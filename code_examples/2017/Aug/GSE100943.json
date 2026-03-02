@@ -5,7 +5,7 @@
       "description": "RNA-seq data was aligned to the human hg19 genome build using Olego alignes, and alternative splicing was estimated as described below.",
       "tool_name": "Olego",
       "tool_version": "",
-      "code_example": "",
+      "code_example": "olego -h",
       "code_language": "bash",
       "github_url": ""
     },
