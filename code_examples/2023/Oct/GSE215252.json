@@ -1,0 +1,22 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "SAILOR (RNA Editing)",
+      "tool_name": "SAILOR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://github.com/YeoLab/sailor"
+    },
+    {
+      "step_order": 2,
+      "description": "Snakemake (Workflow)",
+      "tool_name": "Snakemake",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://snakemake.readthedocs.io"
+    }
+  ]
+}

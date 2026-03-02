@@ -1,0 +1,112 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "STAR (Alignment)",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://github.com/alexdobin/STAR"
+    },
+    {
+      "step_order": 2,
+      "description": "HOMER (Peak Calling / Motif)",
+      "tool_name": "HOMER",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "http://homer.ucsd.edu"
+    },
+    {
+      "step_order": 3,
+      "description": "CLIPper (CLIP Analysis)",
+      "tool_name": "CLIPper",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://github.com/YeoLab/clipper"
+    },
+    {
+      "step_order": 4,
+      "description": "Skipper (CLIP Analysis)",
+      "tool_name": "Skipper",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://github.com/YeoLab/skipper"
+    },
+    {
+      "step_order": 5,
+      "description": "DESeq2 (Differential Expression)",
+      "tool_name": "DESeq2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://bioconductor.org/packages/DESeq2"
+    },
+    {
+      "step_order": 6,
+      "description": "RBNS (RBP Binding)",
+      "tool_name": "RBNS",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "GATK (Variant Calling)",
+      "tool_name": "GATK",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://gatk.broadinstitute.org"
+    },
+    {
+      "step_order": 8,
+      "description": "GSEA (Pathway Analysis)",
+      "tool_name": "GSEA",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://www.gsea-msigdb.org"
+    },
+    {
+      "step_order": 9,
+      "description": "Gene Ontology (Pathway Analysis)",
+      "tool_name": "Gene Ontology",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "http://geneontology.org"
+    },
+    {
+      "step_order": 10,
+      "description": "clusterProfiler (Pathway Analysis)",
+      "tool_name": "clusterProfiler",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 11,
+      "description": "UCSC tools (Genomic Utilities)",
+      "tool_name": "UCSC tools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://genome.ucsc.edu"
+    },
+    {
+      "step_order": 12,
+      "description": "samtools (Genomic Utilities)",
+      "tool_name": "samtools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "http://www.htslib.org"
+    }
+  ]
+}

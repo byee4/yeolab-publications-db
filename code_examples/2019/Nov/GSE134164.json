@@ -1,0 +1,13 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Gene Ontology (Pathway Analysis)",
+      "tool_name": "Gene Ontology",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "http://geneontology.org"
+    }
+  ]
+}

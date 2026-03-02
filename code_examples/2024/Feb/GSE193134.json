@@ -1,0 +1,67 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "IDR (Peak Calling)",
+      "tool_name": "IDR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "HOMER (Peak Calling / Motif)",
+      "tool_name": "HOMER",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "http://homer.ucsd.edu"
+    },
+    {
+      "step_order": 3,
+      "description": "Gene Ontology (Pathway Analysis)",
+      "tool_name": "Gene Ontology",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "http://geneontology.org"
+    },
+    {
+      "step_order": 4,
+      "description": "KEGG (Pathway Analysis)",
+      "tool_name": "KEGG",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://www.genome.jp/kegg"
+    },
+    {
+      "step_order": 5,
+      "description": "Metascape (Pathway Analysis)",
+      "tool_name": "Metascape",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://metascape.org"
+    },
+    {
+      "step_order": 6,
+      "description": "GENCODE (Reference)",
+      "tool_name": "GENCODE",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://www.gencodegenes.org"
+    },
+    {
+      "step_order": 7,
+      "description": "UniProt (Reference)",
+      "tool_name": "UniProt",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://www.uniprot.org"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "STAR (Alignment)",
+      "tool_name": "STAR",
+      "tool_version": "2.7.1a",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://github.com/alexdobin/STAR"
+    },
+    {
+      "step_order": 2,
+      "description": "Salmon (Quantification)",
+      "tool_name": "Salmon",
+      "tool_version": "0.13.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://combine-lab.github.io/salmon"
+    },
+    {
+      "step_order": 3,
+      "description": "limma (Differential Expression)",
+      "tool_name": "limma",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://bioconductor.org/packages/limma"
+    },
+    {
+      "step_order": 4,
+      "description": "Harmony (Single-Cell)",
+      "tool_name": "Harmony",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "GSEA (Pathway Analysis)",
+      "tool_name": "GSEA",
+      "tool_version": "3.8",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://www.gsea-msigdb.org"
+    },
+    {
+      "step_order": 6,
+      "description": "GENCODE (Reference)",
+      "tool_name": "GENCODE",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://www.gencodegenes.org"
+    }
+  ]
+}

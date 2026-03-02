@@ -1,0 +1,49 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Salmon (Quantification)",
+      "tool_name": "Salmon",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://combine-lab.github.io/salmon"
+    },
+    {
+      "step_order": 2,
+      "description": "IDR (Peak Calling)",
+      "tool_name": "IDR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "CLIPper (CLIP Analysis)",
+      "tool_name": "CLIPper",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://github.com/YeoLab/clipper"
+    },
+    {
+      "step_order": 4,
+      "description": "AlphaFold (Structure Prediction)",
+      "tool_name": "AlphaFold",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://alphafold.ebi.ac.uk"
+    },
+    {
+      "step_order": 5,
+      "description": "RefSeq (Reference)",
+      "tool_name": "RefSeq",
+      "tool_version": "000006765.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ]
+}

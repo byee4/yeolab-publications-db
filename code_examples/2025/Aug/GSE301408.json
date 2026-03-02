@@ -1,0 +1,49 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Skipper (CLIP Analysis)",
+      "tool_name": "Skipper",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://github.com/YeoLab/skipper"
+    },
+    {
+      "step_order": 2,
+      "description": "Gene Ontology (Pathway Analysis)",
+      "tool_name": "Gene Ontology",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "http://geneontology.org"
+    },
+    {
+      "step_order": 3,
+      "description": "KEGG (Pathway Analysis)",
+      "tool_name": "KEGG",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://www.genome.jp/kegg"
+    },
+    {
+      "step_order": 4,
+      "description": "Nextflow (Workflow)",
+      "tool_name": "Nextflow",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://nextflow.io"
+    },
+    {
+      "step_order": 5,
+      "description": "UniProt (Reference)",
+      "tool_name": "UniProt",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://www.uniprot.org"
+    }
+  ]
+}

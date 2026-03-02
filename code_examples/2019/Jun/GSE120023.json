@@ -1,0 +1,49 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Adapter trimming with cutadapt",
+      "tool_name": "cutadapt",
+      "tool_version": "",
+      "code_example": "# Trim adapter sequences with cutadapt\ncutadapt \\\n  -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA \\\n  -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT \\\n  -m 18 \\\n  -j 8 \\\n  -o trimmed_R1.fastq.gz \\\n  -p trimmed_R2.fastq.gz \\\n  sample_R1.fastq.gz sample_R2.fastq.gz",
+      "code_language": "bash",
+      "github_url": "https://cutadapt.readthedocs.io"
+    },
+    {
+      "step_order": 2,
+      "description": "Alignment to hg38 with STAR",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "# Align RNA-seq reads with STAR\nSTAR \\\n  --runMode alignReads \\\n  --genomeDir /path/to/star_index \\\n  --readFilesIn sample_R1.fastq.gz sample_R2.fastq.gz \\\n  --readFilesCommand zcat \\\n  --runThreadN 8 \\\n  --outFileNamePrefix sample_ \\\n  --outSAMtype BAM SortedByCoordinate \\\n  --quantMode GeneCounts \\\n  --outSAMattributes NH HI AS NM MD",
+      "code_language": "bash",
+      "github_url": "https://github.com/alexdobin/STAR"
+    },
+    {
+      "step_order": 3,
+      "description": "PCR duplicate removal and sorting with samtools",
+      "tool_name": "samtools",
+      "tool_version": "",
+      "code_example": "# Sort, index, and get stats with samtools\nsamtools sort -@ 8 -o sorted.bam input.bam\nsamtools index sorted.bam\nsamtools flagstat sorted.bam\nsamtools idxstats sorted.bam\n\n# Filter mapped reads (MAPQ >= 20)\nsamtools view -b -q 20 -F 4 sorted.bam > filtered.bam",
+      "code_language": "bash",
+      "github_url": "http://www.htslib.org"
+    },
+    {
+      "step_order": 4,
+      "description": "Peak calling with CLIPper",
+      "tool_name": "CLIPper",
+      "tool_version": "",
+      "code_example": "# Call CLIP-seq peaks with CLIPper (Yeo Lab)\nclipper \\\n  --bam ip_sample.bam \\\n  --species hg38 \\\n  --outfile peaks.bed\n\n# For eCLIP: compare IP vs input\n# Then use overlap with size-matched input for normalization",
+      "code_language": "bash",
+      "github_url": "https://github.com/YeoLab/clipper"
+    },
+    {
+      "step_order": 5,
+      "description": "Reproducible peak identification with merge_peaks",
+      "tool_name": "merge_peaks",
+      "tool_version": "",
+      "code_example": "# Merge replicate eCLIP peaks using IDR (Yeo Lab)\npython merge_peaks.py \\\n  --ip_rep1 rep1_peaks.bed \\\n  --ip_rep2 rep2_peaks.bed \\\n  --input_rep1 input1_peaks.bed \\\n  --input_rep2 input2_peaks.bed \\\n  --output_file merged_peaks.bed",
+      "code_language": "bash",
+      "github_url": "https://github.com/YeoLab/merge_peaks"
+    }
+  ]
+}

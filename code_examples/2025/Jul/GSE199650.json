@@ -1,0 +1,31 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "featureCounts (Quantification)",
+      "tool_name": "featureCounts",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "http://subread.sourceforge.net"
+    },
+    {
+      "step_order": 2,
+      "description": "MEME (Motif Analysis)",
+      "tool_name": "MEME",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://meme-suite.org"
+    },
+    {
+      "step_order": 3,
+      "description": "GENCODE (Reference)",
+      "tool_name": "GENCODE",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://www.gencodegenes.org"
+    }
+  ]
+}

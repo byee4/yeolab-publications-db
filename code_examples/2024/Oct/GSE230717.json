@@ -1,0 +1,58 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "fastp (Read Processing)",
+      "tool_name": "fastp",
+      "tool_version": "0.11.5",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://github.com/OpenGene/fastp"
+    },
+    {
+      "step_order": 2,
+      "description": "STAR (Alignment)",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://github.com/alexdobin/STAR"
+    },
+    {
+      "step_order": 3,
+      "description": "Skipper (CLIP Analysis)",
+      "tool_name": "Skipper",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://github.com/YeoLab/skipper"
+    },
+    {
+      "step_order": 4,
+      "description": "Gene Ontology (Pathway Analysis)",
+      "tool_name": "Gene Ontology",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "http://geneontology.org"
+    },
+    {
+      "step_order": 5,
+      "description": "GENCODE (Reference)",
+      "tool_name": "GENCODE",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://www.gencodegenes.org"
+    },
+    {
+      "step_order": 6,
+      "description": "UniProt (Reference)",
+      "tool_name": "UniProt",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://www.uniprot.org"
+    }
+  ]
+}

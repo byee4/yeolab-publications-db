@@ -1,0 +1,49 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Quality control with FastQC",
+      "tool_name": "FastQC",
+      "tool_version": "",
+      "code_example": "# Run quality control on FASTQ files\nfastqc \\\n  -t 4 \\\n  -o fastqc_output/ \\\n  sample_R1.fastq.gz sample_R2.fastq.gz",
+      "code_language": "bash",
+      "github_url": "https://www.bioinformatics.babraham.ac.uk/projects/fastqc"
+    },
+    {
+      "step_order": 2,
+      "description": "Adapter trimming with cutadapt",
+      "tool_name": "cutadapt",
+      "tool_version": "",
+      "code_example": "# Trim adapter sequences with cutadapt\ncutadapt \\\n  -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA \\\n  -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT \\\n  -m 18 \\\n  -j 8 \\\n  -o trimmed_R1.fastq.gz \\\n  -p trimmed_R2.fastq.gz \\\n  sample_R1.fastq.gz sample_R2.fastq.gz",
+      "code_language": "bash",
+      "github_url": "https://cutadapt.readthedocs.io"
+    },
+    {
+      "step_order": 3,
+      "description": "Alignment to hg38 with STAR",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "# Align RNA-seq reads with STAR\nSTAR \\\n  --runMode alignReads \\\n  --genomeDir /path/to/star_index \\\n  --readFilesIn sample_R1.fastq.gz sample_R2.fastq.gz \\\n  --readFilesCommand zcat \\\n  --runThreadN 8 \\\n  --outFileNamePrefix sample_ \\\n  --outSAMtype BAM SortedByCoordinate \\\n  --quantMode GeneCounts \\\n  --outSAMattributes NH HI AS NM MD",
+      "code_language": "bash",
+      "github_url": "https://github.com/alexdobin/STAR"
+    },
+    {
+      "step_order": 4,
+      "description": "Read counting with featureCounts",
+      "tool_name": "featureCounts",
+      "tool_version": "",
+      "code_example": "# Count reads per gene with featureCounts (Subread)\nfeatureCounts \\\n  -a annotation.gtf \\\n  -o counts.txt \\\n  -T 8 \\\n  -p --countReadPairs \\\n  -B -C \\\n  -s 2 \\\n  aligned.bam",
+      "code_language": "bash",
+      "github_url": "http://subread.sourceforge.net"
+    },
+    {
+      "step_order": 5,
+      "description": "Differential expression analysis with DESeq2",
+      "tool_name": "DESeq2",
+      "tool_version": "",
+      "code_example": "library(DESeq2)\n\n# Load count matrix and sample metadata\ncounts <- read.csv('counts.csv', row.names = 1)\ncoldata <- read.csv('coldata.csv', row.names = 1)\n\n# Create DESeqDataSet\ndds <- DESeqDataSetFromMatrix(\n  countData = counts,\n  colData = coldata,\n  design = ~ condition\n)\n\n# Run differential expression analysis\ndds <- DESeq(dds)\nres <- results(dds, contrast = c('condition', 'treated', 'control'))\nres <- res[order(res$padj), ]\n\n# Export significant results\nsig <- subset(res, padj < 0.05 & abs(log2FoldChange) > 1)\nwrite.csv(as.data.frame(sig), file = 'deseq2_results.csv')",
+      "code_language": "r",
+      "github_url": "https://bioconductor.org/packages/DESeq2"
+    }
+  ]
+}

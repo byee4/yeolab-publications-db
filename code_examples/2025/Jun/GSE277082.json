@@ -1,0 +1,130 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "cutadapt (Read Processing)",
+      "tool_name": "cutadapt",
+      "tool_version": "3.4",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://cutadapt.readthedocs.io"
+    },
+    {
+      "step_order": 2,
+      "description": "Bowtie (Alignment)",
+      "tool_name": "Bowtie",
+      "tool_version": "1.1.229",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "http://bowtie-bio.sourceforge.net"
+    },
+    {
+      "step_order": 3,
+      "description": "STAR (Alignment)",
+      "tool_name": "STAR",
+      "tool_version": "2.7.6a",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://github.com/alexdobin/STAR"
+    },
+    {
+      "step_order": 4,
+      "description": "featureCounts (Quantification)",
+      "tool_name": "featureCounts",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "http://subread.sourceforge.net"
+    },
+    {
+      "step_order": 5,
+      "description": "HOMER (Peak Calling / Motif)",
+      "tool_name": "HOMER",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "http://homer.ucsd.edu"
+    },
+    {
+      "step_order": 6,
+      "description": "Skipper (CLIP Analysis)",
+      "tool_name": "Skipper",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://github.com/YeoLab/skipper"
+    },
+    {
+      "step_order": 7,
+      "description": "limma (Differential Expression)",
+      "tool_name": "limma",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://bioconductor.org/packages/limma"
+    },
+    {
+      "step_order": 8,
+      "description": "rMATS (Splicing Analysis)",
+      "tool_name": "rMATS",
+      "tool_version": "4.2.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://github.com/Xinglab/rmats-turbo"
+    },
+    {
+      "step_order": 9,
+      "description": "GSEA (Pathway Analysis)",
+      "tool_name": "GSEA",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://www.gsea-msigdb.org"
+    },
+    {
+      "step_order": 10,
+      "description": "KEGG (Pathway Analysis)",
+      "tool_name": "KEGG",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://www.genome.jp/kegg"
+    },
+    {
+      "step_order": 11,
+      "description": "clusterProfiler (Pathway Analysis)",
+      "tool_name": "clusterProfiler",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 12,
+      "description": "IGV (Visualization)",
+      "tool_name": "IGV",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://igv.org"
+    },
+    {
+      "step_order": 13,
+      "description": "GENCODE (Reference)",
+      "tool_name": "GENCODE",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://www.gencodegenes.org"
+    },
+    {
+      "step_order": 14,
+      "description": "UniProt (Reference)",
+      "tool_name": "UniProt",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://www.uniprot.org"
+    }
+  ]
+}

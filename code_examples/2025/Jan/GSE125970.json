@@ -1,0 +1,67 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Cell Ranger (Single-Cell)",
+      "tool_name": "Cell Ranger",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://support.10xgenomics.com"
+    },
+    {
+      "step_order": 2,
+      "description": "Scanpy (Single-Cell)",
+      "tool_name": "Scanpy",
+      "tool_version": "2.1.4",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://scanpy.readthedocs.io"
+    },
+    {
+      "step_order": 3,
+      "description": "Gene Ontology (Pathway Analysis)",
+      "tool_name": "Gene Ontology",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "http://geneontology.org"
+    },
+    {
+      "step_order": 4,
+      "description": "Metascape (Pathway Analysis)",
+      "tool_name": "Metascape",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://metascape.org"
+    },
+    {
+      "step_order": 5,
+      "description": "Louvain clustering (Statistics)",
+      "tool_name": "Louvain clustering",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "PCA (Statistics)",
+      "tool_name": "PCA",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "t-SNE (Statistics)",
+      "tool_name": "t-SNE",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ]
+}

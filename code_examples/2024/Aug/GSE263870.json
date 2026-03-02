@@ -1,0 +1,85 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "STAR (Alignment)",
+      "tool_name": "STAR",
+      "tool_version": "2.4.0i",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://github.com/alexdobin/STAR"
+    },
+    {
+      "step_order": 2,
+      "description": "IDR (Peak Calling)",
+      "tool_name": "IDR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "HOMER (Peak Calling / Motif)",
+      "tool_name": "HOMER",
+      "tool_version": "4.9.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "http://homer.ucsd.edu"
+    },
+    {
+      "step_order": 4,
+      "description": "SAILOR (RNA Editing)",
+      "tool_name": "SAILOR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://github.com/YeoLab/sailor"
+    },
+    {
+      "step_order": 5,
+      "description": "IsoSeq (Long-Read Analysis)",
+      "tool_name": "IsoSeq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "PCA (Statistics)",
+      "tool_name": "PCA",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "bedtools (Genomic Utilities)",
+      "tool_name": "bedtools",
+      "tool_version": "2.27.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://bedtools.readthedocs.io"
+    },
+    {
+      "step_order": 8,
+      "description": "samtools (Genomic Utilities)",
+      "tool_name": "samtools",
+      "tool_version": "1.9",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "http://www.htslib.org"
+    },
+    {
+      "step_order": 9,
+      "description": "GENCODE (Reference)",
+      "tool_name": "GENCODE",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://www.gencodegenes.org"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "GSEA (Pathway Analysis)",
+      "tool_name": "GSEA",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://www.gsea-msigdb.org"
+    },
+    {
+      "step_order": 2,
+      "description": "PCA (Statistics)",
+      "tool_name": "PCA",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Random Forest (Machine Learning)",
+      "tool_name": "Random Forest",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ]
+}

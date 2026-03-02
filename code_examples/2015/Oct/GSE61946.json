@@ -1,0 +1,22 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "HOMER (Peak Calling / Motif)",
+      "tool_name": "HOMER",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "http://homer.ucsd.edu"
+    },
+    {
+      "step_order": 2,
+      "description": "UCSC tools (Genomic Utilities)",
+      "tool_name": "UCSC tools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://genome.ucsc.edu"
+    }
+  ]
+}

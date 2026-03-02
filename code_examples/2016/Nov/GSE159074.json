@@ -1,0 +1,31 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Demultiplexing and alignment with Cell Ranger",
+      "tool_name": "Cell Ranger",
+      "tool_version": "",
+      "code_example": "# Process 10x Genomics scRNA-seq with Cell Ranger\ncellranger count \\\n  --id=sample_id \\\n  --transcriptome=/path/to/refdata-gex-GRCh38 \\\n  --fastqs=/path/to/fastqs/ \\\n  --sample=sample_name \\\n  --localcores=16 \\\n  --localmem=64",
+      "code_language": "bash",
+      "github_url": "https://github.com/10XGenomics/cellranger"
+    },
+    {
+      "step_order": 2,
+      "description": "Quality control and filtering with Scanpy",
+      "tool_name": "Scanpy",
+      "tool_version": "",
+      "code_example": "import scanpy as sc\n\ndef run_scanpy_pipeline(h5ad_path):\n    \"\"\"Standard scRNA-seq analysis with Scanpy.\"\"\"\n    adata = sc.read_h5ad(h5ad_path)\n\n    # QC and filtering\n    sc.pp.filter_cells(adata, min_genes=200)\n    sc.pp.filter_genes(adata, min_cells=3)\n    adata.var['mt'] = adata.var_names.str.startswith('MT-')\n    sc.pp.calculate_qc_metrics(adata, qc_vars=['mt'], inplace=True)\n    adata = adata[adata.obs.pct_counts_mt < 20].copy()\n\n    # Normalize and log-transform\n    sc.pp.normalize_total(adata, target_sum=1e4)\n    sc.pp.log1p(adata)\n\n    # Feature selection, PCA, neighbors, clustering\n    sc.pp.highly_variable_genes(adata, n_top_genes=2000)\n    sc.tl.pca(adata, n_comps=50)\n    sc.pp.neighbors(adata, n_pcs=30)\n    sc.tl.leiden(adata, resolution=0.5)\n    sc.tl.umap(adata)\n\n    sc.pl.umap(adata, color=['leiden'], save='_clusters.png')\n    return adata",
+      "code_language": "python",
+      "github_url": "https://scanpy.readthedocs.io"
+    },
+    {
+      "step_order": 3,
+      "description": "Dimensionality reduction and clustering with scVI",
+      "tool_name": "scVI",
+      "tool_version": "",
+      "code_example": "import scvi\nimport scanpy as sc\n\ndef run_scvi_integration(adata, batch_key='batch'):\n    \"\"\"Batch integration with scVI.\"\"\"\n    scvi.model.SCVI.setup_anndata(adata, batch_key=batch_key)\n    model = scvi.model.SCVI(adata, n_latent=30, n_layers=2)\n    model.train(max_epochs=200, early_stopping=True)\n\n    # Get latent representation\n    adata.obsm['X_scVI'] = model.get_latent_representation()\n\n    # Use scVI latent space for clustering\n    sc.pp.neighbors(adata, use_rep='X_scVI')\n    sc.tl.leiden(adata)\n    sc.tl.umap(adata)\n    return adata, model",
+      "code_language": "python",
+      "github_url": "https://scvi-tools.org"
+    }
+  ]
+}
