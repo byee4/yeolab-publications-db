@@ -2,25 +2,7 @@
   "steps": [
     {
       "step_order": 1,
-      "description": "DESeq2 (Differential Expression)",
-      "tool_name": "DESeq2",
-      "tool_version": "1.39.3",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://bioconductor.org/packages/DESeq2"
-    },
-    {
-      "step_order": 2,
-      "description": "MEME (Motif Analysis)",
-      "tool_name": "MEME",
-      "tool_version": "5.3.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://meme-suite.org"
-    },
-    {
-      "step_order": 3,
-      "description": "IsoSeq (Long-Read Analysis)",
+      "description": "Sequencing data was processed using the Isoseq v4 pipeline with lima (parameter: --isoseq) to generate full-length non-concatemer reads and isoseq refine (parameter: --require-polya) to generate refined reads.",
       "tool_name": "IsoSeq",
       "tool_version": "",
       "code_example": "",
@@ -28,58 +10,43 @@
       "github_url": ""
     },
     {
-      "step_order": 4,
-      "description": "Gene Ontology (Pathway Analysis)",
-      "tool_name": "Gene Ontology",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "http://geneontology.org"
-    },
-    {
-      "step_order": 5,
-      "description": "IGV (Visualization)",
-      "tool_name": "IGV",
-      "tool_version": "2.14.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://igv.org"
-    },
-    {
-      "step_order": 6,
-      "description": "PCA (Statistics)",
-      "tool_name": "PCA",
+      "step_order": 2,
+      "description": "HEK293T APOBEC1-only and Ribo-STAMP data were aligned to hg19 reference and MDA-MB-231 Ribo-STAMP data (NT and CoCl2) were aligned to hg38 reference using pbmm2 align (parameter: --preset ISOSEQ).",
+      "tool_name": "IsoSeq",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
       "github_url": ""
     },
     {
-      "step_order": 7,
-      "description": "bedtools (Genomic Utilities)",
-      "tool_name": "bedtools",
-      "tool_version": "2.29.2",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://bedtools.readthedocs.io"
-    },
-    {
-      "step_order": 8,
-      "description": "samtools (Genomic Utilities)",
-      "tool_name": "samtools",
-      "tool_version": "1.16",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "http://www.htslib.org"
-    },
-    {
-      "step_order": 9,
-      "description": "GENCODE (Reference)",
-      "tool_name": "GENCODE",
+      "step_order": 3,
+      "description": "QC was completed using NanoPlot (parameters: --raw and --tsv_stats).",
+      "tool_name": "",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
-      "github_url": "https://www.gencodegenes.org"
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Reads were filtered for uniquely mapped reads and read counts obtained using IsoQuant (parameters: --data_type pacbio, --transcript_quantification unique_only, and --gene_quantification unique_only)",
+      "tool_name": "PacBio sequencing",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Edits were identified and filtered using custom scripts.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
     }
-  ]
+  ],
+  "raw_text": "Sequencing data was processed using the Isoseq v4 pipeline with lima (parameter: --isoseq) to generate full-length non-concatemer reads and isoseq refine (parameter: --require-polya) to generate refined reads.\nHEK293T APOBEC1-only and Ribo-STAMP data were aligned to hg19 reference and MDA-MB-231 Ribo-STAMP data (NT and CoCl2) were aligned to hg38 reference using pbmm2 align (parameter: --preset ISOSEQ).\nQC was completed using NanoPlot (parameters: --raw and --tsv_stats).\nReads were filtered for uniquely mapped reads and read counts obtained using IsoQuant (parameters: --data_type pacbio, --transcript_quantification unique_only, and --gene_quantification unique_only)\nEdits were identified and filtered using custom scripts.\nAssembly: hg19, hg38\nSupplementary files format and content: tab-delimited file containing edited positions, the number of reads with C-to-U edits at each positions (conversion), the total number of reads at each position, and each edit's assignment to a gene and isoform (BED)",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
 }

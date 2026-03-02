@@ -1,0 +1,52 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "To identify, quantify and annotate circular RNAs from back-splice junctions we first aligned the RNASeq results using TopHat2 on the RiboMinus depleted paired-end RNA-Seq FASTQ files, via the CIRCexplorer2 pipeline, on each individual sample (default options).",
+      "tool_name": "TopHat",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "This workflow identified far greater putative circRNAs than using the same pipeline with STAR 2.4.0.",
+      "tool_name": "STAR",
+      "tool_version": "2.4.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "For differential circRNA analysis we ran RUVSEQ from the CSBB pipeline (https://github.com/csbbcompbio/CSBB-v3.0) on the back-splice junction counts for each sample for all relevant comparison groups.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "This workflow applies the software EdgeR to perform a differential expression analysis using a generalized linear model approach using the upper quartile normalization.",
+      "tool_name": "edgeR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "All together, we identified circRNAs for 448 genes, with evidence of at least two reads per circRNA. circRNAs with a non-adjusted EdgeR p<0.1 were considered differentially expressed.",
+      "tool_name": "edgeR",
+      "tool_version": "0.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "To identify, quantify and annotate circular RNAs from back-splice junctions we first aligned the RNASeq results using TopHat2 on the RiboMinus depleted paired-end RNA-Seq FASTQ files, via the CIRCexplorer2 pipeline, on each individual sample (default options). This workflow identified far greater putative circRNAs than using the same pipeline with STAR 2.4.0. For differential circRNA analysis we ran RUVSEQ from the CSBB pipeline (https://github.com/csbbcompbio/CSBB-v3.0) on the back-splice junction counts for each sample for all relevant comparison groups. This workflow applies the software EdgeR to perform a differential expression analysis using a generalized linear model approach using the upper quartile normalization. All together, we identified circRNAs for 448 genes, with evidence of at least two reads per circRNA. circRNAs with a non-adjusted EdgeR p<0.1 were considered differentially expressed.\nGenome_build: hg19\nSupplementary_files_format_and_content: tab-delimited-text\nSupplementary_files_format_and_content: CIRCexplorer2 back-splice junction read counts",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

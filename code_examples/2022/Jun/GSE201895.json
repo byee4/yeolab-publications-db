@@ -2,12 +2,78 @@
   "steps": [
     {
       "step_order": 1,
-      "description": "UMAP (Statistics)",
-      "tool_name": "UMAP",
+      "description": "Reads were adapter-trimmed using Cutadapt (v1.14) and mapped to human-specific repetitive elements from RepBase (version 18.05) by STAR (v2.4.0i)(Dobin et al., 2013).",
+      "tool_name": "STAR",
+      "tool_version": "2.4.0i",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Repeat-mapping reads were removed, and remaining reads were mapped to the human genome assembly (hg19) with STAR.",
+      "tool_name": "STAR",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
-      "github_url": "https://umap-learn.readthedocs.io"
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "PCR duplicate reads were removed using the unique molecular identifier (UMI) sequences in the 5\u00e2\u0080\u0099 adapter and remaining reads retained as \u00e2\u0080\u0098usable reads\u00e2\u0080\u0099.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Peaks were called on the usable reads by CLIPper (Lovci et al., 2013) and assigned to gene regions annotated in GENCODE (hg19) with the following descending priority order: CDS, 5\u00e2\u0080\u0099UTR, 3\u00e2\u0080\u0099UTR, proximal intron, and distal intron.",
+      "tool_name": "CLIPper",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Proximal intron regions are defined as extending up to 500 bp from an exon-intron junction.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Each peak was normalized to the size-matched input (SMInput) by calculating the fraction of the number of usable reads from immunoprecipitation to that of the usable reads from the SMInput.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "Peaks were deemed significant at 8-fold enrichment and p-value10-3(Chi-squared test, or Fisher\u00e2\u0080\u0099s exact test if the observed or expected read number in eCLIP or SMInput was below 5).",
+      "tool_name": "eCLIP",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "Library strategy: enhanced CLIP",
+      "tool_name": "eCLIP",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
     }
-  ]
+  ],
+  "raw_text": "Reads were adapter-trimmed using Cutadapt (v1.14) and mapped to human-specific repetitive elements from RepBase (version 18.05) by STAR (v2.4.0i)(Dobin et al., 2013).\nRepeat-mapping reads were removed, and remaining reads were mapped to the human genome assembly (hg19) with STAR. PCR duplicate reads were removed using the unique molecular identifier (UMI) sequences in the 5\u00e2\u0080\u0099 adapter and remaining reads retained as \u00e2\u0080\u0098usable reads\u00e2\u0080\u0099.\nPeaks were called on the usable reads by CLIPper (Lovci et al., 2013) and assigned to gene regions annotated in GENCODE (hg19) with the following descending priority order: CDS, 5\u00e2\u0080\u0099UTR, 3\u00e2\u0080\u0099UTR, proximal intron, and distal intron. Proximal intron regions are defined as extending up to 500 bp from an exon-intron junction. Each peak was normalized to the size-matched input (SMInput) by calculating the fraction of the number of usable reads from immunoprecipitation to that of the usable reads from the SMInput. Peaks were deemed significant at 8-fold enrichment and p-value10-3(Chi-squared test, or Fisher\u00e2\u0080\u0099s exact test if the observed or expected read number in eCLIP or SMInput was below 5).\nAssembly: hg19\nSupplementary files format and content: bigwig files for input and IP samples as well as beds files for significant eCLIP peaks per experimental group\nLibrary strategy: enhanced CLIP",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
 }

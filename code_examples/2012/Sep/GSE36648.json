@@ -1,0 +1,16 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "HuGene-1.0-st were analyzed by using affymetrix power tools (apt-probeset-summarize -a rma-sketch -a plier-mm-sketch -d ../../Human/CD_HG-U133_Pl us_2_Libfiles/HG-U133_Plus_2.cdf -o gene-level-output CM0811101A.CEL CM0811101B.CEL CM0811101C.CEL CM0811102A.CEL CM08111 02B.CEL CM0811102C.CEL CM081110CA.CEL CM081110CB.CEL CM081110CC.CEL CM081110HA.CEL CM081110HB.CEL CM081110HC.CEL CM081110 RA.CEL CM081110RB.CEL CM081110RC.CEL )",
+      "tool_name": "Microarray",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "HuGene-1.0-st were analyzed by using affymetrix power tools (apt-probeset-summarize -a rma-sketch -a plier-mm-sketch -d ../../Human/CD_HG-U133_Pl  us_2_Libfiles/HG-U133_Plus_2.cdf -o gene-level-output CM0811101A.CEL CM0811101B.CEL CM0811101C.CEL CM0811102A.CEL CM08111  02B.CEL CM0811102C.CEL CM081110CA.CEL CM081110CB.CEL CM081110CC.CEL CM081110HA.CEL CM081110HB.CEL CM081110HC.CEL CM081110  RA.CEL CM081110RB.CEL CM081110RC.CEL )",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

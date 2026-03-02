@@ -1,0 +1,16 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "C. elegans GeneChip arrays were analyzed by using affymetrix power tools (command line arguments apt-probeset-summarize -a rma-sketch -a plier-mm-sketch -d Celegans.CDF)",
+      "tool_name": "Microarray",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "C. elegans GeneChip arrays were analyzed by using affymetrix power tools (command line arguments apt-probeset-summarize -a rma-sketch -a plier-mm-sketch -d Celegans.CDF)",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

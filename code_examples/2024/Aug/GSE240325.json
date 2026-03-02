@@ -2,44 +2,44 @@
   "steps": [
     {
       "step_order": 1,
-      "description": "STAR (Alignment)",
-      "tool_name": "STAR",
-      "tool_version": "2.4.0i",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://github.com/alexdobin/STAR"
-    },
-    {
-      "step_order": 2,
-      "description": "IDR (Peak Calling)",
-      "tool_name": "IDR",
+      "description": "Demultiplex primers with lima (v2.6.0)",
+      "tool_name": "",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
       "github_url": ""
     },
     {
-      "step_order": 3,
-      "description": "HOMER (Peak Calling / Motif)",
-      "tool_name": "HOMER",
-      "tool_version": "4.9.1",
+      "step_order": 2,
+      "description": "Refine reads with Isoseq3 refine (v3.8.0)",
+      "tool_name": "IsoSeq",
+      "tool_version": "3.8.0",
       "code_example": "",
       "code_language": "bash",
-      "github_url": "http://homer.ucsd.edu"
+      "github_url": ""
     },
     {
-      "step_order": 4,
-      "description": "SAILOR (RNA Editing)",
-      "tool_name": "SAILOR",
+      "step_order": 3,
+      "description": "Align reads using pbmm2 (v1.9.0)",
+      "tool_name": "",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
-      "github_url": "https://github.com/YeoLab/sailor"
+      "github_url": "https://github.com/alexdobin/STAR"
+    },
+    {
+      "step_order": 4,
+      "description": "Cluster reads with isoseq3 cluster (v3.8.0)",
+      "tool_name": "IsoSeq",
+      "tool_version": "3.8.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
     },
     {
       "step_order": 5,
-      "description": "IsoSeq (Long-Read Analysis)",
-      "tool_name": "IsoSeq",
+      "description": "Filter for primary mapped reads with custom script",
+      "tool_name": "",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
@@ -47,39 +47,24 @@
     },
     {
       "step_order": 6,
-      "description": "PCA (Statistics)",
-      "tool_name": "PCA",
+      "description": "Identify gene editing using custom script",
+      "tool_name": "",
       "tool_version": "",
       "code_example": "",
-      "code_language": "bash",
+      "code_language": "r",
       "github_url": ""
     },
     {
       "step_order": 7,
-      "description": "bedtools (Genomic Utilities)",
-      "tool_name": "bedtools",
-      "tool_version": "2.27.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://bedtools.readthedocs.io"
-    },
-    {
-      "step_order": 8,
-      "description": "samtools (Genomic Utilities)",
-      "tool_name": "samtools",
-      "tool_version": "1.9",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "http://www.htslib.org"
-    },
-    {
-      "step_order": 9,
-      "description": "GENCODE (Reference)",
-      "tool_name": "GENCODE",
+      "description": "remove edits found in annotated SNP positions using custom script",
+      "tool_name": "",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
-      "github_url": "https://www.gencodegenes.org"
+      "github_url": ""
     }
-  ]
+  ],
+  "raw_text": "Demultiplex primers with lima (v2.6.0)\nRefine reads with Isoseq3 refine (v3.8.0)\nAlign reads using pbmm2 (v1.9.0)\nCluster reads with isoseq3 cluster (v3.8.0)\nFilter for primary mapped reads with custom script\nIdentify gene editing using custom script\nremove edits found in annotated SNP positions using custom script\nAssembly: hg38\nSupplementary files format and content: isoforms from clustering (.gff)\nSupplementary files format and content: gene edits (.bed)",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
 }

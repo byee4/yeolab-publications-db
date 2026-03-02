@@ -1,0 +1,133 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Map fastq reads with HISAT2 hisat2 -q --phred64 -x grch37_tran/genome_tran --no-unal --reorder --no-mixed",
+      "tool_name": "HISAT2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Extract uniquely mapped reads from SAM files",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Remap unmapped reads with hyperediting pipeline.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "In brief, convert all adenosines to guanosines and align to modified hg19 genome where adenosines are also substituted by guanosines.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Obtain uniquely mapped reads pairs from hyperediting pipeline and combine with uniquely mapped reads from first round of read mapping",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Identify RNA-DNA differences between mapped reads and hg19 reference genome.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "r",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "Apply log-likelihood test to determine whether RDD is likely resulted from sequencing error (Bahn et. al.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "PMID: 21960545)",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "Apply posterior filters to remove RDD sites that are likely caused by technical artifats (Bahn et. al.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 10,
+      "description": "PMID: 21960545 and Lee et. al.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 11,
+      "description": "PMID: 23598527)",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 12,
+      "description": "Retain only highly prevalent editing sites.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 13,
+      "description": "In particular, filter for editing sites where both pooled fragile X and pooled controls have at least 10 reads each and where pooled fragile X or pooled controls have editing ratio at least 0.1",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 14,
+      "description": "Also quantify gene expression as RPKM values over the exon union of ENSEMBL transcripts in hg19.",
+      "tool_name": "Ensembl",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Map fastq reads with HISAT2 hisat2 -q --phred64 -x grch37_tran/genome_tran  --no-unal --reorder --no-mixed\nExtract uniquely mapped reads from SAM files\nRemap unmapped reads with hyperediting pipeline. In brief, convert all adenosines to guanosines and align to modified hg19 genome where adenosines are also substituted by guanosines.\nObtain uniquely mapped reads pairs from hyperediting pipeline and combine with uniquely mapped reads from first round of read mapping\nIdentify RNA-DNA differences between mapped reads and hg19 reference genome.\nApply log-likelihood test to determine whether RDD is likely resulted from sequencing error (Bahn et. al. PMID: 21960545)\nApply posterior filters to remove RDD sites that are likely caused by technical artifats (Bahn et. al. PMID: 21960545 and Lee et. al. PMID: 23598527)\nRetain only highly prevalent editing sites. In particular, filter for editing sites where both pooled fragile X and pooled controls have at least 10 reads each and where pooled fragile X or pooled controls have editing ratio at least 0.1\nAlso quantify gene expression as RPKM values over the exon union of ENSEMBL transcripts in hg19.\nGenome_build: hg19\nSupplementary_files_format_and_content: gene expression (RPKM)",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

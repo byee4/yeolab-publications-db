@@ -1,0 +1,88 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Base calling was performed with CASAVA 1.8.2",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Sequences were trimmed then aligned to the mm9 mouse genome using TOPHAT",
+      "tool_name": "TopHat",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Probabilities of isoform abundances were computed using MISO",
+      "tool_name": "MISO",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Data was filtered based on a Bayes factor of at least 1",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Additional details are included in Verma, S.K., Deshmukh, V., Liu, P., Nutter, C.A., Espejo, R., Hung, M.L., Wang, G.S., Yeo, G.W., and Kuyumcu-Martinez, M.N. (2013).",
+      "tool_name": "R",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Reactivation of fetal splicing programs in diabetic hearts is mediated by protein kinase C signaling.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "r",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "The Journal of biological chemistry 288, 35372-35386.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "processed data files format and content: Proccessed data is MISO analysis of skipped exons in comparisions between control and diabetic samples.",
+      "tool_name": "MISO",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "The proccessed data format is tab deliniated .txt files.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Base calling was performed with CASAVA 1.8.2\nSequences were trimmed then aligned to the mm9 mouse genome using TOPHAT\nProbabilities of isoform abundances were computed using MISO\nData was filtered based on a Bayes factor of at least 1\nAdditional details are included in Verma, S.K., Deshmukh, V., Liu, P., Nutter, C.A., Espejo, R., Hung, M.L., Wang, G.S., Yeo, G.W., and Kuyumcu-Martinez, M.N. (2013). Reactivation of fetal splicing programs in diabetic hearts is mediated by protein kinase C signaling. The Journal of biological chemistry 288, 35372-35386.\ngenome build: mm9\nprocessed data files format and content: Proccessed data is MISO analysis of skipped exons in comparisions between control and diabetic samples. The proccessed data format is tab deliniated .txt files.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

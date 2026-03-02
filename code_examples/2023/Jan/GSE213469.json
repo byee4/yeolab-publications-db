@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Alignment, cell barcode processing, umis processing, abundance measurements: Cellranger ATAC (version 1.2.0)",
+      "tool_name": "Cell Ranger",
+      "tool_version": "1.2.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "QC, cell filtering, dimension reduction: Signac (version 1.5.0)",
+      "tool_name": "Signac",
+      "tool_version": "1.5.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Alignment, cell barcode processing, umis processing, abundance measurements: Cellranger ATAC  (version 1.2.0)\nQC, cell filtering, dimension reduction: Signac (version 1.5.0)\nAssembly: mm10\nSupplementary files format and content: Tab-separated values files and matrix files",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

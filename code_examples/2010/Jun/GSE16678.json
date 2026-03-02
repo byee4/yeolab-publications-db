@@ -1,0 +1,70 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "The signal processing implemented for the Ambion miRCHIP is a multi-step process involving probe specific signal detection calls, background estimate and correction, constant variance stabilization and either array scaling or global normalization.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "For each probe, an estimated background value is subtracted that is derived from the median signal of a set of G-C matched anti-genomic controls.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Arrays within a specific analysis experiment were normalized together according to the variance stabilization methods described by Huber et al. (Huber et al., 2002).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Detection calls were based on a Wilcoxon rank-sum test of the miRNA probe signal compared to the distribution of signals from GC-content matched anti-genomic probes.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "For statistical hypothesis testing, a two-sample t-Test, with assumption of equal variance, was applied.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "One-way ANOVA was used for experimental designs with more than two experimental groupings or levels of the same factor.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "These tests define which probes are considered to be significantly differentially expressed, or significant, based on a default p-value of 0.001 and log2 difference > 1.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "The signal processing implemented for the Ambion miRCHIP is a multi-step process involving probe specific signal detection calls, background estimate and correction, constant variance stabilization and either array scaling or global normalization. For each probe, an estimated background value is subtracted that is derived from the median signal of a set of G-C matched anti-genomic controls. Arrays within a specific analysis experiment were normalized together according to the variance stabilization methods described by Huber et al. (Huber et al., 2002). Detection calls were based on a Wilcoxon rank-sum test of the miRNA probe signal compared to the distribution of signals from GC-content matched anti-genomic probes.  For statistical hypothesis testing, a two-sample t-Test, with assumption of equal variance, was applied.  One-way ANOVA was used for experimental designs with more than two experimental groupings or levels of the same factor.  These tests define which probes are considered to be significantly differentially expressed, or significant, based on a default p-value of 0.001 and log2 difference > 1.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

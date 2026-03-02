@@ -1,0 +1,34 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "RNA-seq raw reads were trimmed for adaptor sequences or low-quality bases and mapped to both the human genome (hg19 build) and the HCMV Merlin genome (Genbank AY446894.2) with GSNAP, with additional filtering for repetitive regions.",
+      "tool_name": "GSNAP",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Virus-mapping reads were obtained from the HSV-2 and HIV-1 samples using Genbank accessions NC_001798.1 and K03455.1, respectively.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Genome coverage files for visualization (bigWig format) were generated using UCSC tools bedGraphToBigWig and genomeCoverageBed, and strand-corrected.",
+      "tool_name": "UCSC tools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "RNA-seq raw reads were trimmed for adaptor sequences or low-quality bases and mapped to both the human genome (hg19 build) and the HCMV Merlin genome (Genbank AY446894.2) with GSNAP, with additional filtering for repetitive regions. Virus-mapping reads were obtained from the HSV-2 and HIV-1 samples using Genbank accessions NC_001798.1 and K03455.1, respectively.\nGenome coverage files for visualization (bigWig format) were generated using UCSC tools bedGraphToBigWig and genomeCoverageBed, and strand-corrected.\nGenome_build: hg19\nSupplementary_files_format_and_content: bigWig (each .bw includes human transcriptome only)",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

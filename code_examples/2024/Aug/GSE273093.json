@@ -2,21 +2,33 @@
   "steps": [
     {
       "step_order": 1,
-      "description": "GSEA (Pathway Analysis)",
-      "tool_name": "GSEA",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://www.gsea-msigdb.org"
-    },
-    {
-      "step_order": 2,
-      "description": "PCA (Statistics)",
-      "tool_name": "PCA",
-      "tool_version": "",
+      "description": "Sequenced reads were trimmed for adaptor sequence, and masked for low-complexity or low-quality sequence, then mapped to GRCm38 whole genome using STAR 2.7.3a with extra arguments --outFilterMultimapNmax 50 --outFilterMultimapScoreRange 3 --outFilterScoreMinOverLread 0.7 --outFilterMatchNminOverLread 0.7 --outFilterMismatchNmax 10 --alignIntronMax 500000 --alignMatesGapMax 1000000 --sjdbScore 2",
+      "tool_name": "STAR",
+      "tool_version": "2.7.3a",
       "code_example": "",
       "code_language": "bash",
       "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Reads aligning to gene exons (Mus_musculus.GRCm38.102.gtf) were counted using featureCounts v2.0.3 program from Subread package, summarized at gene level with extra parameters -s 0",
+      "tool_name": "featureCounts",
+      "tool_version": "2.0.3",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Differential gene expression at FDR level 0.05 was obtained using DESeq2 R package, genes with total raw counts less then 1 across all samples were excluded from analysis",
+      "tool_name": "DESeq2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "r",
+      "github_url": ""
     }
-  ]
+  ],
+  "raw_text": "Sequenced reads were trimmed for adaptor sequence, and masked for low-complexity or low-quality sequence, then mapped to GRCm38 whole genome using STAR 2.7.3a with extra arguments --outFilterMultimapNmax 50   --outFilterMultimapScoreRange 3   --outFilterScoreMinOverLread 0.7   --outFilterMatchNminOverLread 0.7   --outFilterMismatchNmax 10   --alignIntronMax 500000   --alignMatesGapMax 1000000   --sjdbScore 2\nReads aligning to gene exons (Mus_musculus.GRCm38.102.gtf) were counted using featureCounts v2.0.3 program from Subread package, summarized at gene level with extra parameters -s 0\nDifferential gene expression at FDR level 0.05 was obtained using DESeq2 R package, genes with total raw counts less then 1 across all samples were excluded from analysis\nAssembly: GRCm38.p6\nSupplementary files format and content: tab-delimited text file includes raw read counts for all samples\nSupplementary files format and content: tab-delimited text file includes differetial gene expression analysis output from DESeq2",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
 }

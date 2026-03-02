@@ -1,0 +1,52 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "data were processed by cellranger 2.1.0 with default parameter, using mm10 as reference.",
+      "tool_name": "Cell Ranger",
+      "tool_version": "2.1.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Raw cell-reads were then loaded to R using the cellrangerRkit package.",
+      "tool_name": "R",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "The scRNA-seq dataset was then further filtered based on gene numbers and mitochondria gene counts tototal counts ratio.",
+      "tool_name": "scRNA-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Only cells with > 400 genes,UMI > 0,and 0.5% ~ 20% of their UMIs mappingto mitochondria genes were kept for downstream analysis.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "For the scRNA-seq, the first 16 bp of R1 is the cell barcode and the next 10bp (17-26bp) is the UMI.",
+      "tool_name": "scRNA-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "data were processed by cellranger 2.1.0 with default parameter, using mm10 as reference.\nRaw cell-reads were then loaded to R using the cellrangerRkit package. The scRNA-seq dataset was then further filtered based on gene numbers and mitochondria gene counts tototal counts ratio. Only cells with > 400 genes,UMI > 0,and 0.5% ~ 20% of their UMIs mappingto mitochondria genes were kept for downstream analysis.\nFor the scRNA-seq, the first 16 bp of R1 is the cell barcode and the next 10bp (17-26bp) is the UMI.\nGenome_build: mm10\nSupplementary_files_format_and_content: CellRanger output of filtered gene matrix with barcodes & features files",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

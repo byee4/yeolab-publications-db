@@ -1,0 +1,61 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Reads were mapped either to the mouse or yeast genome with bowtie2 -p 8 --local --very-sensitive-local --no-unal --no-mixed --no-discordant --phred33 -I 10 -X 700 (v1.2.2).",
+      "tool_name": "Bowtie2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Mapped reads were then converted into bed files.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "A scale factor for Spike-In normalization was calculated for each sample by dividing 1000 from the sequencing depth of mapped yeast reads.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Bed files were normalized using bedtools genomcov (v2.29.2) with the respective scaling factor calculated as describe above.",
+      "tool_name": "bedtools",
+      "tool_version": "2.29.2",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Peaks calls were determined using macs2 macs2 callpeak -broad --broad-cutoff 0.1 -B --nomodel --keep-dup all -f BED (v2.1.2).",
+      "tool_name": "MACS2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "none provided by the submitter",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Reads were mapped either to the mouse or yeast genome with bowtie2 -p 8 --local --very-sensitive-local --no-unal --no-mixed --no-discordant --phred33 -I 10 -X 700 (v1.2.2). Mapped reads were then converted into bed files. A scale factor for Spike-In normalization was calculated for each sample by dividing 1000 from the sequencing depth of mapped yeast reads. Bed files were normalized using bedtools genomcov (v2.29.2) with the respective scaling factor calculated as describe above. Peaks calls were determined using macs2 macs2 callpeak -broad --broad-cutoff 0.1 -B --nomodel --keep-dup all -f BED (v2.1.2).\nnone provided by the submitter\nAssembly: mm10\nSupplementary files format and content: Normalized bedgraph files",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

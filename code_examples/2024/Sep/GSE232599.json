@@ -2,16 +2,7 @@
   "steps": [
     {
       "step_order": 1,
-      "description": "STAR (Alignment)",
-      "tool_name": "STAR",
-      "tool_version": "2.6.7a",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://github.com/alexdobin/STAR"
-    },
-    {
-      "step_order": 2,
-      "description": "Skipper (CLIP Analysis)",
+      "description": "Data was processed using Skipper, available at: http://github.com/yeolab/skipper",
       "tool_name": "Skipper",
       "tool_version": "",
       "code_example": "",
@@ -19,49 +10,43 @@
       "github_url": "https://github.com/YeoLab/skipper"
     },
     {
-      "step_order": 3,
-      "description": "DESeq2 (Differential Expression)",
-      "tool_name": "DESeq2",
+      "step_order": 2,
+      "description": "Reads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using skewer.",
+      "tool_name": "eCLIP",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
-      "github_url": "https://bioconductor.org/packages/DESeq2"
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Unique Molecular Identifiers (UMIs) were extracted from raw sequencing reads with fastp",
+      "tool_name": "fastp",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
     },
     {
       "step_order": 4,
-      "description": "rMATS (Splicing Analysis)",
-      "tool_name": "rMATS",
-      "tool_version": "4.0.2",
+      "description": "Extracted reads were aligned using STAR: --alignEndsType EndToEnd --genomeDir {params.star_sjdb} --genomeLoad NoSharedMemory --outBAMcompression 10 --outFileNamePrefix {params.outprefix} --winAnchorMultimapNmax 100 --outFilterMultimapNmax 100 --outFilterMultimapScoreRange 1 --outSAMmultNmax 1 --outMultimapperOrder Random --outFilterScoreMin 10 --outFilterType BySJout --limitOutSJcollapsed 5000000 --outReadsUnmapped None --outSAMattrRGline ID:{wildcards.replicate_label} --outSAMattributes All --outSAMmode Full --outSAMtype BAM Unsorted --outSAMunmapped Within --readFilesCommand zcat --outStd Log --readFilesIn {input.fq} --runMode alignReads --runThreadN {threads}",
+      "tool_name": "STAR",
+      "tool_version": "",
       "code_example": "",
       "code_language": "bash",
-      "github_url": "https://github.com/Xinglab/rmats-turbo"
+      "github_url": "https://github.com/alexdobin/STAR"
     },
     {
       "step_order": 5,
-      "description": "Gene Ontology (Pathway Analysis)",
-      "tool_name": "Gene Ontology",
+      "description": "Custom scripts called reproducible enriched windows and repetitive elements as part of Skipper",
+      "tool_name": "Skipper",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
-      "github_url": "http://geneontology.org"
-    },
-    {
-      "step_order": 6,
-      "description": "Metascape (Pathway Analysis)",
-      "tool_name": "Metascape",
-      "tool_version": "3.5",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://metascape.org"
-    },
-    {
-      "step_order": 7,
-      "description": "UniProt (Reference)",
-      "tool_name": "UniProt",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://www.uniprot.org"
+      "github_url": "https://github.com/YeoLab/skipper"
     }
-  ]
+  ],
+  "raw_text": "Data was processed using Skipper, available at: http://github.com/yeolab/skipper\nReads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using skewer.\nUnique Molecular Identifiers (UMIs) were extracted from raw sequencing reads with fastp\nExtracted reads were aligned using STAR: --alignEndsType EndToEnd --genomeDir {params.star_sjdb} --genomeLoad NoSharedMemory --outBAMcompression 10 --outFileNamePrefix {params.outprefix} --winAnchorMultimapNmax 100 --outFilterMultimapNmax 100 --outFilterMultimapScoreRange 1 --outSAMmultNmax 1 --outMultimapperOrder Random --outFilterScoreMin 10 --outFilterType BySJout --limitOutSJcollapsed 5000000 --outReadsUnmapped None --outSAMattrRGline ID:{wildcards.replicate_label} --outSAMattributes All --outSAMmode Full --outSAMtype BAM Unsorted --outSAMunmapped Within --readFilesCommand zcat --outStd Log --readFilesIn {input.fq} --runMode alignReads --runThreadN {threads}\nCustom scripts called reproducible enriched windows and repetitive elements as part of Skipper\nAssembly: GRCh38\nSupplementary files format and content: single-replicate enriched window files contain p values, q values, enrichment, and annotations for significantly bound transcriptome tiled windows\nSupplementary files format and content: reproducible enriched window files contain p values, q values, enrichment, and annotations for significantly bound transcriptome tiled windows",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
 }

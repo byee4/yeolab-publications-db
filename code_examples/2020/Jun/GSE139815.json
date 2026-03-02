@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "MaGeCk was used to process data for lentiCRISPR bulk samples to quantify sgRNA abundances.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Targeted microRaft data was processed with CRaftID software (https://github.com/YeoLab/CRaftID)",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "MaGeCk was used to process data for lentiCRISPR bulk samples to quantify sgRNA abundances.\nTargeted microRaft data was processed with CRaftID software (https://github.com/YeoLab/CRaftID)\nGenome_build: hg19\nSupplementary_files_format_and_content: [all.count_normalized.csv]  Table of normalized sgRNA counts (one column per sample) for bulk samples\nSupplementary_files_format_and_content: [microRaft_processed.csv]   Read counts and sgRNA insert identified for each microRaft library. Libraries where no sgRNA insert were detected (sequencing failure) are not included in this file.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

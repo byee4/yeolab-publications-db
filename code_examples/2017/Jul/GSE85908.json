@@ -1,0 +1,106 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Reads were trimmed of adapter sequences TCGTATGCCGTCTTCTGCTTG, ATCTCGTATGCCGTCTTCTGCTTG, CGACAGGTTCAGAGTTCTACAGTCCGACGATC GATCGGAAGAGCACACGTCTGAACTCCAGTCAC using cutadapt v1.8.1",
+      "tool_name": "cutadapt",
+      "tool_version": "1.8.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Trimmed reads were aligned to RepBase v18.05 using STAR v2.4.01",
+      "tool_name": "STAR",
+      "tool_version": "2.4.01",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Reads that didn't align to RepBase were aligned to hg19 using STAR v2.4.01 and a splice junction database derived from GENCODE v19",
+      "tool_name": "STAR",
+      "tool_version": "2.4.01",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Transcripts per million (TPM) per transcript was calculated from reads that didn't align to RepBase were quasi-aligned to GENCODE v19 protein coding and lincRNA transcripts using Sailfish v0.6.3",
+      "tool_name": "GENCODE",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "TPM per gene was calculated by summing the TPM for all transcripts of a gene",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Percent spliced-in (Psi) was calculated from junction read output from STAR aligner (SJ.out.tab) were used to create a de novo splicing index in conjunction with GENCODE v19 gene annotations, using outrigger",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "Outlier cells were calculated using K-means clustering with k=3 on the expression matrix and omitting cells which clustered into a group consisting of a majority of other cell types",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "Modality was calculated using anchor on the psi scores for all events detected in at least 10 cells, for each cell type",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "Waypoints were calculated using bonvoyage on the psi scores for all events detected in at least 10 cells, for each cell type",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 10,
+      "description": "Splicing events were annotated using poshsplice to annotate corresponding genes, splice site strength using MaxEntScan, intron and exon lengths, conservation of alternative splicing from Merkin et al Science 2012,",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 11,
+      "description": "Genes were annotated with attributes available in Gencode v19, Phylostrata for the matching ENSEMBL identifiers in Domazet-Loso et al MBE 2008, and TF or RBP category from Gerstberger et al Nat Rev Gen 2014",
+      "tool_name": "GENCODE",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Reads were trimmed of adapter sequences TCGTATGCCGTCTTCTGCTTG, ATCTCGTATGCCGTCTTCTGCTTG, CGACAGGTTCAGAGTTCTACAGTCCGACGATC GATCGGAAGAGCACACGTCTGAACTCCAGTCAC using cutadapt v1.8.1\nTrimmed reads were aligned to RepBase v18.05 using STAR v2.4.01\nReads that didn't align to RepBase were aligned to hg19 using STAR v2.4.01 and a splice junction database derived from GENCODE v19\nTranscripts per million (TPM) per transcript was calculated from reads that didn't align to RepBase were quasi-aligned to GENCODE v19 protein coding and lincRNA transcripts using Sailfish v0.6.3\nTPM per gene was calculated by summing the TPM for all transcripts of a gene\nPercent spliced-in (Psi) was calculated from junction read output from STAR aligner (SJ.out.tab) were used to create a de novo splicing index in conjunction with GENCODE v19 gene annotations, using outrigger\nOutlier cells were calculated using K-means clustering with k=3 on the expression matrix and omitting cells which clustered into a group consisting of a majority of other cell types\nModality was calculated using anchor on the psi scores for all events detected in at least 10 cells, for each cell type\nWaypoints were calculated using bonvoyage on the psi scores for all events detected in at least 10 cells, for each cell type\nSplicing events were annotated using poshsplice to annotate corresponding genes, splice site strength using MaxEntScan, intron and exon lengths, conservation of alternative splicing from Merkin et al Science 2012,\nGenes were annotated with attributes available in Gencode v19, Phylostrata for the matching ENSEMBL identifiers in Domazet-Loso et al MBE 2008, and TF or RBP category from Gerstberger et al Nat Rev Gen 2014\nGenome_build: hg19\nSupplementary_files_format_and_content: \"metadata.csv.gz\" contains sample metadata, \"splicing.csv.gz\" contains Psi scores, \"splicing_feature.csv.gz\" contains metadata for splicing events, \"expression.csv.gz\" contains TPM values for genes, \"expression_feature.csv.gz\" contains metadata for genes, \"mapping_stats.csv.gz\" contains the number and percentages of reads mapped for each samples",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

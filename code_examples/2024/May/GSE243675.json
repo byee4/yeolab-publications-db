@@ -2,17 +2,17 @@
   "steps": [
     {
       "step_order": 1,
-      "description": "Salmon (Quantification)",
-      "tool_name": "Salmon",
+      "description": "R1 data was processed using the single ended eCLIP pipeline and available at: http://github.com/yeolab/eclip.",
+      "tool_name": "eCLIP",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
-      "github_url": "https://combine-lab.github.io/salmon"
+      "github_url": ""
     },
     {
       "step_order": 2,
-      "description": "IDR (Peak Calling)",
-      "tool_name": "IDR",
+      "description": "Unique Molecular Identifiers (UMIs) were extracted from raw sequencing reads with umi_tools extract",
+      "tool_name": "UMI-tools",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
@@ -20,7 +20,43 @@
     },
     {
       "step_order": 3,
-      "description": "CLIPper (CLIP Analysis)",
+      "description": "Post-umi-extracted reads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using cutadapt.",
+      "tool_name": "cutadapt",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Trimmed reads were mapped against RepBase with STAR to remove reads mapping to repetitive sequences (--outFilterMultimapNmax 30 --alignEndsType EndToEnd --outFilterMultimapScoreRange 1 --outSAMmode Full --outFilterType BySJout --outSAMtype BAM Unsorted --outFilterScoreMin 10 --outReadsUnmapped Fastx --outSAMattributes All)",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Remaining reads were mapped to the appropriate genome build (Pa_P01 + PhiPA3) using STAR aligner (--outFilterMultimapNmax 1 --alignEndsType EndToEnd --outFilterMultimapScoreRange 1 --outSAMmode Full --outFilterType BySJout --outSAMtype BAM Unsorted --outFilterScoreMin 10 --outReadsUnmapped Fastx --outSAMattributes All)",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Uniquely mapped reads were removed of PCR duplicates with umi_tools",
+      "tool_name": "UMI-tools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "Peak clusters were identified with CLIPper, available at: https://github.com/YeoLab/clipper",
       "tool_name": "CLIPper",
       "tool_version": "",
       "code_example": "",
@@ -28,22 +64,25 @@
       "github_url": "https://github.com/YeoLab/clipper"
     },
     {
-      "step_order": 4,
-      "description": "AlphaFold (Structure Prediction)",
-      "tool_name": "AlphaFold",
+      "step_order": 8,
+      "description": "Clusters enriched over corresponding size-matched input (SMInput) were identified using a custom Perl script, available in the main eCLIP repository as: overlap_peakfi_with_bam.pl",
+      "tool_name": "eCLIP",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
-      "github_url": "https://alphafold.ebi.ac.uk"
+      "github_url": ""
     },
     {
-      "step_order": 5,
-      "description": "RefSeq (Reference)",
-      "tool_name": "RefSeq",
-      "tool_version": "000006765.1",
+      "step_order": 9,
+      "description": "Overlapping enriched clusters (peaks) were merged with a custom perl script, available in the main eCLIP repository as: compress_l2foldenrpeakfi_for_replicate_overlapping_bedformat.pl",
+      "tool_name": "eCLIP",
+      "tool_version": "",
       "code_example": "",
       "code_language": "bash",
       "github_url": ""
     }
-  ]
+  ],
+  "raw_text": "R1 data was processed using the single ended eCLIP pipeline and available at: http://github.com/yeolab/eclip.\nUnique Molecular Identifiers (UMIs) were extracted from raw sequencing reads with umi_tools extract\nPost-umi-extracted reads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using cutadapt.\nTrimmed reads were mapped against RepBase with STAR to remove reads mapping to repetitive sequences (--outFilterMultimapNmax 30 --alignEndsType EndToEnd --outFilterMultimapScoreRange 1 --outSAMmode Full --outFilterType BySJout --outSAMtype BAM Unsorted --outFilterScoreMin 10 --outReadsUnmapped Fastx --outSAMattributes All)\nRemaining reads were mapped to the appropriate genome build (Pa_P01 + PhiPA3) using STAR aligner (--outFilterMultimapNmax 1 --alignEndsType EndToEnd --outFilterMultimapScoreRange 1 --outSAMmode Full --outFilterType BySJout --outSAMtype BAM Unsorted --outFilterScoreMin 10 --outReadsUnmapped Fastx --outSAMattributes All)\nUniquely mapped reads were removed of PCR duplicates with umi_tools\nPeak clusters were identified with CLIPper, available at: https://github.com/YeoLab/clipper\nClusters enriched over corresponding size-matched input (SMInput) were identified using a custom Perl script, available in the main eCLIP repository as: overlap_peakfi_with_bam.pl\nOverlapping enriched clusters (peaks) were merged with a custom perl script, available in the main eCLIP repository as: compress_l2foldenrpeakfi_for_replicate_overlapping_bedformat.pl\nAssembly: PhiPA3\nAssembly: Pa_PA01\nSupplementary files format and content: compressed.bed files contain single replicate peaks (-log10 p-value, log2 fold enrichment above size-matched input in columns 4 and 5 respectively)\nSupplementary files format and content: *vs* files contain reproducible peaks using IDR",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
 }

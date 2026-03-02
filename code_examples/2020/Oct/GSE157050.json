@@ -1,0 +1,61 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "First, adapter trimming was performed with\u00c2 cutadapt\u00c2 (v1.14).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Next, reads were mapped with STAR (v2.4.0i) against a database of repetitive elements, with mapping reads discarded from further analysis.",
+      "tool_name": "STAR",
+      "tool_version": "2.4.0i",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Remaining reads were then mapped to the mouse genome (mm10) with STAR (v2.4.0i)",
+      "tool_name": "STAR",
+      "tool_version": "2.4.0i",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Stranded reads mapping to GENCODE (vM20) genes were quantified with featureCounts (subread-1.6.4).",
+      "tool_name": "featureCounts",
+      "tool_version": "1.6.4",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Mitochondrial genes were discarded, and only genes with at least 0.5 reads per million across all datasets were kept for further analysis.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Differential expression in polysome versus input was quantified with edgeR (v3.26.8) with dispersion = 0.06 estimated from the subset of experiments with multiple replicates.",
+      "tool_name": "edgeR",
+      "tool_version": "3.26.8",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "First, adapter trimming was performed with\u00c2\u00a0cutadapt\u00c2\u00a0(v1.14).\nNext, reads were mapped with STAR (v2.4.0i) against a database of repetitive elements, with mapping reads discarded from further analysis.\nRemaining reads were then mapped to the mouse genome (mm10) with STAR (v2.4.0i)\nStranded reads mapping to GENCODE (vM20) genes were quantified with featureCounts (subread-1.6.4). Mitochondrial genes were discarded, and only genes with at least 0.5 reads per million across all datasets were kept for further analysis.\nDifferential expression in polysome versus input was quantified with edgeR (v3.26.8) with dispersion = 0.06 estimated from the subset of experiments with multiple replicates.\nGenome_build: mm10\nSupplementary_files_format_and_content: EdgeR output files (*.txt.gz*) contain gene identifier, log(fold-change in polysome versus input), log(counts per million), and p-value (polysome versus input)",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

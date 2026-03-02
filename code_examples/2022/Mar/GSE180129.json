@@ -2,12 +2,222 @@
   "steps": [
     {
       "step_order": 1,
-      "description": "BLAST (Sequence Search)",
-      "tool_name": "BLAST",
+      "description": "Sequenced reads were reformatted to include randomers in read headers with umi_tools (1.0.0).",
+      "tool_name": "UMI-tools",
+      "tool_version": "1.0.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Args: --random-seed 1 --bc-pattern NNNNNNNNNN",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Reads were then trimmed with cutadapt (1.14).",
+      "tool_name": "cutadapt",
+      "tool_version": "1.14",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Args: --match-read-wildcards -O 1 --times 1 -e 0.1 --quality-cutoff 6 -m 18 -a InvRNA*.fasta (fasta sequences can be found at: https://github.com/YeoLab/eclip/tree/master/example/inputs/)",
+      "tool_name": "eCLIP",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Reads were then trimmed again with cutadapt (1.14) to remove double-ligation events.",
+      "tool_name": "cutadapt",
+      "tool_version": "1.14",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Args: --match-read-wildcards -O 5 --times 1 -e 0.1 --quality-cutoff 6 -m 18 -a Ril19.fasta (fasta sequences can be found at: https://github.com/YeoLab/eclip/tree/master/example/inputs/)",
+      "tool_name": "eCLIP",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "For targeted miR-130a datasets, reads that did not contain the primer sequence (CAGUGCAAUGUUAAAAGGGCAU) were filtered out.",
+      "tool_name": "",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
       "github_url": "https://blast.ncbi.nlm.nih.gov"
+    },
+    {
+      "step_order": 8,
+      "description": "For total chimeric eCLIP datasets, 10nt from the 3'end of Read1 was trimmed with umi_tools.",
+      "tool_name": "UMI-tools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "Args: -u -9",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 10,
+      "description": "Trimmed and filtered reads were then mapped with STAR (2.7.6a) against a repeat element database (RepBase 18.05).",
+      "tool_name": "STAR",
+      "tool_version": "2.7.6a",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 11,
+      "description": "Args: --runThreadN 16 \\ --genomeDir human_repbase \\ --readFilesIn path/to/read1 \\ --outFileNamePrefix out_prefix \\ --outReadsUnmapped Fastx \\ --outSAMtype BAM Unsorted \\ --outSAMattributes All \\ --outSAMunmapped Within \\ --outSAMattrRGline ID:foo \\ --outFilterType BySJout \\ --outFilterMultimapNmax 30 \\ --outFilterMultimapScoreRange 1 \\ --outFilterScoreMin 10 \\ --alignEndsType EndToEnd",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 12,
+      "description": "Unmapped reads filtered of repeat elements were then mapped with STAR (2.7.6a) against a human genome (hg19).",
+      "tool_name": "STAR",
+      "tool_version": "2.7.6a",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 13,
+      "description": "Args: --runThreadN 16 \\ --genomeDir genomedir \\ --readFilesIn /path/to/read1 \\ --outFileNamePrefix out_prefix \\ --outReadsUnmapped Fastx \\ --outSAMtype BAM Unsorted \\ --outSAMattributes All \\ --outSAMunmapped Within \\ --outSAMattrRGline ID:foo \\ --outFilterType BySJout \\ --outFilterMultimapNmax 1 \\ --outFilterMultimapScoreRange 1 \\ --outFilterScoreMin 10 \\ --alignEndsType EndToEnd",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 14,
+      "description": "Aligned reads were sorted with samtools (1.6)",
+      "tool_name": "samtools",
+      "tool_version": "1.6",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 15,
+      "description": "Sorted reads were collapsed with umi_tools (1.0.0).",
+      "tool_name": "UMI-tools",
+      "tool_version": "1.0.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 16,
+      "description": "Args: --random-seed 1 --method unique",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 17,
+      "description": "BAM files were used to identify peak clusters with Clipper (1.2.2).",
+      "tool_name": "CLIPper",
+      "tool_version": "1.2.2",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 18,
+      "description": "Args: --species (hg19) --bam path/to/input.bam --timeout 3600000 --maxgenes 1000000 --save-pickle --outfile path/to/output.bam",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 19,
+      "description": "Peak clusters were normalized using BAM files for IP against BAM files for INPUT with peaksnormalize.pl (overlap_peakfi_with_bam_PE.pl), included in eclip 0.1.5+.",
+      "tool_name": "eCLIP",
+      "tool_version": "0.1.5",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 20,
+      "description": "Overlapping normalized peak regions were merged with compress_l2foldenrpeakfi_for_replicate_overlapping_bedformat.pl, included within eclip-0.1.5+",
+      "tool_name": "eCLIP",
+      "tool_version": "0.1.5",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 21,
+      "description": "Normalized peak (compressed.bed) files were ranked by entropy score (make_informationcontent_from_peaks.pl included within the merge_peaks pipeline) and used as inputs to IDR (2.0.2) to determine reproducible peaks.",
+      "tool_name": "IDR",
+      "tool_version": "2.0.2",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 22,
+      "description": "To capture chimeric reads, trimmed fastqs were converted to fasta and collapsed into unique sequences using seqtk seq (1.3-r106) and ctk fasta2collapse.pl (v1.0.8)",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 23,
+      "description": "Collapsed sequences were indexed and used to map mature miRNA (miRBase) using bowtie2 (v2.2.6)",
+      "tool_name": "Bowtie2",
+      "tool_version": "2.2.6",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 24,
+      "description": "Sequences that mapped to miRs whose mRNA portion were at least 18nt were re-assigned according to their original read ID, and mapped to the human genome as previously described.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
     }
-  ]
+  ],
+  "raw_text": "Sequenced reads were reformatted to include randomers in read headers with umi_tools (1.0.0). Args: --random-seed 1 --bc-pattern NNNNNNNNNN\nReads were then trimmed with cutadapt (1.14). Args: --match-read-wildcards -O 1 --times 1 -e 0.1 --quality-cutoff 6 -m 18 -a InvRNA*.fasta (fasta sequences can be found at: https://github.com/YeoLab/eclip/tree/master/example/inputs/)\nReads were then trimmed again with cutadapt (1.14) to remove double-ligation events. Args: --match-read-wildcards -O 5 --times 1 -e 0.1 --quality-cutoff 6 -m 18  -a Ril19.fasta (fasta sequences can be found at: https://github.com/YeoLab/eclip/tree/master/example/inputs/)\nFor targeted miR-130a datasets, reads that did not contain the primer sequence (CAGUGCAAUGUUAAAAGGGCAU) were filtered out.\nFor total chimeric eCLIP datasets, 10nt from the 3'end of Read1 was trimmed with umi_tools. Args: -u -9\nTrimmed and filtered reads were then mapped with STAR (2.7.6a) against a repeat element database (RepBase 18.05). Args: --runThreadN 16 \\  --genomeDir human_repbase \\  --readFilesIn path/to/read1 \\  --outFileNamePrefix out_prefix \\  --outReadsUnmapped Fastx \\  --outSAMtype BAM Unsorted \\  --outSAMattributes All \\  --outSAMunmapped Within \\  --outSAMattrRGline ID:foo \\  --outFilterType BySJout \\  --outFilterMultimapNmax 30 \\  --outFilterMultimapScoreRange 1 \\  --outFilterScoreMin 10 \\  --alignEndsType EndToEnd\nUnmapped reads filtered of repeat elements were then mapped with STAR (2.7.6a) against a human genome (hg19). Args: --runThreadN 16 \\  --genomeDir genomedir \\  --readFilesIn /path/to/read1 \\  --outFileNamePrefix out_prefix \\  --outReadsUnmapped Fastx \\  --outSAMtype BAM   Unsorted \\  --outSAMattributes All \\  --outSAMunmapped Within \\  --outSAMattrRGline ID:foo \\  --outFilterType BySJout \\  --outFilterMultimapNmax 1 \\  --outFilterMultimapScoreRange 1 \\  --outFilterScoreMin 10 \\  --alignEndsType EndToEnd\nAligned reads were sorted with samtools (1.6)\nSorted reads were collapsed with umi_tools (1.0.0). Args: --random-seed 1 --method unique\nBAM files were used to identify peak clusters with Clipper (1.2.2). Args: --species (hg19) --bam path/to/input.bam --timeout 3600000 --maxgenes 1000000 --save-pickle --outfile path/to/output.bam\nPeak clusters were normalized using BAM files for IP against BAM files for INPUT with peaksnormalize.pl (overlap_peakfi_with_bam_PE.pl), included in eclip 0.1.5+.\nOverlapping normalized peak regions were merged with compress_l2foldenrpeakfi_for_replicate_overlapping_bedformat.pl, included within eclip-0.1.5+\nNormalized peak (compressed.bed) files were ranked by entropy score (make_informationcontent_from_peaks.pl included within the merge_peaks pipeline) and used as inputs to IDR (2.0.2) to determine reproducible peaks.\nTo capture chimeric reads, trimmed fastqs were converted to fasta and collapsed into unique sequences using seqtk seq (1.3-r106) and ctk fasta2collapse.pl (v1.0.8)\nCollapsed sequences were indexed and used to map mature miRNA (miRBase) using bowtie2 (v2.2.6)\nSequences that mapped to miRs whose mRNA portion were at least 18nt were re-assigned according to their original read ID, and mapped to the human genome as previously described.\nGenome_build: hg19\nSupplementary_files_format_and_content: gk.Au9.umi.r1.fq.genome-mappedSoSo.rmDupSo.peakClusters.bed and gk.Au13.umi.r1.fq.genome-mappedSoSo.rmDupSo.peakClusters.bed contain enriched regions from the miR-130a targeted chimeric eCLIP dataset\nSupplementary_files_format_and_content: cellsB_rep1.vs.cellsB_rep2.bed contains reproducible total chimeric eCLIP peaks across replicates\nSupplementary_files_format_and_content: BigWig files contain RPM-normalized read densities",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
 }

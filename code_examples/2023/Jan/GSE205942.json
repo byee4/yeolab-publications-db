@@ -1,0 +1,34 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Cell Ranger ATAC (v6.0.1) was used to process sequencing information and single cell barcodes.",
+      "tool_name": "Cell Ranger",
+      "tool_version": "6.0.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Cellranger outputs were analyzed in R using Signac (v1.6.0)",
+      "tool_name": "Cell Ranger",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Annotation, quality control, dimensional reduction, and UMAPcreationwerecompleted using the standard Signac workflow.",
+      "tool_name": "Signac",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Cell Ranger ATAC (v6.0.1) was used to process sequencing information and single cell barcodes.\nCellranger outputs were analyzed in R using Signac (v1.6.0)\nAnnotation, quality control, dimensional reduction, and UMAPcreationwerecompleted using the standard Signac workflow.\nAssembly: mm10\nSupplementary files format and content: 10x Genomics output files used: filtered_peak_bc_matrix.h5, singlecell.csv, fragments.tsv.gz, peaks.bed",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

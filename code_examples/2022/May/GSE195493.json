@@ -1,0 +1,52 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "All reads were aligned to the human genome hg38 primary assembly using STAR.",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "featureCounts version 2.0.2 was used to annotate reads, using the flag --minOverlap 20 and a custom GTF file derived from gencode v34",
+      "tool_name": "featureCounts",
+      "tool_version": "2.0.2",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Differential expression was calculated using DESeq2.",
+      "tool_name": "DESeq2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Cut-offs used to determine significant differential expression were baseMean > 50 and padj <=0.01.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "In this comparison, a negative log2FoldChange indicates that a transcript was more nuclear, while a positive log2FoldChange indicates that a transcript was more cytoplasmic.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "All reads were aligned to the human genome hg38 primary assembly using STAR.\nfeatureCounts version 2.0.2 was used to annotate reads, using the flag --minOverlap 20 and a custom GTF file derived from gencode v34\nDifferential expression was calculated using DESeq2. Cut-offs used to determine significant differential expression were baseMean > 50 and padj <=0.01. In this comparison, a negative log2FoldChange indicates that a transcript was more nuclear, while a positive log2FoldChange indicates that a transcript was more cytoplasmic.\nGenome_build: hg38\nSupplementary_files_format_and_content: comma separated files with output of DESeq2; normalized abudnance measurements for all genes when comparing the nuclear and cytoplasmic fractions. In this comparison, a negative log2FoldChange indicates that a transcript was more nuclear, while a positive log2FoldChange indicates that a transcript was more cytoplasmic",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

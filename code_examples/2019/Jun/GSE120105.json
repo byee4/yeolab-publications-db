@@ -1,0 +1,52 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Library strategy: GRO-seq",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "GRO-seq reads were mapped on the human reference genome using the Bowtie2 local model",
+      "tool_name": "Bowtie2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Non-redundant reads were determined and kept for downstream analysis by using Samtools",
+      "tool_name": "samtools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "DEseq2 package was used to search for differentially expressed genes (DEGs), which was defined with the following cutoff: adjusted p-value of \u00e2\u0089\u00a40.05 and fold change of \u00e2\u0089\u00a42/3 or \u00e2\u0089\u00a53/2.",
+      "tool_name": "DESeq2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "processed data files format and content: BED and BigWig",
+      "tool_name": "UCSC tools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Library strategy: GRO-seq\nGRO-seq reads were mapped on the human reference genome using the Bowtie2 local model\nNon-redundant reads were determined and kept for downstream analysis by using Samtools\nDEseq2 package was used to search for differentially expressed genes (DEGs), which was defined with the following cutoff: adjusted p-value of \u00e2\u0089\u00a40.05 and fold change of \u00e2\u0089\u00a42/3 or \u00e2\u0089\u00a53/2.\nGenome_build: GRCh37 (hg19)\nprocessed data files format and content: BED and BigWig",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

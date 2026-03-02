@@ -2,35 +2,35 @@
   "steps": [
     {
       "step_order": 1,
-      "description": "STAR (Alignment)",
+      "description": "fastq Illumina RNASeq paired-end reads were aligned using STAR (2.5.2a).",
       "tool_name": "STAR",
-      "tool_version": "2.7.1a",
+      "tool_version": "2.5.2a",
       "code_example": "",
       "code_language": "bash",
       "github_url": "https://github.com/alexdobin/STAR"
     },
     {
       "step_order": 2,
-      "description": "Salmon (Quantification)",
-      "tool_name": "Salmon",
-      "tool_version": "0.13.1",
+      "description": "We used Leafcutter (0.2.6) to perform differential splicing analyses of each of four defined groups of ALS cases (ALSlow, ALShigh, C9, FTD grouped samples for a total of 54 samples referred to as the training set) against the Control group (all groups are described in: link to manuscript here).",
+      "tool_name": "Leafcutter",
+      "tool_version": "0.2.6",
       "code_example": "",
       "code_language": "bash",
-      "github_url": "https://combine-lab.github.io/salmon"
+      "github_url": ""
     },
     {
       "step_order": 3,
-      "description": "limma (Differential Expression)",
-      "tool_name": "limma",
+      "description": "In each differential splicing analysis, Leafcutter outputs a file listing the set of cluster padj values, and a second file listing the splice junctions that reside within those clusters and their delta PSIs as a result of the differential analysis.",
+      "tool_name": "Leafcutter",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
-      "github_url": "https://bioconductor.org/packages/limma"
+      "github_url": ""
     },
     {
       "step_order": 4,
-      "description": "Harmony (Single-Cell)",
-      "tool_name": "Harmony",
+      "description": "Clusters with a padj value <0.1 were selected for further analysis; we aggregated splice junctions and their corresponding delta PSIs across the 4 analyses into a single matrix.",
+      "tool_name": "",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
@@ -38,21 +38,42 @@
     },
     {
       "step_order": 5,
-      "description": "GSEA (Pathway Analysis)",
-      "tool_name": "GSEA",
-      "tool_version": "3.8",
+      "description": "Differentially spliced events are ordered by the max delta PSI across the 4 analyses (file: sig.junctions.padj01.sorted_by_max_deltapsi_Conlon_et_al_2018.txt).",
+      "tool_name": "",
+      "tool_version": "",
       "code_example": "",
       "code_language": "bash",
-      "github_url": "https://www.gsea-msigdb.org"
+      "github_url": "https://combine-lab.github.io/salmon"
     },
     {
       "step_order": 6,
-      "description": "GENCODE (Reference)",
+      "description": "Splice junction coordinates are intersected with Gencode release 25 annotations.",
       "tool_name": "GENCODE",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
       "github_url": "https://www.gencodegenes.org"
+    },
+    {
+      "step_order": 7,
+      "description": "PSI ratios across all samples in Conlon et al.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "2018 (77 training and test samples, see link to manuscript here) were computed using the leafcutter_quantify_psi.R script starting from the splice junction counts (see https://github.com/davidaknowles/leafcutter/issues/34)",
+      "tool_name": "Leafcutter",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
     }
-  ]
+  ],
+  "raw_text": "fastq Illumina RNASeq paired-end reads were aligned using STAR (2.5.2a).\nWe used Leafcutter (0.2.6) to perform differential splicing analyses of each of four defined groups of ALS cases (ALSlow, ALShigh, C9, FTD grouped samples for a total of 54 samples referred to as the training set) against the Control group (all groups are described in: link to manuscript here). In each differential splicing analysis, Leafcutter outputs a file listing the set of cluster padj values, and a second file listing the splice junctions that reside within those clusters and their delta PSIs as a result of the differential analysis.\nClusters with a padj value <0.1 were selected for further analysis; we aggregated splice junctions and their corresponding delta PSIs across the 4 analyses into a single matrix. Differentially spliced events are ordered by the max delta PSI across the 4 analyses (file: sig.junctions.padj01.sorted_by_max_deltapsi_Conlon_et_al_2018.txt).\nSplice junction coordinates are intersected with Gencode release 25 annotations.\nPSI ratios across all samples in Conlon et al. 2018 (77 training and test samples, see link to manuscript here) were computed using the leafcutter_quantify_psi.R  script starting from the splice junction counts (see https://github.com/davidaknowles/leafcutter/issues/34)\nGenome_build: GRCh38\nSupplementary_files_format_and_content: sig.junctions.padj01.sorted_by_max_deltapsi_Conlon_et_al_2018.txt : Differentially spliced events, coordinates and gene names are ordered by the max delta PSI across the 4 analyses of 54 ALS and Control samples.\nSupplementary_files_format_and_content: DS_leafcutter.ratios_Conlon_et_al_2018.txt : PSI ratios across all samples (77 training and test samples in Conlon et al. 2018, link to manuscript here) were computed using the leafcutter_quantify_psi.R  script starting from the splice junction counts (see https://github.com/davidaknowles/leafcutter/issues/34)",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
 }

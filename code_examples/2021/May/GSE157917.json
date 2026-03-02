@@ -1,0 +1,34 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "The reads were aligned with STAR (Dobin et al., 2013) to the human genome hg19 using default parameters and a two-pass approach.",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Following a first pass alignment of each sample, novel splice junctions were pooled across all samples from the same cell type and incorporated into the genome annotation for a second pass alignment.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Second pass gene counts derived from uniquely mapping pairs with the expected strandedness were output by STAR.",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "The reads were aligned with STAR (Dobin et al., 2013) to the human genome hg19 using default parameters and a two-pass approach.\nFollowing a first pass alignment of each sample, novel splice junctions were pooled across all samples from the same cell type and incorporated into the genome annotation for a second pass alignment.\nSecond pass gene counts derived from uniquely mapping pairs with the expected strandedness were output by STAR.\nGenome_build: hg19\nSupplementary_files_format_and_content: Raw gene counts for every gene and every sample",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

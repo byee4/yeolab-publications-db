@@ -1,0 +1,43 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "data processing was done using the Skipper pipeline, freelly available at https://github.com/yeolab/skipper.",
+      "tool_name": "Skipper",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Adapters trimming was done with Skewer",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "proccessed reads were mapped with STAR (2.7.10a_alpha_220314)",
+      "tool_name": "STAR",
+      "tool_version": "2.7.10a",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "PCR bias was removed using UMIcollapse",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "data processing was done using the Skipper pipeline, freelly available at https://github.com/yeolab/skipper.\nAdapters trimming was done with Skewer\nproccessed reads were mapped with STAR (2.7.10a_alpha_220314)\nPCR bias was removed using UMIcollapse\nAssembly: hg38\nSupplementary files format and content: tab separated values files\nSupplementary files format and content: Supplementary files - reproducible enriched window including p and q values, enrichment scores, and the annotated regions for the significantly bound transcriptome tiled windows.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

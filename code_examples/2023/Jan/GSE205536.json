@@ -2,12 +2,123 @@
   "steps": [
     {
       "step_order": 1,
-      "description": "Mudskipper (CLIP Analysis)",
-      "tool_name": "Mudskipper",
+      "description": "Data is processed in a similar way to standard eCLIP pipeline, except for a few adjustments to ABC\u00e2\u0080\u0099s multiplex design and library structure.",
+      "tool_name": "eCLIP",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "UMI are extracted using umitools 1.0.0 and adaptors are removed using cutadapt 2.8, then fastqs are demultiplexed based on the 5nt barcode sequence using fastx toolkit.",
+      "tool_name": "cutadapt",
+      "tool_version": "2.8",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Since ABC is sequenced on the reverse strand, we reverse complement sequences.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Alignment to the repetitive regions removes multi-mapped reads, then aligned to the genomic sequences using STAR 2.7.6.",
+      "tool_name": "STAR",
+      "tool_version": "2.7.6",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "The pipeline is available at https://github.com/algaebrown/oligoCLIP.git",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Given the genome alignment, we subsequently follow the steps to do peak call using CLIPper, then rank the peaks comparing to \u00e2\u0080\u009cbackgrounds\u00e2\u0080\u009d, either SMInput (eCLIP), RNA-seq (ABC), or to other multiplex libraries (internal normalization).",
+      "tool_name": "CLIPper",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "CLIPper uses nearby regions (+/- 500 b.p.) to estimate the background, followed by a Poisson distribution to assess the significance of a peak, whereas \u00e2\u0080\u009cnormalization\u00e2\u0080\u009d takes into account of another background library.",
+      "tool_name": "CLIPper",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "In the eCLIP protocol, the SMInput library is prepared the same way as the IP library, which estimates the background crosslinking rate of other RBPs with similar size ranges as well as the RNA expression level and all other bias in library preparation.",
+      "tool_name": "eCLIP",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "Since ABC does not have a SMInput, we realize that a total RNA-seq library can capture part of the bias.",
+      "tool_name": "RNA-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 10,
+      "description": "Furthermore, internal normalization to other multiplexed library can estimate not only the expression level, but also other biases introduced within the protocol.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 11,
+      "description": "Ideally, as the number of RBP approaches infinity, the summation of \u00e2\u0080\u009cother RBPs in the multiplexed library\u00e2\u0080\u009d should approach the SMI-input.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 12,
+      "description": "To estimate the significance of the peak based on backgrounds, we used a chi-square test (or Fisher Exact test, if the number of reads < 5) to compare the number of reads in the IP library and the background library within and outside of the peak region.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 13,
+      "description": "The pipeline is available at https://github.com/algaebrown/oligoCLIP.git",
+      "tool_name": "",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
       "github_url": ""
     }
-  ]
+  ],
+  "raw_text": "Data is processed in a similar way to standard eCLIP pipeline, except for a few adjustments to ABC\u00e2\u0080\u0099s multiplex design and library structure. UMI are extracted using umitools 1.0.0 and adaptors are removed using cutadapt 2.8, then fastqs are demultiplexed based on the 5nt barcode sequence using fastx toolkit. Since ABC is sequenced on the reverse strand, we reverse complement sequences. Alignment to the repetitive regions removes multi-mapped reads, then aligned to the genomic sequences using STAR 2.7.6. The pipeline is available at https://github.com/algaebrown/oligoCLIP.git\nGiven the genome alignment, we subsequently follow the steps to do peak call using CLIPper, then rank the peaks comparing to \u00e2\u0080\u009cbackgrounds\u00e2\u0080\u009d, either SMInput (eCLIP), RNA-seq (ABC), or to other multiplex libraries (internal normalization). CLIPper uses nearby regions (+/- 500 b.p.) to estimate the background, followed by a Poisson distribution to assess the significance of a peak, whereas \u00e2\u0080\u009cnormalization\u00e2\u0080\u009d takes into account of another background library. In the eCLIP protocol, the SMInput library is prepared the same way as the IP library, which estimates the background crosslinking rate of other RBPs with similar size ranges as well as the RNA expression level and all other bias in library preparation. Since ABC does not have a SMInput, we realize that a total RNA-seq library can capture part of the bias. Furthermore, internal normalization to other multiplexed library can estimate not only the expression level, but also other biases introduced within the protocol. Ideally, as the number of RBP approaches infinity, the summation of \u00e2\u0080\u009cother RBPs in the multiplexed library\u00e2\u0080\u009d should approach the SMI-input. To estimate the significance of the peak based on backgrounds, we used a chi-square test (or Fisher Exact test, if the number of reads < 5) to compare the number of reads in the IP library and the background library within and outside of the peak region. The pipeline is available at https://github.com/algaebrown/oligoCLIP.git\nAssembly: GRCh38\nSupplementary files format and content: bed (unnormalized CLIPper peak)\nSupplementary files format and content: bed (normalized to RNA-seq)\nSupplementary files format and content: bed (normalized to other multiplex library, repeat element removed)",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
 }

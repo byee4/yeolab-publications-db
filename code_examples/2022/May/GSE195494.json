@@ -1,0 +1,52 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "All reads were aligned to the human genome hg38 primary assembly using STAR.",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "featureCounts version 2.0.2 was used to annotate reads, using the flag --minOverlap 20 and a custom GTF file derived from gencode v34",
+      "tool_name": "featureCounts",
+      "tool_version": "2.0.2",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "EPKM values were determined as in (Brannan et al., 2021).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Furthermore, for each gene, EPKM values obtained in the Control-STAMP cell line were subtracted from the RPS2-STAMP EPKM values, giving a normalized EPKM value for each gene which indicates the degree of translation of that transcript.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Control-STAMP PABPC IP Rep3 was not a successful immunoprecipitation and thus was excluded from analysis.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "All reads were aligned to the human genome hg38 primary assembly using STAR.\nfeatureCounts version 2.0.2 was used to annotate reads, using the flag --minOverlap 20 and a custom GTF file derived from gencode v34\nEPKM values were determined as in (Brannan et al., 2021). Furthermore, for each gene, EPKM values obtained in the Control-STAMP cell line were subtracted from the RPS2-STAMP EPKM values, giving a normalized EPKM value for each gene which indicates the degree of translation of that transcript. Control-STAMP PABPC IP Rep3 was not a successful immunoprecipitation and thus was excluded from analysis.\nGenome_build: hg38\nSupplementary_files_format_and_content: comma separated file with normalized epkm values calculated for each gene in each condition (Input, PABPN IP or PABPC IP). Transcript per kilobase Million (TPM) values are included for each condition so that users can filter based on the overall abundance of a gene",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

@@ -1,0 +1,43 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Paired end reads from all libraries were mapped to both the human (hg19, GRCh37) and chimpanzee (panTro3, CGSC 2.1.3) genomes using STAR (v2.2.0c).",
+      "tool_name": "STAR",
+      "tool_version": "2.2.0c",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Due to the lack of annotation in the chimpanzee genome, human gene models (RefSeq) were used to quantify gene expression.",
+      "tool_name": "RefSeq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "To avoid bias introduced by genome insertions and deletions, only reads mapping to both the human and chimpanzee genomes uniquely were used from each sample when comparing gene expression values (~4% of reads mapped to only one genome per sample).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "To calculate gene expression, read counts in the exons of RefSeq transcripts where calculated using HOMER",
+      "tool_name": "HOMER",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Paired end reads from all libraries were mapped to both the human (hg19, GRCh37) and chimpanzee (panTro3, CGSC 2.1.3) genomes using STAR (v2.2.0c). Due to the lack of annotation in the chimpanzee genome, human gene models (RefSeq) were used to quantify gene expression. To avoid bias introduced by genome insertions and deletions, only reads mapping to both the human and chimpanzee genomes uniquely were used from each sample when comparing gene expression values (~4% of reads mapped to only one genome per sample).  To calculate gene expression, read counts in the exons of RefSeq transcripts where calculated using HOMER\nGenome_build: GRCh37, panTro3\nGenome_build: Pan_troglodytes-2.1.3\nSupplementary_files_format_and_content: File \"rpkm.txt.gz\" (linked as a supplementary file to the Series record) is a tab-delimited text file with RPKM values from all experiments and gene annotation information for RefSeq protein-coding genes (hg19 assembly)",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

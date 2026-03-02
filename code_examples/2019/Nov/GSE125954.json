@@ -2,12 +2,42 @@
   "steps": [
     {
       "step_order": 1,
-      "description": "Gene Ontology (Pathway Analysis)",
-      "tool_name": "Gene Ontology",
+      "description": "Reads were trimmed using cutadapt and aligned to the hg19 genome using BWA.",
+      "tool_name": "BWA",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
-      "github_url": "http://geneontology.org"
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Duplicate reads were marked using picard tools, and reads were filtered for a mapq score > 15.",
+      "tool_name": "Picard",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Macs2 callpeak was used to call peaks, with --broad used for H3K9me3.",
+      "tool_name": "MACS2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "To generate peak sets, macs2 called peaks were extended by 500bp then only kept if present and overlapping in both biological replicates.",
+      "tool_name": "MACS2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
     }
-  ]
+  ],
+  "raw_text": "Reads were trimmed using cutadapt and aligned to the hg19 genome using BWA. Duplicate reads were marked using picard tools, and reads were filtered for a mapq score > 15.\nMacs2 callpeak was used to call peaks, with --broad used for H3K9me3.\nTo generate peak sets, macs2 called peaks were extended by 500bp then only kept if present and overlapping in both biological replicates.\nGenome_build: hg19\nSupplementary_files_format_and_content: Processed peak files are in bed format: chr, start, end.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
 }

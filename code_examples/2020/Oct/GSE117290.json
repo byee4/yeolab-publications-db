@@ -2,48 +2,69 @@
   "steps": [
     {
       "step_order": 1,
-      "description": "Quality control with FastQC",
-      "tool_name": "FastQC",
+      "description": "library strategy: CLIP-seq",
+      "tool_name": "CLIP-seq",
       "tool_version": "",
-      "code_example": "# Run quality control on FASTQ files\nfastqc \\\n  -t 4 \\\n  -o fastqc_output/ \\\n  sample_R1.fastq.gz sample_R2.fastq.gz",
+      "code_example": "",
       "code_language": "bash",
-      "github_url": "https://www.bioinformatics.babraham.ac.uk/projects/fastqc"
+      "github_url": ""
     },
     {
       "step_order": 2,
-      "description": "Adapter trimming with cutadapt",
-      "tool_name": "cutadapt",
+      "description": "Reads were processed essentially as described (Van Nostrand et al., 2016b).",
+      "tool_name": "",
       "tool_version": "",
-      "code_example": "# Trim adapter sequences with cutadapt\ncutadapt \\\n  -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA \\\n  -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT \\\n  -m 18 \\\n  -j 8 \\\n  -o trimmed_R1.fastq.gz \\\n  -p trimmed_R2.fastq.gz \\\n  sample_R1.fastq.gz sample_R2.fastq.gz",
+      "code_example": "",
       "code_language": "bash",
-      "github_url": "https://cutadapt.readthedocs.io"
+      "github_url": ""
     },
     {
       "step_order": 3,
-      "description": "Alignment to hg38 with STAR",
+      "description": "Brifely, reads were adapter-trimmed and mapped to human-specific repetitive elements from RepBase (version 18.04) by STAR.",
       "tool_name": "STAR",
       "tool_version": "",
-      "code_example": "# Align RNA-seq reads with STAR\nSTAR \\\n  --runMode alignReads \\\n  --genomeDir /path/to/star_index \\\n  --readFilesIn sample_R1.fastq.gz sample_R2.fastq.gz \\\n  --readFilesCommand zcat \\\n  --runThreadN 8 \\\n  --outFileNamePrefix sample_ \\\n  --outSAMtype BAM SortedByCoordinate \\\n  --quantMode GeneCounts \\\n  --outSAMattributes NH HI AS NM MD",
+      "code_example": "",
       "code_language": "bash",
-      "github_url": "https://github.com/alexdobin/STAR"
+      "github_url": ""
     },
     {
       "step_order": 4,
-      "description": "Read counting with featureCounts",
-      "tool_name": "featureCounts",
+      "description": "Repeat-mapping reads were removed and remaining reads mapped to the human genome assembly hg19 with STAR.",
+      "tool_name": "STAR",
       "tool_version": "",
-      "code_example": "# Count reads per gene with featureCounts (Subread)\nfeatureCounts \\\n  -a annotation.gtf \\\n  -o counts.txt \\\n  -T 8 \\\n  -p --countReadPairs \\\n  -B -C \\\n  -s 2 \\\n  aligned.bam",
+      "code_example": "",
       "code_language": "bash",
-      "github_url": "http://subread.sourceforge.net"
+      "github_url": ""
     },
     {
       "step_order": 5,
-      "description": "Differential expression analysis with DESeq2",
-      "tool_name": "DESeq2",
+      "description": "PCR duplicate reads were removed using the unique molecular identifier (UMI) sequences in the 5\u00e2\u0080\u0099 adapter and remaining reads retained as \u00e2\u0080\u0098usable reads\u00e2\u0080\u0099.",
+      "tool_name": "",
       "tool_version": "",
-      "code_example": "library(DESeq2)\n\n# Load count matrix and sample metadata\ncounts <- read.csv('counts.csv', row.names = 1)\ncoldata <- read.csv('coldata.csv', row.names = 1)\n\n# Create DESeqDataSet\ndds <- DESeqDataSetFromMatrix(\n  countData = counts,\n  colData = coldata,\n  design = ~ condition\n)\n\n# Run differential expression analysis\ndds <- DESeq(dds)\nres <- results(dds, contrast = c('condition', 'treated', 'control'))\nres <- res[order(res$padj), ]\n\n# Export significant results\nsig <- subset(res, padj < 0.05 & abs(log2FoldChange) > 1)\nwrite.csv(as.data.frame(sig), file = 'deseq2_results.csv')",
-      "code_language": "r",
-      "github_url": "https://bioconductor.org/packages/DESeq2"
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Peaks were called on the usable reads by CLIPper ,and assigned to gene regions annotated in Gencode (v19)",
+      "tool_name": "CLIPper",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "Each peak was normalized to the size-matched input (SMInput)",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
     }
-  ]
+  ],
+  "raw_text": "library strategy: CLIP-seq\nReads were processed essentially as described (Van Nostrand et al., 2016b).\nBrifely, reads were adapter-trimmed and mapped to human-specific repetitive elements from RepBase (version 18.04) by STAR. Repeat-mapping reads were removed and remaining reads mapped to the human genome assembly hg19 with STAR. PCR duplicate reads were removed using the unique molecular identifier (UMI) sequences in the 5\u00e2\u0080\u0099 adapter and remaining reads retained as \u00e2\u0080\u0098usable reads\u00e2\u0080\u0099.\nPeaks were called on the usable reads by CLIPper ,and assigned to gene regions annotated in Gencode (v19)\nEach peak was normalized to the size-matched input (SMInput)\nGenome_build: Homo sapiens UCSC hg19",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
 }

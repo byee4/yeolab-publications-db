@@ -1,0 +1,151 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "RNA-seq data was aligned to the human hg19 genome build using Olego and Star aligners, and alternative splicing and alternative polyadenylation were estimated as described below.",
+      "tool_name": "RNA-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Quantas software as described in Charizanis et al, 2012, Neuron, was used to estimate alternative splicing.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Olego aligned alignment files were used to count observed junction reads for each exon.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Weighted number of exon or exon-junction fragments uniquely supporting the inclusion or skipping isoform of each cassette exon and a probability score was assigned to each isoform.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "A Fisher\u00e2\u0080\u0099s exact test was used to evaluate the statistical significance of splicing changes using both exon and exon-junction fragments, followed by Benjamini multiple testing correction to estimate the false discovery rate (FDR).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "In addition, inclusion or exclusion junction reads were used to calculate the proportional change of exon inclusion (dI).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "r",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "See documentation at http://zhanglab.c2b2.columbia.edu/index.php/Quantas_Documentation.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "Tandem UTR isoform analysis was performed with the MISO algorithm v0.5.2 using default settings as described in Katz et al, Nature, 2010, except for use of custom 3\u00e2\u0080\u00b2UTR isoform annotations.",
+      "tool_name": "MISO",
+      "tool_version": "0.5.2",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "We used a Bayes-factor threshold of 10,000 and difference values (delta Psi) with an absolute value of at least 0.03",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 10,
+      "description": "For TAIL-seq data analysis, image files were downloaded from the MiSeq and run on tailseeker (Chang et al, 2014, Mol Cell) to determine accurate polyA tail lengths, yielding paired fastq files corresponding to the 5' (R5) and 3' (R3 polyA tail) ends of each read.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 11,
+      "description": "Reads were aligned against the human genome (hg19) and viral genomes (Human_Herpesvirus_5_strain_Merlin, AY446894.2) using STAR under default parameters.",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 12,
+      "description": "Features were assigned using Subread with gencode v19 annotations and with Human_Herpesvirus_5_strain_Merlin features, and filtered to obtain only the uniquely mapped protein coding genes.",
+      "tool_name": "featureCounts",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 13,
+      "description": "For analysis of virally mapped reads, all genes were counted.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 14,
+      "description": "Reads with tails measuring 0 lengths were removed.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 15,
+      "description": "For genes with at least 20 mapped reads, median lengths were measured and the global distributions of these lengths were compared against each other using the Kolmogorov-Smirnov test.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 16,
+      "description": "For each gene captured in all samples and with at least 20 mapped reads, individual tail length distributions were compared amongst samples using the Mann Whitney U test with a P value cutoff of 0.025",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "RNA-seq data was aligned to the human hg19 genome build using Olego and Star aligners, and alternative splicing and alternative polyadenylation were estimated as described below.\nQuantas software as described in Charizanis et al, 2012, Neuron, was used to estimate alternative splicing. Olego aligned alignment files were used to count observed junction reads for each exon. Weighted number of exon or exon-junction fragments uniquely supporting the inclusion or skipping isoform of each cassette exon and a probability score was assigned to each isoform. A Fisher\u00e2\u0080\u0099s exact test was used to evaluate the statistical significance of splicing changes using both exon and exon-junction fragments, followed by Benjamini multiple testing correction to estimate the false discovery rate (FDR). In addition, inclusion or exclusion junction reads were used to calculate the proportional change of exon inclusion (dI). See documentation at http://zhanglab.c2b2.columbia.edu/index.php/Quantas_Documentation.\nTandem UTR isoform analysis was performed with the MISO algorithm v0.5.2 using default settings as described in Katz et al, Nature, 2010, except for use of custom 3\u00e2\u0080\u00b2UTR isoform annotations. We used a Bayes-factor threshold of 10,000 and difference values (delta Psi) with an absolute value of at least 0.03\nFor TAIL-seq data analysis, image files were downloaded from the MiSeq and run on tailseeker (Chang et al, 2014, Mol Cell) to determine accurate polyA tail lengths, yielding paired fastq files corresponding to the 5' (R5) and 3' (R3 polyA tail) ends of each read. Reads were aligned against the human genome (hg19) and viral genomes (Human_Herpesvirus_5_strain_Merlin, AY446894.2) using STAR under default parameters. Features were assigned using Subread with gencode v19 annotations and with Human_Herpesvirus_5_strain_Merlin features, and filtered to obtain only the uniquely mapped protein coding genes. For analysis of virally mapped reads, all genes were counted. Reads with tails measuring 0 lengths were removed. For genes with at least 20 mapped reads, median lengths were measured and the global distributions of these lengths were compared against each other using the Kolmogorov-Smirnov test. For each gene captured in all samples and with at least 20 mapped reads, individual tail length distributions were compared amongst samples using the Mann Whitney U test with a P value cutoff of 0.025\nGenome_build: hg19\nSupplementary_files_format_and_content: bedgraph\nSupplementary_files_format_and_content: TableS3: Significantly changing alternative host polyadenylation events\nSupplementary_files_format_and_content: TableS6: Significant host gene alternative cassette splicing changes upon CPEB1 KD and CPEB1 OE from RNA-seq\nSupplementary_files_format_and_content: TableS8: PolyA tail lengths analyzed by TAIL-seq",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

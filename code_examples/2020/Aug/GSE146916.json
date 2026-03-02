@@ -1,0 +1,43 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Sequencing on Illumina NextSeq500 and basecalling by Real-Time Analysis (RTA) software version 2.4.11",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Alignment to the mm10 genome using STAR version 2.5.0",
+      "tool_name": "STAR",
+      "tool_version": "2.5.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "mRNA quantitation using featureCounts version 1.5.3 and the option \u00e2\u0080\u009c\u00e2\u0080\u0093t exon\u00e2\u0080\u009d was specified to count mRNA features",
+      "tool_name": "featureCounts",
+      "tool_version": "1.5.3",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Differential expression using DESeq2 version 1.22.1 specifying a false discovery cutoff of 0.01 for independent filtering",
+      "tool_name": "DESeq2",
+      "tool_version": "1.22.1",
+      "code_example": "",
+      "code_language": "r",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Sequencing on Illumina NextSeq500 and basecalling by Real-Time Analysis (RTA) software version 2.4.11\nAlignment to the mm10 genome using STAR version 2.5.0\nmRNA quantitation using featureCounts version 1.5.3 and the option \u00e2\u0080\u009c\u00e2\u0080\u0093t exon\u00e2\u0080\u009d was specified to count mRNA features\nDifferential expression using DESeq2 version 1.22.1 specifying a false discovery cutoff of 0.01 for independent filtering\nGenome_build: mm10\nSupplementary_files_format_and_content: Transcripts per kilobase million (TPM) normalized count matrix of mapped reads, and DESeq2 outputs for Bmal1 and Clock knockout comparisons in \".csv\" format",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

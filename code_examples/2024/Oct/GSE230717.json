@@ -2,25 +2,7 @@
   "steps": [
     {
       "step_order": 1,
-      "description": "fastp (Read Processing)",
-      "tool_name": "fastp",
-      "tool_version": "0.11.5",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://github.com/OpenGene/fastp"
-    },
-    {
-      "step_order": 2,
-      "description": "STAR (Alignment)",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://github.com/alexdobin/STAR"
-    },
-    {
-      "step_order": 3,
-      "description": "Skipper (CLIP Analysis)",
+      "description": "Data was processed using the eCLIP pipeline and available at https://github.com/YeoLab/skipper",
       "tool_name": "Skipper",
       "tool_version": "",
       "code_example": "",
@@ -28,17 +10,53 @@
       "github_url": "https://github.com/YeoLab/skipper"
     },
     {
-      "step_order": 4,
-      "description": "Gene Ontology (Pathway Analysis)",
-      "tool_name": "Gene Ontology",
+      "step_order": 2,
+      "description": "Unique Molecular Identifiers (UMIs) were extracted using fastp 0.11.5 (https://github.com/OpenGene/fastp)",
+      "tool_name": "fastp",
+      "tool_version": "0.11.5",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://github.com/OpenGene/fastp"
+    },
+    {
+      "step_order": 3,
+      "description": "Post-umi-extracted reads were trimmed for adapter sequences and barcode sequences (eCLIP samples)",
+      "tool_name": "eCLIP",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
-      "github_url": "http://geneontology.org"
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Mapping was then performed against the full human genome (hg38) including a database of splice junctions with STAR (v 2.7.6) allowing up to 100 multimapped regions.",
+      "tool_name": "STAR",
+      "tool_version": "2.7.6",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://github.com/alexdobin/STAR"
     },
     {
       "step_order": 5,
-      "description": "GENCODE (Reference)",
+      "description": "Reads were then PCR deduplicated using UMIcollaps (https://github.com/Daniel-Liu-c0deb0t/UMICollapse",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Enriched \u00e2\u0080\u009cwindows\u00e2\u0080\u009d (IP versus SM-Input) was called on deduplicated reads using a GC-bias aware beta-binomial model.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "Each window (~100 b.p.) were partitioned from Gencode v38 and associated with a specific type of genomic region (CDS, UTR, proximal introns near splice site\u00e2\u0080\u00a6 etc).",
       "tool_name": "GENCODE",
       "tool_version": "",
       "code_example": "",
@@ -46,13 +64,25 @@
       "github_url": "https://www.gencodegenes.org"
     },
     {
-      "step_order": 6,
-      "description": "UniProt (Reference)",
-      "tool_name": "UniProt",
+      "step_order": 8,
+      "description": "Windows are filtered using FDR < 0.2 and only reproducible windows between two replicates were used.",
+      "tool_name": "",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
-      "github_url": "https://www.uniprot.org"
+      "github_url": "https://github.com/YeoLab/skipper"
+    },
+    {
+      "step_order": 9,
+      "description": "Data was processed using the eCLIP pipeline and available at https://github.com/YeoLab/skipper",
+      "tool_name": "Skipper",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": "https://github.com/YeoLab/skipper"
     }
-  ]
+  ],
+  "raw_text": "Data was processed using the eCLIP pipeline and available at https://github.com/YeoLab/skipper\nUnique Molecular Identifiers (UMIs) were extracted using fastp 0.11.5 (https://github.com/OpenGene/fastp)\nPost-umi-extracted reads were trimmed for adapter sequences and barcode sequences (eCLIP samples)\nMapping was then performed against the full human genome (hg38) including a database of splice junctions with STAR (v 2.7.6) allowing up to 100 multimapped regions.\nReads were then PCR deduplicated using UMIcollaps (https://github.com/Daniel-Liu-c0deb0t/UMICollapse\nEnriched \u00e2\u0080\u009cwindows\u00e2\u0080\u009d (IP versus SM-Input) was called on deduplicated reads using a GC-bias aware beta-binomial model. Each window (~100 b.p.) were partitioned from Gencode v38 and associated with a specific type of genomic region (CDS, UTR, proximal introns near splice site\u00e2\u0080\u00a6 etc). Windows are filtered using FDR < 0.2 and only reproducible windows between two replicates were used.\nData was processed using the eCLIP pipeline and available at https://github.com/YeoLab/skipper\nAssembly: hg38\nSupplementary files format and content: bed files contain Skipper windows.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
 }

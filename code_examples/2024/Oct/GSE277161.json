@@ -2,12 +2,42 @@
   "steps": [
     {
       "step_order": 1,
-      "description": "RBNS (RBP Binding)",
-      "tool_name": "RBNS",
+      "description": "We aligned reads to the human genome version GRCh38 with annotation version Gencode v40 using STAR (v2.7.1a).",
+      "tool_name": "STAR",
+      "tool_version": "2.7.1a",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Bam files were then filtered to include only read1 values using samtools (v1.16) with option \u00e2\u0080\u009cview -hbf 64.\u00e2\u0080\u009d",
+      "tool_name": "samtools",
+      "tool_version": "1.16",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "C-to-U edit sites were obtained using SAILOR.",
+      "tool_name": "SAILOR",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
       "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Edits were divided by the featurecounts (v1.5.2) output for each gene\u00e2\u0080\u0099s exons to generate EPR values based on GENCODE v40 annotations.",
+      "tool_name": "featureCounts",
+      "tool_version": "1.5.2",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
     }
-  ]
+  ],
+  "raw_text": "We aligned reads to the human genome version GRCh38 with annotation version Gencode v40 using STAR (v2.7.1a).\nBam files were then filtered to include only read1 values using samtools (v1.16) with option \u00e2\u0080\u009cview -hbf 64.\u00e2\u0080\u009d\nC-to-U edit sites were obtained using SAILOR.\nEdits were divided by the featurecounts (v1.5.2) output for each gene\u00e2\u0080\u0099s exons to generate EPR values based on GENCODE v40 annotations.\nAssembly: GRCh38\nSupplementary files format and content: Bam files and EPR (edits-per-read) quantification",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
 }

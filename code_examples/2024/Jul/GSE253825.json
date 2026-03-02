@@ -2,102 +2,15 @@
   "steps": [
     {
       "step_order": 1,
-      "description": "UMI-tools (Read Processing)",
-      "tool_name": "UMI-tools",
-      "tool_version": "1.0.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "cutadapt (Read Processing)",
-      "tool_name": "cutadapt",
-      "tool_version": "1.14",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://cutadapt.readthedocs.io"
-    },
-    {
-      "step_order": 3,
-      "description": "Bowtie2 (Alignment)",
-      "tool_name": "Bowtie2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "http://bowtie-bio.sourceforge.net/bowtie2"
-    },
-    {
-      "step_order": 4,
-      "description": "STAR (Alignment)",
+      "description": "STAR (version 2.7.11a, reference genome: mm10-2020-A<based on Gencode vM23, and filtering out pseudogenes, TEC, miRNA etc. a total of 32285 genes) was used to perform alignment, filtering, barcode counting, and UMI counting for single cell RNA-Seq.",
       "tool_name": "STAR",
-      "tool_version": "",
+      "tool_version": "2.7.11a",
       "code_example": "",
       "code_language": "bash",
       "github_url": "https://github.com/alexdobin/STAR"
-    },
-    {
-      "step_order": 5,
-      "description": "MACS2 (Peak Calling)",
-      "tool_name": "MACS2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://github.com/macs3-project/MACS"
-    },
-    {
-      "step_order": 6,
-      "description": "CLIPper (CLIP Analysis)",
-      "tool_name": "CLIPper",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://github.com/YeoLab/clipper"
-    },
-    {
-      "step_order": 7,
-      "description": "Cell Ranger (Single-Cell)",
-      "tool_name": "Cell Ranger",
-      "tool_version": "5.0.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://support.10xgenomics.com"
-    },
-    {
-      "step_order": 8,
-      "description": "Gene Ontology (Pathway Analysis)",
-      "tool_name": "Gene Ontology",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "http://geneontology.org"
-    },
-    {
-      "step_order": 9,
-      "description": "PCA (Statistics)",
-      "tool_name": "PCA",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 10,
-      "description": "Ensembl (Reference)",
-      "tool_name": "Ensembl",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://ensembl.org"
-    },
-    {
-      "step_order": 11,
-      "description": "GENCODE (Reference)",
-      "tool_name": "GENCODE",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://www.gencodegenes.org"
     }
-  ]
+  ],
+  "raw_text": "STAR (version 2.7.11a, reference genome: mm10-2020-A<based on Gencode vM23, and filtering out pseudogenes, TEC, miRNA etc. a total of 32285 genes) was used to perform alignment, filtering, barcode counting, and UMI counting for single cell RNA-Seq.\nAssembly: mm10\nSupplementary files format and content: Tab-separated values files and matrix files",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
 }

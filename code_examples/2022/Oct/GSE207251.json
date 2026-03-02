@@ -1,0 +1,43 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Adapters trimmed with cutadapt (v1.4.0)",
+      "tool_name": "cutadapt",
+      "tool_version": "1.4.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Reads mapping to repetitive elements (RepBase v18.04) with STAR were removed",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Remaining reads were mapped to mouse genome mm9 with STAR (v2.4.0i)",
+      "tool_name": "STAR",
+      "tool_version": "2.4.0i",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "FeatureCounts was used to assign reads to genes (v1.5.0)",
+      "tool_name": "featureCounts",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Adapters trimmed with cutadapt (v1.4.0)\nReads mapping to repetitive elements (RepBase v18.04) with STAR were removed\nRemaining reads were mapped to mouse genome mm9 with STAR (v2.4.0i)\nFeatureCounts was used to assign reads to genes (v1.5.0)\nAssembly: mm9\nSupplementary files format and content: tpm_filtered.csv, comma separated file with transcripts per million calculated for all expressed genes.\nSupplementary files format and content: deseq2_results.csv, comma separated file with results from differential expression analysis (prion vs mock) calculated with DESeq2",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

@@ -2,12 +2,42 @@
   "steps": [
     {
       "step_order": 1,
-      "description": "BLAST (Sequence Search)",
-      "tool_name": "BLAST",
+      "description": "The output of the assay was analyzed by nSolver 4.0 where the mean of the negative spike-in control was used as the threshold of microRNA detection.",
+      "tool_name": "",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
-      "github_url": "https://blast.ncbi.nlm.nih.gov"
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "With the expression profile table generated, patients were then stratified by miR-130a expression using a median split and a Kaplan-Meier curve was drawn by GraphPad Prism 7.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "All counted reads are provided in the count matrix.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Data normalization was conducted within the Ncounter software that used a median cut-off of the negative detection probes",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
     }
-  ]
+  ],
+  "raw_text": "The output of the assay was analyzed by nSolver 4.0 where the mean of the negative spike-in control was used as the threshold of microRNA detection. With the expression profile table generated, patients were then stratified by miR-130a expression using a median split and a Kaplan-Meier curve was drawn by GraphPad Prism 7.\nAll counted reads are provided in the count matrix. Data normalization was conducted within the Ncounter software that used a median cut-off of the negative detection probes",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
 }

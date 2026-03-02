@@ -1,0 +1,16 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "alignment, cell barcode processing, umis processing, abundance measurements: cellranger count (version 2.1.1)",
+      "tool_name": "Cell Ranger",
+      "tool_version": "2.1.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "alignment, cell barcode processing, umis processing, abundance measurements: cellranger count (version 2.1.1)\nGenome_build: hg19\nSupplementary_files_format_and_content: XXX_summary.html: summary HTML file containing summary metrics and automated secondary analysis results\nSupplementary_files_format_and_content: XXX_filtered_gene_bc_matrices_h5.h5: gene-barcode matrix in sparse h5 format",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

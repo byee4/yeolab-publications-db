@@ -2,7 +2,7 @@
   "steps": [
     {
       "step_order": 1,
-      "description": "Trim Galore (Read Processing)",
+      "description": "Ribosomal footprints were analyzed as described by Ingolia et al. with these modifications: Trimgalore was used to trim off adapters and clip the first nucleotide off the 5\u00e2\u0080\u0099 end.",
       "tool_name": "Trim Galore",
       "tool_version": "",
       "code_example": "",
@@ -11,21 +11,69 @@
     },
     {
       "step_order": 2,
-      "description": "Bowtie2 (Alignment)",
-      "tool_name": "Bowtie2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "http://bowtie-bio.sourceforge.net/bowtie2"
-    },
-    {
-      "step_order": 3,
-      "description": "STAR (Alignment)",
+      "description": "Reads were then mapped to ribosomal RNA using bowtie2 (39) and unmapped reads were further mapped to the human transcriptome (v19) with STAR aligner (33).",
       "tool_name": "STAR",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
       "github_url": "https://github.com/alexdobin/STAR"
+    },
+    {
+      "step_order": 3,
+      "description": "Expected read length distribution was tested with the R package RiboProfiling.",
+      "tool_name": "R",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "To center ribosomes and obtain a list of genes with P-sites in their 3\u00e2\u0080\u0099 UTR, we used functionalities within Ribowaltz (40) and a custom python script by Scott Adamson, UConn, and Jax Laboratories.",
+      "tool_name": "Python",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Observed/expected ratios were calculated using a custom script by Scott Adamson.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Obs/exp indicates the number of observed codons in the A-site of the ribosome vs the calculated hypothetical expected number of observations.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "If ribosome pausing occurs, obs/exp > 1.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "Library strategy: Ribo-Seq",
+      "tool_name": "Ribo-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
     }
-  ]
+  ],
+  "raw_text": "Ribosomal footprints were analyzed as described by Ingolia et al. with these modifications: Trimgalore was used to trim off adapters and clip the first nucleotide off the 5\u00e2\u0080\u0099 end. Reads were then mapped to ribosomal RNA using bowtie2 (39) and unmapped reads were further mapped to the human transcriptome (v19) with STAR aligner (33).\nExpected read length distribution was tested with the R package RiboProfiling. To center ribosomes and obtain a list of genes with P-sites in their 3\u00e2\u0080\u0099 UTR, we used functionalities within Ribowaltz (40) and a custom python script by Scott Adamson, UConn, and Jax Laboratories.\nObserved/expected ratios were calculated using a custom script by Scott Adamson. Obs/exp indicates the number of observed codons in the A-site of the ribosome vs the calculated hypothetical expected number of observations. If ribosome pausing occurs, obs/exp > 1.\nAssembly: hg19\nSupplementary files format and content: Excel file\nLibrary strategy: Ribo-Seq",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
 }

@@ -1,0 +1,61 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Library strategy: Ribo-Seq",
+      "tool_name": "Ribo-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Raw sequencing reads were trimmed for adapter sequences using cutadapt (v1.14).",
+      "tool_name": "cutadapt",
+      "tool_version": "1.14",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Trimmed reads were mapped against RepBase (v18.05) to remove reads mapping to repetitive sequences.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Remaining reads were mapped to the appropriate genome build using STAR aligner (v2.5.2b).",
+      "tool_name": "STAR",
+      "tool_version": "2.5.2b",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Raw read counts were generated from all mapped reads using featureCounts (v1.5.3) package.",
+      "tool_name": "featureCounts",
+      "tool_version": "1.5.3",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Normalized counts were derived from DESeq output.",
+      "tool_name": "DESeq2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Library strategy: Ribo-Seq\nRaw sequencing reads were trimmed for adapter sequences using cutadapt (v1.14). Trimmed reads were mapped against RepBase (v18.05) to remove reads mapping to repetitive sequences. Remaining reads were mapped to the appropriate genome build using STAR aligner (v2.5.2b). Raw read counts were generated from all mapped reads using featureCounts (v1.5.3) package.\nNormalized counts were derived from DESeq output.\nAssembly: hg19 (GRCh37)\nSupplementary files format and content: counts_for_pub.txt contains featureCounts output in comma-delimited format.\nSupplementary files format and content: diffexp.tsv files contain DESeq2 output in tab-separated format.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

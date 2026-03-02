@@ -1,0 +1,52 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "RNAseq reads were adapter-trimmed using Cutadapt (v1.14) and mapped to human-specific repetitive elements from RepBase (version 18.05) by STAR (v2.4.0i) (Dobin et al., 2013).",
+      "tool_name": "STAR",
+      "tool_version": "2.4.0i",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Repeat-mapping reads were removed, and remaining reads were mapped to the mouse genome assembly (mm10) with STAR (v2.4.0i)",
+      "tool_name": "STAR",
+      "tool_version": "2.4.0i",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Read counts for all genes annotated in GENCODE (vM20) were calculated using the read summarization program featureCounts (v1.5.3) (Liao et al., 2014).",
+      "tool_name": "featureCounts",
+      "tool_version": "1.5.3",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Batch correction was completed with Combat-seq",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Differential expression was completed by DESeq2 (v1.5.3)",
+      "tool_name": "DESeq2",
+      "tool_version": "1.5.3",
+      "code_example": "",
+      "code_language": "r",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "RNAseq reads were adapter-trimmed using Cutadapt (v1.14) and mapped to human-specific repetitive elements from RepBase (version 18.05) by STAR (v2.4.0i) (Dobin et al., 2013).\nRepeat-mapping reads were removed, and remaining reads were mapped to the mouse genome assembly (mm10) with STAR (v2.4.0i)\nRead counts for all genes annotated in GENCODE (vM20) were calculated using the read summarization program featureCounts (v1.5.3) (Liao et al., 2014).\nBatch correction was completed with Combat-seq\nDifferential expression was completed by DESeq2 (v1.5.3)\nAssembly: mm10",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

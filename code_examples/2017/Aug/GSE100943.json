@@ -1,0 +1,70 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "RNA-seq data was aligned to the human hg19 genome build using Olego alignes, and alternative splicing was estimated as described below.",
+      "tool_name": "Olego",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Quantas software as described in Charizanis et al, 2012, Neuron, was used to estimate alternative splicing.",
+      "tool_name": "Quantas",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Olego aligned alignment files were used to count observed junction reads for each exon.",
+      "tool_name": "Olego",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Weighted number of exon or exon-junction fragments uniquely supporting the inclusion or skipping isoform of each cassette exon and a probability score was assigned to each isoform.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "A Fisher\u00e2\u0080\u0099s exact test was used to evaluate the statistical significance of splicing changes using both exon and exon-junction fragments, followed by Benjamini multiple testing correction to estimate the false discovery rate (FDR).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "In addition, inclusion or exclusion junction reads were used to calculate the proportional change of exon inclusion (dI).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "r",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "See documentation at http://zhanglab.c2b2.columbia.edu/index.php/Quantas_Documentation.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "r",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "RNA-seq data was aligned to the human hg19 genome build using Olego alignes, and alternative splicing was estimated as described below.\nQuantas software as described in Charizanis et al, 2012, Neuron, was used to estimate alternative splicing. Olego aligned alignment files were used to count observed junction reads for each exon. Weighted number of exon or exon-junction fragments uniquely supporting the inclusion or skipping isoform of each cassette exon and a probability score was assigned to each isoform. A Fisher\u00e2\u0080\u0099s exact test was used to evaluate the statistical significance of splicing changes using both exon and exon-junction fragments, followed by Benjamini multiple testing correction to estimate the false discovery rate (FDR). In addition, inclusion or exclusion junction reads were used to calculate the proportional change of exon inclusion (dI). See documentation at http://zhanglab.c2b2.columbia.edu/index.php/Quantas_Documentation.\nGenome_build: hg19\nSupplementary_files_format_and_content: RPKM",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

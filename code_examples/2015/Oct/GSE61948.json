@@ -2,21 +2,87 @@
   "steps": [
     {
       "step_order": 1,
-      "description": "HOMER (Peak Calling / Motif)",
-      "tool_name": "HOMER",
+      "description": "Quality Control.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Quality of sequencing data is analyzed using the software FastQC v0.10.1.",
+      "tool_name": "FastQC",
+      "tool_version": "0.10.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "The results are examined to determine if samples are of questionable quality on an array of metrics.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Mapping.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Alignment of sequencing data to reference genomes is performed with the software RNA-Star 2.3.0e.",
+      "tool_name": "",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
       "github_url": "http://homer.ucsd.edu"
     },
     {
-      "step_order": 2,
-      "description": "UCSC tools (Genomic Utilities)",
-      "tool_name": "UCSC tools",
+      "step_order": 6,
+      "description": "Parameters are set to default and reads are mapped to references along with splice junction databases.",
+      "tool_name": "",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
       "github_url": "https://genome.ucsc.edu"
+    },
+    {
+      "step_order": 7,
+      "description": "Gene Expression Quantification.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "To obtain gene expression values, several quantification methods are used (Sailfish 0.6.3, Cufflinks 2.2.0).",
+      "tool_name": "Cufflinks",
+      "tool_version": "2.2.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "Expression values are calculated for entries in the gene annotation references.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
     }
-  ]
+  ],
+  "raw_text": "Quality Control. Quality of sequencing data is analyzed using the software FastQC v0.10.1. The results are examined to determine if samples are of questionable quality on an array of metrics.\nMapping. Alignment of sequencing data to reference genomes is performed with the software RNA-Star 2.3.0e. Parameters are set to default and reads are mapped to references along with splice junction databases.\nGene Expression Quantification. To obtain gene expression values, several quantification methods are used (Sailfish 0.6.3, Cufflinks 2.2.0). Expression values are calculated for entries in the gene annotation references.\nGenome_build: hg19\nSupplementary_files_format_and_content: Txt file of ensemble identifiers with RPKMs of samples used in study",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
 }

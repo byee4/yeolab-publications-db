@@ -1,0 +1,133 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "ssRNAseq: The adr-1(-);adr-2(-) sample was sequenced on one lane of Illumina's HiSeq 2000 yielding 216 million single-end 76nt reads.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Each other sample was sequenced on a lane of Illumina GAII yielding between 37 and 42 million reads of the same type.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Illumina Casava1.8.2 software used for basecalling.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Mapping: Sequenced reads were mapped to the C. elegans reference genome (ce10) using TopHat aligner (version 2.0.6) allowing only uniquely-mapped reads with up to two mismatches each with command line options -Mx 1 and -N 2",
+      "tool_name": "TopHat",
+      "tool_version": "2.0.6",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Variant calling: sites with RNA-DNA differences were identified by SAMtools mpileup (version 0.1.18) tallying up to 1000 alignments per site.",
+      "tool_name": "samtools",
+      "tool_version": "0.1.18",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Additional command line options used were -D -I and -g.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "r",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "Site filters: Annotated SNPs were obtained from Illumina's iGenomes collection for C. elegans (ce10) and unannotated variants were extracted from the adr-1(-);adr-2(-) RNA-Seq dataset.",
+      "tool_name": "RNA-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "These genomic variants were filtered from the putative sites in all other strains reducing the number of false-positive predictions.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "Read filters: Each read aligned to one the remaining putative sites was filtered out if: a) it was a suspected PCR duplicate, according to SAMtools rmdup (version 0.1.18); b) it had a junction overhang < 10nt according to its SAMtools CIGAR string; c) it had > 1 non-A2G or non-C2T mismatch or any short indel, per its MD tag; d) it had a mismatch less than 25nt away from either end of the read",
+      "tool_name": "samtools",
+      "tool_version": "0.1.18",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 10,
+      "description": "Identify sites: Putative RNA editing sites were identified from A2G variants on the sense strand and T2C variants on the antisense strand that were covered by more than 5 reads which passed the filters in step 5, including the stringent 25nt threshold for filter 5d).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 11,
+      "description": "Quantify sites: The extent of editing at each site and our confidence in that prediction were quantified by a novel extension of the classical Bayesian model used for genomic variants, which is described in more detail in the next section.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 12,
+      "description": "To increase the accuracy and confidence of our predictions, we used additional reads from the relaxed version of filter 5d) that overlap the sites identified in step 6.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 13,
+      "description": "Moreover, we dropped sites that exhibited editing in 100% of the reads (suggesting a genomic variant not filtered out by step 4) and those with very low editing (less than 10%), which would have been hard to distinguish from sequencing errors.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 14,
+      "description": "The predicted RNA editing sites from each strain were characterized according to their position in annotated genic regions (introns, exons, 3'/5' UTRs, etc.) and according to their overlap with other strains.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "ssRNAseq: The adr-1(-);adr-2(-) sample was sequenced on one lane of Illumina's HiSeq 2000 yielding 216 million single-end 76nt reads.  Each other sample was sequenced on a lane of Illumina GAII yielding between 37 and 42 million reads of the same type.  Illumina Casava1.8.2 software used for basecalling.\nMapping: Sequenced reads were mapped to the C. elegans reference genome (ce10) using TopHat aligner (version 2.0.6) allowing only uniquely-mapped reads with up to two mismatches each with command line options -Mx 1 and -N 2\nVariant calling: sites with RNA-DNA differences were identified by SAMtools mpileup (version 0.1.18) tallying up to 1000 alignments per site.  Additional command line options used were -D -I and -g.\nSite filters: Annotated SNPs were obtained from Illumina's iGenomes collection for C. elegans (ce10) and unannotated variants were extracted from the adr-1(-);adr-2(-) RNA-Seq dataset.  These genomic variants were filtered from the putative sites in all other strains reducing the number of false-positive predictions.\nRead filters:  Each read aligned to one the remaining putative sites was filtered out if: a) it was a suspected PCR duplicate, according to SAMtools rmdup (version 0.1.18); b) it had a junction overhang < 10nt according to its SAMtools CIGAR string; c) it had > 1 non-A2G or non-C2T mismatch or any short indel, per its MD tag; d) it had a mismatch less than 25nt away from either end of the read\nIdentify sites:  Putative RNA editing sites were identified from A2G variants on the sense strand and T2C variants on the antisense strand that were covered by more than 5 reads which passed the filters in step 5, including the stringent 25nt threshold for filter 5d).\nQuantify sites: The extent of editing at each site and our confidence in that prediction were quantified by a novel extension of the classical Bayesian model used for genomic variants, which is described in more detail in the next section.\nTo increase the accuracy and confidence of our predictions, we used additional reads from the relaxed version of filter 5d) that overlap the sites identified in step 6.  Moreover, we dropped sites that exhibited editing in 100% of the reads (suggesting a genomic variant not filtered out by step 4) and those with very low editing (less than 10%), which would have been hard to distinguish from sequencing errors.\nThe predicted RNA editing sites from each strain were characterized according to their position in annotated genic regions (introns, exons, 3'/5' UTRs, etc.) and according to their overlap with other strains.\nSupplementary_files_format_and_content: tab-delimited text file containing #READS and %EDITING values for each editing site\nGenome_build: ce10",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

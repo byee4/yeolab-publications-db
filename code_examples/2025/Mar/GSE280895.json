@@ -2,35 +2,35 @@
   "steps": [
     {
       "step_order": 1,
-      "description": "MACS2 (Peak Calling)",
-      "tool_name": "MACS2",
+      "description": "Cell nuclei were segmented using Cellpose 2.0 (Pachitariu et al.",
+      "tool_name": "",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
-      "github_url": "https://github.com/macs3-project/MACS"
+      "github_url": ""
     },
     {
       "step_order": 2,
-      "description": "Scanpy (Single-Cell)",
-      "tool_name": "Scanpy",
+      "description": "2022).",
+      "tool_name": "",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
-      "github_url": "https://scanpy.readthedocs.io"
+      "github_url": ""
     },
     {
       "step_order": 3,
-      "description": "scVI (Single-Cell)",
-      "tool_name": "scVI",
+      "description": "Cell boundaries were predicted using the nuclear staining and transcript positions using Baysor (Petukhov et al.",
+      "tool_name": "",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
-      "github_url": "https://scvi-tools.org"
+      "github_url": ""
     },
     {
       "step_order": 4,
-      "description": "Neural Network (Machine Learning)",
-      "tool_name": "Neural Network",
+      "description": "2021).",
+      "tool_name": "",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
@@ -38,30 +38,33 @@
     },
     {
       "step_order": 5,
-      "description": "TensorFlow (Machine Learning)",
-      "tool_name": "TensorFlow",
-      "tool_version": "2.18.0",
+      "description": "Experiments were integrated using scVI (Lopez et al 2018).",
+      "tool_name": "scVI",
+      "tool_version": "",
       "code_example": "",
       "code_language": "bash",
-      "github_url": "https://www.tensorflow.org"
+      "github_url": "https://scvi-tools.org"
     },
     {
       "step_order": 6,
-      "description": "XGBoost (Machine Learning)",
-      "tool_name": "XGBoost",
+      "description": "Celltypes were assigned manually, and the processed object is stored as an Anndata object in h5ad format containing both metadata and raw gene expression counts (Wolf et al 2018).",
+      "tool_name": "",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
-      "github_url": ""
+      "github_url": "https://scanpy.readthedocs.io"
     },
     {
       "step_order": 7,
-      "description": "Leiden clustering (Statistics)",
-      "tool_name": "Leiden clustering",
+      "description": "Raw detected RNA counts per cell",
+      "tool_name": "",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
-      "github_url": ""
+      "github_url": "https://scvi-tools.org"
     }
-  ]
+  ],
+  "raw_text": "Cell nuclei were segmented using Cellpose 2.0 (Pachitariu et al. 2022). Cell boundaries were predicted using the nuclear staining and transcript positions using Baysor (Petukhov et al. 2021). Experiments were integrated using scVI (Lopez et al 2018). Celltypes were assigned manually, and the processed object is stored as an Anndata object in h5ad format containing both metadata and raw gene expression counts (Wolf et al 2018).\nRaw detected RNA counts per cell",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
 }

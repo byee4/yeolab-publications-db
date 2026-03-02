@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "CLIPSeqTool0.1.8 was used to trim the adapaters, align the reads to the genome and perform deduplications",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Kallisto0.44.0 was used to quantify transcripts abundance in terms of TPM",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "CLIPSeqTool0.1.8 was used to trim the adapaters, align the reads to the genome and perform deduplications\nKallisto0.44.0 was used to quantify transcripts abundance in terms of TPM\nGenome_build: hg38\nSupplementary_files_format_and_content: tab-delimited text files include TPM values",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

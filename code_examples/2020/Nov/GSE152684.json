@@ -1,0 +1,79 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Raw reads were adapter-trimmed using Cutadapt (version 1.14)",
+      "tool_name": "cutadapt",
+      "tool_version": "1.14",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Sequenced reads were aligned to hg19 genome using STAR (version 2.5.2b) and sorted using samtools (version 1.5)",
+      "tool_name": "STAR",
+      "tool_version": "2.5.2b",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Gene counts were quantified from sorted BAM files using featureCounts (version 1.5.0) of the Subread (Liao et al., Nucleic Acids Research 2013) package using \"gene\" as a metafeature.",
+      "tool_name": "featureCounts",
+      "tool_version": "1.5.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Annotated gene length and gene counts were subsequently used to calculate transcript per-million (TPM) for each gene in each library.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "For downsampling prior to downstream editing analysis, samtools view -bs INT.FRAC was used for proportional downsampling of read pairs to achieve sampling depth between 15-35 million aligned reads",
+      "tool_name": "samtools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Aligned BAM files were run through SAILOR (v1.0.4) using the following parameters-- min_variant_coverage: 5, alpha: 0, beta: 0, edit_fraction: 0.01",
+      "tool_name": "SAILOR",
+      "tool_version": "1.0.4",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "BED files that are output corresponding to positive and negative strands of the genome from SAILOR are combined into one BED file and filtered based upon confidence score (Washburn et al., Cell Reports 2014)",
+      "tool_name": "SAILOR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "Recurrent sites between replicates were determined using pybedtools (version 0.8.0) intersect with the following options: wo=True, s=True",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Raw reads were adapter-trimmed using Cutadapt (version 1.14)\nSequenced reads were aligned to hg19 genome using STAR (version 2.5.2b) and sorted using samtools (version 1.5)\nGene counts were quantified from sorted BAM files using featureCounts (version 1.5.0) of the Subread (Liao et al., Nucleic Acids Research 2013) package using \"gene\" as a metafeature. Annotated gene length and gene counts were subsequently used to calculate transcript per-million (TPM) for each gene in each library.\nFor downsampling prior to downstream editing analysis, samtools view -bs INT.FRAC was used for proportional downsampling of read pairs to achieve sampling depth between 15-35 million aligned reads\nAligned BAM files were run through SAILOR (v1.0.4) using the following parameters-- min_variant_coverage: 5, alpha: 0, beta: 0, edit_fraction: 0.01\nBED files that are output corresponding to positive and negative strands of the genome from SAILOR are combined into one BED file and filtered based upon confidence score (Washburn et al., Cell Reports 2014)\nRecurrent sites between replicates were determined using pybedtools (version 0.8.0) intersect with the following options: wo=True, s=True\nGenome_build: hg19\nSupplementary_files_format_and_content: Matrix tables containing normalized transcripts per-million (TPM) data for every annotated gene; BED files containing editing events per library",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

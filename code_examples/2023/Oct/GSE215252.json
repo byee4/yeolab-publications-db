@@ -2,7 +2,16 @@
   "steps": [
     {
       "step_order": 1,
-      "description": "SAILOR (RNA Editing)",
+      "description": "STAR aligned original fastqs to hg19 reference build",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Run SAILOR to identify editing sites.",
       "tool_name": "SAILOR",
       "tool_version": "",
       "code_example": "",
@@ -10,13 +19,34 @@
       "github_url": "https://github.com/YeoLab/sailor"
     },
     {
-      "step_order": 2,
-      "description": "Snakemake (Workflow)",
-      "tool_name": "Snakemake",
+      "step_order": 3,
+      "description": "Code available at: https://github.com/YeoLab/FLARE",
+      "tool_name": "",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
-      "github_url": "https://snakemake.readthedocs.io"
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Run FLARE to identify regions of enriched editing.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Code available at: https://github.com/YeoLab/FLARE",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
     }
-  ]
+  ],
+  "raw_text": "STAR aligned original fastqs to hg19 reference build\nRun SAILOR to identify editing sites. Code available at: https://github.com/YeoLab/FLARE\nRun FLARE to identify regions of enriched editing. Code available at: https://github.com/YeoLab/FLARE\nAssembly: hg19\nSupplementary files format and content: Peak files are tab delimited and include peak coordinates, edit fraction, fraction of reads edited, and score",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
 }

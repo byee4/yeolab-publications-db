@@ -2,21 +2,51 @@
   "steps": [
     {
       "step_order": 1,
-      "description": "HOMER (Peak Calling / Motif)",
-      "tool_name": "HOMER",
+      "description": "Mean foreground intensities were obtained for each spot and imported into the mathematical software package \u00e2\u0080\u009cR\u00e2\u0080\u009d, which is used for all data input, diagnostic plots, normalization and quality checking steps of the analysis process using scripts developed in-house by Peter White specifically for this analysis.",
+      "tool_name": "",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
-      "github_url": "http://homer.ucsd.edu"
+      "github_url": ""
     },
     {
       "step_order": 2,
-      "description": "UCSC tools (Genomic Utilities)",
-      "tool_name": "UCSC tools",
+      "description": "In outline, the Cy3 (green) intensities were not background corrected (this has been shown to only introduce noise), and corrected for the scanner offset (40 was subtracted for each intensity).",
+      "tool_name": "",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
-      "github_url": "https://genome.ucsc.edu"
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "The dataset was filtered to remove positive control elements and any elements that had been flagged as bad.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Using the negative controls on the arrays, the background threshold was determined and all values less than this value were set to the threshold value.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Finally, the data was normalized using the Limma Quantile Normalization package in \u00e2\u0080\u009cR\u00e2\u0080\u009d (Smyth 2004, Bolstad et al., 2003).",
+      "tool_name": "limma",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
     }
-  ]
+  ],
+  "raw_text": "Mean foreground intensities were obtained for each spot and imported into the mathematical software package \u00e2\u0080\u009cR\u00e2\u0080\u009d, which is used for all data input, diagnostic plots, normalization and quality checking steps of the analysis process using scripts developed in-house by Peter White specifically for this analysis. In outline, the Cy3 (green) intensities were not background corrected (this has been shown to only introduce noise), and corrected for the scanner offset (40 was subtracted for each intensity). The dataset was filtered to remove positive control elements and any elements that had been flagged as bad. Using the negative controls on the arrays, the background threshold was determined and all values less than this value were set to the threshold value. Finally, the data was normalized using the Limma Quantile Normalization package in \u00e2\u0080\u009cR\u00e2\u0080\u009d (Smyth 2004, Bolstad et al., 2003).",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
 }

@@ -1,0 +1,97 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Reads from scRNA-seq were aligned to mm10 using the 10x Genomics Cell Ranger software (v 2.1.0).",
+      "tool_name": "Cell Ranger",
+      "tool_version": "2.1.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Reads were collapsed into unique molecular identifier counts.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "All samples had >2000 cells detected with >1000 genes per cells with >70% of the coding genome covered.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Genes that were not expressed in at least 5% of all cells were excluded.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "As previously described (Boland et al., 2020), replicates of single cell libraries were normalized removing batch effects using RUVnormalize (v1.15.0).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "The raw UMI matrix was scaled and input to the naiveRandRUV function with parameters coeff=1e-3 and k=10.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "Fifty negative control genes were taken from a list of housekeeping genes (Eisenberg and Levanon, 2013) with least variability in all datasets.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "Seurat (v3.0.1) functions were used to calculate top variable genes, principal components analysis (PCA), and tSNE with FindVariableGenes, RunPCA, and RunTSNE.",
+      "tool_name": "Seurat",
+      "tool_version": "3.0.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "The top 5000 genes were considered as input for the PCA calculation, and only the top 25 principal components (PCs) were used in tSNE.",
+      "tool_name": "PCA",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 10,
+      "description": "none provided by the submitter",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Reads from scRNA-seq were aligned to mm10 using the 10x Genomics Cell Ranger software (v 2.1.0). Reads were collapsed into unique molecular identifier counts. All samples had >2000 cells detected with >1000 genes per cells with >70% of the coding genome covered.  Genes that were not expressed in at least 5% of all cells were excluded. As previously described (Boland et al., 2020), replicates of single cell libraries were normalized removing batch effects using RUVnormalize (v1.15.0). The raw UMI matrix was scaled and input to the naiveRandRUV function with parameters coeff=1e-3 and k=10. Fifty negative control genes were taken from a list of housekeeping genes (Eisenberg and Levanon, 2013) with least variability in all datasets. Seurat (v3.0.1) functions were used to calculate top variable genes, principal components analysis (PCA), and tSNE with FindVariableGenes, RunPCA, and RunTSNE. The top 5000 genes were considered as input for the PCA calculation, and only the top 25 principal components (PCs) were used in tSNE.\nnone provided by the submitter\nAssembly: mm10\nSupplementary files format and content: Tab-separated values files and matrix files",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

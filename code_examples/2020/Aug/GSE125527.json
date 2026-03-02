@@ -1,0 +1,88 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "data were processed by cellranger 2.1.0 with default parameter, using mm10 as reference.",
+      "tool_name": "Cell Ranger",
+      "tool_version": "2.1.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Raw cell-reads were then loaded to R using the cellrangerRkit package.",
+      "tool_name": "R",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "The pre-filtered VDJ information table (all_contig_annotations.csv, output by cellranger) were loaded at the same time.",
+      "tool_name": "Cell Ranger",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "A cell was considered \u00e2\u0080\u009cvalid\u00e2\u0080\u009d if it satisfied the following criteria: (1) Cell has enough RNA reads to pass the Cell Ranger threshold. (2) Cell has productive full-length BCR or TCR detected.",
+      "tool_name": "Cell Ranger",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Only valid cells were kept for downstream analysis in both the scRNA-seq and scTCR-seq/scBCR-seq datasets.",
+      "tool_name": "scRNA-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "The scRNA-seq dataset was then further filtered based on gene numbers and mitochondria gene counts tototal counts ratio.",
+      "tool_name": "scRNA-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "Only cells with > 400 genes,UMI > 0,and 0.5% ~ 30% of their UMIs mappingto mitochondria genes were kept for downstream analysis.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "All the VDJ data that don't have the following flag of cellranger were filtered: 1. the is_cell flag, 2. the full-length flag and 3. the productive flag.",
+      "tool_name": "Cell Ranger",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "For the 5' scRNA-seq and 5' VDJ-seq, the first 16 bp of R1 is the cell barcode and the next 10bp (17-26bp) is the UMI.",
+      "tool_name": "scRNA-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "data were processed by cellranger 2.1.0 with default parameter, using mm10 as reference.\nRaw cell-reads were then loaded to R using the cellrangerRkit package. The pre-filtered VDJ information table (all_contig_annotations.csv, output by cellranger) were loaded at the same time. A cell was considered \u00e2\u0080\u009cvalid\u00e2\u0080\u009d if it satisfied the following criteria: (1) Cell has enough RNA reads to pass the Cell Ranger threshold. (2) Cell has productive full-length BCR or TCR detected. Only valid cells were kept for downstream analysis in both the scRNA-seq and scTCR-seq/scBCR-seq datasets. The scRNA-seq dataset was then further filtered based on gene numbers and mitochondria gene counts tototal counts ratio. Only cells with > 400 genes,UMI > 0,and 0.5% ~ 30% of their UMIs mappingto mitochondria genes were kept for downstream analysis.\nAll the VDJ data that don't have the following flag of cellranger were filtered: 1. the is_cell flag, 2. the full-length flag and 3. the productive flag.\nFor the 5' scRNA-seq and 5' VDJ-seq, the first 16 bp of R1 is the cell barcode and the next 10bp (17-26bp) is the UMI.\nGenome_build: hg38\nSupplementary_files_format_and_content: cell-gene UMI table: UMI table with each row represent a cell and each column represent a gene.   BCR table: table containing BCR information, including V/D/J/C genes and CDR3  TCR table:  table containing TCR information, including V/D/J/C genes and CDR3",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

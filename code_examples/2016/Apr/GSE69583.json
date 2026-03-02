@@ -1,0 +1,70 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Sequencing reads from CLIP-seq and RIP-seq libraries were first trimmed of polyA tails, adapters, and low quality ends using cutadapt with parameters --match-read-wildcards --times 2 -e 0 -O 5 --quality-cutoff' 6 -m 18 -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b TGGAATTCTCGGGTGCCAAGG -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT.",
+      "tool_name": "cutadapt",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Reads were then mapped against a database of repetitive elements derived from RepBase18.05.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Bowtie version 1.0.0 with parameters -S -q -p 16 -e 100 -l 20 was used to align reads against an index generated from Repbase sequences (Langmead et al., 2009).",
+      "tool_name": "Bowtie",
+      "tool_version": "1.0.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Reads not mapped to Repbase sequences were aligned to the hg19 human genome (UCSC assembly) using STAR (Dobin et al., 2013) version 2.3.0e with parameters --outSAMunmapped Within \u00e2\u0080\u0093outFilterMultimapNmax 1 \u00e2\u0080\u0093outFilterMultimapScoreRange 1.",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Reads that were PCR replicates were removed from each CLIP-seq library using a custom script.",
+      "tool_name": "CLIP-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Briefly one read was kept at each nucleotide position when more than one read\u00e2\u0080\u0099s 5' end was mapped",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "Clusters were then assigned using the CLIPper software with parameters --bonferroni --superlocal --threshold- software (Lovci et al., 2013).",
+      "tool_name": "CLIPper",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Sequencing reads from CLIP-seq and RIP-seq libraries were first trimmed of polyA tails, adapters, and low quality ends using cutadapt with parameters --match-read-wildcards --times 2 -e 0 -O 5 --quality-cutoff' 6 -m 18 -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b TGGAATTCTCGGGTGCCAAGG -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT.\nReads were then mapped against a database of repetitive elements derived from RepBase18.05. Bowtie version 1.0.0 with parameters -S -q -p 16 -e 100 -l 20 was used to align reads against an index generated from Repbase sequences (Langmead et al., 2009).\nReads not mapped to Repbase sequences were aligned to the hg19 human genome (UCSC assembly) using STAR (Dobin et al., 2013) version 2.3.0e with parameters --outSAMunmapped Within \u00e2\u0080\u0093outFilterMultimapNmax 1 \u00e2\u0080\u0093outFilterMultimapScoreRange 1.\nReads that were PCR replicates were removed from each CLIP-seq library using a custom script. Briefly one read was kept at each nucleotide position when more than one read\u00e2\u0080\u0099s 5' end was mapped\nClusters were then assigned using the CLIPper software with parameters --bonferroni --superlocal --threshold- software (Lovci et al., 2013).\nGenome_build: hg19\nSupplementary_files_format_and_content: bed format, contains clusters of predicted MSI2 binding",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

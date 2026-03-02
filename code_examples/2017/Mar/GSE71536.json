@@ -1,0 +1,43 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Demultiplexing: Reads were demultiplexed based on the presence of the gene-specific primer at the beginning of R2, and a random-mer was extracted off of the beginning of R1.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Read trimming: Reads were trimmed at the 3' end using the cutadapt program, with options \"--discard-untrimmed flag -a Gene_Specific_Primer\"",
+      "tool_name": "cutadapt",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Tail counting: Non-PCR duplicate reads were counted by summing reads with the same sequence that did not have the same randommer sequence as any other read.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Counts were performed for unique only (hamming distance > 0), as well as randommers at least 1 nt apart (hamming distance >1)",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Demultiplexing: Reads were demultiplexed based on the presence of the gene-specific primer at the beginning of R2, and a random-mer was extracted off of the beginning of R1.\nRead trimming: Reads were trimmed at the 3' end using the cutadapt program, with options \"--discard-untrimmed flag -a Gene_Specific_Primer\"\nTail counting: Non-PCR duplicate reads were counted by summing reads with the same sequence that did not have the same randommer sequence as any other read. Counts were performed for unique only (hamming distance > 0), as well as randommers at least 1 nt apart (hamming distance >1)\nGenome_build: Analysis was done on raw reads without genome mapping\nSupplementary_files_format_and_content: Processed files are tab-delimited files, with each line containing the sample ID, trimmed sequence, total number of observed reads for that sequence,  number of non-PCR duplicate reads for that sequence (hamming distance > 0), and number of non-PCR duplciate reads for that sequence (hamming distance > 1)",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

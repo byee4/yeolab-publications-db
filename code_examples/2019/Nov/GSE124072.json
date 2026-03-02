@@ -2,12 +2,33 @@
   "steps": [
     {
       "step_order": 1,
-      "description": "Gene Ontology (Pathway Analysis)",
-      "tool_name": "Gene Ontology",
+      "description": "Illumina Casava1.7 software used for basecalling.",
+      "tool_name": "",
       "tool_version": "",
       "code_example": "",
       "code_language": "bash",
-      "github_url": "http://geneontology.org"
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Sequenced reads were trimmed for adaptor sequence, and masked for low-complexity or low-quality sequence, then mapped to reference genome hg19 using STAR",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Transcript abundance was calculated using Htseq",
+      "tool_name": "HTSeq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
     }
-  ]
+  ],
+  "raw_text": "Illumina Casava1.7 software used for basecalling.\nSequenced reads were trimmed for adaptor sequence, and masked for low-complexity or low-quality sequence, then mapped to reference genome hg19 using STAR\nTranscript abundance was calculated using Htseq\nGenome_build: Homo sapiens UCSC hg19",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
 }

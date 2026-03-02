@@ -1,0 +1,178 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Reads were trimmed with cutadapt -l 86 --max-n 5 -o (v1.18), mapped to RNA-Linker-DNA (GTTGGATTCNNNGACACAGCTCACTCCCACACACCGAACTCCAAC) with bwa mem -k 5 -L 4 -B 2 -O 4 (v0.7.15) and sorted with samtools sort (v1.7).",
+      "tool_name": "BWA",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "RNA and DNA reads were separated with GridTools matefq (https://github.com/biz007/gridtools).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Reads were then mapped to the mm10 genome with bwa mem -k 17 -w 1 -T 1.",
+      "tool_name": "BWA",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "GridTools evaluate was then used to correct against background and RNA-DNA mate read pair quality and quantity with bin size of 1 kb and moving windows of 10.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "GridTools.py evaluate function uses a gene annotation GTF (Gene transfer format) file to ensure that RNA end of the read always uniquely maps to its correct chromosomal location.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Thus, during the analysis, only RNA reads that map back to its own locus will be retained.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "Moreover, the DNA end of the read will also be unique mapped, ensuring that both the RNA and DNA ends of each read are all unique reads.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "No read that maps to multiple locations in the genome (including repeat elements all over chromosomes) will be retained during analysis.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "GridTools RNA was used to identify expression levels of chromatin-enriched RNA.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 10,
+      "description": "GridTools matrix was used to construct an interaction contact matrix of chromatin-associated RNA within specified genomic bin sizes of 1 kb or 100 kb.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 11,
+      "description": "All lncRNAs with reads per kilobase DNA read density \u00c2\u00b310 on any genomic region were filtered from the interaction contact matrix.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 12,
+      "description": "A 1 kb interaction matrix was directly visualized on a heatmap using the ComplexHeatmap package (v2.2.0).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 13,
+      "description": "PCA, k-means clustering set to 3 clusters, and pearson correlation analysis were performed on the interaction matrix with the R stats package (v3.6.2) removing all bins with zero interactions.",
+      "tool_name": "PCA",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 14,
+      "description": "The correlation matrix was visualized with corrplot package (v0.89) and circos plots with the circlize package (v0.42).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 15,
+      "description": "Differential RNA chromatin interaction regions were determined by taking the average RNA interaction level of each genomic bin for all lncRNAs in a cluster.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 16,
+      "description": "These averaged genomic bins were annotated to the transcription start site of the nearest gene using the ChIPpeakAnno.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 17,
+      "description": "Consecutive genomic bins annotated to a single gene with greater RNA interaction for each genomic bin in one cluster relative to another cluster were considered differentially interacting.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 18,
+      "description": "Differential RNA chromatin interaction regions were annotated with ChiPseeker.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 19,
+      "description": "none provided by the submitter",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Reads were trimmed with cutadapt -l 86 --max-n 5 -o (v1.18), mapped to RNA-Linker-DNA (GTTGGATTCNNNGACACAGCTCACTCCCACACACCGAACTCCAAC) with bwa mem -k 5 -L 4 -B 2 -O 4 (v0.7.15) and sorted with samtools sort (v1.7). RNA and DNA reads were separated with GridTools matefq (https://github.com/biz007/gridtools). Reads were then mapped to the mm10 genome with bwa mem -k 17 -w 1 -T 1. GridTools evaluate was then used to correct against background and RNA-DNA mate read pair quality and quantity with bin size of 1 kb and moving windows of 10. GridTools.py evaluate function uses a gene annotation GTF (Gene transfer format) file to ensure that RNA end of the read always uniquely maps to its correct chromosomal location. Thus, during the analysis, only RNA reads that map back to its own locus will be retained. Moreover, the DNA end of the read will also be unique mapped, ensuring that both the RNA and DNA ends of each read are all unique reads. No read that maps to multiple locations in the genome (including repeat elements all over chromosomes) will be retained during analysis. GridTools RNA was used to identify expression levels of chromatin-enriched RNA. GridTools matrix was used to construct an interaction contact matrix of chromatin-associated RNA within specified genomic bin sizes of 1 kb or 100 kb. All lncRNAs with reads per kilobase DNA read density \u00c2\u00b310 on any genomic region were filtered from the interaction contact matrix. A 1 kb interaction matrix was directly visualized on a heatmap using the ComplexHeatmap package (v2.2.0). PCA, k-means clustering set to 3 clusters, and pearson correlation analysis were performed on the interaction matrix with the R stats package (v3.6.2) removing all bins with zero interactions. The correlation matrix was visualized with corrplot package (v0.89) and circos plots with the circlize package (v0.42). Differential RNA chromatin interaction regions were determined by taking the average RNA interaction level of each genomic bin for all lncRNAs in a cluster. These averaged genomic bins were annotated to the transcription start site of the nearest gene using the ChIPpeakAnno. Consecutive genomic bins annotated to a single gene with greater RNA interaction for each genomic bin in one cluster relative to another cluster were considered differentially interacting. Differential RNA chromatin interaction regions were annotated with ChiPseeker.\nnone provided by the submitter\nAssembly: mm10\nSupplementary files format and content: Expression and scope Cis and Trans of all chromatin enriched RNAs",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

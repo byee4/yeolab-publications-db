@@ -1,0 +1,16 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "The data were normalised using quantile normalisation with IlluminaGUI in R",
+      "tool_name": "R",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "The data were normalised using quantile normalisation with IlluminaGUI in R",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

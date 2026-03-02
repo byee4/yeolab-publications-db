@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Read counts were quantified using kallisto.",
+      "tool_name": "kallisto",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "These were then aligned to C. elegans genome WS247.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Read counts were quantified using kallisto.\nThese were then aligned to C. elegans genome WS247.\nGenome_build: WS247\nSupplementary_files_format_and_content: Csv; Contains tpm values for each replicate",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

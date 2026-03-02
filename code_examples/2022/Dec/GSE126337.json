@@ -1,0 +1,34 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Reads were mapped to GRCh38 using STAR (v2.4.2a) and Gencode v25 gene annotations",
+      "tool_name": "STAR",
+      "tool_version": "2.4.2a",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "STAR --genomeDir /STARgenomes/hg38_Gencode25 --outFileNamePrefix $sampleName\"_\" --readFilesIn /path/to/read1 /path/to/read2 --readFilesCommand zcat --runThreadN 8 --outSAMstrandField intronMotif --outSAMtype BAM SortedByCoordinate --quantMode GeneCounts --sjdbGTFfile /path/to/gencode.v25.annotation.gtf",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Read counts from STAR were merged along with gene annotations using bespoke R script",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Reads were mapped to GRCh38 using STAR (v2.4.2a) and Gencode v25 gene annotations\nSTAR --genomeDir /STARgenomes/hg38_Gencode25 --outFileNamePrefix $sampleName\"_\" --readFilesIn /path/to/read1 /path/to/read2 --readFilesCommand zcat --runThreadN 8 --outSAMstrandField intronMotif --outSAMtype BAM SortedByCoordinate --quantMode GeneCounts --sjdbGTFfile /path/to/gencode.v25.annotation.gtf\nRead counts from STAR were merged along with gene annotations using bespoke R script\nGenome_build: GRCh38\nSupplementary_files_format_and_content: Tab-delimited file containing read counts per gene",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

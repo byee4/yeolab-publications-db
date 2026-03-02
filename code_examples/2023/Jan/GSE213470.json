@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Alignment, cell barcode processing, umis processing, abundance measurements: cellranger count (version 2.1.1)",
+      "tool_name": "Cell Ranger",
+      "tool_version": "2.1.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Cells and genes filtering, dimension reduction: Scanpy (version 1.7.2)",
+      "tool_name": "Scanpy",
+      "tool_version": "1.7.2",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Alignment, cell barcode processing, umis processing, abundance measurements: cellranger count (version 2.1.1)\nCells and genes filtering, dimension reduction: Scanpy (version 1.7.2)\nAssembly: mm10\nSupplementary files format and content: Tab-separated values files and matrix files",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

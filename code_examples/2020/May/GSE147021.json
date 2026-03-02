@@ -1,0 +1,34 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Tophat",
+      "tool_name": "TopHat",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "HT-Seq Count",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "DESeq from BioConductor",
+      "tool_name": "DESeq2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "r",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Tophat\nHT-Seq Count\nDESeq from BioConductor\nGenome_build: UCSC mm10\nSupplementary_files_format_and_content: gct",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

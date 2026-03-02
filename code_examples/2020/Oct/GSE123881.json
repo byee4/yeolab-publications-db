@@ -1,0 +1,34 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Sequenced reads were mapped to mm10 using STAR v2.6.1a with parameters \"--outFilterMultimapNmax 20 --alignSJoverhangMin 8 --alignSJDBoverhangMin 1 --outFilterMismatchNmax 999 --outFilterMismatchNoverReadLmax 0.04 --alignIntronMin 20 --alignIntronMax 1000000 --alignMatesGapMax 1000000\".",
+      "tool_name": "STAR",
+      "tool_version": "2.6.1a",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Uniquely mapped reads overlapping with the exons were counted using featureCounts for each gene in GENCODE.vM19 annotation.",
+      "tool_name": "featureCounts",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Differential expression analysis were performed by DESeq2(v1.18.1) package",
+      "tool_name": "DESeq2",
+      "tool_version": "1.18.1",
+      "code_example": "",
+      "code_language": "r",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Sequenced reads were mapped to mm10 using STAR v2.6.1a with parameters \"--outFilterMultimapNmax 20 --alignSJoverhangMin 8 --alignSJDBoverhangMin 1 --outFilterMismatchNmax 999 --outFilterMismatchNoverReadLmax 0.04 --alignIntronMin 20 --alignIntronMax 1000000 --alignMatesGapMax 1000000\".\nUniquely mapped reads overlapping with the exons were counted using featureCounts for each gene in GENCODE.vM19 annotation.\nDifferential expression analysis were performed by DESeq2(v1.18.1) package\nGenome_build: MM10\nSupplementary_files_format_and_content: tab-delimited text files include raw counts, normalized counts values log2FoldChange and pvalue for each gene",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

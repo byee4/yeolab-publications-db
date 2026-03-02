@@ -1,0 +1,43 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Following sequencing, raw reads were aligned to GRCh38 and analyzed following a previously published pipeline (Nostrand et al, 2016)",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Consistent with the ENCODE standard 65, reads aligning to artifact-enriched or repetitive genomic regions were removed",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Reproducible and significant peaks of aligned reads were defined as IDR cutoff of 0.01, P \u00e2\u0089\u00a4 0.001, and fold enrichment \u00e2\u0089\u00a58.",
+      "tool_name": "IDR",
+      "tool_version": "0.01",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Genic regions of eCLIP peaks were annotated based on overlap with GENCODE v26 transcripts following the priority order consistent with the previous study",
+      "tool_name": "GENCODE",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Following sequencing, raw reads were aligned to GRCh38 and analyzed following a previously published pipeline (Nostrand et al, 2016)\nConsistent with the ENCODE standard 65, reads aligning to artifact-enriched or repetitive genomic regions were removed\nReproducible and significant peaks of aligned reads were defined as IDR cutoff of 0.01, P \u00e2\u0089\u00a4 0.001, and fold enrichment \u00e2\u0089\u00a58.\nGenic regions of eCLIP peaks were annotated based on overlap with GENCODE v26 transcripts following the priority order consistent with the previous study\nAssembly: GRCh38\nSupplementary files format and content: wig files represent read covergae for plus and minus strands\nSupplementary files format and content: peak files",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}
