@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "eCLIP data was analyzed using Skipper with default settings.",
+      "tool_name": "Skipper",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "The kDa of each ORF was matched to the closest input sample beginning at that range; for example, a 78 kDa ORF would be paired with the input sample covering the range of 75 to 150 kDa.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "eCLIP data was analyzed using Skipper with default settings. The kDa of each ORF was matched to the closest input sample beginning at that range; for example, a 78 kDa ORF would be paired with the input sample covering the range of 75 to 150 kDa.\nAssembly: hg38/mm10\nSupplementary files format and content: Reproducible enriched peaks output by Skipper",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

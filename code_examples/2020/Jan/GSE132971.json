@@ -1,0 +1,43 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Oxford Nanopore's Albacore and Guppy base-callers",
+      "tool_name": "Nanopore sequencing",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Reads were aligned and resquiggled with Tombo v1.4",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Coverage and fraction modified files were obtained using Tombo's text_output commands.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Bedobs was used to convert the wig files to bed files before being interescted with the coverage file using bedtools.",
+      "tool_name": "bedtools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Oxford Nanopore's Albacore and Guppy base-callers\nReads were aligned and resquiggled with Tombo v1.4\nCoverage and fraction modified files were obtained using Tombo's text_output commands. Bedobs was used to convert the wig files to bed files before being interescted with the coverage file using bedtools.\nGenome_build: hg19 and hg38(cDNA)\nSupplementary_files_format_and_content: bedgraph and wig",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

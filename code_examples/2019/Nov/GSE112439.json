@@ -1,0 +1,43 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Preprocessing: 10bp were trimmed from the beginning of each read to remove possible adapter contamination",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Alignment: Reads were aligned using Bsmap with the following flags: -v 0.05 -s 16 -w 100 -S 1 -p 8 -",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Methylation calling: CpGs in the reference sequence were compared to the sequence in the aligned read.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "If bisulfite conversion (signifying an unmethylated cytosine) was detected, the read added to the unmethylated count for that CpG, otherwise, it added to the methylated count.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Preprocessing: 10bp were trimmed from the beginning of each read to remove possible adapter contamination\nAlignment: Reads were aligned using Bsmap with the following flags: -v 0.05 -s 16 -w 100 -S 1 -p 8 -\nMethylation calling: CpGs in the reference sequence were compared to the sequence in the aligned read. If bisulfite conversion (signifying an unmethylated cytosine) was detected, the read added to the unmethylated count for that CpG, otherwise, it added to the methylated count.\nGenome_build: Homo sapiens UCSC hg19\nSupplementary_files_format_and_content: Bed files contain the number of methylated and total reads for CpGs covered by RRBS with the columns: chromosome, start, end, number of reads methylated divided by number of reads seen, methylation percent*1000",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

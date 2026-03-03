@@ -1,0 +1,106 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "RNA-seq reads were subjected to 3\u00e2\u0080\u0099 adapter and poly(A)/poly(T) tail trimming using Cutadapt v1.9.1 from Martin et al., EMBnet.journal, 2011.",
+      "tool_name": "cutadapt",
+      "tool_version": "1.9.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "The following 3\u00e2\u0080\u0099 adapter sequences were utilized for generating RNA-Seq libraries and subsequently trimmed: mate1 5\u00e2\u0080\u0099-AGATCGGAAGAGCACACGTC-3\u00e2\u0080\u0099, mate2 5\u00e2\u0080\u0099-AGATCGGAAGAGCGTCGTGT-3\u00e2\u0080\u0099.",
+      "tool_name": "RNA-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Reads shorter than 30 nucleotides were discarded.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "The kallisto v0.43.1 software from Bray et al., Nature Biotechnology, 2016 was used for building transcriptome index and aligning filtered reads.",
+      "tool_name": "kallisto",
+      "tool_version": "0.43.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "The default options of kallisto were utilized for building transcriptome index.",
+      "tool_name": "kallisto",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "For aligning filtered reads we used options \u00e2\u0080\u009c--rf-stranded\u00e2\u0080\u009d and \u00e2\u0080\u009c--pseudobam\u00e2\u0080\u009d.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "Mapped reads were assigned to transcripts in a weighted manner: if a read was uniquely mapped to a transcript, then the transcript\u00e2\u0080\u0099s read count was incremented by 1; if a read was mapped to n different transcripts, each transcript\u00e2\u0080\u0099s read count was incremented by 1/n.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "The expression of each transcript was estimated in transcripts per million (TPM) units by dividing its read count by the transcript length and normalizing to the library size.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "The expression of a gene was obtained by summing up the normalized expression of the transcripts associated with it.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 10,
+      "description": "For every gene, read counts of transcripts associated with this gene were also summed up and further used for the differential expression analysis.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 11,
+      "description": "As the reference mouse transcriptome, we considered sequences of protein coding transcripts with the support level 1-3 based on genome assembly GRCm38 (release 92) and transcript annotations from Ensembl database (see Hubbard et al., Nucleic Acids Research, 2002).",
+      "tool_name": "Ensembl",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "RNA-seq reads were subjected to 3\u00e2\u0080\u0099 adapter and poly(A)/poly(T) tail trimming using Cutadapt v1.9.1 from Martin et al., EMBnet.journal, 2011. The following 3\u00e2\u0080\u0099 adapter sequences were utilized for generating RNA-Seq libraries and subsequently trimmed: mate1 5\u00e2\u0080\u0099-AGATCGGAAGAGCACACGTC-3\u00e2\u0080\u0099, mate2 5\u00e2\u0080\u0099-AGATCGGAAGAGCGTCGTGT-3\u00e2\u0080\u0099.\nReads shorter than 30 nucleotides were discarded.\nThe kallisto v0.43.1 software from Bray et al., Nature Biotechnology, 2016 was used for building transcriptome index and aligning filtered reads. The default options of kallisto were utilized for building transcriptome index. For aligning filtered reads we used options \u00e2\u0080\u009c--rf-stranded\u00e2\u0080\u009d and \u00e2\u0080\u009c--pseudobam\u00e2\u0080\u009d.\nMapped reads were assigned to transcripts in a weighted manner: if a read was uniquely mapped to a transcript, then the transcript\u00e2\u0080\u0099s read count was incremented by 1; if a read was mapped to n different transcripts, each transcript\u00e2\u0080\u0099s read count was incremented by 1/n.\nThe expression of each transcript was estimated in transcripts per million (TPM) units by dividing its read count by the transcript length and normalizing to the library size. The expression of a gene was obtained by summing up the normalized expression of the transcripts associated with it. For every gene, read counts of transcripts associated with this gene were also summed up and further used for the differential expression analysis.\nAs the reference mouse transcriptome, we considered sequences of protein coding transcripts with the support level 1-3 based on genome assembly GRCm38 (release 92) and transcript annotations from Ensembl database (see Hubbard et al., Nucleic Acids Research, 2002).\nGenome_build: GRCm38\nSupplementary_files_format_and_content: counts_mouse_aging_timecourse.txt: Tab-delimited text file includes raw counts at the gene level for each sample.\nSupplementary_files_format_and_content: tpms_mouse_aging_timecourse.txt: Tab-delimited text file includes TPM values at the gene level for each sample.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

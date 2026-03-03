@@ -1,0 +1,16 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Raw data were log2 transformed and normalized to 75 percentile according to Agilent protocol.",
+      "tool_name": "Microarray",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Raw data were log2 transformed and normalized to 75 percentile according to Agilent protocol.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

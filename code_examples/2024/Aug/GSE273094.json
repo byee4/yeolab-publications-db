@@ -1,0 +1,34 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Reads were aligned to the GRCm38.p6 version of the mouse genome using STAR and duplicated reads were removed with MarkDuplicates.",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "We used MACS3 callpeak for peak calling (q- value < 0.05 and fold change \u00e2\u0089\u00a5 1.5).",
+      "tool_name": "MACS2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Bedtools were used to generate coverage tracks.",
+      "tool_name": "bedtools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Reads were aligned to the GRCm38.p6 version of the mouse genome using STAR and duplicated reads were removed with MarkDuplicates.\nWe used MACS3 callpeak for peak calling (q- value < 0.05 and fold change \u00e2\u0089\u00a5 1.5).\nBedtools were used to generate coverage tracks.\nAssembly: GRCm38.p6\nSupplementary files format and content: Excel xlsx files containing peak information\nSupplementary files format and content: Bigwig (bw) files containing track coverage information",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

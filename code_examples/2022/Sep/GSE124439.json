@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "fastq Illumina RNASeq paired-end reads were aligned to the hg19 reference genome using STAR v2.5.2b with the following configurations: --outFilterMultimapNmax 100; --outFilterMismatchNoverReadLmax 0.04",
+      "tool_name": "STAR",
+      "tool_version": "2.5.2b",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Genes and transposable elements (TE) were quantified using TEcount (from TEtranscripts v2.0.3) with the following configurations: hg19 genic GTF from refGene (Jan 2018), custom hg19 TE GTF generated from repeatMasker; --stranded reverse",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "fastq Illumina RNASeq paired-end reads were aligned to the hg19 reference genome using STAR v2.5.2b with the following configurations: --outFilterMultimapNmax 100; --outFilterMismatchNoverReadLmax 0.04\nGenes and transposable elements (TE) were quantified using TEcount (from TEtranscripts v2.0.3) with the following configurations: hg19 genic GTF from refGene (Jan 2018), custom hg19 TE GTF generated from repeatMasker; --stranded reverse\nGenome_build: hg19\nSupplementary_files_format_and_content: Individual count tables (SampleName_counts.txt) were generated as output from TEcount",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

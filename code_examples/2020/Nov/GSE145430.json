@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "RNA-seq reads were aligned to the mouse genome (mm10) and analyzed using the public server Galaxy (usegalaxy.org), which employs the STAR aligner.",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "DESeq2 was used for differential expression analysis",
+      "tool_name": "DESeq2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "RNA-seq reads were aligned to the mouse genome (mm10) and analyzed using the public server Galaxy (usegalaxy.org), which employs the STAR aligner.\nDESeq2 was used for differential expression analysis\nGenome_build: mm10\nSupplementary_files_format_and_content: Excel file contains the normalized counts for each sample",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

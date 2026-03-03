@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Raw Data was aligned to hg38 using STAR",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "HT-Seq count was used to obtain read counts over all GENCODE 32 genes",
+      "tool_name": "GENCODE",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Raw Data was aligned to hg38 using STAR\nHT-Seq count was used to obtain read counts over all GENCODE 32 genes\nGenome_build: hg38\nSupplementary_files_format_and_content: tab delimited read counts",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

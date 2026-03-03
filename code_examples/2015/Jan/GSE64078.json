@@ -1,0 +1,16 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "The sequenced 40 bases were mapped to the oligo pool sequences with Bowtie by allowing 1 mismatch in each of the donor and acceptor sequences.",
+      "tool_name": "Bowtie",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "The sequenced 40 bases were mapped to the oligo pool sequences with Bowtie by allowing 1 mismatch in each of the donor and acceptor sequences.\nGenome_build: hg18\nSupplementary_files_format_and_content: The processed files contain both the genomic location (the first 6 columns) and counts for 2 isoforms (last 2 columns) of each alternative splicing event.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

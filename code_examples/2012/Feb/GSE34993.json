@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "CLIP-seq reads were processed as previously described (Polymenidou et al., 2011).",
+      "tool_name": "CLIP-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Briefly, reads were trimmed to remove sequencing adaptors and homopolymeric runs >10nt, and mapped to the human genome (hg18) using Bowtie (version 0.12.2 with parameters \u00e2\u0080\u0093q \u00e2\u0080\u0093l 20 \u00e2\u0080\u0093m 5 \u00e2\u0080\u0093k 5 \u00e2\u0080\u0093\u00e2\u0080\u0093best).",
+      "tool_name": "Bowtie",
+      "tool_version": "0.12.2",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "CLIP-seq reads were processed as previously described (Polymenidou et al., 2011). Briefly, reads were trimmed to remove sequencing adaptors and homopolymeric runs >10nt, and mapped to the human genome (hg18) using Bowtie (version 0.12.2 with parameters \u00e2\u0080\u0093q \u00e2\u0080\u0093l 20 \u00e2\u0080\u0093m 5 \u00e2\u0080\u0093k 5 \u00e2\u0080\u0093\u00e2\u0080\u0093best).",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

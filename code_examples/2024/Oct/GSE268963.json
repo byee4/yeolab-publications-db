@@ -1,0 +1,16 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Reads were aligned to hg38 using SlamDunk (v0.4.3) with inclusion of multi-mapping reads.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Reads were aligned to hg38 using SlamDunk (v0.4.3) with inclusion of multi-mapping reads.\nAssembly: hg38\nSupplementary files format and content: C->T conversion counts within 3' UTR regions output by SlamDunk",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

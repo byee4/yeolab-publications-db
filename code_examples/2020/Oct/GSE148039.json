@@ -1,0 +1,70 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "We used Illumina CASAVA 1.8.2 software to generate fastq files.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Reads were trimmed using cutadapt (Martin 2011) (parameters: -a ADAPTER1 -a \u00e2\u0080\u009cA{10}\u00e2\u0080\u009d -a \u00e2\u0080\u009cT{10}\u00e2\u0080\u009d -A \u00e2\u0080\u009cA{10}\u00e2\u0080\u009d -A \u00e2\u0080\u009cT{10}\u00e2\u0080\u009d \u00e2\u0080\u0093times 2 -q 20 -m 25).",
+      "tool_name": "cutadapt",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Reads were mapped to genome mm10 using STAR (Dobin et al.",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "2013) v2.4.2a (parameters: \u00e2\u0080\u0093alignEndsType EndToEnd, \u00e2\u0080\u0093outFilterMismatchNoverLmax 0.05, \u00e2\u0080\u0093twopassMode Basic).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Sample counting was done using STAR, quantifying mm10 RefSeq annotated genes.",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Normalization of the counts and differential expression analysis was performed using DESeq2 (Love et al.",
+      "tool_name": "DESeq2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "2014) with the parameters: betaPrior=True, cooksCutoff=FALSE, independentFiltering=FALSE.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "We used Illumina CASAVA 1.8.2 software to generate fastq files.\nReads were trimmed using cutadapt (Martin 2011) (parameters: -a ADAPTER1 -a \u00e2\u0080\u009cA{10}\u00e2\u0080\u009d -a \u00e2\u0080\u009cT{10}\u00e2\u0080\u009d -A \u00e2\u0080\u009cA{10}\u00e2\u0080\u009d -A \u00e2\u0080\u009cT{10}\u00e2\u0080\u009d \u00e2\u0080\u0093times 2 -q 20 -m 25).\nReads were mapped to genome mm10 using STAR (Dobin et al. 2013) v2.4.2a (parameters: \u00e2\u0080\u0093alignEndsType EndToEnd, \u00e2\u0080\u0093outFilterMismatchNoverLmax 0.05, \u00e2\u0080\u0093twopassMode Basic).\nSample counting was done using STAR, quantifying mm10 RefSeq annotated genes.\nNormalization of the counts and differential expression analysis was performed using DESeq2 (Love et al. 2014) with the parameters: betaPrior=True, cooksCutoff=FALSE, independentFiltering=FALSE.\nGenome_build: mm10\nSupplementary_files_format_and_content: DESeq2 output",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

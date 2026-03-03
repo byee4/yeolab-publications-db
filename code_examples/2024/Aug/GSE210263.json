@@ -1,0 +1,97 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Post sequencing read quality was checked using the FastQC quality control tool (http://www.bioinformatics.babraham.ac.uk/projects/fastqc/) for high throughput sequence data.",
+      "tool_name": "FastQC",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "If the per-base quality score was below 20 at any position along the 75 bp length stretch, those samples were processed using sliding window quality filtering (window size = 4 bp) in Trimmomatic v0.32.",
+      "tool_name": "Trimmomatic",
+      "tool_version": "0.32",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "After filtering, only the paired-end reads collected from the read-trimming were used for downstream data analysis",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "After filtering, only the paired-end reads collected from the read-trimming were used for downstream data analysis (Table S3).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Original samples that showed a satisfactory per base quality score (>20) were used without filtering.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Sequencing adapters were trimmed while converting initial BCL data to fastq files from the sequencing center prior to receiving the data files and no adaptor contamination was detected in FASTQC analysis.",
+      "tool_name": "FastQC",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "Prepared fastq files were aligned to the Mus musculus GRCm38.p4 genome annotation using the Tophat alignment tool.",
+      "tool_name": "TopHat",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "In order to calculate the insert sizes between paired-end reads, a subset of 250,000 reads from each sample was aligned using the BWA-aln short read alignment tool available on the Galaxy web platform.",
+      "tool_name": "BWA",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "The built-in reference mouse genome (mm10) was used to carry out the alignment under default settings.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 10,
+      "description": "Alignment statistics for the pre-alignments were generated using CollectInsertSizeMetrics Picard tool (http://broadinstitute.github.io/picard/), and average insert sizes and standard deviations were fed into subsequent complete read alignments generated with Tophat v2.1.1",
+      "tool_name": "TopHat",
+      "tool_version": "2.1.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Post sequencing read quality was checked using the FastQC quality control tool (http://www.bioinformatics.babraham.ac.uk/projects/fastqc/) for high throughput sequence data.\nIf the per-base quality score was below 20 at any position along the 75 bp length stretch, those samples were processed using sliding window quality filtering (window size = 4 bp) in Trimmomatic v0.32. After filtering, only the paired-end reads collected from the read-trimming were used for downstream data analysis\nAfter filtering, only the paired-end reads collected from the read-trimming were used for downstream data analysis (Table S3). Original samples that showed a satisfactory per base quality score (>20) were used without filtering. Sequencing adapters were trimmed while converting initial BCL data to fastq files from the sequencing center prior to receiving the data files and no adaptor contamination was detected in FASTQC analysis.\nPrepared fastq files were aligned to the Mus musculus GRCm38.p4 genome annotation using the Tophat alignment tool. In order to calculate the insert sizes between paired-end reads,  a subset of 250,000 reads from each sample was aligned using the BWA-aln short read alignment tool available on the Galaxy web platform. The built-in reference mouse genome (mm10) was used to carry out the alignment under default settings.\nAlignment statistics for the pre-alignments were generated using CollectInsertSizeMetrics Picard tool (http://broadinstitute.github.io/picard/), and average insert sizes and standard deviations were fed into subsequent complete read alignments generated with Tophat v2.1.1\nAssembly: GRCm38.p4\nSupplementary files format and content: tab delimited count file (.txt)",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

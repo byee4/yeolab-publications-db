@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Adapter-trimmed sequencing libraries were mapped against an index composed of both the human (UCSC hg19, http://genome.ucsc.edu) and HCMV Towne (Genbank FJ616285.1) genomes, using Bowtie software (version 0.12.7, with parameters -k 1 -m 10 -l 25 --best).",
+      "tool_name": "Bowtie",
+      "tool_version": "0.12.7",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Custom Perl scripts were used to overlap mapped coordinates with smRNA annotations, which were obtained from miRBase 16.0 (http://www.mirbase.org) and the UCSC Table Browser.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Adapter-trimmed sequencing libraries were mapped against an index composed of both the human (UCSC hg19, http://genome.ucsc.edu) and HCMV Towne (Genbank FJ616285.1) genomes, using Bowtie software (version 0.12.7, with parameters -k 1 -m 10 -l 25 --best). Custom Perl scripts were used to overlap mapped coordinates with smRNA annotations, which were obtained from miRBase 16.0 (http://www.mirbase.org) and the UCSC Table Browser.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

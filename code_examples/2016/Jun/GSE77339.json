@@ -1,0 +1,70 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Cel files were analyzed using Expression Console (build 1.4.1.46, Affymetrix), with RMA normalization and DABG probe-level detection.",
+      "tool_name": "Microarray",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Only probesets with detection p-value \u00e2\u0089\u00a4 0.05 in more than half of the microarray samples were considered for downstream analysis.",
+      "tool_name": "Microarray",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "All probes corresponding to cassette exons profiled on the microarray (comprising exclusion junction, upstream and downstream inclusion junction, and inclusion exonic probes) were identified and normalized against the average signal on a per-gene basis to remove gene expression changes.",
+      "tool_name": "Microarray",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Student\u00e2\u0080\u0099s t-test was performed on residuals for inclusion probes and exclusion probes separately to identify robust splicing changes, which were quantified by SepScore ( defined as the normalized change in exclusion minus the normalized change in inclusion).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "HTA-2_0.r1.pgf",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "HTA-2_0.r1.Psrs.mps",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "RMA probeset-level signal estimates, DABG detection flag (Absent or Present), and DABG detection p-value obtained from 'Alt Splice Analysis' performed in Affymetrix Expression Console build 1.4.1.46.",
+      "tool_name": "Microarray",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Cel files were analyzed using Expression Console (build 1.4.1.46, Affymetrix), with RMA normalization and DABG probe-level detection. Only probesets with detection p-value \u00e2\u0089\u00a4 0.05 in more than half of the microarray samples were considered for downstream analysis. All probes corresponding to cassette exons profiled on the microarray (comprising exclusion junction, upstream and downstream inclusion junction, and inclusion exonic probes) were identified and normalized against the average signal on a per-gene basis to remove gene expression changes. Student\u00e2\u0080\u0099s t-test was performed on residuals for inclusion probes and exclusion probes separately to identify robust splicing changes, which were quantified by SepScore ( defined as the normalized change in exclusion minus the normalized change in inclusion).\nHTA-2_0.r1.pgf\nHTA-2_0.r1.Psrs.mps\nRMA probeset-level signal estimates, DABG detection flag (Absent or Present), and DABG detection p-value obtained from 'Alt Splice Analysis' performed in Affymetrix Expression Console build 1.4.1.46.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

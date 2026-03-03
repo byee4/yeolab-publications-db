@@ -1,0 +1,43 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Illumina Casava1.7 software used for basecalling.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Reads were aligned to the human genome (hg19) with STAR (v2.2.0c) with default parameters.",
+      "tool_name": "STAR",
+      "tool_version": "2.2.0c",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Only uniquely alignable reads were used for downstream analysis",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Reads Per Kilobase of exon per milion mapped reads were calculated using HOMER (http://homer.salk.edu/homer/) across the entire gene (both introns and exons)",
+      "tool_name": "HOMER",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Illumina Casava1.7 software used for basecalling.\nReads were aligned to the human genome (hg19) with STAR (v2.2.0c) with default parameters.  Only uniquely alignable reads were used for downstream analysis\nReads Per Kilobase of exon per milion mapped reads were calculated using HOMER (http://homer.salk.edu/homer/) across the entire gene (both introns and exons)\nGenome_build: hg19\nSupplementary_files_format_and_content: Tab delimited text file, Column Def: 1-ensembl ID, 2-chr, 3-gene start, 4-gene end, 5-strand, 6-gene length, 7-copies in genome, 8-gene name, 9-chr band, 10-gene type, 11-status, 12-aliases, 13-18: RPKM values",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

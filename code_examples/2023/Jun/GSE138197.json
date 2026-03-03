@@ -1,0 +1,61 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "map to HG19 with WASP output mode.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Remove reads not passing WASP multimapping.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Clean for mispriming by removing reads with 6 A's upstream of 7 of 10 As in upstream sequence.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Merge all BAM files and call peaks with inhouse scripts (avaialbe on github)",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Assign PAS to genes using RefSeq annoations",
+      "tool_name": "RefSeq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Remove PAS used on average <5% in total or nuclear individuals",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "map to HG19 with WASP output mode. Remove reads not passing WASP multimapping.\nClean for mispriming by removing reads with 6 A's upstream of 7 of 10 As in upstream sequence.\nMerge all BAM files and call peaks with inhouse scripts (avaialbe on github)\nAssign PAS to genes using RefSeq annoations\nRemove PAS used on average <5% in total or nuclear individuals\nGenome_build: GRCh37\nSupplementary_files_format_and_content: APAPAS_GeneLocAnno.5perc.bed: bed file with location of each PAS used at 5% in the total or nuclear fraction. Name column has peak unique number, gene, and PAS genic location. End corresponds to 5kb downstream of annotated 3' UTR\nSupplementary_files_format_and_content: MetaDataSequencing.txt: file with relevant cell collection and sequencing metadata",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

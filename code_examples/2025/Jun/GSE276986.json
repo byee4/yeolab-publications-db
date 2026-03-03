@@ -1,0 +1,16 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "RNA-Seq data was processed using the NF-Core architecture, which compiles several RNA-seq processing steps into a single executable command",
+      "tool_name": "Nextflow",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "RNA-Seq data was processed using the NF-Core architecture, which compiles several RNA-seq processing steps into a single executable command\nAssembly: hg38\nSupplementary files format and content: Feature counts for all detected transcripts in .csv format",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

@@ -1,0 +1,34 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Reads for all samples were mapped to the human genome using Casava (Ver 1.8.2) with default paramters",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "RPKM values and reads counts were calculated using Casava",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Analysis of differntial gene expression was performed thorugh ratio analysis and R (Deseq package)",
+      "tool_name": "DESeq2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Reads for all samples were mapped to the human genome using Casava (Ver 1.8.2) with default paramters\nRPKM values and reads counts were calculated using Casava\nAnalysis of differntial gene expression was performed thorugh ratio analysis and R (Deseq package)\nGenome_build: hg19\nSupplementary_files_format_and_content: KH_ratios_results.xlsx: This file contains the results of a ratio analysis of gene expression\nSupplementary_files_format_and_content: KH_DESeq_results.xlsx: This file contains the results of a gene expression analysi performed using the DEseq R package",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

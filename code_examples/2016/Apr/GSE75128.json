@@ -1,0 +1,70 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "A genome index was first generated using the Ensembl C. elegans genome WBcel235 and the Ensembl gene annotation file (version WBcel235.82) by the command: \u00e2\u0080\u009cSTAR --runThreadN 8 --runMode genomeGenerate --genomeDir <output folder> --genomeFastaFiles <path to genome fasta> --sjdbGTFfile <path to .gtf gene annotation file> --sjdbOverhang 49 --genomeSAindexNbases 12\u00e2\u0080\u009d.",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Reads from all six samples were then mapped onto the genome using: \u00e2\u0080\u009cSTAR --runThreadN 8 --genomeDir <path to genome index> --readFilesIn <list of sequence files> --outFileNamePrefix <Prefix for output files> --outFilterMismatchNmax 3 --outFilterMultimapNmax 10\u00e2\u0080\u009d.",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Reads that uniquely mapped to annotated genes were counted by htseq-count using the command: \u00e2\u0080\u009chtseq-count --stranded=no <.sam file> <.gtf gene annotation file> > <output file name>\u00e2\u0080\u009d.",
+      "tool_name": "HTSeq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "DESeq2 (Love et al., 2014) was used to perform differential analysis of gene expression between different groups.",
+      "tool_name": "DESeq2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "First, a DESeq2 data set was created by: \u00e2\u0080\u009c(dds <- DESeqDataSetFromMatrix(countData = countdata, colData = coldata, design = ~ genotype))\u00e2\u0080\u009d.",
+      "tool_name": "DESeq2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Second, the size factors (normalization for sequence depth) for each group were estimated by: \u00e2\u0080\u009cdds <- estimateSizeFactors(dds)\u00e2\u0080\u009d.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "Differential analysis was performed by calling \u00e2\u0080\u009cdds <- DESeq(dds)\u00e2\u0080\u009d and pairwise comparison was performed at a false discovery rate of 0.05 by: \u00e2\u0080\u009cres_group1_group2_alpha.05 <- results(dds, contrast=c(\"genotype\", \"group1\", \"group2\"), alpha = .05)\u00e2\u0080\u009d.",
+      "tool_name": "DESeq2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "A genome index was first generated using the Ensembl  C. elegans genome WBcel235 and the Ensembl gene annotation file (version WBcel235.82)  by the command: \u00e2\u0080\u009cSTAR --runThreadN 8 --runMode genomeGenerate --genomeDir <output  folder> --genomeFastaFiles <path to genome fasta> --sjdbGTFfile <path to .gtf gene  annotation file> --sjdbOverhang 49 --genomeSAindexNbases 12\u00e2\u0080\u009d.\nReads from all six samples were then mapped onto the genome using: \u00e2\u0080\u009cSTAR --runThreadN 8 --genomeDir  <path to genome index> --readFilesIn <list of sequence files> --outFileNamePrefix <Prefix  for output files> --outFilterMismatchNmax 3 --outFilterMultimapNmax 10\u00e2\u0080\u009d.\nReads that uniquely mapped to annotated genes were counted by htseq-count using the command: \u00e2\u0080\u009chtseq-count --stranded=no <.sam file> <.gtf gene annotation file> > <output file name>\u00e2\u0080\u009d.\nDESeq2 (Love et al., 2014) was used to perform differential analysis of gene  expression between different groups. First, a DESeq2 data set was created by: \u00e2\u0080\u009c(dds <-  DESeqDataSetFromMatrix(countData = countdata, colData = coldata, design = ~  genotype))\u00e2\u0080\u009d. Second, the size factors (normalization for sequence depth) for each group  were estimated by: \u00e2\u0080\u009cdds <- estimateSizeFactors(dds)\u00e2\u0080\u009d.\nDifferential analysis was performed by calling \u00e2\u0080\u009cdds <- DESeq(dds)\u00e2\u0080\u009d and pairwise  comparison was performed at a false discovery rate of 0.05 by: \u00e2\u0080\u009cres_group1_group2_alpha.05 <- results(dds, contrast=c(\"genotype\", \"group1\", \"group2\"), alpha = .05)\u00e2\u0080\u009d.\nGenome_build: WBcel235\nSupplementary_files_format_and_content: csv file that contains counts, normalized expression (rpkm), log2FoldChange(SIN/WT), adjusted p-values as well as useful published information for each gene annotation and each of the six samples",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

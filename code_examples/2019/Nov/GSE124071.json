@@ -1,0 +1,34 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Illumina Casava1.7 software used for basecalling.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Sequenced reads were trimmed for adaptor sequence, and masked for low-complexity or low-quality sequence, then mapped to reference genome hg19 using BWA",
+      "tool_name": "BWA",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "peaks were called using HOTSPOT with default parameter",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Illumina Casava1.7 software used for basecalling.\nSequenced reads were trimmed for adaptor sequence, and masked for low-complexity or low-quality sequence, then mapped to reference genome hg19 using BWA\npeaks were called using HOTSPOT with default parameter\nGenome_build: hg19\nSupplementary_files_format_and_content: bed files for peak calls",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

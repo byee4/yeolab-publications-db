@@ -1,0 +1,43 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Images analysis and base calling was done using solexa pipeline and reads aligned to both mouse NCBI build 36 using ELAND.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "For ChIP-Seq, sequences from all lanes were extended 200bp (maximum fragment length accounting for ~100bp of primer sequence), and allocated into 25 bp bins.",
+      "tool_name": "ChIP-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Genomic bins containing statistically significant ChIP-seq enrichment were identified by comparison to a Poissonian background model, using a p-value threshold of 10-9.",
+      "tool_name": "ChIP-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Additionally, we used an empirical background model obtained from identical Solexa sequencing of DNA from whole cell extract (WCE) from matched cell samples (>5X normalized enrichment across the entire region).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Images analysis and base calling was done using solexa pipeline and reads aligned to both mouse NCBI build 36 using ELAND.  For ChIP-Seq, sequences from all lanes were extended 200bp (maximum fragment length accounting for ~100bp of primer sequence), and allocated into 25 bp bins.  Genomic bins containing statistically significant ChIP-seq enrichment were identified by comparison to a Poissonian background model, using a p-value threshold of 10-9.  Additionally, we used an empirical background model obtained from identical Solexa sequencing of DNA from whole cell extract (WCE) from matched cell samples (>5X normalized enrichment across the entire region).",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

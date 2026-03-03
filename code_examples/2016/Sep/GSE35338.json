@@ -1,0 +1,16 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "CEL files were analyzed wth the Arraystar 4.0 software (DNAstar) using RMA processing with quantile normalization.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "CEL files were analyzed wth the Arraystar 4.0 software (DNAstar) using RMA processing with quantile normalization.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

@@ -1,0 +1,43 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Processed using Skipper https://github.com/YeoLab/skipper",
+      "tool_name": "Skipper",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Skipper trims the read, extract UMI, align to the genome and deduplicate",
+      "tool_name": "Skipper",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "To find enriched windows, it models the CLIP libraries crosslinking-induced truncation(CITs) with beta-binomial model with GC-bias of each window as a varaible",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "overdispersion parameters are estimated from two input replicates",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Processed using Skipper https://github.com/YeoLab/skipper\nSkipper trims the read, extract UMI, align to the genome and deduplicate\nTo find enriched windows, it models the CLIP libraries crosslinking-induced truncation(CITs)  with beta-binomial model with GC-bias of each window as a varaible\noverdispersion parameters are estimated from two input replicates\nAssembly: hg38\nSupplementary files format and content: wig files represent crosslinking-induced truncation(CITs) for plus and minus strands\nSupplementary files format and content: tsv file represents reproducible genomic enriched window",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

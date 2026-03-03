@@ -1,0 +1,322 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Reference genome: Novoindex (2.8) (http://www.novocraft.com) was used to create a standard and bisulfite reference index on a combination of hg19 chromosome, scaffold and splice junction sequences.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Splice junction sequences were generated with USeq (v8.8.8) 1 MakeTranscriptome using Ensembl transcript annotations (build 74).",
+      "tool_name": "Ensembl",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Alignment parameters: BS and NBS samples were aligned to the transcriptome indexes described above using Novoalign (v2.08.01) (http://www.novocraft.com) allowing up to 50 alignments and trimming adaptor sequences (TGGAATTCTCGGGTGCCAAGGAACTCCAGTCAC GATCGTCGGACTGTAGAACTCTGAAC).",
+      "tool_name": "Novoalign",
+      "tool_version": "2.08.01",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Alignment processing : The alignment files were processed with USeq SamTranscriptomeParser, which reports the best alignment location for each read in bam format and converts the coordinates of splice junction alignments to genomic space.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "One alignment location is selected at random if a read aligned to multiple locations in the genome with equal confidence.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Alignments were reordered using Picard (v1.87) (http://picard.sourceforge.net) ReorderBam and all alignments were set as primary using the set_sam_primary.py (https://github.com/HuntsmanCancerInstitute/RBSSeqTools).",
+      "tool_name": "Picard",
+      "tool_version": "1.87",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "The alignments were then processed with GATK (v3.4-0) 2 SplitNCigarReads, which splits spliced alignments into multiple alignment segments without N cigar elements.",
+      "tool_name": "GATK",
+      "tool_version": "3.4",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "Reads containing deletions four base pairs or longer were removed using remove_deletions.py (https://github.com/HuntsmanCancerInstitute/RBSSeqTools).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "m5C analysis pipeline: BS and NBS sample reads were aligned and processed as outlined above.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 10,
+      "description": "Alignments were further processed using CreateMethTable (https://github.com/HuntsmanCancerInstitute/RBSSeqTools), which iterates over the alignment file and reports forward alignment base counts at all reference \u00c3\u0092C\u00c3\u0093 positions and in reverse alignment base counts at all reference \u00c3\u0092G\u00c3\u0093 positions.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 11,
+      "description": "A Fisher's exact test p-value was calculated for each position by comparing the observed count of unconverted and converted bases to the expected count, which was calculated assuming an error rate of 0.001.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 12,
+      "description": "The table was filtered to create a final list of candidates by selecting only those sites which had a read depth \u00c2\u00b310 in both BS and NBS datasets, a non-conversion rate of \u00c2\u00b320% in the BS dataset and a Fisher exact p-value \u00c2\u00b20.05.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 13,
+      "description": "These sites were further screened manually for evidence of mis-mapping due to loss of complexity, or nonconversion arising from nondenatured secondary structure.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 14,
+      "description": "m1A analysis pipeline: BS and NBS sample reads were aligned and processed as listed above.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 15,
+      "description": "CreateMethTable was used to report forward alignment base counts at all reference \u00c3\u0092A\u00c3\u0093 positions with at least 100x coverage and in reverse alignment base counts at all reference \u00c3\u0092T\u00c3\u0093 positions with at least 100x coverage.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 16,
+      "description": "A one-tailed Fisher's exact test, corrected for multiple comparisons using the Benjamini-Hochberg (BH) procedure, was used to test if the mismatch rate in the NBS sample was greater than the BS sample.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 17,
+      "description": "One-tailed binomial tests, corrected using BH, were used to test if the number of C, G or T bases were greater than expected given error rate (0.001).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 18,
+      "description": "Positions where 1) the mismatch rate of the NBS sample was significantly higher than the BS sample, 2) two of C, G or T were significantly higher than the error rate and 3) the FDR or C was not lower than both G and T were reported as m1A sites.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 19,
+      "description": "Pseudouridine analysis pipeline: BS and NBS samples were aligned to the transcriptome indexes described above.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 20,
+      "description": "Pseudouridine positions were called using ScorePsuedouridinePositions (https://github.com/HuntsmanCancerInstitute/RBSSeqTools).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 21,
+      "description": "This application iterates over a bam file, tracking the number of deletions and overall coverage at each genomic position.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 22,
+      "description": "Positions are skipped if 1) BS sample < 5 deletions, 2) BS sample fraction deletion < 0.01, 3) BS sample coverage < 10 reads, 4) NBS sample fraction deletion > 0.01 or NBS sample coverage < 10 reads.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 23,
+      "description": "Adjacent positions are merged into a single deletion group on the initial analysis pass.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 24,
+      "description": "Deletion groups are pruned by removing positions with fraction deletions less than half the maximum observed faction deletion in the group.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 25,
+      "description": "If pruning results in non-continuous regions, both are used in the remaining analysis.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 26,
+      "description": "Deletion groups are then scanned for potential pseudouridine locations using the following steps: 1) T at the position with highest fraction deletion (FirstDelBase) 2) T in the deletion group (AltPositionBase) 3) T in a homopolymer region (considering bisulfite treatment) with deletion at the leftmost position of the homopolymer (LeftAlignBase) or 4) nearest T within 25 bp of deletion (Neighborhood).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 27,
+      "description": "If multiple deletion groups share the same predicted pseudouridine position, only the group with the highest fraction deletion is used.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 28,
+      "description": "A p-value is calculated for each group using the binomial test comparing observed deletion rate to the expected deletion rate.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 29,
+      "description": "The expected deletion rate is calculated using an error rate of 0.001.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 30,
+      "description": "Deletion groups are flagged as false positives if: 1) NBS deletion p-value < 0.01, 2) deletion occurs within 4bp of an exon boundary 3) within 6bp or longer homopolymer or 4) within 5bp of a natural deletion observed in the NBS sample.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 31,
+      "description": "Deletion groups that pass these criteria are annotated if they are within a gene or repetitive element.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 32,
+      "description": "Finally, FDR values are calculated using the Benjamini Hochberg procedure.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 33,
+      "description": "Positions were further filtered manually by removing sites that were classified as \u00c3\u0092Neighborhood\u00c3\u0093 when predicting the true pseudouridine position or had a high fraction of insertions at deletion site.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 34,
+      "description": "Reads were aligned and processed using the pipeline outlined above, except the Novoalign bisuflite alignment mode was set to 2 and different adapters were used (AGATCGGAAGAGCACACGTCTGAACTCCAGTCA AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT).",
+      "tool_name": "Novoalign",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 35,
+      "description": "Validation calls were intersected with the RBS-Seq calls using the predicted pseudouridine position.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Reference genome: Novoindex (2.8) (http://www.novocraft.com) was used to create a standard and bisulfite reference index on a combination of hg19 chromosome, scaffold and splice junction sequences.  Splice junction sequences were generated with USeq (v8.8.8) 1 MakeTranscriptome using Ensembl transcript annotations (build 74).\nAlignment parameters: BS and NBS samples were aligned to the transcriptome indexes described above using Novoalign (v2.08.01) (http://www.novocraft.com) allowing up to 50 alignments and trimming adaptor sequences (TGGAATTCTCGGGTGCCAAGGAACTCCAGTCAC GATCGTCGGACTGTAGAACTCTGAAC).\nAlignment processing : The alignment files were processed with USeq SamTranscriptomeParser, which reports the best alignment location for each read in bam format and converts the coordinates of splice junction alignments to genomic space. One alignment location is selected at random if a read aligned to multiple locations in the genome with equal confidence.\nAlignments were reordered using Picard (v1.87) (http://picard.sourceforge.net) ReorderBam  and all alignments were set as primary using the set_sam_primary.py (https://github.com/HuntsmanCancerInstitute/RBSSeqTools). The alignments were then processed with GATK (v3.4-0) 2 SplitNCigarReads, which splits spliced alignments into multiple alignment segments without N cigar elements.  Reads containing deletions four base pairs or longer were removed using remove_deletions.py (https://github.com/HuntsmanCancerInstitute/RBSSeqTools).\nm5C analysis pipeline: BS and NBS sample reads were aligned and processed as outlined above. Alignments were further processed using CreateMethTable (https://github.com/HuntsmanCancerInstitute/RBSSeqTools), which iterates over the alignment file and reports forward alignment base counts at all reference \u00c3\u0092C\u00c3\u0093 positions and in reverse alignment base counts at all reference \u00c3\u0092G\u00c3\u0093 positions. A Fisher's exact test p-value was calculated for each position by comparing the observed count of unconverted and converted bases to the expected count, which was calculated assuming an error rate of 0.001. The table was filtered to create a final list of candidates by selecting only those sites which had a read depth \u00c2\u00b310 in both BS and NBS datasets, a non-conversion rate of \u00c2\u00b320% in the BS dataset and a Fisher exact p-value \u00c2\u00b20.05. These sites were further screened manually for evidence of mis-mapping due to loss of complexity, or nonconversion arising from nondenatured secondary structure.\nm1A analysis pipeline: BS and NBS sample reads were aligned and processed as listed above. CreateMethTable was used to report forward alignment base counts at all reference \u00c3\u0092A\u00c3\u0093 positions with at least 100x coverage and in reverse alignment base counts at all reference \u00c3\u0092T\u00c3\u0093 positions with at least 100x coverage.  A one-tailed Fisher's exact test, corrected for multiple comparisons using the Benjamini-Hochberg (BH) procedure, was used to test if the mismatch rate in the NBS sample was greater than the BS sample.  One-tailed binomial tests, corrected using BH, were used to test if the number of C, G or T bases were greater than expected given error rate (0.001).  Positions where 1) the mismatch rate of the NBS sample was significantly higher than the BS sample, 2) two of C, G or T were significantly higher than the error rate and 3) the FDR or C was not lower than both G and T were reported as m1A sites.\nPseudouridine analysis pipeline:  BS and NBS samples were aligned to the transcriptome indexes described above. Pseudouridine positions were called using ScorePsuedouridinePositions (https://github.com/HuntsmanCancerInstitute/RBSSeqTools).  This application iterates over a bam file, tracking the number of deletions and overall coverage at each genomic position.  Positions are skipped if 1) BS sample < 5 deletions, 2) BS sample fraction deletion < 0.01, 3) BS sample coverage < 10 reads, 4) NBS sample fraction deletion > 0.01 or NBS sample coverage < 10 reads. Adjacent positions are merged into a single deletion group on the initial analysis pass.  Deletion groups are pruned by removing positions with fraction deletions less than half the maximum observed faction deletion in the group. If pruning results in non-continuous regions, both are used in the remaining analysis.  Deletion groups are then scanned for potential pseudouridine locations using the following steps: 1) T at the position with highest fraction deletion (FirstDelBase) 2) T in the deletion group (AltPositionBase) 3) T in a homopolymer region (considering bisulfite treatment) with deletion at the leftmost position of the homopolymer (LeftAlignBase) or 4) nearest T within 25 bp of deletion (Neighborhood).  If multiple deletion groups share the same predicted pseudouridine position, only the group with the highest fraction deletion is used. A p-value is calculated for each group using the binomial test comparing observed deletion rate to the expected deletion rate.  The expected deletion rate is calculated using an error rate of 0.001. Deletion groups are flagged as false positives if: 1) NBS deletion p-value < 0.01, 2) deletion occurs within 4bp of an exon boundary 3) within 6bp or longer homopolymer or 4) within 5bp of a natural deletion observed in the NBS sample.  Deletion groups that pass these criteria are annotated if they are within a gene or repetitive element.  Finally, FDR values are calculated using the Benjamini Hochberg procedure. Positions were further filtered manually by removing sites that were classified as \u00c3\u0092Neighborhood\u00c3\u0093 when predicting the true pseudouridine position or had a high fraction of insertions at deletion site.\nReads were aligned and processed using the pipeline outlined above, except the Novoalign bisuflite alignment mode was set to 2 and different adapters were used (AGATCGGAAGAGCACACGTCTGAACTCCAGTCA AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT). Validation calls were intersected with the RBS-Seq calls using the predicted pseudouridine position.\nGenome_build: hg19\nSupplementary_files_format_and_content: Excel files contaning m1A, m5C and pseudouridine candidtate sites.  Column descriptions can be found on the first tab of the spreadsheet",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

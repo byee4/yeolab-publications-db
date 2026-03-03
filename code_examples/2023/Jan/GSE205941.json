@@ -1,0 +1,52 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Cell Ranger (v6.0.1) was used to process sequencing information and single cell barcodes.",
+      "tool_name": "Cell Ranger",
+      "tool_version": "6.0.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Gene and cell filtering, clustering, differential and average expression using Seurat (v4.1.1)",
+      "tool_name": "Seurat",
+      "tool_version": "4.1.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Cell Ranger output was converted to .loom files with velocyto (v0.17.17) for velocity analysis.",
+      "tool_name": "Cell Ranger",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Velocity and latent time anlysis using scVelo (v0.2.4).",
+      "tool_name": "Velocyto",
+      "tool_version": "0.2.4",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Library strategy: CITE-seq",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Cell Ranger (v6.0.1) was used to process sequencing information and single cell barcodes.\nGene and cell filtering, clustering, differential and average expression using Seurat (v4.1.1)\nCell Ranger output was converted to .loom files with velocyto (v0.17.17) for velocity analysis.\nVelocity and latent time anlysis using scVelo (v0.2.4).\nAssembly: mm10\nSupplementary files format and content: 10x Genomics output files: barcodes.tsv.gz, features.tsv.gz, matrix.mtx.gz\nLibrary strategy: CITE-seq",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

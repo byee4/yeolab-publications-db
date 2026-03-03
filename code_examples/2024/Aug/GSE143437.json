@@ -1,0 +1,70 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Libraries were sequenced on Illumina NextSeq 500 using paired-end 26 + 8 + 58 (according to 10X Chromium Single Cell 3' protocol)",
+      "tool_name": "scRNA-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Sequences were aligned to mm10 using Cell Ranger v2 pipeline (10X Genomics)",
+      "tool_name": "Cell Ranger",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Gene expression data was processed with Seurat v2.3.4 (Satija lab) using R v3.6.2 (2019-12-12)",
+      "tool_name": "Seurat",
+      "tool_version": "2.3.4",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Initial data filtering (minimum cells to express an included gene = 3, minium genes to be expressed in an included cell = 200)",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Filtering by percent mitochondiral genes in included cells (maximum 0.2), number of UMIs in included cells (minimum 1000, maximum 60000), and number of mapped genes in included cells (maximum 8000)",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Log-normalization of expression data",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "Cell annotations in metadata derived from unsupervised clustering in CCA space (CCA coefficients obtained by MultiCCA from Seurat (Satija Lab).",
+      "tool_name": "Seurat",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Libraries were sequenced on Illumina NextSeq 500 using paired-end 26 + 8 + 58 (according to 10X Chromium Single Cell 3' protocol)\nSequences were aligned to mm10 using Cell Ranger v2 pipeline (10X Genomics)\nGene expression data was processed with Seurat v2.3.4 (Satija lab) using R  v3.6.2 (2019-12-12)\nInitial data filtering (minimum cells to express an included gene = 3, minium genes to be expressed in an included cell = 200)\nFiltering by percent mitochondiral genes in included cells (maximum 0.2), number of UMIs in included cells (minimum 1000, maximum 60000), and number of mapped genes in included cells (maximum 8000)\nLog-normalization of expression data\nCell annotations in metadata derived from unsupervised clustering in CCA space (CCA coefficients obtained by MultiCCA from Seurat (Satija Lab).\nGenome_build: mm10\nSupplementary_files_format_and_content: .txt tabulated files of metadata information, normalized gene expression matrix, and raw gene expression matrix",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

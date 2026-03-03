@@ -1,0 +1,43 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Reads were mapped to human genome using TopHat v2.1.1 with the flags, \"--no-coverage-search\" and \"--GTF gencode.v19.annotation.gtf\".",
+      "tool_name": "TopHat",
+      "tool_version": "2.1.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Gene expression was quantified against the Gencode v19 reference transcriptome (gencode.v19.annotation.gtf, genecodegenes.org) with Cufflinks v2.2.1.",
+      "tool_name": "Cufflinks",
+      "tool_version": "2.2.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "The statistical significance of differential expression was assessed using CuffDiff2, with the flags, \"--dispersion-method per-condition\" and \"--seed 42\".",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "ROC analysis was perfomed in Microsoft Excel, using true positive and false positive gene lists culled from the literature.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Reads were mapped to human genome using TopHat v2.1.1 with the flags, \"--no-coverage-search\" and \"--GTF gencode.v19.annotation.gtf\".\nGene expression was quantified against the Gencode v19 reference transcriptome (gencode.v19.annotation.gtf, genecodegenes.org) with Cufflinks v2.2.1.\nThe statistical significance of differential expression was assessed using CuffDiff2, with the flags, \"--dispersion-method per-condition\" and \"--seed 42\".\nROC analysis was perfomed in Microsoft Excel, using true positive and false positive gene lists culled from the literature.\nGenome_build: hg19",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

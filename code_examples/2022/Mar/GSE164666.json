@@ -1,0 +1,43 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Library strategy: eCLIP-Seq",
+      "tool_name": "eCLIP",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "For eCLIP-seq, and RNA-seq, raw sequencing reads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using cutadapt.",
+      "tool_name": "cutadapt",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Trimmed reads were mapped against RepBase to remove reads mapping to repetitive sequences.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Remaining reads were mapped to the appropriate genome build using STAR aligner. eCLIP peaks were called with CLIPPER and normalized to size-matched input sample",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Library strategy: eCLIP-Seq\nFor eCLIP-seq, and RNA-seq, raw sequencing reads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using cutadapt. Trimmed reads were mapped against RepBase to remove reads mapping to repetitive sequences. Remaining reads were mapped to the appropriate genome build using STAR aligner. eCLIP peaks were called with CLIPPER and normalized to size-matched input sample\nGenome_build: hg19, gencode v19\nSupplementary_files_format_and_content: eCLIP input normalized and filtered peaks in BED format. Peaks files (bigwigs) for eCLIP. Featurecounts file for RNA-seq samples.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

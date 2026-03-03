@@ -1,0 +1,124 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Reads were trimmed of adapter sequences TCGTATGCCGTCTTCTGCTTG, ATCTCGTATGCCGTCTTCTGCTTG, CGACAGGTTCAGAGTTCTACAGTCCGACGATC GATCGGAAGAGCACACGTCTGAACTCCAGTCAC using cutadapt v1.9.1",
+      "tool_name": "cutadapt",
+      "tool_version": "1.9.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Trimmed reads were aligned to RepBase v18.05 using STAR v2.4.01",
+      "tool_name": "STAR",
+      "tool_version": "2.4.01",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Reads that didn't align to RepBase were aligned to ce11 using STAR v2.4.01",
+      "tool_name": "STAR",
+      "tool_version": "2.4.01",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Featurecounts v1.5.0-p1 and DESeq2 were used to count and normalize genes for differential expression, respectively.",
+      "tool_name": "featureCounts",
+      "tool_version": "1.5.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Gene regions were described using WS254 (Wormbase) annotations.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Reads were removed of potential duplicates and combined respective to their WT or Adr condition for editing calls using samtools v1.3.1",
+      "tool_name": "samtools",
+      "tool_version": "1.3.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "Reads were filtered and removed using the following parameters: reads containing junction overhangs less than 10nt long, reads containing indels, reads containing mutations within 5nt of the 3' end, reads containing more than 1 non AG or TC antisense mutation",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "Reads were piled up using samtools 1.3.1 [-d 1000 -E -I -p -o -f -t DP,DV,DPR,INFO/DPR,DP4,SP]",
+      "tool_name": "samtools",
+      "tool_version": "1.3.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "Variants were called using bcftools 1.2.1 [-O -c -A -i -v]",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 10,
+      "description": "Variants were filtered for and removed: known SNPs (wormbase WS254), positions covered by less than 5 reads, variants which were not A-G or T-C antisense",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 11,
+      "description": "Variants were scored using a previously published bayesian method and filtered for those passing a 0.99 confidence parameter",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 12,
+      "description": "Surviving variants from the Adr2- samples were filtered out.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 13,
+      "description": "Variants were annotated using bedtools 2.26 on WS254 annotations, prioritized using the following: 3'UTR, 5'UTR, CDS, Intron, mRNA, piRNA, ncRNA, tRNA, pre-ncRNA, miRNA, snoRNA, pre_miRNA, lincRNA, snRNA, antisense RNA, rRNA, pre-miRNA, downstream from gene, upstream from gene, downstream noncoding RNA, upstream noncoding RNA and scRNA",
+      "tool_name": "bedtools",
+      "tool_version": "2.26",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Reads were trimmed of adapter sequences TCGTATGCCGTCTTCTGCTTG, ATCTCGTATGCCGTCTTCTGCTTG, CGACAGGTTCAGAGTTCTACAGTCCGACGATC GATCGGAAGAGCACACGTCTGAACTCCAGTCAC using cutadapt v1.9.1\nTrimmed reads were aligned to RepBase v18.05 using STAR v2.4.01\nReads that didn't align to RepBase were aligned to ce11 using STAR v2.4.01\nFeaturecounts v1.5.0-p1 and DESeq2 were used to count and normalize genes for differential expression, respectively. Gene regions were described using WS254 (Wormbase) annotations.\nReads were removed of potential duplicates and combined respective to their WT or Adr condition for editing calls using samtools v1.3.1\nReads were filtered and removed using the following parameters: reads containing junction overhangs less than 10nt long, reads containing indels, reads containing mutations within 5nt of the 3' end, reads containing more than 1 non AG or TC antisense mutation\nReads were piled up using samtools 1.3.1 [-d 1000 -E -I -p -o -f -t DP,DV,DPR,INFO/DPR,DP4,SP]\nVariants were called using bcftools 1.2.1 [-O -c -A -i -v]\nVariants were filtered for and removed: known SNPs (wormbase WS254), positions covered by less than 5 reads, variants which were not A-G or T-C antisense\nVariants were scored using a previously published bayesian method and filtered for those passing a 0.99 confidence parameter\nSurviving variants from the Adr2- samples were filtered out.\nVariants were annotated using bedtools 2.26 on WS254 annotations, prioritized using the following: 3'UTR, 5'UTR, CDS, Intron, mRNA, piRNA, ncRNA, tRNA, pre-ncRNA, miRNA, snoRNA, pre_miRNA, lincRNA, snRNA, antisense RNA, rRNA, pre-miRNA, downstream from gene, upstream from gene, downstream noncoding RNA, upstream noncoding RNA and scRNA\nGenome_build: ce11\nSupplementary_files_format_and_content: diffexp.tsv contains DESeq2-processed differential expression results for WS254 wormbase genes between WT and Adr2- knockout conditions. editing_calls.tsv contains all annotated editing calls removed of adr2- false positives. GSF973-Hundley-SarahD-1_S1_R1_001.polyATrim.adapterTrim.rmRep.sorted.rg.bam, GSF973-Hundley-SarahD-3_S3_R1_001.polyATrim.adapterTrim.rmRep.sorted.rg.bam, and GSF973-Hundley-SarahD-6_S6_R1_001.polyATrim.adapterTrim.rmRep.sorted.rg.bam contain ce11-aligned reads pertaining to WT neural C elegan RNA. GSF973-Hundley-SarahD-2_S2_R1_001.polyATrim.adapterTrim.rmRep.sorted.rg.bam, GSF973-Hundley-SarahD-5_S5_R1_001.polyATrim.adapterTrim.rmRep.sorted.rg.bam, and GSF973-Hundley-SarahD-7_S7_R1_001.polyATrim.adapterTrim.rmRep.sorted.rg.bam contain ce11-aligned reads pertaining to adr2 knockout neural C elegan RNA.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

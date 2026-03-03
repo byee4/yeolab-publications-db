@@ -1,0 +1,16 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Data scaled to 1500 mean signal intensity value using GCOS 1.1.1.052",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Data scaled to 1500 mean signal intensity value using GCOS 1.1.1.052",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

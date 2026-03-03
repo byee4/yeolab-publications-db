@@ -1,0 +1,52 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Base calling was with Illumina GAP Pipeline Software v1.90",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Sequences were aligned to mm9 reference genome using Tophat 2.0.8 with option -g with mm9 reference GTF",
+      "tool_name": "TopHat",
+      "tool_version": "2.0.8",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Novel transcripts were predicted with Cufflinks 2.1.1",
+      "tool_name": "Cufflinks",
+      "tool_version": "2.1.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Novel transcripts predictions were merged with mm9 reference genome using Cuffmerge 2.1.1 with option -G with mm9 reference GTF",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Counts were generated using htseq-count v0.5.4p3",
+      "tool_name": "HTSeq",
+      "tool_version": "0.5.4p",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Base calling was with Illumina GAP Pipeline Software v1.90\nSequences were aligned to mm9 reference genome using Tophat 2.0.8 with option -g with mm9 reference GTF\nNovel transcripts were predicted with Cufflinks 2.1.1\nNovel transcripts predictions were merged with mm9 reference genome using Cuffmerge 2.1.1 with option -G with mm9 reference GTF\nCounts were generated using htseq-count v0.5.4p3\nGenome_build: mm9\nSupplementary_files_format_and_content: Raw count data for genes were normalized to the relative size of each library using R/Bioconductor package edgeR calcNormFactors function. Count data are provided in tab-delimited format",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

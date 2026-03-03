@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Riboseq data was analyzed as described previously; see Tirosh et al.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "2015 doi:10.1371/journal.ppat.1005288",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Riboseq data was analyzed as described previously; see Tirosh et al. 2015 doi:10.1371/journal.ppat.1005288\nAssembly: hg19\nSupplementary files format and content: RNA-seq and footprinting reads for each sample in duplicate",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

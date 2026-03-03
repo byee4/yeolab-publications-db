@@ -1,0 +1,16 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Cell Ranger (version 5.0.1, reference genome: mm10-2020-A<based on Gencode vM23, and filtering out pseudogenes, TEC, miRNA etc. a total of 32285 genes) was used to perform alignment, filtering, barcode counting, and UMI counting for single cell RNA-Seq.",
+      "tool_name": "Cell Ranger",
+      "tool_version": "5.0.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Cell Ranger (version 5.0.1, reference genome: mm10-2020-A<based on Gencode vM23, and filtering out pseudogenes, TEC, miRNA etc. a total of 32285 genes) was used to perform alignment, filtering, barcode counting, and UMI counting for single cell RNA-Seq.\nAssembly: mm10",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

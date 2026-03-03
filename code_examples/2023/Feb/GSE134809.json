@@ -1,0 +1,52 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "FASTQ were demultiplexed using Cell Ranger v2.0 and aligned to the Grch38 human",
+      "tool_name": "Cell Ranger",
+      "tool_version": "2.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Cell barcodes and unique molecular identifiers (UMIs) were extracted and \u00e2\u0080\u009cRaw\u00e2\u0080\u009d UMI matrix generated for each sample",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "extracted cell-barcodes associated with at least 800 UMIs from the \u00e2\u0080\u009cRaw\u00e2\u0080\u009d output UMI matrices of CellRanger",
+      "tool_name": "Cell Ranger",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Epithelial cells, Red blood cells and cell-barcodess associated with high mitochondrial mRNA content were excluded by \"in-silico\" gating precedure which computes that fractoin of UMIs assocated with each gene signature.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Thresholds and genes lists are detailed in the manuscripts.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "FASTQ were demultiplexed using Cell Ranger v2.0 and aligned to the Grch38 human\nCell barcodes and unique molecular identifiers (UMIs) were extracted and \u00e2\u0080\u009cRaw\u00e2\u0080\u009d UMI matrix generated for each sample\nextracted cell-barcodes associated with at least 800 UMIs from the \u00e2\u0080\u009cRaw\u00e2\u0080\u009d output UMI matrices of CellRanger\nEpithelial cells, Red blood cells and cell-barcodess associated with high mitochondrial mRNA content were excluded by \"in-silico\" gating precedure which computes that fractoin of UMIs assocated with each gene signature. Thresholds and genes lists are detailed in the manuscripts.\nGenome_build: Grch38",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

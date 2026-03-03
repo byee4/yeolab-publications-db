@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "All .CEL files (within each species) were pre-processed using the default settings of the justGCRMA function of gcrma package version 2.8.0 (Wu et al., 2004) as implemented in R.",
+      "tool_name": "R",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "This function background corrects perfect-match probe intensities using probe sequence information, log2-transforms the data, quantile normalizes across the arrays, and summarizes probe intensities via the robust multiarray average (RMA) method (Irizarry et al., 2003) to give an intensity value (log2 scale) for each probe set.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "All .CEL files (within each species) were pre-processed using the default settings of the justGCRMA function of gcrma package version 2.8.0 (Wu et al., 2004) as implemented in R. This function background corrects perfect-match probe intensities using probe sequence information, log2-transforms the data, quantile normalizes across the arrays, and summarizes probe intensities via the robust multiarray average (RMA) method (Irizarry et al., 2003) to give an intensity value (log2 scale) for each probe set.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

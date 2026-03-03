@@ -1,0 +1,79 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "3' polyA RNA-seq",
+      "tool_name": "RNA-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "CellRanger 1.0",
+      "tool_name": "Cell Ranger",
+      "tool_version": "1.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "PCA (prcomp in R)",
+      "tool_name": "PCA",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "kNN-based graph clustering (R code)",
+      "tool_name": "R",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Full-length RNAseq (SMART-Seq2)",
+      "tool_name": "RNA-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Tophat",
+      "tool_name": "TopHat",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "Bowtie",
+      "tool_name": "Bowtie",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "RSEM",
+      "tool_name": "RSEM",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "3' polyA RNA-seq\nCellRanger 1.0\nPCA (prcomp in R)\nkNN-based graph clustering (R code)\nFull-length RNAseq (SMART-Seq2)\nTophat\nBowtie\nRSEM\nGenome_build: mm10\nSupplementary_files_format_and_content: 3' polyA RNA-seq: UMI count expression values for each gene (rows) in each cell (columns)\nSupplementary_files_format_and_content: Full-length RNAseq (SMART-Seq2): Transcripts per million (TPM) expression values (derived from RSEM  for each gene (rows) in each cell (columns)",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

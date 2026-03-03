@@ -1,0 +1,43 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Library strategy: Ribosome profiling",
+      "tool_name": "Ribo-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Fastq reads were trimmed and mapped to human rRNA sequences using bowtie allowing 2 mismatches.",
+      "tool_name": "Bowtie",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Unmapped reads were mapped to human genome GRCh38 with Ensembl gene annotation release 83 using STAR with parameters \u00e2\u0080\u0098--outSAMattributes All --outFilterMismatchNmax 2 --alignEndsType EndToEnd --outFilterIntronMotifs RemoveNoncanonicalUnannotated --alignIntronMax 20000 --outMultimapperOrder Random --outSAMmultNmax 1\u00e2\u0080\u0099",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Reads with mapQ=0 or NH>5 were filtered out and only primary loci are counted.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Library strategy: Ribosome profiling\nFastq reads were trimmed and mapped to human rRNA sequences using bowtie allowing 2 mismatches.\nUnmapped reads were mapped to human genome GRCh38 with Ensembl gene annotation release 83 using STAR with parameters \u00e2\u0080\u0098--outSAMattributes All --outFilterMismatchNmax 2 --alignEndsType EndToEnd --outFilterIntronMotifs RemoveNoncanonicalUnannotated --alignIntronMax 20000 --outMultimapperOrder Random --outSAMmultNmax 1\u00e2\u0080\u0099\nReads with mapQ=0 or NH>5 were filtered out and only primary loci are counted.\nGenome_build: GRCh38\nSupplementary_files_format_and_content: tab-delimited text files include Ensembl gene id, gene symbol, length and raw counts",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

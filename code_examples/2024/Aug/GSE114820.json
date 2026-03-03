@@ -1,0 +1,43 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Sequenced reads were performed quality assessment using FastQC.",
+      "tool_name": "FastQC",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Sequenced reads were then aligend to GRCm38.p5 reference genome using Hisat2 tool.",
+      "tool_name": "HISAT2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Raw read counts were then obtained from aligned files using HTSeq.",
+      "tool_name": "HTSeq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Differential expression was analyzed by DESeq2",
+      "tool_name": "DESeq2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Sequenced reads were performed quality assessment using FastQC.\nSequenced reads were then aligend to GRCm38.p5 reference genome using Hisat2 tool.\nRaw read counts were then obtained from aligned files using HTSeq.\nDifferential expression was analyzed by DESeq2\nGenome_build: GRCm38.p5\nSupplementary_files_format_and_content: Test files include raw read counts for each sample and expression data.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

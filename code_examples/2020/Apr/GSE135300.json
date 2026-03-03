@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Reads were counted by first searching for the CACCG sequence in the primary read file that appears in the vector 5\u00e2\u0080\u0099 to all sgRNA inserts.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "The next 20 nts are the sgRNA insert, which was then mapped to a reference file of all possible sgRNAs present in the library.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Reads were counted by first searching for the CACCG sequence in the primary read file that appears in the vector 5\u00e2\u0080\u0099 to all sgRNA inserts. The next 20 nts are the sgRNA insert, which was then mapped to a reference file of all possible sgRNAs present in the library.\nSupplementary_files_format_and_content: tab-delimited text file, includes sgRNA code and count",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

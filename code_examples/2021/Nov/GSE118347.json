@@ -1,0 +1,97 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Library strategy: PAR-CLIP",
+      "tool_name": "PAR-CLIP",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Sequencing data was converted using the bcl2fastq tool from the Illumina CASAVA package, followed by demultiplexing and 3\u00e2\u0080\u0099 adapter trimming using flexbar and Cutadapt .",
+      "tool_name": "cutadapt",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "To remove PCR duplicates, reads with identical sequence were collapsed, then we used FASTX Trimmer tool to remove random nucleotides from both ends of collapsed reads.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Reads shorter than 14 nucleotides were discarded.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "BWA-based PARA-Suite aligner was used to align reads to GRCh38 genome and to a custom database of exon-exon junctions generated from Ensembl 89 transcriptome annotation.",
+      "tool_name": "BWA",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "We handled multi-mapping reads by keeping only those that mapped once with at least one T-C mismatch: mapping positions indicating T-C transitions were chosen as the correct ones.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "Alignment files from each pair of replicates were combined and T-C transition were called using Bmix tool.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "Only transitions supported by at least two reads from both replicates were kept.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "Annotation of T-C transitions with respect to their position within Ensembl 89 gene bodies was performed using BEDTools intersect tool.",
+      "tool_name": "bedtools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 10,
+      "description": "Each column reports the fraction of T-C transitions in each gene body region that was calculated by dividing the number of T converted to C by the total number of T in that region.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Library strategy: PAR-CLIP\nSequencing data was converted using the bcl2fastq tool from the Illumina CASAVA package, followed by demultiplexing and 3\u00e2\u0080\u0099 adapter trimming using flexbar and Cutadapt . To remove PCR duplicates, reads with identical sequence were collapsed, then we used FASTX Trimmer tool to remove random nucleotides from both ends of collapsed reads. Reads shorter than 14 nucleotides were discarded.\nBWA-based PARA-Suite aligner was used to align reads to GRCh38 genome and to a custom database of exon-exon junctions generated from Ensembl 89 transcriptome annotation. We handled multi-mapping reads by keeping only those that mapped once with at least one T-C mismatch: mapping positions indicating T-C transitions were chosen as the correct ones.\nAlignment files from each pair of replicates were combined and  T-C transition were called using Bmix tool. Only transitions supported by at least two reads from both replicates were kept.\nAnnotation of T-C transitions with respect to their position within Ensembl 89 gene bodies was performed using BEDTools intersect tool.\nEach column reports the fraction of T-C transitions in each gene body region that was calculated by dividing the number of T converted to C by the total number of T in that region.\nGenome_build: hg19\nSupplementary_files_format_and_content: tab separated values",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

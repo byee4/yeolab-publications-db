@@ -1,0 +1,16 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Expression data (cel files) were normalized with the MAS5.0 algorithm (target signal = 100) using GCOS software (Affymetrix)",
+      "tool_name": "Microarray",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Expression data (cel files) were normalized with the MAS5.0 algorithm (target signal = 100) using GCOS software (Affymetrix)",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

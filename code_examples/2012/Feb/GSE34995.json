@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Strand-specific RNA-seq reads from control siRNA treatment, and each hnRNP depletion experiment were processed as previously described (Polymenidou et al., 2011).",
+      "tool_name": "RNA-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "An average of 70% of reads mapped uniquely to our gene structure database, using Bowtie (version 0.12.2, with parameters \u00e2\u0080\u0093l 20 \u00e2\u0080\u0093m 5 \u00e2\u0080\u0093k 5 \u00e2\u0080\u0093\u00e2\u0080\u0093best \u00e2\u0080\u0093\u00e2\u0080\u0093un \u00e2\u0080\u0093\u00e2\u0080\u0093 max \u00e2\u0080\u0093q).",
+      "tool_name": "Bowtie",
+      "tool_version": "0.12.2",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Strand-specific RNA-seq reads from control siRNA treatment, and each hnRNP depletion experiment were processed as previously described (Polymenidou et al., 2011). An average of 70% of reads mapped uniquely to our gene structure database, using Bowtie (version 0.12.2, with parameters \u00e2\u0080\u0093l 20 \u00e2\u0080\u0093m 5 \u00e2\u0080\u0093k 5 \u00e2\u0080\u0093\u00e2\u0080\u0093best \u00e2\u0080\u0093\u00e2\u0080\u0093un \u00e2\u0080\u0093\u00e2\u0080\u0093 max \u00e2\u0080\u0093q).",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

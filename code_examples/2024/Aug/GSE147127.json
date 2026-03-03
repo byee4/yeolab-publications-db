@@ -1,0 +1,52 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Raw sequencing data of all samples were processed using the cellRanger workflow (version 3.1.0), using a combined intron-exon reference produced as described using the vendor-provided \u00e2\u0080\u009cGenerating a Cell Ranger compatible \"pre-mRNA\" Reference Package\u00e2\u0080\u009d guidelines (https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/advanced/references).",
+      "tool_name": "Cell Ranger",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "In brief, the \u00e2\u0080\u009cpre-mRNA\u00e2\u0080\u009d reference was derived using the default exon-level GTF file provided by 10x Genomics (\u00c2 http://cf.10xgenomics.com/supp/cell-exp/refdata-cellranger-mm10-3.0.0.tar.gz).",
+      "tool_name": "Cell Ranger",
+      "tool_version": "3.0.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Using the below awk command, this exon-level GTF file into \u00e2\u0080\u009cpre-MRNA\u00e2\u0080\u009d GTF containing intron transcript definitions).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Next, the below mkref command was run to produce the final \u00e2\u0080\u009cpre-MRNA\u00e2\u0080\u009d GTF and genome fasta file ($ cellranger mkref --genome=Mmpre --fasta=genome.fa --genes=genes.premrna.gtf).",
+      "tool_name": "Cell Ranger",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "For each dataset, we corrected for ambient background RNA by filtering with the R package SoupX (version 0.3.0), using the inferNonExpressedGenes() function to determine which genes had the highest probability of being ambient mRNA, and the strainCells() function in order to transform count matrices.",
+      "tool_name": "R",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Raw sequencing data of all samples were processed using the cellRanger workflow (version 3.1.0), using a combined intron-exon reference produced as described using the vendor-provided \u00e2\u0080\u009cGenerating a Cell Ranger compatible \"pre-mRNA\" Reference Package\u00e2\u0080\u009d guidelines (https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/advanced/references). In brief, the \u00e2\u0080\u009cpre-mRNA\u00e2\u0080\u009d reference was derived using the default exon-level GTF file provided by 10x Genomics (\u00c2\u00a0http://cf.10xgenomics.com/supp/cell-exp/refdata-cellranger-mm10-3.0.0.tar.gz). Using the below awk command, this exon-level GTF file into \u00e2\u0080\u009cpre-MRNA\u00e2\u0080\u009d GTF containing intron transcript definitions). Next, the below mkref command was run to produce the final \u00e2\u0080\u009cpre-MRNA\u00e2\u0080\u009d GTF and genome fasta file ($ cellranger mkref --genome=Mmpre --fasta=genome.fa --genes=genes.premrna.gtf). For each dataset, we corrected for ambient background RNA by filtering with the R package SoupX (version 0.3.0), using the inferNonExpressedGenes() function to determine which genes had the highest probability of being ambient mRNA, and the strainCells() function in order to transform count matrices.\nGenome_build: mm10\nSupplementary_files_format_and_content: HDF5",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

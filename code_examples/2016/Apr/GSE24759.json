@@ -1,0 +1,34 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Transcript levels were processed from data image files using RMA method, implemented by Bioconductor R package.",
+      "tool_name": "R",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "To reduce batch effects, transcript levels were further corrected with the ComBat method (Johnson, 2007), which applies empirical Bayes framework for adjusting data for batch effects.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Final dataset which was used in the paper and contains 8968 genes is included in the supplementary file GSE24759_data.sort.txt.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Transcript levels were processed from data image files using RMA method, implemented by Bioconductor R package. To reduce batch effects, transcript levels were further corrected with the ComBat method (Johnson, 2007), which applies empirical Bayes framework for adjusting data for batch effects. Final dataset which was used in the paper and contains 8968 genes is included in the supplementary file GSE24759_data.sort.txt.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

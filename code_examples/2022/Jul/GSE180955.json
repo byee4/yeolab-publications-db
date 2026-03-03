@@ -1,0 +1,52 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Raw sequencing reads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using cutadapt.",
+      "tool_name": "cutadapt",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Trimmed reads were mapped against RepBase to remove reads mapping to repetitive sequences.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Remaining reads were mapped to the appropriate genome build using STAR aligner",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "For eCLIP samples, read densities were calculated to identify eCLIP peaks.",
+      "tool_name": "eCLIP",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "eclip data processing pipeline can be requested from the following link : https://github.com/YeoLab/eclip",
+      "tool_name": "eCLIP",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Raw sequencing reads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using cutadapt. Trimmed reads were mapped against RepBase to remove reads mapping to repetitive sequences. Remaining reads were mapped to the appropriate genome build using STAR aligner\nFor eCLIP samples, read densities were calculated to identify eCLIP peaks.\neclip data processing pipeline can be requested from the following link : https://github.com/YeoLab/eclip\nSupplementary_files_format_and_content: bigwig, bed",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

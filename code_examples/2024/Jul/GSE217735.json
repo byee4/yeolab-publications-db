@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Illumina RTA was used to create .bcl files, and bcl2fastq v2.20.0.422 software was used for base calling (for samples split between flowcells and later merged per run)",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Raw reads were mapped against sgRNA library and raw counts table of sgRNA was generated using MAGeCK v0.5.9.3",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Illumina RTA was used to create .bcl files, and bcl2fastq v2.20.0.422 software was used for base calling (for samples split between flowcells and later merged per run)\nRaw reads were mapped against sgRNA library and raw counts table of sgRNA was generated using MAGeCK v0.5.9.3\nSupplementary files format and content: raw counts table in txt format of every sample in CRISPR sgRNA project",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

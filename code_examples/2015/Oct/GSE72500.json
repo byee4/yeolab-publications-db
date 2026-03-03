@@ -1,0 +1,34 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Illumina software used for basecalling.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Reads were mapped to human genome build hg19 using STAR (https://code.google.com/p/rna-star/) with the \"outFilterMultimapNmax 20\" option, then PCR duplicates were removed using unique nmers in the barcode sequence.",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Peak calling was performed using pyicoclip (http://regulatorygenomics.upf.edu/Software/Pyicoteo/pyicoclip.html) using RefSeq genes as the region file.",
+      "tool_name": "RefSeq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Illumina software used for basecalling.\nReads were mapped to human genome build hg19 using STAR (https://code.google.com/p/rna-star/) with the \"outFilterMultimapNmax 20\" option, then PCR duplicates were removed using unique nmers in the barcode sequence. Peak calling was performed using pyicoclip (http://regulatorygenomics.upf.edu/Software/Pyicoteo/pyicoclip.html) using RefSeq genes as the region file.\nGenome_build: GRCh37 (hg19)\nSupplementary_files_format_and_content: Bed files include peaks.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

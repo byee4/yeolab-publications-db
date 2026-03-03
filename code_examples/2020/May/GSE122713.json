@@ -1,0 +1,34 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Sample demultiplexing, barcode processing, alignment, filtering, UMI counting, and aggregation of multiple sequencing runs were performed using the Cell Ranger analysis pipeline (v1.2)",
+      "tool_name": "Cell Ranger",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Data normalization, dimension reduction, and differential expression analysis were performed using the Seurat R package (v2.2.0)",
+      "tool_name": "Seurat",
+      "tool_version": "2.2.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Single cell signatures scoring was performed using the FastProject software (v1.1.0)",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Sample demultiplexing, barcode processing, alignment, filtering, UMI counting, and aggregation of multiple sequencing runs were performed using the Cell Ranger analysis pipeline (v1.2)\nData normalization, dimension reduction, and differential expression analysis were performed using the Seurat R package (v2.2.0)\nSingle cell signatures scoring was performed using the FastProject software (v1.1.0)\nGenome_build: mm10\nSupplementary_files_format_and_content: matrix.mtx file is count matrix in sparse matrix format; barcodes.tsv is list of barcodes for each sample; genes.tsv is list of genes detected in samples",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

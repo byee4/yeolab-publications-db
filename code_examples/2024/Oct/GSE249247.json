@@ -1,0 +1,52 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "*library strategy: Cut&Run",
+      "tool_name": "ChIP-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Data analysis was performed using a modified version of CUT&RUNTools 2.0.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Adapters were trimmed using Trimmomatic (v0.36), followed by a second round of trimming to remove any remaining adapter overhang sequences not removed due to fragment read-through.",
+      "tool_name": "Trimmomatic",
+      "tool_version": "0.36",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Reads were aligned to hg38 using bowtie2 (v2.3.5.1) using preset \u00e2\u0080\u009c--very-sensitive-local,\u00e2\u0080\u009d minimum fragment length 10, and maximum fragment length 700.",
+      "tool_name": "Bowtie2",
+      "tool_version": "2.3.5",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "After removing PCR duplicates with Picard (v0.1.8), peaks were called using MACS2 (v2.2.7.1) on the default narrowPeak setting using the same-batch V5 mock IP sample as a normalization control.",
+      "tool_name": "MACS2",
+      "tool_version": "2.2.7",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "*library strategy: Cut&Run\nData analysis was performed using a modified version of CUT&RUNTools 2.0. Adapters were trimmed using Trimmomatic (v0.36), followed by a second round of trimming to remove any remaining adapter overhang sequences not removed due to fragment read-through. Reads were aligned to hg38 using bowtie2 (v2.3.5.1) using preset \u00e2\u0080\u009c--very-sensitive-local,\u00e2\u0080\u009d minimum fragment length 10, and maximum fragment length 700. After removing PCR duplicates with Picard (v0.1.8), peaks were called using MACS2 (v2.2.7.1) on the default narrowPeak setting using the same-batch V5 mock IP sample as a normalization control.\nAssembly: hg38\nSupplementary files format and content: narrowPeak files (q<0.05) output by MACS2",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

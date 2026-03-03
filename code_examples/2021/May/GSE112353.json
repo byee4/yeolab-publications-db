@@ -1,0 +1,52 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Raw reads were processed by removing 5\u00e2\u0080\u0099 adapters, discarding reads shorter than 20 nucleotides and trimming the first nucleotide (using Trimmomatic v0.36).",
+      "tool_name": "Trimmomatic",
+      "tool_version": "0.36",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Reads mapping on rRNAs and tRNAs (downloaded from the SILVA rRNA and the Genomic tRNA databases respectively) were removed.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "The remaining reads were aligned to the human transcriptome (Ensembl v85, corresponding to GENCODE 25) with Bowtie2 (v2.2.6) employing the default settings.",
+      "tool_name": "Bowtie2",
+      "tool_version": "2.2.6",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "All reads aligning to the very same region were collapsed to avoid potential PCR duplicates, and only strand-specific reads were kept.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "The number of ribosome protected fragments was determined with samtools idxstats.",
+      "tool_name": "samtools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Raw reads were processed by removing 5\u00e2\u0080\u0099 adapters, discarding reads shorter than 20 nucleotides and trimming the first nucleotide (using Trimmomatic v0.36). Reads mapping on rRNAs and tRNAs (downloaded from the SILVA rRNA and the Genomic tRNA databases respectively) were removed. The remaining reads were aligned to the human transcriptome (Ensembl v85, corresponding to GENCODE 25) with Bowtie2 (v2.2.6) employing the default settings. All reads aligning to the very same region were collapsed to avoid potential PCR duplicates, and only strand-specific reads were kept.  The number of ribosome protected fragments was determined with samtools idxstats.\nGenome_build: GRCh38.p7\nSupplementary_files_format_and_content: HEK_count_table.txt: tab-delimited text file including transcript annotation (columns 1-8) and sample-specific counts of aligned reads",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

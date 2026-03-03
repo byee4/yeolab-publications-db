@@ -1,0 +1,52 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Raw reads were adaptor-trimmed and aligned to the human genome (UCSC version hg18) using bowtie (parameters: -l 20 -m 5 -k 5 --best -q hg18).",
+      "tool_name": "Bowtie",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Aligned reads were assigned to a custom annotation of human genes [36], [48], and gene expression values were calculated as RPKMs [28].",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Control versus sALS patient datasets were compared in a pairwise fashion, calculating ratio fold-changes for all possible 117 disease versus control pairs.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "For Median Percentile Rank (MPR) analysis, each set of fold-changes were sorted and given a percentile rank, and the median percentile rank for each gene was determined and plotted as a histogram.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "The local minima near the down-regulated edge, 0.15 was taken as the down-regulated cutoff, and a mirrored cutoff of 0.85 was taken for the up-regulated cutoff, and these gene sets were used for subsequent GO analysis.",
+      "tool_name": "Gene Ontology",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Raw reads were adaptor-trimmed and aligned to the human genome (UCSC version hg18) using bowtie (parameters: -l 20 -m 5 -k 5 --best -q hg18). Aligned reads were assigned to a custom annotation of human genes [36], [48], and gene expression values were calculated as RPKMs [28].\nControl versus sALS patient datasets were compared in a pairwise fashion, calculating ratio fold-changes for all possible 117 disease versus control pairs. For Median Percentile Rank (MPR) analysis, each set of fold-changes were sorted and given a percentile rank, and the median percentile rank for each gene was determined and plotted as a histogram. The local minima near the down-regulated edge, 0.15 was taken as the down-regulated cutoff, and a mirrored cutoff of 0.85 was taken for the up-regulated cutoff, and these gene sets were used for subsequent GO analysis.\nGenome_build: hg18\nSupplementary_files_format_and_content: Fastq files were aligned to the UCSC genome build (mm9, mm10, or hg19) using BWA, novoaligner (HITS-CLIP) or Olego (polyA-seq). The resulting .sam files were converted to bed files using samtools (HITS-CLIP) or Olego (PolyA-seq). The resulting .bed files were filtered to remove PCR duplicates (HITS-CLIP) and internal A-stretches (polyA-seq). BedGraph files (wiggles) were generated from bedfiles using bedtools (HITS-CLIP) or tag2profile tool from Olego (polyA-seq). Olego is an open source software by Chaolin Zhang lab from Columbia University.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

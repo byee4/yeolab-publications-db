@@ -1,0 +1,61 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Library strategy: Amplicon-seq",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "CRISPR screening data were aligned and processed using the published MAGeCK-VISPR pipeline (Li et al.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Genome Biology 2015).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "For 3'READS data, reads were trimmed using Cutadapt then aligned to hg19 using bowtie2.",
+      "tool_name": "Bowtie2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Following alignment, bigwig files were generated to visualize the peaks surrounding the gene-of-interest in the study.",
+      "tool_name": "UCSC tools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Reads from the four peaks in this single gene were quantified using multiBigwigSummary from DeepTools2.0",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Library strategy: Amplicon-seq\nCRISPR screening data were aligned and processed using the published MAGeCK-VISPR pipeline (Li et al. Genome Biology 2015).\nFor 3'READS data, reads were trimmed using Cutadapt then aligned to hg19 using bowtie2.\nFollowing alignment, bigwig files were generated to visualize the peaks surrounding the gene-of-interest in the study. Reads from the four peaks in this single gene were quantified using multiBigwigSummary from DeepTools2.0\nGenome_build: hg19\nSupplementary_files_format_and_content: count' text file includes sgRNA counts per sample\nSupplementary_files_format_and_content: summary' text file contains beta scores of enrichment in GFP high and low populations\nSupplementary_files_format_and_content: countsummary' text file contains QC metrics\nSupplementary_files_format_and_content: bigwig files show visualization of 3'READS peaks across the genome",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

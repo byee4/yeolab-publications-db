@@ -1,0 +1,52 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Bcl2fastq (v2.17.1.14) used for basecalling.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "3\u00e2\u0080\u0099 adaptor-trimming and low quality reads removing by Cutadapt\u00ef\u00bc\u0088version 1.9.1\u00ef\u00bc\u0089",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "The high quality trimmed reads (clean reads) were aligned to the human reference genome (UCSC HG19) using Hisat2(v2.0.1).",
+      "tool_name": "HISAT2",
+      "tool_version": "2.0.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Reads Per Kilobase of exon per Megabase of library size (RPKM) were calculated using Htseq (V0.6.1).",
+      "tool_name": "HTSeq",
+      "tool_version": "0.6.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Differential expression analysis used the DESeq2 (V1.6.3).",
+      "tool_name": "DESeq2",
+      "tool_version": "1.6.3",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Bcl2fastq (v2.17.1.14) used for basecalling.\n3\u00e2\u0080\u0099 adaptor-trimming and low quality reads removing by Cutadapt\u00ef\u00bc\u0088version 1.9.1\u00ef\u00bc\u0089\nThe high quality trimmed reads (clean reads) were aligned to the human reference genome (UCSC HG19) using Hisat2(v2.0.1).\nReads Per Kilobase of exon per Megabase of library size (RPKM) were calculated using Htseq (V0.6.1).\nDifferential expression analysis used the DESeq2 (V1.6.3).\nGenome_build: HG19\nSupplementary_files_format_and_content: Excel files include RPKM values for each Sample",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

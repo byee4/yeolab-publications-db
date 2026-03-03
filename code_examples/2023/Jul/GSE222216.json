@@ -1,0 +1,43 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Transcript abundance was quantified using Salmon [v1.3.0] with GENCODE v37 annotation.",
+      "tool_name": "Salmon",
+      "tool_version": "1.3.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Gene level quantification was performed using tximeta [v1.8.4].",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Differential gene expression was analyzed by DESeq2 [v1.30.1]",
+      "tool_name": "DESeq2",
+      "tool_version": "1.30.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "processed data files format and content: gene counts",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Transcript abundance was quantified using Salmon [v1.3.0] with GENCODE v37 annotation.\nGene level quantification was performed using tximeta [v1.8.4].\nDifferential gene expression was analyzed by DESeq2 [v1.30.1]\ngenome build: HG19\nprocessed data files format and content: gene counts",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

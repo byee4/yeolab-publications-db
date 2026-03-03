@@ -1,0 +1,79 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "We aligned reads to the human genome version GRCh38 with annotation version Gencode v40 using STAR (v2.7.1a).",
+      "tool_name": "STAR",
+      "tool_version": "2.7.1a",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Gene expression levels were quantified using RSEM (v1.3.0), in which the TPM values were used to calculate Pearson correlation coefficient between replicates.",
+      "tool_name": "RSEM",
+      "tool_version": "1.3.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Samples meeting specific criteria were selected for further analysis: only those with unique aligned reads greater than 10M and a Pearson correlation coefficient between replicates of 0.9 or higher were considered.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Samples with fewer reads were re-sequenced to ensure an adequate count, while those with lower correlation were repeated.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Plus and minus strand bigwig files were generated using bedGraphToBigWig (v2.9).",
+      "tool_name": "UCSC tools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Transcript abundance was quantified using Salmon (v1.9.0) with the \u00e2\u0080\u0093gcBias option.",
+      "tool_name": "Salmon",
+      "tool_version": "1.9.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "CQN (v1.40.0) was employed to normalize gene-level GC content and length biases.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "Transcript merging to genes was performed using Tximport (v1.22.0).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "We aligned reads to the human genome version GRCh38 with annotation version Gencode v40 using STAR (v2.7.1a). Gene expression levels were quantified using RSEM (v1.3.0), in which the TPM values were used to calculate Pearson correlation coefficient between replicates. Samples meeting specific criteria were selected for further analysis: only those with unique aligned reads greater than 10M and a Pearson correlation coefficient between replicates of 0.9 or higher were considered. Samples with fewer reads were re-sequenced to ensure an adequate count, while those with lower correlation were repeated. Plus and minus strand bigwig files were generated using bedGraphToBigWig (v2.9). Transcript abundance was quantified using Salmon (v1.9.0) with the \u00e2\u0080\u0093gcBias option. CQN (v1.40.0) was employed to normalize gene-level GC content and length biases. Transcript merging to genes was performed using Tximport (v1.22.0).\nAssembly: GRCh38\nSupplementary files format and content: Bam files and salmon quant files",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

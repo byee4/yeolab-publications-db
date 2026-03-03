@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "RNA-seq reads were aligned to the human genome (hg19) with STAR 2.4.0h (outFilterMultimapNmax 20, outFilterMismatchNmax 999, outFilterMismatchNoverLmax 0.04, outFilterIntronMotifs RemoveNoncanonicalUnannotated, outSJfilterOverhangMin 6 6 6 6, seedSearchStartLmax 20, alignSJDBoverhangMin 1) using a gene database constructed from Gencode v19",
+      "tool_name": "STAR",
+      "tool_version": "2.4.0h",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Reads that overlap with exon coordinates were counted using HTSeqcount (-s reverse -a 0 -t exon -i gene_id -m union)",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "RNA-seq reads were aligned to the human genome (hg19) with STAR 2.4.0h (outFilterMultimapNmax 20, outFilterMismatchNmax 999, outFilterMismatchNoverLmax 0.04, outFilterIntronMotifs RemoveNoncanonicalUnannotated, outSJfilterOverhangMin 6 6 6 6, seedSearchStartLmax 20, alignSJDBoverhangMin 1) using a gene database constructed from Gencode v19\nReads that overlap with exon coordinates were counted using HTSeqcount (-s reverse -a 0 -t exon -i gene_id -m union)\nGenome_build: hg19\nSupplementary_files_format_and_content: tab-separated file created using featureCounts v1.5.0 (number of reads mapped to each Gencode V.19 gene)",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

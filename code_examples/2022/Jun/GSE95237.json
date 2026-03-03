@@ -1,0 +1,34 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Reads were aligned to mm10 by BWA",
+      "tool_name": "BWA",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Reads with low quality (MAPQ < 30) were filtered out.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "If multiple reads were mapped to the exact same location, only one read was kept.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Reads were aligned to mm10 by BWA\nReads with low quality (MAPQ < 30) were filtered out. If multiple reads were mapped to the exact same location, only one read was kept.\nGenome_build: mm10\nSupplementary_files_format_and_content: bigwig",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

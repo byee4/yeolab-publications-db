@@ -1,0 +1,16 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Probe level analysis was performed on the Affymetrix raw data (.cel files) with the robust multichip average (RMA) method implemented in the Bioconductor package 'aroma.affymetrix' to obtain a log2 expression value for each gene probe set",
+      "tool_name": "R",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Probe level analysis was performed on the Affymetrix raw data (.cel files) with the robust multichip average (RMA) method implemented in the Bioconductor package 'aroma.affymetrix' to obtain a log2 expression value for each gene probe set",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

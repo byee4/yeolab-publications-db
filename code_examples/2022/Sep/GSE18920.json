@@ -1,0 +1,43 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Data were processed using Partek Genomics Suite version 6.4.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "RMA background correction and quantile normalization were performed, and probeset summarization used the median polish method (RMA default setting in Partek).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Core probesets were used for the analysis.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "For alternative splicing analysis, probe sets with maximum signal <3 and differential expression p-values > 0.5 were excluded.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Data were processed using Partek Genomics Suite version 6.4.  RMA background correction and quantile normalization were performed, and probeset summarization used the median polish method (RMA default setting in Partek).  Core probesets were used for the analysis.  For alternative splicing analysis, probe sets with maximum signal <3 and differential expression p-values > 0.5 were excluded.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

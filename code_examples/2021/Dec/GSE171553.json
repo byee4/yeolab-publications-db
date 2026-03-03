@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "After sequencing, raw reads were aligned to GRCh38 and analyzed following the detailed instructions in ENCODE eCLIP-seq Processing Pipeline v2.2 (https://www.encodeproject.org/pipelines/ENCPL357ADL/).",
+      "tool_name": "eCLIP",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Consistent with the ENCODE standard, reads aligning to artifact-enriched or repetitive genomic regions were removed.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "After sequencing, raw reads were aligned to GRCh38 and analyzed following the detailed instructions in ENCODE eCLIP-seq Processing Pipeline v2.2 (https://www.encodeproject.org/pipelines/ENCPL357ADL/).\nConsistent with the ENCODE standard, reads aligning to artifact-enriched or repetitive genomic regions were removed.\nGenome_build: GRCh38\nSupplementary_files_format_and_content: The processed file contains reproducible and significant peaks of aligned reads at IDR cutoff of 0.01, P \u00e2\u0089\u00a4 0.001, and fold enrichment \u00e2\u0089\u00a5 8. All peaks have annotated genic region based on overlap with GENCODE v26 transcripts.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

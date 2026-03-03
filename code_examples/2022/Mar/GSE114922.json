@@ -1,0 +1,70 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Real time Analysis (RTA): HiSeq 4000 - RTA v2.73, HCS v3.3.52",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Base-calling: bcl2fastq v2.17.1.14",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Adapter trimming: RNA-seq reads were trimmed for SMARTer and Illumina adapter sequences using skewer-v0.1.125",
+      "tool_name": "RNA-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Alignment: Reads in gzipped fastq format were aligned using Hisat2 version-2.0.0-beta with default parameters to a modified reference genome comprising the human genome, Homo sapiens GRCh37 - human_g1k_v37, and fasta sequences for ERCC spike-ins",
+      "tool_name": "HISAT2",
+      "tool_version": "2.0.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Mark Duplicates: Duplicate reads were marked using MarkDuplicates.jar implemented in Picard tools v1.92",
+      "tool_name": "Picard",
+      "tool_version": "1.92",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Read counts (abundance measurement): Reads mapping uniquely to genes annotated in ENSEMBL release 76 were counted using featureCounts implemented in subread-v1.5.0",
+      "tool_name": "featureCounts",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "Normalized Counts: Read counts were normalized to counts per million (CPM) and Transcripts per Million (TPM) by dividing each gene-count by total reads mapped (uniquely mapped to exonic regions) per million and using ENSEMBL annotated read-lengths",
+      "tool_name": "Ensembl",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Real time Analysis (RTA):  HiSeq 4000 - RTA v2.73, HCS v3.3.52\nBase-calling: bcl2fastq v2.17.1.14\nAdapter trimming: RNA-seq reads were trimmed for SMARTer and Illumina  adapter sequences using skewer-v0.1.125\nAlignment: Reads in gzipped fastq format were aligned using Hisat2 version-2.0.0-beta with default parameters to a modified reference genome comprising the human genome, Homo sapiens GRCh37 - human_g1k_v37, and fasta sequences for ERCC spike-ins\nMark Duplicates: Duplicate reads were marked using MarkDuplicates.jar implemented in Picard tools v1.92\nRead counts (abundance measurement): Reads mapping uniquely to genes annotated in ENSEMBL release 76 were counted using featureCounts implemented in subread-v1.5.0\nNormalized Counts: Read counts were normalized to counts per million (CPM) and Transcripts per Million (TPM) by dividing each gene-count by total reads mapped (uniquely mapped to exonic regions) per million and using ENSEMBL annotated read-lengths\nGenome_build: GRCh37\nSupplementary_files_format_and_content: Count_table.txt: raw read counts for all 63677 ENSEMBL annotated genes\nSupplementary_files_format_and_content: CPM_table.txt:  Counts per million normalized counts all 63677 ENSEMBL annotated genes\nSupplementary_files_format_and_content: TPM_table.txt:  Transcripts per million (gene-length and sequencing depth normalized counts) all 63677 ENSEMBL annotated genes\nSupplementary_files_format_and_content: Text",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

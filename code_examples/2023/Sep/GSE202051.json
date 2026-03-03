@@ -1,0 +1,52 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "BCL files were converted to FASTQ using bcl2fastq2-v2.20.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "CellRanger v3.0.2 was used to demultiplex the FASTQ reads, align them to the hg38 human transcriptome (pre-mRNA) reference and extract the UMI and nuclei barcodes.",
+      "tool_name": "Cell Ranger",
+      "tool_version": "3.0.2",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "We used CellBender remove-background to remove ambient RNA and other technical artifacts from the count matrices.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Nuclei with over 10,000 UMI counts were filtered.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "UMI counts were normalized by the total number of UMIs per nucleus and converted to transcripts-per-10,000 (TP10K) as the final expression unit.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "BCL files were converted to FASTQ using bcl2fastq2-v2.20.\nCellRanger v3.0.2 was used to demultiplex the FASTQ reads, align them to the hg38 human transcriptome (pre-mRNA) reference and extract the UMI and nuclei barcodes.\nWe used CellBender remove-background to remove ambient RNA and other technical artifacts from the count matrices.\nNuclei with over 10,000 UMI counts were filtered.\nUMI counts were normalized by the total number of UMIs per nucleus and converted to transcripts-per-10,000 (TP10K) as the final expression unit.\nAssembly: Hg38\nSupplementary files format and content: H5ad file of aggregated processed single-nuclei RNA sequencing data from all 45 human specimens; found in totaldata-final-toshare.h5ad\nSupplementary files format and content: H5ad file of processed single-nuclei RNA sequencing data from the patient-derived organoid (untreated); found in adata_010nuc_10x.h5ad\nSupplementary files format and content: H5ad file of processed single-nuclei RNA sequencing data from the patient-derived organoid (treated with 5-FU, SM38, and oxaliplatin); found in adata_010orgCRT_10x.h5ad",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

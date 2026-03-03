@@ -1,0 +1,34 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Adaptors were trimmed using trimmomatic (SE for Kasumi-1 cells, PE for CD34+ cells).",
+      "tool_name": "Trimmomatic",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Trimmed reads were aligned to the human genome (hg19) with TopHat v2.0.11.",
+      "tool_name": "TopHat",
+      "tool_version": "2.0.11",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Differential gene expression was determined using Cuffdiff v.2.1.1.",
+      "tool_name": "Cufflinks",
+      "tool_version": "2.1.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Adaptors were trimmed using trimmomatic (SE for Kasumi-1 cells, PE for CD34+ cells).\nTrimmed reads were aligned to the human genome (hg19) with TopHat v2.0.11.\nDifferential gene expression was determined using Cuffdiff v.2.1.1.\nGenome_build: hg19 (GRCh37)\nSupplementary_files_format_and_content: *_gene_exp.diff: Cuffdiff differential gene expression output; tab delimited text file.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "BCL files were demultiplexed into FASTQ files using spaceranger mkfastq followed by spaceranger count to generate the spatial representation of gene counts by matrix at 2 and 8 mm resolution binning",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Library strategy: VisiumHD spatial transcriptomics",
+      "tool_name": "Spatial transcriptomics",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "BCL files were demultiplexed into FASTQ files using spaceranger mkfastq followed by spaceranger count to generate the spatial representation of gene counts by matrix at 2 and 8 mm resolution binning\nAssembly: mm10\nSupplementary files format and content: Standard 10X Cellranger outputs for VisiumHD data\nLibrary strategy: VisiumHD spatial transcriptomics",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Reads were aligned to the mm9 by STAR with parameters: --outSAMstrandField intronMotif --outFilterMultimapNmax 1 --runThreadN 5.Only the reads aligned uniquely to one genomic location were retained for subsequent analysis.",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "makeTagDirectory and makeUCSCfile in homer was used to generate bigWig file",
+      "tool_name": "HOMER",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Reads were aligned to the mm9 by STAR with parameters: --outSAMstrandField intronMotif --outFilterMultimapNmax 1 --runThreadN 5.Only the reads aligned uniquely to one genomic location were retained for subsequent analysis.\nmakeTagDirectory and makeUCSCfile in homer was used to generate bigWig file\nGenome_build: mm9\nSupplementary_files_format_and_content: bigWig file",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

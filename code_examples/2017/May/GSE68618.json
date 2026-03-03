@@ -1,0 +1,106 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Illumina Casava-1.8.2 software was used for basecalling.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "RNA-Seq: Low quality reads as well as ribosomal and other repeat sequences were filtered out before alignment.",
+      "tool_name": "RNA-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "RUM software was used for aligning reads to mouse genome mm9 and Refseq transcriptome and for transcript quantitation.",
+      "tool_name": "RefSeq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Differential expression analysis was carried out using a custom script implementing EdgeR software.",
+      "tool_name": "edgeR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "ChIP-Seq: Reads were aligned to mm9 genome using bowtie version 0.12.7 with parameters -v 3 -k 1 -m 1 --best --strata.",
+      "tool_name": "Bowtie",
+      "tool_version": "0.12.7",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Redundant reads were discarded before creating bedgraph profiles.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "Peak calling was done using HOMER for H3K4me1 and H3K27Ac marks at FDR=0.01 with respect to corresponding Input.",
+      "tool_name": "HOMER",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "Peak calling using STAR was done for H3K27me3 marks at FDR=0.01.",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "BIS-Seq: DNA sequencing data was aligned to mouse genome (mm9) with the BS Seeker program.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 10,
+      "description": "Data was reported as the fraction of reads that were methylated, calculated as the ratio of cytosine bases (indicating methylated CpGs) to total reads for each CpG coordinate.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 11,
+      "description": "Unmethylated cytosines are ultimately converted to thymine bases during the bisulfite conversion process.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Illumina Casava-1.8.2 software was used for basecalling.\nRNA-Seq: Low quality reads as well as ribosomal and other repeat sequences were filtered out before alignment. RUM software was used for aligning reads to mouse genome mm9 and Refseq transcriptome and for transcript quantitation. Differential expression analysis was carried out using a custom script implementing EdgeR software.\nChIP-Seq: Reads were aligned to mm9 genome using bowtie version 0.12.7 with parameters -v 3 -k 1 -m 1 --best --strata. Redundant reads were discarded before creating bedgraph profiles.\nPeak calling was done using HOMER for H3K4me1 and H3K27Ac marks at FDR=0.01 with respect to corresponding Input. Peak calling using STAR was done for H3K27me3 marks at FDR=0.01.\nBIS-Seq: DNA sequencing data was aligned to mouse genome (mm9) with the BS Seeker program. Data was reported as the fraction of reads that were methylated, calculated as the ratio of cytosine bases (indicating methylated CpGs) to total reads for each CpG coordinate.  Unmethylated cytosines are ultimately converted to thymine bases during the bisulfite conversion process.\nGenome_build: mm9\nSupplementary_files_format_and_content: Tab delimited file of transcript raw read counts.\nSupplementary_files_format_and_content: Tab delimited file of transcript FPKM counts.\nSupplementary_files_format_and_content: Peak files are tab-delimited listing genomic coordinates and their respective scores and p-values. Scores represent fold-change with respect to Input.\nSupplementary_files_format_and_content: Tab-delimited files of loci, fraction of methylated cytosines and total read count.\nSupplementary_files_format_and_content: RawReadCounts.txt: Raw transcript counts\nSupplementary_files_format_and_content: TrancriptFPKMCounts.txt: Transcript FPKM counts\nSupplementary_files_format_and_content: Old_H3K4me1.peaks.txt: peak\nSupplementary_files_format_and_content: Old_H3K27me3.peaks.txt: peak\nSupplementary_files_format_and_content: Young_H3K4me1.peaks.txt: peak\nSupplementary_files_format_and_content: Young_H3K27me3.peaks.txt: peak\nSupplementary_files_format_and_content: Young_H3K27Ac.peaks.txt: peak\nSupplementary_files_format_and_content: OldBeta_bs_seeker-CG.tab: Percent methylated cytosines\nSupplementary_files_format_and_content: YoungBeta_bs_seeker-CG.tab: Percent methylated cytosines",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

@@ -1,0 +1,115 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "All FASTQ files were analyzed using the bcbioRNASeq workflow and toolchain91.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "The FASTQ files were aligned to the GRCh37/hg19 reference genome.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Differential expression testing was performed using DESeq2 suite of bioinformatics tools38.",
+      "tool_name": "DESeq2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "The DEXSeq module of Bioconductor was used to identify differential splicing92.",
+      "tool_name": "R",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "We used salmon to generate the counts and tximport to load them at gene level93,94.",
+      "tool_name": "Salmon",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "All p-values are then corrected for multiple comparisons using the method of Benjamini and Hochberg95.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "We used an adjusted p-value cutoff of 0.05 with no log fold-change ratio cutoff for differential gene expression analysis and a 0.1 cutoff with no log fold-change ratio cutoff for differential exon usage.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "[tpm.csv.gz] gene x sample matrix of TPM for each sample",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "[raw_counts.csv.gz] gene x sample matrix of raw counts per sample",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 10,
+      "description": "[category_als_vs_control_all.csv.gz] differential expression calls for all genes from DESeq2. (ensgene: Ensembl gene ID, baseMean: mean expression across all samples, log2FoldChange: log2Fold change (knockdown/control), lfcSE: standard error of the log2FoldChange, stat: value of Wald test statistic, pvalue: p-value of differential expression, symbol: gene symbol, description: gene description, biotype: biotype of gene, broadClass: broad biotype class gene belongs to, chr: chromosome gene is on, start: start of gene on chromosome, end: end of gene on chromosome, strand: strand gene is on)",
+      "tool_name": "DESeq2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 11,
+      "description": "[dexseq-all.csv.gz] gene fragment differential expression calls from DEXSeq. (fragment: gene fragment ID, groupID: group ID of fragment, featureID: gene ID of fragment, exonBaseMean: expressoin of exon across all samples, dispersion: dispersion of fragment across all samples, stat: value from Wald test, pvalue: p-value from Wald test, padj: BH adjusted p-value, scrambled: expression in scrambled siRNA, als: expression in TDP43 knockdown samples, rest of columns are locations of fragments in the genome, counts of the fragment for each individual sample and gene annotation similar to the above)",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 12,
+      "description": "[combined.dexseq.gz] exon part count table",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "All FASTQ files were analyzed using the bcbioRNASeq workflow and toolchain91. The FASTQ files were aligned to the GRCh37/hg19 reference genome.\nDifferential expression testing was performed using DESeq2 suite of bioinformatics tools38. The DEXSeq module of Bioconductor was used to identify differential splicing92. We used salmon to generate the counts and tximport to load them at gene level93,94. All p-values are then corrected for multiple comparisons using the method of Benjamini and Hochberg95.  We used an adjusted p-value cutoff of 0.05 with no log fold-change ratio cutoff for differential gene expression analysis and a 0.1 cutoff with no log fold-change ratio cutoff for differential exon usage.\nGenome_build: hg19\nSupplementary_files_format_and_content:\n[tpm.csv.gz]  gene x sample matrix of TPM for each sample\n[raw_counts.csv.gz]  gene x sample matrix of raw counts per sample\n[category_als_vs_control_all.csv.gz]  differential expression calls for all genes from DESeq2. (ensgene: Ensembl gene ID, baseMean: mean expression across all samples, log2FoldChange: log2Fold change (knockdown/control), lfcSE: standard error of the log2FoldChange, stat: value of Wald test statistic, pvalue: p-value of differential expression, symbol: gene symbol, description: gene description, biotype: biotype of gene, broadClass: broad biotype class gene belongs to, chr: chromosome gene is on, start: start of gene on chromosome, end: end of gene on chromosome, strand: strand gene is on)\n[dexseq-all.csv.gz]  gene fragment differential expression calls from DEXSeq. (fragment: gene fragment ID, groupID: group ID of fragment, featureID: gene ID of fragment, exonBaseMean: expressoin of exon across all samples, dispersion: dispersion of fragment across all samples, stat: value from Wald test, pvalue: p-value from Wald test, padj: BH adjusted p-value, scrambled: expression in scrambled siRNA, als: expression in TDP43 knockdown samples, rest of columns are locations of fragments in the genome, counts of the fragment for each individual sample and gene annotation similar to the above)\n[combined.dexseq.gz]  exon part count table",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

@@ -1,0 +1,88 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Library strategy: Pseduo-seq",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Reverse reads were trimmed of 5\u00e2\u0080\u00b2 amplicon sequence using cutadapt (-G)",
+      "tool_name": "cutadapt",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Trimmed paired end reads collapsed using PEAR (default settings)",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "PCR duplicates collapsed for in vitro Pseudo-seq libraries using fastx_collapser",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Reads were mapped to bowtie indices of the pool or GRCh37 for chromatin-associated RNA Pseudo-seq with tophat2.",
+      "tool_name": "Bowtie",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Reads from PUS1 knockout and wild type mRNA-seq were mapped to GRCh37 using STAR",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "Pseudouridylation was assessed using cutom python scripts (see text)",
+      "tool_name": "Python",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "Differential mRNA level analysis of PUS1 knockout and wildtype mRNA-seq using DEseq2",
+      "tool_name": "DESeq2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "Differential splicing analysis of PUS1 knockout and wildtype mRNA-seq using rMATS",
+      "tool_name": "rMATS",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Library strategy: Pseduo-seq\nReverse reads were trimmed of 5\u00e2\u0080\u00b2 amplicon sequence using cutadapt (-G)\nTrimmed paired end reads collapsed using PEAR (default settings)\nPCR duplicates collapsed for in vitro Pseudo-seq libraries using fastx_collapser\nReads were mapped to bowtie indices of the pool or GRCh37 for chromatin-associated RNA Pseudo-seq with tophat2. Reads from PUS1 knockout and wild type mRNA-seq were mapped to GRCh37 using STAR\nPseudouridylation was assessed using cutom python scripts (see text)\nDifferential mRNA level analysis of PUS1 knockout and wildtype mRNA-seq using DEseq2\nDifferential splicing analysis of PUS1 knockout and wildtype mRNA-seq using rMATS\nGenome_build: GRCh37 for sequencing experiments from cellular RNA and Bowtie indices made from fasta files of pool sequences\nSupplementary_files_format_and_content: Tab delimited text files of peak values for pseudouridylation (see text)\nSupplementary_files_format_and_content: rMATS output\nSupplementary_files_format_and_content: DEseq2 output",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

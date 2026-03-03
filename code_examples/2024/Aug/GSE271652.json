@@ -1,0 +1,52 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Reads were downsampled to an equivalent number of reads per sample using seqtk sample (version 1.2)",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Adaptors were trimmed with trimmomatic (version 0.39) [1] with the options ILLUMINACLIP:Trimmomatic-0.39/adapters/NexteraPE-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:25 MINLEN:24",
+      "tool_name": "Trimmomatic",
+      "tool_version": "0.39",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Reads were then aligned to the mouse genome (mm10) with bowtie2 (version 2.4.4) using default parameters",
+      "tool_name": "Bowtie2",
+      "tool_version": "2.4.4",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Duplicates were removed with picard through gatk MarkDuplicates (version 4.2.5.0)",
+      "tool_name": "Picard",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Peak detection was performed using macs2 callpeak (version 2.2.7.1) with the parameters \u00e2\u0080\u009c-g mm --qvalue 0.05 --shift 100 --extsize 200 --format BAMPE --keep-dup=all --cutoff-analysis \u00e2\u0080\u0093bdg\u00e2\u0080\u0099\u00e2\u0080\u0099.",
+      "tool_name": "MACS2",
+      "tool_version": "2.2.7",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Reads were downsampled to an equivalent number of reads per sample using seqtk sample (version 1.2)\nAdaptors were trimmed with trimmomatic (version 0.39) [1] with the options ILLUMINACLIP:Trimmomatic-0.39/adapters/NexteraPE-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:25 MINLEN:24\nReads were then aligned to the mouse genome (mm10) with bowtie2 (version 2.4.4) using default parameters\nDuplicates were removed with picard through gatk MarkDuplicates (version 4.2.5.0)\nPeak detection was performed using macs2 callpeak (version 2.2.7.1) with the parameters \u00e2\u0080\u009c-g mm --qvalue 0.05 --shift 100 --extsize 200 --format BAMPE --keep-dup=all --cutoff-analysis \u00e2\u0080\u0093bdg\u00e2\u0080\u0099\u00e2\u0080\u0099.\nAssembly: mm10\nSupplementary files format and content: bedgraph data files for each sample",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

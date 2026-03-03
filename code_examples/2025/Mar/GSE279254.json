@@ -1,0 +1,16 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "cellranger was used to process the raw sequencing files to generate count matrices per cell",
+      "tool_name": "Cell Ranger",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "cellranger was used to process the raw sequencing files to generate count matrices per cell\nAssembly: mm10\nSupplementary files format and content: \"h5ad\" file containing combined total nuclei profiled from all mice and regions of the gastrointestinal tract",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

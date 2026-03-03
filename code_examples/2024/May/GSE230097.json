@@ -1,0 +1,61 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Adapters were removes using cutadapt and reads were mapped to hg19 using STAR.",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Initial peak calling was performed for each sample by CLIPper using only the r1 reads.",
+      "tool_name": "CLIPper",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Peaks with genomic overlap in at least two ePRINT samples were identified and their genomic coordinates merged to define the candidate peak superset using HOMER.",
+      "tool_name": "HOMER",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "These peaks were then filtered using the input retaining those significantly enriched in the ePRINT samples in comparison to the corresponding input samples.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "The remaining high confidence peaks were then input to DESEQ2 for differential analysis.",
+      "tool_name": "DESeq2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Bedgraph files were generated from the r1 reads using bedtools",
+      "tool_name": "bedtools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Adapters were removes using cutadapt and reads were mapped to hg19 using STAR.\nInitial peak calling was performed for each sample by CLIPper using only the r1 reads. Peaks with genomic overlap in at least two ePRINT samples were identified and their genomic coordinates merged to define the candidate peak superset using HOMER. These peaks were then filtered using the input retaining those significantly enriched in the ePRINT samples in comparison to the corresponding input samples. The remaining high confidence peaks were then input to DESEQ2 for differential analysis.\nBedgraph files were generated from the r1 reads using bedtools\nAssembly: hg19\nSupplementary files format and content: bedgraph",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

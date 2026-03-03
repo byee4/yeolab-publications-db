@@ -1,0 +1,43 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Illumina Casava1.82 software used for basecalling.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Short reads in fastQ format are processed using RAPiD, which is a RNA-Seq analysis framework developed and maintained by the Technology Development group at Icahn Institute for Genomics and MultiScale Biology. .",
+      "tool_name": "RNA-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "RAPiD uses STAR to map the short reads to the [hg19 ] reference and resultant alignment map in BAM format is quantified for gene level expression using featureCounts of the subreads package.",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Detailed QC metrics are generated using the RNASeQC package",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Illumina Casava1.82 software used for basecalling.\nShort reads in fastQ format are processed using RAPiD, which is a RNA-Seq analysis framework developed and maintained by the Technology Development group at Icahn Institute for Genomics and MultiScale Biology. .\nRAPiD uses STAR to map the short reads to the  [hg19 ] reference and resultant alignment map in BAM format is quantified for gene level expression using featureCounts of the subreads package. Detailed QC metrics are generated using the RNASeQC package\nGenome_build: hg19\nSupplementary_files_format_and_content: tab-delimited text files include fragment per kilobase per million (FPKM) for each gene",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

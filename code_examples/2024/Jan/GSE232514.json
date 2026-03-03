@@ -1,0 +1,52 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "remove adapter with Cutadapt",
+      "tool_name": "cutadapt",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "align to human genome using STAR 2.7.6a",
+      "tool_name": "STAR",
+      "tool_version": "2.7.6a",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "align unmapped reads from above to 12X MS2 stem-loop reporter mRNA using STAR 2.7.6a",
+      "tool_name": "STAR",
+      "tool_version": "2.7.6a",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "SAILOR analysis of data for C-to-U edits",
+      "tool_name": "SAILOR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "SAILOR analysis of data for A-to-I edits",
+      "tool_name": "SAILOR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "remove adapter with Cutadapt\nalign to human genome using STAR 2.7.6a\nalign unmapped reads from above to 12X MS2 stem-loop reporter mRNA using STAR 2.7.6a\nSAILOR analysis of data for C-to-U edits\nSAILOR analysis of data for A-to-I edits\nAssembly: GRCh38\nAssembly: 12X MS2 stem-loop reporter mRNA\nSupplementary files format and content: The processed data files are in .bed format. They contain SAILOR-identified C-to-U or A-to-I edit information for endogenous transcripts (*non.construct.bed) and the 12X stem-loop-bearing-bearing reporter mRNA (*reporter.construct.bed).",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

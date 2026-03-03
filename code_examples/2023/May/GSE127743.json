@@ -1,0 +1,43 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Raw reads were trimmed using cutadapt (v1.14) using the following parameters: -O 5 --match-read-wildcards --times 2 -e 0.0 --quality-cutoff 6 -m 18 -b TCGTATGCCGTCTTCTGCTTG ATCTCGTATGCCGTCTTCTGCTTG CGACAGGTTCAGAGTTCTACAGTCCGACGATC GATCGGAAGAGCACACGTCTGAACTCCAGTCAC AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+      "tool_name": "cutadapt",
+      "tool_version": "1.14",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Trimmed reads were mapped to and filtered of mouse-specific repeat elements (RepBase 18.05) with STAR (2.4.0i) using the following parameters: --alignEndsType EndToEnd --genomeDir repbase --genomeLoad NoSharedMemory --outBAMcompression 10 --outFileNamePrefix condition1 --outFilterMultimapNmax 10 --outFilterMultimapScoreRange 1 --outFilterScoreMin 10 --outFilterType BySJout --outReadsUnmapped Fastx --outSAMattrRGline ID:foo --outSAMattributes All --outSAMmode Full --outSAMtype BAM Unsorted --outSAMunmapped Within --outStd Log --readFilesIn r1.fastq r2.fastq --runMode alignReads --runThreadN 8",
+      "tool_name": "STAR",
+      "tool_version": "2.4.0i",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Reads unmapped to repeat elements were mapped to the mouse genome with STAR using the same parameters as the previous step, using an mm9 index in place of the repeat element index",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Subread featureCounts (-a gencode.vM1.annotation.gtf -s 2 -p -o counts.txt RN2c.bam) was used to count features using mouse annotations (Gencode vM1)",
+      "tool_name": "featureCounts",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Raw reads were trimmed using cutadapt (v1.14) using the following parameters: -O 5 --match-read-wildcards --times 2 -e 0.0 --quality-cutoff 6 -m 18 -b TCGTATGCCGTCTTCTGCTTG ATCTCGTATGCCGTCTTCTGCTTG CGACAGGTTCAGAGTTCTACAGTCCGACGATC GATCGGAAGAGCACACGTCTGAACTCCAGTCAC AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT\nTrimmed reads were mapped to and filtered of mouse-specific repeat elements (RepBase 18.05) with STAR (2.4.0i) using the following parameters: --alignEndsType  EndToEnd  --genomeDir  repbase  --genomeLoad  NoSharedMemory  --outBAMcompression  10  --outFileNamePrefix  condition1  --outFilterMultimapNmax  10  --outFilterMultimapScoreRange  1  --outFilterScoreMin  10  --outFilterType  BySJout  --outReadsUnmapped  Fastx  --outSAMattrRGline  ID:foo  --outSAMattributes  All  --outSAMmode  Full  --outSAMtype  BAM  Unsorted  --outSAMunmapped  Within  --outStd  Log  --readFilesIn  r1.fastq  r2.fastq  --runMode  alignReads  --runThreadN  8\nReads unmapped to repeat elements were mapped to the mouse genome with STAR using the same parameters as the previous step, using an mm9 index in place of the repeat element index\nSubread featureCounts (-a gencode.vM1.annotation.gtf -s 2 -p -o counts.txt RN2c.bam) was used to count features using mouse annotations (Gencode vM1)\nGenome_build: mm9\nSupplementary_files_format_and_content: counts.txt contains read counts from mm9-mapped BAM files",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

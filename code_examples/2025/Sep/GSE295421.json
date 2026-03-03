@@ -1,0 +1,34 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Reads were mapped using STAR 2.7.6a",
+      "tool_name": "STAR",
+      "tool_version": "2.7.6a",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Read count extraction was performed using featureCounts from the Subread package, with results sorted into counts matrices",
+      "tool_name": "featureCounts",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Differential gene expression analysis was performed on the counts matrices using DESeq2",
+      "tool_name": "DESeq2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Reads were mapped using STAR 2.7.6a\nRead count extraction was performed using featureCounts from the Subread package, with results sorted into counts matrices\nDifferential gene expression analysis was performed on the counts matrices using DESeq2\nAssembly: GRCh38\nSupplementary files format and content: Supplementary files format and content: tab-delimited text files include gene expression analysis for each transfection condition relative to pUC19 (empty vector)",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

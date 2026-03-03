@@ -1,0 +1,115 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Alignment, cell barcode processing, umis processing, abundance measurements: cellranger count (version 3.0.2)",
+      "tool_name": "Cell Ranger",
+      "tool_version": "3.0.2",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "MD tags were added to alignments with samtools calmd --threads 15 -rb possorted_genome_bam.bam refdata-cellranger-hg19-3.0.0/fasta/genome.fa > possorted_genome_bam_MD.bam",
+      "tool_name": "Cell Ranger",
+      "tool_version": "3.0.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Reads were split based on the CB:Z tag, resulting in one BAM file per barcode.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Edits were called on each \"split-BAM\" file using SAILOR (http://github.com/yeolab/sailor) using default parameters and dbSNP (v147) to remove known SNPs.",
+      "tool_name": "SAILOR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Coverage was generated from filtered BAM files (intermediates from SAILOR) for each cell barcode, using the following commands from BedTools (v2.27.1). :",
+      "tool_name": "SAILOR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "bedtools genomecov -split -strand - -g refdata-cellranger-hg19-3.0.0/star/chrNameLength.txt -bg -ibam fwd.bam > fwd.bg",
+      "tool_name": "Cell Ranger",
+      "tool_version": "3.0.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "bedtools sort -I fwd.bg > fwd.sorted.bg",
+      "tool_name": "bedtools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "bedGraphToBigWig fwd.sorted.bg refdata-cellranger-hg19-3.0.0/star/chrNameLength.txt fwd.sorted.bw",
+      "tool_name": "Cell Ranger",
+      "tool_version": "3.0.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "bedtools genomecov -split -strand + -g refdata-cellranger-hg19-3.0.0/star/chrNameLength.txt -bg -ibam rev.bam > rev.bg",
+      "tool_name": "Cell Ranger",
+      "tool_version": "3.0.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 10,
+      "description": "bedtools sort -I rev.bg > rev.sorted.bg",
+      "tool_name": "bedtools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 11,
+      "description": "bedGraphToBigWig rev.sorted.bg refdata-cellranger-hg19-3.0.0/star/chrNameLength.txt rev.sorted.bw",
+      "tool_name": "Cell Ranger",
+      "tool_version": "3.0.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 12,
+      "description": "For each barcode, edit sites were annotated across exons (Gencode v19) and the cumulative C>T depth across each gene was divided by the cumulative depth across C's as obtained from the previous step.",
+      "tool_name": "GENCODE",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Alignment, cell barcode processing, umis processing, abundance measurements: cellranger count (version 3.0.2)\nMD tags were added to alignments with samtools calmd --threads 15 -rb possorted_genome_bam.bam refdata-cellranger-hg19-3.0.0/fasta/genome.fa > possorted_genome_bam_MD.bam\nReads were split based on the CB:Z tag, resulting in one BAM file per barcode.\nEdits were called on each \"split-BAM\" file using SAILOR (http://github.com/yeolab/sailor) using default parameters and dbSNP (v147) to remove known SNPs.\nCoverage was generated from filtered BAM files (intermediates from SAILOR) for each cell barcode, using the following commands from BedTools (v2.27.1). :\nbedtools genomecov -split -strand - -g refdata-cellranger-hg19-3.0.0/star/chrNameLength.txt -bg -ibam fwd.bam > fwd.bg\nbedtools sort -I fwd.bg > fwd.sorted.bg\nbedGraphToBigWig fwd.sorted.bg refdata-cellranger-hg19-3.0.0/star/chrNameLength.txt fwd.sorted.bw\nbedtools genomecov -split -strand + -g refdata-cellranger-hg19-3.0.0/star/chrNameLength.txt -bg -ibam rev.bam > rev.bg\nbedtools sort -I rev.bg > rev.sorted.bg\nbedGraphToBigWig rev.sorted.bg refdata-cellranger-hg19-3.0.0/star/chrNameLength.txt rev.sorted.bw\nFor each barcode, edit sites were annotated across exons (Gencode v19) and the cumulative C>T depth across each gene was divided by the cumulative depth across C's as obtained from the previous step.\nGenome_build: hg19\nSupplementary_files_format_and_content: Edit fractions across barcodes with detectable edits were merged to obtain processed STAMP_edits.txt files for each sample.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

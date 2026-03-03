@@ -1,0 +1,16 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "BRB-ArrayTools v3.8.1 & RMA",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "BRB-ArrayTools v3.8.1 & RMA",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

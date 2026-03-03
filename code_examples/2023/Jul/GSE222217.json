@@ -1,0 +1,70 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "For differential expression:",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Transcript abundance was quantified using Salmon [v1.3.0] with GENCODE v37 annotation.",
+      "tool_name": "Salmon",
+      "tool_version": "1.3.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Gene level quantification was performed using tximeta [v1.8.4].",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Differential gene expression was analyzed by DESeq2 [v1.30.1].",
+      "tool_name": "DESeq2",
+      "tool_version": "1.30.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "For splicing analysis, 22Rv1 data only:",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "RNA-seq reads were mapped to hg38 using STAR Aligner.",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "Alternative splicing (AS) analysis was completed using rMATs (v3.2.5).",
+      "tool_name": "rMATS",
+      "tool_version": "3.2.5",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "For differential expression:\nTranscript abundance was quantified using Salmon [v1.3.0] with GENCODE v37 annotation.\nGene level quantification was performed using tximeta [v1.8.4].\nDifferential gene expression was analyzed by DESeq2 [v1.30.1].\nFor splicing analysis, 22Rv1 data only:\nRNA-seq reads were mapped to hg38 using STAR Aligner.\nAlternative splicing (AS) analysis was completed using rMATs (v3.2.5).\nAssembly: hg19\nSupplementary files format and content: *.csv: Gene counts were used for differential expression.\nSupplementary files format and content: *.xlsx: rMATs table was used for splicing analysis.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

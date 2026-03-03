@@ -1,0 +1,124 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Library strategy: Cut&Run",
+      "tool_name": "ChIP-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "For Cut&Run:",
+      "tool_name": "ChIP-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Adaptor trimming with Trimmomatic-0.32.",
+      "tool_name": "Trimmomatic",
+      "tool_version": "0.32",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Alignment to hg19+scer genome with bowtie2.",
+      "tool_name": "Bowtie2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "High quality reads (F4q10) were filtered using samtools.",
+      "tool_name": "samtools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Peaks called with MACS2 (narrowPeak, q=0.001).",
+      "tool_name": "MACS2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "For HA Cut&Run +/-dTAG, differential peaks were identified by Diffbind/DESeq2 using yeast spike-in for normalization.",
+      "tool_name": "DESeq2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "bigWig files were generated using deepTools and bedGraph files were generated using Homer.",
+      "tool_name": "HOMER",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "For ChIP-seq:",
+      "tool_name": "ChIP-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 10,
+      "description": "Adaptor trimming with Trimmomatic-0.32.",
+      "tool_name": "Trimmomatic",
+      "tool_version": "0.32",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 11,
+      "description": "Alignment to hg19+dm3 genome with bowtie2.",
+      "tool_name": "Bowtie2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 12,
+      "description": "High quality reads (F4q10) were filtered using samtools.",
+      "tool_name": "samtools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 13,
+      "description": "Normalized bigWig files were generated with deepTools.",
+      "tool_name": "deepTools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Library strategy: Cut&Run\nFor Cut&Run:\nAdaptor trimming with Trimmomatic-0.32.\nAlignment to hg19+scer genome with bowtie2.\nHigh quality reads (F4q10) were filtered using samtools.\nPeaks called with MACS2 (narrowPeak, q=0.001).\nFor HA Cut&Run +/-dTAG, differential peaks were identified by Diffbind/DESeq2 using yeast spike-in for normalization.\nbigWig files were generated using deepTools and bedGraph files were generated using Homer.\nFor ChIP-seq:\nAdaptor trimming with Trimmomatic-0.32.\nAlignment to hg19+dm3 genome with bowtie2.\nHigh quality reads (F4q10) were filtered using samtools.\nNormalized bigWig files were generated with deepTools.\nGenome_build: hg19 (GRCh37)\nSupplementary_files_format_and_content: bigWig, bedGraph files\nSupplementary_files_format_and_content: 042420_HA_AE_Diffbind-peakinfo_q0.001.csv: Diffbind peak info\nSupplementary_files_format_and_content: 042420_HA-AE_cutandrun_diffbind-deseq2_q0.001.csv: Differential peak DESeq2\nSupplementary_files_format_and_content: New_ZnF_q0.001_peaks.txt: MACS2 peaks\nSupplementary_files_format_and_content: CD34_HA_merged_noNeg_nomodel_extsize300_q0.001_peaks.txt: MACS2 peaks",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

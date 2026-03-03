@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Use the simpleaffy package in R/Bioconductor to calculate MAS5.0 calls.",
+      "tool_name": "R",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "These values were subsequently normalized using quantile normalization.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Use the simpleaffy package in R/Bioconductor to calculate MAS5.0 calls. These values were subsequently normalized using quantile normalization.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

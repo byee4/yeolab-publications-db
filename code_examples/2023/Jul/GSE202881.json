@@ -1,0 +1,79 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Ribosome profiling data were processed using RiboFlow.",
+      "tool_name": "Ribo-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "We extracted the first 12 nucleotides from the 5\u00e2\u0080\u0099 end of the reads using UMI-tools with the following parameters: \u00e2\u0080\u009cumi_tools extract -p \"^(?P.{12})(?P.{4}).+$\" --extract-method=regex\u00e2\u0080\u009d.",
+      "tool_name": "UMI-tools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "The four nucleotides downstream of the UMIs are discarded as they are incorporated during the reverse transcription step.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Next, we used cutadapt to clip the 3\u00e2\u0080\u0099 adapter AAAAAAAAAACAAAAAAAAAA.",
+      "tool_name": "cutadapt",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "After UMI extraction and adapter trimming, ribosomal and transfer RNAs were filtered by alignment using Bowtie2.",
+      "tool_name": "Bowtie2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "The remaining reads were mapped to human transcriptome and alignments with mapping quality greater than two were retained.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "UMIs were used for deduplication and .ribo files are created using RiboPy.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "Library strategy: Ribo-seq",
+      "tool_name": "Ribo-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Ribosome profiling data were processed using RiboFlow. We extracted the first 12 nucleotides from the 5\u00e2\u0080\u0099 end of the reads using UMI-tools with the following parameters: \u00e2\u0080\u009cumi_tools extract -p \"^(?P.{12})(?P.{4}).+$\" --extract-method=regex\u00e2\u0080\u009d. The four nucleotides downstream of the UMIs are discarded as they are incorporated during the reverse transcription step. Next, we used cutadapt to clip the 3\u00e2\u0080\u0099 adapter AAAAAAAAAACAAAAAAAAAA. After UMI extraction and adapter trimming, ribosomal and transfer RNAs were filtered by alignment using Bowtie2. The remaining reads were mapped to human transcriptome and alignments with mapping quality greater than two were retained. UMIs were used for deduplication and .ribo files are created using RiboPy.\nAssembly: hg38\nSupplementary files format and content: CSV file containing the RPKM value of detectable transcripts\nLibrary strategy: Ribo-seq",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

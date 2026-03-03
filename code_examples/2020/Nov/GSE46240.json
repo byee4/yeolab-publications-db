@@ -1,0 +1,52 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "ChIP-seq and RNA-seq reads were aligned to the mm9 genome assembly using DNAnexus.",
+      "tool_name": "RNA-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "For ChIP-seq: Peaks were called using the DNAnexus ChIP-seq analyses tool with the following specifications: peak enrichment >20, peak-to background enrichment >3, a minimum ratio between uniquely and repetitively mapped reads of 3:1, a kernel bandwith of 30.0, FDR calculation enabled.",
+      "tool_name": "ChIP-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Background was combined input reads and reads from p53 ChIP in p53-/- MEFs.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "For RNA-seq: Tag counts were derived using the DNAnexus 3SEQ transcriptome-based quantification tool with the following specifications: Sense only, RefSeq genes.",
+      "tool_name": "RefSeq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "The DESeq library was used to normalize tag counts between samples and to call differentially expressed genes.",
+      "tool_name": "DESeq2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "ChIP-seq and RNA-seq reads were aligned to the mm9 genome assembly using DNAnexus.\nFor ChIP-seq: Peaks were called using the DNAnexus ChIP-seq analyses tool with the following specifications: peak enrichment >20, peak-to background enrichment >3, a minimum ratio between uniquely and repetitively mapped reads of 3:1, a kernel bandwith of 30.0, FDR calculation enabled. Background was combined input  reads and reads from p53 ChIP in p53-/- MEFs.\nFor RNA-seq: Tag counts were derived using the DNAnexus 3SEQ transcriptome-based quantification tool with the following specifications: Sense only, RefSeq genes. The DESeq library was used to normalize tag counts between samples and to call differentially expressed genes.\nGenome_build: mm9\nSupplementary_files_format_and_content: ChIP-seq: Processed data files are tab-delimited text files containing 1) Chromosome name, 2) Position (summit of the peak), 3) enrichment (based on background reads), 4) neg_log10_qvalue (negative log of q-value of peak) and 5) peak rank.\nSupplementary_files_format_and_content: RNA-seq: Processed files are tab-delimited text files containing normalized gene expression, obtained using DESeq.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

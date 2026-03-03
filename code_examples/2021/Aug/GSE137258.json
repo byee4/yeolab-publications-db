@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Library strategy: DNA-seq",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "CRISPR screening data was aligned and processed using MaGeCK.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Library strategy: DNA-seq\nCRISPR screening data was aligned and processed using MaGeCK.\nGenome_build: hg19\nSupplementary_files_format_and_content: MaGeCK processed gene summary",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

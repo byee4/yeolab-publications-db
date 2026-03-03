@@ -1,0 +1,133 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Raw RNA sequencing reads in FASTQ files were quality-tested using FASTQC (v0.11.8) (Andrews 2010) and mapped to the mouse reference genome (mm10) with STAR (v2.5.3a) aligner with default parameters (Dobin et al.",
+      "tool_name": "STAR",
+      "tool_version": "2.5.3a",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "2012).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Raw or normalized gene expression levels were quantified across all the exons of RefSeq genes with analyzeRepeats.pl in HOMER (v4.11.1) (Heinz et al.",
+      "tool_name": "HOMER",
+      "tool_version": "4.11.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "2010).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Differential expression analysis was performed with raw gene counts using R package, edgeR (v3.26.7) (Robinson et al.",
+      "tool_name": "edgeR",
+      "tool_version": "3.26.7",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "2010), using replicates to compute within-group dispersion and correcting for batch effects.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "Genes with false discovery rate (FDR) < 0.05 and an absolute fold-change (FC) >= 1.5 were identified as significantly different when comparing two conditions.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "Normalized counts were log transformed, filtered, scaled, and centered prior to clustering and heatmap generation with Cluster3 (de Hoon et al.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "2004), and visualized with JavaTreeView (Saldanha 2004).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 10,
+      "description": "GSEA was carried out with the GenePattern interface, https://genepattern.broadinstitute.org) using preranked lists generated from FDR values, setting gene set permutations to 1000 and using the Hallmark collection in MSigDB version5.0.",
+      "tool_name": "GSEA",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 11,
+      "description": "GO Term and KEGG Pathway analysis were performed with David: http://david.ncifcrf.gov/.",
+      "tool_name": "DAVID",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 12,
+      "description": "Area-proportional Venn diagrams were plotted using BioVenn (Hulsen et al.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 13,
+      "description": "2008).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 14,
+      "description": "Enrichr: http://amp.pharm.mssm.edu/Enrichr.",
+      "tool_name": "Enrichr",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Raw RNA sequencing reads in FASTQ files were quality-tested using FASTQC (v0.11.8) (Andrews 2010) and mapped to the mouse reference genome (mm10) with STAR (v2.5.3a) aligner with default parameters (Dobin et al. 2012).\nRaw or normalized gene expression levels were quantified across all the exons of RefSeq genes with analyzeRepeats.pl in HOMER (v4.11.1) (Heinz et al. 2010).\nDifferential expression analysis was performed with raw gene counts using R package, edgeR (v3.26.7) (Robinson et al. 2010), using replicates to compute within-group dispersion and correcting for batch effects. Genes with false discovery rate (FDR) < 0.05 and an absolute fold-change (FC) >= 1.5 were identified as significantly different when comparing two conditions.\nNormalized counts were log transformed, filtered, scaled, and centered prior to clustering and heatmap generation with Cluster3 (de Hoon et al. 2004), and visualized with JavaTreeView (Saldanha 2004).\nGSEA was carried out with the GenePattern interface, https://genepattern.broadinstitute.org) using preranked lists generated from FDR values, setting gene set permutations to 1000 and using the Hallmark collection in MSigDB version5.0. GO Term and KEGG Pathway analysis were performed with David: http://david.ncifcrf.gov/.\nArea-proportional Venn diagrams were plotted using BioVenn (Hulsen et al. 2008). Enrichr: http://amp.pharm.mssm.edu/Enrichr.\nGenome_build: mm10\nSupplementary_files_format_and_content: Normalized expression table generated with analyzeRepeats.pl. Please see header for specific arguments used.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

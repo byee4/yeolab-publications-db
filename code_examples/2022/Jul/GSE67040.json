@@ -1,0 +1,34 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Basecalls performed using CASAVA 1.8",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Sequenced reads were mapped to the reference genome using CASAVA 1.8",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Reads Per Kilobase of exon per Megabase of library size (RPKM) were calculated using CASAVA 1.8",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Basecalls performed using CASAVA 1.8\nSequenced reads were mapped to the reference genome using CASAVA 1.8\nReads Per Kilobase of exon per Megabase of library size (RPKM) were calculated using CASAVA 1.8\nGenome_build: hg19\nSupplementary_files_format_and_content: Tab-delimited text files include RPKM values for each sample. Columns are: Chromosome, Start location, Stop location, Gene, RPKM, base count.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

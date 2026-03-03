@@ -1,0 +1,115 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "All reads were aligned to the human genome hg38 primary assembly using STAR.",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "featureCounts version 2.0.2 was used to annotate reads, using the flag --minOverlap 20 and a custom GTF file derived from gencode v34",
+      "tool_name": "featureCounts",
+      "tool_version": "2.0.2",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Differential expression was calculated using DESeq2.",
+      "tool_name": "DESeq2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Cut-offs used to determine significant differential expression were baseMean > 50 and padj <=0.01",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Genes which had substantial upstream intergenic reads (similar to DoGs) were removed from DE tables.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Upstream intergenic regions were extracted using bedtools flank -l 2000 -r 0 -s.",
+      "tool_name": "bedtools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "Intervening upstream genes that had any overlap with this region were removed with bedtools subtract.",
+      "tool_name": "bedtools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "Reads that did not align to intronic or exonic regions were extracted from bam files with fgrep.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "Coverage across the 2000 bp upstream region was determined with bedtools coverage -S -split.",
+      "tool_name": "bedtools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 10,
+      "description": "A TPM value was determined for this upstream region and compared to the TPM of the adjacent downstream gene.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 11,
+      "description": "If a ratio of 20% of the signal (determined by TPM) was present in the upstream region, and a breadth of 70% of that region was covered, that gene was determined to have significant enough upstream transcription so as to not be a reliable functional coding product, and was removed from subsequent analysis.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 12,
+      "description": "Genes that showed this pattern in either the input or IP condition were both removed from that IP analysis.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "All reads were aligned to the human genome hg38 primary assembly using STAR.\nfeatureCounts version 2.0.2 was used to annotate reads, using the flag --minOverlap 20 and a custom GTF file derived from gencode v34\nDifferential expression was calculated using DESeq2. Cut-offs used to determine significant differential expression were baseMean > 50 and padj <=0.01\nGenes which had substantial upstream intergenic reads (similar to DoGs) were removed from DE tables. Upstream intergenic regions were extracted using bedtools flank -l 2000 -r 0 -s. Intervening upstream genes that had any overlap with this region were removed with bedtools subtract. Reads that did not align to intronic or exonic regions were extracted from bam files with fgrep. Coverage across the 2000 bp upstream region was determined with bedtools coverage -S -split. A TPM value was determined for this upstream region and compared to the TPM of the adjacent downstream gene. If a ratio of 20% of the signal (determined by TPM) was present in the upstream region, and a breadth of 70% of that region was covered, that gene was determined to have significant enough upstream transcription so as to not be a reliable functional coding product, and was removed from subsequent analysis. Genes that showed this pattern in either the input or IP condition were both removed from that IP analysis.\nGenome_build: hg38\nSupplementary_files_format_and_content: comma separated files with output of DESeq2; normalized abundance measurements for all genes when comparing RIP condition to total input condition",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

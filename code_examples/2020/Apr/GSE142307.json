@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Bowtie2-alignment tool",
+      "tool_name": "Bowtie2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Macs2-peak calling",
+      "tool_name": "MACS2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Bowtie2-alignment tool\nMacs2-peak calling\nGenome_build: hg38",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

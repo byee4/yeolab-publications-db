@@ -1,0 +1,16 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Utilized R::beadarray package with the readIdatFiles and normaliseIllumina functions to extract raw and normalised (neqc, log2 transformed) values.",
+      "tool_name": "R",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Utilized R::beadarray package with the readIdatFiles and normaliseIllumina functions to extract raw and normalised (neqc, log2 transformed) values.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

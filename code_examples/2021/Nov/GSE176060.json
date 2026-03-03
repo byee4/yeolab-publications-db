@@ -1,0 +1,34 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "library strategy: eCLIP",
+      "tool_name": "eCLIP",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Reproducible RBM20 peaks (hg19) obtained from replicate WT and R636S HMZ iPSC-CMs compared to size-matched input controls, were used for all down-stream analyses.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Downstream bioinformatics were performed according to the default ENCODE eCLIP bioinformatics pipeline as described at from https://www.encodeproject.org/eclip/.",
+      "tool_name": "eCLIP",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "library strategy: eCLIP\nReproducible RBM20 peaks (hg19) obtained from replicate WT and R636S HMZ iPSC-CMs compared to size-matched input controls, were used for all down-stream analyses. Downstream bioinformatics were performed according to the default ENCODE eCLIP bioinformatics pipeline as described at from https://www.encodeproject.org/eclip/.\nGenome_build: hg19\nSupplementary_files_format_and_content: BED format text files of hg19-aligned RBM20 eCLIP in WT iPSC-CM  peak genomic coordinates and annotations\nSupplementary_files_format_and_content: BED format text files of hg19-aligned RBM20 eCLIP in RBM20 R636S-HMZ iPSC-CM  peak genomic coordinates and annotations",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

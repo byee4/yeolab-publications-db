@@ -1,0 +1,43 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "RNA-Seq data was aligned to the human hg19 reference genome and transcriptome (Ensembl 72) using the software STAR.",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "To accurately detect diverse alternative splicing events in iPSC-CM RNA-Seq, we adapted a recently developed Percent Spliced In (PSI) splicing method called MultiPath-PSI.",
+      "tool_name": "RNA-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "MultiPath-PSI is available through AltAnalyze version 2.1.1, requiring aligned BAM files as input and was extensively benchmarked against other local splicing variation approaches (http://altanalyze.readthedocs.io/en/latest/Algorithms/#multipath-psi-splicing-algorithm).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "For gene expression Quantification Kallisto (https://pachterlab.github.io/kallisto/) was used.",
+      "tool_name": "kallisto",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "RNA-Seq data was aligned to the human hg19 reference genome and transcriptome (Ensembl 72) using the software STAR. To accurately detect diverse alternative splicing events in iPSC-CM RNA-Seq, we adapted a recently developed Percent Spliced In (PSI) splicing method called MultiPath-PSI. MultiPath-PSI is available through AltAnalyze version 2.1.1, requiring aligned BAM files as input and was extensively benchmarked against other local splicing variation approaches (http://altanalyze.readthedocs.io/en/latest/Algorithms/#multipath-psi-splicing-algorithm).\nFor gene expression Quantification Kallisto (https://pachterlab.github.io/kallisto/) was used.\nGenome_build: hg19\nSupplementary_files_format_and_content: Kallisto-gene expression Quantification data",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

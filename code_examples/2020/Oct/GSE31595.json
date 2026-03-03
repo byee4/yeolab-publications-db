@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "The processing and analysis of expression data were performed using the statistical software R and Bioconductor.",
+      "tool_name": "R",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "For all Affymetrix CEL files the background were corrected and the expression were normalized using robust multiarray average (RMA).",
+      "tool_name": "Microarray",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "The processing and analysis of expression data were performed using the statistical software R and Bioconductor. For all Affymetrix CEL files the background were corrected and the expression were normalized using robust multiarray average (RMA).",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

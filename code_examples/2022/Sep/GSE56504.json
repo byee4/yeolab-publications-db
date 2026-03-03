@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "The Partek Genomics Suite was used to normalize (by GC RMA) and then analyse the microarray data following Affymetrix guidelines.",
+      "tool_name": "Microarray",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Core probesets only were used.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "The Partek Genomics Suite was used to normalize (by GC RMA) and then analyse the microarray data following Affymetrix guidelines. Core probesets only were used.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

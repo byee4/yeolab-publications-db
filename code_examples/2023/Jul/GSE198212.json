@@ -1,0 +1,70 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Processed Using https://github.com/YeoLab/eclip 0.7.0",
+      "tool_name": "eCLIP",
+      "tool_version": "0.7.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "After standard HiSeq demultiplexing, eCLIP libraries with distinct in-line barcodes were demultiplexed using custom scripts, and the random-mer was appended to the read name for later usage.",
+      "tool_name": "eCLIP",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Reads were then adapter trimmed (cutadapt v1.9.dev1) and reads less than 18 bp were discarded",
+      "tool_name": "cutadapt",
+      "tool_version": "1.9",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Mapping was then first performed against human elements in RepBase (v18.05) with STAR (v2.4.0i), repeat-mapping reads were segregated for separate analysis, and all others were then mapped against the full human genome (hg19) including a database of splice junctions with STAR (v 2.4.0i) (Dobin et al., 2013).",
+      "tool_name": "STAR",
+      "tool_version": "2.4.0i",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Uniquely mapping reads were then run through a custom-built PCR duplicate removal script, removing duplicate reads based on sharing identical Read1 start position, Read2 start position, and random-mer sequence to leave 'Usable' reads.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "eCLIP data sets with multiple in-line barcodes were merged at the usable read stage, and cluster identification was performed on usable reads using CLIPper (Yeo et al., 2009) (available at https://github.com/YeoLab/clipper/releases/tag/1.0) with options \u00e2\u0080\u0093s GRCh38 \u00e2\u0080\u0093o \u00e2\u0080\u0093bonferroni \u00e2\u0080\u0093superlocal\u00e2\u0080\u0093threshold-method binomial\u00e2\u0080\u0093save-pickle",
+      "tool_name": "CLIPper",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "data are further downsampled to roughly equal number per replicate",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Processed Using https://github.com/YeoLab/eclip 0.7.0\nAfter standard HiSeq demultiplexing, eCLIP libraries with distinct in-line barcodes were demultiplexed using custom scripts, and the random-mer was appended to the read name for later usage. Reads were then adapter trimmed (cutadapt v1.9.dev1) and reads less than 18 bp were discarded\nMapping was then first performed against human elements in RepBase (v18.05) with STAR (v2.4.0i), repeat-mapping reads were segregated for separate analysis, and all others were then mapped against the full human genome (hg19) including a database of splice junctions with STAR (v 2.4.0i) (Dobin et al., 2013). Uniquely mapping reads were then run through a custom-built PCR duplicate removal script, removing duplicate reads based on sharing identical Read1 start position, Read2 start position, and random-mer sequence to leave 'Usable' reads.\neCLIP data sets with multiple in-line barcodes were merged at the usable read stage, and cluster identification was performed on usable reads using CLIPper (Yeo et al., 2009) (available at https://github.com/YeoLab/clipper/releases/tag/1.0) with options \u00e2\u0080\u0093s GRCh38 \u00e2\u0080\u0093o \u00e2\u0080\u0093bonferroni \u00e2\u0080\u0093superlocal\u00e2\u0080\u0093threshold-method binomial\u00e2\u0080\u0093save-pickle\ndata are further downsampled to roughly equal number per replicate\nAssembly: hg38\nSupplementary files format and content: wig files represent read covergae for plus and minus strands\nSupplementary files format and content: peak files",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

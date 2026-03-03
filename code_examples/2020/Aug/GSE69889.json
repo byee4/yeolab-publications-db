@@ -1,0 +1,52 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "The data was analyzed by RNA Express v1.0 in BaseSpace",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Reads were aligned to mm10 using STAR with the following parameters: readFilesCommand zcat outFilterType BySJout outSJfilterCountUniqueMin -1 2 2 2 outSJfilterCountTotalMin -1 2 2 2 outFilterIntronMotifs RemoveNoncanonical genomeLoad LoadAndKeep",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Gene expression levels were computed by a proprietary alogorithm in BaseSpace",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Differential expression was performed with DESeq2 using default parameters",
+      "tool_name": "DESeq2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Gene cycling data was computed with eJTK_Cycle",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "The data was analyzed by RNA Express v1.0 in BaseSpace\nReads were aligned to mm10 using STAR with the following parameters: readFilesCommand zcat outFilterType BySJout outSJfilterCountUniqueMin -1 2 2 2 outSJfilterCountTotalMin -1 2 2 2 outFilterIntronMotifs RemoveNoncanonical genomeLoad LoadAndKeep\nGene expression levels were computed by a proprietary alogorithm in BaseSpace\nDifferential expression was performed with DESeq2 using default parameters\nGene cycling data was computed with eJTK_Cycle\nGenome_build: mm10\nSupplementary_files_format_and_content: tab-delimited text files showing gene cycling data",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

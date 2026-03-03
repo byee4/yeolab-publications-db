@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Raw data provided is demultiplexed reads with adapters removed and only unique synthetic reads.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Library strategy: RBNS",
+      "tool_name": "RBNS",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Raw data provided is demultiplexed reads with adapters removed and only unique synthetic reads.\nAssembly: N/A\nSupplementary files format and content: Raw data provided is demultiplexed reads with adapters removed and only unique synthetic reads.\nLibrary strategy: RBNS",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

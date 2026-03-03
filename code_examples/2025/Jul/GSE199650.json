@@ -1,0 +1,106 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Raw reads were processed using the eCLIP pipeline.",
+      "tool_name": "eCLIP",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Reads were then trimmed with cutadapt",
+      "tool_name": "cutadapt",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Reads were then trimmed again with cutadapt to remove double-ligation events.",
+      "tool_name": "cutadapt",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Trimmed and filtered reads were then mapped with STAR against a repeat element database",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Unmapped reads filtered of repeat elements were then mapped with STAR against a human genome (GRCh37)",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Aligned reads were sorted with samtools",
+      "tool_name": "samtools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "Sorted reads were collapsed with umi_tools.",
+      "tool_name": "UMI-tools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "BAM files were used to identify peak clusters with Clipper.\u00c2",
+      "tool_name": "CLIPper",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "Peak clusters were normalized using BAM files for IP against BAM files for INPUT with overlap_peakfi_with_bam.pl, included in eclip 0.1.5+.",
+      "tool_name": "eCLIP",
+      "tool_version": "0.1.5",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 10,
+      "description": "Overlapping normalized peak regions were merged with compress_l2foldenrpeakfi_for_replicate_overlapping_bedformat.pl, included within eclip-0.1.5+",
+      "tool_name": "eCLIP",
+      "tool_version": "0.1.5",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 11,
+      "description": "Filtered peak files were ranked by entropy score (make_informationcontent_from_peaks.pl included within the merge_peaks pipeline) and used as inputs to IDR to determine reproducible peaks.",
+      "tool_name": "IDR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Raw reads were processed using the eCLIP pipeline.\nReads were then trimmed with cutadapt\nReads were then trimmed again with cutadapt to remove double-ligation events.\nTrimmed and filtered reads were then mapped with STAR against a repeat element database\nUnmapped reads filtered of repeat elements were then mapped with STAR   against a human genome (GRCh37)\nAligned reads were sorted with samtools\nSorted reads were collapsed with umi_tools.\nBAM files were used to identify peak clusters with Clipper.\u00c2\nPeak clusters were normalized using BAM files for IP against BAM files for INPUT with overlap_peakfi_with_bam.pl, included in eclip 0.1.5+.\nOverlapping normalized peak regions were merged with compress_l2foldenrpeakfi_for_replicate_overlapping_bedformat.pl, included within eclip-0.1.5+\nFiltered peak files were ranked by entropy score (make_informationcontent_from_peaks.pl included within the merge_peaks pipeline) and used as inputs to IDR to determine reproducible peaks.\nAssembly: hg19\nSupplementary files format and content: BigWig files contain RPM-normalized read densities",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

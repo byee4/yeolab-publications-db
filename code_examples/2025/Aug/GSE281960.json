@@ -1,0 +1,97 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Sequencing adapters were trimmed from the raw reads with skewer.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Reads were aligned to the human genome version GRCh38_p126.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "A STAR index (version 2.7.1a) was built with the \u00e2\u0080\u0093sjdbOverhang=50 argument.",
+      "tool_name": "STAR",
+      "tool_version": "2.7.1a",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Splice junctions from Gencode gene models (release M28) were provided via the \u00e2\u0080\u0093sjdbGTFfile argument.",
+      "tool_name": "GENCODE",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "STAR alignments were generated with the following parameters: \u00e2\u0080\u0093outFilterType BySJout, \u00e2\u0080\u0093quantMode TranscriptomeSAM, \u00e2\u0080\u0093outFilterIntronMotifs RemoveNoncanonicalUnannotated, \u00e2\u0080\u0093outSAMstrandField intronMotif, \u00e2\u0080\u0093outSAMattributes NH HI AS nM MD XS and \u00e2\u0080\u0093outSAMunmapped Within.",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Alignments were obtained with the following parameters: \u00e2\u0080\u0093readFilesCommand zcat \u00e2\u0080\u0093outFilterType BySJout \u00e2\u0080\u0093outFilterMultimapNmax 20 \u00e2\u0080\u0093alignSJoverhangMin 8 \u00e2\u0080\u0093alignSJDBoverhangMin 1 \u00e2\u0080\u0093outFilterMismatchNmax 999 \u00e2\u0080\u0093outFilterMismatchNoverLmax 0.6 \u00e2\u0080\u0093alignIntronMin 20 \u00e2\u0080\u0093alignIntronMax 1000000 \u00e2\u0080\u0093alignMatesGapMax 1000000 \u00e2\u0080\u0093quantMode GeneCounts \u00e2\u0080\u0093outSAMunmapped Within \u00e2\u0080\u0093outSAMattributes NH HI AS nM MD XS \u00e2\u0080\u0093outSAMstrandField intronMotif \u00e2\u0080\u0093outSAMtype BAM SortedByCoordinate \u00e2\u0080\u0093outBAMcompression 6.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "Alignments sharing the same UMI and genomic coordinate were deduplicated using the collapse_UMI_bam tool (Lexogen).",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "The raw gene expression matrix was constructed from the 'forward' column of STAR's ReadsPerGene.out.tab output files using R.",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "Gene symbols and biotype information were extracted from the Gencode GTF file.",
+      "tool_name": "GENCODE",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 10,
+      "description": "To calculate normalized counts per million (CPM) TMM normalization was applied across all genes annotated as protein_coding with the edgeR R package.",
+      "tool_name": "edgeR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Sequencing adapters were trimmed from the raw reads with skewer. Reads were aligned to the human genome version GRCh38_p126. A STAR index (version 2.7.1a) was built with the \u00e2\u0080\u0093sjdbOverhang=50 argument. Splice junctions from Gencode gene models (release M28) were provided via the \u00e2\u0080\u0093sjdbGTFfile argument. STAR alignments were generated with the following parameters: \u00e2\u0080\u0093outFilterType BySJout, \u00e2\u0080\u0093quantMode TranscriptomeSAM, \u00e2\u0080\u0093outFilterIntronMotifs RemoveNoncanonicalUnannotated, \u00e2\u0080\u0093outSAMstrandField intronMotif, \u00e2\u0080\u0093outSAMattributes NH HI AS nM MD XS and \u00e2\u0080\u0093outSAMunmapped Within. Alignments were obtained with the following parameters: \u00e2\u0080\u0093readFilesCommand zcat \u00e2\u0080\u0093outFilterType BySJout \u00e2\u0080\u0093outFilterMultimapNmax 20 \u00e2\u0080\u0093alignSJoverhangMin 8 \u00e2\u0080\u0093alignSJDBoverhangMin 1 \u00e2\u0080\u0093outFilterMismatchNmax 999 \u00e2\u0080\u0093outFilterMismatchNoverLmax 0.6 \u00e2\u0080\u0093alignIntronMin 20 \u00e2\u0080\u0093alignIntronMax 1000000 \u00e2\u0080\u0093alignMatesGapMax 1000000 \u00e2\u0080\u0093quantMode GeneCounts \u00e2\u0080\u0093outSAMunmapped Within \u00e2\u0080\u0093outSAMattributes NH HI AS nM MD XS \u00e2\u0080\u0093outSAMstrandField intronMotif \u00e2\u0080\u0093outSAMtype BAM SortedByCoordinate \u00e2\u0080\u0093outBAMcompression 6. Alignments sharing the same UMI and genomic coordinate were deduplicated using the collapse_UMI_bam tool (Lexogen). The raw gene expression matrix was constructed from the 'forward' column of STAR's ReadsPerGene.out.tab output files using R. Gene symbols and biotype information were extracted from the Gencode GTF file. To calculate normalized counts per million (CPM) TMM normalization was applied across all genes annotated as protein_coding with the edgeR R package.\nAssembly: GRCh38\nSupplementary files format and content: File raw_and_normalized_counts.xlsx is a microsoft excel file with three worksheets: 1. sample information 2. raw count table 3. normalized count table (log2 counts per million)",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

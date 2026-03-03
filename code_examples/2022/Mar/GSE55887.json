@@ -1,0 +1,52 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Illlumina MiSeq Sequencer was used for base calling.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Sequence reads were aligned to hg19 reference genome using Bowtie for HA-Chip data and Bowtie2 for deep sequencing data.",
+      "tool_name": "Bowtie",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Two re-sequenced files : sgRNA2_1_Replicate1 and sgRNA3_1_Replicate1 were merged with sgRNA2_Replicate1 and sgRNA3_Replicate1 respectively",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Peaks were called by using MACS14 tool for HA-ChIP (-c=Control_dCas9only -p=1e-6)",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Further data processing steps have been described in the method sections.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Illlumina MiSeq Sequencer was used for base calling.\nSequence reads were aligned to hg19 reference genome using Bowtie for HA-Chip data and Bowtie2 for deep sequencing data.\nTwo re-sequenced files : sgRNA2_1_Replicate1 and sgRNA3_1_Replicate1 were merged with sgRNA2_Replicate1 and sgRNA3_Replicate1 respectively\nPeaks were called by using MACS14 tool for HA-ChIP (-c=Control_dCas9only -p=1e-6)\nFurther data processing steps have been described in the method sections.\nGenome_build: hg19\nSupplementary_files_format_and_content: bigWig and Bed files containing peaks.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

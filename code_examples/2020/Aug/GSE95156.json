@@ -1,0 +1,70 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Sequenced paired-end reads were mapped to the whole genome (mm10) using STAR (Dobin et al., 2013) with default parameters.",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Genome index was built considering Ensembl annotation.",
+      "tool_name": "Ensembl",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "For each Ensembl gene, all of the exons of the respective annotated protein-coding transcripts were considered.",
+      "tool_name": "Ensembl",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Reads up to one mismatch were counted considering only reads in the right gene orientation and mapped in the defined exons.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Read counts were normalized by the library size (EdgeR, Robinson et al.",
+      "tool_name": "edgeR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "2010) and the average size of the transcripts.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "Normalized reads count (RPKM) were log2 transformed.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Sequenced paired-end reads were mapped to the whole genome (mm10) using STAR (Dobin et al., 2013) with default parameters. Genome index was built considering Ensembl annotation.\nFor each Ensembl gene, all of the exons of the respective annotated protein-coding transcripts were considered. Reads up to one mismatch were counted considering only reads in the right gene orientation and mapped in the defined exons.\nRead counts were normalized by the library size (EdgeR, Robinson et al. 2010) and the average size of the transcripts. Normalized reads count (RPKM) were log2 transformed.\nGenome_build: mm10\nSupplementary_files_format_and_content: Tab-delimited text file include RPKM values for each sample",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

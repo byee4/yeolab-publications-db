@@ -1,0 +1,61 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Fastq files were trimmed for adapters using cutadapt",
+      "tool_name": "cutadapt",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Trimmed reads were aligned to the human genome build hg19 using STAR aligner",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "seCLIP : Binding region peaks were identified based on read pileup densities (Clipper)",
+      "tool_name": "CLIPper",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "seCLIP : Reproducible peaks were identified by comparing replicate read pileups along binding regions",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "wiggle files",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "peak text files",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Fastq files were trimmed for adapters using cutadapt\nTrimmed reads were aligned to the human genome build hg19 using STAR aligner\nseCLIP : Binding region peaks were identified based on read pileup densities (Clipper)\nseCLIP : Reproducible peaks were identified by comparing replicate read pileups along binding regions\nGenome_build: hg19\nSupplementary_files_format_and_content: normalized read counts text file\nwiggle files\npeak text files",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

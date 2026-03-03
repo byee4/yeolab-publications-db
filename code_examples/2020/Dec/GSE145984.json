@@ -1,0 +1,52 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Reads were trimmed with Trim Galore v0.4.1 and cutadapt v1.15",
+      "tool_name": "cutadapt",
+      "tool_version": "1.15",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Mapping to hg19 was performed with bwa v0.7.17 and samtools v1.9",
+      "tool_name": "samtools",
+      "tool_version": "1.9",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "We used the CIRI2 pipeline v2.0.6 to detect circRNAs.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "The CIRI2 pipeline was run with a gene transfer format (GTF) file (hg19) to annotate the overlapping gene of the circRNAs",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Expression values of circRNAs were normalized to total reads",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Reads were trimmed with Trim Galore v0.4.1 and cutadapt v1.15\nMapping to hg19 was performed with bwa v0.7.17 and samtools v1.9\nWe used the CIRI2 pipeline v2.0.6 to detect circRNAs. The CIRI2 pipeline was run with a gene transfer format (GTF) file (hg19) to annotate the overlapping gene of the circRNAs\nExpression values of circRNAs were normalized to total reads\nGenome_build: hg19\nSupplementary_files_format_and_content: tab-delimited text file include counts per million (CPM) values for each circRNA in each sample",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

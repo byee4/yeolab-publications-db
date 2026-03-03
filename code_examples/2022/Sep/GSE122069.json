@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "50bp single-end FASTQ files were obtained using the Illumina demultiplexing pipeline.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "STAR (Dobin et al., 2013) and RSEM (Li and Dewey, 2011) were used to align the reads to the human reference sequence HG38 and to calculate the raw counts and transcripts per million (TPM) values for genes, respectively",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "50bp single-end FASTQ files were obtained using the Illumina demultiplexing pipeline. STAR (Dobin et al., 2013) and RSEM (Li and Dewey, 2011) were used to align the reads to the human reference sequence HG38 and to calculate the raw counts and transcripts per million (TPM) values for genes, respectively\nGenome_build: HG38\nSupplementary_files_format_and_content: TPM, csv format",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

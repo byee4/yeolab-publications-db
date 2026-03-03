@@ -1,0 +1,43 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "FASTQ sequencing reads were processed, aligned to the mouse genome (mm10) and converted to digital gene expression matrices using the Drop-seq tools (version 1.12, http://mccarrolllab.com/dropseq/) with settings as described in the Drop-seq Alignment Cookbook (version 1.2 Jan2016, http://mccarrolllab.com/dropseq/)",
+      "tool_name": "scRNA-seq",
+      "tool_version": "1.12",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "The number of cell barcodes per embryonic age was identified by calculating the cumulative fraction of reads attributable to each individual cell barcode and arranging these in decreasing order.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "2000 Barcodes were selected at E11.5, E13.5 and E17.5 and 5000 Barcodes at E15.5",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Two batches data collected from E15.5 embryos (Batch1 and Batch2) were combined together.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "FASTQ sequencing reads were processed, aligned to the mouse genome (mm10) and converted to digital gene expression matrices using the Drop-seq tools (version 1.12, http://mccarrolllab.com/dropseq/) with settings as described in the Drop-seq Alignment Cookbook (version 1.2 Jan2016, http://mccarrolllab.com/dropseq/)\nThe number of cell barcodes per embryonic age was identified by calculating the cumulative fraction of reads attributable to each individual cell barcode and arranging these in decreasing order.\n2000 Barcodes were selected at E11.5, E13.5 and E17.5 and 5000 Barcodes at E15.5\nTwo batches data collected from E15.5 embryos (Batch1 and Batch2) were combined together.\nGenome_build: mm10\nSupplementary_files_format_and_content: tab-delimited text files containing raw digital gene expression for each embryonic age. Two processed data files are included per age. One containing all data for all cells and one containing only cells predicted as cortical in origin.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

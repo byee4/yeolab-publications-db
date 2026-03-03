@@ -1,0 +1,97 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "FASTQ files were mapped to the mm10 mouse reference genome with Bowtie2.",
+      "tool_name": "Bowtie2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Peaks were called with HOMER (findPeaks) using parameters \u00e2\u0080\u009c-style factor -minDist 200 -size 200\u00e2\u0080\u009d.",
+      "tool_name": "HOMER",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "After merging these peaks, correlations among replicates from the same cell subset/treatment were evaluated by correlation using tag counts.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "The two most highly correlated samples were used for identifying the most robust peaks using the irreproducible discovery rate (IDR) method.",
+      "tool_name": "IDR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "For this step, peaks were called with HOMER\u00e2\u0080\u0099s findPeaks, using parameters \u00e2\u0080\u009c-L 0 -C 0 -fdr 0.9 -minDist 200 -size 200\u00e2\u0080\u009d.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "IDR peaks from different conditions involved in a comparison merged with HOMER\u00e2\u0080\u0099s mergePeaks and annotated with HOMER\u00e2\u0080\u0099s annotatePeaks.pl.",
+      "tool_name": "IDR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "The raw tags of all samples which had reasonable correlation were quantified with HOMER (annotatePeaks.pl) using parameter \u00e2\u0080\u009c-noadj\u00e2\u0080\u009d.",
+      "tool_name": "HOMER",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "Peaks which contained at least 4 tags in at least 1 sample were used to identify differentially bounded peaks (DBP) by DESeq2.",
+      "tool_name": "DESeq2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "Peaks were categorized as distal peaks which are 2 kb away from known TSS and promotor peaks which are located within 2 kb region of known TSS sites.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 10,
+      "description": "ATAC peak quantification was normalized to the total tags in peaks.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "FASTQ files were mapped to the mm10 mouse reference genome with Bowtie2.  Peaks were called with HOMER (findPeaks) using parameters \u00e2\u0080\u009c-style factor -minDist 200 -size 200\u00e2\u0080\u009d.  After merging these peaks, correlations among replicates from the same cell subset/treatment were evaluated by correlation using tag counts.  The two most highly correlated samples were used for identifying the most robust peaks using the irreproducible discovery rate (IDR) method.  For this step, peaks were called with HOMER\u00e2\u0080\u0099s findPeaks, using parameters \u00e2\u0080\u009c-L 0 -C 0 -fdr 0.9 -minDist 200 -size 200\u00e2\u0080\u009d.  IDR peaks from different conditions involved in a comparison merged with HOMER\u00e2\u0080\u0099s mergePeaks and annotated with HOMER\u00e2\u0080\u0099s annotatePeaks.pl.  The raw tags of all samples which had reasonable correlation were quantified with HOMER (annotatePeaks.pl) using parameter \u00e2\u0080\u009c-noadj\u00e2\u0080\u009d.  Peaks which contained at least 4 tags in at least 1 sample were used to identify differentially bounded peaks (DBP) by DESeq2.  Peaks were categorized as distal peaks which are 2 kb away from known TSS and promotor peaks which are located within 2 kb region of known TSS sites.\nATAC peak quantification was normalized to the total tags in peaks.\nAssembly: mm10",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

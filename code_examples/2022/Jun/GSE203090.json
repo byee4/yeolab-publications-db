@@ -1,0 +1,34 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Libraries were filtered and mapped to the mm10 genome using ENCODE Transcription Factor and Histone ChIP-Seq processing pipeline with default parameters for histone marks (github.com/ENCODE-DCC/chip-seq-pipeline2).",
+      "tool_name": "ChIP-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Final pooled bigwig files were used for visualization.",
+      "tool_name": "UCSC tools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "none provided by the submitter",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Libraries were filtered and mapped to the mm10 genome using ENCODE Transcription Factor and Histone ChIP-Seq processing pipeline with default parameters for histone marks (github.com/ENCODE-DCC/chip-seq-pipeline2). Final pooled bigwig files were used for visualization.\nnone provided by the submitter\nAssembly: mm10\nSupplementary files format and content: bigwig files from pooled replicates",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

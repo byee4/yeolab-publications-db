@@ -1,0 +1,133 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "(Using CZ25180_S1_L008_R1_001.fastq.gz as an example starting fastq file): umi_tools extract --stdin CZ25180_S1_L008_R1_001.fastq.gz --bc-pattern NNNNNNNNNN --log CAR1.CZ25180_IP.---.--.metrics CAR1 --stdout CAR1.CZ25180_IP.umi.r1.fq",
+      "tool_name": "UMI-tools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "cutadapt -O \\ 1 \\ -f \\ fastq \\ --match-read-wildcards \\ --times \\ 1 \\ -e \\ 0.1 \\ --quality-cutoff \\ 6 \\ -m \\ 18 \\ -o \\ CAR1.CZ25180_IP.umi.r1Tr.fq \\ '-a AGATCGGAAGAGCAC' \\ '-a GATCGGAAGAGCACA' \\ '-a ATCGGAAGAGCACAC' \\ '-a TCGGAAGAGCACACG' \\ '-a CGGAAGAGCACACGT' \\ '-a GGAAGAGCACACGTC' \\ '-a GAAGAGCACACGTCT' \\ '-a AAGAGCACACGTCTG' \\ '-a AGAGCACACGTCTGA' \\ '-a GAGCACACGTCTGAA' \\ '-a AGCACACGTCTGAAC' \\ '-a GCACACGTCTGAACT' \\ '-a CACACGTCTGAACTC' \\ '-a ACACGTCTGAACTCC' \\ '-a CACGTCTGAACTCCA' \\ '-a ACGTCTGAACTCCAG' \\ '-a CGTCTGAACTCCAGT' \\ '-a GTCTGAACTCCAGTC' \\ '-a TCTGAACTCCAGTCA' \\ '-a CTGAACTCCAGTCAC' \\ CAR1.CZ25180_IP.umi.r1.fq",
+      "tool_name": "cutadapt",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "cutadapt \\ -O \\ 5 \\ -f \\ fastq \\ --match-read-wildcards \\ --times \\ 1 \\ -e \\ 0.1 \\ --quality-cutoff \\ 6 \\ -m \\ 18 \\ -o \\ CAR1.CZ25180_IP.umi.r1TrTr.fq \\ -a AGATCGGAAGAGCAC \\ -a GATCGGAAGAGCACA \\ -a ATCGGAAGAGCACAC \\ -a TCGGAAGAGCACACG \\ -a CGGAAGAGCACACGT \\ -a GGAAGAGCACACGTC \\ -a GAAGAGCACACGTCT \\ -a AAGAGCACACGTCTG \\ -a AGAGCACACGTCTGA \\ -a GAGCACACGTCTGAA \\ -a AGCACACGTCTGAAC \\ -a GCACACGTCTGAACT \\ -a CACACGTCTGAACTC \\ -a ACACGTCTGAACTCC \\ -a CACGTCTGAACTCCA \\ -a ACGTCTGAACTCCAG \\ -a CGTCTGAACTCCAGT \\ -a GTCTGAACTCCAGTC \\ -a TCTGAACTCCAGTCA \\ -a CTGAACTCCAGTCAC \\ CAR1.CZ25180_IP.umi.r1Tr.fq",
+      "tool_name": "cutadapt",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "fastq-sort --id CAR1.CZ25180_IP.umi.r1TrTr.fq > CAR1.CZ25180_IP.umi.r1TrTr.sorted.fq",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "STAR \\ --alignEndsType \\ EndToEnd \\ --genomeDir \\ RepBase18.05.STAR \\ --genomeLoad \\ NoSharedMemory \\ --outBAMcompression \\ 10 \\ --outFileNamePrefix \\ CAR1.CZ25180_IP.umi.r1TrTr.sorted.STAR \\ --outFilterMultimapNmax \\ 30 \\ --outFilterMultimapScoreRange \\ 1 \\ --outFilterScoreMin \\ 10 \\ --outFilterType \\ BySJout \\ --outReadsUnmapped \\ Fastx \\ --outSAMattrRGline \\ ID:foo \\ --outSAMattributes \\ All \\ --outSAMmode \\ Full \\ --outSAMtype \\ BAM \\ Unsorted \\ --outSAMunmapped \\ Within \\ --outStd \\ Log \\ --readFilesIn \\ CAR1.CZ25180_IP.umi.r1TrTr.sorted.fq \\ --runMode \\ alignReads \\ --runThreadN \\ 8",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "STAR \\ --alignEndsType \\ EndToEnd \\ --genomeDir \\ ce10.STAR \\ --genomeLoad \\ NoSharedMemory \\ --outBAMcompression \\ 10 \\ --outFileNamePrefix \\ CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STAR \\ --outFilterMultimapNmax \\ 1 \\ --outFilterMultimapScoreRange \\ 1 \\ --outFilterScoreMin \\ 10 \\ --outFilterType \\ BySJout \\ --outReadsUnmapped \\ Fastx \\ --outSAMattrRGline \\ ID:foo \\ --outSAMattributes \\ All \\ --outSAMmode \\ Full \\ --outSAMtype \\ BAM \\ Unsorted \\ --outSAMunmapped \\ Within \\ --outStd \\ Log \\ --readFilesIn \\ CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.fq \\ --runMode \\ alignReads \\ --runThreadN \\ 8",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "umi_tools \\ dedup \\ -I \\ CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.bam \\ --output-stats \\ CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo \\ -S \\ CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDup.bam",
+      "tool_name": "UMI-tools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "sort \\ -o \\ CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.bam \\ CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDup.bam",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "samtools \\ index \\ CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.bam",
+      "tool_name": "samtools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 10,
+      "description": "makebigwigfiles \\ --bw_pos \\ CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.norm.pos.bw \\ --bw_neg \\ CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.norm.neg.bw \\ --bam \\ CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.bam \\ --genome \\ ce10.chrom.sizes",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 11,
+      "description": "clipper \\ --bam \\ CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.bam \\ --species ce10 \\ --outfile CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.peakClusters.bed \\ --save-pickle",
+      "tool_name": "CLIPper",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 12,
+      "description": "samtools view -c -F 4 CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.bam \\ > CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.mappedreadnum",
+      "tool_name": "samtools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 13,
+      "description": "overlap_peakfi_with_bam_PE.pl \\ CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.bam \\ CAR1.CZ26430_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.bam \\ CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.peakClusters.bed \\ CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.mappedreadnum \\ CAR1.CZ26430_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.mappedreadnum \\ CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.peakClusters.normed.bed",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 14,
+      "description": "peakscompress.pl \\ CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.peakClusters.normed.bed \\ CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.peakClusters.normed.compressed.bed",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "(Using CZ25180_S1_L008_R1_001.fastq.gz as an example starting fastq file): umi_tools extract --stdin CZ25180_S1_L008_R1_001.fastq.gz --bc-pattern NNNNNNNNNN --log CAR1.CZ25180_IP.---.--.metrics CAR1 --stdout CAR1.CZ25180_IP.umi.r1.fq\ncutadapt  -O \\  1 \\  -f \\  fastq \\  --match-read-wildcards \\  --times \\  1 \\  -e \\  0.1 \\  --quality-cutoff \\  6 \\  -m \\  18 \\  -o \\  CAR1.CZ25180_IP.umi.r1Tr.fq \\  '-a AGATCGGAAGAGCAC' \\  '-a GATCGGAAGAGCACA' \\  '-a ATCGGAAGAGCACAC' \\  '-a TCGGAAGAGCACACG' \\  '-a CGGAAGAGCACACGT' \\  '-a GGAAGAGCACACGTC' \\  '-a GAAGAGCACACGTCT' \\  '-a AAGAGCACACGTCTG' \\  '-a AGAGCACACGTCTGA' \\  '-a GAGCACACGTCTGAA' \\  '-a AGCACACGTCTGAAC' \\  '-a GCACACGTCTGAACT' \\  '-a CACACGTCTGAACTC' \\  '-a ACACGTCTGAACTCC' \\  '-a CACGTCTGAACTCCA' \\  '-a ACGTCTGAACTCCAG' \\  '-a CGTCTGAACTCCAGT' \\  '-a GTCTGAACTCCAGTC' \\  '-a TCTGAACTCCAGTCA' \\  '-a CTGAACTCCAGTCAC' \\  CAR1.CZ25180_IP.umi.r1.fq\ncutadapt \\   -O \\   5 \\   -f \\   fastq \\   --match-read-wildcards \\   --times \\   1 \\   -e \\   0.1 \\   --quality-cutoff \\   6 \\   -m \\   18 \\   -o \\   CAR1.CZ25180_IP.umi.r1TrTr.fq \\   -a AGATCGGAAGAGCAC \\   -a GATCGGAAGAGCACA \\   -a ATCGGAAGAGCACAC \\   -a TCGGAAGAGCACACG \\   -a CGGAAGAGCACACGT \\   -a GGAAGAGCACACGTC \\   -a GAAGAGCACACGTCT \\   -a AAGAGCACACGTCTG \\   -a AGAGCACACGTCTGA \\   -a GAGCACACGTCTGAA \\   -a AGCACACGTCTGAAC \\   -a GCACACGTCTGAACT \\   -a CACACGTCTGAACTC \\   -a ACACGTCTGAACTCC \\   -a CACGTCTGAACTCCA \\   -a ACGTCTGAACTCCAG \\   -a CGTCTGAACTCCAGT \\   -a GTCTGAACTCCAGTC \\   -a TCTGAACTCCAGTCA \\   -a CTGAACTCCAGTCAC \\   CAR1.CZ25180_IP.umi.r1Tr.fq\nfastq-sort --id CAR1.CZ25180_IP.umi.r1TrTr.fq > CAR1.CZ25180_IP.umi.r1TrTr.sorted.fq\nSTAR \\  --alignEndsType \\  EndToEnd \\  --genomeDir \\  RepBase18.05.STAR \\  --genomeLoad \\  NoSharedMemory \\  --outBAMcompression \\  10 \\  --outFileNamePrefix \\  CAR1.CZ25180_IP.umi.r1TrTr.sorted.STAR \\  --outFilterMultimapNmax \\  30 \\  --outFilterMultimapScoreRange \\  1 \\  --outFilterScoreMin \\  10 \\  --outFilterType \\  BySJout \\  --outReadsUnmapped \\  Fastx \\  --outSAMattrRGline \\  ID:foo \\  --outSAMattributes \\  All \\  --outSAMmode \\  Full \\  --outSAMtype \\  BAM \\  Unsorted \\  --outSAMunmapped \\  Within \\  --outStd \\  Log \\  --readFilesIn \\  CAR1.CZ25180_IP.umi.r1TrTr.sorted.fq \\  --runMode \\  alignReads \\  --runThreadN \\  8\nSTAR \\  --alignEndsType \\  EndToEnd \\  --genomeDir \\  ce10.STAR \\  --genomeLoad \\  NoSharedMemory \\  --outBAMcompression \\  10 \\  --outFileNamePrefix \\  CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STAR \\  --outFilterMultimapNmax \\  1 \\  --outFilterMultimapScoreRange \\  1 \\  --outFilterScoreMin \\  10 \\  --outFilterType \\  BySJout \\  --outReadsUnmapped \\  Fastx \\  --outSAMattrRGline \\  ID:foo \\  --outSAMattributes \\  All \\  --outSAMmode \\  Full \\  --outSAMtype \\  BAM \\  Unsorted \\  --outSAMunmapped \\  Within \\  --outStd \\  Log \\  --readFilesIn \\  CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.fq \\  --runMode \\  alignReads \\  --runThreadN \\  8\numi_tools \\  dedup \\  -I \\  CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.bam \\  --output-stats \\  CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo \\  -S \\  CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDup.bam\nsort \\  -o \\  CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.bam \\  CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDup.bam\nsamtools \\  index \\  CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.bam\nmakebigwigfiles \\  --bw_pos \\  CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.norm.pos.bw \\  --bw_neg \\  CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.norm.neg.bw \\  --bam \\  CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.bam \\  --genome \\  ce10.chrom.sizes\nclipper \\  --bam \\  CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.bam \\  --species ce10 \\  --outfile CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.peakClusters.bed \\  --save-pickle\nsamtools view -c -F 4 CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.bam \\  > CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.mappedreadnum\noverlap_peakfi_with_bam_PE.pl \\  CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.bam \\  CAR1.CZ26430_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.bam \\  CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.peakClusters.bed \\  CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.mappedreadnum \\  CAR1.CZ26430_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.mappedreadnum \\  CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.peakClusters.normed.bed\npeakscompress.pl \\  CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.peakClusters.normed.bed \\  CAR1.CZ25180_IP.umi.r1TrTr.sorted.STARUnmapped.out.sorted.STARAligned.outSo.rmDupSo.peakClusters.normed.compressed.bed\nGenome_build: ce10\nSupplementary_files_format_and_content: bed format, contains peaks of predicted RBP binding",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

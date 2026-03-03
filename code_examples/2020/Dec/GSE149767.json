@@ -1,0 +1,133 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "library strategy: footprinting and selective 2\u00e2\u0080\u0099-hydroxyl acylation analyzed by primer extension (fSHAPE)",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "SHAPE libraries as follows:",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Full code at https://github.com/meracorley/fSHAPE",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "zcat \"$file\".fastq.gz | umi_tools extract --bc-pattern=NNNNCCCCNNNNN > \"$file\".umi.fastq",
+      "tool_name": "UMI-tools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "cutadapt -a AGATCGGAAGAGCGGTTCAGCAGGAATGCCGAGACCGATCTCGTATGCCGTCTTCTGCTTG --minimum-length=23 --overlap=5 -o \"$file\".trim.fastq \"$file\".umi.fastq",
+      "tool_name": "cutadapt",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "STAR --runThreadN 8 --genomeDir /projects/ps-yeolab4/genomes/GRCh38/star/ --readFilesIn \"$file\".trim.fastq --outFileNamePrefix \"$file\" --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --outSAMtype BAM SortedByCoordinate",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "umitools dedup -I \"$file\"Aligned.sortedByCoord.out.bam --spliced-is-unique -S \"$file\".dedup.bam",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "Total coverage (bedtools genomecov -split -strand + -dz; bedtools genomecov -split -strand - -dz) and 5' end coverage (bedtools genomecov -5 -strand + -dz; bedtools genomecov -5 -strand - -dz) summed at each position in the transcriptome with de-duplicated reads.",
+      "tool_name": "bedtools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "For each human transcript with read coverage, (5'end coverage / total read coverage) calculated at each position and normalized between -protein and +protein SHAPE libraries to calculate \"fSHAPE reactivity\" at each nucleotide in *maps.tar.gz files. -protein SHAPE libraries normalized against untreated SHAPE libraries to produce \"in vitro icSHAPE reactivity\" at each nucleotide in *vitro_icshape.tar.gz files. +protein SHAPE libraries normalized against untreated SHAPE libraries to produce \"in vivo icSHAPE reactivity\" at each nucleotide in *vivo_icshape.tar.gz files.",
+      "tool_name": "SHAPE-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 10,
+      "description": "SHAPE-eCLIP and fSHAPE-eCLIP libraries as follows:",
+      "tool_name": "eCLIP",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 11,
+      "description": "Full code at https://github.com/meracorley/f-SHAPE-eCLIP",
+      "tool_name": "eCLIP",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 12,
+      "description": "eCLIP pipeline (reads mapped with bowtie and STAR, de-duplicated, peaks called for regions with read pileup in IP samples relative to Input)",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 13,
+      "description": "Total coverage and mutation counts summed at each position in the transcriptome with de-duplicated reads.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 14,
+      "description": "For each human transcript with read coverage, (mutation coverage / total read coverage) calculated at each position and normalized between -protein and +protein libraries, or treated and untreated libraries, to calculate \"fSHAPE\" or \"SHAPE\" reactivity at each nucleotide in fshape_clip_maps.tar.gz and *shapeclip_maps.tar.gz files.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "library strategy: footprinting and selective 2\u00e2\u0080\u0099-hydroxyl acylation analyzed by primer extension (fSHAPE)\nSHAPE libraries as follows:\nFull code at https://github.com/meracorley/fSHAPE\nzcat \"$file\".fastq.gz | umi_tools extract --bc-pattern=NNNNCCCCNNNNN > \"$file\".umi.fastq\ncutadapt -a AGATCGGAAGAGCGGTTCAGCAGGAATGCCGAGACCGATCTCGTATGCCGTCTTCTGCTTG --minimum-length=23 --overlap=5 -o \"$file\".trim.fastq \"$file\".umi.fastq\nSTAR --runThreadN 8 --genomeDir /projects/ps-yeolab4/genomes/GRCh38/star/ --readFilesIn \"$file\".trim.fastq --outFileNamePrefix \"$file\" --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --outSAMtype BAM SortedByCoordinate\numitools dedup -I \"$file\"Aligned.sortedByCoord.out.bam --spliced-is-unique -S \"$file\".dedup.bam\nTotal coverage (bedtools genomecov -split -strand + -dz; bedtools genomecov -split -strand - -dz) and 5' end coverage (bedtools genomecov -5 -strand + -dz; bedtools genomecov -5 -strand - -dz) summed at each position in the transcriptome with de-duplicated reads.\nFor each human transcript with read coverage, (5'end coverage / total read coverage) calculated at each position and normalized between -protein and +protein SHAPE libraries to calculate \"fSHAPE reactivity\" at each nucleotide in *maps.tar.gz files. -protein SHAPE libraries normalized against untreated SHAPE libraries to produce \"in vitro icSHAPE reactivity\" at each nucleotide in *vitro_icshape.tar.gz files. +protein SHAPE libraries normalized against untreated SHAPE libraries to produce \"in vivo icSHAPE reactivity\" at each nucleotide in *vivo_icshape.tar.gz files.\nSHAPE-eCLIP and fSHAPE-eCLIP libraries as follows:\nFull code at https://github.com/meracorley/f-SHAPE-eCLIP\neCLIP pipeline (reads mapped with bowtie and STAR, de-duplicated, peaks called for regions with read pileup in IP samples relative to Input)\nTotal coverage and mutation counts summed at each position in the transcriptome with de-duplicated reads.\nFor each human transcript with read coverage, (mutation coverage / total read coverage) calculated at each position and normalized between -protein and +protein libraries, or treated and untreated libraries, to calculate \"fSHAPE\" or \"SHAPE\" reactivity at each nucleotide in fshape_clip_maps.tar.gz and *shapeclip_maps.tar.gz files.\nGenome_build: Hg38 for icSHAPE and fSHAPE, Hg19 for SHAPE-eCLIP and fSHAPE-eCLIP\nSupplementary_files_format_and_content: Tab-delimited .map files for multiple human transcripts: Nucleotide number in transcript, Average SHAPE or fSHAPE reactivity, Standard deviation, Base. Tab-delimited .rx files for multiple human transcripts: SHAPE or fSHAPE reactivity rep1, SHAPE or fSHAPE reactivity rep2.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

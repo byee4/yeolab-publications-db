@@ -1,0 +1,52 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "3' Illumina adaptors trimmed with cutadapt",
+      "tool_name": "cutadapt",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Mapped to mm9 genome build with Bowtie, version 0.12.7 with options --time -k 100 --best --strata -v 2 -p 3, and filtered to a mismatch rate of 6%",
+      "tool_name": "Bowtie",
+      "tool_version": "0.12.7",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Mapped reads were counted for each exon using bedtools multicov and merged into raw gene counts with bedtoools groupBy",
+      "tool_name": "bedtools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "DESeq2 was used to normalize read counts.",
+      "tool_name": "DESeq2",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Genes were filtered to have a minimum of 10 reads per million in at least one sample, and those counts were used to test for differential expression",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "3' Illumina adaptors trimmed with cutadapt\nMapped to mm9 genome build with Bowtie, version 0.12.7 with options --time -k 100 --best --strata -v 2 -p 3, and filtered to a mismatch rate of 6%\nMapped reads were counted for each exon using bedtools multicov and merged into raw gene counts with bedtoools groupBy\nDESeq2 was used to normalize read counts. Genes were filtered to have a minimum of 10 reads per million in at least one sample, and those counts were used to test for differential expression\nGenome_build: mm9\nSupplementary_files_format_and_content: NLS_deseq2_all_alluniq_vs_mmu9htdp43nls.txt is the differential expression output of DESeq2. NLS_norm_counts_all.txt is the file of normalized read counts per gene as computed by DESeq2. The counts are in matrix format, one file for the whole experiment.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Sequenced reads were trimmed for adaptor sequence, and masked for low-complexity or low-quality sequence, then mapped to mm9 whole genome using STAR aligner with the default settings",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Reads counts for each gene were generated and were further used to compute the rpkm values",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Sequenced reads were trimmed for adaptor sequence, and masked for low-complexity or low-quality sequence, then mapped to mm9 whole genome using STAR aligner with the default settings\nReads counts for each gene were generated and were further used to compute the rpkm values\nGenome_build: mm9\nSupplementary_files_format_and_content: tab-delimited text files include RPKM values for each Sample ...",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

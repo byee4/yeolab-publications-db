@@ -1,0 +1,16 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "For quantification of alternative RNA splicing, fastq files are adapter-trimmed by cutadapt 3.4 and aligned to GRCh38 by STAR 2.7 .6 and analyzed using rMATS (v4.1.1) (Shen et al., 2014) using the GENCODE (v35) GTF annotation for GRCh38 and the following parameters: -t paired --libType fr-unstranded \u00e2\u0080\u0093readLength 150 --novelSS",
+      "tool_name": "STAR",
+      "tool_version": "2.7",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "For quantification of alternative RNA splicing, fastq files are adapter-trimmed by cutadapt 3.4 and aligned to GRCh38 by STAR 2.7 .6 and analyzed using rMATS (v4.1.1) (Shen et al., 2014) using the GENCODE (v35) GTF annotation for GRCh38 and the following parameters: -t paired --libType fr-unstranded \u00e2\u0080\u0093readLength 150 --novelSS\nSupplementary files format and content: hg38\nSupplementary files format and content: tsv file represents rMATs output files . For column definitions, see https://github.com/Xinglab/rmats-turbo\nSupplementary files format and content: file naming is SAMPLE1_SAMPLE2_EVENTTYPE.MATS.JC.txt",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

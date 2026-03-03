@@ -1,0 +1,61 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Read processing was performed as described (Islam et al., Nat Methods.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "2014 Feb;11(2):163-6), except that we removed any RNA molecule (i.e.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Unique Molecular Identifier) supported only by a single read (\"singleton molecules\").",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "This removed a large number of false positive molecules, artefacts that can arise by sequencing error, PCR-induced mutations or translocations and cross-contamination.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "The first 6 bases of each read represent the random Unique Molecular Identifier used for molecule counting.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "After follows three or more Gs, stemming from the template switching at the mRNA 5' end during first strand cDNA sythesis.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Read processing was performed as described (Islam et al., Nat Methods. 2014 Feb;11(2):163-6), except that we removed any RNA molecule (i.e. Unique Molecular Identifier) supported only by a single read (\"singleton molecules\"). This removed a large number of false positive molecules, artefacts that can arise by sequencing error, PCR-induced mutations or translocations and cross-contamination.\nThe first 6 bases of each read represent the random Unique Molecular Identifier used for molecule counting. After follows three or more Gs, stemming from the template switching at the mRNA 5' end during first strand cDNA sythesis.\nGenome_build: UCSC mm10\nSupplementary_files_format_and_content: Tab-delimited file of mRNA molecule counts for each gene and cell. Cells with less than 1500 molecules have been removed from this file.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

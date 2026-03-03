@@ -1,0 +1,52 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "RNA-Seq Read Alignment: TopHat 2.0 with default options using UCSC known genes from hg19 or mm9 as reference transcriptome",
+      "tool_name": "TopHat",
+      "tool_version": "2.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "RNA-Seq Differential Expression: Cuffdiff 2.1 with default options using UCSC known genes from hg19 or mm9 as reference transcriptome",
+      "tool_name": "Cufflinks",
+      "tool_version": "2.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "ChIP-Seq Read Alignment: Bowtie 2.0 with default options using hg19 or mm9 as reference genome",
+      "tool_name": "Bowtie",
+      "tool_version": "2.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "ChIP-Seq general peak calling: Scripture using hg19 or mm9 as reference genome",
+      "tool_name": "ChIP-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "ChIP-Seq significant peak calling: Cuffdiff 2.0 using Scripture output as peak reference",
+      "tool_name": "Cufflinks",
+      "tool_version": "2.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "RNA-Seq Read Alignment: TopHat 2.0 with default options using UCSC known genes from hg19 or mm9 as reference transcriptome\nRNA-Seq Differential Expression: Cuffdiff 2.1 with default options using UCSC known genes from hg19 or mm9 as reference transcriptome\nChIP-Seq Read Alignment: Bowtie 2.0 with default options using hg19 or mm9 as reference genome\nChIP-Seq general peak calling: Scripture using hg19 or mm9 as reference genome\nChIP-Seq significant peak calling: Cuffdiff 2.0 using Scripture output as peak reference\nGenome_build: hg19 / mm9\nSupplementary_files_format_and_content: TXT files are expression matrices with FPKM values for each sample / BED files are p53 ChIP-Seq peak coordinates",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

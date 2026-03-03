@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Kallisto \u00e2\u0080\u0093 transcript quantification",
+      "tool_name": "kallisto",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Sleuth \u00e2\u0080\u0093 gene differential expression analysis/gene normalized abundance measurements",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Kallisto \u00e2\u0080\u0093 transcript quantification\nSleuth \u00e2\u0080\u0093 gene differential expression analysis/gene normalized abundance measurements\nGenome_build: hg38\nSupplementary_files_format_and_content: .xls, TPM values and sleuth output",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

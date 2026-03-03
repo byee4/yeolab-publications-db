@@ -1,0 +1,88 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Reads trimmed using default paramters of Trim Galore!",
+      "tool_name": "Trim Galore",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Version 0.4.3",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Trimmed reads aligned to human reference genome GRCh38, release 87 using bowtie2 (version 2.3.4)",
+      "tool_name": "Bowtie2",
+      "tool_version": "2.3.4",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Alignments filtered for reads with MAPQ score >= 11 using samtools (version 1.3.1)",
+      "tool_name": "samtools",
+      "tool_version": "1.3.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Duplicates removed using picard tools (version 2.9.0)",
+      "tool_name": "Picard",
+      "tool_version": "2.9.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Peaks called using MACS2 (version 2.1.1.20160309)",
+      "tool_name": "MACS2",
+      "tool_version": "2.1.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "Peaks filtered for known chromosomes only",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "common peaks shared between replicates determined by findOverlapsOfPeaks() from ChIPpeakAnno R package (version 3.14.2)",
+      "tool_name": "R",
+      "tool_version": "3.14.2",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "common peaks shared between treatments determined by findOverlapsOfPeaks() from ChIPpeakAnno R package (version 3.14.2)",
+      "tool_name": "R",
+      "tool_version": "3.14.2",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Reads trimmed using default paramters of Trim Galore! Version 0.4.3\nTrimmed reads aligned to human reference genome GRCh38, release 87 using bowtie2 (version 2.3.4)\nAlignments filtered for reads with MAPQ score >= 11 using samtools (version 1.3.1)\nDuplicates removed using picard tools (version 2.9.0)\nPeaks called using MACS2 (version 2.1.1.20160309)\nPeaks filtered for known chromosomes only\ncommon peaks shared between replicates determined by findOverlapsOfPeaks() from ChIPpeakAnno R package (version 3.14.2)\ncommon peaks shared between treatments determined by findOverlapsOfPeaks() from ChIPpeakAnno R package (version 3.14.2)\nGenome_build: GRCh38",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

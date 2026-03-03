@@ -1,0 +1,43 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "FASTQ files were first trimmed using Trim_galore (v0.6.4) to remove sequencing adapters and low quality (Q<15) reads.",
+      "tool_name": "Trim Galore",
+      "tool_version": "0.6.4",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Trimmed sequencing reads were aligned to the human Hg19 reference genome (GENCODE, GRCh37.p13) using STAR (v2.7.5).",
+      "tool_name": "STAR",
+      "tool_version": "2.7.5",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "SAM files were subsequently converted to BAM files, sorted, and indexed using samtools (v1.9).",
+      "tool_name": "samtools",
+      "tool_version": "1.9",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "BAM files were used to generate bigwig files using bamCoverage (part of the Deeptools package; v3.3.1).",
+      "tool_name": "deepTools",
+      "tool_version": "3.3.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "FASTQ files were first trimmed using Trim_galore (v0.6.4) to remove sequencing adapters and low quality (Q<15) reads.\nTrimmed sequencing reads were aligned to the human Hg19 reference genome (GENCODE, GRCh37.p13) using STAR (v2.7.5).\nSAM files were subsequently converted to BAM files, sorted, and indexed using samtools (v1.9).\nBAM files were used to generate bigwig files using bamCoverage (part of the Deeptools package; v3.3.1).\nGenome_build: HG19\nSupplementary_files_format_and_content: bigWig",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

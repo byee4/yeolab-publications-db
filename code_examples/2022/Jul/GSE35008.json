@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Data were normalized normalized with the Expression Console Software version 1.1 from Affymetrix using Robust Multi-array Average (RMA) algorithm.",
+      "tool_name": "Microarray",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "MEV software was used to select differentially expressed genes by applying the following criteria: (a) Absolute value of the group mean difference greater than 1.5, and (b) p value smaller than 0.05 (Welch's t test)",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Data were normalized normalized with the Expression Console Software  version 1.1 from Affymetrix using Robust Multi-array Average (RMA) algorithm. MEV software was used to select differentially expressed genes by applying the following criteria: (a) Absolute value of the group mean difference greater than 1.5, and (b) p value smaller than 0.05 (Welch's t test)",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

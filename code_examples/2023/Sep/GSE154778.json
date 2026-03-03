@@ -1,0 +1,16 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Cell Ranger",
+      "tool_name": "Cell Ranger",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Cell Ranger\nGenome_build: hg19\nSupplementary_files_format_and_content: csv format that contains the umi count for each gene in each barcodes (cells)",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

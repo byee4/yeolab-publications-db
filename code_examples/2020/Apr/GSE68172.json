@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "The data were analyzed with BRB ArrayTools using RMA.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Intensity values were log2 transformed",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "The data were analyzed with BRB ArrayTools using RMA. Intensity values were log2 transformed",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

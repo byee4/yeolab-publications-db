@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Sequence reads were aligned to GRCh37.67 transcriptome using bowtie 0.12.7.",
+      "tool_name": "Bowtie",
+      "tool_version": "0.12.7",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "TPM and readcount values were obtained using EMSAR v1.0",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Sequence reads were aligned to GRCh37.67 transcriptome using bowtie 0.12.7.\nTPM and readcount values were obtained using EMSAR v1.0\nGenome_build: GRCh37\nSupplementary_files_format_and_content: tab-delimited files that contains TPM and read count information.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

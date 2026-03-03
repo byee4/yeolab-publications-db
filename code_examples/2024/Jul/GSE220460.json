@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "The raw data was mapped using STAR.",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "We calculated the gene-level read counts and identified differentially expressed genes by in-house script.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "The raw data was mapped using STAR.\nWe calculated the gene-level read counts and identified differentially expressed genes by in-house script.\nAssembly: mm10",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

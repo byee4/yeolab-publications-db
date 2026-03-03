@@ -1,0 +1,16 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Analysis and normalization were performed using two methods: dChip 1.3 (Li and Wong, 2001) and Drop Method (Aimone and Gage, 2004) software packages.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Analysis and normalization were performed using two methods: dChip 1.3 (Li and Wong, 2001) and Drop Method (Aimone and Gage, 2004) software packages.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

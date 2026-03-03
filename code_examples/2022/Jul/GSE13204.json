@@ -1,0 +1,43 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Data pre-processing included a summarization and quantile normalization step to generate probe set level signal intensities for each microarray experiment and was performed as previously published by Liu WM et al.",
+      "tool_name": "Microarray",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "PQN and DQN: algorithms for expression microarrays.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "J.Theor.Biol.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "2006;243:273-278.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Data pre-processing included a summarization and quantile normalization step to generate probe set level signal intensities for each microarray experiment and was performed as previously published by Liu WM et al. PQN and DQN: algorithms for expression microarrays. J.Theor.Biol. 2006;243:273-278.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

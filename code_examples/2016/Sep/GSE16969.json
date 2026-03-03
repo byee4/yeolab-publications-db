@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "The data were analyzed with MicroArray Suite version 5.0 (MAS 5.0) using Affymetrix default analysis settings and Robust Multi-Array Average (RMA) analysis as normalization method.",
+      "tool_name": "Microarray",
+      "tool_version": "5.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "The trimmed mean target intensity of each array was set arbitrarily to 100.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "The data were analyzed with MicroArray Suite version 5.0 (MAS 5.0) using Affymetrix default analysis settings and Robust Multi-Array Average (RMA) analysis as normalization method. The trimmed mean target intensity of each array was set arbitrarily to 100.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

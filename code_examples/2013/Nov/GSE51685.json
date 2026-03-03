@@ -1,0 +1,61 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Illumina Casava1.8.2 software used for basecalling.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Adapters trimmed using Cutadapt v1.2.1.",
+      "tool_name": "cutadapt",
+      "tool_version": "1.2.1",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Command: cutadapt -O 5 -a GATCGGAAGAGCTCGTATGCCGTCTTCTGCTTG",
+      "tool_name": "cutadapt",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Trimmed reads mapped to mouse genome (mm9) using the GSNAP aligner (part of GMAP package, version 2012-07-20).",
+      "tool_name": "GSNAP",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Command: gsnap -Q -n 10 \u00c2 --quality-protocol=\"sanger\" -t 4 -N 1 -A sam -B 5 -s mm9 -d mm9",
+      "tool_name": "GSNAP",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Mapped reads assigned to coding regions of Ensembl mouse genes",
+      "tool_name": "Ensembl",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Illumina Casava1.8.2 software used for basecalling.\nAdapters trimmed using Cutadapt v1.2.1. Command: cutadapt -O 5 -a GATCGGAAGAGCTCGTATGCCGTCTTCTGCTTG\nTrimmed reads mapped to mouse genome (mm9) using the GSNAP aligner (part of GMAP package, version 2012-07-20). Command: gsnap -Q -n 10 \u00c2\u00a0--quality-protocol=\"sanger\" -t 4 -N 1 -A sam -B 5 -s mm9 -d mm9\nMapped reads assigned to coding regions of Ensembl mouse genes\nSupplementary_files_format_and_content: tab-delimited text file containing RPKM values for each gene",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

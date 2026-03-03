@@ -1,0 +1,52 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "For transcript assembly, TopHat2 was used with default parameters to align all sequenced reads to the human genome (hg19).",
+      "tool_name": "TopHat",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Using the GENCODE v16 annotation, all sequeced transcripts overlapping annotated transcripts were removed.",
+      "tool_name": "GENCODE",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "To estimate gene expression including both protein-coding genes and lincRNAs in human and macaque, a human-macaque consensus genome based on a pairwise whole-genome alignment of the human (hg19) and the rhesus macaque (rheMac3) genomes was constructed.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "Reads in both, human and macaque samples were mapped to the consensus genome using STAR with default parameters.",
+      "tool_name": "STAR",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Gene expression was quantified using RPKM = n*1000*100/L/N, where n is the number of reads aligned to exon regions, and L is the length of exons regions, N is the total number of reads in the sample.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "For transcript assembly, TopHat2 was used with default parameters to align all sequenced reads to the human genome (hg19).\nUsing the GENCODE v16 annotation, all sequeced transcripts overlapping annotated transcripts were removed.\nTo estimate gene expression including both protein-coding genes and lincRNAs in human and macaque, a human-macaque consensus genome based on a pairwise whole-genome alignment of the human (hg19) and the rhesus macaque (rheMac3) genomes was constructed.\nReads in both, human and macaque samples were mapped to the consensus genome using STAR with default parameters.\nGene expression was quantified using RPKM = n*1000*100/L/N, where n is the number of reads aligned to exon regions, and L is the length of exons regions, N is the total number of reads in the sample.\nGenome_build: GENCODE 16; hg19; GCA_000230795.1; consensus genome\nSupplementary_files_format_and_content: rpkm_human.tsv is a table showing gene expression (in RPKM) of each gene in each human PFC sample. rpkm_macaque.tsv is a similar table but showing information in macaque PFC samples.\nSupplementary_files_format_and_content: All the ENSG* IDs in the GENE_ID column are correspond to GENCODE v16 gene IDs (not transcript IDs). The \"CUFF.*\" IDs are novel lincRNAs we identified. Please see the file named \"novel_lincrna.gtf\", which involves the information of them.",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}

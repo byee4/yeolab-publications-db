@@ -1,0 +1,88 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "library strategy: CLIP-seq",
+      "tool_name": "CLIP-seq",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "novoindex",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "Remove 3\u00e2\u0080\u0099adapter using flexbar",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "collapse data and remove PCR duplicates using pyCRAC",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "align using novalign",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "Readcounter using pyCRAC",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "calculate FDR using Mock sample using pyCRAC",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 8,
+      "description": "intersect fdr with reads using bedtools intersect",
+      "tool_name": "bedtools",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 9,
+      "description": "Cluster reads using pyCRAC",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "library strategy: CLIP-seq\nnovoindex\nRemove 3\u00e2\u0080\u0099adapter using flexbar\ncollapse data and remove PCR duplicates using pyCRAC\nalign using novalign\nReadcounter using pyCRAC\ncalculate FDR using Mock sample using pyCRAC\nintersect fdr with reads using bedtools intersect\nCluster reads using pyCRAC\nGenome_build: hg38; Homo_sapiens-ensembl-release_83 genome annotation\nSupplementary_files_format_and_content: GTF representing clusters of hits",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}
