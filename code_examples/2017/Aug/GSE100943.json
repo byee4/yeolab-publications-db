@@ -5,7 +5,7 @@
       "description": "RNA-seq data was aligned to the human hg19 genome build using Olego alignes, and alternative splicing was estimated as described below.",
       "tool_name": "RNA-seq",
       "tool_version": "",
-      "code_example": "",
+      "code_example": "olego -h",
       "code_language": "bash",
       "github_url": ""
     },
@@ -14,7 +14,7 @@
       "description": "Quantas software as described in Charizanis et al, 2012, Neuron, was used to estimate alternative splicing.",
       "tool_name": "",
       "tool_version": "",
-      "code_example": "",
+      "code_example": "quantas -h",
       "code_language": "bash",
       "github_url": ""
     },
