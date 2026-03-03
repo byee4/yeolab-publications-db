@@ -5,7 +5,7 @@
       "description": "Read counts were quantified using kallisto.",
       "tool_name": "kallisto",
       "tool_version": "",
-      "code_example": "",
+      "code_example": "kallisto -h",
       "code_language": "bash",
       "github_url": ""
     },
