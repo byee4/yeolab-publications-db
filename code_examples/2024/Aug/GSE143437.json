@@ -1,70 +1,70 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Libraries were sequenced on Illumina NextSeq 500 using paired-end 26 + 8 + 58 (according to 10X Chromium Single Cell 3' protocol)",
-      "tool_name": "scRNA-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Sequences were aligned to mm10 using Cell Ranger v2 pipeline (10X Genomics)",
-      "tool_name": "Cell Ranger",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Gene expression data was processed with Seurat v2.3.4 (Satija lab) using R v3.6.2 (2019-12-12)",
-      "tool_name": "Seurat",
-      "tool_version": "2.3.4",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Initial data filtering (minimum cells to express an included gene = 3, minium genes to be expressed in an included cell = 200)",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Filtering by percent mitochondiral genes in included cells (maximum 0.2), number of UMIs in included cells (minimum 1000, maximum 60000), and number of mapped genes in included cells (maximum 8000)",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Log-normalization of expression data",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Cell annotations in metadata derived from unsupervised clustering in CCA space (CCA coefficients obtained by MultiCCA from Seurat (Satija Lab).",
-      "tool_name": "Seurat",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Libraries were sequenced on Illumina NextSeq 500 using paired-end 26 + 8 + 58 (according to 10X Chromium Single Cell 3' protocol)\nSequences were aligned to mm10 using Cell Ranger v2 pipeline (10X Genomics)\nGene expression data was processed with Seurat v2.3.4 (Satija lab) using R  v3.6.2 (2019-12-12)\nInitial data filtering (minimum cells to express an included gene = 3, minium genes to be expressed in an included cell = 200)\nFiltering by percent mitochondiral genes in included cells (maximum 0.2), number of UMIs in included cells (minimum 1000, maximum 60000), and number of mapped genes in included cells (maximum 8000)\nLog-normalization of expression data\nCell annotations in metadata derived from unsupervised clustering in CCA space (CCA coefficients obtained by MultiCCA from Seurat (Satija Lab).\nGenome_build: mm10\nSupplementary_files_format_and_content: .txt tabulated files of metadata information, normalized gene expression matrix, and raw gene expression matrix",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Libraries were sequenced on Illumina NextSeq 500 using paired-end 26 + 8 + 58 (according to 10X Chromium Single Cell 3' protocol)",
+            "tool_name": "scRNA-seq",
+            "tool_version": "7.0.0",
+            "code_example": "# Cell Ranger is typically downloaded as a tarball and extracted, then added to PATH.\n# For example:\n# wget https://cf.10xgenomics.com/releases/cell-ranger/cellranger-7.0.0.tar.gz\n# tar -xzf cellranger-7.0.0.tar.gz\n# export PATH=/path/to/cellranger-7.0.0:$PATH\n\n# Download 10x Genomics reference data (e.g., GRCh38 for human)\n# wget https://cf.10xgenomics.com/releases/cell-ranger/refdata-gex-GRCh38-2020-A.tar.gz\n# tar -xzf refdata-gex-GRCh38-2020-A.tar.gz\n\ncellranger count \\\n    --id=my_sample_id \\\n    --transcriptome=/path/to/refdata-gex-GRCh38-2020-A \\\n    --fastqs=/path/to/fastq_directory \\\n    --sample=my_sample_name \\\n    --chemistry=SC3Pv2",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Sequences were aligned to mm10 using Cell Ranger v2 pipeline (10X Genomics)",
+            "tool_name": "Cell Ranger",
+            "tool_version": "2",
+            "code_example": "# Cell Ranger is proprietary software from 10x Genomics.\n# Download the specific version (e.g., v2) from the 10x Genomics website after registration.\n# Note: Direct download links for very old versions like v2 might be difficult to find publicly.\n# The general installation involves downloading a tarball and adding the executable to your PATH.\n# Example download and setup (replace with actual version and path, e.g., cellranger-2.x.x.tar.gz):\n# wget https://cf.10xgenomics.com/releases/cell-ranger/cellranger-7.1.0.tar.gz # Example for a recent version\n# tar -xzf cellranger-7.1.0.tar.gz\n# export PATH=/path/to/cellranger-7.1.0:$PATH\n\n# Example command for Cell Ranger v2 'count' pipeline (for single-cell gene expression alignment and quantification).\n# This assumes you have a Cell Ranger-formatted reference transcriptome for mm10.\n# If not, you would first run 'cellranger mkref' or download a pre-built one from 10x Genomics.\n# For mm10, you would typically download a pre-built reference from 10x Genomics for the specific Cell Ranger version.\n\ncellranger count \\\n    --id=my_sample_output_v2 \\\n    --transcriptome=/path/to/cellranger_refdata/mm10/ \\\n    --fastqs=/path/to/your/fastq_directory/ \\\n    --sample=my_sample_name \\\n    --localcores=8 \\\n    --localmem=64",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "Gene expression data was processed with Seurat v2.3.4 (Satija lab) using R v3.6.2 (2019-12-12)",
+            "tool_name": "Seurat",
+            "tool_version": "2.3.4",
+            "code_example": "# Create a conda environment with R 3.6.2 and Seurat 2.3.4\n# conda create -n seurat_v2_3_4 r-base=3.6.2 -c conda-forge -y\n# conda activate seurat_v2_3_4\n# conda install -c bioconda r-seurat=2.3.4 -y\n\n# Example of an R script (e.g., 'run_seurat_analysis.R') that uses Seurat:\n# # R script content (save this to 'run_seurat_analysis.R'):\n# # library(Seurat)\n# # # Load data, create Seurat object, perform analysis\n# # # For example:\n# # # pbmc.data <- Read10X(data.dir = \"path/to/filtered_gene_bc_matrices/hg19/\")\n# # # pbmc <- CreateSeuratObject(counts = pbmc.data)\n# # # pbmc <- NormalizeData(pbmc)\n# # # ... further Seurat analysis ...\n\n# To execute an R script containing Seurat commands:\nRscript run_seurat_analysis.R",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "Initial data filtering (minimum cells to express an included gene = 3, minium genes to be expressed in an included cell = 200)",
+            "tool_name": "Scanpy",
+            "tool_version": "1.9.3",
+            "code_example": "#!/bin/bash\n\n# This script performs initial data filtering using Scanpy.\n# It filters genes based on a minimum number of expressing cells\n# and filters cells based on a minimum number of expressed genes.\n\n# Usage: ./filter_data.sh <input_h5ad_file> <output_h5ad_file>\n\n# Check if input and output files are provided\nif [ -z \"$1\" ] || [ -z \"$2\" ]; then\n    echo \"Error: Missing input or output file arguments.\"\n    echo \"Usage: $0 <input_h5ad_file> <output_h5ad_file>\"\n    exit 1\nfi\n\nINPUT_H5AD=\"$1\"\nOUTPUT_H5AD=\"$2\"\n\n# Comment out installation - use your preferred method (conda, pip, etc.)\n# conda install -c conda-forge scanpy\n# pip install scanpy\n\n# Run Scanpy filtering using a Python one-liner\n# This script loads an .h5ad file, applies filters, and saves the result.\npython -c \"\nimport scanpy as sc\nimport sys\n\ninput_file = sys.argv[1]\noutput_file = sys.argv[2]\n\nprint(f'Loading data from {input_file}...')\nadata = sc.read_h5ad(input_file)\nprint(f'Initial data shape: {adata.shape} (cells, genes)')\n\n# Filter genes: keep genes expressed in at least 3 cells\nmin_cells_for_gene = 3\nprint(f'Filtering genes: keeping genes expressed in at least {min_cells_for_gene} cells...')\nsc.pp.filter_genes(adata, min_cells=min_cells_for_gene)\nprint(f'Shape after gene filtering: {adata.shape}')\n\n# Filter cells: keep cells expressing at least 200 genes\nmin_genes_for_cell = 200\nprint(f'Filtering cells: keeping cells expressing at least {min_genes_for_cell} genes...')\nsc.pp.filter_cells(adata, min_genes=min_genes_for_cell)\nprint(f'Shape after cell filtering: {adata.shape}')\n\nprint(f'Saving filtered data to {output_file}...')\nadata.write(output_file)\nprint('Filtering complete.')\n\" \"$INPUT_H5AD\" \"$OUTPUT_H5AD\"\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/scverse/scanpy"
+        },
+        {
+            "step_order": 5,
+            "description": "Filtering by percent mitochondiral genes in included cells (maximum 0.2), number of UMIs in included cells (minimum 1000, maximum 60000), and number of mapped genes in included cells (maximum 8000)",
+            "tool_name": "Scanpy",
+            "tool_version": "Not specified",
+            "code_example": "# conda install -c conda-forge scanpy\npython -c \"\nimport scanpy as sc\nimport pandas as pd\n\n# Load the AnnData object. Replace 'input.h5ad' with your actual input file path.\n# This example assumes the AnnData object already has 'pct_counts_mt', 'n_counts', and 'n_genes' in its .obs dataframe.\n# If these metrics are not present, you would typically calculate them first using:\n# sc.pp.calculate_qc_metrics(adata, qc_vars=['mt'], percent_top=None, log1p=False, inplace=True)\n# where 'mt' is a boolean array indicating mitochondrial genes (e.g., adata.var_names.str.startswith('MT-')).\nadata = sc.read_h5ad('input.h5ad')\n\n# --- Filtering steps ---\n\n# Filter by percent mitochondrial genes: maximum 0.2\n# Assuming 'pct_counts_mt' is a percentage (0-100). Adjust '20' to '0.2' if it's a fraction (0-1).\nadata = adata[adata.obs['pct_counts_mt'] <= 20, :].copy()\n\n# Filter by number of UMIs (n_counts): minimum 1000, maximum 60000\nadata = adata[adata.obs['n_counts'] >= 1000, :].copy()\nadata = adata[adata.obs['n_counts'] <= 60000, :].copy()\n\n# Filter by number of mapped genes (n_genes): maximum 8000\nadata = adata[adata.obs['n_genes'] <= 8000, :].copy()\n\n# Save the filtered AnnData object. Replace 'output.h5ad' with your desired output file path.\nadata.write('output.h5ad')\n\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/scverse/scanpy"
+        },
+        {
+            "step_order": 6,
+            "description": "Log-normalization of expression data",
+            "tool_name": "DESeq2",
+            "tool_version": "1.40.2",
+            "code_example": "# Install DESeq2 via Bioconda (recommended for pipeline environments)\n# conda install -c bioconda bioconductor-deseq2=1.40.2\n\n# Alternatively, install via R/BiocManager (ensure R and BiocManager are installed)\n# R -e \"if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager')\"\n# R -e \"BiocManager::install('DESeq2', version = '3.17')\" # Bioconductor 3.17 corresponds to DESeq2 1.40.x\n\n# Create a temporary R script for log-normalization using rlog transformation\ncat << 'EOF' > normalize_deseq2.R\nlibrary(DESeq2)\n\n# --- Configuration ---\n# Input count matrix file (e.g., from featureCounts, HTSeq-count)\n# Expected format: CSV with gene IDs as the first column and sample names as headers.\n# Example: gene_id,sampleA,sampleB,sampleC\n#          gene1,100,150,200\n#          gene2,50,75,100\ninput_counts_file <- \"counts.csv\"\n\n# Input sample metadata file\n# Expected format: CSV with sample IDs as the first column and metadata columns as headers.\n# A 'condition' column is recommended but not strictly required for blind rlog transformation.\n# Example: sample,condition,batch\n#          sampleA,control,batch1\n#          sampleB,treated,batch1\ninput_coldata_file <- \"coldata.csv\"\n\n# Output log-normalized expression matrix file\noutput_normalized_file <- \"normalized_expression_rlog.csv\"\n\n# --- Script Logic ---\nmessage(paste(\"Loading count data from:\", input_counts_file))\n# Read count data, assuming gene IDs are in the first column and sample names are headers.\n# check.names = FALSE prevents R from modifying column names (e.g., replacing hyphens with dots).\ncount_data <- read.csv(input_counts_file, row.names = 1, check.names = FALSE)\ncount_data <- as.matrix(count_data)\n\nmessage(paste(\"Loading sample metadata from:\", input_coldata_file))\n# Read colData, assuming sample IDs are in the first column.\ncoldata <- read.csv(input_coldata_file, row.names = 1, check.names = FALSE)\n\n# Ensure sample names in count data columns match and are in the same order as colData rows.\nif (!all(colnames(count_data) %in% rownames(coldata))) {\n  stop(\"Error: Sample names in count data columns do not match sample names in colData rows.\")\n}\ncoldata <- coldata[colnames(count_data), , drop = FALSE]\n\n# Create DESeqDataSet object.\n# DESeq2 expects integer counts, so round if necessary (though typically counts are integers).\n# A design formula is required. For blind rlog transformation (for general normalization/visualization),\n# a simple design like ~1 or ~condition (if a condition column exists) is sufficient.\ndesign_formula <- ~ 1 # Default to a simple design for blind transformation\nif (\"condition\" %in% colnames(coldata)) {\n  message(\"Using 'condition' column from colData for DESeqDataSet design.\")\n  design_formula <- ~ condition\n  # Ensure 'condition' is a factor for DESeq2\n  coldata$condition <- factor(coldata$condition)\n} else {\n  message(\"No 'condition' column found in colData. Using a dummy design (~1) for blind transformation.\")\n}\n\ndds <- DESeqDataSetFromMatrix(countData = round(count_data), # DESeq2 expects integer counts\n                              colData = coldata,\n                              design = design_formula)\n\n# Filter out genes with zero counts across all samples to avoid issues with log transformation.\ndds <- dds[rowSums(counts(dds)) > 0, ]\n\nmessage(\"Performing rlog transformation (blind=TRUE for normalization for downstream analysis)...\")\n# The 'rlog' transformation stabilizes variance across the range of mean expression values.\n# 'blind=TRUE' is appropriate when the goal is general normalization for visualization or clustering,\n# not for differential expression where the design should be explicitly considered.\nrld <- rlog(dds, blind = TRUE)\n\n# Extract rlog transformed counts\nrlog_counts <- assay(rld)\n\nmessage(paste(\"Saving log-normalized expression data to:\", output_normalized_file))\nwrite.csv(rlog_counts, output_normalized_file)\n\nmessage(\"DESeq2 log-normalization complete.\")\nEOF\n\n# --- Example Input Files (for demonstration purposes) ---\n# In a real pipeline, these files would be generated by upstream steps.\necho \"gene_id,sampleA,sampleB,sampleC\" > counts.csv\necho \"gene1,100,150,200\" >> counts.csv\necho \"gene2,50,75,100\" >> counts.csv\necho \"gene3,10,15,20\" >> counts.csv\necho \"gene4,0,5,10\" >> counts.csv\n\necho \"sample,condition\" > coldata.csv\necho \"sampleA,control\" >> coldata.csv\necho \"sampleB,treated\" >> coldata.csv\necho \"sampleC,control\" >> coldata.csv\n\n# --- Run the R script ---\nRscript normalize_deseq2.R\n\n# --- Clean up (optional) ---\n# rm normalize_deseq2.R\n# rm counts.csv coldata.csv\n",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/s13059-014-0550-8"
+        },
+        {
+            "step_order": 7,
+            "description": "Cell annotations in metadata derived from unsupervised clustering in CCA space (CCA coefficients obtained by MultiCCA from Seurat (Satija Lab).",
+            "tool_name": "Seurat",
+            "tool_version": "v3",
+            "code_example": "#!/bin/bash\n\n# This script demonstrates a Seurat workflow for unsupervised clustering\n# in a CCA-derived space, as described. It uses the 'FindIntegrationAnchors'\n# function with 'reduction = \"cca\"' which is the modern Seurat (v3+) approach\n# for CCA-based integration across multiple datasets, conceptually aligning\n# with the 'MultiCCA' mentioned in the description.\n\n# --- Installation (commented out) ---\n# Uncomment the following lines to install Seurat and its dependencies if not already installed.\n# R -e \"install.packages('Seurat')\"\n# R -e \"install.packages('SeuratObject')\"\n# R -e \"install.packages('patchwork')\" # For plotting\n# R -e \"install.packages('ggplot2')\" # For plotting\n\n# --- Create an R script for Seurat operations ---\ncat << 'EOF' > run_seurat_cca_clustering.R\nlibrary(Seurat)\nlibrary(patchwork)\nlibrary(ggplot2)\n\n# --- 1. Load or create dummy Seurat objects ---\n# In a real scenario, you would load your single-cell RNA-seq data,\n# typically from 10x Genomics output, into multiple Seurat objects\n# (e.g., one object per sample/batch).\n# For this demonstration, we'll create two simple dummy Seurat objects.\n\n# Sample 1 data\nset.seed(123)\nn_cells_1 <- 1000\nn_genes <- 2000\ncounts_1 <- matrix(sample(0:5, n_genes * n_cells_1, replace = TRUE, prob = c(0.6, 0.2, 0.1, 0.05, 0.03, 0.02)),\n                   nrow = n_genes, ncol = n_cells_1,\n                   dimnames = list(paste0(\"gene\", 1:n_genes), paste0(\"cell1_\", 1:n_cells_1)))\nseurat_obj_1 <- CreateSeuratObject(counts = counts_1, project = \"sample1\")\nseurat_obj_1[[\"percent.mt\"]] <- PercentageFeatureSet(seurat_obj_1, pattern = \"^MT-\")\n\n# Sample 2 data\nset.seed(456)\nn_cells_2 <- 1200\ncounts_2 <- matrix(sample(0:5, n_genes * n_cells_2, replace = TRUE, prob = c(0.6, 0.2, 0.1, 0.05, 0.03, 0.02)),\n                   nrow = n_genes, ncol = n_cells_2,\n                   dimnames = list(paste0(\"gene\", 1:n_genes), paste0(\"cell2_\", 1:n_cells_2)))\nseurat_obj_2 <- CreateSeuratObject(counts = counts_2, project = \"sample2\")\nseurat_obj_2[[\"percent.mt\"]] <- PercentageFeatureSet(seurat_obj_2, pattern = \"^MT-\")\n\n# --- 2. Pre-process individual objects ---\n# Normalize and find highly variable features for each object.\nmessage(\"Normalizing and finding variable features for individual samples...\")\nseurat_obj_1 <- NormalizeData(seurat_obj_1) %>%\n                FindVariableFeatures(selection.method = \"vst\", nfeatures = 2000)\nseurat_obj_2 <- NormalizeData(seurat_obj_2) %>%\n                FindVariableFeatures(selection.method = \"vst\", nfeatures = 2000)\n\n# --- 3. Prepare for and perform integration using CCA principles ---\n# The description mentions \"MultiCCA\". In Seurat v3+, integration across\n# multiple datasets using CCA principles is primarily achieved via\n# `FindIntegrationAnchors` with `reduction = \"cca\"` followed by `IntegrateData`.\n# This generates a common, integrated CCA-derived space.\n\nseurat_list <- list(seurat_obj_1, seurat_obj_2)\n\n# Select features that are repeatedly variable across datasets for integration\nmessage(\"Selecting integration features...\")\nfeatures <- SelectIntegrationFeatures(object.list = seurat_list)\n\n# Find integration anchors using CCA.\n# This step computes CCA coefficients and identifies 'anchors' (cells in shared\n# biological states) in the CCA space. The 'reduction = \"cca\"' argument\n# explicitly uses Canonical Correlation Analysis for anchor finding.\nmessage(\"Finding integration anchors using CCA...\")\nintegration_anchors <- FindIntegrationAnchors(object.list = seurat_list,\n                                              anchor.features = features,\n                                              reduction = \"cca\")\n\n# Integrate the datasets based on the identified anchors.\n# This creates an 'integrated' assay where cells from different samples\n# are projected into a common, batch-corrected, CCA-derived space.\nmessage(\"Integrating data...\")\nseurat_integrated <- IntegrateData(anchorset = integration_anchors)\n\n# --- 4. Perform unsupervised clustering in the integrated CCA space ---\n# Set the default assay to 'integrated' for downstream analysis.\nDefaultAssay(seurat_integrated) <- \"integrated\"\n\n# Scale the integrated data.\nmessage(\"Scaling integrated data...\")\nseurat_integrated <- ScaleData(seurat_integrated, verbose = FALSE)\n\n# Perform PCA on the integrated data.\n# The dimensions here represent the principal components of the integrated\n# CCA space, which are then used for clustering.\nmessage(\"Running PCA on integrated data...\")\nseurat_integrated <- RunPCA(seurat_integrated, npcs = 30, verbose = FALSE)\n\n# Find neighbors and clusters based on the PCA dimensions from the integrated space.\nmessage(\"Finding neighbors and clusters...\")\nseurat_integrated <- FindNeighbors(seurat_integrated, dims = 1:30)\nseurat_integrated <- FindClusters(seurat_integrated, resolution = 0.5)\n\n# --- 5. Add cell annotations to metadata ---\n# The cluster IDs are automatically added to the metadata slot 'seurat_clusters'.\n# We can rename this column for clarity or use it directly.\nseurat_integrated$unsupervised_clusters_cca <- seurat_integrated$seurat_clusters\nmessage(\"Unsupervised cluster IDs added to metadata as 'unsupervised_clusters_cca'.\")\n\n# --- 6. Save results and visualize (optional) ---\nsaveRDS(seurat_integrated, file = \"seurat_integrated_cca_clustered.rds\")\nmessage(\"Seurat integrated object with CCA-derived clusters saved to seurat_integrated_cca_clustered.rds\")\n\n# Visualization (optional): Generate UMAP plots to visualize the clustering.\nmessage(\"Generating UMAP plots...\")\nseurat_integrated <- RunUMAP(seurat_integrated, dims = 1:30)\np1 <- DimPlot(seurat_integrated, reduction = \"umap\", group.by = \"orig.ident\", pt.size = 0.5) +\n      ggtitle(\"UMAP by Original Sample\")\np2 <- DimPlot(seurat_integrated, reduction = \"umap\", group.by = \"unsupervised_clusters_cca\", label = TRUE, pt.size = 0.5) +\n      ggtitle(\"UMAP by Unsupervised CCA Clusters\") + NoLegend()\n\n# Save plots\nggsave(\"umap_by_sample.png\", plot = p1, width = 8, height = 6)\nggsave(\"umap_by_clusters.png\", plot = p2, width = 8, height = 6)\nmessage(\"UMAP plots saved to umap_by_sample.png and umap_by_clusters.png\")\n\nmessage(\"Seurat integration and clustering workflow complete.\")\nEOF\n\n# --- Run the R script ---\nRscript run_seurat_cca_clustering.R\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/satijalab/seurat"
+        }
+    ],
+    "raw_text": "Libraries were sequenced on Illumina NextSeq 500 using paired-end 26 + 8 + 58 (according to 10X Chromium Single Cell 3' protocol)\nSequences were aligned to mm10 using Cell Ranger v2 pipeline (10X Genomics)\nGene expression data was processed with Seurat v2.3.4 (Satija lab) using R  v3.6.2 (2019-12-12)\nInitial data filtering (minimum cells to express an included gene = 3, minium genes to be expressed in an included cell = 200)\nFiltering by percent mitochondiral genes in included cells (maximum 0.2), number of UMIs in included cells (minimum 1000, maximum 60000), and number of mapped genes in included cells (maximum 8000)\nLog-normalization of expression data\nCell annotations in metadata derived from unsupervised clustering in CCA space (CCA coefficients obtained by MultiCCA from Seurat (Satija Lab).\nGenome_build: mm10\nSupplementary_files_format_and_content: .txt tabulated files of metadata information, normalized gene expression matrix, and raw gene expression matrix",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }
