@@ -1,29 +1,11 @@
 {
   "steps": [
     {
-      "step_order": 1,
-      "description": "Library strategy: eCLIP-seq",
-      "tool_name": "eCLIP",
-      "tool_version": "",
-      "code_example": "# Example installation (if needed, follow instructions in the GitHub repository)\n# git clone https://github.com/yeolab/eclip.git\n# cd eclip\n# conda env create -f environment.yml\n# conda activate eclip_env\n\n# Example execution of the eCLIP pipeline using the main script\n# Replace placeholders with actual file paths and desired output directory\n./run_eclip.sh \\\n    -f input_r1.fastq.gz \\\n    -g /path/to/genome.fa \\\n    -a /path/to/annotation.gtf \\\n    -o eclip_output_dir \\\n    -p 8 # Use 8 threads for processing",
-      "code_language": "bash",
-      "github_url": "https://github.com/yeolab/eclip/"
-    },
-    {
-      "step_order": 3,
-      "description": "Run to trim off both 5â and 3â adapters on both reads.",
-      "tool_name": "cutadapt (inferred by models/gemini-2.5-flash)",
-      "tool_version": "",
-      "code_example": "# Install cutadapt if not already installed\n# conda install -c bioconda cutadapt\n\n# Define adapter sequences (replace with actual sequences for your library prep)",
-      "code_language": "bash",
-      "github_url": "https://github.com/marcelm/cutadapt"
-    },
-    {
       "step_order": 4,
       "description": "Command: quality-cutoff 6 -m 18 -a NNNNNAGATCGGAAGAGCACACGTCTGAACTCCAGTCAC -g CTTCCGATCTACAAGTT -g CTTCCGATCTTGGTCCT -A AACTTGTAGATCGGA -A AGGACCAAGATCGGA -A ACTTGTAGATCGGAA -A GGACCAAGATCGGAA -A CTTGT AGATCGGAAG -A GACCAAGATCGGAAG -A TTGTAGATCGGAAGA -A ACCAAGATCGGAAGA -A TGTAGATCGGAAGAG -A CCAAGATCGGAAGAG -A GTAGATCGGAAGAGC -A CAAGATCGGAAGAGC -A TAGATCGGAAGAGCG -A AAGATCGGAAGAGCG -A AGATCGGAAGAGCGT -A GATCGGAAGAGCGTC -A ATCGGAAGAGCGTCG -A TCGGAAGAGCGTCGT -A CGGAAGAGCGTCGTG -A GGAAGAGCGTCGTGT -o /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.fastq.gz -p /full/path/to/files/file_R2.C01.fastq.gz.adapterTrim.fastq.gz /full/path/to/files/file_R1.C01.fastq.gz /full/path/to/files/file_R2.C01.fastq.gz > /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.metrics",
       "tool_name": "quality-cutoff (inferred by models/gemini-2.5-flash)",
       "tool_version": "",
-      "code_example": "cutadapt quality-cutoff 6 -m 18 -a NNNNNAGATCGGAAGAGCACACGTCTGAACTCCAGTCAC -g CTTCCGATCTACAAGTT -g CTTCCGATCTTGGTCCT -A AACTTGTAGATCGGA -A AGGACCAAGATCGGA -A ACTTGTAGATCGGAA -A GGACCAAGATCGGAA -A CTTGT AGATCGGAAG -A GACCAAGATCGGAAG -A TTGTAGATCGGAAGA -A ACCAAGATCGGAAGA -A TGTAGATCGGAAGAG -A CCAAGATCGGAAGAG -A GTAGATCGGAAGAGC -A CAAGATCGGAAGAGC -A TAGATCGGAAGAGCG -A AAGATCGGAAGAGCG -A AGATCGGAAGAGCGT -A GATCGGAAGAGCGTC -A ATCGGAAGAGCGTCG -A TCGGAAGAGCGTCGT -A CGGAAGAGCGTCGTG -A GGAAGAGCGTCGTGT -o /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.fastq.gz -p /full/path/to/files/file_R2.C01.fastq.gz.adapterTrim.fastq.gz /full/path/to/files/file_R1.C01.fastq.gz /full/path/to/files/file_R2.C01.fastq.gz > /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.metrics",
+      "code_example": "# Install cutadapt if not already installed\n# conda install -c bioconda cutadapt\n\n# Define adapter sequences (replace with actual sequences for your library prep)\ncutadapt quality-cutoff 6 -m 18 -a NNNNNAGATCGGAAGAGCACACGTCTGAACTCCAGTCAC -g CTTCCGATCTACAAGTT -g CTTCCGATCTTGGTCCT -A AACTTGTAGATCGGA -A AGGACCAAGATCGGA -A ACTTGTAGATCGGAA -A GGACCAAGATCGGAA -A CTTGT AGATCGGAAG -A GACCAAGATCGGAAG -A TTGTAGATCGGAAGA -A ACCAAGATCGGAAGA -A TGTAGATCGGAAGAG -A CCAAGATCGGAAGAG -A GTAGATCGGAAGAGC -A CAAGATCGGAAGAGC -A TAGATCGGAAGAGCG -A AAGATCGGAAGAGCG -A AGATCGGAAGAGCGT -A GATCGGAAGAGCGTC -A ATCGGAAGAGCGTCG -A TCGGAAGAGCGTCGT -A CGGAAGAGCGTCGTG -A GGAAGAGCGTCGTGT -o /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.fastq.gz -p /full/path/to/files/file_R2.C01.fastq.gz.adapterTrim.fastq.gz /full/path/to/files/file_R1.C01.fastq.gz /full/path/to/files/file_R2.C01.fastq.gz > /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.metrics",
       "code_language": "bash",
       "github_url": "https://github.com/marcelm/cutadapt"
     },
