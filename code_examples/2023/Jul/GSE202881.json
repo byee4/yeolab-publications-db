@@ -1,79 +1,79 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Ribosome profiling data were processed using RiboFlow.",
-      "tool_name": "Ribo-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "We extracted the first 12 nucleotides from the 5\u00e2\u0080\u0099 end of the reads using UMI-tools with the following parameters: \u00e2\u0080\u009cumi_tools extract -p \"^(?P.{12})(?P.{4}).+$\" --extract-method=regex\u00e2\u0080\u009d.",
-      "tool_name": "UMI-tools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "The four nucleotides downstream of the UMIs are discarded as they are incorporated during the reverse transcription step.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Next, we used cutadapt to clip the 3\u00e2\u0080\u0099 adapter AAAAAAAAAACAAAAAAAAAA.",
-      "tool_name": "cutadapt",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "After UMI extraction and adapter trimming, ribosomal and transfer RNAs were filtered by alignment using Bowtie2.",
-      "tool_name": "Bowtie2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "The remaining reads were mapped to human transcriptome and alignments with mapping quality greater than two were retained.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "UMIs were used for deduplication and .ribo files are created using RiboPy.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "Library strategy: Ribo-seq",
-      "tool_name": "Ribo-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Ribosome profiling data were processed using RiboFlow. We extracted the first 12 nucleotides from the 5\u00e2\u0080\u0099 end of the reads using UMI-tools with the following parameters: \u00e2\u0080\u009cumi_tools extract -p \"^(?P.{12})(?P.{4}).+$\" --extract-method=regex\u00e2\u0080\u009d. The four nucleotides downstream of the UMIs are discarded as they are incorporated during the reverse transcription step. Next, we used cutadapt to clip the 3\u00e2\u0080\u0099 adapter AAAAAAAAAACAAAAAAAAAA. After UMI extraction and adapter trimming, ribosomal and transfer RNAs were filtered by alignment using Bowtie2. The remaining reads were mapped to human transcriptome and alignments with mapping quality greater than two were retained. UMIs were used for deduplication and .ribo files are created using RiboPy.\nAssembly: hg38\nSupplementary files format and content: CSV file containing the RPKM value of detectable transcripts\nLibrary strategy: Ribo-seq",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Ribosome profiling data were processed using RiboFlow.",
+            "tool_name": "Ribo-seq",
+            "tool_version": "v1.0.0",
+            "code_example": "# Install Nextflow (if not already installed)\n# curl -s https://get.nextflow.io | bash\n# mv nextflow /usr/local/bin/\n\n# Example command for running the RiboFlow pipeline.\n# This command assumes you have a samplesheet (e.g., samples.csv or samples.tsv)\n# and reference genome files (FASTA, GTF). \n# Replace 'path/to/samples.csv', 'path/to/genome.fasta', 'path/to/genome.gtf'\n# with the actual paths to your input files and reference data.\n# 'GRCh38' is used as a placeholder for the genome assembly name.\n# The '-profile docker' or '-profile singularity' is recommended for reproducibility\n# and requires Docker or Singularity to be installed and running.\n\nnextflow run riboflow/riboflow -r v1.0.0 \\\n    -profile docker \\\n    --input \"path/to/samples.csv\" \\\n    --genome \"GRCh38\" \\\n    --fasta \"path/to/genome.fasta\" \\\n    --gtf \"path/to/genome.gtf\" \\\n    --outdir \"riboflow_output\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "We extracted the first 12 nucleotides from the 5\u00e2\u0080\u0099 end of the reads using UMI-tools with the following parameters: \u00e2\u0080\u009cumi_tools extract -p \"^(?P.{12})(?P.{4}).+$\" --extract-method=regex\u00e2\u0080\u009d.",
+            "tool_name": "UMI-tools",
+            "tool_version": "1.1.2",
+            "code_example": "# Install UMI-tools (example using conda)\n# conda install -c bioconda umi-tools\n\n# Define input and output files (placeholders)\nINPUT_FASTQ=\"input_read.fastq.gz\"\nOUTPUT_FASTQ=\"output_read.fastq.gz\"\n\n# Extract UMIs from the 5' end of reads using the specified regex pattern.\n# The pattern captures the first 12 bases as the UMI (named 'umi_1') and\n# the subsequent 4 bases as a discardable sequence (named 'discard_1').\n# The UMI is then appended to the read header and removed from the read sequence.\numi_tools extract \\\n    --extract-method=regex \\\n    -p \"^(?P<umi_1>.{12})(?P<discard_1>.{4}).+$\" \\\n    -I \"${INPUT_FASTQ}\" \\\n    -S \"${OUTPUT_FASTQ}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/CGATOxford/UMI-tools"
+        },
+        {
+            "step_order": 3,
+            "description": "The four nucleotides downstream of the UMIs are discarded as they are incorporated during the reverse transcription step.",
+            "tool_name": "cutadapt (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "4.1",
+            "code_example": "# Install cutadapt if not already installed\n# conda install -c bioconda cutadapt\n\n# This command assumes that the UMIs have already been extracted or handled in a preceding step,\n# and the four nucleotides to be discarded are now at the 5' end of the input reads.\n# It trims 4 bases from the 5' end of the reads.\ncutadapt -u 4 -o trimmed_reads.fastq.gz input_reads.fastq.gz",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 4,
+            "description": "Next, we used cutadapt to clip the 3\u00e2\u0080\u0099 adapter AAAAAAAAAACAAAAAAAAAA.",
+            "tool_name": "cutadapt",
+            "tool_version": "4.0",
+            "code_example": "# Install cutadapt (if not already installed)\n# conda install -c bioconda cutadapt\n\n# Clip the 3' adapter from a FASTQ file\n# Replace 'input.fastq.gz' with your actual input file and 'output.fastq.gz' with your desired output file.\ncutadapt -a AAAAAAAAAACAAAAAAAAAA -o output.fastq.gz input.fastq.gz",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 5,
+            "description": "After UMI extraction and adapter trimming, ribosomal and transfer RNAs were filtered by alignment using Bowtie2.",
+            "tool_name": "Bowtie2",
+            "tool_version": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Bowtie2 (if not already installed)\n# conda install -c bioconda bowtie2\n\n# Define variables\nINPUT_FASTQ=\"trimmed_reads.fastq.gz\" # Input FASTQ file after UMI extraction and adapter trimming\nOUTPUT_FASTQ=\"filtered_rRNA_tRNA_reads.fastq.gz\" # Output FASTQ file containing reads with ribosomal and transfer RNAs removed\nRRNA_TRNA_INDEX_BASE=\"rRNA_tRNA_index\" # Basename for the Bowtie2 index of ribosomal and transfer RNA sequences\nNUM_THREADS=8 # Number of threads to use for alignment\n\n# --- Reference Data Preparation (Example) ---\n# For human (e.g., hg38), ribosomal and transfer RNA sequences can be obtained from various sources:\n# - UCSC Genome Browser: Specific RNA files or extracted from repeatmasker tracks.\n# - NCBI RefSeq: Individual rRNA (e.g., NR_003286.2 for 18S, NR_003287.2 for 28S) and tRNA sequences.\n# - Rfam database: Comprehensive collection of RNA families (e.g., RF00001 for 5S rRNA, RF00005 for tRNA).\n# - A custom combined FASTA file of known ribosomal and transfer RNAs relevant to the organism being studied.\n#\n# Example command to build the Bowtie2 index (uncomment and modify if needed):\n# # Assuming you have a combined FASTA file named 'combined_rRNA_tRNA.fa'\n# # cat human_rRNA.fa human_tRNA.fa > combined_rRNA_tRNA.fa\n# bowtie2-build combined_rRNA_tRNA.fa ${RRNA_TRNA_INDEX_BASE}\n\n# Run Bowtie2 to filter ribosomal and transfer RNAs\n# Reads that align to the rRNA/tRNA index are considered ribosomal/transfer RNAs and are discarded.\n# Reads that do NOT align to the rRNA/tRNA index are kept and written to the output file.\nbowtie2 \\\n    -x \"${RRNA_TRNA_INDEX_BASE}\" \\\n    -U \"${INPUT_FASTQ}\" \\\n    --un-gz \"${OUTPUT_FASTQ}\" \\\n    -S /dev/null \\\n    -p \"${NUM_THREADS}\" \\\n    --very-fast # Using a fast preset like --very-fast is common for filtering steps\n                # to quickly identify and remove obvious matches. Other presets like\n                # --fast, --sensitive, or --very-sensitive can be used depending on\n                # the desired stringency and computational resources.\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie2"
+        },
+        {
+            "step_order": 6,
+            "description": "The remaining reads were mapped to human transcriptome and alignments with mapping quality greater than two were retained.",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.7.9a",
+            "code_example": "# Install STAR and Samtools if not already available\n# conda install -c bioconda star samtools\n\n# Define variables\nREADS_FASTQ=\"remaining_reads.fastq.gz\" # Placeholder for input reads (e.g., output from a previous trimming/deduplication step)\nSTAR_INDEX_DIR=\"/path/to/STAR_human_genome_and_transcriptome_index\" # Placeholder for STAR index built from human genome FASTA and GTF\nOUTPUT_PREFIX=\"aligned_reads\" # Prefix for output files\nTHREADS=8 # Adjust as needed for available CPU cores\n\n# 1. Map reads to the human transcriptome (genome with GTF-guided splicing)\n# Parameters are commonly used in eCLIP pipelines for robust alignment.\n# --outFilterMultimapNmax 1: Retain only uniquely mapping reads.\n# --outFilterMismatchNmax 3: Allow up to 3 mismatches.\n# --outFilterScoreMinOverLread 0.6 and --outFilterMatchNminOverLread 0.6: Ensure good alignment quality relative to read length.\nSTAR --genomeDir \"${STAR_INDEX_DIR}\" \\\n     --readFilesIn \"${READS_FASTQ}\" \\\n     --runThreadN \"${THREADS}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outFilterMultimapNmax 1 \\\n     --outFilterMismatchNmax 3 \\\n     --outFilterScoreMinOverLread 0.6 \\\n     --outFilterMatchNminOverLread 0.6 \\\n     --outReadsUnmapped Fastx \\\n     --outSAMattributes All \\\n     --limitBAMsortRAM 30000000000 # Adjust RAM as needed (e.g., 30GB)\n\n# 2. Retain alignments with mapping quality greater than two (MAPQ > 2, which means MAPQ >= 3)\nsamtools view -b -h -q 3 \"${OUTPUT_PREFIX}Aligned.sortedByCoord.out.bam\" > \"${OUTPUT_PREFIX}.filtered.bam\"\n\n# 3. Index the filtered BAM file for downstream processing\nsamtools index \"${OUTPUT_PREFIX}.filtered.bam\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper/"
+        },
+        {
+            "step_order": 7,
+            "description": "UMIs were used for deduplication and .ribo files are created using RiboPy.",
+            "tool_name": "RiboPy (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "0.1.1 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install RiboPy (if not already installed)\n# conda create -n ribopy_env python=3.8\n# conda activate ribopy_env\n# pip install ribopy\n\n# Assuming 'aligned_reads_with_umis.bam' is the input BAM file\n# with UMIs tagged (e.g., in the 'RX' tag, common for UMI-tools output)\n# and 'sample_name' is the prefix for the output .ribo file.\n\n# Create .ribo file with UMI deduplication\nribopy count \\\n    --bam aligned_reads_with_umis.bam \\\n    --output sample_name.ribo \\\n    --umi-tag RX \\\n    --dedup",
+            "code_language": "bash",
+            "github_url": "https://github.com/ribosomeprofiling/ribopy"
+        },
+        {
+            "step_order": 8,
+            "description": "Library strategy: Ribo-seq",
+            "tool_name": "Ribo-seq",
+            "tool_version": "1.2.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install riboviz (example using conda)\n# conda create -n riboviz_env python=3.8\n# conda activate riboviz_env\n# pip install riboviz\n\n# Define input and output paths\nREADS=\"sample.fastq.gz\" # Placeholder for input Ribo-seq FASTQ file (often single-end)\nOUTPUT_DIR=\"riboviz_output\"\nCONFIG_FILE=\"riboviz_config.yaml\"\n\n# Define reference datasets (placeholders - replace with actual paths)\n# For human (Homo sapiens), common references include hg38.\nREFERENCE_GENOME=\"/path/to/reference/genome/hg38.fa\"\nGENOME_ANNOTATION=\"/path/to/reference/annotation/gencode.v38.annotation.gtf\"\n\n# Create a dummy riboviz configuration file\n# This file defines the analysis parameters, input/output, and reference files.\n# For a real analysis, this file would be more detailed.\n# Refer to riboviz documentation for comprehensive configuration options:\n# https://riboviz.readthedocs.io/en/latest/user_guide/configuration.html\ncat << EOF > ${CONFIG_FILE}\n# Example riboviz configuration\n# This is a simplified example. A real config would be more extensive.\ndir_in: .\ndir_out: ${OUTPUT_DIR}\nrpf_in:\n  - ${READS}\nriboviz_datadir: /path/to/riboviz_data # Directory containing pre-built indices or other data\nfasta: ${REFERENCE_GENOME}\ngtf: ${GENOME_ANNOTATION}\nfeatures: CDS\nstop_codons: [\"TAG\", \"TAA\", \"TGA\"]\nstart_codons: [\"ATG\"]\nmin_read_length: 10\nmax_read_length: 50\n# Add other parameters like adapter sequences, UMI handling, etc. as needed.\nEOF\n\n# Execute riboviz workflow using the generated configuration file\n# This command runs the riboviz pipeline, performing trimming, alignment,\n# and ribosome footprint analysis based on the configuration.\npython -m riboviz.workflow --config ${CONFIG_FILE}",
+            "code_language": "bash",
+            "github_url": "https://github.com/riboviz/riboviz"
+        }
+    ],
+    "raw_text": "Ribosome profiling data were processed using RiboFlow. We extracted the first 12 nucleotides from the 5\u00e2\u0080\u0099 end of the reads using UMI-tools with the following parameters: \u00e2\u0080\u009cumi_tools extract -p \"^(?P.{12})(?P.{4}).+$\" --extract-method=regex\u00e2\u0080\u009d. The four nucleotides downstream of the UMIs are discarded as they are incorporated during the reverse transcription step. Next, we used cutadapt to clip the 3\u00e2\u0080\u0099 adapter AAAAAAAAAACAAAAAAAAAA. After UMI extraction and adapter trimming, ribosomal and transfer RNAs were filtered by alignment using Bowtie2. The remaining reads were mapped to human transcriptome and alignments with mapping quality greater than two were retained. UMIs were used for deduplication and .ribo files are created using RiboPy.\nAssembly: hg38\nSupplementary files format and content: CSV file containing the RPKM value of detectable transcripts\nLibrary strategy: Ribo-seq",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

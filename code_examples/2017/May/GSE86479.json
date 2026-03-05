@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Reads were aligned to the mm9 by STAR with parameters: --outSAMstrandField intronMotif --outFilterMultimapNmax 1 --runThreadN 5.Only the reads aligned uniquely to one genomic location were retained for subsequent analysis.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "makeTagDirectory and makeUCSCfile in homer was used to generate bigWig file",
-      "tool_name": "HOMER",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Reads were aligned to the mm9 by STAR with parameters: --outSAMstrandField intronMotif --outFilterMultimapNmax 1 --runThreadN 5.Only the reads aligned uniquely to one genomic location were retained for subsequent analysis.\nmakeTagDirectory and makeUCSCfile in homer was used to generate bigWig file\nGenome_build: mm9\nSupplementary_files_format_and_content: bigWig file",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Reads were aligned to the mm9 by STAR with parameters: --outSAMstrandField intronMotif --outFilterMultimapNmax 1 --runThreadN 5.Only the reads aligned uniquely to one genomic location were retained for subsequent analysis.",
+            "tool_name": "STAR",
+            "tool_version": "2.5.x",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables for reference genome and annotation\nGENOME_DIR=\"star_mm9_index\"\nGENOME_FASTA=\"mm9.fa\"\nGTF_FILE=\"Mus_musculus.NCBIM37.67.gtf\" # Ensembl release 67 for mm9/NCBIM37\n\n# Download reference files (example using curl/wget)\n# mkdir -p ref_data\n# cd ref_data\n# curl -O http://hgdownload.soe.ucsc.edu/goldenPath/mm9/bigZips/mm9.fa.gz\n# gunzip mm9.fa.gz\n# curl -O ftp://ftp.ensembl.org/pub/release-67/gtf/mus_musculus/Mus_musculus.NCBIM37.67.gtf.gz\n# gunzip Mus_musculus.NCBIM37.67.gtf.gz\n# cd ..\n\n# Create STAR genome index (run once per genome)\n# mkdir -p \"${GENOME_DIR}\"\n# STAR --runMode genomeGenerate \\\n#      --genomeDir \"${GENOME_DIR}\" \\\n#      --genomeFastaFiles \"ref_data/${GENOME_FASTA}\" \\\n#      --sjdbGTFfile \"ref_data/${GTF_FILE}\" \\\n#      --sjdbOverhang 100 \\\n#      --runThreadN 5 # Use the same number of threads as alignment if possible\n\n# Define input and output files\nREAD1=\"sample_R1.fastq.gz\"\nREAD2=\"sample_R2.fastq.gz\" # Assuming paired-end reads\nOUTPUT_PREFIX=\"aligned_reads/\"\n\n# Create output directory\nmkdir -p \"${OUTPUT_PREFIX}\"\n\n# Align reads with STAR\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${READ1}\" \"${READ2}\" \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --runThreadN 5 \\\n     --outSAMstrandField intronMotif \\\n     --outFilterMultimapNmax 1 \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes NH HI AS NM MD \\\n     --outSAMmapqUnique 60 \\\n     --outFilterType BySJout \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.04 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --limitBAMsortRAM 30000000000 # Adjust based on available RAM (e.g., 30GB)",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "makeTagDirectory and makeUCSCfile in homer was used to generate bigWig file",
+            "tool_name": "HOMER",
+            "tool_version": "Inferred with models/gemini-2.5-flash",
+            "code_example": "# Install HOMER (if not already installed)\n# conda install -c bioconda homer\n\n# Define variables (replace with actual paths and names)\nINPUT_BAM=\"input_sample.bam\"\nTAG_DIRECTORY=\"sample_tag_directory\"\nOUTPUT_BIGWIG=\"sample_signal.bigWig\"\nGENOME_ASSEMBLY=\"hg38\" # Placeholder: Replace with your reference genome (e.g., mm10, hg38)\n\n# Step 1: Create a Tag Directory from BAM/SAM files\n# This command processes the alignment file(s) and creates a directory containing tag information.\n# -format bam: Specifies the input file format.\n# -genome: Specifies the reference genome assembly for proper normalization and coordinate handling.\n# -tbp 1: Treats each read as a single tag (useful for single-end reads or when fragment length is handled later).\n# -fragLength given: Tells HOMER to use the fragment length specified in the BAM file (if paired-end) or infer it.\nmakeTagDirectory ${TAG_DIRECTORY} ${INPUT_BAM} -format bam -genome ${GENOME_ASSEMBLY} -tbp 1 -fragLength given\n\n# Step 2: Generate a bigWig file from the Tag Directory\n# This command converts the tag directory into a bigWig file suitable for visualization in genome browsers.\n# -o: Specifies the output bigWig file name.\n# -bigWig: Ensures the output is in bigWig format.\n# -norm 1x: Normalizes the signal to 1x coverage (reads per million mapped reads), a common method for visualization.\n# -res 10: Sets the resolution of the bigWig file to 10 bp.\nmakeUCSCfile ${TAG_DIRECTORY} -o ${OUTPUT_BIGWIG} -bigWig -norm 1x -res 10",
+            "code_language": "bash",
+            "github_url": "http://homer.ucsd.edu/homer/index.html"
+        }
+    ],
+    "raw_text": "Reads were aligned to the mm9 by STAR with parameters: --outSAMstrandField intronMotif --outFilterMultimapNmax 1 --runThreadN 5.Only the reads aligned uniquely to one genomic location were retained for subsequent analysis.\nmakeTagDirectory and makeUCSCfile in homer was used to generate bigWig file\nGenome_build: mm9\nSupplementary_files_format_and_content: bigWig file",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

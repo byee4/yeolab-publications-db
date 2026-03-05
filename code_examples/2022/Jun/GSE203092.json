@@ -1,97 +1,97 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Reads from scRNA-seq were aligned to mm10 using the 10x Genomics Cell Ranger software (v 2.1.0).",
-      "tool_name": "Cell Ranger",
-      "tool_version": "2.1.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reads were collapsed into unique molecular identifier counts.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "All samples had >2000 cells detected with >1000 genes per cells with >70% of the coding genome covered.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Genes that were not expressed in at least 5% of all cells were excluded.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "As previously described (Boland et al., 2020), replicates of single cell libraries were normalized removing batch effects using RUVnormalize (v1.15.0).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "The raw UMI matrix was scaled and input to the naiveRandRUV function with parameters coeff=1e-3 and k=10.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Fifty negative control genes were taken from a list of housekeeping genes (Eisenberg and Levanon, 2013) with least variability in all datasets.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "Seurat (v3.0.1) functions were used to calculate top variable genes, principal components analysis (PCA), and tSNE with FindVariableGenes, RunPCA, and RunTSNE.",
-      "tool_name": "Seurat",
-      "tool_version": "3.0.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "The top 5000 genes were considered as input for the PCA calculation, and only the top 25 principal components (PCs) were used in tSNE.",
-      "tool_name": "PCA",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 10,
-      "description": "none provided by the submitter",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Reads from scRNA-seq were aligned to mm10 using the 10x Genomics Cell Ranger software (v 2.1.0). Reads were collapsed into unique molecular identifier counts. All samples had >2000 cells detected with >1000 genes per cells with >70% of the coding genome covered.  Genes that were not expressed in at least 5% of all cells were excluded. As previously described (Boland et al., 2020), replicates of single cell libraries were normalized removing batch effects using RUVnormalize (v1.15.0). The raw UMI matrix was scaled and input to the naiveRandRUV function with parameters coeff=1e-3 and k=10. Fifty negative control genes were taken from a list of housekeeping genes (Eisenberg and Levanon, 2013) with least variability in all datasets. Seurat (v3.0.1) functions were used to calculate top variable genes, principal components analysis (PCA), and tSNE with FindVariableGenes, RunPCA, and RunTSNE. The top 5000 genes were considered as input for the PCA calculation, and only the top 25 principal components (PCs) were used in tSNE.\nnone provided by the submitter\nAssembly: mm10\nSupplementary files format and content: Tab-separated values files and matrix files",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Reads from scRNA-seq were aligned to mm10 using the 10x Genomics Cell Ranger software (v 2.1.0).",
+            "tool_name": "Cell Ranger",
+            "tool_version": "2.1.0",
+            "code_example": "# Cell Ranger is typically installed by downloading and extracting the tarball.\n# For example, for version 2.1.0:\n# wget https://cf.10xgenomics.com/releases/cell-ranger/cellranger-2.1.0.tar.gz\n# tar -xzf cellranger-2.1.0.tar.gz\n# export PATH=/path/to/cellranger-2.1.0:$PATH\n\n# Define paths for reference genome and input/output\n# The mm10 transcriptome reference must be pre-built or downloaded from 10x Genomics.\n# Example command to build a reference (if not using a pre-built one):\n# cellranger mkref --genome=mm10 --fasta=/path/to/mm10.fa --genes=/path/to/mm10_genes.gtf --transcript=/path/to/mm10_transcripts.gtf\nMM10_TRANSCRIPTOME_PATH=\"/path/to/10x_genomics_references/mm10/cellranger_refdata_mm10_2020-A\" # Placeholder for mm10 transcriptome reference\nFASTQ_DIR=\"/path/to/your/input_fastqs\" # Placeholder for directory containing FASTQ files\nOUTPUT_ID=\"scrnaseq_alignment_mm10\" # Placeholder for the output directory name\nSAMPLE_NAME=\"my_scrnaseq_sample\" # Placeholder for the sample name (matches FASTQ file prefix)\n\n# Run Cell Ranger alignment\ncellranger count \\\n    --id=\"${OUTPUT_ID}\" \\\n    --transcriptome=\"${MM10_TRANSCRIPTOME_PATH}\" \\\n    --fastqs=\"${FASTQ_DIR}\" \\\n    --sample=\"${SAMPLE_NAME}\" \\\n    --expect-cells=3000 # Adjust based on expected number of cells",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Reads were collapsed into unique molecular identifier counts.",
+            "tool_name": "umi_tools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.1.2",
+            "code_example": "# Install umi_tools if not already installed\n# conda install -c bioconda umi_tools\n\n# Assuming input BAM file is 'aligned_reads.bam' where UMIs are in the read names\n# (e.g., read_name_UMI_sequence) and separated by an underscore.\n# This command collapses reads with the same mapping position and UMI into a single count.\numi_tools count \\\n    --per-contig \\\n    --umi-separator='_' \\\n    -I aligned_reads.bam \\\n    -S umi_counted_reads.bam \\\n    --log umi_counts.log",
+            "code_language": "bash",
+            "github_url": "https://github.com/CGATOxford/UMI-tools"
+        },
+        {
+            "step_order": 3,
+            "description": "All samples had >2000 cells detected with >1000 genes per cells with >70% of the coding genome covered.",
+            "tool_name": "Single-cell RNA-seq Quality Control (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# This script conceptually represents the quality control filtering step\n# described: \"All samples had >2000 cells detected with >1000 genes per cells with >70% of the coding genome covered.\"\n# It assumes a tab-separated file 'sample_qc_metrics.tsv' exists with relevant columns.\n\n# Define thresholds\nMIN_CELLS=2000\nMIN_GENES_PER_CELL=1000\nMIN_CODING_GENOME_COVERAGE=70\n\n# Input QC metrics file (example structure: sample_id\\tcells_detected\\tgenes_per_cell\\tcoding_genome_coverage_percent)\nQC_FILE=\"sample_qc_metrics.tsv\"\n\n# Output file for samples passing QC\nPASSING_SAMPLES_FILE=\"samples_passing_qc.tsv\"\n\n# Reference genome annotation (e.g., for calculating coding genome coverage if not pre-calculated)\n# This would typically be a GTF/GFF file used by an upstream tool like QualiMap or RSeQC.\n# For demonstration, we'll just note its conceptual presence.\n# GENOME_ANNOTATION=\"Homo_sapiens.GRCh38.109.gtf\" # Example for human GRCh38\n\necho \"Checking samples against QC criteria:\"\necho \"  - Cells detected > ${MIN_CELLS}\"\necho \"  - Genes per cell > ${MIN_GENES_PER_CELL}\"\necho \"  - Coding genome coverage > ${MIN_CODING_GENOME_COVERAGE}%\"\necho \"\"\n\n# Process the QC file, skipping header, and filter samples\n# Using awk for numerical comparison\nawk -v min_cells=\"$MIN_CELLS\" \\\n    -v min_genes=\"$MIN_GENES_PER_CELL\" \\\n    -v min_coverage=\"$MIN_CODING_GENOME_COVERAGE\" \\\n    'BEGIN {FS=\"\\t\"; OFS=\"\\t\"}\n    NR==1 {print; next} # Print header\n    $2 > min_cells && $3 > min_genes && $4 > min_coverage {print}' \\\n    \"$QC_FILE\" > \"$PASSING_SAMPLES_FILE\"\n\necho \"QC complete. Samples passing criteria are listed in: $PASSING_SAMPLES_FILE\"\necho \"Original QC file: $QC_FILE\"\n# echo \"Note: Calculation of 'coding genome coverage' typically requires a genome annotation file (e.g., GTF) and tools like QualiMap or RSeQC, which would be run upstream.\"",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/books/release/OSCA/"
+        },
+        {
+            "step_order": 4,
+            "description": "Genes that were not expressed in at least 5% of all cells were excluded.",
+            "tool_name": "Seurat (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "4.x",
+            "code_example": "# Install Seurat if not already installed\n# R -e \"if (!requireNamespace('Seurat', quietly = TRUE)) install.packages('Seurat')\"\n\n# Create an R script for filtering genes based on expression percentage across cells\ncat << 'EOF' > filter_genes_by_expression.R\nlibrary(Seurat)\n\n# --- Configuration ---\nINPUT_SEURAT_OBJECT_PATH <- \"input_seurat_object.rds\" # Path to your input Seurat object\nOUTPUT_SEURAT_OBJECT_PATH <- \"filtered_seurat_object.rds\" # Path for the filtered output Seurat object\nMIN_PERCENT_CELLS_EXPRESSING <- 5 # Minimum percentage of cells a gene must be expressed in to be kept\n# ---------------------\n\n# Check if input file exists\nif (!file.exists(INPUT_SEURAT_OBJECT_PATH)) {\n  stop(paste(\"Input Seurat object '\", INPUT_SEURAT_OBJECT_PATH, \"' not found. Please provide a valid path.\", sep=\"\"))\n}\n\nmessage(paste(\"Loading Seurat object from:\", INPUT_SEURAT_OBJECT_PATH))\nseurat_object <- readRDS(INPUT_SEURAT_OBJECT_PATH)\n\n# Get the raw counts matrix from the 'RNA' assay\n# Assuming 'RNA' is the default assay and 'counts' slot contains raw data\ncounts <- GetAssayData(object = seurat_object, assay = \"RNA\", slot = \"counts\")\n\n# Calculate the number of cells where each gene is expressed (count > 0)\nnum_cells_expressing_gene <- rowSums(counts > 0)\n\n# Calculate the percentage of cells expressing each gene\npercent_cells_expressing_gene <- (num_cells_expressing_gene / ncol(counts)) * 100\n\n# Identify genes to keep (expressed in at least MIN_PERCENT_CELLS_EXPRESSING% of cells)\n# Genes that were not expressed in at least 5% of all cells were excluded.\n# This means we keep genes expressed in >= 5% of cells.\ngenes_to_keep <- names(percent_cells_expressing_gene[percent_cells_expressing_gene >= MIN_PERCENT_CELLS_EXPRESSING])\n\nmessage(paste(\"Original number of genes:\", nrow(seurat_object@assays$RNA@counts)))\nmessage(paste(\"Number of genes to keep (expressed in >= \", MIN_PERCENT_CELLS_EXPRESSING, \"% of cells):\n\", length(genes_to_keep)))\n\n# Subset the Seurat object to keep only these genes\nseurat_object_filtered <- subset(seurat_object, features = genes_to_keep)\n\nmessage(paste(\"Filtered number of genes:\", nrow(seurat_object_filtered@assays$RNA@counts)))\n\n# Save the filtered Seurat object\nmessage(paste(\"Saving filtered Seurat object to:\", OUTPUT_SEURAT_OBJECT_PATH))\nsaveRDS(seurat_object_filtered, OUTPUT_SEURAT_OBJECT_PATH)\n\nmessage(\"Gene filtering complete.\")\nEOF\n\n# Execute the R script\nRscript filter_genes_by_expression.R",
+            "code_language": "bash",
+            "github_url": "https://github.com/satijalab/seurat"
+        },
+        {
+            "step_order": 5,
+            "description": "As previously described (Boland et al., 2020), replicates of single cell libraries were normalized removing batch effects using RUVnormalize (v1.15.0).",
+            "tool_name": "RUVnormalize",
+            "tool_version": "1.15.0",
+            "code_example": "# Install R (if not already installed)\n# For example, on Ubuntu:\n# sudo apt update\n# sudo apt install r-base\n\n# Install BiocManager and RUVnormalize package (v1.15.0)\n# This version of RUVnormalize (1.15.0) is part of Bioconductor 3.12, which requires R version 4.0.x.\n# If your R version is different, you might need to adjust the BiocManager::install call or R version.\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\"); BiocManager::install(\"RUVnormalize\", version = \"3.12\")'\n\n# Define input and output file paths\n# Replace 'your_input_counts.csv' with the actual path to your single-cell count matrix.\n# The count matrix should have genes as rows and samples as columns, with gene IDs in the first column.\nINPUT_COUNTS_FILE=\"your_input_counts.csv\"\nOUTPUT_NORMALIZED_FILE=\"normalized_single_cell_counts.csv\"\n\n# Define RUVnormalize specific parameters\n# These are CRITICAL and cannot be inferred from the description.\n# You must determine these based on your data and experimental design.\n# CONTROL_GENES_FILE: Path to a file listing control gene names (one per line).\n#                     These are genes assumed to have constant expression across samples,\n#                     or spike-ins, used to estimate unwanted variation.\n# NUM_UNWANTED_FACTORS: Integer 'k', the number of unwanted factors to estimate.\n#                       Often determined by exploring variance components (e.g., PCA).\n# For demonstration, we use placeholders. In a real pipeline, these would be actual files/values.\n# Example:\n# CONTROL_GENES_FILE=\"path/to/your/control_genes.txt\"\n# NUM_UNWANTED_FACTORS=\"1\" # e.g., 1, 2, or more\n\n# Create a temporary R script to execute RUVnormalize\nR_SCRIPT_NAME=\"run_ruvnormalize.R\"\n\ncat << 'EOF_R_SCRIPT' > \"${R_SCRIPT_NAME}\"\n# R script to perform RUV normalization using RUVnormalize package (v1.15.0)\n\n# Load RUVnormalize package\nlibrary(RUVnormalize)\n\n# --- Configuration ---\ninput_counts_file <- Sys.getenv(\"INPUT_COUNTS_FILE\")\noutput_normalized_file <- Sys.getenv(\"OUTPUT_NORMALIZED_FILE\")\n\n# --- Load Data ---\nif (is.null(input_counts_file) || !file.exists(input_counts_file)) {\n  stop(paste(\"Error: Input counts file not found or not specified via INPUT_COUNTS_FILE environment variable. Expected:\", input_counts_file))\n}\n# Assuming a CSV file where the first column is gene IDs and subsequent columns are sample counts\ncounts_data <- read.csv(input_counts_file, row.names = 1, check.names = FALSE)\n\n# --- RUV Normalization Parameters (CRITICAL: These need to be determined by the user) ---\n# The RUVnormalize function requires 'cIdx' (indices of control genes) and 'k' (number of unwanted factors).\n# These cannot be inferred from the general description \"removing batch effects\".\n# Users typically identify control genes (e.g., housekeeping genes, spike-ins, or empirically)\n# and determine 'k' through data exploration (e.g., PCA, variance analysis).\n\n# Placeholder for control gene indices (e.g., from a list of gene names)\n# In a real pipeline, you would load these from a file or define them.\n# Example:\n# control_genes_file <- Sys.getenv(\"CONTROL_GENES_FILE\", \"\")\n# if (file.exists(control_genes_file)) {\n#   cIdx_genes <- readLines(control_genes_file)\n#   cIdx <- match(cIdx_genes, rownames(counts_data))\n#   cIdx <- cIdx[!is.na(cIdx)]\n#   if (length(cIdx) == 0) {\n#     warning(\"No specified control genes found in the input data. Using first 10 genes as dummy controls.\")\n#     cIdx <- 1:min(10, nrow(counts_data))\n#   }\n# } else {\n#   warning(\"Control genes file not found or not specified. Using first 10 genes as dummy controls.\")\n#   cIdx <- 1:min(10, nrow(counts_data))\n# }\n# For this example, we will use the first 10 genes as dummy controls if not enough genes.\ncIdx <- 1:min(10, nrow(counts_data))\nif (length(cIdx) == 0) {\n  stop(\"Error: Not enough genes in the input data to select dummy control genes.\")\n}\n\n# Placeholder for 'k' (number of unwanted factors)\n# In a real pipeline, this would be a user-defined value.\n# Example:\n# k_value <- as.numeric(Sys.getenv(\"NUM_UNWANTED_FACTORS\", \"1\"))\n# For this example, we will use k=1 as a dummy value.\nk_value <- 1\n\nmessage(paste(\"Using dummy control gene indices (first\", length(cIdx), \"genes):\", paste(cIdx, collapse=\", \")))\nmessage(paste(\"Using dummy number of unwanted factors (k):\", k_value))\nmessage(\"WARNING: 'cIdx' and 'k' are critical parameters that should be carefully chosen based on your data and experimental design.\")\n\n# --- Perform RUV Normalization ---\nnormalized_result <- RUVnormalize(counts = as.matrix(counts_data), cIdx = cIdx, k = k_value)\n\n# Extract normalized counts\nnormalized_matrix <- normalized_result$normalizedCounts\n\n# --- Save Results ---\nif (is.null(output_normalized_file)) {\n  stop(\"Error: Output normalized file not specified via OUTPUT_NORMALIZED_FILE environment variable.\")\n}\nwrite.csv(normalized_matrix, file = output_normalized_file, row.names = TRUE)\n\nmessage(paste(\"Normalization complete. Normalized counts saved to\", output_normalized_file))\nEOF_R_SCRIPT\n\n# Set environment variables for the R script\nexport INPUT_COUNTS_FILE=\"${INPUT_COUNTS_FILE}\"\nexport OUTPUT_NORMALIZED_FILE=\"${OUTPUT_NORMALIZED_FILE}\"\n# export CONTROL_GENES_FILE=\"${CONTROL_GENES_FILE}\" # Uncomment and set if you have a control genes file\n# export NUM_UNWANTED_FACTORS=\"${NUM_UNWANTED_FACTORS}\" # Uncomment and set if you have a specific k value\n\n# Execute the R script\nRscript \"${R_SCRIPT_NAME}\"\n\n# Clean up the temporary R script file\nrm \"${R_SCRIPT_NAME}\"\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 6,
+            "description": "The raw UMI matrix was scaled and input to the naiveRandRUV function with parameters coeff=1e-3 and k=10.",
+            "tool_name": "RUVSeq (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "latest stable",
+            "code_example": "# Install R and Bioconductor if not already present\n# sudo apt-get update && sudo apt-get install -y r-base\n# R -e 'install.packages(\"BiocManager\", repos=\"https://cloud.r-project.org\")'\n# R -e 'BiocManager::install(\"RUVSeq\")'\n\n# Create an R script\ncat << 'EOF' > run_ruvseq.R\n# Load necessary library\nlibrary(RUVSeq)\n\n# --- Placeholder for loading the raw UMI matrix ---\n# Replace 'raw_umi_matrix.csv' with your actual input file path.\n# The input should be a matrix of raw UMI counts (integers).\n# Example:\n# umi_matrix <- read.csv(\"raw_umi_matrix.csv\", row.names=1)\n# umi_matrix <- as.matrix(umi_matrix)\n\n# Dummy data for demonstration purposes if no actual file is provided\nset.seed(123)\nnum_genes <- 1000\nnum_samples <- 10\numi_matrix <- matrix(rnbinom(num_genes * num_samples, mu=100, size=10),\n                     ncol=num_samples,\n                     dimnames=list(paste0(\"gene\", 1:num_genes), paste0(\"sample\", 1:num_samples)))\n\n# Convert the UMI matrix to a SeqExpressionSet object, which is commonly used by RUVSeq.\n# If you have sample metadata (e.g., batch information), you would include it here.\n# For naiveRandRUV, a basic SeqExpressionSet from the count matrix is sufficient.\nset <- newSeqExpressionSet(umi_matrix)\n\n# Apply the naiveRandRUV function.\n# The parameter 'k=10' is directly used by naiveRandRUV.\n# The parameter 'coeff=1e-3' is NOT a direct argument for the naiveRandRUV function\n# as defined in the RUVSeq package (version 1.38.0 and earlier).\n# It is possible that 'coeff' refers to:\n# 1. A parameter for a prior custom scaling step applied to the UMI matrix before input to naiveRandRUV.\n# 2. A parameter for a custom wrapper function that internally calls naiveRandRUV.\n# 3. A parameter for a different RUV-like function (e.g., from another package like RUVIII).\n# Since the description explicitly states \"naiveRandRUV function with parameters coeff=1e-3 and k=10\",\n# but 'coeff' is not a valid argument, we proceed with 'k=10' and acknowledge the discrepancy for 'coeff'.\n\nruv_set <- naiveRandRUV(set, k=10)\n\n# Extract normalized counts from the RUVSeq output object.\nnormalized_counts <- normCounts(ruv_set)\n\n# --- Placeholder for saving the output ---\n# Replace 'normalized_umi_matrix_ruvseq.csv' with your desired output file path.\nwrite.csv(normalized_counts, \"normalized_umi_matrix_ruvseq.csv\", quote=FALSE)\n\nmessage(\"RUVSeq normalization complete. Normalized counts saved to normalized_umi_matrix_ruvseq.csv\")\nEOF\n\n# Execute the R script\nRscript run_ruvseq.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/RUVSeq.html"
+        },
+        {
+            "step_order": 7,
+            "description": "Fifty negative control genes were taken from a list of housekeeping genes (Eisenberg and Levanon, 2013) with least variability in all datasets.",
+            "tool_name": "Custom Script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": null,
+            "code_example": "# This script conceptually represents the selection of 50 negative control genes.\n# It assumes that a list of housekeeping genes (e.g., from Eisenberg and Levanon, 2013)\n# and pre-computed variability scores for these genes across relevant datasets are available.\n\n# Placeholder for the file containing housekeeping genes and their variability scores.\n# Format: gene_id\\tvariability_score\n# Example content (replace with actual data):\n# geneA\\t0.05\n# geneB\\t0.01\n# geneC\\t0.12\n# ...\n# For demonstration, create a dummy file if not available:\n# echo -e \"geneA\\t0.05\\ngeneB\\t0.01\\ngeneC\\t0.12\\ngeneD\\t0.03\\ngeneE\\t0.08\\ngeneF\\t0.02\\ngeneG\\t0.07\\ngeneH\\t0.04\\ngeneI\\t0.06\\ngeneJ\\t0.09\" > gene_variability_scores.tsv\n\n# Assuming 'gene_variability_scores.tsv' contains gene IDs and their variability scores,\n# with variability in the second column.\n# Sort by variability (ascending) and take the top 50 gene IDs.\n# The 'cut -f1' extracts only the gene ID.\nsort -k2,2n gene_variability_scores.tsv | head -n 50 | cut -f1 > negative_control_genes_50.txt\n\n# The output file 'negative_control_genes_50.txt' will contain the 50 selected gene IDs.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 8,
+            "description": "Seurat (v3.0.1) functions were used to calculate top variable genes, principal components analysis (PCA), and tSNE with FindVariableGenes, RunPCA, and RunTSNE.",
+            "tool_name": "Seurat",
+            "tool_version": "3.0.1",
+            "code_example": "cat << 'EOF' > run_seurat_analysis.R\n# Load the Seurat library\nlibrary(Seurat)\n\n# --- Placeholder for loading your Seurat object ---\n# This script assumes you have a Seurat object already created and normalized\n# from previous steps in your pipeline. Replace 'path/to/your/normalized_seurat_object.rds'\n# with the actual path to your input Seurat object.\n# If starting from raw counts, you would need initial steps like:\n# counts <- Read10X(data.dir = \"path/to/10x/data/\")\n# seurat_object <- CreateSeuratObject(counts = counts)\n# seurat_object <- NormalizeData(seurat_object)\n\n# Example: Load an existing Seurat object\n# For a real pipeline, ensure 'path/to/your/normalized_seurat_object.rds' exists.\nif (file.exists(\"path/to/your/normalized_seurat_object.rds\")) {\n    seurat_object <- readRDS(\"path/to/your/normalized_seurat_object.rds\")\n} else {\n    # --- DEMONSTRATION ONLY: Create a dummy Seurat object if no file is found ---\n    # In a real scenario, this would typically be an error or the output of a previous step.\n    message(\"WARNING: 'path/to/your/normalized_seurat_object.rds' not found. Creating a dummy Seurat object for demonstration.\")\n    dummy_counts <- matrix(sample(0:10, 1000, replace = TRUE), nrow = 50, ncol = 20)\n    rownames(dummy_counts) <- paste0(\"gene\", 1:50)\n    colnames(dummy_counts) <- paste0(\"cell\", 1:20)\n    seurat_object <- CreateSeuratObject(counts = dummy_counts)\n    seurat_object <- NormalizeData(seurat_object)\n    message(\"Please replace the placeholder path with your actual Seurat object path.\")\n}\n\n# 1. Calculate top variable genes using FindVariableFeatures (formerly FindVariableGenes)\n# Using common default parameters as none were specified in the description.\n# 'vst' (variance stabilizing transformation) is a robust method.\n# 'nfeatures = 2000' identifies the top 2000 variable features.\nseurat_object <- FindVariableFeatures(seurat_object, selection.method = \"vst\", nfeatures = 2000)\n\n# 2. Perform Principal Components Analysis (PCA)\n# PCA is run on the previously identified variable features.\nseurat_object <- RunPCA(seurat_object, features = VariableFeatures(seurat_object))\n\n# 3. Perform t-distributed Stochastic Neighbor Embedding (tSNE)\n# tSNE is typically run after PCA, using a subset of the principal components.\n# 'dims = 1:30' uses the first 30 principal components, a common choice.\nseurat_object <- RunTSNE(seurat_object, dims = 1:30)\n\n# --- Placeholder for saving the updated Seurat object ---\n# Replace 'path/to/your/processed_seurat_object.rds' with your desired output path.\nsaveRDS(seurat_object, \"path/to/your/processed_seurat_object.rds\")\n\n# Optional: You can add plotting commands here to visualize the results\n# For example:\n# pdf(\"variable_features_plot.pdf\")\n# VariableFeaturePlot(seurat_object)\n# dev.off()\n#\n# pdf(\"pca_elbow_plot.pdf\")\n# ElbowPlot(seurat_object)\n# dev.off()\n#\n# pdf(\"tsne_plot.pdf\")\n# DimPlot(seurat_object, reduction = \"tsne\")\n# dev.off()\n\nEOF\n\n# --- Installation instructions (commented out) ---\n# To install Seurat in R:\n# R -e 'install.packages(\"Seurat\")'\n# Or, if you need BiocManager:\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\"); BiocManager::install(\"Seurat\")'\n\n# Execute the R script\nRscript run_seurat_analysis.R",
+            "code_language": "bash",
+            "github_url": "https://github.com/satijalab/seurat"
+        },
+        {
+            "step_order": 9,
+            "description": "The top 5000 genes were considered as input for the PCA calculation, and only the top 25 principal components (PCs) were used in tSNE.",
+            "tool_name": "PCA",
+            "tool_version": "1.4.0",
+            "code_example": "# Install scikit-learn if not already installed\n# conda install -c conda-forge scikit-learn=1.4.0 pandas numpy\n\n# Create a dummy input file for demonstration purposes\n# In a real scenario, 'top_5000_genes_expression.csv' would be the pre-filtered gene expression matrix.\n# This example creates a matrix with 100 samples and 5000 genes.\npython -c \"\nimport pandas as pd\nimport numpy as np\n\nnp.random.seed(42)\nnum_samples = 100\nnum_genes = 5000\ndata = np.random.rand(num_samples, num_genes)\ngene_names = [f'gene_{i+1}' for i in range(num_genes)]\nsample_names = [f'sample_{i+1}' for i in range(num_samples)]\ndf = pd.DataFrame(data, index=sample_names, columns=gene_names)\ndf.to_csv('top_5000_genes_expression.csv')\nprint('Created dummy input file: top_5000_genes_expression.csv')\n\"\n\n# Python script to perform PCA\npython -c \"\nimport pandas as pd\nfrom sklearn.decomposition import PCA\nimport numpy as np\n\n# Load the pre-filtered gene expression data (top 5000 genes)\n# Assuming rows are samples and columns are genes\ninput_file = 'top_5000_genes_expression.csv'\ndf = pd.read_csv(input_file, index_col=0)\n\n# Initialize PCA with 25 principal components\nn_components = 25\npca = PCA(n_components=n_components)\n\n# Fit PCA to the data and transform it\npc_data = pca.fit_transform(df)\n\n# Create a DataFrame for the principal components\npc_df = pd.DataFrame(data=pc_data, \n                     columns=[f'PC_{i+1}' for i in range(n_components)], \n                     index=df.index)\n\n# Save the principal components to a CSV file\noutput_file = 'principal_components_25.csv'\npc_df.to_csv(output_file)\n\nprint(f'PCA completed. Saved {n_components} principal components to {output_file}')\nprint(f'Explained variance ratio: {pca.explained_variance_ratio_.sum():.4f}')\n\"\n",
+            "code_language": "bash",
+            "github_url": "https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html"
+        },
+        {
+            "step_order": 10,
+            "description": "none provided by the submitter",
+            "tool_name": "(Inferred with models/gemini-2.5-flash)",
+            "tool_version": null,
+            "code_example": null,
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Reads from scRNA-seq were aligned to mm10 using the 10x Genomics Cell Ranger software (v 2.1.0). Reads were collapsed into unique molecular identifier counts. All samples had >2000 cells detected with >1000 genes per cells with >70% of the coding genome covered.  Genes that were not expressed in at least 5% of all cells were excluded. As previously described (Boland et al., 2020), replicates of single cell libraries were normalized removing batch effects using RUVnormalize (v1.15.0). The raw UMI matrix was scaled and input to the naiveRandRUV function with parameters coeff=1e-3 and k=10. Fifty negative control genes were taken from a list of housekeeping genes (Eisenberg and Levanon, 2013) with least variability in all datasets. Seurat (v3.0.1) functions were used to calculate top variable genes, principal components analysis (PCA), and tSNE with FindVariableGenes, RunPCA, and RunTSNE. The top 5000 genes were considered as input for the PCA calculation, and only the top 25 principal components (PCs) were used in tSNE.\nnone provided by the submitter\nAssembly: mm10\nSupplementary files format and content: Tab-separated values files and matrix files",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

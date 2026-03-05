@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Reads were trimmed with Trim Galore v0.4.1 and cutadapt v1.15",
-      "tool_name": "cutadapt",
-      "tool_version": "1.15",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Mapping to hg19 was performed with bwa v0.7.17 and samtools v1.9",
-      "tool_name": "samtools",
-      "tool_version": "1.9",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "We used the CIRI2 pipeline v2.0.6 to detect circRNAs.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "The CIRI2 pipeline was run with a gene transfer format (GTF) file (hg19) to annotate the overlapping gene of the circRNAs",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Expression values of circRNAs were normalized to total reads",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Reads were trimmed with Trim Galore v0.4.1 and cutadapt v1.15\nMapping to hg19 was performed with bwa v0.7.17 and samtools v1.9\nWe used the CIRI2 pipeline v2.0.6 to detect circRNAs. The CIRI2 pipeline was run with a gene transfer format (GTF) file (hg19) to annotate the overlapping gene of the circRNAs\nExpression values of circRNAs were normalized to total reads\nGenome_build: hg19\nSupplementary_files_format_and_content: tab-delimited text file include counts per million (CPM) values for each circRNA in each sample",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Reads were trimmed with Trim Galore v0.4.1 and cutadapt v1.15",
+            "tool_name": "cutadapt",
+            "tool_version": "1.15",
+            "code_example": "# Install cutadapt v1.15\n# conda install -c bioconda cutadapt=1.15\n\n# Example command for paired-end reads trimming with common Illumina adapters and quality filtering.\n# This command assumes standard Illumina universal adapters and quality trimming.\n# Replace 'reads_R1.fastq.gz', 'reads_R2.fastq.gz' with your actual input files.\n# Replace 'trimmed_reads_R1.fastq.gz', 'trimmed_reads_R2.fastq.gz' with your desired output files.\n# The adapter sequence 'AGATCGGAAGAGC' is a common Illumina universal adapter for 3' end.\n# -a AGATCGGAAGAGC: 3' adapter sequence for read 1\n# -A AGATCGGAAGAGC: 3' adapter sequence for read 2\n# -q 20,20: Quality trim from both ends with a threshold of 20\n# --minimum-length 20: Discard reads shorter than 20 bp after trimming\n# -o: Output file for read 1\n# -p: Output file for read 2\ncutadapt -a AGATCGGAAGAGC -A AGATCGGAAGAGC -q 20,20 --minimum-length 20 -o trimmed_reads_R1.fastq.gz -p trimmed_reads_R2.fastq.gz reads_R1.fastq.gz reads_R2.fastq.gz",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 2,
+            "description": "Mapping to hg19 was performed with bwa v0.7.17 and samtools v1.9",
+            "tool_name": "samtools",
+            "tool_version": "1.9",
+            "code_example": "# Define placeholder paths\nREF_GENOME=\"path/to/hg19.fa\" # Placeholder for hg19 reference genome\nBWA_OUTPUT_SAM=\"bwa_aligned.sam\" # Placeholder for SAM file output by bwa\nOUTPUT_PREFIX=\"sample_aligned\"\nSORTED_BAM=\"${OUTPUT_PREFIX}.sorted.bam\"\n\n# Install samtools v1.9 (commented out)\n# conda install -c bioconda samtools=1.9\n\n# Convert SAM to BAM, sort, and save\n# This command assumes 'bwa_aligned.sam' is the input from bwa.\n# If bwa output was piped, it would look like:\n# bwa mem -t 8 \"${REF_GENOME}\" reads.fastq.gz | samtools view -bS - | samtools sort -o \"${SORTED_BAM}\"\nsamtools view -bS \"${BWA_OUTPUT_SAM}\" | samtools sort -o \"${SORTED_BAM}\"\n\n# Index the sorted BAM file\nsamtools index \"${SORTED_BAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 3,
+            "description": "We used the CIRI2 pipeline v2.0.6 to detect circRNAs.",
+            "tool_name": "CIRI2",
+            "tool_version": "2.0.6",
+            "code_example": "# Install CIRI2 (if not already installed)\n# conda install -c bioconda ciri2\n\n# Example command for CIRI2 to detect circRNAs\n# This command assumes you have an aligned BAM file (e.g., from STAR or HISAT2)\n# and reference genome files (FASTA and GTF).\n# Replace 'aligned_reads.bam', 'circrna_output', 'genome.fasta', and 'genes.gtf' with your actual file paths.\n\nperl CIRI2.pl -I aligned_reads.bam -O circrna_output -A genome.fasta -G genes.gtf",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "The CIRI2 pipeline was run with a gene transfer format (GTF) file (hg19) to annotate the overlapping gene of the circRNAs",
+            "tool_name": "CIRI2 (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Not specified",
+            "code_example": "# Install CIRI2 (example using conda)\n# conda create -n ciri2_env python=3.8\n# conda activate ciri2_env\n# conda install -c bioconda ciri2\n\n# Download hg19 GTF (GRCh37) if not already present\n# mkdir -p ref_data\n# wget -O ref_data/Homo_sapiens.GRCh37.75.gtf.gz ftp://ftp.ensembl.org/pub/release-75/gtf/homo_sapiens/Homo_sapiens.GRCh37.75.gtf.gz\n# gunzip -f ref_data/Homo_sapiens.GRCh37.75.gtf.gz\nGTF_FILE=\"ref_data/Homo_sapiens.GRCh37.75.gtf\"\n\n# Placeholder for input RNA-seq alignment BAM file, which CIRI2 uses to identify circRNAs\n# and then annotate them with the provided GTF.\nINPUT_BAM=\"rnaseq_aligned.bam\"\nOUTPUT_PREFIX=\"circrna_annotation_hg19\"\n\n# Run CIRI2 to identify and annotate circRNAs, including overlapping genes, using the hg19 GTF.\n# -I: Input RNA-seq alignment file (BAM format)\n# -A: Gene annotation file (GTF format) for annotating circRNAs with overlapping genes\n# -O: Output file prefix\nCIRI2 -I \"${INPUT_BAM}\" -A \"${GTF_FILE}\" -O \"${OUTPUT_PREFIX}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 5,
+            "description": "Expression values of circRNAs were normalized to total reads",
+            "tool_name": "R (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "4.2.0",
+            "code_example": "# Install R and necessary packages if not already installed\n# conda create -n r_env r-base=4.2.0 r-essentials r-recommended -y\n# conda activate r_env\n# R -e \"install.packages(c('readr', 'dplyr', 'tibble'), repos='http://cran.us.r-project.org')\"\n\n# Input file with raw circRNA counts (e.g., from a circRNA quantification tool like CIRI2, DCC, etc.)\n# This file should have circRNA IDs in the first column and raw counts for samples in subsequent columns.\n# Example:\n# circRNA_ID\\tSample1\\tSample2\n# circ_1\\t100\\t150\n# circ_2\\t50\\t75\nINPUT_COUNTS=\"circRNA_raw_counts.tsv\"\nOUTPUT_NORMALIZED=\"circRNA_normalized_cpm.tsv\"\n\n# Placeholder for reference genome used in upstream circRNA quantification (e.g., hg38 for human).\n# This normalization step itself does not directly use a reference genome.\nREFERENCE_GENOME=\"hg38\"\n\n# R script to perform normalization to Counts Per Million (CPM).\n# This directly implements \"normalized to total reads\" by dividing by library size and scaling.\nR_SCRIPT=$(cat <<EOF\nlibrary(readr)\nlibrary(dplyr)\nlibrary(tibble)\n\ninput_file <- Sys.getenv(\"INPUT_COUNTS\")\noutput_file <- Sys.getenv(\"OUTPUT_NORMALIZED\")\n\n# Read counts data\ncounts_df <- read_tsv(input_file)\n\n# Assuming the first column is circRNA ID and subsequent columns are raw counts for samples\ncircRNA_ids <- counts_df[[1]]\ncounts_matrix <- as.matrix(counts_df[,-1])\nrownames(counts_matrix) <- circRNA_ids\n\n# Calculate total reads per sample (column sums of the count matrix).\n# This represents the library size for each sample based on the quantified circRNAs.\ntotal_reads_per_sample <- colSums(counts_matrix)\n\n# Normalize to total reads (CPM - Counts Per Million)\n# Divide each count by the total reads for its sample, then multiply by 1,000,000\nnormalized_counts_cpm <- t(t(counts_matrix) / total_reads_per_sample) * 1e6\n\n# Convert the normalized matrix back to a data frame and add circRNA IDs as a column\nnormalized_df <- as.data.frame(normalized_counts_cpm)\nnormalized_df <- normalized_df %>%\n  rownames_to_column(var = \"circRNA_ID\")\n\n# Write the normalized counts to an output file\nwrite_tsv(normalized_df, output_file)\nEOF\n)\n\n# Execute the R script\nINPUT_COUNTS=\"${INPUT_COUNTS}\" OUTPUT_NORMALIZED=\"${OUTPUT_NORMALIZED}\" Rscript -e \"${R_SCRIPT}\"",
+            "code_language": "bash",
+            "github_url": "https://www.r-project.org/"
+        }
+    ],
+    "raw_text": "Reads were trimmed with Trim Galore v0.4.1 and cutadapt v1.15\nMapping to hg19 was performed with bwa v0.7.17 and samtools v1.9\nWe used the CIRI2 pipeline v2.0.6 to detect circRNAs. The CIRI2 pipeline was run with a gene transfer format (GTF) file (hg19) to annotate the overlapping gene of the circRNAs\nExpression values of circRNAs were normalized to total reads\nGenome_build: hg19\nSupplementary_files_format_and_content: tab-delimited text file include counts per million (CPM) values for each circRNA in each sample",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

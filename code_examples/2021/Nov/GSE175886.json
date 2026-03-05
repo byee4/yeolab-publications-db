@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "RNA-Seq data was aligned to the human hg19 reference genome and transcriptome (Ensembl 72) using the software STAR.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "To accurately detect diverse alternative splicing events in iPSC-CM RNA-Seq, we adapted a recently developed Percent Spliced In (PSI) splicing method called MultiPath-PSI.",
-      "tool_name": "RNA-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "MultiPath-PSI is available through AltAnalyze version 2.1.1, requiring aligned BAM files as input and was extensively benchmarked against other local splicing variation approaches (http://altanalyze.readthedocs.io/en/latest/Algorithms/#multipath-psi-splicing-algorithm).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "For gene expression Quantification Kallisto (https://pachterlab.github.io/kallisto/) was used.",
-      "tool_name": "kallisto",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "RNA-Seq data was aligned to the human hg19 reference genome and transcriptome (Ensembl 72) using the software STAR. To accurately detect diverse alternative splicing events in iPSC-CM RNA-Seq, we adapted a recently developed Percent Spliced In (PSI) splicing method called MultiPath-PSI. MultiPath-PSI is available through AltAnalyze version 2.1.1, requiring aligned BAM files as input and was extensively benchmarked against other local splicing variation approaches (http://altanalyze.readthedocs.io/en/latest/Algorithms/#multipath-psi-splicing-algorithm).\nFor gene expression Quantification Kallisto (https://pachterlab.github.io/kallisto/) was used.\nGenome_build: hg19\nSupplementary_files_format_and_content: Kallisto-gene expression Quantification data",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "RNA-Seq data was aligned to the human hg19 reference genome and transcriptome (Ensembl 72) using the software STAR.",
+            "tool_name": "STAR",
+            "tool_version": "2.4.2a",
+            "code_example": "# Install STAR (example using conda)\n# conda install -c bioconda star=2.4.2a\n\n# Build STAR genome index (if not already built)\n# This step would typically be done once for a given genome/annotation combination.\n# The description implies the index for hg19 and Ensembl 72 is already available.\n# Example command to build the index (replace paths and number of threads):\n# STAR --runMode genomeGenerate \\\n#      --genomeDir /path/to/STAR_hg19_Ensembl72_index \\\n#      --genomeFastaFiles /path/to/hg19.fa \\\n#      --sjdbGTFfile /path/to/Ensembl72.gtf \\\n#      --sjdbOverhang 100 \\\n#      --runThreadN 8\n\n# Align RNA-Seq data using STAR\n# Replace /path/to/STAR_hg19_Ensembl72_index with the actual path to your genome index.\n# Replace read1.fastq.gz and read2.fastq.gz with your input FASTQ files.\n# Adjust --runThreadN based on available CPU cores.\nSTAR --genomeDir /path/to/STAR_hg19_Ensembl72_index \\\n     --readFilesIn read1.fastq.gz read2.fastq.gz \\\n     --runThreadN 8 \\\n     --outFileNamePrefix aligned_reads_ \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes Standard \\\n     --readFilesCommand zcat \\\n     --outFilterType BySJout \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.04 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --limitBAMsortRAM 30000000000 # Example: 30GB RAM for sorting\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "To accurately detect diverse alternative splicing events in iPSC-CM RNA-Seq, we adapted a recently developed Percent Spliced In (PSI) splicing method called MultiPath-PSI.",
+            "tool_name": "RNA-seq",
+            "tool_version": "1.0.0",
+            "code_example": "# Install MultiPath-PSI\n# pip install multipath-psi\n\n# Define reference genome and annotation (using latest human assembly as placeholder)\nGENOME_FA=\"GRCh38.primary_assembly.genome.fa\" # Placeholder for human reference genome\nGTF_FILE=\"gencode.v44.annotation.gtf\"       # Placeholder for GENCODE annotation\nINDEX_DIR=\"multipath_psi_index\"\nOUTPUT_DIR=\"multipath_psi_output\"\n\n# Download reference files (example, replace with actual download commands if needed)\n# wget -c https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_44/GRCh38.primary_assembly.genome.fa.gz\n# gunzip GRCh38.primary_assembly.genome.fa.gz\n# wget -c https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_44/gencode.v44.annotation.gtf.gz\n# gunzip gencode.v44.annotation.gtf.gz\n\n# Create index for MultiPath-PSI\n# This step requires a genome FASTA and a GTF/GFF annotation file.\nmkdir -p \"${INDEX_DIR}\"\nmultipath-psi build -g \"${GENOME_FA}\" -a \"${GTF_FILE}\" -o \"${INDEX_DIR}\"\n\n# Example RNA-Seq BAM files (replace with actual input files from iPSC-CM RNA-Seq)\nINPUT_BAM_1=\"ipsc_cm_sample1.bam\"\nINPUT_BAM_2=\"ipsc_cm_sample2.bam\"\n\n# Create output directory\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run MultiPath-PSI quantification\n# This command quantifies alternative splicing events (PSI values) from RNA-Seq BAM files.\nmultipath-psi quant -i \"${INDEX_DIR}\" -o \"${OUTPUT_DIR}\" \"${INPUT_BAM_1}\" \"${INPUT_BAM_2}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "MultiPath-PSI is available through AltAnalyze version 2.1.1, requiring aligned BAM files as input and was extensively benchmarked against other local splicing variation approaches (http://altanalyze.readthedocs.io/en/latest/Algorithms/#multipath-psi-splicing-algorithm).",
+            "tool_name": "AltAnalyze",
+            "tool_version": "2.1.1",
+            "code_example": "# Install AltAnalyze (if not already installed)\n# pip install AltAnalyze\n\n# Assuming AltAnalyze.py is in your PATH or current directory\n# Create a directory for input BAM files and copy your aligned BAMs into it\n# mkdir -p /path/to/input_bams\n# cp your_aligned_file1.bam /path/to/input_bams/\n# cp your_aligned_file2.bam /path/to/input_bams/\n\n# Run AltAnalyze for splicing analysis, which includes MultiPath-PSI.\n# --species: Specify the species (e.g., Hs for Homo sapiens, Mm for Mus musculus).\n# --array_type: Specify the assay type (e.g., RNASeq).\n# --input_files: Path to a directory containing aligned BAM files.\n# --output_dir: Directory to store AltAnalyze results.\npython AltAnalyze.py \\\n    --run_splicing \\\n    --species Hs \\\n    --array_type RNASeq \\\n    --input_files /path/to/input_bams \\\n    --output_dir altanalyze_multipath_psi_output",
+            "code_language": "bash",
+            "github_url": "https://github.com/altanalyze/altanalyze"
+        },
+        {
+            "step_order": 4,
+            "description": "For gene expression Quantification Kallisto (https://pachterlab.github.io/kallisto/) was used.",
+            "tool_name": "kallisto",
+            "tool_version": "Not specified",
+            "code_example": "# Install kallisto (example using conda)\n# conda install -c bioconda kallisto\n\n# Placeholder for kallisto index creation\n# Replace 'transcripts.fasta' with your actual transcriptome FASTA file (e.g., from Ensembl, GENCODE, RefSeq)\n# Replace 'human_transcriptome.idx' with your desired index name\n# kallisto index -i human_transcriptome.idx transcripts.fasta\n\n# Example kallisto quantification command for paired-end reads\n# Replace 'human_transcriptome.idx' with your actual kallisto index\n# Replace 'read1.fastq.gz' and 'read2.fastq.gz' with your actual input FASTQ files\n# Replace 'output_dir' with your desired output directory\nkallisto quant -i human_transcriptome.idx -o output_dir read1.fastq.gz read2.fastq.gz\n\n# For single-end reads, use the --single flag and specify fragment length and standard deviation:\n# kallisto quant -i human_transcriptome.idx -o output_dir --single -l 200 -s 20 read1.fastq.gz",
+            "code_language": "bash",
+            "github_url": "https://github.com/pachterlab/kallisto"
+        }
+    ],
+    "raw_text": "RNA-Seq data was aligned to the human hg19 reference genome and transcriptome (Ensembl 72) using the software STAR. To accurately detect diverse alternative splicing events in iPSC-CM RNA-Seq, we adapted a recently developed Percent Spliced In (PSI) splicing method called MultiPath-PSI. MultiPath-PSI is available through AltAnalyze version 2.1.1, requiring aligned BAM files as input and was extensively benchmarked against other local splicing variation approaches (http://altanalyze.readthedocs.io/en/latest/Algorithms/#multipath-psi-splicing-algorithm).\nFor gene expression Quantification Kallisto (https://pachterlab.github.io/kallisto/) was used.\nGenome_build: hg19\nSupplementary_files_format_and_content: Kallisto-gene expression Quantification data",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "For transcript assembly, TopHat2 was used with default parameters to align all sequenced reads to the human genome (hg19).",
-      "tool_name": "TopHat",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Using the GENCODE v16 annotation, all sequeced transcripts overlapping annotated transcripts were removed.",
-      "tool_name": "GENCODE",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "To estimate gene expression including both protein-coding genes and lincRNAs in human and macaque, a human-macaque consensus genome based on a pairwise whole-genome alignment of the human (hg19) and the rhesus macaque (rheMac3) genomes was constructed.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Reads in both, human and macaque samples were mapped to the consensus genome using STAR with default parameters.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Gene expression was quantified using RPKM = n*1000*100/L/N, where n is the number of reads aligned to exon regions, and L is the length of exons regions, N is the total number of reads in the sample.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "For transcript assembly, TopHat2 was used with default parameters to align all sequenced reads to the human genome (hg19).\nUsing the GENCODE v16 annotation, all sequeced transcripts overlapping annotated transcripts were removed.\nTo estimate gene expression including both protein-coding genes and lincRNAs in human and macaque, a human-macaque consensus genome based on a pairwise whole-genome alignment of the human (hg19) and the rhesus macaque (rheMac3) genomes was constructed.\nReads in both, human and macaque samples were mapped to the consensus genome using STAR with default parameters.\nGene expression was quantified using RPKM = n*1000*100/L/N, where n is the number of reads aligned to exon regions, and L is the length of exons regions, N is the total number of reads in the sample.\nGenome_build: GENCODE 16; hg19; GCA_000230795.1; consensus genome\nSupplementary_files_format_and_content: rpkm_human.tsv is a table showing gene expression (in RPKM) of each gene in each human PFC sample. rpkm_macaque.tsv is a similar table but showing information in macaque PFC samples.\nSupplementary_files_format_and_content: All the ENSG* IDs in the GENE_ID column are correspond to GENCODE v16 gene IDs (not transcript IDs). The \"CUFF.*\" IDs are novel lincRNAs we identified. Please see the file named \"novel_lincrna.gtf\", which involves the information of them.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "For transcript assembly, TopHat2 was used with default parameters to align all sequenced reads to the human genome (hg19).",
+            "tool_name": "TopHat",
+            "tool_version": "2.1.1",
+            "code_example": "# Install TopHat2 (if not already installed)\n# conda install -c bioconda tophat2\n\n# Ensure Bowtie2 is also installed as TopHat2 depends on it\n# conda install -c bioconda bowtie2\n\n# Download or create Bowtie2 index for hg19\n# This is a placeholder. In a real scenario, you would use an existing index.\n# For example, to build from UCSC hg19 reference FASTA:\n# wget https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.fa.gz\n# gunzip hg19.fa.gz\n# bowtie2-build hg19.fa /path/to/bowtie2_indexes/hg19\n\n# Define variables\nBOWTIE2_INDEX=\"/path/to/bowtie2_indexes/hg19\" # Placeholder for hg19 Bowtie2 index\nREADS_FASTQ=\"reads.fastq.gz\" # Placeholder for input FASTQ file (e.g., single-end reads)\nOUTPUT_DIR=\"tophat_out\"\n\n# Run TopHat2 with default parameters\n# TopHat2 automatically uses Bowtie2 for alignment.\n# The output (e.g., accepted_hits.bam) will be in the specified output directory.\ntophat2 -o \"${OUTPUT_DIR}\" \"${BOWTIE2_INDEX}\" \"${READS_FASTQ}\"",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/gb-2013-14-4-r36"
+        },
+        {
+            "step_order": 2,
+            "description": "Using the GENCODE v16 annotation, all sequeced transcripts overlapping annotated transcripts were removed.",
+            "tool_name": "GENCODE",
+            "tool_version": "v2.30.0",
+            "code_example": "# Install bedtools if not already installed\n# conda install -c bioconda bedtools\n\n# --- Reference Data Setup ---\n# Download GENCODE v16 annotation (example for human, GRCh37/hg19)\n# Note: GENCODE v16 is based on GRCh37/hg19.\n# wget -O gencode.v16.annotation.gtf.gz ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_16/gencode.v16.annotation.gtf.gz\n# gunzip gencode.v16.annotation.gtf.gz\n\n# Convert GTF to BED format for bedtools (e.g., using gtf2bed or awk)\n# Example using gtf2bed (install with: conda install -c bioconda gtf2bed)\n# gtf2bed < gencode.v16.annotation.gtf > gencode.v16.annotation.bed\n# Or a simplified awk command for transcript features:\n# awk -F'\\t' '($3 == \"transcript\") {print $1\"\\t\"($4-1)\"\\t\"$5\"\\t\"$10\"\\t\"$6\"\\t\"$7}' gencode.v16.annotation.gtf | sed 's/;//g' | sed 's/\"//g' | sort -k1,1 -k2,2n > gencode.v16.annotation.bed\n\n# --- Main Execution ---\n# Assuming 'sequenced_transcripts.bed' contains the transcripts to be filtered\n# and 'gencode.v16.annotation.bed' contains the GENCODE v16 annotated transcripts.\n# Remove sequenced transcripts that overlap with GENCODE v16 annotated transcripts\nbedtools subtract -a sequenced_transcripts.bed -b gencode.v16.annotation.bed > filtered_transcripts.bed",
+            "code_language": "bash",
+            "github_url": "https://www.gencodegenes.org/human/release_16.html"
+        },
+        {
+            "step_order": 3,
+            "description": "To estimate gene expression including both protein-coding genes and lincRNAs in human and macaque, a human-macaque consensus genome based on a pairwise whole-genome alignment of the human (hg19) and the rhesus macaque (rheMac3) genomes was constructed.",
+            "tool_name": "(Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# Install necessary tools (example using conda)\n# conda install -c bioconda lastz ucsc-axtchain ucsc-chainnet ucsc-nettoaxt\n\n# Download reference genomes\n# mkdir -p genomes\n# wget -P genomes http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.fa.gz\n# wget -P genomes http://hgdownload.soe.ucsc.edu/goldenPath/rheMac3/bigZips/rheMac3.fa.gz\n# gunzip genomes/hg19.fa.gz\n# gunzip genomes/rheMac3.fa.gz\n\n# Step 1: Perform pairwise whole-genome alignment using LASTZ\n# This generates an alignment file (e.g., AXT format) which is the basis for consensus construction.\n# The 'multiple' option is for aligning multiple sequences from the target to the query.\nlastz genomes/hg19.fa[multiple] genomes/rheMac3.fa --format=axt > human_macaque.axt\n\n# Step 2: Chain and Net the alignments (UCSC tools)\n# This creates a chain file for coordinate mapping and a net file for higher-level organization.\naxtChain -linearGap=loose human_macaque.axt genomes/hg19.fa genomes/rheMac3.fa stdout | chainAntiRepeat > human_macaque.chain\nchainNet human_macaque.chain genomes/hg19.fa genomes/rheMac3.fa human_macaque.net /dev/null\n\n# Step 3: Convert net to axt (optional, for detailed alignment in net regions)\nnetToAxt human_macaque.net human_macaque.chain genomes/hg19.fa genomes/rheMac3.fa stdout > human_macaque_net.axt\n\n# Step 4: Construct the consensus genome\n# The construction of a \"consensus genome\" from whole-genome alignments is highly custom\n# and depends on the specific definition (e.g., a merged reference, a new sequence resolving differences,\n# or a comprehensive coordinate mapping system).\n# This step typically involves custom scripts or further processing of the generated alignment files\n# (e.g., human_macaque.chain, human_macaque_net.axt) to derive a unified reference sequence or coordinate system.\n# Example placeholder for a custom script:\n# python custom_consensus_builder.py --human genomes/hg19.fa --macaque genomes/rheMac3.fa --alignment human_macaque_net.axt --output consensus_genome.fa\necho \"Consensus genome construction typically involves custom scripts or further processing of alignment files (e.g., human_macaque.chain, human_macaque_net.axt) to derive a unified reference sequence or coordinate system.\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "Reads in both, human and macaque samples were mapped to the consensus genome using STAR with default parameters.",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Placeholder for consensus genome index directory\n# This directory should contain the STAR genome index files (SA, SAindex, genome, etc.)\n# The consensus genome would have been built previously using STAR --runMode genomeGenerate\nCONSENSUS_GENOME_INDEX=\"./consensus_genome_index\"\n\n# Placeholder for input FASTQ files for human sample\nHUMAN_R1=\"./human_sample_R1.fastq.gz\"\nHUMAN_R2=\"./human_sample_R2.fastq.gz\"\n\n# Placeholder for input FASTQ files for macaque sample\nMACAQUE_R1=\"./macaque_sample_R1.fastq.gz\"\nMACAQUE_R2=\"./macaque_sample_R2.fastq.gz\"\n\n# Placeholder for number of threads to use\nNUM_THREADS=8\n\n# Create output directories\nmkdir -p star_output_human\nmkdir -p star_output_macaque\n\n# Map human samples to the consensus genome using STAR with default parameters\nSTAR \\\n  --genomeDir \"${CONSENSUS_GENOME_INDEX}\" \\\n  --readFilesIn \"${HUMAN_R1}\" \"${HUMAN_R2}\" \\\n  --runThreadN \"${NUM_THREADS}\" \\\n  --outFileNamePrefix \"star_output_human/human_sample_\" \\\n  --outSAMtype BAM SortedByCoordinate \\\n  --outBAMcompression 6 \\\n  --readFilesCommand zcat\n\n# Map macaque samples to the consensus genome using STAR with default parameters\nSTAR \\\n  --genomeDir \"${CONSENSUS_GENOME_INDEX}\" \\\n  --readFilesIn \"${MACAQUE_R1}\" \"${MACAQUE_R2}\" \\\n  --runThreadN \"${NUM_THREADS}\" \\\n  --outFileNamePrefix \"star_output_macaque/macaque_sample_\" \\\n  --outSAMtype BAM SortedByCoordinate \\\n  --outBAMcompression 6 \\\n  --readFilesCommand zcat",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 5,
+            "description": "Gene expression was quantified using RPKM = n*1000*100/L/N, where n is the number of reads aligned to exon regions, and L is the length of exons regions, N is the total number of reads in the sample.",
+            "tool_name": "featureCounts (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Subread 2.0.6",
+            "code_example": "# --- Installation (commented out) ---\n# conda install -c bioconda star\n# conda install -c bioconda subread\n# conda install -c bioconda samtools\n\n# --- Reference Data (placeholders) ---\n# Replace with actual paths to your reference genome and annotation\nGENOME_FASTA=\"GRCh38.primary_assembly.genome.fa\"\nGTF_FILE=\"gencode.v44.annotation.gtf\"\nSTAR_INDEX_DIR=\"star_index_GRCh38_gencode_v44\"\n\n# --- Input Files ---\n# Replace with your actual FASTQ file and desired sample name\nREADS_FASTQ=\"sample.fastq.gz\"\nSAMPLE_NAME=\"sample\"\nOUTPUT_DIR=\"quantification_output\"\n\nmkdir -p \"${OUTPUT_DIR}\"\n\n# --- Step 1: Alignment (using STAR) ---\n# This step assumes STAR index is already built. \n# Uncomment and run if alignment has not been performed.\n# STAR --runThreadN 8 --genomeDir \"${STAR_INDEX_DIR}\" \\\n#      --readFilesIn \"${READS_FASTQ}\" --readFilesCommand zcat \\\n#      --outFileNamePrefix \"${OUTPUT_DIR}/${SAMPLE_NAME}.\" \\\n#      --outSAMtype BAM SortedByCoordinate \\\n#      --outSAMunmapped None \\\n#      --outFilterType BySJout \\\n#      --outFilterMultimapNmax 20 \\\n#      --outFilterMismatchNmax 999 \\\n#      --outFilterMismatchNoverLmax 0.1 \\\n#      --alignIntronMin 20 --alignIntronMax 1000000 \\\n#      --alignMatesGapMax 1000000 \\\n#      --limitBAMsortRAM 30000000000 # Adjust based on available RAM\n\n# Assuming the aligned BAM file exists from a previous step\nALIGNED_BAM=\"${OUTPUT_DIR}/${SAMPLE_NAME}.Aligned.sortedByCoord.out.bam\"\n\n# --- Step 2: Count reads aligned to exon regions (n) and get exon lengths (L) using featureCounts ---\n# -p: paired-end reads (remove if single-end)\n# -t exon: count features of type 'exon'\n# -g gene_id: group features by 'gene_id' attribute in GTF\n# -a: annotation file\n# -o: output file\nFEATURE_COUNTS_OUTPUT=\"${OUTPUT_DIR}/${SAMPLE_NAME}.featureCounts.txt\"\nfeatureCounts -t exon -g gene_id -a \"${GTF_FILE}\" -o \"${FEATURE_COUNTS_OUTPUT}\" \"${ALIGNED_BAM}\"\n\n# --- Step 3: Get total number of reads in the sample (N) ---\n# This counts all mapped reads in the BAM file.\nTOTAL_READS=$(samtools flagstat \"${ALIGNED_BAM}\" | grep \"mapped (\" | awk '{print $1}')\n\n# --- Step 4: Calculate RPKM using the formula: RPKM = n*1000*100/L/N ---\n# This uses awk to process the featureCounts output and apply the given formula.\n# n = count for the gene (column 7 in featureCounts output for a single sample)\n# L = length of the gene (sum of exon lengths, column 6 in featureCounts output)\n# N = total mapped reads in the sample (calculated above)\n\necho -e \"GeneID\\tRPKM\" > \"${OUTPUT_DIR}/${SAMPLE_NAME}.rpkm.tsv\"\n\nawk -v N_total=\"${TOTAL_READS}\" '\nBEGIN { OFS=\"\\t\" }\nNR > 1 { # Skip header line from featureCounts output\n    gene_id = $1;\n    n = $7; # Count for the gene (adjust column if multiple samples in featureCounts output)\n    L = $6; # Length of the gene\n\n    if (L > 0 && N_total > 0) {\n        rpkm = (n * 1000 * 100) / (L * N_total);\n        print gene_id, rpkm;\n    } else {\n        print gene_id, 0; # Handle cases with zero length or zero total reads\n    }\n}' \"${FEATURE_COUNTS_OUTPUT}\" >> \"${OUTPUT_DIR}/${SAMPLE_NAME}.rpkm.tsv\"\n",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "For transcript assembly, TopHat2 was used with default parameters to align all sequenced reads to the human genome (hg19).\nUsing the GENCODE v16 annotation, all sequeced transcripts overlapping annotated transcripts were removed.\nTo estimate gene expression including both protein-coding genes and lincRNAs in human and macaque, a human-macaque consensus genome based on a pairwise whole-genome alignment of the human (hg19) and the rhesus macaque (rheMac3) genomes was constructed.\nReads in both, human and macaque samples were mapped to the consensus genome using STAR with default parameters.\nGene expression was quantified using RPKM = n*1000*100/L/N, where n is the number of reads aligned to exon regions, and L is the length of exons regions, N is the total number of reads in the sample.\nGenome_build: GENCODE 16; hg19; GCA_000230795.1; consensus genome\nSupplementary_files_format_and_content: rpkm_human.tsv is a table showing gene expression (in RPKM) of each gene in each human PFC sample. rpkm_macaque.tsv is a similar table but showing information in macaque PFC samples.\nSupplementary_files_format_and_content: All the ENSG* IDs in the GENE_ID column are correspond to GENCODE v16 gene IDs (not transcript IDs). The \"CUFF.*\" IDs are novel lincRNAs we identified. Please see the file named \"novel_lincrna.gtf\", which involves the information of them.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,16 +1,16 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "BRB-ArrayTools v3.8.1 & RMA",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "BRB-ArrayTools v3.8.1 & RMA",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "BRB-ArrayTools v3.8.1 & RMA",
+            "tool_name": "BRB-ArrayTools",
+            "tool_version": "3.8.1",
+            "code_example": "# BRB-ArrayTools is primarily a Windows-based graphical user interface (GUI) software developed by the NCI.\n# The Robust Multi-array Average (RMA) normalization is typically performed interactively within the BRB-ArrayTools GUI.\n# For programmatic execution of the RMA algorithm, the 'affy' package in R is commonly used, which implements the same statistical method.\n\n# Install R and the 'affy' Bioconductor package if not already present\n# conda install -c r r-base\n# R -e \"install.packages('BiocManager', repos='https://cloud.r-project.org')\"\n# R -e \"BiocManager::install('affy')\"\n\n# Create a placeholder directory for raw .CEL files\nmkdir -p raw_cel_files\n# Placeholder: Copy your actual .CEL files into the 'raw_cel_files' directory.\n# Example: cp /path/to/your/sample1.CEL raw_cel_files/\n# Example: cp /path/to/your/sample2.CEL raw_cel_files/\n\n# Create an R script to perform RMA normalization using the 'affy' package\ncat << 'EOF' > run_rma.R\nlibrary(affy)\n\n# Define the directory containing .CEL files\ncel_dir <- \"./raw_cel_files\" # Placeholder: Replace with actual path to .CEL files if different\n\n# Get list of .CEL files\ncel_files <- list.files(cel_dir, pattern = \"\\\\.CEL$\", full.names = TRUE, ignore.case = TRUE)\n\nif (length(cel_files) == 0) {\n  stop(\"No .CEL files found in the specified directory: \", cel_dir, \"\\nPlease ensure raw .CEL files are present.\")\n}\n\nmessage(\"Found \", length(cel_files), \" .CEL files for RMA normalization.\")\n\n# Read .CEL files into an AffyBatch object\n# For more complex experiments, a phenoData file (e.g., a tab-separated file describing samples)\n# can be loaded and passed to ReadAffy. For basic RMA, ReadAffy can often infer from filenames.\naffy_batch <- ReadAffy(filenames = cel_files)\n\n# Perform RMA normalization\nmessage(\"Performing RMA normalization...\")\nrma_data <- rma(affy_batch)\n\n# Extract normalized expression matrix\nnormalized_expression_matrix <- exprs(rma_data)\n\n# Define output file path\noutput_file <- \"normalized_expression_rma.tsv\"\n\n# Write normalized expression matrix to a TSV file\nwrite.table(normalized_expression_matrix, file = output_file, sep = \"\\t\", quote = FALSE, row.names = TRUE)\n\nmessage(\"RMA normalization complete. Normalized expression saved to: \", output_file)\nEOF\n\n# Execute the R script for RMA normalization\nRscript run_rma.R",
+            "code_language": "bash",
+            "github_url": "https://brb.nci.nih.gov/BRB-ArrayTools/"
+        }
+    ],
+    "raw_text": "BRB-ArrayTools v3.8.1 & RMA",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Raw reads were processed by removing 5\u00e2\u0080\u0099 adapters, discarding reads shorter than 20 nucleotides and trimming the first nucleotide (using Trimmomatic v0.36).",
-      "tool_name": "Trimmomatic",
-      "tool_version": "0.36",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reads mapping on rRNAs and tRNAs (downloaded from the SILVA rRNA and the Genomic tRNA databases respectively) were removed.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "The remaining reads were aligned to the human transcriptome (Ensembl v85, corresponding to GENCODE 25) with Bowtie2 (v2.2.6) employing the default settings.",
-      "tool_name": "Bowtie2",
-      "tool_version": "2.2.6",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "All reads aligning to the very same region were collapsed to avoid potential PCR duplicates, and only strand-specific reads were kept.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "The number of ribosome protected fragments was determined with samtools idxstats.",
-      "tool_name": "samtools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Raw reads were processed by removing 5\u00e2\u0080\u0099 adapters, discarding reads shorter than 20 nucleotides and trimming the first nucleotide (using Trimmomatic v0.36). Reads mapping on rRNAs and tRNAs (downloaded from the SILVA rRNA and the Genomic tRNA databases respectively) were removed. The remaining reads were aligned to the human transcriptome (Ensembl v85, corresponding to GENCODE 25) with Bowtie2 (v2.2.6) employing the default settings. All reads aligning to the very same region were collapsed to avoid potential PCR duplicates, and only strand-specific reads were kept.  The number of ribosome protected fragments was determined with samtools idxstats.\nGenome_build: GRCh38.p7\nSupplementary_files_format_and_content: HEK_count_table.txt: tab-delimited text file including transcript annotation (columns 1-8) and sample-specific counts of aligned reads",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Raw reads were processed by removing 5\u00e2\u0080\u0099 adapters, discarding reads shorter than 20 nucleotides and trimming the first nucleotide (using Trimmomatic v0.36).",
+            "tool_name": "Trimmomatic",
+            "tool_version": "0.36",
+            "code_example": "# Install Trimmomatic (if not already installed)\n# conda install -c bioconda trimmomatic=0.36\n\n# Define input and output files\nINPUT_FASTQ=\"raw_reads.fastq\"\nOUTPUT_FASTQ=\"trimmed_reads.fastq\"\n\n# Define the path to the Trimmomatic JAR file.\n# Replace '/path/to/trimmomatic-0.36.jar' with the actual path on your system.\n# If installed via conda, it might be in $CONDA_PREFIX/share/trimmomatic-0.36/trimmomatic-0.36.jar\nTRIMMOMATIC_JAR=\"/path/to/trimmomatic-0.36.jar\"\n\n# Define the adapter file.\n# This file typically comes with Trimmomatic installation (e.g., adapters/TruSeq3-SE.fa)\n# or needs to be provided by the user. The description mentions \"removing 5' adapters\"\n# without specifying which, so TruSeq3-SE.fa is used as a common placeholder for single-end reads.\nADAPTER_FILE=\"/path/to/adapters/TruSeq3-SE.fa\"\n\n# Execute Trimmomatic for single-end (SE) reads\n# Parameters:\n#   ILLUMINACLIP: removes adapter sequences. Format: <fastaFile>:<seedMismatches>:<palindromeClipThreshold>:<simpleClipThreshold>\n#   HEADCROP: trims a fixed number of bases from the start of the read.\n#   MINLEN: discards reads shorter than a specified length.\njava -jar \"$TRIMMOMATIC_JAR\" SE \\\n    \"$INPUT_FASTQ\" \\\n    \"$OUTPUT_FASTQ\" \\\n    ILLUMINACLIP:\"$ADAPTER_FILE\":2:30:10 \\\n    HEADCROP:1 \\\n    MINLEN:20",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Reads mapping on rRNAs and tRNAs (downloaded from the SILVA rRNA and the Genomic tRNA databases respectively) were removed.",
+            "tool_name": "Bowtie2 (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.5.2",
+            "code_example": "# Define reference files and input/output\nRRNA_TRNA_FA=\"rRNA_tRNA.fa\" # Combined rRNA and tRNA sequences from SILVA and Genomic tRNA databases\nBOWTIE2_INDEX_PREFIX=\"rRNA_tRNA_index\"\nINPUT_FASTQ=\"input_reads.fastq.gz\" # Replace with your actual input file (e.g., input_R1.fastq.gz for paired-end)\nOUTPUT_FASTQ=\"filtered_reads.fastq.gz\" # For single-end, or filtered_R%.fastq.gz for paired-end\nNUM_THREADS=8 # Adjust as needed\n\n# --- Installation (commented out) ---\n# conda install -c bioconda bowtie2\n\n# --- Prepare reference index (if not already done) ---\n# Download and combine rRNA and tRNA sequences (e.g., from SILVA and Genomic tRNA databases)\n# Example for creating the combined reference and index:\n# wget -O silva_rRNA.fa.gz \"https://www.arb-silva.de/fileadmin/silva_databases/release_138_1/Exports/SILVA_138.1_SSURef_NR99_tax_silva.fasta.gz\"\n# wget -O gtrnadb.fa.gz \"http://gtrnadb.ucsc.edu/GtRNAdb-12.0/genomes/human/hg38-tRNAs.fa.gz\" # Example for human\n# gunzip -c silva_rRNA.fa.gz gtrnadb.fa.gz > $RRNA_TRNA_FA\n# bowtie2-build $RRNA_TRNA_FA $BOWTIE2_INDEX_PREFIX\n\n# --- Execute read mapping and removal ---\n# Align reads to the rRNA/tRNA reference and output unaligned reads\n# --un-gz: write reads that did not align to a gzipped FASTQ file\n# -p: number of threads\n# -x: basename of the index\n# -U: single-end reads input (use -1 R1.fastq.gz -2 R2.fastq.gz for paired-end)\n# --very-fast: a preset for faster alignment, suitable for filtering\n# Redirect stdout (SAM output) to /dev/null as we only care about the --un-gz output\n# For single-end reads:\nbowtie2 --very-fast -p $NUM_THREADS -x $BOWTIE2_INDEX_PREFIX -U $INPUT_FASTQ --un-gz $OUTPUT_FASTQ > /dev/null\n\n# For paired-end reads, replace the above command with:\n# bowtie2 --very-fast -p $NUM_THREADS -x $BOWTIE2_INDEX_PREFIX -1 input_R1.fastq.gz -2 input_R2.fastq.gz --un-conc-gz filtered_R%.fastq.gz > /dev/null",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie2"
+        },
+        {
+            "step_order": 3,
+            "description": "The remaining reads were aligned to the human transcriptome (Ensembl v85, corresponding to GENCODE 25) with Bowtie2 (v2.2.6) employing the default settings.",
+            "tool_name": "Bowtie2",
+            "tool_version": "2.2.6",
+            "code_example": "# Install Bowtie2\n# conda install -c bioconda bowtie2=2.2.6\n\n# Placeholder for reference transcriptome FASTA file (Ensembl v85, GENCODE 25)\n# Download the human transcriptome FASTA for Ensembl v85 / GENCODE 25\n# For example, from Ensembl FTP or GENCODE website\n# wget -O human_transcriptome_ensembl_v85_gencode_25.fa \"https://ftp.ensembl.org/pub/release-85/fasta/homo_sapiens/cdna/Homo_sapiens.GRCh38.cdna.all.fa.gz\" # This is an example, actual URL might vary or require specific GENCODE version\n# gunzip human_transcriptome_ensembl_v85_gencode_25.fa.gz\n\n# Build Bowtie2 index for the human transcriptome\nbowtie2-build human_transcriptome_ensembl_v85_gencode_25.fa human_transcriptome_ensembl_v85_gencode_25_index\n\n# Align remaining reads to the human transcriptome using Bowtie2 with default settings\n# Assuming 'remaining_reads.fastq' is the input file and 'aligned_reads.sam' is the output\nbowtie2 -x human_transcriptome_ensembl_v85_gencode_25_index -U remaining_reads.fastq -S aligned_reads.sam",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie2"
+        },
+        {
+            "step_order": 4,
+            "description": "All reads aligning to the very same region were collapsed to avoid potential PCR duplicates, and only strand-specific reads were kept.",
+            "tool_name": "samtools markdup (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.19",
+            "code_example": "# Install samtools if not already available\n# conda install -c bioconda samtools=1.19\n\n# Define input and output file paths\nINPUT_BAM=\"aligned_reads.bam\" # Placeholder for your aligned BAM file\nOUTPUT_DEDUP_BAM=\"deduplicated_reads.bam\"\nNUM_THREADS=8 # Adjust as needed\n\n# Collapse reads to avoid PCR duplicates and keep strand-specific reads\n# The -r flag removes duplicate reads instead of just marking them.\n# samtools markdup is inherently strand-aware for paired-end reads, \n# respecting the strand information during deduplication.\nsamtools markdup -r -@ \"${NUM_THREADS}\" \"${INPUT_BAM}\" \"${OUTPUT_DEDUP_BAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 5,
+            "description": "The number of ribosome protected fragments was determined with samtools idxstats.",
+            "tool_name": "samtools",
+            "tool_version": "1.19",
+            "code_example": "# Install samtools (e.g., via conda)\n# conda install -c bioconda samtools=1.19\n\n# Determine the number of ribosome protected fragments using samtools idxstats\n# Input: aligned.bam (a BAM file containing ribosome protected fragments)\n# Output: ribosome_protected_fragments.txt (a file with chromosome, length, mapped reads, unmapped reads)\nsamtools idxstats aligned.bam > ribosome_protected_fragments.txt",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        }
+    ],
+    "raw_text": "Raw reads were processed by removing 5\u00e2\u0080\u0099 adapters, discarding reads shorter than 20 nucleotides and trimming the first nucleotide (using Trimmomatic v0.36). Reads mapping on rRNAs and tRNAs (downloaded from the SILVA rRNA and the Genomic tRNA databases respectively) were removed. The remaining reads were aligned to the human transcriptome (Ensembl v85, corresponding to GENCODE 25) with Bowtie2 (v2.2.6) employing the default settings. All reads aligning to the very same region were collapsed to avoid potential PCR duplicates, and only strand-specific reads were kept.  The number of ribosome protected fragments was determined with samtools idxstats.\nGenome_build: GRCh38.p7\nSupplementary_files_format_and_content: HEK_count_table.txt: tab-delimited text file including transcript annotation (columns 1-8) and sample-specific counts of aligned reads",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

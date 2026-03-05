@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Sequenced reads were trimmed for adaptor sequence, and masked for low-complexity or low-quality sequence, then mapped to GRCm38 whole genome using STAR 2.7.3a with extra parameters --outFilterScoreMinOverLread 0 --outFilterMatchNmin 0 --outFilterMatchNminOverLread 0 --outFilterMismatchNmax 33 --seedSearchStartLmax 12 --alignSJoverhangMin 8",
-      "tool_name": "STAR",
-      "tool_version": "2.7.3a",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reads aligning to gene exons (Mus_musculus.GRCm38.102.gtf) were counted using featureCounts v2.0.3 program from Subread package, summarized at gene level with extra parameters -s 0 --countReadPairs.",
-      "tool_name": "featureCounts",
-      "tool_version": "2.0.3",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Differential gene expression at FDR level 0.05 was obtained using DESeq2 R package, genes with total raw counts less then 1 across all samples were excluded from analysis",
-      "tool_name": "DESeq2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Sequenced reads were trimmed for adaptor sequence, and masked for low-complexity or low-quality sequence, then mapped to GRCm38 whole genome using STAR 2.7.3a with extra parameters --outFilterScoreMinOverLread 0   --outFilterMatchNmin 0   --outFilterMatchNminOverLread 0   --outFilterMismatchNmax 33   --seedSearchStartLmax 12   --alignSJoverhangMin 8\nReads aligning to gene exons (Mus_musculus.GRCm38.102.gtf) were counted using featureCounts v2.0.3 program from Subread package, summarized at gene level with extra parameters -s 0 --countReadPairs.\nDifferential gene expression at FDR level 0.05 was obtained using DESeq2 R package, genes with total raw counts less then 1 across all samples were excluded from analysis\nAssembly: GRCm38.p6\nSupplementary files format and content: tab-delimited text file includes raw read counts for all samples\nSupplementary files format and content: tab-delimited text files includes differetial gene expression analysis output from DESeq2",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Sequenced reads were trimmed for adaptor sequence, and masked for low-complexity or low-quality sequence, then mapped to GRCm38 whole genome using STAR 2.7.3a with extra parameters --outFilterScoreMinOverLread 0 --outFilterMatchNmin 0 --outFilterMatchNminOverLread 0 --outFilterMismatchNmax 33 --seedSearchStartLmax 12 --alignSJoverhangMin 8",
+            "tool_name": "STAR",
+            "tool_version": "2.7.3a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables for clarity\nGENOME_DIR=\"/path/to/GRCm38/STAR_index\" # Placeholder for GRCm38 STAR index\nREADS_R1=\"input_reads_R1.fastq.gz\" # Placeholder for input forward reads\nREADS_R2=\"input_reads_R2.fastq.gz\" # Placeholder for input reverse reads (assuming paired-end)\nOUTPUT_PREFIX=\"aligned_reads\" # Prefix for output files\nTHREADS=8 # Number of threads to use\n\n# Run STAR alignment\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${READS_R1}\" \"${READS_R2}\" \\\n     --runThreadN \"${THREADS}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --outFilterScoreMinOverLread 0 \\\n     --outFilterMatchNmin 0 \\\n     --outFilterMatchNminOverLread 0 \\\n     --outFilterMismatchNmax 33 \\\n     --seedSearchStartLmax 12 \\\n     --alignSJoverhangMin 8 \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outSAMattributes All \\\n     --readFilesCommand zcat",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "Reads aligning to gene exons (Mus_musculus.GRCm38.102.gtf) were counted using featureCounts v2.0.3 program from Subread package, summarized at gene level with extra parameters -s 0 --countReadPairs.",
+            "tool_name": "featureCounts",
+            "tool_version": "2.0.3",
+            "code_example": "# Install Subread package (which includes featureCounts)\n# conda install -c bioconda subread\n\n# Define input and output files, and reference annotation\nINPUT_BAM=\"input.bam\" # Placeholder for your aligned BAM file(s)\nGTF_FILE=\"/path/to/Mus_musculus.GRCm38.102.gtf\" # Placeholder for the Mus_musculus GRCm38.102 GTF file\nOUTPUT_COUNTS=\"gene_counts.txt\"\n\n# Run featureCounts\nfeatureCounts -a \"${GTF_FILE}\" -o \"${OUTPUT_COUNTS}\" -s 0 --countReadPairs \"${INPUT_BAM}\"\n",
+            "code_language": "bash",
+            "github_url": "http://subread.sourceforge.net/"
+        },
+        {
+            "step_order": 3,
+            "description": "Differential gene expression at FDR level 0.05 was obtained using DESeq2 R package, genes with total raw counts less then 1 across all samples were excluded from analysis",
+            "tool_name": "DESeq2",
+            "tool_version": "1.40.2 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install R and Bioconductor if not already present\n# For Ubuntu/Debian:\n# sudo apt-get update\n# sudo apt-get install r-base\n# R -e \"if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager'); BiocManager::install('DESeq2')\"\n\n# Create dummy input files for demonstration purposes.\n# In a real scenario, replace these with your actual count matrix and sample metadata.\n\n# counts_matrix.csv: A CSV file where rows are genes and columns are samples, containing raw counts.\n# The first column should be gene IDs.\necho \"gene_id,sample1,sample2,sample3,sample4\" > counts_matrix.csv\necho \"geneA,100,120,110,130\" >> counts_matrix.csv\necho \"geneB,50,60,55,65\" >> counts_matrix.csv\necho \"geneC,0,0,0,0\" >> counts_matrix.csv # This gene will be filtered out as its total raw count is 0\necho \"geneD,200,210,190,220\" >> counts_matrix.csv\necho \"geneE,5,0,3,2\" >> counts_matrix.csv # This gene will NOT be filtered (sum = 10 > 0)\n\n# sample_metadata.csv: A CSV file where rows are samples and columns are experimental factors.\n# The first column should be sample names, matching the column names in counts_matrix.csv.\necho \"sample,condition\" > sample_metadata.csv\necho \"sample1,control\" >> sample_metadata.csv\necho \"sample2,treatment\" >> sample_metadata.csv\necho \"sample3,control\" >> sample_metadata.csv\necho \"sample4,treatment\" >> sample_metadata.csv\n\n# R script for DESeq2 analysis\ncat << 'EOF' > run_deseq2.R\nlibrary(DESeq2)\n\n# Load count data\n# Assuming the first column is gene_id and subsequent columns are sample counts\ncount_data <- read.csv(\"counts_matrix.csv\", row.names = 1, check.names = FALSE)\n\n# Load sample metadata\n# Assuming the first column is sample name and subsequent columns are experimental factors\ncoldata <- read.csv(\"sample_metadata.csv\", row.names = 1)\n\n# Ensure sample names match and are in the same order\ncoldata <- coldata[colnames(count_data), , drop = FALSE]\nstopifnot(all(rownames(coldata) == colnames(count_data)))\n\n# Filter out genes with total raw counts less than 1 across all samples (i.e., sum of counts is 0)\n# This implements the description: \"genes with total raw counts less then 1 across all samples were excluded from analysis\"\nkeep <- rowSums(count_data) >= 1\ncount_data_filtered <- count_data[keep, ]\n\n# Create DESeqDataSet object\n# The design formula should reflect the experimental design, e.g., ~ condition\ndds <- DESeqDataSetFromMatrix(countData = count_data_filtered,\n                              colData = coldata,\n                              design = ~ condition)\n\n# Run DESeq2 analysis\ndds <- DESeq(dds)\n\n# Get results with FDR level 0.05 (alpha = 0.05)\n# This implements the description: \"Differential gene expression at FDR level 0.05 was obtained\"\nres <- results(dds, alpha = 0.05)\n\n# Order results by adjusted p-value\nres_ordered <- res[order(res$padj), ]\n\n# Save results to a CSV file\nwrite.csv(as.data.frame(res_ordered), \"deseq2_results_fdr0.05.csv\")\n\nmessage(\"DESeq2 analysis complete. Results saved to deseq2_results_fdr0.05.csv\")\nEOF\n\n# Execute the R script\nRscript run_deseq2.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/DESeq2.html"
+        }
+    ],
+    "raw_text": "Sequenced reads were trimmed for adaptor sequence, and masked for low-complexity or low-quality sequence, then mapped to GRCm38 whole genome using STAR 2.7.3a with extra parameters --outFilterScoreMinOverLread 0   --outFilterMatchNmin 0   --outFilterMatchNminOverLread 0   --outFilterMismatchNmax 33   --seedSearchStartLmax 12   --alignSJoverhangMin 8\nReads aligning to gene exons (Mus_musculus.GRCm38.102.gtf) were counted using featureCounts v2.0.3 program from Subread package, summarized at gene level with extra parameters -s 0 --countReadPairs.\nDifferential gene expression at FDR level 0.05 was obtained using DESeq2 R package, genes with total raw counts less then 1 across all samples were excluded from analysis\nAssembly: GRCm38.p6\nSupplementary files format and content: tab-delimited text file includes raw read counts for all samples\nSupplementary files format and content: tab-delimited text files includes differetial gene expression analysis output from DESeq2",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

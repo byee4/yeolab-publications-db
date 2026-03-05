@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Raw Data was aligned to hg38 using STAR",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "HT-Seq count was used to obtain read counts over all GENCODE 32 genes",
-      "tool_name": "GENCODE",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Raw Data was aligned to hg38 using STAR\nHT-Seq count was used to obtain read counts over all GENCODE 32 genes\nGenome_build: hg38\nSupplementary_files_format_and_content: tab delimited read counts",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Raw Data was aligned to hg38 using STAR",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Reference genome: hg38\n# Before alignment, a STAR genome index for hg38 must be built.\n# Example command to build index (run once):\n# STAR --runMode genomeGenerate \\\n#      --genomeDir /path/to/hg38_star_index \\\n#      --genomeFastaFiles /path/to/hg38.fa \\\n#      --sjdbGTFfile /path/to/hg38.gtf \\\n#      --runThreadN 8 # Adjust threads as needed\n\n# Assume hg38 STAR index is available at /path/to/hg38_star_index\n# Assume input raw data is input.fastq.gz (for single-end reads)\n# For paired-end reads, use: --readFilesIn input_R1.fastq.gz input_R2.fastq.gz\n\nSTAR --runThreadN 8 \\\n     --genomeDir /path/to/hg38_star_index \\\n     --readFilesIn input.fastq.gz \\\n     --outFileNamePrefix aligned_reads_ \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outBAMcompression 6",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "HT-Seq count was used to obtain read counts over all GENCODE 32 genes",
+            "tool_name": "GENCODE",
+            "tool_version": "0.11.2",
+            "code_example": "# Install HTSeq if not already available\n# conda install -c bioconda htseq\n\n# Define input and output files\nINPUT_BAM=\"aligned_reads.bam\" # Placeholder for your aligned BAM file\nGENCODE_GTF=\"gencode.v32.annotation.gtf\"\nOUTPUT_COUNTS=\"read_counts.txt\"\n\n# Download GENCODE v32 GTF if not already present\n# mkdir -p references\n# wget -O references/gencode.v32.annotation.gtf.gz ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_32/gencode.v32.annotation.gtf.gz\n# gunzip -f references/gencode.v32.annotation.gtf.gz\n# GENCODE_GTF=\"references/gencode.v32.annotation.gtf\"\n\n# Run htseq-count\n# Parameters:\n# --format=bam: Input file format is BAM.\n# --stranded=no: Assumes unstranded library preparation. Adjust to 'yes' or 'reverse' if applicable.\n# --mode=union: Default mode for counting reads overlapping features.\n# --type=exon: Count reads overlapping 'exon' features.\n# --idattr=gene_id: Use 'gene_id' attribute to group features and report counts.\nhtseq-count \\\n    --format=bam \\\n    --stranded=no \\\n    --mode=union \\\n    --type=exon \\\n    --idattr=gene_id \\\n    \"${INPUT_BAM}\" \\\n    \"${GENCODE_GTF}\" \\\n    > \"${OUTPUT_COUNTS}\"",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Raw Data was aligned to hg38 using STAR\nHT-Seq count was used to obtain read counts over all GENCODE 32 genes\nGenome_build: hg38\nSupplementary_files_format_and_content: tab delimited read counts",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

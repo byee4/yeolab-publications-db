@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Read counts were quantified using kallisto.",
-      "tool_name": "kallisto",
-      "tool_version": "",
-      "code_example": "kallisto -h",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "These were then aligned to C. elegans genome WS247.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Read counts were quantified using kallisto.\nThese were then aligned to C. elegans genome WS247.\nGenome_build: WS247\nSupplementary_files_format_and_content: Csv; Contains tpm values for each replicate",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Read counts were quantified using kallisto.",
+            "tool_name": "kallisto",
+            "tool_version": "",
+            "code_example": "kallisto -h",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "These were then aligned to C. elegans genome WS247.",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define paths and reference genome for C. elegans WS247\n# The C. elegans WS247 genome FASTA and GTF/GFF3 files can be obtained from WormBase (e.g., ftp://ftp.wormbase.org/pub/wormbase/releases/WS247/)\nGENOME_DIR=\"/path/to/C_elegans_WS247_STAR_index\" # Directory containing STAR genome index\nREADS_R1=\"input_reads_R1.fastq.gz\" # Placeholder for input forward reads\nREADS_R2=\"input_reads_R2.fastq.gz\" # Placeholder for input reverse reads (if paired-end, remove if single-end)\nOUTPUT_PREFIX=\"aligned_to_WS247\"\n\n# --- Genome Index Generation (Run this once if the index does not exist) ---\n# Assuming you have the genome FASTA and GTF files for WS247, e.g.:\n# GENOME_FASTA=\"/path/to/c_elegans.PRJNA13758.WS247.genomic.fa\"\n# GTF_FILE=\"/path/to/c_elegans.PRJNA13758.WS247.annotations.gtf\" # Convert GFF3 to GTF if only GFF3 is available\n# STAR --runMode genomeGenerate \\\n#      --genomeDir ${GENOME_DIR} \\\n#      --genomeFastaFiles ${GENOME_FASTA} \\\n#      --sjdbGTFfile ${GTF_FILE} \\\n#      --runThreadN 8 # Adjust number of threads as needed\n# ---------------------------------------------------------------------------\n\n# Align reads to C. elegans genome WS247\nSTAR --genomeDir ${GENOME_DIR} \\\n     --readFilesIn ${READS_R1} ${READS_R2} \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix ${OUTPUT_PREFIX}. \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outSAMattributes Standard \\\n     --runThreadN 8 # Adjust number of threads as needed\n\n# Note: For single-end reads, remove the ${READS_R2} from --readFilesIn.",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        }
+    ],
+    "raw_text": "Read counts were quantified using kallisto.\nThese were then aligned to C. elegans genome WS247.\nGenome_build: WS247\nSupplementary_files_format_and_content: Csv; Contains tpm values for each replicate",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

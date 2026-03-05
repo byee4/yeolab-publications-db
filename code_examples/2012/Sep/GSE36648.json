@@ -1,16 +1,16 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "HuGene-1.0-st were analyzed by using affymetrix power tools (apt-probeset-summarize -a rma-sketch -a plier-mm-sketch -d ../../Human/CD_HG-U133_Pl us_2_Libfiles/HG-U133_Plus_2.cdf -o gene-level-output CM0811101A.CEL CM0811101B.CEL CM0811101C.CEL CM0811102A.CEL CM08111 02B.CEL CM0811102C.CEL CM081110CA.CEL CM081110CB.CEL CM081110CC.CEL CM081110HA.CEL CM081110HB.CEL CM081110HC.CEL CM081110 RA.CEL CM081110RB.CEL CM081110RC.CEL )",
-      "tool_name": "Microarray",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "HuGene-1.0-st were analyzed by using affymetrix power tools (apt-probeset-summarize -a rma-sketch -a plier-mm-sketch -d ../../Human/CD_HG-U133_Pl  us_2_Libfiles/HG-U133_Plus_2.cdf -o gene-level-output CM0811101A.CEL CM0811101B.CEL CM0811101C.CEL CM0811102A.CEL CM08111  02B.CEL CM0811102C.CEL CM081110CA.CEL CM081110CB.CEL CM081110CC.CEL CM081110HA.CEL CM081110HB.CEL CM081110HC.CEL CM081110  RA.CEL CM081110RB.CEL CM081110RC.CEL )",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "HuGene-1.0-st were analyzed by using affymetrix power tools (apt-probeset-summarize -a rma-sketch -a plier-mm-sketch -d ../../Human/CD_HG-U133_Pl us_2_Libfiles/HG-U133_Plus_2.cdf -o gene-level-output CM0811101A.CEL CM0811101B.CEL CM0811101C.CEL CM0811102A.CEL CM08111 02B.CEL CM0811102C.CEL CM081110CA.CEL CM081110CB.CEL CM081110CC.CEL CM081110HA.CEL CM081110HB.CEL CM081110HC.CEL CM081110 RA.CEL CM081110RB.CEL CM081110RC.CEL )",
+            "tool_name": "Microarray",
+            "tool_version": "Not specified",
+            "code_example": "# Affymetrix Power Tools (APT) is proprietary software.\n# Download and install from Thermo Fisher Scientific website:\n# https://www.thermofisher.com/us/en/home/life-science/microarray-analysis/microarray-data-analysis/affymetrix-power-tools.html\n\n# The HG-U133_Plus_2.cdf file is a Chip Definition File for the Affymetrix Human Genome U133 Plus 2.0 Array.\n# It is typically obtained from Thermo Fisher Scientific (formerly Affymetrix) and should be placed in the specified path.\n# Example (illustrative, actual download may vary):\n# mkdir -p ../../Human/CD_HG-U133_Plus_2_Libfiles/\n# wget -O ../../Human/CD_HG-U133_Plus_2_Libfiles/HG-U133_Plus_2.cdf \"https://assets.thermofisher.com/TFS-Assets/LSG/support-files/HG-U133_Plus_2.cdf\"\n\napt-probeset-summarize -a rma-sketch -a plier-mm-sketch -d ../../Human/CD_HG-U133_Plus_2_Libfiles/HG-U133_Plus_2.cdf -o gene-level-output CM0811101A.CEL CM0811101B.CEL CM0811101C.CEL CM0811102A.CEL CM0811102B.CEL CM0811102C.CEL CM081110CA.CEL CM081110CB.CEL CM081110CC.CEL CM081110HA.CEL CM081110HB.CEL CM081110HC.CEL CM081110RA.CEL CM081110RB.CEL CM081110RC.CEL",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "HuGene-1.0-st were analyzed by using affymetrix power tools (apt-probeset-summarize -a rma-sketch -a plier-mm-sketch -d ../../Human/CD_HG-U133_Pl  us_2_Libfiles/HG-U133_Plus_2.cdf -o gene-level-output CM0811101A.CEL CM0811101B.CEL CM0811101C.CEL CM0811102A.CEL CM08111  02B.CEL CM0811102C.CEL CM081110CA.CEL CM081110CB.CEL CM081110CC.CEL CM081110HA.CEL CM081110HB.CEL CM081110HC.CEL CM081110  RA.CEL CM081110RB.CEL CM081110RC.CEL )",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

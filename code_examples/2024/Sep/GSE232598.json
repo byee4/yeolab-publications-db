@@ -1,61 +1,61 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Reads were mapped using STAR 2.7.6a",
-      "tool_name": "STAR",
-      "tool_version": "2.7.6a",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Read count extraction was performed using featureCounts from the Subread package.",
-      "tool_name": "featureCounts",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Results were sorted into counts matrices",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "TPM was calculated manually from counts matrix",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Differential splicing analysis was performed on STAR-aligned reads using rMATS 4.0.2.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "For each condition, shRNA knockdown samples represent SAMPLE_1, while non-targeting controls (shNT_1, shNT_2, and shNT_3) represent SAMPLE_2.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Reads were mapped using STAR 2.7.6a\nRead count extraction was performed using featureCounts from the Subread package. Results were sorted into counts matrices\nTPM was calculated manually from counts matrix\nDifferential splicing analysis was performed on STAR-aligned reads using rMATS 4.0.2.  For each condition, shRNA knockdown samples represent SAMPLE_1, while non-targeting controls (shNT_1, shNT_2, and shNT_3) represent SAMPLE_2.\nAssembly: GRCh38\nSupplementary files format and content: csv files include TPM values for each sample in comparison to non-targeting shRNA control, along with sample means and standard deviations\nSupplementary files format and content: tab-delimited text files include differential skipped exon splicing analysis for each knockdown (SE.MATS.JC.txt from rMATS)",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Reads were mapped using STAR 2.7.6a",
+            "tool_name": "STAR",
+            "tool_version": "2.7.6a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star=2.7.6a\n\n# Define variables\n# Placeholder for STAR genome index. Replace with the actual path to your indexed genome (e.g., GRCh38, hg38).\n# To build a genome index (example for GRCh38):\n# STAR --runMode genomeGenerate \\\n#      --genomeDir /path/to/STAR_genome_index/GRCh38 \\\n#      --genomeFastaFiles /path/to/GRCh38.fa \\\n#      --sjdbGTFfile /path/to/GRCh38.gtf \\\n#      --runThreadN 8\nGENOME_DIR=\"/path/to/STAR_genome_index/GRCh38\" \n\n# Placeholder for input FASTQ files. Replace with your actual read files.\n# Assuming paired-end reads. For single-end, remove READ2_FASTQ and adjust --readFilesIn.\nREAD1_FASTQ=\"sample_R1.fastq.gz\"\nREAD2_FASTQ=\"sample_R2.fastq.gz\" \n\n# Output file prefix\nOUTPUT_PREFIX=\"sample_mapped\"\n\n# Number of threads to use\nTHREADS=8 \n\n# Run STAR mapping\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${READ1_FASTQ}\" \"${READ2_FASTQ}\" \\\n     --runThreadN \"${THREADS}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}_\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --outReadsUnmapped Fastx \\\n     --quantMode GeneCounts # Optional: for gene quantification (e.g., for RNA-seq)",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "Read count extraction was performed using featureCounts from the Subread package.",
+            "tool_name": "featureCounts",
+            "tool_version": "2.0.6",
+            "code_example": "# Install Subread package (which includes featureCounts)\n# conda install -c bioconda subread\n\n# Placeholder for annotation file (e.g., human GRCh38, Ensembl release 109)\n# Download from Ensembl: ftp://ftp.ensembl.org/pub/release-109/gtf/homo_sapiens/Homo_sapiens.GRCh38.109.gtf.gz\n# gunzip Homo_sapiens.GRCh38.109.gtf.gz\nGTF_FILE=\"Homo_sapiens.GRCh38.109.gtf\"\n\n# Placeholder for input aligned BAM file(s)\n# Replace with your actual aligned BAM files. Multiple BAMs can be provided.\nINPUT_BAM=\"input_aligned.bam\"\n\n# Placeholder for output count file\nOUTPUT_COUNTS=\"gene_counts.txt\"\n\n# Perform read count extraction using featureCounts\n# -a: Annotation file (GTF/GFF format)\n# -o: Output file for read counts\n# -F GTF: Specify annotation file format as GTF\n# -t exon: Specify feature type to count (e.g., 'exon' for gene-level counts)\n# -g gene_id: Specify attribute type in GTF/GFF to use as gene identifier\n# -s 0: Strandedness (0: unstranded, 1: stranded, 2: reversely stranded). Assumed unstranded.\n# -T 8: Number of threads/cores to use\n# -p: Count fragments instead of reads (for paired-end data). Remove if single-end.\nfeatureCounts -a \"${GTF_FILE}\" \\\n              -o \"${OUTPUT_COUNTS}\" \\\n              -F GTF \\\n              -t exon \\\n              -g gene_id \\\n              -s 0 \\\n              -T 8 \\\n              -p \\\n              \"${INPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "Results were sorted into counts matrices",
+            "tool_name": "featureCounts (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Subread 2.0.6",
+            "code_example": "# Install Subread (which includes featureCounts)\n# conda install -c bioconda subread\n\n# Define input and output files\n# Replace 'aligned_reads.bam' with your actual aligned BAM file(s)\nINPUT_BAM=\"aligned_reads.bam\"\n# Replace 'Homo_sapiens.GRCh38.111.gtf' with your actual annotation file (e.g., from Ensembl or GENCODE)\nANNOTATION_GTF=\"Homo_sapiens.GRCh38.111.gtf\"\nOUTPUT_COUNTS=\"gene_counts.txt\"\n\n# Run featureCounts to generate a gene count matrix\n# -a: Specify the annotation file (GTF/GFF format)\n# -o: Specify the output file for the counts matrix\n# -p: Indicates that reads are paired-end (remove if single-end)\n# -t exon: Specifies 'exon' as the feature type to count (common for gene-level counts)\n# -g gene_id: Specifies 'gene_id' as the attribute in the GTF/GFF file to use as the feature identifier\n# --extraAttributes gene_name: Includes the 'gene_name' attribute in the output (optional)\n# -T 8: Use 8 threads for parallel processing (adjust based on available resources)\nfeatureCounts -a \"${ANNOTATION_GTF}\" \\\n              -o \"${OUTPUT_COUNTS}\" \\\n              -p \\\n              -t exon \\\n              -g gene_id \\\n              --extraAttributes gene_name \\\n              -T 8 \\\n              \"${INPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": "http://subread.sourceforge.net/"
+        },
+        {
+            "step_order": 4,
+            "description": "TPM was calculated manually from counts matrix",
+            "tool_name": "Python/R Script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# This script calculates Transcripts Per Million (TPM) from a gene counts matrix.\n# It assumes the input file is tab-separated and contains at least:\n# - A gene identifier column (e.g., 'gene_id') as the first column (index_col=0 for pandas)\n# - A gene length column (e.g., 'length')\n# - Subsequent columns for sample counts (e.g., 'sample1', 'sample2', ...)\n\n# Example input file (counts.tsv):\n# gene_id\\tlength\\tsample1\\tsample2\n# geneA\\t1000\\t100\\t200\n# geneB\\t2000\\t50\\t150\n# geneC\\t500\\t200\\t100\n\n# Create a dummy counts file for demonstration\necho -e \"gene_id\\tlength\\tsample1\\tsample2\" > counts.tsv\necho -e \"geneA\\t1000\\t100\\t200\" >> counts.tsv\necho -e \"geneB\\t2000\\t50\\t150\" >> counts.tsv\necho -e \"geneC\\t500\\t200\\t100\" >> counts.tsv\n\n# Python script to calculate TPM\n# Save this content as 'calculate_tpm.py'\ncat << 'EOF' > calculate_tpm.py\n#!/usr/bin/env python3\nimport pandas as pd\nimport sys\n\ndef calculate_tpm(input_file, output_file):\n    try:\n        df = pd.read_csv(input_file, sep='\\t', index_col=0)\n    except FileNotFoundError:\n        print(f\"Error: Input file '{input_file}' not found.\", file=sys.stderr)\n        sys.exit(1)\n\n    if 'length' not in df.columns:\n        print(\"Error: 'length' column not found in the input matrix.\", file=sys.stderr)\n        sys.exit(1)\n\n    gene_lengths = df['length']\n    counts_df = df.drop(columns=['length'])\n\n    # Calculate RPK (Reads Per Kilobase)\n    # Divide counts by gene length in kilobases\n    rpk_df = counts_df.div(gene_lengths / 1000, axis=0)\n\n    # Calculate TPM (Transcripts Per Million)\n    # Divide RPK by the sum of RPKs for each sample, then multiply by 1,000,000\n    tpm_df = rpk_df.div(rpk_df.sum(axis=0), axis=1) * 1_000_000\n\n    tpm_df.to_csv(output_file, sep='\\t')\n\nif __name__ == \"__main__\":\n    if len(sys.argv) != 3:\n        print(\"Usage: python calculate_tpm.py <input_counts.tsv> <output_tpm.tsv>\", file=sys.stderr)\n        sys.exit(1)\n    input_counts_file = sys.argv[1]\n    output_tpm_file = sys.argv[2]\n    calculate_tpm(input_counts_file, output_tpm_file)\nEOF\n\n# Make the script executable\nchmod +x calculate_tpm.py\n\n# Install pandas if not already installed\n# pip install pandas\n\n# Execute the TPM calculation\n./calculate_tpm.py counts.tsv tpm.tsv",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1007/s12064-012-0162-3"
+        },
+        {
+            "step_order": 5,
+            "description": "Differential splicing analysis was performed on STAR-aligned reads using rMATS 4.0.2.",
+            "tool_name": "STAR",
+            "tool_version": "4.0.2",
+            "code_example": "# Install rMATS (if not already installed)\n# conda install -c bioconda rmats-turbo\n\n# Placeholder variables (replace with actual paths and values)\nCASE_BAM_FILES=\"case_replicate1.bam,case_replicate2.bam\"\nCONTROL_BAM_FILES=\"control_replicate1.bam,control_replicate2.bam\"\nGTF_ANNOTATION=\"gencode.vM25.annotation.gtf\" # Example: latest mouse Gencode GTF\nREAD_LENGTH=100 # Replace with actual read length\nLIB_TYPE=\"fr-unstranded\" # Example: paired-end, unstranded. Adjust as needed (e.g., 'fr-firststrand', 'fr-secondstrand', 'single')\nOUTPUT_DIR=\"rmats_output\"\nNUM_THREADS=8\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run rMATS for differential splicing analysis\nrmats.py \\\n  --b1 \"${CASE_BAM_FILES}\" \\\n  --b2 \"${CONTROL_BAM_FILES}\" \\\n  --gtf \"${GTF_ANNOTATION}\" \\\n  --readLength \"${READ_LENGTH}\" \\\n  --libType \"${LIB_TYPE}\" \\\n  --dataType RNA \\\n  --nthread \"${NUM_THREADS}\" \\\n  -o \"${OUTPUT_DIR}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/Xinglab/rmats-turbo"
+        },
+        {
+            "step_order": 6,
+            "description": "For each condition, shRNA knockdown samples represent SAMPLE_1, while non-targeting controls (shNT_1, shNT_2, and shNT_3) represent SAMPLE_2.",
+            "tool_name": "(Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# Define sample groups based on the description for downstream analysis\n# SAMPLE_1: shRNA knockdown samples\n# Replace 'shRNA_KD_sample_X' with actual sample identifiers for shRNA knockdown samples\nSAMPLE_1_SAMPLES=\"shRNA_KD_sample_1 shRNA_KD_sample_2 shRNA_KD_sample_3\"\n\n# SAMPLE_2: Non-targeting controls\nSAMPLE_2_SAMPLES=\"shNT_1 shNT_2 shNT_3\"\n\n# These variables would typically be passed to a differential analysis tool\n# For example, if using a tool that takes sample lists:\n# differential_analysis_tool --group1 \"${SAMPLE_1_SAMPLES}\" --group2 \"${SAMPLE_2_SAMPLES}\" --output_prefix \"differential_results\"\n",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Reads were mapped using STAR 2.7.6a\nRead count extraction was performed using featureCounts from the Subread package. Results were sorted into counts matrices\nTPM was calculated manually from counts matrix\nDifferential splicing analysis was performed on STAR-aligned reads using rMATS 4.0.2.  For each condition, shRNA knockdown samples represent SAMPLE_1, while non-targeting controls (shNT_1, shNT_2, and shNT_3) represent SAMPLE_2.\nAssembly: GRCh38\nSupplementary files format and content: csv files include TPM values for each sample in comparison to non-targeting shRNA control, along with sample means and standard deviations\nSupplementary files format and content: tab-delimited text files include differential skipped exon splicing analysis for each knockdown (SE.MATS.JC.txt from rMATS)",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,97 +1,97 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "FASTQ files were mapped to the mm10 mouse reference genome with Bowtie2.",
-      "tool_name": "Bowtie2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Peaks were called with HOMER (findPeaks) using parameters \u00e2\u0080\u009c-style factor -minDist 200 -size 200\u00e2\u0080\u009d.",
-      "tool_name": "HOMER",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "After merging these peaks, correlations among replicates from the same cell subset/treatment were evaluated by correlation using tag counts.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "The two most highly correlated samples were used for identifying the most robust peaks using the irreproducible discovery rate (IDR) method.",
-      "tool_name": "IDR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "For this step, peaks were called with HOMER\u00e2\u0080\u0099s findPeaks, using parameters \u00e2\u0080\u009c-L 0 -C 0 -fdr 0.9 -minDist 200 -size 200\u00e2\u0080\u009d.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "IDR peaks from different conditions involved in a comparison merged with HOMER\u00e2\u0080\u0099s mergePeaks and annotated with HOMER\u00e2\u0080\u0099s annotatePeaks.pl.",
-      "tool_name": "IDR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "The raw tags of all samples which had reasonable correlation were quantified with HOMER (annotatePeaks.pl) using parameter \u00e2\u0080\u009c-noadj\u00e2\u0080\u009d.",
-      "tool_name": "HOMER",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "Peaks which contained at least 4 tags in at least 1 sample were used to identify differentially bounded peaks (DBP) by DESeq2.",
-      "tool_name": "DESeq2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "Peaks were categorized as distal peaks which are 2 kb away from known TSS and promotor peaks which are located within 2 kb region of known TSS sites.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 10,
-      "description": "ATAC peak quantification was normalized to the total tags in peaks.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "FASTQ files were mapped to the mm10 mouse reference genome with Bowtie2.  Peaks were called with HOMER (findPeaks) using parameters \u00e2\u0080\u009c-style factor -minDist 200 -size 200\u00e2\u0080\u009d.  After merging these peaks, correlations among replicates from the same cell subset/treatment were evaluated by correlation using tag counts.  The two most highly correlated samples were used for identifying the most robust peaks using the irreproducible discovery rate (IDR) method.  For this step, peaks were called with HOMER\u00e2\u0080\u0099s findPeaks, using parameters \u00e2\u0080\u009c-L 0 -C 0 -fdr 0.9 -minDist 200 -size 200\u00e2\u0080\u009d.  IDR peaks from different conditions involved in a comparison merged with HOMER\u00e2\u0080\u0099s mergePeaks and annotated with HOMER\u00e2\u0080\u0099s annotatePeaks.pl.  The raw tags of all samples which had reasonable correlation were quantified with HOMER (annotatePeaks.pl) using parameter \u00e2\u0080\u009c-noadj\u00e2\u0080\u009d.  Peaks which contained at least 4 tags in at least 1 sample were used to identify differentially bounded peaks (DBP) by DESeq2.  Peaks were categorized as distal peaks which are 2 kb away from known TSS and promotor peaks which are located within 2 kb region of known TSS sites.\nATAC peak quantification was normalized to the total tags in peaks.\nAssembly: mm10",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "FASTQ files were mapped to the mm10 mouse reference genome with Bowtie2.",
+            "tool_name": "Bowtie2",
+            "tool_version": "2.3.4.3",
+            "code_example": "# Install Bowtie2\n# conda install -c bioconda bowtie2\n\n# Install Samtools (often used with Bowtie2 for BAM conversion and sorting)\n# conda install -c bioconda samtools\n\n# Define variables\n# Placeholder for the Bowtie2 index for mm10. This index must be pre-built.\n# Example: bowtie2-build /path/to/mm10.fa /path/to/bowtie2_indexes/mm10\nREF_GENOME_INDEX=\"/path/to/bowtie2_indexes/mm10\"\n\n# Placeholder for input FASTQ files (assuming paired-end reads)\nINPUT_FASTQ_R1=\"input_R1.fastq.gz\"\nINPUT_FASTQ_R2=\"input_R2.fastq.gz\"\n\n# Desired output BAM file name\nOUTPUT_BAM=\"output.bam\"\n\n# Number of threads to use for alignment\nNUM_THREADS=8\n\n# Run Bowtie2 alignment, pipe output to samtools for BAM conversion and sorting\nbowtie2 -x \"${REF_GENOME_INDEX}\" \\\n        -1 \"${INPUT_FASTQ_R1}\" \\\n        -2 \"${INPUT_FASTQ_R2}\" \\\n        --threads \"${NUM_THREADS}\" \\\n        --very-sensitive \\\n        2> \"${OUTPUT_BAM%.bam}.log\" \\\n    | samtools view -bS - \\\n    | samtools sort -o \"${OUTPUT_BAM}\" -",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie2"
+        },
+        {
+            "step_order": 2,
+            "description": "Peaks were called with HOMER (findPeaks) using parameters \u00e2\u0080\u009c-style factor -minDist 200 -size 200\u00e2\u0080\u009d.",
+            "tool_name": "HOMER",
+            "tool_version": "v4.12",
+            "code_example": "# Install HOMER (if not already installed)\n# conda install -c bioconda homer\n\n# Define input and output files\n# Replace 'path/to/your/treatment.bam' with the actual path to your aligned reads BAM file\nTREATMENT_BAM=\"path/to/your/treatment.bam\"\n\n# Define output prefix for the peak files\nOUTPUT_PREFIX=\"homer_factor_peaks\"\n\n# Call peaks with HOMER findPeaks\n# This command will generate files like homer_factor_peaks.peaks.txt and homer_factor_peaks.peaks.bed\nfindPeaks \"${TREATMENT_BAM}\" -style factor -minDist 200 -size 200 -o \"${OUTPUT_PREFIX}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "After merging these peaks, correlations among replicates from the same cell subset/treatment were evaluated by correlation using tag counts.",
+            "tool_name": "deepTools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "3.5.1",
+            "code_example": "# Install deepTools (example using conda)\n# conda create -n deeptools_env deeptools=3.5.1\n# conda activate deeptools_env\n\n# Define input files (placeholders)\n# MERGED_PEAKS: BED file containing the merged peak regions from the previous step.\n# REPLICATE_BWS: Space-separated list of bigWig files for each replicate from the same cell subset/treatment.\nMERGED_PEAKS=\"merged_peaks.bed\"\nREPLICATE_BWS=\"replicate1.bw replicate2.bw replicate3.bw\"\n\n# Output files\nMATRIX_FILE=\"replicate_correlation_matrix.npz\"\nPLOT_FILE=\"replicate_correlation_heatmap.png\"\nTEXT_FILE=\"replicate_correlation_values.txt\"\n\n# Labels for the replicates, corresponding to the order in REPLICATE_BWS\nREPLICATE_LABELS=\"rep1 rep2 rep3\"\n\n# 1. Compute tag counts/signal for merged peak regions across replicates using multiBigwigSummary\n# This step quantifies the signal within the specified BED regions for each bigWig file.\nmultiBigwigSummary BED \\\n    --BED ${MERGED_PEAKS} \\\n    --bws ${REPLICATE_BWS} \\\n    --outFileName ${MATRIX_FILE} \\\n    --labels ${REPLICATE_LABELS}\n\n# 2. Evaluate correlations and generate a heatmap using plotCorrelation\n# This step takes the matrix generated by multiBigwigSummary and calculates Pearson correlation,\n# then visualizes it as a heatmap.\nplotCorrelation \\\n    -in ${MATRIX_FILE} \\\n    --corMethod pearson \\\n    --plotType heatmap \\\n    --outFileName ${PLOT_FILE} \\\n    --plotNumbers \\\n    --labels ${REPLICATE_LABELS} \\\n    --outFileCorrelations ${TEXT_FILE}",
+            "code_language": "bash",
+            "github_url": "https://github.com/deeptools/deepTools"
+        },
+        {
+            "step_order": 4,
+            "description": "The two most highly correlated samples were used for identifying the most robust peaks using the irreproducible discovery rate (IDR) method.",
+            "tool_name": "IDR",
+            "tool_version": "latest from repository",
+            "code_example": "# Clone the merge_peaks repository if not already present\n# git clone https://github.com/yeolab/merge_peaks.git\n# Assuming the repository is cloned to a known location, e.g., /opt/yeolab_tools/merge_peaks\nMERGE_PEAKS_DIR=\"/opt/yeolab_tools/merge_peaks\"\n\n# Install the IDR executable (version 2.0.4 is commonly used and is a dependency for merge_peaks)\n# conda install -c bioconda idr=2.0.4\n\n# Placeholder for input peak files from the two most highly correlated samples.\n# These would typically be BED files generated by a peak caller (e.g., CLIPper)\n# and selected based on correlation analysis from a previous step.\nreplicate1_peaks=\"path/to/your/replicate1_peaks.bed\"\nreplicate2_peaks=\"path/to/your/replicate2_peaks.bed\"\n\n# Output prefix for IDR results\noutput_prefix=\"idr_robust_peaks\"\n\n# Rank type for IDR (e.g., 'p.value' or 'score'). 'p.value' is a common choice for peak callers.\n# The description does not specify, so a common default is used.\nrank_type=\"p.value\"\n\n# IDR cutoff (e.g., 0.01 or 0.05). 0.01 is a stringent common choice for high confidence peaks.\nidr_cutoff=0.01\n\n# Execute the IDR replicate pipeline script from the merge_peaks repository.\n# This script orchestrates the IDR analysis using the underlying 'idr' executable.\npython \"${MERGE_PEAKS_DIR}/idr_replicate_pipeline.py\" \\\n    -p \"${replicate1_peaks}\" \\\n    -q \"${replicate2_peaks}\" \\\n    -o \"${output_prefix}\" \\\n    -r \"${rank_type}\" \\\n    -c \"${idr_cutoff}\"\n\n# The output will include files such as:\n# - ${output_prefix}-idr.log: IDR log file\n# - ${output_prefix}-idr.out: Raw IDR output\n# - Potentially filtered peak files (e.g., BED files with reproducible peaks)",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/merge_peaks"
+        },
+        {
+            "step_order": 5,
+            "description": "For this step, peaks were called with HOMER\u00e2\u0080\u0099s findPeaks, using parameters \u00e2\u0080\u009c-L 0 -C 0 -fdr 0.9 -minDist 200 -size 200\u00e2\u0080\u009d.",
+            "tool_name": "HOMER",
+            "tool_version": "4.11.1 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install HOMER (if not already installed)\n# conda install -c bioconda homer\n# perl /path/to/homer/configureHomer.pl -install hg38 # Example for genome installation\n\n# Assuming a tag directory 'my_sample_tags' has been created from alignment files\n# Example: makeTagDirectory my_sample_tags my_sample_aligned.bam\n\n# Define input and output paths (placeholders as not specified in description)\nTAG_DIRECTORY=\"my_sample_tags\"\nOUTPUT_PEAKS=\"my_sample_peaks.txt\"\nGENOME=\"hg38\" # Placeholder for reference genome\n\n# Execute HOMER findPeaks with specified parameters\nfindPeaks \"${TAG_DIRECTORY}\" -o \"${OUTPUT_PEAKS}\" -L 0 -C 0 -fdr 0.9 -minDist 200 -size 200 -g \"${GENOME}\" -style factor",
+            "code_language": "bash",
+            "github_url": "http://homer.ucsd.edu/homer/"
+        },
+        {
+            "step_order": 6,
+            "description": "IDR peaks from different conditions involved in a comparison merged with HOMER\u00e2\u0080\u0099s mergePeaks and annotated with HOMER\u00e2\u0080\u0099s annotatePeaks.pl.",
+            "tool_name": "IDR",
+            "tool_version": "2.0.4",
+            "code_example": "# The input to this step are peaks generated by the IDR (Irreproducible Discovery Rate) method.\n# The specific actions described (merging and annotation) are performed using HOMER tools.\n\n# Install HOMER (if not already installed)\n# conda install -c bioconda homer\n\n# Example input IDR peak files from different conditions\n# These files are assumed to be in HOMER peak format or a compatible format (e.g., BED, narrowPeak).\n# Replace with actual input file paths.\ninput_idr_peaks_cond1=\"condition1_idr_peaks.narrowPeak\"\ninput_idr_peaks_cond2=\"condition2_idr_peaks.narrowPeak\"\ninput_idr_peaks_cond3=\"condition3_idr_peaks.narrowPeak\"\n\n# Merge IDR peaks from different conditions using HOMER's mergePeaks\n# The '-d' option can be used to specify a distance for merging overlapping peaks (e.g., -d 200 for 200bp).\n# Without '-d', it merges peaks that overlap by at least 1 bp.\n# Output is typically a BED-like format.\nmerged_peaks_file=\"merged_idr_peaks.bed\"\nmergePeaks \"${input_idr_peaks_cond1}\" \"${input_idr_peaks_cond2}\" \"${input_idr_peaks_cond3}\" > \"${merged_peaks_file}\"\n\n# Annotate the merged IDR peaks using HOMER's annotatePeaks.pl\n# Using hg38 as the reference genome (latest assembly placeholder). Replace with appropriate genome if needed.\n# The output is a tab-separated text file with annotation details.\nannotated_peaks_file=\"annotated_idr_peaks.txt\"\nannotatePeaks.pl \"${merged_peaks_file}\" hg38 > \"${annotated_peaks_file}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 7,
+            "description": "The raw tags of all samples which had reasonable correlation were quantified with HOMER (annotatePeaks.pl) using parameter \u00e2\u0080\u009c-noadj\u00e2\u0080\u009d.",
+            "tool_name": "HOMER",
+            "tool_version": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install HOMER (e.g., via conda)\n# conda install -c bioconda homer=4.12\n\n# Assuming 'input_peaks.bed' is the file containing raw tags/peaks that had reasonable correlation\n# and 'hg38' is the reference genome assembly (replace with actual if known)\n# The output will be a tab-separated file with peak annotations.\nannotatePeaks.pl input_peaks.bed hg38 -noadj > output_annotations.txt",
+            "code_language": "bash",
+            "github_url": "http://homer.ucsd.edu/homer/index.html"
+        },
+        {
+            "step_order": 8,
+            "description": "Peaks which contained at least 4 tags in at least 1 sample were used to identify differentially bounded peaks (DBP) by DESeq2.",
+            "tool_name": "DESeq2",
+            "tool_version": "1.42.0",
+            "code_example": "# Install R and DESeq2 (if not already installed)\n# conda install -c conda-forge r-base\n# conda install -c bioconda bioconductor-deseq2\n\n# Create dummy input files for demonstration\n# In a real pipeline, 'peak_counts.tsv' would be generated by an upstream peak quantification step\n# and would already reflect the pre-filtering criterion: \n# \"Peaks which contained at least 4 tags in at least 1 sample\".\n# 'sample_info.tsv' would contain metadata for each sample.\ncat << EOF > peak_counts.tsv\npeak_id\tsample1\tsample2\tsample3\tsample4\npeak1\t10\t12\t5\t7\npeak2\t0\t1\t0\t0\npeak3\t50\t60\t25\t30\npeak4\t2\t3\t1\t2\npeak5\t15\t18\t8\t10\npeak6\t4\t5\t2\t3\npeak7\t0\t0\t0\t0\npeak8\t6\t7\t3\t4\nEOF\n\ncat << EOF > sample_info.tsv\nsample_id\tcondition\nsample1\tcontrol\nsample2\tcontrol\nsample3\ttreated\nsample4\ttreated\nEOF\n\n# R script for DESeq2 analysis\ncat << 'EOF' > run_deseq2.R\nlibrary(DESeq2)\n\n# Load count data\n# Assuming 'peak_counts.tsv' already reflects the pre-filtering: \n# \"Peaks which contained at least 4 tags in at least 1 sample\"\ncounts_df <- read.table(\"peak_counts.tsv\", header=TRUE, row.names=1, sep=\"\\t\")\n# Ensure counts are integers\ncounts_df <- round(counts_df)\n\n# Load sample information\nsample_info <- read.table(\"sample_info.tsv\", header=TRUE, row.names=1, sep=\"\\t\")\n\n# Ensure sample order matches between counts and sample_info\nsample_info <- sample_info[colnames(counts_df), , drop=FALSE]\n\n# Create DESeqDataSet object\n# The design formula specifies the experimental factors to be modeled.\n# Here, we assume a simple comparison between 'control' and 'treated' conditions.\ndds <- DESeqDataSetFromMatrix(countData = counts_df,\n                              colData = sample_info,\n                              design = ~ condition)\n\n# DESeq2 recommends filtering out rows that have zero or very few counts across all samples.\n# If the input 'peak_counts.tsv' was already filtered based on \"at least 4 tags in at least 1 sample\",\n# then this internal filtering might be less critical but still good practice.\n# For demonstration, we'll proceed assuming adequate pre-filtering.\n\n# Run DESeq2 analysis\ndds <- DESeq(dds)\n\n# Get results for the contrast of interest (e.g., treated vs control)\n# The contrast argument specifies the factor, the numerator level, and the denominator level.\nres <- results(dds, contrast=c(\"condition\", \"treated\", \"control\"))\n\n# Order results by adjusted p-value\nres <- res[order(res$padj),]\n\n# Save results\nwrite.csv(as.data.frame(res), file=\"deseq2_results.csv\")\n\n# Optional: Save normalized counts\n# normalized_counts <- counts(dds, normalized=TRUE)\n# write.csv(as.data.frame(normalized_counts), file=\"deseq2_normalized_counts.csv\")\nEOF\n\n# Execute the R script\nRscript run_deseq2.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/DESeq2.html"
+        },
+        {
+            "step_order": 9,
+            "description": "Peaks were categorized as distal peaks which are 2 kb away from known TSS and promotor peaks which are located within 2 kb region of known TSS sites.",
+            "tool_name": "bedtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.30.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install bedtools (if not already installed)\n# conda install -c bioconda bedtools\n\n# Define input files and reference data\n# Replace 'input_peaks.bed' with the actual path to your peak file.\nPEAKS_BED=\"input_peaks.bed\"\n\n# Replace 'hg38_gencode_v38_tss.bed' with the actual path to your TSS BED file.\n# This file should contain 1bp regions representing the Transcription Start Sites.\n# Example: chr1\\t10000\\t10001\\tgeneA_tss\\t0\\t+\nTSS_BED=\"hg38_gencode_v38_tss.bed\"\n\n# Replace 'hg38.chrom.sizes' with the actual path to your chromosome sizes file.\n# This file is required by bedtools slop to prevent extending regions off chromosome ends.\n# Example: chr1\\t248956422\nCHROM_SIZES=\"hg38.chrom.sizes\"\n\n# Create dummy files for demonstration if they don't exist.\n# In a real pipeline, these files would be pre-existing and properly generated.\nif [ ! -f \"$CHROM_SIZES\" ]; then\n    echo \"Warning: Creating dummy $CHROM_SIZES for demonstration. Replace with actual file for real analysis.\"\n    echo -e \"chr1\\t248956422\\nchr2\\t242193529\\nchr3\\t198295559\\nchrX\\t156040895\\nchrY\\t57227415\" > \"$CHROM_SIZES\"\nfi\n\nif [ ! -f \"$TSS_BED\" ]; then\n    echo \"Warning: Creating dummy $TSS_BED for demonstration. Replace with actual file for real analysis.\"\n    # Example TSS for a few genes on chr1\n    echo -e \"chr1\\t10000\\t10001\\tgeneA_tss\\t0\\t+\\nchr1\\t50000\\t50001\\tgeneB_tss\\t0\\t-\" > \"$TSS_BED\"\nfi\n\n# Define the promoter region size (2 kb)\nPROMOTER_DISTANCE=2000\n\n# 1. Define promoter regions by extending TSS sites by PROMOTER_DISTANCE in both directions.\n#    bedtools slop extends features by a specified number of base pairs.\nbedtools slop -i \"$TSS_BED\" -g \"$CHROM_SIZES\" -b \"$PROMOTER_DISTANCE\" > promoter_regions_slop.bed\n\n# 2. Merge overlapping promoter regions to create a consolidated set of promoter areas.\n#    This prevents a single peak from being counted multiple times if it overlaps several TSS regions.\nbedtools merge -i promoter_regions_slop.bed > merged_promoter_regions.bed\n\n# 3. Identify promoter peaks: Peaks that overlap with the merged promoter regions.\n#    bedtools intersect -a <peaks> -b <promoter_regions> finds overlaps.\nbedtools intersect -a \"$PEAKS_BED\" -b merged_promoter_regions.bed > promoter_peaks.bed\n\n# 4. Identify distal peaks: Peaks that do NOT overlap with the merged promoter regions.\n#    bedtools intersect -a <peaks> -b <promoter_regions> -v finds features in -a that do NOT overlap -b.\nbedtools intersect -a \"$PEAKS_BED\" -b merged_promoter_regions.bed -v > distal_peaks.bed\n\n# Clean up intermediate files\nrm promoter_regions_slop.bed merged_promoter_regions.bed",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        },
+        {
+            "step_order": 10,
+            "description": "ATAC peak quantification was normalized to the total tags in peaks.",
+            "tool_name": "DiffBind (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "3.10.0",
+            "code_example": "# Install R and Bioconductor if not already present\n# sudo apt-get update && sudo apt-get install -y r-base\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\"); BiocManager::install(\"DiffBind\")'\n\n# Create an R script file for ATAC peak quantification and normalization\n# This script assumes you have a 'samplesheet.csv' file defining your samples, \n# BAM files, and peak files. Example 'samplesheet.csv' structure:\n# SampleID,Condition,Replicate,bamReads,Peaks,PeakCaller\n# Sample1,Control,1,sample1.bam,sample1_peaks.bed,bed\n# Sample2,Control,2,sample2.bam,sample2_peaks.bed,bed\ncat << 'EOF' > run_atac_quant_norm.R\nlibrary(DiffBind)\n\n# Load samplesheet (replace with your actual samplesheet path)\nsamplesheet <- dba(sampleSheet=\"samplesheet.csv\")\n\n# Step 1: Count reads in peaks for all samples\n# This creates a dba object with raw counts for each peak in each sample.\n# score=DBA_SCORE_READS ensures raw read counts are used.\n# bUseSummarizeOverlaps=TRUE uses the more robust SummarizedExperiment approach.\nmessage(\"Counting reads in peaks...\")\nsamplesheet_counts <- dba.count(samplesheet, bUseSummarizeOverlaps=TRUE, score=DBA_SCORE_READS)\n\n# Step 2: Extract raw counts matrix\n# This retrieves the raw count matrix where rows are peaks and columns are samples.\nraw_counts_matrix <- dba.peakset(samplesheet_counts, bRetrieve=TRUE, DataType=DBA_DATA_COUNTS)\n\n# Step 3: Calculate total tags in peaks for each sample\n# This sums the raw counts for all peaks for each individual sample.\ntotal_tags_in_peaks <- colSums(raw_counts_matrix)\n\n# Step 4: Normalize counts by total tags in peaks\n# Each peak's count is divided by the total tags in peaks for its respective sample.\n# A small pseudocount (1e-6) is added to the denominator to prevent division by zero.\n# The result is scaled by 1e6 to represent Counts Per Million (CPM) within peaks.\nmessage(\"Normalizing counts to total tags in peaks...\")\nnormalized_counts_matrix <- t(t(raw_counts_matrix) / (total_tags_in_peaks + 1e-6)) * 1e6\n\n# Save the normalized counts to a CSV file\noutput_file <- \"atac_normalized_peak_counts.csv\"\nwrite.csv(normalized_counts_matrix, output_file, row.names=TRUE)\n\nmessage(paste0(\"ATAC peak quantification and normalization complete. Normalized counts saved to \", output_file))\nEOF\n\n# Execute the R script\nRscript run_atac_quant_norm.R",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "FASTQ files were mapped to the mm10 mouse reference genome with Bowtie2.  Peaks were called with HOMER (findPeaks) using parameters \u00e2\u0080\u009c-style factor -minDist 200 -size 200\u00e2\u0080\u009d.  After merging these peaks, correlations among replicates from the same cell subset/treatment were evaluated by correlation using tag counts.  The two most highly correlated samples were used for identifying the most robust peaks using the irreproducible discovery rate (IDR) method.  For this step, peaks were called with HOMER\u00e2\u0080\u0099s findPeaks, using parameters \u00e2\u0080\u009c-L 0 -C 0 -fdr 0.9 -minDist 200 -size 200\u00e2\u0080\u009d.  IDR peaks from different conditions involved in a comparison merged with HOMER\u00e2\u0080\u0099s mergePeaks and annotated with HOMER\u00e2\u0080\u0099s annotatePeaks.pl.  The raw tags of all samples which had reasonable correlation were quantified with HOMER (annotatePeaks.pl) using parameter \u00e2\u0080\u009c-noadj\u00e2\u0080\u009d.  Peaks which contained at least 4 tags in at least 1 sample were used to identify differentially bounded peaks (DBP) by DESeq2.  Peaks were categorized as distal peaks which are 2 kb away from known TSS and promotor peaks which are located within 2 kb region of known TSS sites.\nATAC peak quantification was normalized to the total tags in peaks.\nAssembly: mm10",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

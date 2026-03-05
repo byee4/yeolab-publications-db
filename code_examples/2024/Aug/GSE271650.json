@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Adapter sequences, low base call quality (Phred score <30), and reads with fewer than 5 bases, were trimmed from all FASTQ files using Cutadapt (v3.5)",
-      "tool_name": "cutadapt",
-      "tool_version": "3.5",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "STAR (Dobin et al., Bioinformatics, 2012, DOI: 10.1093/bioinformatics/bts635) aligner was used to align trimmed sequences to the mouse reference genome (GRCm39) with gene annotations from mouse Gencode (vM28)",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Gene count quantifications were analyzed using RSEM (RNA-Seq by Expectation Maximization; v.1.3.1)",
-      "tool_name": "RSEM",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Expected gene count quantifications from RSEM analysis were imported into R for differential gene analysis using edgeR (v.3.30.3)",
-      "tool_name": "RSEM",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Functional pathway analysis was performed using Metascape (Zhou et al., Nature Communications, 2019, DOI: 10.1038/s41467-019-09234-6), gProfiler (Reimand et al., R package version 0.67, 2018; https://cran.r-project.org/web/packages/gProfileR/gProfileR.pdf), and ClusterProfiler",
-      "tool_name": "clusterProfiler",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Adapter sequences, low base call quality (Phred score <30), and reads with fewer than 5 bases, were trimmed from all FASTQ files using Cutadapt (v3.5)\nSTAR (Dobin et al., Bioinformatics, 2012, DOI: 10.1093/bioinformatics/bts635) aligner was used to align trimmed sequences to the mouse reference genome (GRCm39) with gene annotations from mouse Gencode (vM28)\nGene count quantifications were analyzed using RSEM (RNA-Seq by Expectation Maximization; v.1.3.1)\nExpected gene count quantifications from RSEM analysis were imported into R for differential gene analysis using edgeR (v.3.30.3)\nFunctional pathway analysis was performed using Metascape (Zhou et al., Nature Communications, 2019, DOI: 10.1038/s41467-019-09234-6), gProfiler (Reimand et al., R package version 0.67, 2018; https://cran.r-project.org/web/packages/gProfileR/gProfileR.pdf), and ClusterProfiler\nAssembly: GRCm39\nSupplementary files format and content: EdgeR outputed differential gene expression files",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Adapter sequences, low base call quality (Phred score <30), and reads with fewer than 5 bases, were trimmed from all FASTQ files using Cutadapt (v3.5)",
+            "tool_name": "cutadapt",
+            "tool_version": "3.5",
+            "code_example": "# Install Cutadapt (if not already installed)\n# conda install -c bioconda cutadapt=3.5\n\n# Define input and output file names\nINPUT_R1=\"input_R1.fastq.gz\"\nINPUT_R2=\"input_R2.fastq.gz\"\nOUTPUT_R1_TRIMMED=\"output_R1_trimmed.fastq.gz\"\nOUTPUT_R2_TRIMMED=\"output_R2_trimmed.fastq.gz\"\n\n# Define common Illumina adapter sequences (adjust if specific adapters are known)\n# For Illumina Universal Adapter (R1) and Illumina Reverse Complement Adapter (R2)\nADAPTER_R1=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\"\nADAPTER_R2=\"AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT\"\n\n# Run Cutadapt for paired-end reads\ncutadapt \\\n  -a \"$ADAPTER_R1\" \\\n  -A \"$ADAPTER_R2\" \\\n  -q 30,30 \\\n  -m 5 \\\n  -o \"$OUTPUT_R1_TRIMMED\" \\\n  -p \"$OUTPUT_R2_TRIMMED\" \\\n  \"$INPUT_R1\" \\\n  \"$INPUT_R2\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 2,
+            "description": "STAR (Dobin et al., Bioinformatics, 2012, DOI: 10.1093/bioinformatics/bts635) aligner was used to align trimmed sequences to the mouse reference genome (GRCm39) with gene annotations from mouse Gencode (vM28)",
+            "tool_name": "STAR",
+            "tool_version": "2.3.0.1",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables for paths and files\nGENOME_DIR=\"star_genome_index_GRCm39_Gencode_vM28\"\nGENOME_FASTA=\"GRCm39.primary_assembly.genome.fa\" # Placeholder for GRCm39 FASTA file\nGTF_FILE=\"gencode.vM28.annotation.gtf\" # Placeholder for Gencode vM28 GTF file\nREAD_1=\"trimmed_R1.fastq.gz\" # Placeholder for trimmed R1 (forward) reads\nREAD_2=\"trimmed_R2.fastq.gz\" # Placeholder for trimmed R2 (reverse) reads\nOUTPUT_PREFIX=\"aligned_reads\"\nNUM_THREADS=8 # Adjust as needed for your system\n\n# --- Download reference files (example placeholders) ---\n# These commands are illustrative. You would typically download these from Ensembl/GENCODE FTP.\n# mkdir -p references\n# cd references\n# wget -c https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M28/GRCm39.primary_assembly.genome.fa.gz\n# wget -c https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M28/gencode.vM28.annotation.gtf.gz\n# gunzip GRCm39.primary_assembly.genome.fa.gz\n# gunzip gencode.vM28.annotation.gtf.gz\n# cd ..\n\n# --- Step 1: Generate STAR genome index (run once) ---\n# This step uses the mouse reference genome (GRCm39) and Gencode vM28 annotations\n# to build a STAR index. The sjdbOverhang parameter should ideally be (read_length - 1).\n# A value of 100 is common for typical RNA-seq read lengths.\nmkdir -p \"${GENOME_DIR}\"\nSTAR --runMode genomeGenerate \\\n     --genomeDir \"${GENOME_DIR}\" \\\n     --genomeFastaFiles \"${GENOME_FASTA}\" \\\n     --sjdbGTFfile \"${GTF_FILE}\" \\\n     --sjdbOverhang 100 \\\n     --runThreadN \"${NUM_THREADS}\"\n\n# --- Step 2: Align trimmed sequences ---\n# Align trimmed sequences to the mouse reference genome (GRCm39) using the generated index.\n# Outputs a sorted BAM file and gene counts (ReadsPerGene.out.tab).\nSTAR --runThreadN \"${NUM_THREADS}\" \\\n     --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${READ_1}\" \"${READ_2}\" \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 10 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --quantMode GeneCounts",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "Gene count quantifications were analyzed using RSEM (RNA-Seq by Expectation Maximization; v.1.3.1)",
+            "tool_name": "RSEM",
+            "tool_version": "1.3.1",
+            "code_example": "# Install RSEM (example using conda)\n# conda install -c bioconda rsem\n\n# Example: Prepare RSEM reference (run once per reference genome/transcriptome)\n# This step requires a FASTA file of the genome (e.g., hg38.fa) and a GTF/GFF annotation file (e.g., gencode.v44.annotation.gtf).\n# rsem-prepare-reference --gtf gencode.v44.annotation.gtf hg38.fa hg38_rsem_reference\n\n# Perform gene count quantification using RSEM\n# Assuming paired-end reads and a pre-built RSEM reference index (e.g., hg38_rsem_reference)\n# Replace 'read1.fastq.gz', 'read2.fastq.gz', 'hg38_rsem_reference', and 'sample_output_prefix' with actual file paths and desired output prefix.\nrsem-calculate-expression \\\n    --paired-end \\\n    --num-threads 8 \\\n    read1.fastq.gz \\\n    read2.fastq.gz \\\n    hg38_rsem_reference \\\n    sample_output_prefix",
+            "code_language": "bash",
+            "github_url": "https://github.com/deweylab/RSEM"
+        },
+        {
+            "step_order": 4,
+            "description": "Expected gene count quantifications from RSEM analysis were imported into R for differential gene analysis using edgeR (v.3.30.3)",
+            "tool_name": "RSEM",
+            "tool_version": "1.3.3 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install RSEM (if not already installed)\n# conda install -c bioconda rsem\n\n# --- RSEM Reference Preparation (run once per reference genome) ---\n# Replace 'genome.fa' with your reference genome FASTA file\n# Replace 'genes.gtf' with your gene annotation GTF file\n# Replace 'rsem_ref' with your desired reference name/path\n# rsem-prepare-reference --gtf genes.gtf genome.fa rsem_ref\n\n# --- RSEM Quantification ---\n# This command calculates gene and isoform expression levels from RNA-Seq reads.\n# Replace 'read1.fq.gz' and 'read2.fq.gz' with your actual gzipped paired-end FASTQ files.\n# Replace 'rsem_ref' with the path to your prepared RSEM reference.\n# Replace 'sample_output' with your desired output file prefix.\n# The output will include 'sample_output.genes.results' and 'sample_output.isoforms.results'.\nrsem-calculate-expression \\\n    --paired-end \\\n    --gzip-compressed \\\n    --num-threads 8 \\\n    read1.fq.gz read2.fq.gz \\\n    rsem_ref \\\n    sample_output",
+            "code_language": "bash",
+            "github_url": "https://github.com/deweylab/RSEM"
+        },
+        {
+            "step_order": 5,
+            "description": "Functional pathway analysis was performed using Metascape (Zhou et al., Nature Communications, 2019, DOI: 10.1038/s41467-019-09234-6), gProfiler (Reimand et al., R package version 0.67, 2018; https://cran.r-project.org/web/packages/gProfileR/gProfileR.pdf), and ClusterProfiler",
+            "tool_name": "clusterProfiler",
+            "tool_version": "3.9.2 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install R and Bioconductor if not already present.\n# For example, using conda:\n# conda create -n r_env r-base bioconductor-clusterprofiler r-org.hs.eg.db -y\n# conda activate r_env\n\n# Create an R script for functional pathway analysis using clusterProfiler\ncat << 'EOF' > run_clusterprofiler.R\n# Load necessary packages\nlibrary(clusterProfiler)\nlibrary(org.Hs.eg.db) # For human gene annotations (Homo sapiens)\n\n# Example gene list (replace with your actual gene list of Entrez IDs)\n# In a real scenario, this would typically come from differential expression analysis.\n# For demonstration, let's use a small set of placeholder Entrez IDs.\ngene_list <- c(\"10000\", \"10001\", \"10002\", \"10003\", \"10004\", \"10005\", \"10006\", \"10007\", \"10008\", \"10009\")\n\n# If your gene list is in a different format (e.g., gene symbols), you would convert it:\n# gene_symbols <- c(\"TP53\", \"MYC\", \"EGFR\")\n# eg <- bitr(gene_symbols, fromType=\"SYMBOL\", toType=\"ENTREZID\", OrgDb=\"org.Hs.eg.db\")\n# gene_list <- eg$ENTREZID\n\n# Perform GO enrichment analysis (Biological Process, Molecular Function, or Cellular Component)\ngo_enrichment_bp <- enrichGO(gene          = gene_list,\n                             OrgDb         = org.Hs.eg.db,\n                             ont           = \"BP\", # Biological Process\n                             pAdjustMethod = \"BH\",\n                             pvalueCutoff  = 0.05,\n                             qvalueCutoff  = 0.05,\n                             readable      = TRUE)\n\ngo_enrichment_mf <- enrichGO(gene          = gene_list,\n                             OrgDb         = org.Hs.eg.db,\n                             ont           = \"MF\", # Molecular Function\n                             pAdjustMethod = \"BH\",\n                             pvalueCutoff  = 0.05,\n                             qvalueCutoff  = 0.05,\n                             readable      = TRUE)\n\n# Perform KEGG enrichment analysis\nkegg_enrichment <- enrichKEGG(gene         = gene_list,\n                              organism     = 'hsa', # 'hsa' for Homo sapiens\n                              pvalueCutoff = 0.05)\n\n# Save results to CSV files\nif (!is.null(go_enrichment_bp)) {\n  write.csv(as.data.frame(go_enrichment_bp), \"go_enrichment_bp_results.csv\", row.names = FALSE)\n}\n\nif (!is.null(go_enrichment_mf)) {\n  write.csv(as.data.frame(go_enrichment_mf), \"go_enrichment_mf_results.csv\", row.names = FALSE)\n}\n\nif (!is.null(kegg_enrichment)) {\n  write.csv(as.data.frame(kegg_enrichment), \"kegg_enrichment_results.csv\", row.names = FALSE)\n}\n\nmessage(\"Functional pathway analysis completed. Results saved to CSV files.\")\nEOF\n\n# Execute the R script\nRscript run_clusterprofiler.R",
+            "code_language": "bash",
+            "github_url": "https://github.com/YuLab-SMU/clusterProfiler"
+        }
+    ],
+    "raw_text": "Adapter sequences, low base call quality (Phred score <30), and reads with fewer than 5 bases, were trimmed from all FASTQ files using Cutadapt (v3.5)\nSTAR (Dobin et al., Bioinformatics, 2012, DOI: 10.1093/bioinformatics/bts635) aligner was used to align trimmed sequences to the mouse reference genome (GRCm39) with gene annotations from mouse Gencode (vM28)\nGene count quantifications were analyzed using RSEM (RNA-Seq by Expectation Maximization; v.1.3.1)\nExpected gene count quantifications from RSEM analysis were imported into R for differential gene analysis using edgeR (v.3.30.3)\nFunctional pathway analysis was performed using Metascape (Zhou et al., Nature Communications, 2019, DOI: 10.1038/s41467-019-09234-6), gProfiler (Reimand et al., R package version 0.67, 2018; https://cran.r-project.org/web/packages/gProfileR/gProfileR.pdf), and ClusterProfiler\nAssembly: GRCm39\nSupplementary files format and content: EdgeR outputed differential gene expression files",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

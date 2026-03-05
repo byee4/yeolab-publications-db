@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Alignment, cell barcode processing, umis processing, abundance measurements: Cellranger ATAC (version 1.2.0)",
-      "tool_name": "Cell Ranger",
-      "tool_version": "1.2.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "QC, cell filtering, dimension reduction: Signac (version 1.5.0)",
-      "tool_name": "Signac",
-      "tool_version": "1.5.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Alignment, cell barcode processing, umis processing, abundance measurements: Cellranger ATAC  (version 1.2.0)\nQC, cell filtering, dimension reduction: Signac (version 1.5.0)\nAssembly: mm10\nSupplementary files format and content: Tab-separated values files and matrix files",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Alignment, cell barcode processing, umis processing, abundance measurements: Cellranger ATAC (version 1.2.0)",
+            "tool_name": "Cell Ranger",
+            "tool_version": "1.2.0",
+            "code_example": "# Install Cell Ranger ATAC (version 1.2.0) - download and extract the tarball\n# For example:\n# wget https://cf.10xgenomics.com/releases/cell-atac/cellranger-atac-1.2.0.tar.gz\n# tar -xzf cellranger-atac-1.2.0.tar.gz\n# export PATH=/path/to/cellranger-atac-1.2.0:$PATH\n\n# Download Cell Ranger ATAC reference data (e.g., GRCh38 for version 1.2.0)\n# For example:\n# wget https://cf.10xgenomics.com/releases/cell-atac/refdata-cellranger-atac-GRCh38-1.2.0.tar.gz\n# tar -xzf refdata-cellranger-atac-GRCh38-1.2.0.tar.gz\n# REF_PATH=\"$(pwd)/refdata-cellranger-atac-GRCh38-1.2.0\"\n\n# Define variables\nSAMPLE_ID=\"my_atac_sample\"\nFASTQ_DIR=\"/path/to/your/fastqs\"\nREFERENCE_PATH=\"/path/to/refdata-cellranger-atac-GRCh38-1.2.0\"\n\n# Run Cell Ranger ATAC count for alignment, cell barcode processing, UMI processing, and abundance measurements\ncellranger atac count \\\n    --id=\"${SAMPLE_ID}\" \\\n    --fastqs=\"${FASTQ_DIR}\" \\\n    --reference=\"${REFERENCE_PATH}\"",
+            "code_language": "bash",
+            "github_url": "https://www.10xgenomics.com/products/single-cell-atac"
+        },
+        {
+            "step_order": 2,
+            "description": "QC, cell filtering, dimension reduction: Signac (version 1.5.0)",
+            "tool_name": "Signac",
+            "tool_version": "1.5.0",
+            "code_example": "# Install R and necessary packages if not already present\n# R -e 'install.packages(\"devtools\")'\n# R -e 'devtools::install_github(\"timoast/signac@release/1.5.0\")'\n# R -e 'install.packages(\"Seurat\")'\n# R -e 'install.packages(\"GenomeInfoDb\")'\n# R -e 'install.packages(\"EnsDb.Hsapiens.v86\")' # Example for hg38 annotation\n\n# Define input and output paths\nFRAGMENTS_FILE=\"input/fragments.tsv.gz\"\nCELL_BARCODES_FILE=\"input/cell_barcodes.tsv\"\nOUTPUT_DIR=\"output_signac\"\n\n# Define reference genome (e.g., hg38)\nGENOME_ASSEMBLY=\"hg38\"\n\nmkdir -p ${OUTPUT_DIR}\n\n# Create an R script to perform QC, cell filtering, and dimension reduction using Signac\ncat << 'EOF' > ${OUTPUT_DIR}/signac_analysis.R\nlibrary(Signac)\nlibrary(Seurat)\nlibrary(GenomeInfoDb)\nlibrary(EnsDb.Hsapiens.v86) # For hg38 annotation\n\n# --- Configuration ---\nfragments_file <- Sys.getenv(\"FRAGMENTS_FILE\")\ncell_barcodes_file <- Sys.getenv(\"CELL_BARCODES_FILE\")\noutput_dir <- Sys.getenv(\"OUTPUT_DIR\")\ngenome_assembly <- Sys.getenv(\"GENOME_ASSEMBLY\")\n\n# Load genome annotation\nif (genome_assembly == \"hg38\") {\n  annotations <- Get  (EnsDb.Hsapiens.v86)\n  seqlevelsStyle(annotations) <- 'UCSC'\n  genome(annotations) <- \"hg38\"\n} else {\n  stop(\"Unsupported genome assembly. Please add appropriate annotation package.\")\n}\n\n# --- Data Loading ---\n# Create a ChromatinAssay object from the fragments file\nfrags <- CreateFragmentObject(\n  path = fragments_file,\n  cells = read.table(cell_barcodes_file, header = FALSE)$V1\n)\n\n# Create a Seurat object\nchrom_assay <- CreateChromatinAssay(\n  counts = frags,\n  sep = c(\":\", \"-\"),\n  genome = genome_assembly,\n  fragments = frags,\n  min.cells = 10,\n  min.features = 200\n)\n\n# Add the assay to a Seurat object\nobj <- CreateSeuratObject(\n  counts = chrom_assay,\n  assay = \"ATAC\"\n)\n\n# Add annotations\nAnnotation(obj) <- annotations\n\n# --- Quality Control ---\n# Compute QC metrics\nobj <- NucleosomeSignal(object = obj)\nobj <- TSSEnrichment(object = obj, fast = FALSE)\nobj <- CountFragments(object = obj)\n\n# Add blacklist ratio (requires blacklist regions for the specific genome)\n# For hg38, you might use: blacklist_hg38_unified <- blacklist_hg38_unified\n# obj$blacklist_ratio <- FractionCountsInRegion(object = obj, regions = blacklist_hg38_unified)\n\n# Plot QC metrics (optional, for visualization)\n# pdf(file.path(output_dir, \"qc_plots.pdf\"))\n# VlnPlot(obj, features = c(\"nCount_ATAC\", \"TSS.enrichment\", \"nucleosome_signal\"), pt.size = 0.1, ncol = 3)\n# dev.off()\n\n# --- Cell Filtering ---\n# Filter cells based on QC metrics\nobj_filtered <- subset(\n  x = obj,\n  subset = nCount_ATAC < 100000 & \n           nCount_ATAC > 500 & \n           TSS.enrichment > 2 & \n           nucleosome_signal < 2 # & \n           # blacklist_ratio < 0.05 # Uncomment if blacklist ratio is calculated\n)\n\n# --- Normalization and Dimension Reduction ---\n# Call peaks (optional, but often done before dimension reduction for feature selection)\n# obj_filtered <- CallPeaks(obj_filtered, macs2.path = \"/path/to/macs2\") # Requires MACS2\n\n# Create a gene activity matrix (optional, for multi-modal analysis)\n# gene.activities <- GeneActivity(obj_filtered)\n# obj_filtered[['RNA']] <- CreateAssayObject(counts = gene.activities)\n\n# Normalize and scale data\nobj_filtered <- RunTFIDF(obj_filtered)\nobj_filtered <- FindTopFeatures(obj_filtered, min.cutoff = 'q0')\nobj_filtered <- RunSVD(obj_filtered)\n\n# Build a graph and cluster cells\nobj_filtered <- RunUMAP(obj_filtered, reduction = \"lsi\", dims = 2:30)\nobj_filtered <- FindNeighbors(obj_filtered, reduction = \"lsi\", dims = 2:30)\nobj_filtered <- FindClusters(obj_filtered, verbose = FALSE, algorithm = 3)\n\n# Save the processed Seurat object\nsaveRDS(obj_filtered, file = file.path(output_dir, \"signac_processed_seurat_object.rds\"))\n\n# Save UMAP coordinates and cluster assignments\nwrite.csv(Embeddings(obj_filtered, reduction = \"umap\"), file = file.path(output_dir, \"umap_coordinates.csv\"))\nwrite.csv(obj_filtered@meta.data$seurat_clusters, file = file.path(output_dir, \"cell_clusters.csv\"))\n\nmessage(\"Signac analysis complete. Output saved to \", output_dir)\nEOF\n\n# Execute the R script\nFRAGMENTS_FILE=\"${FRAGMENTS_FILE}\" CELL_BARCODES_FILE=\"${CELL_BARCODES_FILE}\" OUTPUT_DIR=\"${OUTPUT_DIR}\" GENOME_ASSEMBLY=\"${GENOME_ASSEMBLY}\" Rscript ${OUTPUT_DIR}/signac_analysis.R",
+            "code_language": "bash",
+            "github_url": "https://github.com/timoast/signac"
+        }
+    ],
+    "raw_text": "Alignment, cell barcode processing, umis processing, abundance measurements: Cellranger ATAC  (version 1.2.0)\nQC, cell filtering, dimension reduction: Signac (version 1.5.0)\nAssembly: mm10\nSupplementary files format and content: Tab-separated values files and matrix files",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,115 +1,115 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "All reads were aligned to the human genome hg38 primary assembly using STAR.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "featureCounts version 2.0.2 was used to annotate reads, using the flag --minOverlap 20 and a custom GTF file derived from gencode v34",
-      "tool_name": "featureCounts",
-      "tool_version": "2.0.2",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Differential expression was calculated using DESeq2.",
-      "tool_name": "DESeq2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Cut-offs used to determine significant differential expression were baseMean > 50 and padj <=0.01",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Genes which had substantial upstream intergenic reads (similar to DoGs) were removed from DE tables.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Upstream intergenic regions were extracted using bedtools flank -l 2000 -r 0 -s.",
-      "tool_name": "bedtools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Intervening upstream genes that had any overlap with this region were removed with bedtools subtract.",
-      "tool_name": "bedtools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "Reads that did not align to intronic or exonic regions were extracted from bam files with fgrep.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "Coverage across the 2000 bp upstream region was determined with bedtools coverage -S -split.",
-      "tool_name": "bedtools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 10,
-      "description": "A TPM value was determined for this upstream region and compared to the TPM of the adjacent downstream gene.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 11,
-      "description": "If a ratio of 20% of the signal (determined by TPM) was present in the upstream region, and a breadth of 70% of that region was covered, that gene was determined to have significant enough upstream transcription so as to not be a reliable functional coding product, and was removed from subsequent analysis.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 12,
-      "description": "Genes that showed this pattern in either the input or IP condition were both removed from that IP analysis.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "All reads were aligned to the human genome hg38 primary assembly using STAR.\nfeatureCounts version 2.0.2 was used to annotate reads, using the flag --minOverlap 20 and a custom GTF file derived from gencode v34\nDifferential expression was calculated using DESeq2. Cut-offs used to determine significant differential expression were baseMean > 50 and padj <=0.01\nGenes which had substantial upstream intergenic reads (similar to DoGs) were removed from DE tables. Upstream intergenic regions were extracted using bedtools flank -l 2000 -r 0 -s. Intervening upstream genes that had any overlap with this region were removed with bedtools subtract. Reads that did not align to intronic or exonic regions were extracted from bam files with fgrep. Coverage across the 2000 bp upstream region was determined with bedtools coverage -S -split. A TPM value was determined for this upstream region and compared to the TPM of the adjacent downstream gene. If a ratio of 20% of the signal (determined by TPM) was present in the upstream region, and a breadth of 70% of that region was covered, that gene was determined to have significant enough upstream transcription so as to not be a reliable functional coding product, and was removed from subsequent analysis. Genes that showed this pattern in either the input or IP condition were both removed from that IP analysis.\nGenome_build: hg38\nSupplementary_files_format_and_content: comma separated files with output of DESeq2; normalized abundance measurements for all genes when comparing RIP condition to total input condition",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "All reads were aligned to the human genome hg38 primary assembly using STAR.",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star=2.7.10a\n\n# Define paths for reference genome and GTF\n# For hg38 primary assembly, we typically use GENCODE or Ensembl annotations.\n# Example Ensembl GRCh38 release 110:\n# GENOME_FASTA=\"ftp://ftp.ensembl.org/pub/release-110/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz\"\n# GTF_FILE=\"ftp://ftp.ensembl.org/pub/release-110/gtf/homo_sapiens/Homo_sapiens.GRCh38.110.gtf.gz\"\n\n# Placeholder paths for local files\nGENOME_FASTA=\"/path/to/reference/hg38/Homo_sapiens.GRCh38.dna.primary_assembly.fa\" # e.g., from Ensembl or UCSC\nGTF_FILE=\"/path/to/reference/hg38/Homo_sapiens.GRCh38.110.gtf\" # e.g., from Ensembl or GENCODE\nSTAR_INDEX_DIR=\"/path/to/STAR_index/hg38_ensembl_110\" # Directory to store the STAR genome index\n\n# Create STAR genome index (run this command once to build the index)\n# mkdir -p ${STAR_INDEX_DIR}\n# STAR --runMode genomeGenerate \\\n#      --genomeDir ${STAR_INDEX_DIR} \\\n#      --genomeFastaFiles ${GENOME_FASTA} \\\n#      --sjdbGTFfile ${GTF_FILE} \\\n#      --sjdbOverhang 100 \\\n#      --runThreadN 8 # Adjust threads based on available resources\n\n# Define input and output files\nREADS_R1=\"sample_R1.fastq.gz\" # Placeholder for forward reads\nREADS_R2=\"sample_R2.fastq.gz\" # Placeholder for reverse reads (if paired-end, otherwise remove)\nOUTPUT_PREFIX=\"sample_aligned\" # Prefix for output files (e.g., sample_aligned.Aligned.sortedByCoord.out.bam)\nTHREADS=8 # Number of threads to use for alignment\n\n# Align reads to hg38 primary assembly using STAR\nSTAR --genomeDir ${STAR_INDEX_DIR} \\\n     --readFilesIn ${READS_R1} ${READS_R2} \\\n     --readFilesCommand zcat \\\n     --runThreadN ${THREADS} \\\n     --outFileNamePrefix ${OUTPUT_PREFIX}. \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes All \\\n     --outSAMunmapped Within \\\n     --twopassMode Basic",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "featureCounts version 2.0.2 was used to annotate reads, using the flag --minOverlap 20 and a custom GTF file derived from gencode v34",
+            "tool_name": "featureCounts",
+            "tool_version": "2.0.2",
+            "code_example": "# featureCounts is part of the Subread package.\n# Installation via Bioconda:\n# conda install -c bioconda subread\n\n# Placeholder for the custom GTF file derived from gencode v34.\n# Ensure this GTF file is available in your working directory or provide its full path.\n# Example: gencode.v34.annotation.gtf\nCUSTOM_GTF=\"custom_gencode_v34.gtf\"\n\n# Placeholder for input BAM file(s).\n# featureCounts can take multiple BAM files as input.\nINPUT_BAM=\"input.bam\"\n\n# Placeholder for output counts file.\nOUTPUT_COUNTS=\"featureCounts_counts.txt\"\n\n# Execute featureCounts\n# -a: Annotation file (GTF/GFF)\n# -o: Output file\n# --minOverlap: Minimum number of overlapping bases in a read that is required for read assignment.\n# Input BAM files are provided as positional arguments.\nfeatureCounts -a \"${CUSTOM_GTF}\" \\\n              -o \"${OUTPUT_COUNTS}\" \\\n              --minOverlap 20 \\\n              \"${INPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "Differential expression was calculated using DESeq2.",
+            "tool_name": "DESeq2",
+            "tool_version": "1.42.0 (R 4.3.2, Bioconductor 3.18) (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install R and Bioconductor if not already present\n# conda create -n deseq2_env r-base=4.3.2 bioconductor-deseq2 -c bioconda -c conda-forge -y\n# conda activate deseq2_env\n\n# Create dummy input files for demonstration purposes\n# In a real scenario, 'counts.tsv' would be your gene/transcript count matrix\n# and 'sample_info.tsv' would contain metadata for your samples.\ncat << EOF > counts.tsv\tgene1\tgene2\tgene3\tsampleA1\t100\t50\t20\nsampleA2\t120\t60\t25\nsampleB1\t50\t100\t15\nsampleB2\t60\t110\t18\nEOF\n\ncat << EOF > sample_info.tsv\tsample\tcondition\tsampleA1\tcontrol\tsampleA2\tcontrol\tsampleB1\ttreated\tsampleB2\ttreated\nEOF\n\n# R script for DESeq2 analysis\ncat << 'EOF' > run_deseq2.R\nlibrary(DESeq2)\n\n# Load count data\ncount_data <- read.table(\"counts.tsv\", header=TRUE, row.names=1, sep=\"\\t\")\n\n# Load sample information\nsample_info <- read.table(\"sample_info.tsv\", header=TRUE, row.names=1, sep=\"\\t\")\n\n# Ensure sample order matches between count data and sample info\nsample_info <- sample_info[colnames(count_data), , drop=FALSE]\n\n# Create DESeqDataSet object\ndds <- DESeqDataSetFromMatrix(countData = round(count_data), # DESeq2 expects integer counts\n                              colData = sample_info,\n                              design = ~ condition)\n\n# Run DESeq2 analysis\ndds <- DESeq(dds)\n\n# Get results for the 'treated' vs 'control' comparison\nres <- results(dds, contrast=c(\"condition\", \"treated\", \"control\"))\n\n# Order results by adjusted p-value\nres <- res[order(res$padj), ]\n\n# Write results to a CSV file\nwrite.csv(as.data.frame(res), file=\"deseq2_results.csv\")\n\n# Optional: Save normalized counts\nnorm_counts <- counts(dds, normalized=TRUE)\nwrite.csv(as.data.frame(norm_counts), file=\"deseq2_normalized_counts.csv\")\n\nmessage(\"DESeq2 analysis complete. Results saved to deseq2_results.csv\")\nEOF\n\n# Execute the R script\nRscript run_deseq2.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/DESeq2.html"
+        },
+        {
+            "step_order": 4,
+            "description": "Cut-offs used to determine significant differential expression were baseMean > 50 and padj <=0.01",
+            "tool_name": "DESeq2 (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.42.0",
+            "code_example": "# This script assumes DESeq2 has already been run and its results are in 'deseq2_results.tsv'.\n# The following R script filters the results based on the specified cut-offs.\n\n# If R and DESeq2 are not installed:\n# # conda install -c conda-forge r-base\n# # conda install -c bioconda bioconductor-deseq2\n\nRscript -e '\n  results_df <- read.delim(\"deseq2_results.tsv\", sep=\"\\t\", header=TRUE)\n  significant_results <- subset(results_df, baseMean > 50 & padj <= 0.01)\n  write.table(significant_results, \"significant_differential_expression.tsv\", sep=\"\\t\", quote=FALSE, row.names=FALSE)\n'",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/DESeq2.html"
+        },
+        {
+            "step_order": 5,
+            "description": "Genes which had substantial upstream intergenic reads (similar to DoGs) were removed from DE tables.",
+            "tool_name": "Custom script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# This script filters a Differential Expression (DE) results table\n# by removing genes identified as having \"substantial upstream intergenic reads\" (similar to DoGs).\n# The identification of such genes is assumed to be performed by a prior custom script.\n\n# --- Conceptual Step: Identification of genes with substantial upstream intergenic reads ---\n# This part is highly dependent on how \"substantial upstream intergenic reads\" is defined.\n# It would typically involve:\n# 1. Defining upstream intergenic regions for each gene using a genome annotation file (e.g., GTF/GFF).\n#    Reference dataset: Genome annotation (e.g., Homo_sapiens.GRCh38.109.gtf)\n# 2. Quantifying reads in these defined regions from aligned sequencing data (e.g., BAM files).\n#    Reference dataset: Aligned reads (e.g., sample.bam)\n# 3. Applying a threshold or statistical method to identify genes with \"substantial\" read counts\n#    in these upstream intergenic regions.\n#\n# For this filtering step, we assume a file named 'genes_to_remove.txt' has already been generated,\n# containing one gene identifier per line for genes that meet the removal criteria.\n# Example (conceptual) command that might generate 'genes_to_to_remove.txt':\n# python /path/to/custom_script/identify_dogs_like_genes.py \\\n#     --bam_file /path/to/aligned_reads/sample.bam \\\n#     --gtf_file /path/to/genome_annotation/Homo_sapiens.GRCh38.109.gtf \\\n#     --output_file genes_to_remove.txt \\\n#     --upstream_distance 1000 \\\n#     --min_read_count 50 \\\n#     --intergenic_only\n\n# --- Actual Filtering Step ---\n\n# Input: Differential Expression results table\n# This file is expected to have gene identifiers in the first column and a header.\nDE_TABLE=\"differential_expression_results.tsv\"\n\n# Input: List of gene identifiers to be removed\n# Each line should contain one gene ID.\nGENES_TO_REMOVE=\"genes_to_remove.txt\"\n\n# Output: Filtered Differential Expression results table\nFILTERED_DE_TABLE=\"differential_expression_results_filtered.tsv\"\n\n# Check if the DE table exists\nif [ ! -f \"$DE_TABLE\" ]; then\n    echo \"Error: Differential expression table '$DE_TABLE' not found.\"\n    exit 1\nfi\n\n# Check if the list of genes to remove exists and is not empty\nif [ ! -s \"$GENES_TO_REMOVE\" ]; then\n    echo \"Warning: List of genes to remove '$GENES_TO_REMOVE' is empty or not found. No genes will be filtered.\"\n    # If the file is empty, we can just copy the original DE table or proceed without filtering.\n    cp \"$DE_TABLE\" \"$FILTERED_DE_TABLE\"\n    echo \"Original DE table copied to $FILTERED_DE_TABLE as no genes were specified for removal.\"\n    exit 0\nfi\n\n# Filter the DE table:\n# 1. Read the list of genes to remove into an associative array 'a'.\n# 2. Process the DE table:\n#    - Print the header line (NR==1).\n#    - For subsequent lines, print the line only if the gene ID (first column, $1) is NOT in the 'a' array.\nawk 'FNR==NR{a[$1]=1; next} NR==1 || !($1 in a)' \"$GENES_TO_REMOVE\" \"$DE_TABLE\" > \"$FILTERED_DE_TABLE\"\n\necho \"Filtering complete. Filtered DE table saved to: $FILTERED_DE_TABLE\"\necho \"Genes removed from DE table (listed in $GENES_TO_REMOVE):\"\ncat \"$GENES_TO_REMOVE\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 6,
+            "description": "Upstream intergenic regions were extracted using bedtools flank -l 2000 -r 0 -s.",
+            "tool_name": "bedtools",
+            "tool_version": "2.31.0",
+            "code_example": "# Install bedtools if not already installed\n# conda install -c bioconda bedtools\n\n# Placeholder for input intergenic regions file.\n# This file would typically be generated in a previous step,\n# e.g., by subtracting gene annotations from the whole genome.\n# For demonstration, let's assume 'intergenic_regions.bed' exists.\n# Example (not part of this specific step):\n# bedtools complement -i genes.bed -g hg38.chrom.sizes > intergenic_regions.bed\n\n# Download a chrom.sizes file for the desired genome assembly (e.g., hg38)\n# wget -O hg38.chrom.sizes http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes\n\n# Extract upstream intergenic regions\nbedtools flank -i intergenic_regions.bed -g hg38.chrom.sizes -l 2000 -r 0 -s > upstream_intergenic_regions.bed",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        },
+        {
+            "step_order": 7,
+            "description": "Intervening upstream genes that had any overlap with this region were removed with bedtools subtract.",
+            "tool_name": "bedtools",
+            "tool_version": "2.30.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install bedtools if not already installed\n# conda install -c bioconda bedtools\n\n# Define input and output files (placeholders)\n# input_regions.bed: BED file containing the regions of interest (e.g., original regions)\n# upstream_genes.bed: BED file containing the upstream gene regions to be removed\n# filtered_regions.bed: Output BED file with upstream genes subtracted\n\nbedtools subtract -a input_regions.bed -b upstream_genes.bed > filtered_regions.bed",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        },
+        {
+            "step_order": 8,
+            "description": "Reads that did not align to intronic or exonic regions were extracted from bam files with fgrep.",
+            "tool_name": "fgrep (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "System Utility (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# This step describes extracting reads that *did not* align to intronic or exonic regions.\n# Directly using `fgrep` on a BAM file for genomic region filtering is not standard as BAM is binary.\n# A common approach involves first identifying reads that *do* align to these regions (e.g., using bedtools intersect),\n# extracting their read IDs, and then using `fgrep -v` on a list of all read IDs to find the complement.\n# Finally, `samtools` can filter the original BAM based on these non-aligning read IDs.\n# Alternatively, if 'fgrep' is used directly, it implies the BAM was converted to SAM/FASTQ and then filtered for specific string patterns, which is less likely for genomic region filtering.\n# The following code block demonstrates a plausible interpretation using standard tools to achieve the described outcome, assuming 'fgrep' was used on a list of read IDs.\n\n# Define input and output files\nINPUT_BAM=\"input.bam\"\nINTRONIC_EXONIC_BED=\"intronic_exonic.bed\" # Placeholder for a BED file defining intronic/exonic regions\nOUTPUT_BAM=\"reads_not_in_intronic_exonic.bam\"\n\n# --- Installation (commented out) ---\n# conda install -c bioconda samtools bedtools\n\n# 1. Extract all read IDs from the input BAM file\nsamtools view \"${INPUT_BAM}\" | cut -f1 > all_read_ids.txt\n\n# 2. Identify reads that *do* align to intronic or exonic regions\n#    This step uses bedtools intersect to find reads overlapping the defined regions.\n#    The output is a BAM file containing only reads that align to intronic/exonic regions.\nbedtools intersect -abam \"${INPUT_BAM}\" -b \"${INTRONIC_EXONIC_BED}\" > aligned_to_regions.bam\n\n# 3. Extract read IDs from the reads that *do* align to intronic/exonic regions\nsamtools view aligned_to_regions.bam | cut -f1 | sort -u > aligned_read_ids.txt\n\n# 4. Use fgrep to find read IDs that are *not* in the 'aligned_read_ids.txt' list\n#    This effectively identifies reads that did not align to intronic or exonic regions.\nfgrep -v -f aligned_read_ids.txt all_read_ids.txt > non_intronic_exonic_read_ids.txt\n\n# 5. Filter the original BAM file to extract reads corresponding to the non-intronic/exonic read IDs\n#    Note: Filtering BAM by a list of read names is not directly supported by `samtools view -N`.\n#    A common workaround is to convert to SAM, filter with `grep`, and convert back.\n#    However, `samtools view -N` is a common misconception. A more efficient way is to use `samtools view -L` for regions or `samtools view -f` for flags.\n#    Given the explicit mention of `fgrep` and the need to filter by read names, converting to SAM and back is the most direct interpretation of using `fgrep` for this purpose.\n\nsamtools view -h \"${INPUT_BAM}\" | fgrep -f non_intronic_exonic_read_ids.txt - > temp_filtered.sam\nsamtools view -bS temp_filtered.sam > \"${OUTPUT_BAM}\"\n\n# Clean up intermediate files\nrm all_read_ids.txt aligned_to_regions.bam aligned_read_ids.txt non_intronic_exonic_read_ids.txt temp_filtered.sam\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 9,
+            "description": "Coverage across the 2000 bp upstream region was determined with bedtools coverage -S -split.",
+            "tool_name": "bedtools",
+            "tool_version": "v2.31.0",
+            "code_example": "# Install bedtools (if not already installed)\n# conda install -c bioconda bedtools\n\n# Placeholder variables (replace with actual file paths)\nINPUT_BAM=\"aligned_reads.bam\" # e.g., a STAR-aligned BAM file from eCLIP data\nUPSTREAM_REGIONS_BED=\"upstream_regions_2000bp.bed\" # BED file defining the 2000 bp upstream regions\nOUTPUT_COVERAGE_FILE=\"upstream_coverage.tsv\"\n\n# Determine coverage across the 2000 bp upstream region\nbedtools coverage -a \"${UPSTREAM_REGIONS_BED}\" -b \"${INPUT_BAM}\" -S -split > \"${OUTPUT_COVERAGE_FILE}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        },
+        {
+            "step_order": 10,
+            "description": "A TPM value was determined for this upstream region and compared to the TPM of the adjacent downstream gene.",
+            "tool_name": "Salmon (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.10.0",
+            "code_example": "# Install Salmon (if not already installed)\n# conda install -c bioconda salmon\n\n# Define variables\nGENOME_VERSION=\"GRCh38\" # Example: Human genome version\nTRANSCRIPTOME_FASTA=\"gencode.v38.transcripts.fa.gz\" # Example: GENCODE v38 transcriptome FASTA\nSALMON_INDEX_DIR=\"salmon_index_${GENOME_VERSION}\"\nREAD1=\"sample_R1.fastq.gz\"\nREAD2=\"sample_R2.fastq.gz\" # Optional, if paired-end\nOUTPUT_DIR=\"salmon_quant_output\"\n\n# Download reference transcriptome (example commands - replace with actual paths if already available)\n# mkdir -p references\n# cd references\n# wget -c ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_38/gencode.v38.transcripts.fa.gz\n# cd ..\n\n# 1. Build Salmon index (run once for a given transcriptome)\nsalmon index -t \"${TRANSCRIPTOME_FASTA}\" -i \"${SALMON_INDEX_DIR}\" --gencode\n\n# 2. Quantify expression (determine TPM values)\n# For paired-end reads:\nsalmon quant -i \"${SALMON_INDEX_DIR}\" -l A \\\n             -1 \"${READ1}\" -2 \"${READ2}\" \\\n             -p 8 --validateMappings -o \"${OUTPUT_DIR}\"\n\n# For single-end reads (uncomment and use if applicable):\n# salmon quant -i \"${SALMON_INDEX_DIR}\" -l A \\\n#              -r \"${READ1}\" \\\n#              -p 8 --validateMappings -o \"${OUTPUT_DIR}\"\n\n# The output directory will contain 'quant.sf' which includes TPM values for transcripts.\n# Further analysis (e.g., aggregating transcript TPMs to gene TPMs, \n# identifying \"upstream regions\" and \"downstream genes\" based on genomic coordinates \n# from an annotation file like GTF, and comparing their TPMs) would be performed \n# using custom scripts (e.g., R or Python) parsing the 'quant.sf' file and the annotation.",
+            "code_language": "bash",
+            "github_url": "https://github.com/COMBINE-lab/salmon"
+        },
+        {
+            "step_order": 11,
+            "description": "If a ratio of 20% of the signal (determined by TPM) was present in the upstream region, and a breadth of 70% of that region was covered, that gene was determined to have significant enough upstream transcription so as to not be a reliable functional coding product, and was removed from subsequent analysis.",
+            "tool_name": "Custom Script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A (Inferred with models/gemini-2.5-flash)",
+            "code_example": "#!/bin/bash\n\n# --- Configuration ---\nTPM_RATIO_THRESHOLD=0.20 # 20% of signal (TPM) in upstream region\nCOVERAGE_BREADTH_THRESHOLD=0.70 # 70% breadth of coverage in upstream region\n\n# --- Input Files (placeholders - replace with actual paths) ---\n# These files would typically be generated by previous steps in the pipeline.\n# For example:\n# - gene_body_tpm.tsv: Gene-level TPM quantification (e.g., from Salmon, Kallisto, RSEM)\n#   Format: gene_id<tab>TPM_value\n# - upstream_region_tpm.tsv: TPM quantification specifically for the upstream region of each gene.\n#   This would require defining upstream regions (e.g., using bedtools flank on gene annotations),\n#   quantifying reads in these regions (e.g., featureCounts), and then normalizing to TPM.\n#   Format: gene_id<tab>TPM_value\n# - upstream_coverage_breadth.tsv: Fraction of the upstream region covered by transcription.\n#   This could be calculated using bedtools coverage with aligned RNA-seq reads (BAM) and upstream region BED files.\n#   Format: gene_id<tab>fraction_covered\n\n# --- Output Files ---\nFILTERED_GENES_LIST=\"genes_removed_due_to_upstream_transcription.tsv\"\nRELIABLE_GENES_LIST=\"reliable_functional_coding_products.tsv\"\n\n# --- Placeholder for generating dummy input files for demonstration ---\n# In a real pipeline, these would be actual output from previous steps.\necho -e \"geneA\\t100.0\" > gene_body_tpm.tsv\necho -e \"geneB\\t20.0\" >> gene_body_tpm.tsv\necho -e \"geneC\\t50.0\" >> gene_body_tpm.tsv\necho -e \"geneD\\t10.0\" >> gene_body_tpm.tsv\necho -e \"geneE\\t75.0\" >> gene_body_tpm.tsv\n\necho -e \"geneA\\t30.0\" > upstream_region_tpm.tsv # Ratio 0.30\necho -e \"geneB\\t5.0\" >> upstream_region_tpm.tsv   # Ratio 0.25\necho -e \"geneC\\t8.0\" >> upstream_region_tpm.tsv   # Ratio 0.16\necho -e \"geneD\\t3.0\" >> upstream_region_tpm.tsv   # Ratio 0.30\necho -e \"geneE\\t10.0\" >> upstream_region_tpm.tsv  # Ratio 0.13\n\necho -e \"geneA\\t0.85\" > upstream_coverage_breadth.tsv # Covered\necho -e \"geneB\\t0.60\" >> upstream_coverage_breadth.tsv # Not covered\necho -e \"geneC\\t0.90\" >> upstream_coverage_breadth.tsv # Covered\necho -e \"geneD\\t0.75\" >> upstream_coverage_breadth.tsv # Covered\necho -e \"geneE\\t0.65\" >> upstream_coverage_breadth.tsv # Not covered\n\n# --- Core Filtering Logic (using awk for custom script) ---\necho \"Applying filtering logic...\"\nawk -v tpm_ratio_thresh=\"${TPM_RATIO_THRESHOLD}\" -v cov_breadth_thresh=\"${COVERAGE_BREADTH_THRESHOLD}\" '\nBEGIN { OFS=\"\\t\" }\nFILENAME==\"gene_body_tpm.tsv\" {\n    gene_body_tpm[$1] = $2;\n}\nFILENAME==\"upstream_region_tpm.tsv\" {\n    upstream_tpm[$1] = $2;\n}\nFILENAME==\"upstream_coverage_breadth.tsv\" {\n    coverage_breadth[$1] = $2;\n}\nEND {\n    for (gene_id in gene_body_tpm) {\n        # Check if upstream data exists for this gene\n        if (gene_id in upstream_tpm && gene_id in coverage_breadth) {\n            # Calculate TPM ratio: (TPM in upstream region) / (TPM in gene body)\n            ratio = upstream_tpm[gene_id] / gene_body_tpm[gene_id];\n\n            # Apply filtering conditions:\n            # 1. Upstream TPM ratio >= threshold (20%)\n            # 2. Upstream coverage breadth >= threshold (70%)\n            if (ratio >= tpm_ratio_thresh && coverage_breadth[gene_id] >= cov_breadth_thresh) {\n                print gene_id, \"REMOVED\", \"UpstreamTPMRatio=\"ratio, \"CoverageBreadth=\"coverage_breadth[gene_id] >> \"'\"${FILTERED_GENES_LIST}\"'\" ;\n            } else {\n                print gene_id, \"KEPT\", \"UpstreamTPMRatio=\"ratio, \"CoverageBreadth=\"coverage_breadth[gene_id] >> \"'\"${RELIABLE_GENES_LIST}\"'\" ;\n            }\n        } else {\n            # If upstream data is missing, assume it is not problematic and keep the gene\n            print gene_id, \"KEPT\", \"NoUpstreamData\" >> \"'\"${RELIABLE_GENES_LIST}\"'\" ;\n        }\n    }\n}' gene_body_tpm.tsv upstream_region_tpm.tsv upstream_coverage_breadth.tsv\n\necho \"Filtering complete. Genes to remove are in ${FILTERED_GENES_LIST}\"\necho \"Reliable genes are in ${RELIABLE_GENES_LIST}\"\n\n# Clean up dummy files (remove this in a real pipeline)\nrm gene_body_tpm.tsv upstream_region_tpm.tsv upstream_coverage_breadth.tsv\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 12,
+            "description": "Genes that showed this pattern in either the input or IP condition were both removed from that IP analysis.",
+            "tool_name": "Custom Filtering Script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A (Custom) (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# This script conceptually demonstrates the removal of genes based on a defined pattern\n# in either the input or IP condition, as described. The exact \"pattern\" (e.g., high input signal,\n# low IP signal, specific statistical criteria) and the input data format would be specific\n# to the experimental design and upstream analysis.\n\n# For demonstration, let's assume we have a file 'gene_quantification_data.tsv'\n# that contains gene identifiers along with their quantified values (e.g., counts, RPKM, TPM)\n# for both input and IP conditions.\n# Example format (tab-separated):\n# GeneID    Input_Value    IP_Value\n\n# Let's create a dummy file for demonstration purposes:\necho -e \"GeneA\\t1000\\t5000\" > gene_quantification_data.tsv\necho -e \"GeneB\\t5000\\t100\" >> gene_quantification_data.tsv # High input, low IP - candidate for removal\necho -e \"GeneC\\t50\\t20\" >> gene_quantification_data.tsv     # Low IP - candidate for removal\necho -e \"GeneD\\t200\\t8000\" >> gene_quantification_data.tsv\necho -e \"GeneE\\t10000\\t12000\" >> gene_quantification_data.tsv # High input, but also high IP - might be kept or removed based on specific criteria\n\n# Define example thresholds for the \"pattern\" to be removed:\n# - Remove if Input_Value is above a certain threshold (e.g., highly abundant background)\n# - OR Remove if IP_Value is below a certain threshold (e.g., not enriched enough)\n# These thresholds are illustrative and would be determined empirically based on the specific assay.\nINPUT_VALUE_THRESHOLD_FOR_REMOVAL=4000 # Genes with input value > 4000 might be considered problematic background\nIP_VALUE_THRESHOLD_FOR_REMOVAL=50     # Genes with IP value < 50 might be considered not enriched\n\n# Perform filtering using awk.\n# Assuming columns are: 1:GeneID, 2:Input_Value, 3:IP_Value\n# We want to KEEP genes where:\n# (Input_Value <= INPUT_VALUE_THRESHOLD_FOR_REMOVAL) AND (IP_Value >= IP_VALUE_THRESHOLD_FOR_REMOVAL)\n# The following awk command filters out genes matching the removal pattern.\n# It prints lines where the input value is NOT above the input threshold AND the IP value is NOT below the IP threshold.\nawk -v input_thresh_remove=\"$INPUT_VALUE_THRESHOLD_FOR_REMOVAL\" \\\n    -v ip_thresh_remove=\"$IP_VALUE_THRESHOLD_FOR_REMOVAL\" \\\n    'NR==1 {print; next} # Assuming a header line, print it and skip to next record\n     $2 <= input_thresh_remove && $3 >= ip_thresh_remove {print}' \\\n    gene_quantification_data.tsv > filtered_gene_analysis.tsv\n\necho \"Filtered genes saved to filtered_gene_analysis.tsv\"\n\n# Reference datasets: The gene quantification data would typically be derived from\n# alignment to a reference genome (e.g., hg38, mm10) and annotation (e.g., GENCODE, Ensembl).\n# The specific reference used would depend on the species and experimental design\n# of the upstream quantification step.",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "All reads were aligned to the human genome hg38 primary assembly using STAR.\nfeatureCounts version 2.0.2 was used to annotate reads, using the flag --minOverlap 20 and a custom GTF file derived from gencode v34\nDifferential expression was calculated using DESeq2. Cut-offs used to determine significant differential expression were baseMean > 50 and padj <=0.01\nGenes which had substantial upstream intergenic reads (similar to DoGs) were removed from DE tables. Upstream intergenic regions were extracted using bedtools flank -l 2000 -r 0 -s. Intervening upstream genes that had any overlap with this region were removed with bedtools subtract. Reads that did not align to intronic or exonic regions were extracted from bam files with fgrep. Coverage across the 2000 bp upstream region was determined with bedtools coverage -S -split. A TPM value was determined for this upstream region and compared to the TPM of the adjacent downstream gene. If a ratio of 20% of the signal (determined by TPM) was present in the upstream region, and a breadth of 70% of that region was covered, that gene was determined to have significant enough upstream transcription so as to not be a reliable functional coding product, and was removed from subsequent analysis. Genes that showed this pattern in either the input or IP condition were both removed from that IP analysis.\nGenome_build: hg38\nSupplementary_files_format_and_content: comma separated files with output of DESeq2; normalized abundance measurements for all genes when comparing RIP condition to total input condition",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

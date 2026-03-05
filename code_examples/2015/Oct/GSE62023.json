@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Mean foreground intensities were obtained for each spot and imported into the mathematical software package \u00e2\u0080\u009cR\u00e2\u0080\u009d, which is used for all data input, diagnostic plots, normalization and quality checking steps of the analysis process using scripts developed in-house by Peter White specifically for this analysis.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "In outline, the Cy3 (green) intensities were not background corrected (this has been shown to only introduce noise), and corrected for the scanner offset (40 was subtracted for each intensity).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "The dataset was filtered to remove positive control elements and any elements that had been flagged as bad.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Using the negative controls on the arrays, the background threshold was determined and all values less than this value were set to the threshold value.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Finally, the data was normalized using the Limma Quantile Normalization package in \u00e2\u0080\u009cR\u00e2\u0080\u009d (Smyth 2004, Bolstad et al., 2003).",
-      "tool_name": "limma",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Mean foreground intensities were obtained for each spot and imported into the mathematical software package \u00e2\u0080\u009cR\u00e2\u0080\u009d, which is used for all data input, diagnostic plots, normalization and quality checking steps of the analysis process using scripts developed in-house by Peter White specifically for this analysis. In outline, the Cy3 (green) intensities were not background corrected (this has been shown to only introduce noise), and corrected for the scanner offset (40 was subtracted for each intensity). The dataset was filtered to remove positive control elements and any elements that had been flagged as bad. Using the negative controls on the arrays, the background threshold was determined and all values less than this value were set to the threshold value. Finally, the data was normalized using the Limma Quantile Normalization package in \u00e2\u0080\u009cR\u00e2\u0080\u009d (Smyth 2004, Bolstad et al., 2003).",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Mean foreground intensities were obtained for each spot and imported into the mathematical software package \u00e2\u0080\u009cR\u00e2\u0080\u009d, which is used for all data input, diagnostic plots, normalization and quality checking steps of the analysis process using scripts developed in-house by Peter White specifically for this analysis.",
+            "tool_name": "R",
+            "tool_version": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# This step involves custom R scripts for data input, diagnostic plots, normalization, and quality checking.\n# The exact script name and parameters are not provided in the description, as they are described as \"in-house scripts developed by Peter White specifically for this analysis\".\n# A placeholder command is used to represent the execution of such a script.\n\nRscript peter_white_analysis.R \\\n    --input input_intensities.tsv \\\n    --output_normalized output_normalized_data.tsv \\\n    --output_qc_report output_qc_report.pdf",
+            "code_language": "bash",
+            "github_url": "https://www.r-project.org/"
+        },
+        {
+            "step_order": 2,
+            "description": "In outline, the Cy3 (green) intensities were not background corrected (this has been shown to only introduce noise), and corrected for the scanner offset (40 was subtracted for each intensity).",
+            "tool_name": "Custom Script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# Define input and output file names (placeholders)\nINPUT_FILE=\"raw_intensities.tsv\"\nOUTPUT_FILE=\"corrected_intensities.tsv\"\n\n# Define the scanner offset to be subtracted\nSCANNER_OFFSET=40\n\n# Define the 1-based index of the column containing Cy3 intensities.\n# This is an assumption; adjust 'CY3_COLUMN_INDEX' based on the actual file format.\nCY3_COLUMN_INDEX=3\n\n# Subtract the scanner offset from the specified Cy3 intensity column.\n# This command assumes a tab-separated input file and preserves the header.\n# If there is no header, remove 'NR==1 { print; next }'.\n# If the file is not tab-separated, adjust 'FS' and 'OFS' accordingly.\nawk -v offset=\"${SCANNER_OFFSET}\" -v col_idx=\"${CY3_COLUMN_INDEX}\" '\nBEGIN { FS=OFS=\"\\t\" }\nNR==1 { print; next }\n{\n    $col_idx = $col_idx - offset;\n    print\n}' \"${INPUT_FILE}\" > \"${OUTPUT_FILE}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "The dataset was filtered to remove positive control elements and any elements that had been flagged as bad.",
+            "tool_name": "bedtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.30.0",
+            "code_example": "# Example: Assuming input, positive controls, and bad elements are BED files.\n# Replace 'input.bed', 'positive_controls.bed', and 'bad_elements.bed' with your actual file paths.\n# The 'positive_controls.bed' and 'bad_elements.bed' files should contain the genomic regions to be removed.\n\n# conda install -c bioconda bedtools\n\n# Remove positive control elements from the input dataset\nbedtools subtract -a input.bed -b positive_controls.bed > temp_filtered_controls.bed\n\n# From the remaining dataset, remove elements that have been flagged as bad\nbedtools subtract -a temp_filtered_controls.bed -b bad_elements.bed > filtered_output.bed\n\n# Clean up the temporary file\nrm temp_filtered_controls.bed",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        },
+        {
+            "step_order": 4,
+            "description": "Using the negative controls on the arrays, the background threshold was determined and all values less than this value were set to the threshold value.",
+            "tool_name": "Custom Python script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Create dummy input files for demonstration\n# This would be replaced by actual data in a real pipeline\nmkdir -p data\necho -e \"ProbeID\\tSample1\\tSample2\" > data/input_array_data.tsv\necho -e \"ProbeA\\t100\\t120\" >> data/input_array_data.tsv\necho -e \"ProbeB\\t5\\t8\" >> data/input_array_data.tsv\necho -e \"ProbeC\\t150\\t160\" >> data/input_array_data.tsv\necho -e \"NegControl1\\t1\\t2\" >> data/input_array_data.tsv\necho -e \"NegControl2\\t3\\t4\" >> data/input_array_data.tsv\necho -e \"ProbeD\\t20\\t25\" >> data/input_array_data.tsv\n\necho -e \"NegControl1\\nNegControl2\" > data/negative_control_probes.txt\n\n# Save the Python script\ncat << 'EOF' > background_correction.py\nimport pandas as pd\nimport numpy as np\nimport sys\n\ndef apply_background_threshold(data_file, negative_control_probes_file, output_file):\n    \"\"\"\n    Determines background threshold from negative controls and floors values.\n\n    Args:\n        data_file (str): Path to the input data file (e.g., TSV).\n        negative_control_probes_file (str): Path to a file listing negative control probe IDs (one per line).\n        output_file (str): Path to save the processed data.\n    \"\"\"\n    try:\n        df = pd.read_csv(data_file, sep='\\t', index_col=0) # Assuming TSV with first column as index (probe IDs)\n    except Exception as e:\n        print(f\"Error reading data file {data_file}: {e}\", file=sys.stderr)\n        sys.exit(1)\n\n    try:\n        with open(negative_control_probes_file, 'r') as f:\n            negative_control_probes = [line.strip() for line in f if line.strip()]\n    except Exception as e:\n        print(f\"Error reading negative control probes file {negative_control_probes_file}: {e}\", file=sys.stderr)\n        sys.exit(1)\n\n    # Filter for negative control probes present in the data\n    common_negative_controls = [p for p in negative_control_probes if p in df.index]\n    if not common_negative_controls:\n        print(\"Warning: No negative control probes found in the data. Cannot perform background correction.\", file=sys.stderr)\n        sys.exit(1)\n\n    negative_control_data = df.loc[common_negative_controls].values.flatten()\n\n    # Determine background threshold (e.g., mean of positive values from negative controls)\n    # Filter out non-positive values if they represent missing data or true zeros that shouldn't contribute to background mean.\n    positive_negative_control_data = negative_control_data[negative_control_data > 0]\n    if len(positive_negative_control_data) == 0:\n        print(\"Warning: No positive values found in negative controls. Cannot determine background threshold.\", file=sys.stderr)\n        sys.exit(1)\n\n    background_threshold = np.mean(positive_negative_control_data)\n\n    print(f\"Determined background threshold: {background_threshold:.4f}\")\n\n    # Set all values less than the threshold to the threshold value\n    df_corrected = df.applymap(lambda x: max(x, background_threshold))\n\n    df_corrected.to_csv(output_file, sep='\\t')\n    print(f\"Processed data saved to {output_file}\")\n\nif __name__ == \"__main__\":\n    if len(sys.argv) != 4:\n        print(\"Usage: python background_correction.py <input_data_file> <negative_control_probes_file> <output_file>\", file=sys.stderr)\n        sys.exit(1)\n\n    input_data_file = sys.argv[1]\n    negative_control_probes_file = sys.argv[2]\n    output_file = sys.argv[3]\n\n    apply_background_threshold(input_data_file, negative_control_probes_file, output_file)\nEOF\n\n# Install dependencies if not already present\n# conda install -c anaconda pandas numpy\n\n# Execute the background correction script\npython background_correction.py data/input_array_data.tsv data/negative_control_probes.txt data/output_array_data_background_corrected.tsv",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 5,
+            "description": "Finally, the data was normalized using the Limma Quantile Normalization package in \u00e2\u0080\u009cR\u00e2\u0080\u009d (Smyth 2004, Bolstad et al., 2003).",
+            "tool_name": "limma",
+            "tool_version": "not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install R and Bioconductor if not already installed\n# sudo apt-get update\n# sudo apt-get install r-base\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\"); BiocManager::install(\"limma\", update = FALSE, ask = FALSE)'\n\n# --- Placeholder for input data ---\n# In a real scenario, 'expression_matrix.tsv' would be your actual gene expression data.\n# It should be a tab-separated file with gene identifiers in the first column\n# and sample expression values in subsequent columns.\n# Example:\n# Gene    Sample1    Sample2    Sample3\n# GeneA   100        120        90\n# GeneB   50         60         40\n# GeneC   200        210        180\n\n# Create a dummy input file for demonstration purposes if it doesn't exist\nif [ ! -f \"expression_matrix.tsv\" ]; then\n    echo -e \"Gene\\tSample1\\tSample2\\tSample3\" > expression_matrix.tsv\n    echo -e \"GeneA\\t100\\t120\\t90\" >> expression_matrix.tsv\n    echo -e \"GeneB\\t50\\t60\\t40\" >> expression_matrix.tsv\n    echo -e \"GeneC\\t200\\t210\\t180\" >> expression_matrix.tsv\n    echo -e \"GeneD\\t70\\t80\\t60\" >> expression_matrix.tsv\nfi\n\n# R script for Limma Quantile Normalization\n# This script loads expression data, performs quantile normalization using the limma package,\n# and saves the normalized data to a new file.\nR_SCRIPT=\"\"\"\n# Load the limma package\nlibrary(limma)\n\n# --- Configuration ---\ninput_file <- \"expression_matrix.tsv\" # Path to your input data file\noutput_file <- \"normalized_expression_matrix.tsv\" # Path for the output normalized data file\n\n# --- Main script ---\n\n# 1. Load data\n# Assumes input is a tab-separated matrix with gene IDs as row names (first column)\n# and sample names as column headers.\n# Adjust 'header', 'row.names', 'sep' parameters if your file format differs.\ndata_matrix <- read.delim(input_file, header = TRUE, row.names = 1, sep = \"\\t\")\n\n# Ensure the data matrix is numeric for normalization\ndata_matrix <- as.matrix(data_matrix)\n\n# 2. Perform Quantile Normalization\n# The 'normalizeBetweenArrays' function from limma is used with 'method=\\\"quantile\\\"'.\nnormalized_data <- normalizeBetweenArrays(data_matrix, method = \\\"quantile\\\")\n\n# 3. Save normalized data\n# Writes the normalized matrix to a new tab-separated file.\n# 'col.names = NA' ensures that the row names (gene IDs) are written as the first column\n# without an explicit header for that column.\nwrite.table(normalized_data, file = output_file, sep = \"\\t\", quote = FALSE, col.names = NA)\n\nmessage(paste(\"Quantile normalization complete. Normalized data saved to:\", output_file))\n\"\"\"\n\n# Execute the R script using R's command-line interface\nR -e \"$R_SCRIPT\"\n\n# Optional: Clean up the dummy input file if it was created for demonstration\n# rm expression_matrix.tsv",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.2202/1544-6115.1027"
+        }
+    ],
+    "raw_text": "Mean foreground intensities were obtained for each spot and imported into the mathematical software package \u00e2\u0080\u009cR\u00e2\u0080\u009d, which is used for all data input, diagnostic plots, normalization and quality checking steps of the analysis process using scripts developed in-house by Peter White specifically for this analysis. In outline, the Cy3 (green) intensities were not background corrected (this has been shown to only introduce noise), and corrected for the scanner offset (40 was subtracted for each intensity). The dataset was filtered to remove positive control elements and any elements that had been flagged as bad. Using the negative controls on the arrays, the background threshold was determined and all values less than this value were set to the threshold value. Finally, the data was normalized using the Limma Quantile Normalization package in \u00e2\u0080\u009cR\u00e2\u0080\u009d (Smyth 2004, Bolstad et al., 2003).",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

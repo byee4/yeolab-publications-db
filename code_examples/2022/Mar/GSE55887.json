@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Illlumina MiSeq Sequencer was used for base calling.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Sequence reads were aligned to hg19 reference genome using Bowtie for HA-Chip data and Bowtie2 for deep sequencing data.",
-      "tool_name": "Bowtie",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Two re-sequenced files : sgRNA2_1_Replicate1 and sgRNA3_1_Replicate1 were merged with sgRNA2_Replicate1 and sgRNA3_Replicate1 respectively",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Peaks were called by using MACS14 tool for HA-ChIP (-c=Control_dCas9only -p=1e-6)",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Further data processing steps have been described in the method sections.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Illlumina MiSeq Sequencer was used for base calling.\nSequence reads were aligned to hg19 reference genome using Bowtie for HA-Chip data and Bowtie2 for deep sequencing data.\nTwo re-sequenced files : sgRNA2_1_Replicate1 and sgRNA3_1_Replicate1 were merged with sgRNA2_Replicate1 and sgRNA3_Replicate1 respectively\nPeaks were called by using MACS14 tool for HA-ChIP (-c=Control_dCas9only -p=1e-6)\nFurther data processing steps have been described in the method sections.\nGenome_build: hg19\nSupplementary_files_format_and_content: bigWig and Bed files containing peaks.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Illlumina MiSeq Sequencer was used for base calling.",
+            "tool_name": "MiSeq Reporter (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Note: Base calling itself is performed by the Illumina MiSeq's internal Real-Time Analysis (RTA) software, which is part of the MiSeq Reporter suite.\n# The following command demonstrates the typical next step in a bioinformatics pipeline: converting the raw BCL files (output of base calling) into FASTQ files using bcl2fastq.\n\n# Installation (example using conda):\n# conda install -c bioconda bcl2fastq2\n\n# Example command for bcl2fastq:\n# Replace /path/to/MiSeq/run/folder with the actual path to your MiSeq run directory containing BCL files.\n# Replace /path/to/output/fastq with your desired output directory for FASTQ files.\nbcl2fastq --runfolder-dir /path/to/MiSeq/run/folder \\\n          --output-dir /path/to/output/fastq \\\n          --no-lane-splitting \\\n          --minimum-trimmed-read-length 8 \\\n          --mask-short-adapter-reads 8 \\\n          --ignore-missing-bcl \\\n          --ignore-missing-stats \\\n          --ignore-missing-filter",
+            "code_language": "bash",
+            "github_url": "https://www.illumina.com/systems/sequencing-platforms/miseq.html"
+        },
+        {
+            "step_order": 2,
+            "description": "Sequence reads were aligned to hg19 reference genome using Bowtie for HA-Chip data and Bowtie2 for deep sequencing data.",
+            "tool_name": "Bowtie",
+            "tool_version": "1.x (for Bowtie), 2.x (for Bowtie2) (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Bowtie and Bowtie2\n# conda install -c bioconda bowtie bowtie2\n\n# Create a directory for reference genome and indices\nmkdir -p reference_hg19\ncd reference_hg19\n\n# Download hg19 reference genome (UCSC build)\n# wget https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.fa.gz\n# gunzip hg19.fa.gz\n\n# For demonstration, let's assume hg19.fa is already present in reference_hg19/\n# If you downloaded it, uncomment the lines above and ensure the file is named hg19.fa\n\n# Build Bowtie index for hg19\n# bowtie-build hg19.fa hg19_index_bowtie\n\n# Build Bowtie2 index for hg19\n# bowtie2-build hg19.fa hg19_index_bowtie2\n\ncd ..\n\n# --- Example for HA-Chip data alignment with Bowtie ---\n# Assume input_ha_chip.fastq is your HA-Chip sequencing data (single-end)\n# For demonstration, create a dummy fastq file:\n# echo \"@read1\\nAGCTAGCTAGCTAGCT\\n+\\nIIIIIIIIIIIIIIII\" > input_ha_chip.fastq\n\nbowtie -S -p 8 reference_hg19/hg19_index_bowtie input_ha_chip.fastq > output_ha_chip.sam\n\n# --- Example for deep sequencing data alignment with Bowtie2 ---\n# Assume input_deep_seq.fastq is your deep sequencing data (single-end)\n# For demonstration, create a dummy fastq file:\n# echo \"@read1\\nAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCT\\n+\\nIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII\" > input_deep_seq.fastq\n\nbowtie2 -x reference_hg19/hg19_index_bowtie2 -p 8 -U input_deep_seq.fastq -S output_deep_seq.sam",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1038/nmeth.1923"
+        },
+        {
+            "step_order": 3,
+            "description": "Two re-sequenced files : sgRNA2_1_Replicate1 and sgRNA3_1_Replicate1 were merged with sgRNA2_Replicate1 and sgRNA3_Replicate1 respectively",
+            "tool_name": "cat (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# Merge sgRNA2 files\ncat sgRNA2_1_Replicate1.fastq sgRNA2_Replicate1.fastq > sgRNA2_merged.fastq\n\n# Merge sgRNA3 files\ncat sgRNA3_1_Replicate1.fastq sgRNA3_Replicate1.fastq > sgRNA3_merged.fastq",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "Peaks were called by using MACS14 tool for HA-ChIP (-c=Control_dCas9only -p=1e-6)",
+            "tool_name": "MACS",
+            "tool_version": "1.4",
+            "code_example": "# Install MACS14 (MACS 1.4.2 is often referred to as MACS14)\n# conda install -c bioconda macs=1.4.2\n\n# Define input files and parameters\n# Placeholder: Replace with actual treatment and control BAM files\nHA_CHIP_BAM=\"HA_ChIP.bam\"\nCONTROL_BAM=\"Control_dCas9only.bam\"\n\n# Placeholder: Define genome size (e.g., 'hs' for human, 'mm' for mouse, or a specific number)\n# For a specific number, e.g., 2.7e9 for human, use -g 2.7e9\nGENOME_SIZE=\"hs\"\n\n# Output prefix for MACS files\nOUTPUT_PREFIX=\"HA_ChIP_peaks\"\n\n# Run MACS14 peak calling\n# -t: Treatment file (ChIP-seq data)\n# -c: Control file (Input DNA or IgG control)\n# -f: Format of input files (e.g., 'BAM', 'BED', 'ELAND', 'BOWTIE', 'SAM', 'TAGS')\n# -g: Genome size (e.g., 'hs' for human, 'mm' for mouse, or a specific number)\n# -n: Name of the experiment, which will be used as a prefix for output files\n# -p: P-value cutoff for peak detection\nmacs14 -t \"${HA_CHIP_BAM}\" -c \"${CONTROL_BAM}\" -f BAM -g \"${GENOME_SIZE}\" -n \"${OUTPUT_PREFIX}\" -p 1e-6",
+            "code_language": "bash",
+            "github_url": "https://sourceforge.net/projects/macs/"
+        },
+        {
+            "step_order": 5,
+            "description": "Further data processing steps have been described in the method sections.",
+            "tool_name": "(Inferred with models/gemini-2.5-flash)",
+            "tool_version": "(Inferred with models/gemini-2.5-flash)",
+            "code_example": "# No specific command can be inferred from the generic description: 'Further data processing steps have been described in the method sections.'",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Illlumina MiSeq Sequencer was used for base calling.\nSequence reads were aligned to hg19 reference genome using Bowtie for HA-Chip data and Bowtie2 for deep sequencing data.\nTwo re-sequenced files : sgRNA2_1_Replicate1 and sgRNA3_1_Replicate1 were merged with sgRNA2_Replicate1 and sgRNA3_Replicate1 respectively\nPeaks were called by using MACS14 tool for HA-ChIP (-c=Control_dCas9only -p=1e-6)\nFurther data processing steps have been described in the method sections.\nGenome_build: hg19\nSupplementary_files_format_and_content: bigWig and Bed files containing peaks.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

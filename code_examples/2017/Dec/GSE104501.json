@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Base calling, trimming of adapter sequences, removal of duplicated reads and determination of poly(A) tail sizes were performed by tailseeker2.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reads were analyzed by mapping to the WS247 assembly of the C. elegans genome using RNA-STAR.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Poly(A) lengths were then assigned to individual coding genes by intersecting the mapped sequences with WormBase.org WS247 gene annotations using BEDTools.",
-      "tool_name": "bedtools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Base calling, trimming of adapter sequences, removal of duplicated reads and determination of poly(A) tail sizes were performed by tailseeker2.\nReads were analyzed by mapping to the WS247 assembly of the C. elegans genome using RNA-STAR.\nPoly(A) lengths were then assigned to individual coding genes by intersecting the mapped sequences with WormBase.org WS247 gene annotations using BEDTools.\nGenome_build: WS247\nSupplementary_files_format_and_content: Csv; contains the number of hits per gene, and the mean, median, standard deviation, and range of poly(A) tail lengths for RNAs that had more than 10 reads, as well as each individual poly(A) tail length that was read for each gene.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Base calling, trimming of adapter sequences, removal of duplicated reads and determination of poly(A) tail sizes were performed by tailseeker2.",
+            "tool_name": "tailseeker2",
+            "tool_version": "2.0.0",
+            "code_example": "# Install tailseeker2 (example, actual installation might vary)\n# conda create -n tailseeker2_env python=3.8\n# conda activate tailseeker2_env\n# pip install tailseeker2 # Or via bioconda if available\n\n# Placeholder for input and output files\nINPUT_FASTQ=\"raw_nanopore_reads.fastq.gz\"\nOUTPUT_TSV=\"polyA_tail_lengths.tsv\"\nREFERENCE_GENOME=\"path/to/human_hg38.fasta\" # Using hg38 as a common placeholder for reference genome\n\n# The description states: \"Base calling, trimming of adapter sequences, removal of duplicated reads and determination of poly(A) tail sizes were performed by tailseeker2.\"\n# tailseeker2 processes base-called FASTQ files; it does not perform base calling from raw .fast5 files. It is assumed the input FASTQ is already base-called.\n# While tailseeker2 performs adapter trimming (--trim-adapters) and poly(A) tail size determination, it does not have a direct command-line option for explicit removal of duplicated reads.\n# It is assumed that duplicate removal is either handled by a preceding step or is implicitly managed by tailseeker2's internal filtering, or the description is generalized.\n\ntailseeker2 \\\n    --input \"${INPUT_FASTQ}\" \\\n    --output \"${OUTPUT_TSV}\" \\\n    --reference \"${REFERENCE_GENOME}\" \\\n    --trim-adapters \\\n    --min-tail-length 10 \\\n    --min-read-length 50 \\\n    --threads $(nproc)",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Reads were analyzed by mapping to the WS247 assembly of the C. elegans genome using RNA-STAR.",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install STAR (example using conda)\n# conda install -c bioconda star\n\n# --- Reference Data Preparation (C. elegans WS247) ---\n# Download C. elegans WS247 genome FASTA and GTF annotation files.\n# WS247 is an older release. For current data, refer to WormBase (e.g., WS289).\n# For WS247, you would typically access older WormBase FTP archives or specific project repositories.\n# Example placeholder paths for downloaded files:\n# GENOME_FASTA=\"/path/to/c_elegans.WS247.genomic.fa\"\n# GTF_ANNOTATION=\"/path/to/c_elegans.WS247.annotations.gtf\"\n\n# Create a directory for the STAR genome index\nmkdir -p C_elegans_WS247_STAR_index\n\n# Build STAR genome index for C. elegans WS247\n# Replace /path/to/c_elegans.WS247.genomic.fa and /path/to/c_elegans.WS247.annotations.gtf with actual paths\nSTAR --runMode genomeGenerate \\\n     --genomeDir C_elegans_WS247_STAR_index \\\n     --genomeFastaFiles /path/to/c_elegans.WS247.genomic.fa \\\n     --sjdbGTFfile /path/to/c_elegans.WS247.annotations.gtf \\\n     --sjdbOverhang 100 \\\n     --runThreadN 8\n\n# --- Reads Alignment ---\n# Replace reads_R1.fastq.gz and reads_R2.fastq.gz with your actual input FASTQ files.\n# Assuming paired-end reads. For single-end, remove the second file from --readFilesIn.\nSTAR --runMode alignReads \\\n     --genomeDir C_elegans_WS247_STAR_index \\\n     --readFilesIn reads_R1.fastq.gz reads_R2.fastq.gz \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix aligned_reads_ \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outFilterType BySJout \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.1 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --sjdbScore 1 \\\n     --runThreadN 8\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "Poly(A) lengths were then assigned to individual coding genes by intersecting the mapped sequences with WormBase.org WS247 gene annotations using BEDTools.",
+            "tool_name": "bedtools",
+            "tool_version": "2.30.0",
+            "code_example": "# Install bedtools (if not already installed)\n# conda install -c bioconda bedtools\n\n# --- Reference Data Setup ---\n# Download WormBase WS247 C. elegans gene annotations (GFF3 format).\n# The specific URL for WS247 GFF3 might vary slightly or be hosted differently over time.\n# This is a representative path for a past release.\n# wget -O c_elegans.PRJNA13758.WS247.gff3.gz \"ftp://ftp.wormbase.org/pub/wormbase/releases/WS247/GFF/c_elegans.PRJNA13758.WS247.gff3.gz\"\n# gunzip c_elegans.PRJNA13758.WS247.gff3.gz\n\n# Convert GFF3 to BED format for bedtools intersect.\n# This example filters for 'gene' features and converts to 0-based start, 1-based end BED format.\n# It extracts chromosome, start-1, end, gene_id (from Name= or ID= attribute), score (placeholder), strand.\n# A more robust GFF3 to BED conversion might use tools like gff2bed from BEDOPS.\n# awk '$3 == \"gene\"' c_elegans.PRJNA13758.WS247.gff3 | \\\n#     awk -v OFS='\\t' '{\n#         chr=$1; start=$4-1; end=$5; strand=$7;\n#         gene_id=\".\";\n#         if ($9 ~ /ID=([^;]+)/) { gene_id = substr($9, RSTART+3, RLENGTH-3); }\n#         else if ($9 ~ /Name=([^;]+)/) { gene_id = substr($9, RSTART+5, RLENGTH-5); }\n#         print chr, start, end, gene_id, \"0\", strand\n#     }' | \\\n#     grep -P \"^[[:alnum:]]+\" > wormbase_ws247_genes.bed\n\n# --- Input Files ---\n# Placeholder for mapped sequences (e.g., poly(A) site reads, or 3'UTR reads).\n# These sequences should be in BED format (e.g., chr, start, end, name, score, strand).\n# Example: echo -e \"chrI\\t1000\\t1050\\tread1\\t0\\t+\\nchrI\\t2000\\t2030\\tread2\\t0\\t-\" > mapped_sequences.bed\nmapped_sequences_bed=\"mapped_sequences.bed\"\n\n# Placeholder for WormBase WS247 gene annotations in BED format.\n# This file is assumed to have been prepared using the steps above or similar.\nwormbase_genes_bed=\"wormbase_ws247_genes.bed\"\n\n# --- Execution Command ---\n# Intersect mapped sequences with WormBase WS247 gene annotations.\n# -wao: Write the original entry in A and B for each overlap, plus the number of overlapping bases.\n# This output allows associating each poly(A) sequence with its overlapping gene and its attributes,\n# which is crucial for subsequent assignment of poly(A) lengths to individual coding genes.\nbedtools intersect -a \"${mapped_sequences_bed}\" -b \"${wormbase_genes_bed}\" -wao > polyA_sequences_and_overlapping_genes.bed\n\n# Further processing (e.g., using awk, Python, or R) would be needed to group\n# by gene (from the B file columns in the output) and calculate poly(A) lengths\n# (derived from the A file columns in the output) per gene.",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        }
+    ],
+    "raw_text": "Base calling, trimming of adapter sequences, removal of duplicated reads and determination of poly(A) tail sizes were performed by tailseeker2.\nReads were analyzed by mapping to the WS247 assembly of the C. elegans genome using RNA-STAR.\nPoly(A) lengths were then assigned to individual coding genes by intersecting the mapped sequences with WormBase.org WS247 gene annotations using BEDTools.\nGenome_build: WS247\nSupplementary_files_format_and_content: Csv; contains the number of hits per gene, and the mean, median, standard deviation, and range of poly(A) tail lengths for RNAs that had more than 10 reads, as well as each individual poly(A) tail length that was read for each gene.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

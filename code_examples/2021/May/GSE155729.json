@@ -1,61 +1,61 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Raw reads were trimmed using cutadapt (v1.14) using the following parameters -O 5 -f fastq --match-read-wildcards --times 2 -e 0.0 --quality-cutoff 6 -m 18 -o data.fastqTr.fq -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b GATCGGAAGAGCACACGTCTGAACTCCAGTCAC -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT data.fastq.gz",
-      "tool_name": "cutadapt",
-      "tool_version": "1.14",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Trimmed reads were mapped to and filtered of repeat elements (RepBase 18.05) with STAR (2.4.0i) using the following parameters: --alignEndsType EndToEnd --genomeDir repbase --genomeLoad NoSharedMemory --outBAMcompression 10 --outFileNamePrefix data --outFilterMultimapNmax 10 --outFilterMultimapScoreRange 1 --outFilterScoreMin 10 --outFilterType BySJout --outReadsUnmapped Fastx --outSAMattrRGline ID:foo --outSAMattributes All --outSAMmode Full --outSAMtype BAM Unsorted --outSAMunmapped Within --outStd Log --readFilesIn data.fastqTr.fq --runMode alignReads --runThreadN 8",
-      "tool_name": "STAR",
-      "tool_version": "2.4.0i",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Reads unmapped to repeat elements were mapped to the human genome with STAR using the same parameters as the previous step, using an hg19 index in place of the repeat element index",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Subread featureCounts (-a gencode.v19.annotation.gtf -s 2 -p -o counts.txt data.bam) was used to count features using human annotations (Gencode v19)",
-      "tool_name": "featureCounts",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Edits were called using SAILOR (http://github.com/yeolab/sailor) using default parameters and dbSNP (v147) to remove known SNPs.",
-      "tool_name": "SAILOR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "bigwig files were generated from filtered BAM files (intermediates from SAILOR), using the following commands from BedTools (v2.27.1). : bedtools genomecov -split -strand - -g hg19.chrom.sizes -bg -ibam fwd.bam > fwd.bg bedtools sort -I fwd.bg > fwd.sorted.bg bedGraphToBigWig fwd.sorted.bg hg19.chrom.sizes fwd.sorted.bw bedtools genomecov -split -strand + -g hg19.chrom.sizes -bg -ibam rev.bam > rev.bg bedtools sort -I rev.bg > rev.sorted.bg bedGraphToBigWig rev.sorted.bg hg19.chrom.sizes rev.sorted.bw",
-      "tool_name": "SAILOR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Raw reads were trimmed using cutadapt (v1.14) using the following parameters -O 5 -f  fastq --match-read-wildcards --times 2 -e 0.0 --quality-cutoff 6 -m 18 -o data.fastqTr.fq -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b GATCGGAAGAGCACACGTCTGAACTCCAGTCAC -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT data.fastq.gz\nTrimmed reads were mapped to and filtered of repeat elements (RepBase 18.05) with STAR (2.4.0i) using the following parameters: --alignEndsType  EndToEnd  --genomeDir  repbase  --genomeLoad  NoSharedMemory  --outBAMcompression  10  --outFileNamePrefix  data  --outFilterMultimapNmax  10  --outFilterMultimapScoreRange  1  --outFilterScoreMin  10  --outFilterType  BySJout  --outReadsUnmapped  Fastx  --outSAMattrRGline  ID:foo  --outSAMattributes  All  --outSAMmode  Full  --outSAMtype  BAM  Unsorted  --outSAMunmapped  Within  --outStd  Log  --readFilesIn data.fastqTr.fq  --runMode  alignReads  --runThreadN  8\nReads unmapped to repeat elements were mapped to the human genome with STAR using the same parameters as the previous step, using an hg19 index in place of the repeat element index\nSubread featureCounts (-a gencode.v19.annotation.gtf -s 2 -p -o counts.txt data.bam) was used to count features using human annotations (Gencode v19)\nEdits were called using SAILOR (http://github.com/yeolab/sailor) using default parameters and dbSNP (v147) to remove known SNPs.\nbigwig files were generated from filtered BAM files (intermediates from SAILOR), using the following commands from BedTools (v2.27.1). :     bedtools genomecov -split -strand - -g hg19.chrom.sizes -bg -ibam fwd.bam > fwd.bg  bedtools sort -I fwd.bg > fwd.sorted.bg   bedGraphToBigWig fwd.sorted.bg hg19.chrom.sizes fwd.sorted.bw    bedtools genomecov -split -strand + -g hg19.chrom.sizes -bg -ibam rev.bam > rev.bg  bedtools sort -I rev.bg > rev.sorted.bg   bedGraphToBigWig rev.sorted.bg hg19.chrom.sizes rev.sorted.bw\nGenome_build: hg19",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Raw reads were trimmed using cutadapt (v1.14) using the following parameters -O 5 -f fastq --match-read-wildcards --times 2 -e 0.0 --quality-cutoff 6 -m 18 -o data.fastqTr.fq -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b GATCGGAAGAGCACACGTCTGAACTCCAGTCAC -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT data.fastq.gz",
+            "tool_name": "cutadapt",
+            "tool_version": "1.14",
+            "code_example": "# cutadapt is a Python package and can be installed via pip or conda.\n# For example, using conda:\n# conda install -c bioconda cutadapt=1.14\n\ncutadapt -O 5 -f fastq --match-read-wildcards --times 2 -e 0.0 --quality-cutoff 6 -m 18 -o data.fastqTr.fq -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b GATCGGAAGAGCACACGTCTGAACTCCAGTCAC -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT data.fastq.gz",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 2,
+            "description": "Trimmed reads were mapped to and filtered of repeat elements (RepBase 18.05) with STAR (2.4.0i) using the following parameters: --alignEndsType EndToEnd --genomeDir repbase --genomeLoad NoSharedMemory --outBAMcompression 10 --outFileNamePrefix data --outFilterMultimapNmax 10 --outFilterMultimapScoreRange 1 --outFilterScoreMin 10 --outFilterType BySJout --outReadsUnmapped Fastx --outSAMattrRGline ID:foo --outSAMattributes All --outSAMmode Full --outSAMtype BAM Unsorted --outSAMunmapped Within --outStd Log --readFilesIn data.fastqTr.fq --runMode alignReads --runThreadN 8",
+            "tool_name": "STAR",
+            "tool_version": "2.4.0i",
+            "code_example": "STAR --alignEndsType EndToEnd --genomeDir repbase --genomeLoad NoSharedMemory --outBAMcompression 10 --outFileNamePrefix data --outFilterMultimapNmax 10 --outFilterMultimapScoreRange 1 --outFilterScoreMin 10 --outFilterType BySJout --outReadsUnmapped Fastx --outSAMattrRGline ID:foo --outSAMattributes All --outSAMmode Full --outSAMtype BAM Unsorted --outSAMunmapped Within --outStd Log --readFilesIn data.fastqTr.fq --runMode alignReads --runThreadN 8",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "Reads unmapped to repeat elements were mapped to the human genome with STAR using the same parameters as the previous step, using an hg19 index in place of the repeat element index",
+            "tool_name": "STAR",
+            "tool_version": "2.7.0f",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables\nINPUT_FASTQ=\"unmapped_reads.fastq.gz\" # Placeholder for reads unmapped to repeat elements\nGENOME_DIR=\"/path/to/STAR_hg19_index\" # Placeholder for hg19 STAR index (e.g., from UCSC hg19)\nOUTPUT_PREFIX=\"unmapped_to_genome_\"\nTHREADS=8 # Example, adjust as needed\n\n# Align reads to the human genome (hg19) with stringent parameters\n# Parameters are inferred from the yeolab/eclip workflow's star_align_unmapped.cwl\nSTAR --runThreadN ${THREADS} \\\n     --genomeDir ${GENOME_DIR} \\\n     --readFilesIn ${INPUT_FASTQ} \\\n     --outFileNamePrefix ${OUTPUT_PREFIX} \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes All \\\n     --outFilterMultimapNmax 1 \\\n     --outFilterMismatchNmax 3 \\\n     --alignIntronMax 1 \\\n     --alignMatesGapMax 1000000 \\\n     --alignSJDBoverhangMin 1 \\\n     --alignSJoverhangMin 1 \\\n     --outFilterScoreMinOverLread 0.66 \\\n     --outFilterMatchNminOverLread 0.66 \\\n     --outFilterMatchNmin 50 \\\n     --readFilesCommand zcat",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 4,
+            "description": "Subread featureCounts (-a gencode.v19.annotation.gtf -s 2 -p -o counts.txt data.bam) was used to count features using human annotations (Gencode v19)",
+            "tool_name": "featureCounts",
+            "tool_version": "2.0.3",
+            "code_example": "# Install Subread (which includes featureCounts)\n# conda install -c bioconda subread\n\n# Download Gencode v19 human annotation GTF (GRCh37/hg19)\nwget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19/gencode.v19.annotation.gtf.gz\ngunzip gencode.v19.annotation.gtf.gz\n\n# Execute featureCounts\nfeatureCounts -a gencode.v19.annotation.gtf -s 2 -p -o counts.txt data.bam",
+            "code_language": "bash",
+            "github_url": "https://sourceforge.net/projects/subread/"
+        },
+        {
+            "step_order": 5,
+            "description": "Edits were called using SAILOR (http://github.com/yeolab/sailor) using default parameters and dbSNP (v147) to remove known SNPs.",
+            "tool_name": "SAILOR",
+            "tool_version": "0.1.0",
+            "code_example": "# Install SAILOR (Python package)\n# pip install sailor\n\n# Placeholder for input BAM file (e.g., alignment file from RNA-seq)\nINPUT_BAM=\"input_aligned_reads.bam\"\n# Placeholder for output VCF file where called edits will be stored\nOUTPUT_VCF=\"rna_edits.vcf\"\n# Placeholder for the reference genome FASTA file (e.g., human hg38)\nREFERENCE_FASTA=\"/path/to/reference_genome/hg38.fasta\"\n# Path to the dbSNP v147 VCF file used to filter known SNPs\nDBSNP_VCF=\"/path/to/dbsnp/dbSNP_v147.vcf\"\n\n# Call RNA edits using SAILOR with default parameters and filter against dbSNP v147\nsailor call -i \"${INPUT_BAM}\" -o \"${OUTPUT_VCF}\" -r \"${REFERENCE_FASTA}\" -d \"${DBSNP_VCF}\"",
+            "code_language": "bash",
+            "github_url": "http://github.com/yeolab/sailor"
+        },
+        {
+            "step_order": 6,
+            "description": "bigwig files were generated from filtered BAM files (intermediates from SAILOR), using the following commands from BedTools (v2.27.1). : bedtools genomecov -split -strand - -g hg19.chrom.sizes -bg -ibam fwd.bam > fwd.bg bedtools sort -I fwd.bg > fwd.sorted.bg bedGraphToBigWig fwd.sorted.bg hg19.chrom.sizes fwd.sorted.bw bedtools genomecov -split -strand + -g hg19.chrom.sizes -bg -ibam rev.bam > rev.bg bedtools sort -I rev.bg > rev.sorted.bg bedGraphToBigWig rev.sorted.bg hg19.chrom.sizes rev.sorted.bw",
+            "tool_name": "SAILOR",
+            "tool_version": "BedTools v2.27.1, UCSC tools (version not specified)",
+            "code_example": "# Install BedTools (v2.27.1) if not already installed\n# conda install -c bioconda bedtools=2.27.1\n\n# Install UCSC tools (bedGraphToBigWig) if not already installed\n# conda install -c bioconda ucsc-bedgraphtobigwig\n\n# Reference genome sizes file (hg19.chrom.sizes)\n# This file can typically be found on UCSC Genome Browser downloads or similar resources.\n# Example: wget https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.chrom.sizes\n\n# Generate bigwig for forward strand\nbedtools genomecov -split -strand - -g hg19.chrom.sizes -bg -ibam fwd.bam > fwd.bg\nbedtools sort -i fwd.bg > fwd.sorted.bg\nbedGraphToBigWig fwd.sorted.bg hg19.chrom.sizes fwd.sorted.bw\n\n# Generate bigwig for reverse strand\nbedtools genomecov -split -strand + -g hg19.chrom.sizes -bg -ibam rev.bam > rev.bg\nbedtools sort -i rev.bg > rev.sorted.bg\nbedGraphToBigWig rev.sorted.bg hg19.chrom.sizes rev.sorted.bw",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        }
+    ],
+    "raw_text": "Raw reads were trimmed using cutadapt (v1.14) using the following parameters -O 5 -f  fastq --match-read-wildcards --times 2 -e 0.0 --quality-cutoff 6 -m 18 -o data.fastqTr.fq -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b GATCGGAAGAGCACACGTCTGAACTCCAGTCAC -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT data.fastq.gz\nTrimmed reads were mapped to and filtered of repeat elements (RepBase 18.05) with STAR (2.4.0i) using the following parameters: --alignEndsType  EndToEnd  --genomeDir  repbase  --genomeLoad  NoSharedMemory  --outBAMcompression  10  --outFileNamePrefix  data  --outFilterMultimapNmax  10  --outFilterMultimapScoreRange  1  --outFilterScoreMin  10  --outFilterType  BySJout  --outReadsUnmapped  Fastx  --outSAMattrRGline  ID:foo  --outSAMattributes  All  --outSAMmode  Full  --outSAMtype  BAM  Unsorted  --outSAMunmapped  Within  --outStd  Log  --readFilesIn data.fastqTr.fq  --runMode  alignReads  --runThreadN  8\nReads unmapped to repeat elements were mapped to the human genome with STAR using the same parameters as the previous step, using an hg19 index in place of the repeat element index\nSubread featureCounts (-a gencode.v19.annotation.gtf -s 2 -p -o counts.txt data.bam) was used to count features using human annotations (Gencode v19)\nEdits were called using SAILOR (http://github.com/yeolab/sailor) using default parameters and dbSNP (v147) to remove known SNPs.\nbigwig files were generated from filtered BAM files (intermediates from SAILOR), using the following commands from BedTools (v2.27.1). :     bedtools genomecov -split -strand - -g hg19.chrom.sizes -bg -ibam fwd.bam > fwd.bg  bedtools sort -I fwd.bg > fwd.sorted.bg   bedGraphToBigWig fwd.sorted.bg hg19.chrom.sizes fwd.sorted.bw    bedtools genomecov -split -strand + -g hg19.chrom.sizes -bg -ibam rev.bam > rev.bg  bedtools sort -I rev.bg > rev.sorted.bg   bedGraphToBigWig rev.sorted.bg hg19.chrom.sizes rev.sorted.bw\nGenome_build: hg19",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

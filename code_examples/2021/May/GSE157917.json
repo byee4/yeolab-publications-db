@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "The reads were aligned with STAR (Dobin et al., 2013) to the human genome hg19 using default parameters and a two-pass approach.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Following a first pass alignment of each sample, novel splice junctions were pooled across all samples from the same cell type and incorporated into the genome annotation for a second pass alignment.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Second pass gene counts derived from uniquely mapping pairs with the expected strandedness were output by STAR.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "The reads were aligned with STAR (Dobin et al., 2013) to the human genome hg19 using default parameters and a two-pass approach.\nFollowing a first pass alignment of each sample, novel splice junctions were pooled across all samples from the same cell type and incorporated into the genome annotation for a second pass alignment.\nSecond pass gene counts derived from uniquely mapping pairs with the expected strandedness were output by STAR.\nGenome_build: hg19\nSupplementary_files_format_and_content: Raw gene counts for every gene and every sample",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "The reads were aligned with STAR (Dobin et al., 2013) to the human genome hg19 using default parameters and a two-pass approach.",
+            "tool_name": "STAR",
+            "tool_version": "2.4.0d",
+            "code_example": "# Install STAR (example using conda)\n# conda install -c bioconda star\n\n# Define variables\n# Replace with actual paths and filenames\nGENOME_DIR=\"/path/to/STAR_genome_index_hg19\" # Directory for STAR genome index\nGENOME_FASTA=\"/path/to/hg19.fa\" # Human genome hg19 FASTA file (e.g., from UCSC: http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.fa.gz)\nGTF_FILE=\"/path/to/genes.gtf\" # Gene annotation GTF file for hg19 (e.g., Gencode v19 or Ensembl GRCh37)\nREADS_R1=\"sample_R1.fastq.gz\" # Input FASTQ file for Read 1 (gzipped)\nREADS_R2=\"sample_R2.fastq.gz\" # Input FASTQ file for Read 2 (gzipped, remove if single-end)\nOUTPUT_DIR=\"STAR_alignment_output\"\nSAMPLE_NAME=\"sample\"\nNUM_THREADS=8 # Number of threads to use\n\n# 1. Generate STAR genome index (run once for the genome)\n# This step requires the genome FASTA and a GTF file for splice junction annotation.\n# The --sjdbOverhang parameter is typically set to (readLength - 1) or 100.\n# mkdir -p \"${GENOME_DIR}\"\n# STAR --runMode genomeGenerate \\\n#      --genomeDir \"${GENOME_DIR}\" \\\n#      --genomeFastaFiles \"${GENOME_FASTA}\" \\\n#      --sjdbGTFfile \"${GTF_FILE}\" \\\n#      --sjdbOverhang 100 \\\n#      --runThreadN \"${NUM_THREADS}\"\n\n# 2. Align reads with STAR using a two-pass approach and default parameters\nmkdir -p \"${OUTPUT_DIR}\"\n\n# For paired-end reads:\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${READS_R1}\" \"${READS_R2}\" \\\n     --readFilesCommand zcat \\\n     --runThreadN \"${NUM_THREADS}\" \\\n     --outFileNamePrefix \"${OUTPUT_DIR}/${SAMPLE_NAME}_\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outSAMattributes Standard \\\n     --twopassMode Basic\n\n# For single-end reads, modify the --readFilesIn parameter:\n# STAR --genomeDir \"${GENOME_DIR}\" \\\n#      --readFilesIn \"${READS_R1}\" \\\n#      --readFilesCommand zcat \\\n#      --runThreadN \"${NUM_THREADS}\" \\\n#      --outFileNamePrefix \"${OUTPUT_DIR}/${SAMPLE_NAME}_\" \\\n#      --outSAMtype BAM SortedByCoordinate \\\n#      --outSAMunmapped Within \\\n#      --outSAMattributes Standard \\\n#      --twopassMode Basic",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Following a first pass alignment of each sample, novel splice junctions were pooled across all samples from the same cell type and incorporated into the genome annotation for a second pass alignment.",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.7.10a",
+            "code_example": "# Define variables\nGENOME_DIR=\"/path/to/STAR_index_GRCh38\"\nGENOME_FASTA=\"/path/to/GRCh38.p14.genome.fa\" # Source: https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.40_GRCh38.p14/\nGTF_FILE=\"/path/to/gencode.v45.annotation.gtf\" # Source: https://www.gencodegenes.org/human/release_45.html\nREAD_LENGTH=100 # Example read length, adjust as needed based on sequencing data\nSJDB_OVERHANG=$((READ_LENGTH - 1))\nSTAR_VERSION=\"2.7.10a\"\n\n# Placeholders for sample-specific and cell-type-specific data\nSAMPLE_ID=\"sample_1\" # Replace with actual sample ID (e.g., SRR1234567)\nCELL_TYPE_ID=\"cell_type_A\" # Replace with actual cell type ID (e.g., K562)\nFASTQ_R1=\"${SAMPLE_ID}_R1.fastq.gz\" # Replace with actual path to R1 fastq\nFASTQ_R2=\"${SAMPLE_ID}_R2.fastq.gz\" # Replace with actual path to R2 fastq\nOUTPUT_BASE_DIR=\"/path/to/output\"\nOUTPUT_DIR=\"${OUTPUT_BASE_DIR}/${CELL_TYPE_ID}\"\nmkdir -p \"${OUTPUT_DIR}\"\n\n# --- STAR Installation (if not already installed) ---\n# conda install -c bioconda star=${STAR_VERSION}\n\n# --- 1. STAR Genome Generation (Run once per reference genome) ---\n# This step creates the STAR index. It should be run before any alignments.\n# STAR --runMode genomeGenerate \\\n#      --genomeDir \"${GENOME_DIR}\" \\\n#      --genomeFastaFiles \"${GENOME_FASTA}\" \\\n#      --sjdbGTFfile \"${GTF_FILE}\" \\\n#      --sjdbOverhang \"${SJDB_OVERHANG}\" \\\n#      --runThreadN 8\n\n# --- 2. First Pass Alignment for each sample ---\n# This pass aligns reads and discovers novel splice junctions for each individual sample.\nSTAR --runThreadN 8 \\\n     --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${FASTQ_R1}\" \"${FASTQ_R2}\" \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix \"${OUTPUT_DIR}/${SAMPLE_ID}_pass1_\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.05 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --sjdbScore 1 \\\n     --runMode alignReads \\\n     --twopassMode Basic # Enables 2-pass functionality, generates SJ.out.tab\n\n# --- 3. Pool Novel Splice Junctions across all samples from the same cell type ---\n# This step must be run AFTER all first pass alignments for ALL samples of a given cell type are complete.\n# It collects all SJ.out.tab files from the first pass alignments for CELL_TYPE_ID,\n# concatenates them, and filters/sorts unique junctions to create a master list.\n# This master list is then used in the second pass alignment.\n# Example command to combine (adjust paths as necessary):\n# cat \"${OUTPUT_DIR}\"/*_pass1_SJ.out.tab | awk 'BEGIN{OFS=\"\\t\"}{if($5>0 && $6>0) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' | sort -u -k1,1 -k2,2n > \"${OUTPUT_DIR}/${CELL_TYPE_ID}_pooled_junctions.tab\"\nPOOLED_JUNCTIONS_FILE=\"${OUTPUT_DIR}/${CELL_TYPE_ID}_pooled_junctions.tab\" # Placeholder for the combined and filtered junction file\n\n# --- 4. Second Pass Alignment for each sample, incorporating pooled junctions ---\n# This pass re-aligns reads using the refined set of pooled splice junctions for more accurate mapping.\nSTAR --runThreadN 8 \\\n     --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${FASTQ_R1}\" \"${FASTQ_R2}\" \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix \"${OUTPUT_DIR}/${SAMPLE_ID}_pass2_\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.05 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --sjdbScore 1 \\\n     --runMode alignReads \\\n     --sjdbFileChrStartEnd \"${POOLED_JUNCTIONS_FILE}\" # Incorporate pooled junctions for second pass\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "Second pass gene counts derived from uniquely mapping pairs with the expected strandedness were output by STAR.",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install STAR (example using conda)\n# conda install -c bioconda star\n\n# Define variables for paths and files\nGENOME_DIR=\"/path/to/STAR_index_GRCh38_gencode_v38\"\nGENOME_FASTA=\"/path/to/GRCh38.primary_assembly.fa\" # Source: ftp://ftp.ensembl.org/pub/release-109/fasta/homo_sapiens/dna/\nGTF_FILE=\"/path/to/gencode.v38.annotation.gtf\" # Source: ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_38/\nREAD1=\"sample_R1.fastq.gz\"\nREAD2=\"sample_R2.fastq.gz\"\nOUTPUT_PREFIX=\"sample_star_output_\"\nTHREADS=20 # Adjust as needed\n\n# --- Reference Data Setup (run once per genome/annotation combination) ---\n# mkdir -p ${GENOME_DIR}\n# STAR --runMode genomeGenerate \\\n#      --genomeDir ${GENOME_DIR} \\\n#      --genomeFastaFiles ${GENOME_FASTA} \\\n#      --sjdbGTFfile ${GTF_FILE} \\\n#      --sjdbOverhang 100 \\\n#      --runThreadN ${THREADS}\n\n# --- Alignment and Gene Counting (Second Pass) ---\n# The 'second pass' is enabled by --twopassMode Basic.\n# 'Gene counts' are generated by --quantMode GeneCounts, outputting to ReadsPerGene.out.tab.\n# 'Uniquely mapping pairs' are ensured by --outFilterMultimapNmax 1.\n# 'Expected strandedness' implies the user will select the correct column from ReadsPerGene.out.tab\n# (e.g., column 3 for forward-stranded, column 4 for reverse-stranded, column 2 for unstranded).\nSTAR --genomeDir ${GENOME_DIR} \\\n     --readFilesIn ${READ1} ${READ2} \\\n     --runThreadN ${THREADS} \\\n     --outFileNamePrefix ${OUTPUT_PREFIX} \\\n     --readFilesCommand zcat \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes Standard \\\n     --quantMode GeneCounts \\\n     --twopassMode Basic \\\n     --outFilterMultimapNmax 1 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.05 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --sjdbOverhang 100 \\\n     --outSAMstrandField intronMotif",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        }
+    ],
+    "raw_text": "The reads were aligned with STAR (Dobin et al., 2013) to the human genome hg19 using default parameters and a two-pass approach.\nFollowing a first pass alignment of each sample, novel splice junctions were pooled across all samples from the same cell type and incorporated into the genome annotation for a second pass alignment.\nSecond pass gene counts derived from uniquely mapping pairs with the expected strandedness were output by STAR.\nGenome_build: hg19\nSupplementary_files_format_and_content: Raw gene counts for every gene and every sample",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

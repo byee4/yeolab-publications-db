@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "3' Illumina adaptors trimmed with cutadapt",
-      "tool_name": "cutadapt",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Mapped to mm9 genome build with Bowtie, version 0.12.7 with options --time -k 100 --best --strata -v 2 -p 3, and filtered to a mismatch rate of 6%",
-      "tool_name": "Bowtie",
-      "tool_version": "0.12.7",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Mapped reads were counted for each exon using bedtools multicov and merged into raw gene counts with bedtoools groupBy",
-      "tool_name": "bedtools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "DESeq2 was used to normalize read counts.",
-      "tool_name": "DESeq2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Genes were filtered to have a minimum of 10 reads per million in at least one sample, and those counts were used to test for differential expression",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "3' Illumina adaptors trimmed with cutadapt\nMapped to mm9 genome build with Bowtie, version 0.12.7 with options --time -k 100 --best --strata -v 2 -p 3, and filtered to a mismatch rate of 6%\nMapped reads were counted for each exon using bedtools multicov and merged into raw gene counts with bedtoools groupBy\nDESeq2 was used to normalize read counts. Genes were filtered to have a minimum of 10 reads per million in at least one sample, and those counts were used to test for differential expression\nGenome_build: mm9\nSupplementary_files_format_and_content: NLS_deseq2_all_alluniq_vs_mmu9htdp43nls.txt is the differential expression output of DESeq2. NLS_norm_counts_all.txt is the file of normalized read counts per gene as computed by DESeq2. The counts are in matrix format, one file for the whole experiment.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "3' Illumina adaptors trimmed with cutadapt",
+            "tool_name": "cutadapt",
+            "tool_version": "4.0",
+            "code_example": "# Install cutadapt via conda\n# conda install -c bioconda cutadapt=4.0\n\n# Define input and output filenames (placeholders)\nINPUT_FASTQ=\"input.fastq.gz\"\nTRIMMED_FASTQ=\"trimmed.fastq.gz\"\n\n# Define common Illumina 3' adapter sequence (for single-end or Read 1 of paired-end)\nADAPTER_3PRIME=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\"\n\n# Define minimum read length after trimming and quality threshold\nMIN_LENGTH=\"18\"\nQUALITY_THRESHOLD=\"20\"\n\n# Define number of CPU cores to use for parallel processing\nNUM_CORES=\"4\"\n\n# Execute cutadapt to trim 3' Illumina adaptors and perform quality trimming\n# -a: Specifies the 3' adapter sequence to be removed.\n# -o: Specifies the output file for trimmed reads.\n# --minimum-length: Discards reads shorter than this length after trimming.\n# --cores: Uses multiple CPU cores for faster processing.\n# -q: Performs quality trimming from both 5' and 3' ends with the specified quality threshold.\ncutadapt \\\n  -a \"${ADAPTER_3PRIME}\" \\\n  -o \"${TRIMMED_FASTQ}\" \\\n  \"${INPUT_FASTQ}\" \\\n  --minimum-length \"${MIN_LENGTH}\" \\\n  --cores \"${NUM_CORES}\" \\\n  -q \"${QUALITY_THRESHOLD}\",\"${QUALITY_THRESHOLD}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 2,
+            "description": "Mapped to mm9 genome build with Bowtie, version 0.12.7 with options --time -k 100 --best --strata -v 2 -p 3, and filtered to a mismatch rate of 6%",
+            "tool_name": "Bowtie",
+            "tool_version": "0.12.7",
+            "code_example": "# Install Bowtie (if not already installed)\n# conda install -c bioconda bowtie=0.12.7\n\n# Define variables\n# Replace /path/to/mm9_bowtie_index/mm9 with the actual path to your Bowtie index for mm9.\n# The index files (e.g., mm9.1.ebwt, mm9.2.ebwt, etc.) should be in this directory.\nBOWTIE_INDEX_PREFIX=\"/path/to/mm9_bowtie_index/mm9\"\nINPUT_FASTQ=\"input_reads.fastq\" # Replace with your input FASTQ file (e.g., single-end reads)\nOUTPUT_SAM=\"aligned_reads.sam\" # Replace with your desired output SAM file name\n\n# Execute Bowtie alignment\n# --time: Report wall-clock time taken by Bowtie\n# -k 100: Report up to 100 valid alignments per read\n# --best: Report alignments that are \"best\" in terms of stratum and number of mismatches\n# --strata: Don't report alignments for a read unless they fall into the best stratum\n# -v 2: Align reads with at most 2 mismatches (this implicitly handles the 6% mismatch rate for typical read lengths)\n# -p 3: Use 3 parallel threads\nbowtie --time -k 100 --best --strata -v 2 -p 3 \"$BOWTIE_INDEX_PREFIX\" \"$INPUT_FASTQ\" > \"$OUTPUT_SAM\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie"
+        },
+        {
+            "step_order": 3,
+            "description": "Mapped reads were counted for each exon using bedtools multicov and merged into raw gene counts with bedtoools groupBy",
+            "tool_name": "bedtools",
+            "tool_version": "2.31.0",
+            "code_example": "# Define reference genome and annotation\nGENOME=\"hg38\"\nGTF_URL=\"https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_45/gencode.v45.annotation.gtf.gz\"\nGTF_FILE=\"gencode.v45.annotation.gtf.gz\"\nEXONS_BED=\"gencode.v45.exons.bed\"\n\n# Input BAM file (placeholder - replace with your actual mapped reads BAM file)\nMAPPED_READS_BAM=\"mapped_reads.bam\"\n# Ensure BAM is sorted and indexed for optimal performance with bedtools\n# Example:\n# samtools sort -o mapped_reads.sorted.bam mapped_reads.bam\n# samtools index mapped_reads.sorted.bam\n# MAPPED_READS_BAM=\"mapped_reads.sorted.bam\"\n\n# Output files\nEXON_COUNTS_TSV=\"exon_raw_counts.tsv\"\nGENE_COUNTS_TSV=\"gene_raw_counts.tsv\"\n\n# --- Installation (commented out) ---\n# Install bedtools and optionally samtools (for BAM sorting/indexing) if not already available\n# conda install -c bioconda bedtools\n# conda install -c bioconda samtools\n\n# --- Prepare exon annotations (if not already available) ---\n# Download GTF if not present\nif [ ! -f \"$GTF_FILE\" ]; then\n    echo \"Downloading GTF file from $GTF_URL...\"\n    wget \"$GTF_URL\"\nfi\n\n# Convert GTF to BED format for exons, ensuring gene_id is in the name field (column 4).\n# This step is crucial for bedtools groupBy later to correctly group by gene.\n# The awk script extracts chromosome, 0-based start, 1-based end, gene_id, score (set to 0), and strand.\nif [ ! -f \"$EXONS_BED\" ]; then\n    echo \"Creating exon BED file from GTF: $EXONS_BED...\"\n    zcat \"$GTF_FILE\" | awk '\n        BEGIN { OFS=\"\\t\" }\n        $3 == \"exon\" {\n            chr = $1;\n            start = $4 - 1; # Convert to 0-based start\n            end = $5;\n            strand = $7;\n            \n            # Extract gene_id from the 9th column (attributes)\n            gene_id = \"\";\n            split($9, attrs, \"; \");\n            for (i=1; i<=length(attrs); i++) {\n                if (attrs[i] ~ /^gene_id /) {\n                    gene_id = substr(attrs[i], index(attrs[i], \"\\\"\")+1, length(attrs[i]) - index(attrs[i], \"\\\"\") - 1);\n                    break;\n                }\n            }\n            \n            if (gene_id != \"\") {\n                print chr, start, end, gene_id, \"0\", strand;\n            }\n        }' > \"$EXONS_BED\"\n    echo \"Exon BED file created: $EXONS_BED\"\nelse\n    echo \"Exon BED file already exists: $EXONS_BED\"\nfi\n\n# --- Main execution ---\n\n# 1. Count reads for each exon using bedtools multicov\n#    -b: BED file of features (exons)\n#    -f: BAM file of mapped reads\n#    Output format: chr\\tstart\\tend\\tgene_id\\tscore\\tstrand\\tcount\necho \"Counting reads per exon using bedtools multicov...\"\nbedtools multicov -b \"$EXONS_BED\" -f \"$MAPPED_READS_BAM\" > \"$EXON_COUNTS_TSV\"\n\n# 2. Merge into raw gene counts with bedtools groupBy\n#    -i: Input file (exon_raw_counts.tsv from the previous step)\n#    -g 4: Group by the 4th column (which contains the gene_id)\n#    -c 7: Operate on the 7th column (which contains the exon read count)\n#    -o sum: Sum the values in the 7th column for each group (gene)\necho \"Merging exon counts into gene counts using bedtools groupBy...\"\nbedtools groupBy -i \"$EXON_COUNTS_TSV\" -g 4 -c 7 -o sum > \"$GENE_COUNTS_TSV\"\n\necho \"Raw exon counts saved to: $EXON_COUNTS_TSV\"\necho \"Raw gene counts saved to: $GENE_COUNTS_TSV\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        },
+        {
+            "step_order": 4,
+            "description": "DESeq2 was used to normalize read counts.",
+            "tool_name": "DESeq2",
+            "tool_version": "1.42.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install R and Bioconductor (if not already installed)\n# sudo apt-get update\n# sudo apt-get install r-base\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\"); BiocManager::install(\"DESeq2\")'\n\n# This script assumes you have a count matrix file (e.g., 'counts.tsv')\n# and an optional sample metadata file (e.g., 'coldata.tsv').\n# The count matrix should have gene IDs as row names and sample IDs as column names.\n# The metadata file should have sample IDs as row names and relevant experimental factors as columns.\n\n# Example of how to create dummy input files for demonstration:\n# echo -e \"gene_id\\tsample1\\tsample2\\tsample3\\tsample4\\ngeneA\\t100\\t120\\t90\\t110\\ngeneB\\t50\\t60\\t45\\t55\\ngeneC\\t200\\t210\\t190\\t220\" > counts.tsv\n# echo -e \"sample_id\\tcondition\\nsample1\\tcontrol\\nsample2\\tcontrol\\nsample3\\ttreated\\nsample4\\ttreated\" > coldata.tsv\n\nRscript -e '\n  library(DESeq2)\n  \n  # --- Configuration ---\n  count_matrix_file <- \"counts.tsv\" # Path to your raw count matrix file\n  sample_metadata_file <- \"coldata.tsv\" # Path to your sample metadata file\n  output_normalized_counts_file <- \"normalized_counts.tsv\" # Output file for normalized counts\n  \n  # --- Load Data ---\n  # Load count data: first column as row names (gene IDs), tab-separated\n  count_data <- read.table(count_matrix_file, header = TRUE, row.names = 1, sep = \"\\t\")\n  \n  # Load sample metadata: first column as row names (sample IDs), tab-separated\n  coldata <- read.table(sample_metadata_file, header = TRUE, row.names = 1, sep = \"\\t\")\n  \n  # Ensure sample order in coldata matches column order in count_data\n  # This is crucial for DESeqDataSetFromMatrix\n  coldata <- coldata[colnames(count_data), , drop = FALSE]\n  \n  # --- Create DESeqDataSet object ---\n  # For simple normalization, a design of ~1 is sufficient as we are not performing\n  # differential expression analysis here, only estimating size factors.\n  dds <- DESeqDataSetFromMatrix(countData = count_data,\n                                colData = coldata,\n                                design = ~ 1)\n  \n  # --- Perform Normalization ---\n  # Estimate size factors to account for differences in library size and sequencing depth.\n  # This is the core normalization step in DESeq2.\n  dds <- estimateSizeFactors(dds)\n  \n  # Extract normalized counts\n  normalized_counts <- counts(dds, normalized = TRUE)\n  \n  # --- Save Results ---\n  # Write normalized counts to a tab-separated file\n  # col.names = NA ensures that the row names (gene IDs) are written as the first column\n  write.table(normalized_counts, output_normalized_counts_file, sep = \"\\t\", quote = FALSE, col.names = NA)\n  \n  message(paste0(\"DESeq2 normalization complete. Normalized counts saved to \", output_normalized_counts_file))\n'",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/DESeq2.html"
+        },
+        {
+            "step_order": 5,
+            "description": "Genes were filtered to have a minimum of 10 reads per million in at least one sample, and those counts were used to test for differential expression",
+            "tool_name": "DESeq2 (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.38.3",
+            "code_example": "# Install R and DESeq2 (if not already installed)\n# sudo apt-get update\n# sudo apt-get install -y r-base\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\")'\n# R -e 'BiocManager::install(\"DESeq2\")'\n\n# Create dummy input files for demonstration (replace with your actual files)\n# gene_counts.csv: A CSV file with gene IDs as row names and sample IDs as column names, containing raw read counts.\n# sample_metadata.csv: A CSV file with sample IDs as row names and experimental conditions (e.g., 'condition', 'treatment') as columns.\n\ncat <<EOF > gene_counts.csv\nGeneID,sample1,sample2,sample3,sample4,sample5,sample6\ngeneA,100,120,500,550,110,520\ngeneB,5,8,10,12,6,11\ngeneC,200,210,250,260,205,255\ngeneD,15,18,20,22,16,21\ngeneE,0,1,0,2,0,1\ngeneF,1000,1100,1200,1300,1050,1250\nEOF\n\ncat <<EOF > sample_metadata.csv\nSampleID,condition\nsample1,control\nsample2,control\nsample3,treatment\nsample4,treatment\nsample5,control\nsample6,treatment\nEOF\n\n# R script to perform filtering and differential expression using DESeq2\ncat <<'EOF_R_SCRIPT' > run_deseq2.R\nlibrary(DESeq2)\n\n# Load count matrix\ncounts_df <- read.csv(\"gene_counts.csv\", row.names = 1)\n\n# Load sample metadata\ncoldata <- read.csv(\"sample_metadata.csv\", row.names = 1)\n\n# Ensure order of samples in counts_df and coldata matches\nstopifnot(all(colnames(counts_df) == rownames(coldata)))\n\n# --- Filtering step: minimum of 10 reads per million in at least one sample ---\n# Calculate total reads per sample\ntotal_reads_per_sample <- colSums(counts_df)\n\n# Calculate RPM for each gene in each sample\n# Add a small pseudocount to total_reads_per_sample to avoid division by zero if a sample has 0 total reads\nrpm_matrix <- t(t(counts_df) / (total_reads_per_sample + 1e-6)) * 1e6\n\n# Identify genes that have at least 10 RPM in at least one sample\nkeep_genes <- rowSums(rpm_matrix >= 10) >= 1\n\n# Filter the count matrix\nfiltered_counts_df <- counts_df[keep_genes, ]\n\n# --- Differential Expression using DESeq2 ---\n# Create DESeqDataSet object\ndds <- DESeqDataSetFromMatrix(countData = round(filtered_counts_df), # DESeq2 expects integer counts\n                              colData = coldata,\n                              design = ~ condition)\n\n# Run DESeq2\ndds <- DESeq(dds)\n\n# Get results for 'treatment' vs 'control'\nres <- results(dds, contrast = c(\"condition\", \"treatment\", \"control\"))\n\n# Order by adjusted p-value\nres_ordered <- res[order(res$padj), ]\n\n# Save results\nwrite.csv(as.data.frame(res_ordered), \"deseq2_differential_expression_results.csv\")\n\n# Optional: Save normalized counts\nnormalized_counts <- counts(dds, normalized=TRUE)\nwrite.csv(as.data.frame(normalized_counts), \"deseq2_normalized_counts.csv\")\n\nmessage(\"DESeq2 analysis complete. Results saved to deseq2_differential_expression_results.csv\")\nmessage(\"Normalized counts saved to deseq2_normalized_counts.csv\")\nEOF_R_SCRIPT\n\n# Execute the R script\nRscript run_deseq2.R",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/s13059-014-0550-8"
+        }
+    ],
+    "raw_text": "3' Illumina adaptors trimmed with cutadapt\nMapped to mm9 genome build with Bowtie, version 0.12.7 with options --time -k 100 --best --strata -v 2 -p 3, and filtered to a mismatch rate of 6%\nMapped reads were counted for each exon using bedtools multicov and merged into raw gene counts with bedtoools groupBy\nDESeq2 was used to normalize read counts. Genes were filtered to have a minimum of 10 reads per million in at least one sample, and those counts were used to test for differential expression\nGenome_build: mm9\nSupplementary_files_format_and_content: NLS_deseq2_all_alluniq_vs_mmu9htdp43nls.txt is the differential expression output of DESeq2. NLS_norm_counts_all.txt is the file of normalized read counts per gene as computed by DESeq2. The counts are in matrix format, one file for the whole experiment.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

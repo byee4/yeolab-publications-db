@@ -1,106 +1,106 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Basecalls were performed using bcl2fastq v2.17 for Novaseq output.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reads were trimmed from 3' end until the final base had a quality score > 30, using Trimmomatic v0.38, discarding reads left with < 25 bp",
-      "tool_name": "Trimmomatic",
-      "tool_version": "0.38",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Reads were aligned to the mouse genome (mm10) using Bowtie version 1.1.2.",
-      "tool_name": "Bowtie",
-      "tool_version": "1.1.2",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Parameters: --local --very-sensitive-local --no-unal --no-mixed --no-discordant --phred33 -I 10 -X 700",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Reads were aligned to the yeast genome (sacCer3) using Bowtie version 1.1.2.",
-      "tool_name": "Bowtie",
-      "tool_version": "1.1.2",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Parameters: --local --very-sensitive-local --no-overlap --no-dovetail --no-unal --no-mixed --no-discordant --phred33 -I 10 -X 70",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Spike-in normalization.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "The genomic coverage were then normalized by applying the scaling factor that is calculated from the number of mapped reads to mouse genome and yeast genome",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "Peaks were called uing MACS v2.1.0 with the significance cut-off q-value <=0.01, using Callpeak, and compared the sample to corresponding IgG samples using bdgcmp in FE (fold-enrichment) mode.",
-      "tool_name": "MACS2",
-      "tool_version": "2.1.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 10,
-      "description": "bigWig files were generated using bdg2bw from the bedgraph output from last step.",
-      "tool_name": "UCSC tools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 11,
-      "description": "Score represents the FE values at a given genomic coordinate. narrowPeak files were generated using MACS v2 with default settings.",
-      "tool_name": "MACS2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Basecalls were performed using bcl2fastq v2.17 for Novaseq output.\nReads were trimmed from 3' end until the final base had a quality score > 30, using Trimmomatic v0.38, discarding reads left with < 25 bp\nReads were aligned to the mouse genome (mm10) using Bowtie version 1.1.2. Parameters: --local --very-sensitive-local --no-unal --no-mixed --no-discordant --phred33 -I 10 -X 700\nReads were aligned to the yeast genome (sacCer3) using Bowtie version 1.1.2. Parameters: --local --very-sensitive-local --no-overlap --no-dovetail --no-unal --no-mixed --no-discordant --phred33 -I 10 -X 70\nSpike-in normalization. The genomic coverage were then normalized by applying the scaling factor that is calculated from the number of mapped reads to mouse genome and yeast genome\nPeaks were called uing MACS v2.1.0 with the significance cut-off q-value <=0.01, using Callpeak, and compared the sample to corresponding IgG samples using bdgcmp in FE (fold-enrichment) mode.\nbigWig files were generated using bdg2bw from the bedgraph output from last step. Score represents the FE values at a given genomic coordinate. narrowPeak files were generated using MACS v2 with default settings.\nAssembly: mm10\nSupplementary files format and content: bigWig, narrowPeak (except for IgG sample)",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Basecalls were performed using bcl2fastq v2.17 for Novaseq output.",
+            "tool_name": "bcl2fastq",
+            "tool_version": "2.17",
+            "code_example": "# Install bcl2fastq (example, specific installation depends on OS and Illumina's distribution method)\n# On some systems, it might be available via apt/yum or direct download from Illumina.\n# For example, if using a container:\n# docker pull illumina/bcl2fastq:2.17\n\n# Example command for bcl2fastq v2.17\n# Replace /path/to/novaseq_run_folder with the actual path to the BCL run folder from the Novaseq instrument.\n# Replace /path/to/output_fastq_folder with the desired output directory for FASTQ files.\nbcl2fastq --runfolder-dir /path/to/novaseq_run_folder --output-dir /path/to/output_fastq_folder",
+            "code_language": "bash",
+            "github_url": "https://support.illumina.com/sequencing/sequencing_software/bcl2fastq-conversion-software.html"
+        },
+        {
+            "step_order": 2,
+            "description": "Reads were trimmed from 3' end until the final base had a quality score > 30, using Trimmomatic v0.38, discarding reads left with < 25 bp",
+            "tool_name": "Trimmomatic",
+            "tool_version": "0.38",
+            "code_example": "# Install Trimmomatic (if not already installed)\n# conda install -c bioconda trimmomatic=0.38\n\n# Define input and output file names (placeholders)\n# For single-end reads:\nINPUT_READS=\"input_reads.fastq.gz\"\nOUTPUT_READS=\"trimmed_reads.fastq.gz\"\n\n# For paired-end reads (uncomment and adjust if applicable):\n# INPUT_READS_FWD=\"input_reads_R1.fastq.gz\"\n# INPUT_READS_REV=\"input_reads_R2.fastq.gz\"\n# OUTPUT_READS_FWD_PAIRED=\"trimmed_reads_R1_paired.fastq.gz\"\n# OUTPUT_READS_REV_PAIRED=\"trimmed_reads_R2_paired.fastq.gz\"\n# OUTPUT_READS_FWD_UNPAIRED=\"trimmed_reads_R1_unpaired.fastq.gz\"\n# OUTPUT_READS_REV_UNPAIRED=\"trimmed_reads_R2_unpaired.fastq.gz\"\n\n# Path to Trimmomatic JAR file (adjust if installed via conda or other means)\n# If installed via conda, 'trimmomatic' might be directly in your PATH\nTRIMMOMATIC_JAR=\"/path/to/trimmomatic-0.38.jar\"\n\n# Execute Trimmomatic for single-end reads\n# Parameters:\n# -phred33: Assumes Phred+33 quality scores (common for Illumina)\n# TRAILING:30: Trim bases from the 3' end if their quality score is below 30.\n# MINLEN:25: Discard reads shorter than 25 bp after trimming.\njava -jar ${TRIMMOMATIC_JAR} SE \\\n    -phred33 \\\n    ${INPUT_READS} \\\n    ${OUTPUT_READS} \\\n    TRAILING:30 \\\n    MINLEN:25\n\n# Example for paired-end reads (uncomment and adjust if applicable):\n# java -jar ${TRIMMOMATIC_JAR} PE \\\n#     -phred33 \\\n#     ${INPUT_READS_FWD} \\\n#     ${INPUT_READS_REV} \\\n#     ${OUTPUT_READS_FWD_PAIRED} \\\n#     ${OUTPUT_READS_FWD_UNPAIRED} \\\n#     ${OUTPUT_READS_REV_PAIRED} \\\n#     ${OUTPUT_READS_REV_UNPAIRED} \\\n#     TRAILING:30 \\\n#     MINLEN:25",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "Reads were aligned to the mouse genome (mm10) using Bowtie version 1.1.2.",
+            "tool_name": "Bowtie",
+            "tool_version": "1.1.2",
+            "code_example": "# Install Bowtie 1.1.2\n# conda install -c bioconda bowtie=1.1.2\n\n# Align reads to the mm10 genome using Bowtie 1.1.2\n# Input: reads.fastq (single-end reads assumed, adjust for paired-end if needed)\n# Output: aligned_reads.sam (SAM format)\n# Parameters:\n#   -S: Output alignments in SAM format\n#   -p 8: Use 8 threads (adjust as per available resources)\n#   -v 2: Allow up to 2 mismatches in the alignment seed (common for short reads with Bowtie 1)\n#   --best --strata: Report only alignments that are \"best\" in terms of stratum and number of mismatches\n#   <mm10_index_base>: Base name of the Bowtie index files for mm10 (e.g., /path/to/bowtie_indexes/mm10)\n#   <reads.fastq>: Input FASTQ file containing sequencing reads\n#   > aligned_reads.sam: Redirect output to a SAM file\nbowtie -S -p 8 -v 2 --best --strata <mm10_index_base> <reads.fastq> > aligned_reads.sam",
+            "code_language": "bash",
+            "github_url": "http://bowtie-bio.sourceforge.net/index.shtml"
+        },
+        {
+            "step_order": 4,
+            "description": "Parameters: --local --very-sensitive-local --no-unal --no-mixed --no-discordant --phred33 -I 10 -X 700",
+            "tool_name": "Bowtie2 (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.5.1 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Bowtie2 (example using conda)\n# conda install -c bioconda bowtie2\n\n# Placeholder for Bowtie2 index (e.g., GRCh38) and input/output files.\n# Replace 'path/to/genome_index/GRCh38' with the actual path to your Bowtie2 index files for the reference genome.\n# Replace 'reads_R1.fastq.gz' and 'reads_R2.fastq.gz' with your actual input paired-end read files.\n# Replace 'output.sam' with your desired output SAM file name.\n\nbowtie2 \\\n  --local \\\n  --very-sensitive-local \\\n  --no-unal \\\n  --no-mixed \\\n  --no-discordant \\\n  --phred33 \\\n  -I 10 \\\n  -X 700 \\\n  -x path/to/genome_index/GRCh38 \\\n  -1 reads_R1.fastq.gz \\\n  -2 reads_R2.fastq.gz \\\n  -S output.sam",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie2"
+        },
+        {
+            "step_order": 5,
+            "description": "Reads were aligned to the yeast genome (sacCer3) using Bowtie version 1.1.2.",
+            "tool_name": "Bowtie",
+            "tool_version": "1.1.2",
+            "code_example": "# Install Bowtie (if not already installed)\n# conda install -c bioconda bowtie=1.1.2\n\n# Download yeast genome (sacCer3) from UCSC\n# wget http://hgdownload.soe.ucsc.edu/goldenPath/sacCer3/bigZips/sacCer3.fa.gz\n# gunzip sacCer3.fa.gz\n# mv sacCer3.fa sacCer3.fasta\n\n# Build Bowtie index\n# Replace sacCer3.fasta with the actual path to your genome file\nbowtie-build sacCer3.fasta sacCer3_index\n\n# Align reads\n# Replace reads.fastq with your actual input reads file (e.g., single-end reads)\n# Replace aligned_reads.sam with your desired output file name\n# -S: output SAM format\n# -p 4: use 4 threads (adjust as needed for your system)\nbowtie -S -p 4 sacCer3_index reads.fastq > aligned_reads.sam",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie"
+        },
+        {
+            "step_order": 6,
+            "description": "Parameters: --local --very-sensitive-local --no-overlap --no-dovetail --no-unal --no-mixed --no-discordant --phred33 -I 10 -X 70",
+            "tool_name": "bowtie2 (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.4.2",
+            "code_example": "# Install bowtie2 if not already installed\n# conda install -c bioconda bowtie2\n\n# Placeholder for reference genome index\n# Replace with the actual path to your bowtie2 index prefix (e.g., /path/to/your/genome/index/hg38)\n# The index files should be named hg38.1.bt2, hg38.2.bt2, etc.\nREFERENCE_GENOME_INDEX=\"/path/to/your/genome/index/hg38\"\n\n# Placeholder for input FASTQ files\n# Replace with your actual input FASTQ file paths\nREAD1_FASTQ=\"input_read1.fastq.gz\"\nREAD2_FASTQ=\"input_read2.fastq.gz\"\n\n# Placeholder for output SAM file\nOUTPUT_SAM=\"output_aligned.sam\"\n\n# Number of threads to use\nNUM_THREADS=8 # Adjust as needed\n\nbowtie2 \\\n    --local \\\n    --very-sensitive-local \\\n    --no-overlap \\\n    --no-dovetail \\\n    --no-unal \\\n    --no-mixed \\\n    --no-discordant \\\n    --phred33 \\\n    -I 10 \\\n    -X 70 \\\n    -p \"${NUM_THREADS}\" \\\n    -x \"${REFERENCE_GENOME_INDEX}\" \\\n    -1 \"${READ1_FASTQ}\" \\\n    -2 \"${READ2_FASTQ}\" \\\n    -S \"${OUTPUT_SAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie2"
+        },
+        {
+            "step_order": 7,
+            "description": "Spike-in normalization.",
+            "tool_name": "Custom Script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# This is a conceptual script for spike-in normalization.\n# Actual implementation may vary based on assay (e.g., eCLIP, RNA-seq) and specific spike-in design.\n# It typically involves counting reads mapping to spike-in sequences and using this to scale endogenous counts.\n\n# Define input parameters (placeholders)\nINPUT_BAM=\"sample_aligned.bam\" # BAM file aligned to combined genome (e.g., human + dm6)\nSPIKEIN_CHROMOSOME_PREFIX=\"dm\" # Prefix for spike-in chromosomes (e.g., dm6_chr2L, dm6_chrU)\nTARGET_SPIKEIN_READ_COUNT=1000000 # A reference spike-in count for normalization (e.g., average across samples)\nOUTPUT_NORMALIZATION_FACTOR_FILE=\"normalization_factor.txt\"\n\n# Ensure samtools is installed\n# conda install -c bioconda samtools\n\n# 1. Count reads mapping to spike-in sequences\n# This command counts reads where the reference name starts with the spike-in prefix.\n# Note: This assumes spike-in chromosomes are clearly distinguishable in the BAM header.\n# A more robust approach might involve a list of specific spike-in contigs.\nSPIKEIN_READ_COUNT=$(samtools idxstats \"$INPUT_BAM\" | awk -v prefix=\"$SPIKEIN_CHROMOSOME_PREFIX\" '$1 ~ \"^\"prefix {sum+=$3} END {print sum}')\n\necho \"Observed spike-in read count: $SPIKEIN_READ_COUNT\"\n\n# 2. Calculate the normalization factor\nif (( $(echo \"$SPIKEIN_READ_COUNT == 0\" | bc -l) )); then\n    echo \"Warning: Spike-in read count is zero. Normalization factor set to 1.0.\"\n    NORMALIZATION_FACTOR=1.0\nelse\n    NORMALIZATION_FACTOR=$(awk \"BEGIN { print $TARGET_SPIKEIN_READ_COUNT / $SPIKEIN_READ_COUNT }\")\nfi\n\necho \"Calculated normalization factor: $NORMALIZATION_FACTOR\"\necho \"$NORMALIZATION_FACTOR\" > \"$OUTPUT_NORMALIZATION_FACTOR_FILE\"\n\n# 3. Conceptual step: Apply the normalization factor\necho \"# The calculated factor ($NORMALIZATION_FACTOR) would then be used to scale\"\necho \"# endogenous read counts, signal tracks (e.g., bigWig files), or other quantitative metrics.\"\necho \"# Example (conceptual): scale_bigwig.py -i unnormalized.bw -o normalized.bw -f $NORMALIZATION_FACTOR\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 8,
+            "description": "The genomic coverage were then normalized by applying the scaling factor that is calculated from the number of mapped reads to mouse genome and yeast genome",
+            "tool_name": "Custom Python Script (eCLIP Spike-in Normalization) (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A (part of Skipper pipeline) (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# --- Prerequisites: Input BAM files and unnormalized BigWig ---\n# Replace with actual paths to your BAM files and BigWig files.\n# The BAM files are assumed to be generated by aligning reads to their respective genomes.\n# Reference genomes used for alignment (e.g., mouse: mm39, yeast: sacCer3) are implicitly required for these BAMs.\nMOUSE_BAM=\"path/to/your/mouse_mapped_reads.bam\"\nYEAST_BAM=\"path/to/your/yeast_spikein_mapped_reads.bam\"\nINPUT_BIGWIG=\"path/to/your/unnormalized_coverage.bw\"\nOUTPUT_BIGWIG=\"path/to/your/normalized_coverage.bw\"\n\n# --- Step 1: Count mapped reads using samtools ---\n# Install samtools if not available\n# conda install -c bioconda samtools\n\n# Get total mapped reads for the target genome (e.g., mouse)\nMOUSE_MAPPED_READS=$(samtools flagstat \"${MOUSE_BAM}\" | awk '/mapped \\(/ {print $1}')\n\n# Get total mapped reads for the spike-in genome (e.g., yeast)\nYEAST_MAPPED_READS=$(samtools flagstat \"${YEAST_BAM}\" | awk '/mapped \\(/ {print $1}')\n\necho \"Mouse Mapped Reads: ${MOUSE_MAPPED_READS}\"\necho \"Yeast Mapped Reads: ${YEAST_MAPPED_READS}\"\n\n# --- Step 2: Calculate the scaling factor ---\n# This example assumes normalization to a fixed reference amount of yeast spike-in reads.\n# Adjust REFERENCE_YEAST_READS based on your experimental design or pipeline standards.\nREFERENCE_YEAST_READS=10000000 # Example: Normalize all samples as if they had 10 million yeast reads\n\nif (( $(echo \"$YEAST_MAPPED_READS == 0\" | bc -l) )); then\n    echo \"Error: No yeast reads mapped (${YEAST_BAM}). Cannot calculate scaling factor.\"\n    exit 1\nfi\n\n# Scaling factor to apply to mouse coverage: (Reference Yeast Reads / Actual Yeast Reads)\nSCALING_FACTOR=$(echo \"scale=6; ${REFERENCE_YEAST_READS} / ${YEAST_MAPPED_READS}\" | bc)\n\necho \"Calculated Scaling Factor: ${SCALING_FACTOR}\"\n\n# --- Step 3: Apply the scaling factor to genomic coverage ---\n# This step uses a custom Python script, commonly found in eCLIP pipelines like Yeo lab's Skipper.\n# The script `normalize_bigwig_with_spikein.py` is inferred from the context.\n# Ensure the script is accessible (e.g., by cloning the Skipper repository).\n\n# Clone the Skipper repository if the script is not locally available\n# git clone https://github.com/yeolab/skipper.git\n\n# Replace with actual path to the Skipper scripts directory\nSKIPPER_SCRIPTS_DIR=\"/path/to/yeolab/skipper/scripts\"\n\npython \"${SKIPPER_SCRIPTS_DIR}/normalize_bigwig_with_spikein.py\" \\\n    --input_bigwig \"${INPUT_BIGWIG}\" \\\n    --output_bigwig \"${OUTPUT_BIGWIG}\" \\\n    --scaling_factor \"${SCALING_FACTOR}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper"
+        },
+        {
+            "step_order": 9,
+            "description": "Peaks were called uing MACS v2.1.0 with the significance cut-off q-value <=0.01, using Callpeak, and compared the sample to corresponding IgG samples using bdgcmp in FE (fold-enrichment) mode.",
+            "tool_name": "MACS2",
+            "tool_version": "2.1.0",
+            "code_example": "# Install MACS2 if not already installed\n# conda install -c bioconda macs2=2.1.0\n\n# Define input files and output prefix\nTREATMENT_BAM=\"treatment.bam\"\nCONTROL_BAM=\"control.bam\"\nOUTPUT_PREFIX=\"my_sample\"\nGENOME_SIZE=\"hs\" # Example: 'hs' for human, 'mm' for mouse, or a specific number like 2.7e9\n\n# Call peaks using MACS2 callpeak\n# -t: Treatment file (sample)\n# -c: Control file (corresponding IgG samples)\n# -f BAM: Input file format (assuming BAM, could be BAMPE for paired-end)\n# -g: Genome size (e.g., hs for human, mm for mouse)\n# -q 0.01: Q-value cutoff for peak detection (significance cut-off q-value <=0.01)\n# -n: Name string for output files\nmacs2 callpeak -t \"${TREATMENT_BAM}\" -c \"${CONTROL_BAM}\" -f BAM -g \"${GENOME_SIZE}\" -q 0.01 -n \"${OUTPUT_PREFIX}\"\n\n# Generate fold-enrichment bedGraph file using bdgcmp\n# -t: Treatment pileup bedGraph file (generated by callpeak)\n# -c: Control lambda bedGraph file (generated by callpeak)\n# -m FE: Mode for comparison (Fold Enrichment)\n# -o: Output bedGraph file\nmacs2 bdgcmp -t \"${OUTPUT_PREFIX}_treat_pileup.bdg\" -c \"${OUTPUT_PREFIX}_control_lambda.bdg\" -m FE -o \"${OUTPUT_PREFIX}_FE.bdg\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 10,
+            "description": "bigWig files were generated using bdg2bw from the bedgraph output from last step.",
+            "tool_name": "UCSC tools",
+            "tool_version": "Latest",
+            "code_example": "# Install UCSC tools (contains bedGraphToBigWig, which bdg2bw typically wraps)\n# conda install -c bioconda ucsc-bedgraphtobigwig\n\n# Download chromosome sizes file for hg38 (example reference genome)\n# wget https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes -O hg38.chrom.sizes\n\n# Define input and output files\ninput_bedgraph=\"input.bedgraph\" # Replace with actual bedgraph file from previous step\nchrom_sizes_file=\"hg38.chrom.sizes\" # Replace with actual chrom.sizes file\noutput_bigwig=\"output.bigWig\" # Desired output bigWig file\n\n# Generate bigWig file using bdg2bw (assumed to be a wrapper for bedGraphToBigWig)\nbdg2bw \"${input_bedgraph}\" \"${chrom_sizes_file}\" \"${output_bigwig}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/ENCODE-DCC/chip-seq-pipeline2"
+        },
+        {
+            "step_order": 11,
+            "description": "Score represents the FE values at a given genomic coordinate. narrowPeak files were generated using MACS v2 with default settings.",
+            "tool_name": "MACS2",
+            "tool_version": "2",
+            "code_example": "# Install MACS2 (if not already installed)\n# conda install -c bioconda macs2\n\n# Define input files and output prefix\nTREATMENT_BAM=\"treatment.bam\" # Placeholder for treatment BAM file\nCONTROL_BAM=\"control.bam\"   # Placeholder for control BAM file\nOUTPUT_PREFIX=\"my_experiment\" # Prefix for output files\nOUTPUT_DIR=\"macs2_output\"\nGENOME_SIZE=\"hs\" # Example: 'hs' for human, 'mm' for mouse, or a specific number like '2.7e9'\n\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run MACS2 callpeak with default settings\n# The description mentions \"default settings\" and \"narrowPeak files\".\n# MACS2's default behavior for callpeak is to generate narrowPeak files.\n# The score in narrowPeak files (column 5) is typically -log10(pvalue),\n# while fold enrichment (FE) is in column 7. The description \"Score represents the FE values\"\n# might be referring to the FE column or a derived score.\n# We'll use standard callpeak command with common defaults.\nmacs2 callpeak \\\n  -t \"${TREATMENT_BAM}\" \\\n  -c \"${CONTROL_BAM}\" \\\n  -f BAM \\\n  -g \"${GENOME_SIZE}\" \\\n  -n \"${OUTPUT_PREFIX}\" \\\n  --outdir \"${OUTPUT_DIR}\" \\\n  --qvalue 0.05 # Common default q-value threshold for peak calling",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Basecalls were performed using bcl2fastq v2.17 for Novaseq output.\nReads were trimmed from 3' end until the final base had a quality score > 30, using Trimmomatic v0.38, discarding reads left with < 25 bp\nReads were aligned to the mouse genome (mm10) using Bowtie version 1.1.2. Parameters: --local --very-sensitive-local --no-unal --no-mixed --no-discordant --phred33 -I 10 -X 700\nReads were aligned to the yeast genome (sacCer3) using Bowtie version 1.1.2. Parameters: --local --very-sensitive-local --no-overlap --no-dovetail --no-unal --no-mixed --no-discordant --phred33 -I 10 -X 70\nSpike-in normalization. The genomic coverage were then normalized by applying the scaling factor that is calculated from the number of mapped reads to mouse genome and yeast genome\nPeaks were called uing MACS v2.1.0 with the significance cut-off q-value <=0.01, using Callpeak, and compared the sample to corresponding IgG samples using bdgcmp in FE (fold-enrichment) mode.\nbigWig files were generated using bdg2bw from the bedgraph output from last step. Score represents the FE values at a given genomic coordinate. narrowPeak files were generated using MACS v2 with default settings.\nAssembly: mm10\nSupplementary files format and content: bigWig, narrowPeak (except for IgG sample)",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

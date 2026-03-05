@@ -1,106 +1,106 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "RNA-seq reads were subjected to 3\u00e2\u0080\u0099 adapter and poly(A)/poly(T) tail trimming using Cutadapt v1.9.1 from Martin et al., EMBnet.journal, 2011.",
-      "tool_name": "cutadapt",
-      "tool_version": "1.9.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "The following 3\u00e2\u0080\u0099 adapter sequences were utilized for generating RNA-Seq libraries and subsequently trimmed: mate1 5\u00e2\u0080\u0099-AGATCGGAAGAGCACACGTC-3\u00e2\u0080\u0099, mate2 5\u00e2\u0080\u0099-AGATCGGAAGAGCGTCGTGT-3\u00e2\u0080\u0099.",
-      "tool_name": "RNA-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Reads shorter than 30 nucleotides were discarded.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "The kallisto v0.43.1 software from Bray et al., Nature Biotechnology, 2016 was used for building transcriptome index and aligning filtered reads.",
-      "tool_name": "kallisto",
-      "tool_version": "0.43.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "The default options of kallisto were utilized for building transcriptome index.",
-      "tool_name": "kallisto",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "For aligning filtered reads we used options \u00e2\u0080\u009c--rf-stranded\u00e2\u0080\u009d and \u00e2\u0080\u009c--pseudobam\u00e2\u0080\u009d.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Mapped reads were assigned to transcripts in a weighted manner: if a read was uniquely mapped to a transcript, then the transcript\u00e2\u0080\u0099s read count was incremented by 1; if a read was mapped to n different transcripts, each transcript\u00e2\u0080\u0099s read count was incremented by 1/n.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "The expression of each transcript was estimated in transcripts per million (TPM) units by dividing its read count by the transcript length and normalizing to the library size.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "The expression of a gene was obtained by summing up the normalized expression of the transcripts associated with it.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 10,
-      "description": "For every gene, read counts of transcripts associated with this gene were also summed up and further used for the differential expression analysis.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 11,
-      "description": "As the reference mouse transcriptome, we considered sequences of protein coding transcripts with the support level 1-3 based on genome assembly GRCm38 (release 92) and transcript annotations from Ensembl database (see Hubbard et al., Nucleic Acids Research, 2002).",
-      "tool_name": "Ensembl",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "RNA-seq reads were subjected to 3\u00e2\u0080\u0099 adapter and poly(A)/poly(T) tail trimming using Cutadapt v1.9.1 from Martin et al., EMBnet.journal, 2011. The following 3\u00e2\u0080\u0099 adapter sequences were utilized for generating RNA-Seq libraries and subsequently trimmed: mate1 5\u00e2\u0080\u0099-AGATCGGAAGAGCACACGTC-3\u00e2\u0080\u0099, mate2 5\u00e2\u0080\u0099-AGATCGGAAGAGCGTCGTGT-3\u00e2\u0080\u0099.\nReads shorter than 30 nucleotides were discarded.\nThe kallisto v0.43.1 software from Bray et al., Nature Biotechnology, 2016 was used for building transcriptome index and aligning filtered reads. The default options of kallisto were utilized for building transcriptome index. For aligning filtered reads we used options \u00e2\u0080\u009c--rf-stranded\u00e2\u0080\u009d and \u00e2\u0080\u009c--pseudobam\u00e2\u0080\u009d.\nMapped reads were assigned to transcripts in a weighted manner: if a read was uniquely mapped to a transcript, then the transcript\u00e2\u0080\u0099s read count was incremented by 1; if a read was mapped to n different transcripts, each transcript\u00e2\u0080\u0099s read count was incremented by 1/n.\nThe expression of each transcript was estimated in transcripts per million (TPM) units by dividing its read count by the transcript length and normalizing to the library size. The expression of a gene was obtained by summing up the normalized expression of the transcripts associated with it. For every gene, read counts of transcripts associated with this gene were also summed up and further used for the differential expression analysis.\nAs the reference mouse transcriptome, we considered sequences of protein coding transcripts with the support level 1-3 based on genome assembly GRCm38 (release 92) and transcript annotations from Ensembl database (see Hubbard et al., Nucleic Acids Research, 2002).\nGenome_build: GRCm38\nSupplementary_files_format_and_content: counts_mouse_aging_timecourse.txt: Tab-delimited text file includes raw counts at the gene level for each sample.\nSupplementary_files_format_and_content: tpms_mouse_aging_timecourse.txt: Tab-delimited text file includes TPM values at the gene level for each sample.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "RNA-seq reads were subjected to 3\u00e2\u0080\u0099 adapter and poly(A)/poly(T) tail trimming using Cutadapt v1.9.1 from Martin et al., EMBnet.journal, 2011.",
+            "tool_name": "cutadapt",
+            "tool_version": "1.9.1",
+            "code_example": "# Install Cutadapt (if not already installed)\n# conda install -c bioconda cutadapt=1.9.1\n\n# Run Cutadapt for 3' adapter and poly(A)/poly(T) tail trimming.\n# The exact 3' adapter sequence should be known from the library preparation protocol.\n# A common Illumina TruSeq 3' adapter is used as a placeholder.\n# A{100} and T{100} are used to trim long poly(A) and poly(T) tails respectively.\ncutadapt -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA -a A{100} -a T{100} \\\n         -o trimmed_reads.fastq.gz \\\n         raw_reads.fastq.gz",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.14806/ej.17.1.200"
+        },
+        {
+            "step_order": 2,
+            "description": "The following 3\u00e2\u0080\u0099 adapter sequences were utilized for generating RNA-Seq libraries and subsequently trimmed: mate1 5\u00e2\u0080\u0099-AGATCGGAAGAGCACACGTC-3\u00e2\u0080\u0099, mate2 5\u00e2\u0080\u0099-AGATCGGAAGAGCGTCGTGT-3\u00e2\u0080\u0099.",
+            "tool_name": "RNA-seq",
+            "tool_version": "4.2",
+            "code_example": "# Install cutadapt if not already installed\n# conda install -c bioconda cutadapt\n\n# Define input and output file names (placeholders)\nREAD1_IN=\"input_read1.fastq.gz\"\nREAD2_IN=\"input_read2.fastq.gz\"\nREAD1_OUT=\"trimmed_read1.fastq.gz\"\nREAD2_OUT=\"trimmed_read2.fastq.gz\"\nUNPAIRED_READ1_OUT=\"unpaired_trimmed_read1.fastq.gz\"\nUNPAIRED_READ2_OUT=\"unpaired_trimmed_read2.fastq.gz\"\n\n# Define adapter sequences for 3' trimming\nADAPTER_MATE1=\"AGATCGGAAGAGCACACGTC\"\nADAPTER_MATE2=\"AGATCGGAAGAGCGTCGTGT\"\n\n# Run cutadapt for paired-end trimming of 3' adapters\n# -a ADAPTER_MATE1: 3' adapter for read 1\n# -A ADAPTER_MATE2: 3' adapter for read 2\n# -o READ1_OUT: Output file for trimmed read 1 (paired)\n# -p READ2_OUT: Output file for trimmed read 2 (paired)\n# --untrimmed-output: Optional, output reads that were not trimmed (read 1)\n# --untrimmed-paired-output: Optional, output reads that were not trimmed (read 2)\n# --minimum-length 20: Discard reads shorter than 20 bp after trimming (common practice)\n# -j 4: Use 4 CPU cores for parallel processing (adjust as needed)\ncutadapt \\\n  -a \"${ADAPTER_MATE1}\" \\\n  -A \"${ADAPTER_MATE2}\" \\\n  -o \"${READ1_OUT}\" \\\n  -p \"${READ2_OUT}\" \\\n  --untrimmed-output \"${UNPAIRED_READ1_OUT}\" \\\n  --untrimmed-paired-output \"${UNPAIRED_READ2_OUT}\" \\\n  --minimum-length 20 \\\n  -j 4 \\\n  \"${READ1_IN}\" \"${READ2_IN}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 3,
+            "description": "Reads shorter than 30 nucleotides were discarded.",
+            "tool_name": "cutadapt (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "4.1 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install cutadapt if not already installed\n# conda install -c bioconda cutadapt=4.1\n\n# Define input and output file paths\nINPUT_FASTQ=\"input.fastq.gz\"\nOUTPUT_FASTQ=\"output.fastq.gz\"\n\n# Discard reads shorter than 30 nucleotides\ncutadapt -m 30 -o \"${OUTPUT_FASTQ}\" \"${INPUT_FASTQ}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 4,
+            "description": "The kallisto v0.43.1 software from Bray et al., Nature Biotechnology, 2016 was used for building transcriptome index and aligning filtered reads.",
+            "tool_name": "kallisto",
+            "tool_version": "0.43.1",
+            "code_example": "# Install kallisto (if not already installed)\n# conda install -c bioconda kallisto\n\n# --- Placeholder Variables ---\n# Replace with your actual transcriptome FASTA file (e.g., from Ensembl or GENCODE)\nTRANSCRIPTOME_FASTA=\"Homo_sapiens.GRCh38.cdna.all.fa.gz\" \n# Replace with your desired index output prefix\nKALLISTO_INDEX_PREFIX=\"human_grch38_kallisto_index\"\n# Replace with your filtered read files (e.g., R1 and R2 for paired-end)\nREADS_R1=\"filtered_reads_R1.fastq.gz\"\nREADS_R2=\"filtered_reads_R2.fastq.gz\"\n# Replace with your desired output directory for quantification results\nQUANT_OUTPUT_DIR=\"kallisto_quant_output\"\n\n# --- Step 1: Build transcriptome index ---\n# The -i flag specifies the output index file prefix.\n# The input is the transcriptome FASTA file.\nkallisto index -i \"${KALLISTO_INDEX_PREFIX}\" \"${TRANSCRIPTOME_FASTA}\"\n\n# --- Step 2: Align/Quantify filtered reads ---\n# The -i flag specifies the path to the kallisto index.\n# The -o flag specifies the output directory for quantification results.\n# Provide the filtered read files (space-separated for paired-end).\nkallisto quant -i \"${KALLISTO_INDEX_PREFIX}\" -o \"${QUANT_OUTPUT_DIR}\" \"${READS_R1}\" \"${READS_R2}\"",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1038/nbt.3519"
+        },
+        {
+            "step_order": 5,
+            "description": "The default options of kallisto were utilized for building transcriptome index.",
+            "tool_name": "kallisto",
+            "tool_version": "Not specified",
+            "code_example": "# Install kallisto (if not already installed)\n# conda install -c bioconda kallisto\n\n# Placeholder for transcriptome FASTA file (e.g., human GRCh38/hg38 cDNA sequences)\n# Replace with the actual path to your transcriptome FASTA file.\nTRANSCRIPTOME_FASTA=\"/path/to/gencode.v44.transcripts.fa.gz\"\n\n# Output prefix for the kallisto index\nINDEX_OUTPUT_PREFIX=\"kallisto_index\"\n\n# Build the transcriptome index using default options\nkallisto index -i \"${INDEX_OUTPUT_PREFIX}\" \"${TRANSCRIPTOME_FASTA}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/pachterlab/kallisto"
+        },
+        {
+            "step_order": 6,
+            "description": "For aligning filtered reads we used options \u00e2\u0080\u009c--rf-stranded\u00e2\u0080\u009d and \u00e2\u0080\u009c--pseudobam\u00e2\u0080\u009d.",
+            "tool_name": "Salmon (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.10.0",
+            "code_example": "# Install Salmon (example using conda)\n# conda install -c bioconda salmon\n\n# Example: Create a Salmon index using a reference transcriptome\n# Replace 'human_gencode_v44_transcriptome.fa' with your actual transcriptome FASTA file (e.g., from GENCODE or Ensembl)\n# salmon index -t human_gencode_v44_transcriptome.fa -i salmon_index --gencode\n\n# Run Salmon quantification with specified options\n# Replace 'filtered_reads.fastq.gz' with your actual input filtered reads file\n# Replace 'salmon_quant_output' with your desired output directory\nsalmon quant -i salmon_index -l A --rf-stranded --pseudobam -r filtered_reads.fastq.gz -o salmon_quant_output",
+            "code_language": "bash",
+            "github_url": "https://github.com/COMBINE-lab/salmon"
+        },
+        {
+            "step_order": 7,
+            "description": "Mapped reads were assigned to transcripts in a weighted manner: if a read was uniquely mapped to a transcript, then the transcript\u00e2\u0080\u0099s read count was incremented by 1; if a read was mapped to n different transcripts, each transcript\u00e2\u0080\u0099s read count was incremented by 1/n.",
+            "tool_name": "RSEM (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Not specified",
+            "code_example": "# Install RSEM\n# conda install -c bioconda rsem\n\n# Placeholder for reference genome and annotation files (e.g., GRCh38)\n# Replace with actual paths to your genome FASTA and GTF files\nGENOME_FASTA=\"path/to/GRCh38.primary_assembly.genome.fa\"\nGTF_FILE=\"path/to/gencode.v38.annotation.gtf\"\nRSEM_REFERENCE_NAME=\"GRCh38_rsem_ref\"\n\n# Build RSEM reference index (if not already built)\n# This step only needs to be run once per reference\n# rsem-prepare-reference --gtf \"${GTF_FILE}\" \"${GENOME_FASTA}\" \"${RSEM_REFERENCE_NAME}\"\n\n# Input BAM file (e.g., from STAR alignment)\nINPUT_BAM=\"aligned_reads.bam\"\n\n# Output prefix for RSEM results\nOUTPUT_PREFIX=\"transcript_quantification\"\n\n# Quantify transcript expression using RSEM\n# RSEM uses an Expectation-Maximization (EM) algorithm to estimate transcript abundances,\n# which inherently handles multi-mapping reads by distributing their counts probabilistically.\n# This effectively assigns fractional counts similar to the 1/n description.\n# The description implies single-end reads, as it talks about \"a read\" being mapped.\n# If reads are paired-end, use --paired-end instead of --single-end.\nrsem-calculate-expression \\\n    --bam \\\n    --single-end \\\n    \"${INPUT_BAM}\" \\\n    \"${RSEM_REFERENCE_NAME}\" \\\n    \"${OUTPUT_PREFIX}\"\n",
+            "code_language": "bash",
+            "github_url": "http://deweylab.biostat.wisc.edu/rsem/"
+        },
+        {
+            "step_order": 8,
+            "description": "The expression of each transcript was estimated in transcripts per million (TPM) units by dividing its read count by the transcript length and normalizing to the library size.",
+            "tool_name": "RSEM (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.3.3",
+            "code_example": "# Install RSEM (example using conda)\n# conda install -c bioconda rsem\n\n# Download reference genome and annotation (example for human GRCh38, Gencode v38)\n# mkdir -p references/rsem_index\n# wget -P references/rsem_index https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_38/GRCh38.primary_assembly.genome.fa.gz\n# wget -P references/rsem_index https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_38/gencode.v38.annotation.gtf.gz\n# gunzip references/rsem_index/*.gz\n\n# Build RSEM reference index (this step needs to be done once per reference)\n# rsem-prepare-reference \\\n#   --gtf references/rsem_index/gencode.v38.annotation.gtf \\\n#   references/rsem_index/GRCh38.primary_assembly.genome.fa \\\n#   references/rsem_index/GRCh38_gencode_v38_rsem_index\n\n# Define input and output paths\nINPUT_READS_R1=\"path/to/your/sample_R1.fastq.gz\" # Replace with actual input R1 file\nINPUT_READS_R2=\"path/to/your/sample_R2.fastq.gz\" # Replace with actual input R2 file (remove if single-end)\nRSEM_INDEX=\"references/rsem_index/GRCh38_gencode_v38_rsem_index\" # Path to the RSEM index created above\nOUTPUT_PREFIX=\"results/sample_expression\" # Prefix for output files\n\n# Run RSEM to estimate transcript expression in TPM\n# Using --paired-end for paired-end reads, adjust if single-end\n# -p specifies number of threads\n# --output-genome-bam generates a BAM file aligned to the genome, useful for downstream analysis\nrsem-calculate-expression \\\n  --paired-end \\\n  -p 8 \\\n  --output-genome-bam \\\n  \"${INPUT_READS_R1}\" \\\n  \"${INPUT_READS_R2}\" \\\n  \"${RSEM_INDEX}\" \\\n  \"${OUTPUT_PREFIX}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/deweylab/RSEM"
+        },
+        {
+            "step_order": 9,
+            "description": "The expression of a gene was obtained by summing up the normalized expression of the transcripts associated with it.",
+            "tool_name": "RSEM (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.3.3 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install RSEM if not already installed\n# conda install -c bioconda rsem\n\n# --- Reference Preparation (if not already done) ---\n# RSEM requires a reference transcriptome index. This step needs to be run once per reference.\n# Assuming GRCh38 as the latest assembly placeholder.\n# Example commands to download human genome FASTA and GTF (e.g., from Ensembl release 109):\n# wget -O Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz ftp://ftp.ensembl.org/pub/release-109/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz\n# wget -O Homo_sapiens.GRCh38.109.gtf.gz ftp://ftp.ensembl.org/pub/release-109/gtf/homo_sapiens/Homo_sapiens.GRCh38.109.gtf.gz\n# gunzip Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz\n# gunzip Homo_sapiens.GRCh38.109.gtf.gz\n\n# Create RSEM reference index using the GTF annotation and genome FASTA:\n# rsem-prepare-reference \\\n#   --gtf Homo_sapiens.GRCh38.109.gtf \\\n#   Homo_sapiens.GRCh38.dna.primary_assembly.fa \\\n#   GRCh38_rsem_index\n\n# --- Gene Expression Quantification ---\n# This command calculates gene and transcript expression from aligned reads.\n# The 'genes.results' output file will contain gene-level expression, which RSEM derives by aggregating transcript-level estimates.\n# Input: Aligned reads (e.g., from STAR, HISAT2) in BAM format.\n# '--bam' indicates the input is a BAM file.\n# '--no-qualities' is often used when input BAM is from an external aligner and quality scores are not needed by RSEM's internal processing.\n# '-p 8' specifies to use 8 threads for parallel processing.\n# 'aligned_reads.bam' is a placeholder for your input BAM file.\n# 'GRCh38_rsem_index' is the path to the RSEM reference index directory created in the previous step.\n# 'sample_output_prefix' will be used to name the output files (e.g., sample_output_prefix.genes.results, sample_output_prefix.isoforms.results).\n# For paired-end reads, add '--paired-end' after '--bam'.\n\nrsem-calculate-expression \\\n  --bam \\\n  --no-qualities \\\n  -p 8 \\\n  aligned_reads.bam \\\n  GRCh38_rsem_index \\\n  sample_output_prefix",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/1471-2105-12-323"
+        },
+        {
+            "step_order": 10,
+            "description": "For every gene, read counts of transcripts associated with this gene were also summed up and further used for the differential expression analysis.",
+            "tool_name": "tximport (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.30.0",
+            "code_example": "# --- Installation (commented out) ---\n# Install R and Bioconductor (if not already installed)\n# sudo apt-get update\n# sudo apt-get install r-base\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\"); BiocManager::install(c(\"tximport\", \"readr\"))'\n\n# --- Configuration ---\n# Define paths to transcript quantification results (e.g., Salmon output directories)\n# Replace with actual paths to your sample quantification directories\n# Example:\n# QUANT_DIRS=(\n#     \"data/salmon_output/sample1\"\n#     \"data/salmon_output/sample2\"\n#     \"data/salmon_output/sample3\"\n# )\n# For demonstration, using dummy paths:\nQUANT_DIRS=(\n    \"path/to/sample1_quant_dir\"\n    \"path/to/sample2_quant_dir\"\n    \"path/to/sample3_quant_dir\"\n)\n\n# Define the type of quantification output (e.g., \"salmon\", \"kallisto\", \"rsem\")\nQUANT_TYPE=\"salmon\"\n\n# Define the path to the transcript-to-gene mapping file (tx2gene.tsv)\n# This file typically has two columns: 'TXNAME' and 'GENEID'.\n# It can be generated from your GTF/GFF annotation file (e.g., gencode.v44.annotation.gtf.gz for human GRCh38)\n# using R packages like 'rtracklayer' and 'GenomicFeatures'.\n# Example command to generate tx2gene.tsv (requires R, rtracklayer, GenomicFeatures, readr):\n# R -e 'library(rtracklayer); library(GenomicFeatures); library(readr); \\\n#      gtf_path <- \"path/to/gencode.v44.annotation.gtf.gz\"; \\\n#      txdb <- makeTxDbFromGRanges(rtracklayer::import(gtf_path)); \\\n#      k <- keys(txdb, keytype = \"TXNAME\"); \\\n#      tx2gene_df <- select(txdb, k, \"GENEID\", \"TXNAME\"); \\\n#      colnames(tx2gene_df) <- c(\"TXNAME\", \"GENEID\"); \\\n#      write_tsv(tx2gene_df, \"path/to/tx2gene.tsv\")'\nTX2GENE_FILE=\"path/to/tx2gene.tsv\"\n\n# Define the output file for the gene-level count matrix\nOUTPUT_GENE_COUNTS=\"gene_level_counts.tsv\"\n\n# --- Create R script for tximport ---\ncat << 'EOF' > run_tximport.R\nlibrary(tximport)\nlibrary(readr)\nlibrary(dplyr) # For potential data manipulation, though not strictly needed for basic tximport\n\n# Get variables from environment\nquant_dirs_str <- Sys.getenv(\"QUANT_DIRS\")\nquant_type <- Sys.getenv(\"QUANT_TYPE\")\ntx2gene_file <- Sys.getenv(\"TX2GENE_FILE\")\noutput_file <- Sys.getenv(\"OUTPUT_GENE_COUNTS\")\n\n# Parse quantification directories string into a vector\nquant_dirs <- unlist(strsplit(quant_dirs_str, \",\"))\n\n# Construct full paths to quantification files (e.g., quant.sf for Salmon)\n# Adjust \"quant.sf\" if using a different quantification tool (e.g., \"abundance.h5\" for Kallisto)\nfiles <- file.path(quant_dirs, \"quant.sf\")\nnames(files) <- basename(quant_dirs) # Use directory names as sample names\n\nmessage(paste(\"Loading tx2gene mapping from:\", tx2gene_file))\ntx2gene <- read_tsv(tx2gene_file)\n\nmessage(paste(\"Importing and aggregating counts using tximport (type:\", quant_type, \")...\"))\n# ignoreTxVersion = TRUE is often useful for GTF files with version numbers in transcript IDs\ntxi <- tximport(files, type = quant_type, tx2gene = tx2gene, ignoreTxVersion = TRUE)\n\n# Extract gene-level counts\ngene_counts <- as.data.frame(txi$counts)\n\nmessage(paste(\"Saving gene-level counts to:\", output_file))\nwrite.table(gene_counts, file = output_file, sep = \"\\t\", quote = FALSE, col.names = NA)\n\nmessage(\"Gene-level count aggregation complete.\")\nEOF\n\n# --- Execution ---\n# Export variables to be accessible by the R script\nexport QUANT_DIRS=$(IFS=,; echo \"${QUANT_DIRS[*]}\")\nexport QUANT_TYPE=\"${QUANT_TYPE}\"\nexport TX2GENE_FILE=\"${TX2GENE_FILE}\"\nexport OUTPUT_GENE_COUNTS=\"${OUTPUT_GENE_COUNTS}\"\n\n# Run the R script\nRscript run_tximport.R\n\n# Clean up the temporary R script\nrm run_tximport.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/tximport.html"
+        },
+        {
+            "step_order": 11,
+            "description": "As the reference mouse transcriptome, we considered sequences of protein coding transcripts with the support level 1-3 based on genome assembly GRCm38 (release 92) and transcript annotations from Ensembl database (see Hubbard et al., Nucleic Acids Research, 2002).",
+            "tool_name": "Ensembl",
+            "tool_version": "release 92",
+            "code_example": "mkdir -p ensembl_grcm38_release92\ncd ensembl_grcm38_release92\n\n# Download mouse cDNA sequences (all transcripts) for GRCm38, Ensembl release 92\n# This file contains both protein-coding and non-coding transcripts.\nwget ftp://ftp.ensembl.org/pub/release-92/fasta/mus_musculus/cdna/Mus_musculus.GRCm38.cdna.all.fa.gz\n\n# Download mouse GTF annotation file for GRCm38, Ensembl release 92\n# This file is necessary to identify protein-coding transcripts and their support levels.\nwget ftp://ftp.ensembl.org/pub/release-92/gtf/mus_musculus/Mus_musculus.GRCm38.92.gtf.gz\n\n# Unzip files\ngunzip Mus_musculus.GRCm38.cdna.all.fa.gz\ngunzip Mus_musculus.GRCm38.92.gtf.gz\n\n# The description specifies \"sequences of protein coding transcripts with the support level 1-3\".\n# This implies a post-download filtering step using the GTF annotation.\n# For example, one would parse Mus_musculus.GRCm38.92.gtf to identify transcript IDs\n# that are 'protein_coding' and have a Transcript Support Level (TSL) of 1, 2, or 3.\n# Then, these filtered transcript IDs would be used to extract the corresponding sequences\n# from Mus_musculus.GRCm38.cdna.all.fa.\n# A specific tool for this filtering is not mentioned in the description.\n# This bash block provides the raw Ensembl data from which such a reference would be derived.",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "RNA-seq reads were subjected to 3\u00e2\u0080\u0099 adapter and poly(A)/poly(T) tail trimming using Cutadapt v1.9.1 from Martin et al., EMBnet.journal, 2011. The following 3\u00e2\u0080\u0099 adapter sequences were utilized for generating RNA-Seq libraries and subsequently trimmed: mate1 5\u00e2\u0080\u0099-AGATCGGAAGAGCACACGTC-3\u00e2\u0080\u0099, mate2 5\u00e2\u0080\u0099-AGATCGGAAGAGCGTCGTGT-3\u00e2\u0080\u0099.\nReads shorter than 30 nucleotides were discarded.\nThe kallisto v0.43.1 software from Bray et al., Nature Biotechnology, 2016 was used for building transcriptome index and aligning filtered reads. The default options of kallisto were utilized for building transcriptome index. For aligning filtered reads we used options \u00e2\u0080\u009c--rf-stranded\u00e2\u0080\u009d and \u00e2\u0080\u009c--pseudobam\u00e2\u0080\u009d.\nMapped reads were assigned to transcripts in a weighted manner: if a read was uniquely mapped to a transcript, then the transcript\u00e2\u0080\u0099s read count was incremented by 1; if a read was mapped to n different transcripts, each transcript\u00e2\u0080\u0099s read count was incremented by 1/n.\nThe expression of each transcript was estimated in transcripts per million (TPM) units by dividing its read count by the transcript length and normalizing to the library size. The expression of a gene was obtained by summing up the normalized expression of the transcripts associated with it. For every gene, read counts of transcripts associated with this gene were also summed up and further used for the differential expression analysis.\nAs the reference mouse transcriptome, we considered sequences of protein coding transcripts with the support level 1-3 based on genome assembly GRCm38 (release 92) and transcript annotations from Ensembl database (see Hubbard et al., Nucleic Acids Research, 2002).\nGenome_build: GRCm38\nSupplementary_files_format_and_content: counts_mouse_aging_timecourse.txt: Tab-delimited text file includes raw counts at the gene level for each sample.\nSupplementary_files_format_and_content: tpms_mouse_aging_timecourse.txt: Tab-delimited text file includes TPM values at the gene level for each sample.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

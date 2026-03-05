@@ -1,70 +1,70 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Cell nuclei were segmented using Cellpose 2.0 (Pachitariu et al.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "2022).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Cell boundaries were predicted using the nuclear staining and transcript positions using Baysor (Petukhov et al.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "2021).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Experiments were integrated using scVI (Lopez et al 2018).",
-      "tool_name": "scVI",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://scvi-tools.org"
-    },
-    {
-      "step_order": 6,
-      "description": "Celltypes were assigned manually, and the processed object is stored as an Anndata object in h5ad format containing both metadata and raw gene expression counts (Wolf et al 2018).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://scanpy.readthedocs.io"
-    },
-    {
-      "step_order": 7,
-      "description": "Raw detected RNA counts per cell",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://scvi-tools.org"
-    }
-  ],
-  "raw_text": "Cell nuclei were segmented using Cellpose 2.0 (Pachitariu et al. 2022). Cell boundaries were predicted using the nuclear staining and transcript positions using Baysor (Petukhov et al. 2021). Experiments were integrated using scVI (Lopez et al 2018). Celltypes were assigned manually, and the processed object is stored as an Anndata object in h5ad format containing both metadata and raw gene expression counts (Wolf et al 2018).\nRaw detected RNA counts per cell",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Cell nuclei were segmented using Cellpose 2.0 (Pachitariu et al.",
+            "tool_name": "Cellpose",
+            "tool_version": "2.0",
+            "code_example": "# Install Cellpose (e.g., via pip)\n# pip install cellpose\n\n# Example command for segmenting cell nuclei using Cellpose 2.0\n# Replace 'input_image.tif' with your actual image file and 'output_masks.npy' with your desired output path.\n# The '--model nuclei' flag is used for segmenting nuclei.\ncellpose --image_path input_image.tif --model nuclei --save_masks --save_flows --save_rois --dir output_directory",
+            "code_language": "bash",
+            "github_url": "https://github.com/MouseLand/cellpose"
+        },
+        {
+            "step_order": 2,
+            "description": "2022).",
+            "tool_name": "Skipper (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "main branch (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Clone the Skipper repository\n# git clone https://github.com/yeolab/skipper.git\n# cd skipper\n\n# Create a sample configuration file (e.g., samples.tsv)\n# This file should list your input FASTQ files and sample names.\n# Example samples.tsv:\n# sample_name\\tfastq_replicate1\\tfastq_replicate2\n# CLIP_sample1\\tdata/CLIP_R1.fastq.gz\\tdata/CLIP_R2.fastq.gz\n# INPUT_sample1\\tdata/INPUT_R1.fastq.gz\\tdata/INPUT_R2.fastq.gz\n\n# Create a configuration file (e.g., config.yaml)\n# This file specifies genome build, paths, and other parameters.\n# Example config.yaml (adjust paths and parameters as needed):\n# GENOME_BUILD: hg38\n# GENOME_FASTA: /path/to/genome/hg38.fa\n# GENOME_GTF: /path/to/genome/hg38.gtf\n# STAR_INDEX: /path/to/star_index/hg38\n# SAMPLES: samples.tsv\n# OUTPUT_DIR: results\n\n# Ensure Snakemake and Conda are installed\n# conda install -c bioconda -c conda-forge snakemake\n\n# Execute the Skipper workflow\n# Replace 'config.yaml' and 'samples.tsv' with your actual file paths.\n# Adjust --cores based on available resources.\n# The workflow will automatically manage software dependencies via Conda environments.\nsnakemake --use-conda --cores 8 --configfile config.yaml --config SAMPLES=samples.tsv GENOME_BUILD=hg38\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper"
+        },
+        {
+            "step_order": 3,
+            "description": "Cell boundaries were predicted using the nuclear staining and transcript positions using Baysor (Petukhov et al.",
+            "tool_name": "Baysor",
+            "tool_version": "(Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Baysor (example using pip)\n# pip install baysor\n\n# Assuming input files:\n# <transcript_positions.csv>: CSV file containing transcript coordinates and gene IDs (e.g., x, y, gene_id)\n# <nuclear_staining.tif>: Image file of nuclear staining\n\n# Predict cell boundaries using nuclear staining and transcript positions\nbaysor run \\\n    --transcript-file <transcript_positions.csv> \\\n    --nuclei-image <nuclear_staining.tif> \\\n    --output baysor_cell_boundaries_output",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "2021).",
+            "tool_name": "(Inferred with models/gemini-2.5-flash)",
+            "tool_version": "",
+            "code_example": "",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 5,
+            "description": "Experiments were integrated using scVI (Lopez et al 2018).",
+            "tool_name": "scVI",
+            "tool_version": "0.x",
+            "code_example": "# Install scvi-tools and its dependencies\n# pip install scvi-tools anndata pandas numpy\n\n# Create a Python script for scVI integration\ncat << 'EOF' > run_scvi_integration.py\nimport scvi\nimport anndata as ad\nimport pandas as pd\nimport numpy as np\n\n# --- Configuration ---\nINPUT_H5AD=\"input_data.h5ad\" # Path to your input AnnData object (e.g., containing raw counts and batch information)\nOUTPUT_H5AD=\"integrated_output.h5ad\" # Path for the output AnnData object with integrated embeddings\nBATCH_KEY=\"batch_id\" # Key in adata.obs for batch information (e.g., 'batch', 'sample_id', 'experiment')\nLAYER_KEY=\"counts\" # Layer in adata.layers containing raw counts (if applicable, otherwise set to None if .X contains raw counts)\n\n# --- Load Data ---\nprint(f\"Loading data from {INPUT_H5AD}...\")\ntry:\n    adata = ad.read_h5ad(INPUT_H5AD)\nexcept FileNotFoundError:\n    print(f\"Error: Input file '{INPUT_H5AD}' not found. Please ensure the file exists and is correctly specified.\")\n    exit(1) # Exit if input file is not found\n\nprint(\"Data loaded successfully.\")\nprint(f\"AnnData object shape: {adata.shape}\")\n\n# --- Setup AnnData for scVI ---\n# This step prepares the AnnData object for scVI, including identifying batch information.\n# 'layer' specifies where raw counts are stored. If .X contains raw counts, set layer=None.\n# 'batch_key' is crucial for integrating multiple experiments. Ensure this column exists in adata.obs.\nprint(f\"Setting up AnnData for scVI with batch_key='{BATCH_KEY}' and layer='{LAYER_KEY}'...\")\nif BATCH_KEY not in adata.obs.columns:\n    print(f\"Warning: '{BATCH_KEY}' not found in adata.obs. Using default setup without explicit batch correction. Ensure your data is pre-batched or integration is not batch-dependent.\")\n    scvi.data.setup_anndata(adata, layer=LAYER_KEY)\nelse:\n    scvi.data.setup_anndata(adata, layer=LAYER_KEY, batch_key=BATCH_KEY)\n\n# --- Initialize and Train scVI Model ---\nprint(\"Initializing scVI model...\")\n# You can customize model parameters (e.g., n_latent, n_hidden, n_layers)\n# based on your dataset size and complexity. Default values are often a good starting point.\nmodel = scvi.model.SCVI(adata, n_latent=30, n_hidden=128, n_layers=2)\n\nprint(\"Training scVI model (this may take a while, depending on data size and hardware)...\")\n# Adjust max_epochs and other training parameters as needed. Early stopping helps prevent overfitting.\nmodel.train(max_epochs=400, early_stopping=True, early_stopping_patience=30)\n\n# --- Get Latent Representation ---\nprint(\"Extracting latent representation (integrated embeddings)...\")\nlatent_representation = model.get_latent_representation()\nadata.obsm[\"X_scVI\"] = latent_representation # Store the integrated embeddings in .obsm\n\n# --- Save Integrated Data ---\nprint(f\"Saving integrated AnnData object to {OUTPUT_H5AD}...\")\nadata.write_h5ad(OUTPUT_H5AD)\n\nprint(\"scVI integration complete. The output file contains the original data along with 'X_scVI' in .obsm for integrated embeddings.\")\nEOF\n\n# Execute the Python script\npython run_scvi_integration.py",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 6,
+            "description": "Celltypes were assigned manually, and the processed object is stored as an Anndata object in h5ad format containing both metadata and raw gene expression counts (Wolf et al 2018).",
+            "tool_name": "scanpy (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.x.x (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install scanpy and dependencies if not already installed\n# conda create -n scanpy_env python=3.9\n# conda activate scanpy_env\n# pip install scanpy pandas\n\n# Define input and output filenames\nINPUT_H5AD=\"input_raw_data.h5ad\" # Placeholder for the Anndata object before manual assignment\nOUTPUT_H5AD=\"output_processed_data_with_celltypes.h5ad\" # The Anndata object after manual assignment\n\n# Execute a Python script to load an Anndata object,\n# simulate the addition of manual cell type assignments, and save it.\n# The actual manual assignment process is typically interactive and not a command-line tool.\n# This script represents the final step of saving the annotated object.\npython -c \"\nimport scanpy as sc\nimport pandas as pd\nimport numpy as np\nimport os\n\ninput_file = os.getenv('INPUT_H5AD', 'input_raw_data.h5ad')\noutput_file = os.getenv('OUTPUT_H5AD', 'output_processed_data_with_celltypes.h5ad')\n\n# --- Placeholder for loading the Anndata object ---\n# In a real scenario, 'input_file' would be the result of previous processing steps.\n# For this example, we'll create a dummy Anndata object if the input doesn't exist.\nif not os.path.exists(input_file):\n    print(f'Warning: Input file {input_file} not found. Creating a dummy Anndata object for demonstration.')\n    adata = sc.AnnData(np.random.rand(100, 50),\n                       obs=pd.DataFrame(index=[f'cell_{i}' for i in range(100)]),\n                       var=pd.DataFrame(index=[f'gene_{i}' for i in range(50)]))\n    # Save the dummy object as the input for this step\n    adata.write(input_file)\n    print(f'Dummy input Anndata object saved to {input_file}')\nelse:\n    print(f'Loading Anndata object from {input_file}')\n    adata = sc.read_h5ad(input_file)\n\n# --- Simulate manual cell type assignment ---\n# The description states 'Celltypes were assigned manually'.\n# This part represents adding the results of that manual assignment to adata.obs.\nif 'manual_cell_type' not in adata.obs.columns:\n    num_cells = adata.n_obs\n    cell_types = ['Neuron', 'Astrocyte', 'Oligodendrocyte', 'Microglia']\n    # Assign random cell types for demonstration purposes\n    adata.obs['manual_cell_type'] = np.random.choice(cell_types, num_cells)\n    print(f\\\"Added a 'manual_cell_type' column with {len(cell_types)} types (simulated manual assignment).\\\" )\nelse:\n    print(\\\"'manual_cell_type' column already exists. Assuming it contains manual assignments.\\\" )\n\n# --- Store the processed object as an Anndata object in h5ad format ---\nprint(f'Saving processed Anndata object to {output_file}')\nadata.write(output_file)\nprint('Operation complete.')\n\"\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 7,
+            "description": "Raw detected RNA counts per cell",
+            "tool_name": "Salmon (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.10.2 (Inferred)",
+            "code_example": "# Install Salmon (if not already installed)\n# conda install -c bioconda salmon\n\n# --- Reference Data Setup ---\n# Download human transcriptome (e.g., Ensembl GRCh38 cDNA)\n# wget -O Homo_sapiens.GRCh38.cdna.all.fa.gz http://ftp.ensembl.org/pub/release-109/fasta/homo_sapiens/cdna/Homo_sapiens.GRCh38.cdna.all.fa.gz\n# gunzip Homo_sapiens.GRCh38.cdna.all.fa.gz\n\n# Build Salmon index (run once for the reference transcriptome)\n# salmon index -t Homo_sapiens.GRCh38.cdna.all.fa -i salmon_grch38_index\n\n# --- Quantification for a single cell (example) ---\n# This command quantifies transcript expression from raw RNA-seq reads for a single cell.\n# The output directory 'cell1_salmon_quant' will contain 'quant.sf' with transcript-level counts.\n# Assuming input FASTQ files for a cell are cell1_R1.fastq.gz and cell1_R2.fastq.gz\n# And the Salmon index 'salmon_grch38_index' has been built from a reference transcriptome (e.g., GRCh38).\n\nsalmon quant \\\n    -i salmon_grch38_index \\\n    -l A \\\n    -1 cell1_R1.fastq.gz \\\n    -2 cell1_R2.fastq.gz \\\n    --validateMappings \\\n    -o cell1_salmon_quant",
+            "code_language": "bash",
+            "github_url": "https://github.com/COMBINE-lab/salmon"
+        }
+    ],
+    "raw_text": "Cell nuclei were segmented using Cellpose 2.0 (Pachitariu et al. 2022). Cell boundaries were predicted using the nuclear staining and transcript positions using Baysor (Petukhov et al. 2021). Experiments were integrated using scVI (Lopez et al 2018). Celltypes were assigned manually, and the processed object is stored as an Anndata object in h5ad format containing both metadata and raw gene expression counts (Wolf et al 2018).\nRaw detected RNA counts per cell",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,79 +1,79 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Raw reads were trimmed using Trimmomatic.",
-      "tool_name": "Trimmomatic",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "FastQC (Babraham Bioinformatics) was used before and after trimming to assess quality control.",
-      "tool_name": "FastQC",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://www.bioinformatics.babraham.ac.uk/projects/fastqc"
-    },
-    {
-      "step_order": 3,
-      "description": "Reads were aligned to the murine reference genome (mm10) using the STAR aligner tool.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://github.com/alexdobin/STAR"
-    },
-    {
-      "step_order": 4,
-      "description": "MultiQC (v1.12) was used to assess the quality of alignment.",
-      "tool_name": "MultiQC",
-      "tool_version": "1.12",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://multiqc.info"
-    },
-    {
-      "step_order": 5,
-      "description": "All aligned samples showed more than 89% uniquely mapped reads.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "http://subread.sourceforge.net"
-    },
-    {
-      "step_order": 6,
-      "description": "reads were counted using the FeatureCounts package",
-      "tool_name": "featureCounts",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "http://subread.sourceforge.net"
-    },
-    {
-      "step_order": 7,
-      "description": "Expected gene count quantifications from RSEM analysis were imported into R for differential gene analysis using edgeR (v.3.30.3)",
-      "tool_name": "RSEM",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://github.com/deweylab/RSEM"
-    },
-    {
-      "step_order": 8,
-      "description": "The Goseq tool was used to acquire overrepressented gene categories",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Raw reads were trimmed using Trimmomatic. FastQC (Babraham Bioinformatics) was used before and after trimming to assess quality control.\nReads were aligned to the murine reference genome (mm10) using the STAR aligner tool. MultiQC (v1.12) was used to assess the quality of alignment. All aligned samples showed more than 89% uniquely mapped reads.\nreads were counted using the FeatureCounts package\nExpected gene count quantifications from RSEM analysis were imported into R for differential gene analysis using edgeR (v.3.30.3)\nThe Goseq tool was used to acquire overrepressented gene categories\nAssembly: mm10\nSupplementary files format and content: DESeq2 outputed differential gene expression files\nSupplementary files format and content: DESeq2 outputed normalized counts",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Raw reads were trimmed using Trimmomatic.",
+            "tool_name": "Trimmomatic",
+            "tool_version": "0.39 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Trimmomatic (if not already installed)\n# conda install -c bioconda trimmomatic\n\n# Define input and output file paths (placeholders)\nREAD1_IN=\"raw_reads/sample_R1.fastq.gz\"\nREAD2_IN=\"raw_reads/sample_R2.fastq.gz\"\n\nREAD1_PAIRED_OUT=\"trimmed_reads/sample_R1_paired.fastq.gz\"\nREAD1_UNPAIRED_OUT=\"trimmed_reads/sample_R1_unpaired.fastq.gz\"\nREAD2_PAIRED_OUT=\"trimmed_reads/sample_R2_paired.fastq.gz\"\nREAD2_UNPAIRED_OUT=\"trimmed_reads/sample_R2_unpaired.fastq.gz\"\n\n# Define adapter file path (adjust if Trimmomatic is not in PATH or adapters are elsewhere)\n# Trimmomatic's adapter files are typically found in its installation directory, e.g.,\n# TRIMMOMATIC_ADAPTERS=\"$(dirname $(which trimmomatic))/../share/trimmomatic-0.39-0/adapters\"\n# For a more robust path, you might need to locate it based on your installation.\n# For this example, we assume 'adapters' directory is accessible or Trimmomatic finds it.\nADAPTER_FILE=\"TruSeq3-PE.fa\"\n\n# Create output directory if it doesn't exist\nmkdir -p trimmed_reads\n\n# Execute Trimmomatic for paired-end trimming\n# Parameters explained:\n# PE: Paired-End mode\n# -phred33: Quality score encoding\n# ILLUMINACLIP:adapters/TruSeq3-PE.fa:2:30:10: Adapter trimming. Path to adapter file, seed mismatches, palindrome clip threshold, simple clip threshold.\n# LEADING:3: Remove bases from the start of the read if their quality is below 3.\n# TRAILING:3: Remove bases from the end of the read if their quality is below 3.\n# SLIDINGWINDOW:4:15: Scan the read with a 4-base wide window, cutting when the average quality per base drops below 15.\n# MINLEN:36: Drop reads shorter than 36 bases after trimming.\njava -jar $(which trimmomatic) PE -phred33 \\\n    \"${READ1_IN}\" \"${READ2_IN}\" \\\n    \"${READ1_PAIRED_OUT}\" \"${READ1_UNPAIRED_OUT}\" \\\n    \"${READ2_PAIRED_OUT}\" \"${READ2_UNPAIRED_OUT}\" \\\n    ILLUMINACLIP:\"${ADAPTER_FILE}\":2:30:10:8:TRUE \\\n    LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36",
+            "code_language": "bash",
+            "github_url": "https://github.com/usadellab/Trimmomatic"
+        },
+        {
+            "step_order": 2,
+            "description": "FastQC (Babraham Bioinformatics) was used before and after trimming to assess quality control.",
+            "tool_name": "FastQC",
+            "tool_version": "0.11.9",
+            "code_example": "# Install FastQC using Bioconda\n# conda install -c bioconda fastqc\n\n# Create output directories for FastQC reports\nmkdir -p fastqc_raw_output\nmkdir -p fastqc_trimmed_output\n\n# Run FastQC on raw sequencing reads (example with paired-end reads)\n# Replace 'raw_reads_R1.fastq.gz' and 'raw_reads_R2.fastq.gz' with your actual raw input file paths\nfastqc -o fastqc_raw_output raw_reads_R1.fastq.gz raw_reads_R2.fastq.gz\n\n# Run FastQC on trimmed sequencing reads (example with paired-end reads)\n# Replace 'trimmed_reads_R1.fastq.gz' and 'trimmed_reads_R2.fastq.gz' with your actual trimmed input file paths\nfastqc -o fastqc_trimmed_output trimmed_reads_R1.fastq.gz trimmed_reads_R2.fastq.gz",
+            "code_language": "bash",
+            "github_url": "https://www.bioinformatics.babraham.ac.uk/projects/fastqc/"
+        },
+        {
+            "step_order": 3,
+            "description": "Reads were aligned to the murine reference genome (mm10) using the STAR aligner tool.",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR\n# conda install -c bioconda star\n\n# Create a directory for reference files\nmkdir -p star_index_mm10\ncd star_index_mm10\n\n# Download murine reference genome (mm10 / GRCm38) FASTA and GTF from Ensembl release 105\nwget http://ftp.ensembl.org/pub/release-105/fasta/mus_musculus/dna/Mus_musculus.GRCm38.dna.primary_assembly.fa.gz\nwget http://ftp.ensembl.org/pub/release-105/gtf/mus_musculus/Mus_musculus.GRCm38.105.gtf.gz\n\n# Unzip the files\ngunzip Mus_musculus.GRCm38.dna.primary_assembly.fa.gz\ngunzip Mus_musculus.GRCm38.105.gtf.gz\n\n# Generate STAR genome index\n# sjdbOverhang is typically (read_length - 1). A value of 100 is common for 101bp reads.\nSTAR --runMode genomeGenerate \\\n     --genomeDir . \\\n     --genomeFastaFiles Mus_musculus.GRCm38.dna.primary_assembly.fa \\\n     --sjdbGTFfile Mus_musculus.GRCm38.105.gtf \\\n     --sjdbOverhang 100 \\\n     --runThreadN 8\n\n# Navigate back to the working directory\ncd ..\n\n# Example alignment command\n# Replace reads_R1.fastq.gz and reads_R2.fastq.gz with actual input file names.\n# Adjust --runThreadN based on available CPU cores.\n# Output files will be prefixed with 'aligned_reads_'.\nSTAR --genomeDir star_index_mm10 \\\n     --readFilesIn reads_R1.fastq.gz reads_R2.fastq.gz \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix aligned_reads_ \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outSAMattributes Standard \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 10 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --runThreadN 8",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 4,
+            "description": "MultiQC (v1.12) was used to assess the quality of alignment.",
+            "tool_name": "MultiQC",
+            "tool_version": "1.12",
+            "code_example": "# Install MultiQC (if not already installed)\n# conda install -c bioconda multiqc\n\n# Assuming MultiQC is run in a directory containing various QC reports (e.g., FastQC, Picard, STAR, etc.)\n# MultiQC will automatically find and aggregate these reports.\nmultiqc . -o multiqc_report",
+            "code_language": "bash",
+            "github_url": "https://github.com/ewels/MultiQC"
+        },
+        {
+            "step_order": 5,
+            "description": "All aligned samples showed more than 89% uniquely mapped reads.",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR (example using conda)\n# conda install -c bioconda star\n\n# Define variables\nREAD1=\"sample_R1.fastq.gz\"\nREAD2=\"sample_R2.fastq.gz\" # If paired-end, otherwise set to empty or omit\nGENOME_DIR=\"/path/to/STAR_genome_index/GRCh38\" # Placeholder for human GRCh38 genome index\nOUTPUT_DIR=\"./star_output\"\nSAMPLE_NAME=\"sample_name\"\nMIN_UNIQUE_MAPPING_PERCENTAGE=89\n\n# Create output directory\nmkdir -p \"${OUTPUT_DIR}\"\n\n# 1. Perform alignment using STAR\n# This command assumes paired-end reads. Adjust for single-end by omitting --readFilesIn \"${READ2}\".\n# Reference genome index for GRCh38 should be pre-built using STAR --runMode genomeGenerate.\nSTAR \\\n  --runThreadN 8 \\\n  --genomeDir \"${GENOME_DIR}\" \\\n  --readFilesIn \"${READ1}\" \"${READ2}\" \\\n  --readFilesCommand zcat \\\n  --outFileNamePrefix \"${OUTPUT_DIR}/${SAMPLE_NAME}_\" \\\n  --outSAMtype BAM SortedByCoordinate \\\n  --outSAMattributes Standard \\\n  --quantMode GeneCounts\n\n# 2. Extract uniquely mapped reads percentage from STAR's Log.final.out\nLOG_FILE=\"${OUTPUT_DIR}/${SAMPLE_NAME}_Log.final.out\"\n\n# Check if the log file exists\nif [ ! -f \"$LOG_FILE\" ]; then\n  echo \"Error: STAR log file not found at $LOG_FILE\"\n  exit 1\nfi\n\n# Extract the percentage of uniquely mapped reads\nUNIQUE_MAPPED_PERCENTAGE=$(grep \"Uniquely mapped reads %\" \"$LOG_FILE\" | awk '{print $NF}' | sed 's/%//')\n\necho \"${SAMPLE_NAME}: Uniquely mapped reads percentage: ${UNIQUE_MAPPED_PERCENTAGE}%\"\n\n# 3. Check if the percentage meets the threshold (as described in the step)\nif (( $(echo \"$UNIQUE_MAPPED_PERCENTAGE >= $MIN_UNIQUE_MAPPING_PERCENTAGE\" | bc -l) )); then\n  echo \"${SAMPLE_NAME}: Uniquely mapped reads percentage (${UNIQUE_MAPPED_PERCENTAGE}%) meets the threshold of ${MIN_UNIQUE_MAPPING_PERCENTAGE}%.\"\nelse\n  echo \"${SAMPLE_NAME}: WARNING: Uniquely mapped reads percentage (${UNIQUE_MAPPED_PERCENTAGE}%) is below the threshold of ${MIN_UNIQUE_MAPPING_PERCENTAGE}%.\"\n  # Optionally, you might want to exit or flag the sample for review\n  # exit 1\nfi\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 6,
+            "description": "reads were counted using the FeatureCounts package",
+            "tool_name": "featureCounts",
+            "tool_version": "2.0.3 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Subread package (which includes featureCounts)\n# conda install -c bioconda subread\n\n# Example command for counting reads using featureCounts\n# Replace 'input.bam' with your input alignment file(s).\n# Replace 'genes.gtf' with your genomic annotation file (GTF/GFF).\n# Replace 'counts.txt' with your desired output file name.\n# -a: Specify annotation file.\n# -o: Specify output file.\n# -F GTF: Specify annotation file format (GTF or GFF).\n# -t exon: Specify feature type in the annotation file to count (e.g., 'exon' for genes).\n# -g gene_id: Specify attribute type in the annotation file to use as feature identifiers (e.g., 'gene_id').\n# -s 0: Specify strandedness (0: unstranded, 1: stranded, 2: reverse stranded). Adjust based on library prep.\n# -T 8: Use 8 threads for faster processing (adjust based on available CPU cores).\nfeatureCounts -a genes.gtf \\\n              -o counts.txt \\\n              -F GTF \\\n              -t exon \\\n              -g gene_id \\\n              -s 0 \\\n              -T 8 \\\n              input.bam",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 7,
+            "description": "Expected gene count quantifications from RSEM analysis were imported into R for differential gene analysis using edgeR (v.3.30.3)",
+            "tool_name": "RSEM",
+            "tool_version": "1.3.3",
+            "code_example": "# Install RSEM\n# conda install -c bioconda rsem\n\n# Placeholder for reference genome and annotation\n# Replace with actual paths to your reference genome (FASTA) and gene annotation (GTF)\nGENOME_FASTA=\"path/to/human_genome.fasta\" # e.g., GRCh38.p13.genome.fa\nGENOME_GTF=\"path/to/human_genes.gtf\"     # e.g., gencode.v38.annotation.gtf\nRSEM_REFERENCE_NAME=\"human_rsem_reference\"\n\n# Prepare RSEM reference (run once, if not already done)\n# This step builds the RSEM index from the genome and GTF file.\n# rsem-prepare-reference --gtf \"${GENOME_GTF}\" \"${GENOME_FASTA}\" \"${RSEM_REFERENCE_NAME}\"\n\n# Placeholder for input RNA-Seq reads (FASTQ files)\n# Replace with actual paths to your input FASTQ files\nREADS_R1=\"path/to/sample_R1.fastq.gz\"\nREADS_R2=\"path/to/sample_R2.fastq.gz\"\nOUTPUT_PREFIX=\"sample_output\"\n\n# Run RSEM to calculate gene and isoform expression\n# This command assumes paired-end reads and outputs expected counts.\n# The --star option integrates STAR aligner for read alignment, which is a common workflow.\n# --gzip-compressed indicates input FASTQ files are gzipped.\nrsem-calculate-expression \\\n    --paired-end \\\n    --star \\\n    --gzip-compressed \\\n    \"${READS_R1}\" \\\n    \"${READS_R2}\" \\\n    \"${RSEM_REFERENCE_NAME}\" \\\n    \"${OUTPUT_PREFIX}\"\n\n# The primary output for gene count quantifications will be in:\n# ${OUTPUT_PREFIX}.genes.results (contains gene-level expected counts, TPM, FPKM, etc.)\n# Other outputs include:\n# ${OUTPUT_PREFIX}.isoforms.results (isoform-level quantifications)\n# ${OUTPUT_PREFIX}.stat (alignment statistics)",
+            "code_language": "bash",
+            "github_url": "https://github.com/deweylab/RSEM"
+        },
+        {
+            "step_order": 8,
+            "description": "The Goseq tool was used to acquire overrepressented gene categories",
+            "tool_name": "goseq",
+            "tool_version": "1.54.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install R and Bioconductor if not already installed\n# sudo apt-get update\n# sudo apt-get install r-base\n\n# Open R and install Bioconductor and goseq\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\")'\n# R -e 'BiocManager::install(\"goseq\")'\n# R -e 'BiocManager::install(\"org.Hs.eg.db\")' # Example for human GO annotations\n\n# Create a dummy R script for goseq analysis\ncat << 'EOF' > goseq_analysis.R\nlibrary(goseq)\nlibrary(org.Hs.eg.db) # Example for human, required for GO term mapping if not using goseq's internal fetching\n\n# --- Input files (placeholders) ---\n# File containing differentially expressed genes (one gene ID per line)\ndeg_genes_file <- \"deg_genes.txt\"\n# File containing all genes considered in the experiment (one gene ID per line)\nall_genes_file <- \"all_genes.txt\"\n# File containing gene lengths (e.g., Ensembl gene ID and length in bp, tab-separated)\n# Example format:\n# ENSG00000000003\\t1234\n# ENSG00000000005\\t5678\ngene_lengths_file <- \"gene_lengths.txt\"\n\n# --- Output file ---\noutput_file <- \"goseq_overrepresented_categories.tsv\"\n\n# --- Load gene lists ---\ndeg_genes <- readLines(deg_genes_file)\nall_genes <- readLines(all_genes_file)\n\n# --- Load gene lengths ---\ngene_lengths_df <- read.delim(gene_lengths_file, header = FALSE, col.names = c(\"gene_id\", \"length\"))\ngene_lengths <- setNames(gene_lengths_df$length, gene_lengths_df$gene_id)\n\n# --- Prepare gene vector for goseq ---\n# Create a binary vector: 1 if gene is DEG, 0 otherwise\ngene_vector <- as.integer(all_genes %in% deg_genes)\nnames(gene_vector) <- all_genes\n\n# Filter gene_vector to only include genes for which we have length information\n# and ensure order matches gene_lengths\ncommon_genes <- intersect(names(gene_vector), names(gene_lengths))\ngene_vector_filtered <- gene_vector[common_genes]\ngene_lengths_filtered <- gene_lengths[common_genes]\n\n# --- Build Probability Weighting Function (PWF) ---\n# This corrects for gene length bias\npwf <- nullp(gene_vector_filtered, bias.data = gene_lengths_filtered, plot.fit = FALSE)\n\n# --- Perform GO enrichment analysis ---\n# Assuming Ensembl IDs for input genes and human genome (e.g., hg19 or GRCh38)\n# goseq can fetch GO annotations for Ensembl IDs directly using 'genome' and 'id' arguments.\n# For specific organisms, using the annotation package (e.g., org.Hs.eg.db) is also an option\n# if you map your IDs to Entrez first.\nGO.wall <- goseq(pwf, genome = \"hg19\", id = \"ensembl\") # Example for human Ensembl IDs\n\n# --- Adjust p-values for multiple testing ---\nGO.wall$over_represented_p_adj <- p.adjust(GO.wall$over_represented_pvalue, method = \"BH\")\nGO.wall$under_represented_p_adj <- p.adjust(GO.wall$under_represented_pvalue, method = \"BH\")\n\n# --- Filter and write results ---\n# Filter for overrepresented categories with adjusted p-value < 0.05\noverrepresented_results <- GO.wall[GO.wall$over_represented_p_adj < 0.05, ]\noverrepresented_results <- overrepresented_results[order(overrepresented_results$over_represented_p_adj), ]\n\nwrite.table(overrepresented_results, file = output_file, sep = \"\\t\", quote = FALSE, row.names = FALSE)\n\nmessage(paste(\"Goseq analysis complete. Overrepresented categories written to:\", output_file))\nEOF\n\n# Create dummy input files for demonstration\n# Replace these with your actual input files\necho -e \"ENSG00000100000\\nENSG00000100001\\nENSG00000100002\" > deg_genes.txt\necho -e \"ENSG00000100000\\nENSG00000100001\\nENSG00000100002\\nENSG00000100003\\nENSG00000100004\" > all_genes.txt\necho -e \"ENSG00000100000\\t1500\\nENSG00000100001\\t2000\\nENSG00000100002\\t1000\\nENSG00000100003\\t3000\\nENSG00000100004\\t2500\" > gene_lengths.txt\n\n# Execute the R script\nRscript goseq_analysis.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/goseq.html"
+        }
+    ],
+    "raw_text": "Raw reads were trimmed using Trimmomatic. FastQC (Babraham Bioinformatics) was used before and after trimming to assess quality control.\nReads were aligned to the murine reference genome (mm10) using the STAR aligner tool. MultiQC (v1.12) was used to assess the quality of alignment. All aligned samples showed more than 89% uniquely mapped reads.\nreads were counted using the FeatureCounts package\nExpected gene count quantifications from RSEM analysis were imported into R for differential gene analysis using edgeR (v.3.30.3)\nThe Goseq tool was used to acquire overrepressented gene categories\nAssembly: mm10\nSupplementary files format and content: DESeq2 outputed differential gene expression files\nSupplementary files format and content: DESeq2 outputed normalized counts",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

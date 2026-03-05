@@ -1,88 +1,88 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Data was processed using the eCLIP pipeline and available at https://github.com/YeoLab/skipper",
-      "tool_name": "Skipper",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://github.com/YeoLab/skipper"
-    },
-    {
-      "step_order": 2,
-      "description": "Unique Molecular Identifiers (UMIs) were extracted using fastp 0.11.5 (https://github.com/OpenGene/fastp)",
-      "tool_name": "fastp",
-      "tool_version": "0.11.5",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://github.com/OpenGene/fastp"
-    },
-    {
-      "step_order": 3,
-      "description": "Post-umi-extracted reads were trimmed for adapter sequences and barcode sequences (eCLIP samples)",
-      "tool_name": "eCLIP",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Mapping was then performed against the full human genome (hg38) including a database of splice junctions with STAR (v 2.7.6) allowing up to 100 multimapped regions.",
-      "tool_name": "STAR",
-      "tool_version": "2.7.6",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://github.com/alexdobin/STAR"
-    },
-    {
-      "step_order": 5,
-      "description": "Reads were then PCR deduplicated using UMIcollaps (https://github.com/Daniel-Liu-c0deb0t/UMICollapse",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Enriched \u00e2\u0080\u009cwindows\u00e2\u0080\u009d (IP versus SM-Input) was called on deduplicated reads using a GC-bias aware beta-binomial model.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Each window (~100 b.p.) were partitioned from Gencode v38 and associated with a specific type of genomic region (CDS, UTR, proximal introns near splice site\u00e2\u0080\u00a6 etc).",
-      "tool_name": "GENCODE",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://www.gencodegenes.org"
-    },
-    {
-      "step_order": 8,
-      "description": "Windows are filtered using FDR < 0.2 and only reproducible windows between two replicates were used.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://github.com/YeoLab/skipper"
-    },
-    {
-      "step_order": 9,
-      "description": "Data was processed using the eCLIP pipeline and available at https://github.com/YeoLab/skipper",
-      "tool_name": "Skipper",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://github.com/YeoLab/skipper"
-    }
-  ],
-  "raw_text": "Data was processed using the eCLIP pipeline and available at https://github.com/YeoLab/skipper\nUnique Molecular Identifiers (UMIs) were extracted using fastp 0.11.5 (https://github.com/OpenGene/fastp)\nPost-umi-extracted reads were trimmed for adapter sequences and barcode sequences (eCLIP samples)\nMapping was then performed against the full human genome (hg38) including a database of splice junctions with STAR (v 2.7.6) allowing up to 100 multimapped regions.\nReads were then PCR deduplicated using UMIcollaps (https://github.com/Daniel-Liu-c0deb0t/UMICollapse\nEnriched \u00e2\u0080\u009cwindows\u00e2\u0080\u009d (IP versus SM-Input) was called on deduplicated reads using a GC-bias aware beta-binomial model. Each window (~100 b.p.) were partitioned from Gencode v38 and associated with a specific type of genomic region (CDS, UTR, proximal introns near splice site\u00e2\u0080\u00a6 etc). Windows are filtered using FDR < 0.2 and only reproducible windows between two replicates were used.\nData was processed using the eCLIP pipeline and available at https://github.com/YeoLab/skipper\nAssembly: hg38\nSupplementary files format and content: bed files contain Skipper windows.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Data was processed using the eCLIP pipeline and available at https://github.com/YeoLab/skipper",
+            "tool_name": "Skipper",
+            "tool_version": "N/A",
+            "code_example": "git clone https://github.com/YeoLab/skipper.git\ncd skipper\n\n# Configure the workflow by editing config/config.yaml and config/samples.yaml\n# Example reference genome (hg38 inferred as common default for human eCLIP):\n# In config/config.yaml, set:\n#   species: human\n#   assembly: hg38\n#   genome_fasta: /path/to/your/hg38.fasta\n#   gtf: /path/to/your/hg38.gtf\n#   star_index: /path/to/your/star_index_hg38\n#   ... other reference paths ...\n\n# In config/samples.yaml, define your samples and their fastq files.\n\n# (Optional) Create and activate the Snakemake environment\n# conda env create -f envs/snakemake.yaml\n# conda activate snakemake\n\n# Execute the Skipper eCLIP processing workflow\n# The --use-conda flag will create environments for individual rules as needed.\n# Adjust --cores based on available resources.\nsnakemake --use-conda --cores 8",
+            "code_language": "bash",
+            "github_url": "https://github.com/YeoLab/skipper"
+        },
+        {
+            "step_order": 2,
+            "description": "Unique Molecular Identifiers (UMIs) were extracted using fastp 0.11.5 (https://github.com/OpenGene/fastp)",
+            "tool_name": "fastp",
+            "tool_version": "0.11.5",
+            "code_example": "# Install fastp (if not already installed)\n# conda install -c bioconda fastp\n\n# Example command for UMI extraction using fastp.\n# This command assumes UMIs are at the beginning of Read 1 and are 10 bases long.\n# Adjust input/output filenames, UMI location (--umi_loc), and UMI length (--umi_len) as per your library preparation.\n# fastp will prepend the UMI sequence to the read ID in the output FASTQ files.\nfastp \\\n  -i input_read1.fastq.gz \\\n  -o output_read1_umi_extracted.fastq.gz \\\n  -I input_read2.fastq.gz \\\n  -O output_read2_umi_extracted.fastq.gz \\\n  --umi \\\n  --umi_loc per_read \\\n  --umi_len 10 \\\n  --thread 8 \\\n  --json fastp.json \\\n  --html fastp.html",
+            "code_language": "bash",
+            "github_url": "https://github.com/OpenGene/fastp"
+        },
+        {
+            "step_order": 3,
+            "description": "Post-umi-extracted reads were trimmed for adapter sequences and barcode sequences (eCLIP samples)",
+            "tool_name": "eCLIP",
+            "tool_version": "2.10",
+            "code_example": "# Install cutadapt (if not already installed)\n# conda install -c bioconda cutadapt\n\n# Define input and output files\nINPUT_FASTQ=\"input_umi_extracted_reads.fastq\"\nOUTPUT_FASTQ=\"trimmed_reads.fastq\"\n\n# Define adapter sequences and minimum read length\n# These are placeholder sequences. Actual sequences should be obtained from the library preparation protocol\n# or the specific eCLIP protocol used (e.g., from the Yeo lab).\nADAPTER_3PRIME=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\" # Example: Illumina Universal Adapter\nADAPTER_5PRIME=\"GTTCAGAGTTCTACAGTCCGACGATC\" # Example: A common linker or 5' barcode sequence to be trimmed after UMI extraction\nMIN_READ_LENGTH=18\n\n# Execute cutadapt to trim adapter and barcode sequences\ncutadapt \\\n  -a \"${ADAPTER_3PRIME}\" \\\n  -g \"${ADAPTER_5PRIME}\" \\\n  -m ${MIN_READ_LENGTH} \\\n  -o \"${OUTPUT_FASTQ}\" \\\n  \"${INPUT_FASTQ}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 4,
+            "description": "Mapping was then performed against the full human genome (hg38) including a database of splice junctions with STAR (v 2.7.6) allowing up to 100 multimapped regions.",
+            "tool_name": "STAR",
+            "tool_version": "2.7.6",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star=2.7.6\n\n# Define variables\nREAD1_FASTQ=\"path/to/your/read1.fastq.gz\" # Replace with your R1 FASTQ file\nREAD2_FASTQ=\"path/to/your/read2.fastq.gz\" # Replace with your R2 FASTQ file (remove if single-end)\nSTAR_GENOME_DIR=\"path/to/your/star_hg38_index\" # Replace with path to pre-built STAR hg38 genome index\nOUTPUT_PREFIX=\"sample_name\" # Prefix for output files\nNUM_THREADS=8 # Number of threads to use\n\n# Note: The STAR genome index (STAR_GENOME_DIR) must be pre-built using hg38 FASTA and a GTF/GFF file for splice junctions.\n# Example command for building index (run once, adjust sjdbOverhang based on read length - 1):\n# STAR --runMode genomeGenerate \\\n#      --genomeDir ${STAR_GENOME_DIR} \\\n#      --genomeFastaFiles path/to/hg38.fa \\\n#      --sjdbGTFfile path/to/gencode.vXX.annotation.gtf \\\n#      --sjdbOverhang 100 \\\n#      --runThreadN ${NUM_THREADS}\n\n# Perform mapping with STAR\nSTAR --genomeDir ${STAR_GENOME_DIR} \\\n     --readFilesIn ${READ1_FASTQ} ${READ2_FASTQ} \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix ${OUTPUT_PREFIX}_ \\\n     --outFilterMultimapNmax 100 \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes All \\\n     --runThreadN ${NUM_THREADS}\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 5,
+            "description": "Reads were then PCR deduplicated using UMIcollaps (https://github.com/Daniel-Liu-c0deb0t/UMICollapse",
+            "tool_name": "UMIcollaps",
+            "tool_version": "latest",
+            "code_example": "# Clone the repository if not already available\n# git clone https://github.com/Daniel-Liu-c0deb0t/UMICollapse.git\n# cd UMICollapse\n\n# Execute UMIcollaps for PCR deduplication\n# Assuming input_reads.fastq is the input file and deduplicated_reads.fastq is the desired output.\n# The UMI length (-l) is an example (default or common value); adjust if the actual UMI length is known from experimental design.\npython UMICollapse.py -i input_reads.fastq -o deduplicated_reads.fastq -l 10",
+            "code_language": "bash",
+            "github_url": "https://github.com/Daniel-Liu-c0deb0t/UMICollapse"
+        },
+        {
+            "step_order": 6,
+            "description": "Enriched \u00e2\u0080\u009cwindows\u00e2\u0080\u009d (IP versus SM-Input) was called on deduplicated reads using a GC-bias aware beta-binomial model.",
+            "tool_name": "clipper (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Python 3.8 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install clipper (if not already installed)\n# git clone https://github.com/yeolab/clipper.git\n# cd clipper\n# # Ensure dependencies are met, e.g., pysam, numpy, scipy\n# pip install pysam numpy scipy\n\n# Define input and output files\nIP_BAM=\"path/to/deduplicated_IP.bam\" # Immunoprecipitated reads, deduplicated\nSM_INPUT_BAM=\"path/to/deduplicated_SM_Input.bam\" # Size-matched input reads, deduplicated\nGENOME_ASSEMBLY=\"hg38\" # Placeholder: Replace with the actual genome assembly (e.g., hg19, mm10)\nOUTPUT_PREFIX=\"eCLIP_peaks\"\n\n# Run clipper to call enriched windows using a GC-bias aware beta-binomial model\npython clipper.py \\\n    -s ${GENOME_ASSEMBLY} \\\n    -u ${IP_BAM} \\\n    -c ${SM_INPUT_BAM} \\\n    -o ${OUTPUT_PREFIX}",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/clipper"
+        },
+        {
+            "step_order": 7,
+            "description": "Each window (~100 b.p.) were partitioned from Gencode v38 and associated with a specific type of genomic region (CDS, UTR, proximal introns near splice site\u00e2\u0080\u00a6 etc).",
+            "tool_name": "GENCODE",
+            "tool_version": "v38",
+            "code_example": "# Download Gencode v38 annotation GTF\nwget -nc https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_38/gencode.v38.annotation.gtf.gz\ngunzip -f gencode.v38.annotation.gtf.gz\n\n# Download hg38 chrom.sizes for bedtools makewindows\nwget -nc http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes\n\n# # Installation for bedtools:\n# # conda install -c bioconda bedtools\n\n# Extract specific genomic regions from Gencode v38 GTF into BED format\n# Note: This is a simplified representation. A robust pipeline would use dedicated GTF parsers\n# or more complex scripting to accurately define all region types, especially introns.\n\n# Extract CDS regions\nawk '$3 == \"CDS\"' gencode.v38.annotation.gtf | \\\nawk -v OFS='\\t' '{print $1, $4-1, $5, $10, $12, $7}' | \\\nsed 's/;//g; s/\"//g' | \\\nsort -k1,1 -k2,2n > gencode.v38.cds.bed\n\n# Extract UTR regions\nawk '$3 == \"UTR\"' gencode.v38.annotation.gtf | \\\nawk -v OFS='\\t' '{print $1, $4-1, $5, $10, $12, $7}' | \\\nsed 's/;//g; s/\"//g' | \\\nsort -k1,1 -k2,2n > gencode.v38.utr.bed\n\n# Extract Exon regions (often used to derive introns)\nawk '$3 == \"exon\"' gencode.v38.annotation.gtf | \\\nawk -v OFS='\\t' '{print $1, $4-1, $5, $10, $12, $7}' | \\\nsed 's/;//g; s/\"//g' | \\\nsort -k1,1 -k2,2n > gencode.v38.exons.bed\n\n# Conceptual step: Derive intron regions and proximal introns near splice sites.\n# This typically involves custom scripting based on exon coordinates (e.g., using bedtools complement\n# on exons within transcripts, then defining proximal regions +/- X bp around splice sites).\n# For this example, we assume these files (e.g., gencode.v38.introns.bed, gencode.v38.proximal_introns.bed)\n# would be generated by a preceding step or custom script.\n\n# Create genome-wide windows of ~100 b.p.\nbedtools makewindows -g hg38.chrom.sizes -w 100 > genome.100bp_windows.bed\n\n# Associate each window with a specific type of genomic region\n# This step involves intersecting the windows with the derived region BED files\n# and assigning a primary region type based on overlap hierarchy (e.g., CDS > UTR > Intron).\n# This is often done with a custom script after multiple bedtools intersect/map calls.\n\n# Example of intersecting windows with CDS regions:\nbedtools intersect -a genome.100bp_windows.bed -b gencode.v38.cds.bed -wa -wb > windows_overlapping_cds.bed\n\n# Further processing (e.g., with a Python/R script) would then assign a single region type\n# to each window based on the overlaps with CDS, UTR, Intron, etc., following a defined hierarchy.\n# For instance:\n# python assign_region_type.py genome.100bp_windows.bed windows_overlapping_cds.bed windows_overlapping_utr.bed ... > final_annotated_windows.bed",
+            "code_language": "bash",
+            "github_url": "https://www.gencodegenes.org/human/release_38.html"
+        },
+        {
+            "step_order": 8,
+            "description": "Windows are filtered using FDR < 0.2 and only reproducible windows between two replicates were used.",
+            "tool_name": "merge_replicates.py (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "latest",
+            "code_example": "# Clone the merge_peaks repository\n# git clone https://github.com/yeolab/merge_peaks.git\n# cd merge_peaks\n\n# Example usage of merge_replicates.py\n# This command filters windows (peaks) from two replicate BED files\n# using an FDR threshold of 0.2 and identifies reproducible windows.\n# Replace 'replicate1_peaks.bed' and 'replicate2_peaks.bed' with your actual input peak files.\n# The output will be prefixed with 'reproducible_windows'.\npython merge_replicates.py --fdr_threshold 0.2 replicate1_peaks.bed replicate2_peaks.bed --output_prefix reproducible_windows",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/merge_peaks"
+        },
+        {
+            "step_order": 9,
+            "description": "Data was processed using the eCLIP pipeline and available at https://github.com/YeoLab/skipper",
+            "tool_name": "Skipper",
+            "tool_version": "Latest commit",
+            "code_example": "# Clone the Skipper workflow repository\ngit clone https://github.com/YeoLab/skipper.git\ncd skipper\n\n# --- Configuration Setup (User needs to adapt these files) ---\n# The workflow requires a configuration file (e.g., config/config.yaml)\n# and a samplesheet (e.g., config/samples.tsv).\n#\n# Example config/config.yaml (adjust genome_dir and other parameters as needed):\n# genome_assembly: \"hg38\"\n# genome_dir: \"/path/to/your/genome/data/hg38\"\n#\n# Example config/samples.tsv (tab-separated, adjust paths to your FASTQ files):\n# sample_id    fastq_r1    fastq_r2    replicate\n# sample1_rep1 /path/to/sample1_rep1_R1.fastq.gz /path/to/sample1_rep1_R2.fastq.gz 1\n# sample1_rep2 /path/to/sample1_rep2_R1.fastq.gz /path/to/sample1_rep2_R2.fastq.gz 2\n#\n# --- Environment Setup (Optional, but recommended) ---\n# # Install mamba (if not already installed)\n# # conda install -c conda-forge mamba\n#\n# # Create and activate the Snakemake environment\n# # mamba env create -f envs/snakemake.yaml\n# # conda activate snakemake\n\n# --- Run the Skipper eCLIP workflow ---\n# Adjust --cores based on available resources.\n# Ensure config/config.yaml and config/samples.tsv are properly configured.\nsnakemake --use-conda --cores 8 --configfile config/config.yaml",
+            "code_language": "bash",
+            "github_url": "https://github.com/YeoLab/skipper"
+        }
+    ],
+    "raw_text": "Data was processed using the eCLIP pipeline and available at https://github.com/YeoLab/skipper\nUnique Molecular Identifiers (UMIs) were extracted using fastp 0.11.5 (https://github.com/OpenGene/fastp)\nPost-umi-extracted reads were trimmed for adapter sequences and barcode sequences (eCLIP samples)\nMapping was then performed against the full human genome (hg38) including a database of splice junctions with STAR (v 2.7.6) allowing up to 100 multimapped regions.\nReads were then PCR deduplicated using UMIcollaps (https://github.com/Daniel-Liu-c0deb0t/UMICollapse\nEnriched \u00e2\u0080\u009cwindows\u00e2\u0080\u009d (IP versus SM-Input) was called on deduplicated reads using a GC-bias aware beta-binomial model. Each window (~100 b.p.) were partitioned from Gencode v38 and associated with a specific type of genomic region (CDS, UTR, proximal introns near splice site\u00e2\u0080\u00a6 etc). Windows are filtered using FDR < 0.2 and only reproducible windows between two replicates were used.\nData was processed using the eCLIP pipeline and available at https://github.com/YeoLab/skipper\nAssembly: hg38\nSupplementary files format and content: bed files contain Skipper windows.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

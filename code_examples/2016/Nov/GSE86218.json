@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize.",
-      "tool_name": "Microarray",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Iter-plier algorithm used to quantify probesets.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "http://exon.ucsc.edu/documentation/mjay_library/hjay.pgf",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize. Iter-plier algorithm used to quantify probesets.\nhttp://exon.ucsc.edu/documentation/mjay_library/hjay.pgf",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize.",
+            "tool_name": "Microarray",
+            "tool_version": "Not specified",
+            "code_example": "# Install Affymetrix Power Tools (APT)\n# APT is typically downloaded as a binary package from the Thermo Fisher Scientific website.\n# Example installation (may vary based on OS and APT version):\n# wget https://assets.thermofisher.com/TFS-Assets/LSG/software/APT_2.x.x_Linux.zip\n# unzip APT_2.x.x_Linux.zip\n# export PATH=$PATH:/path/to/APT_binaries\n\n# Placeholder variables\n# Replace with actual CEL files. For multiple files, list them space-separated.\n# Example: INPUT_CEL_FILES=\"sample1.CEL sample2.CEL sample3.CEL\"\n# Alternatively, for a long list, create a file (e.g., cel_list.txt) with one CEL file path per line\n# and use --cel-files-file cel_list.txt instead of --cel-files.\nINPUT_CEL_FILES=\"sample1.CEL sample2.CEL sample3.CEL\"\n# Replace with the appropriate library file (e.g., CDF, PGF) for your array type\nPROBESET_LIBRARY_FILE=\"HG-U133_Plus_2.cdf\"\nOUTPUT_DIR=\"apt_summarize_output\"\n# Common algorithms: rma, mas5, plier, etc. Choose based on experimental design.\nALGORITHM=\"rma\"\n\nmkdir -p \"${OUTPUT_DIR}\"\n\napt-probeset-summarize \\\n  --cel-files ${INPUT_CEL_FILES} \\\n  --cdf-file \"${PROBESET_LIBRARY_FILE}\" \\\n  --output-dir \"${OUTPUT_DIR}\" \\\n  --analysis-algorithm \"${ALGORITHM}\" \\\n  --log-file \"${OUTPUT_DIR}/apt_summarize.log\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Iter-plier algorithm used to quantify probesets.",
+            "tool_name": "plier (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Bioconductor (e.g., 1.78.0 for R 4.3)",
+            "code_example": "# Install R and Bioconductor if not already present\n# For example, using conda:\n# conda create -n r_env r-base bioconductor-affy bioconductor-plier\n# conda activate r_env\n\n# Create an R script to perform Iter-PLIER quantification\ncat << 'EOF' > quantify_probesets.R\n# Load necessary Bioconductor packages\nlibrary(affy)\nlibrary(plier)\n\n# Define input and output paths\n# Assuming CEL files are in a directory named 'cel_files'\ncel_dir <- \"cel_files\"\noutput_file <- \"probeset_quantification_iterplier.tsv\"\n\n# Get list of CEL files\ncel_files <- list.files(path = cel_dir, pattern = \"\\\\.CEL$\", full.names = TRUE, ignore.case = TRUE)\n\nif (length(cel_files) == 0) {\n  stop(\"No CEL files found in the specified directory: \", cel_dir)\n}\n\n# Read CEL files into an AffyBatch object\n# This step automatically handles the appropriate CDF (Chip Description File)\n# for the array type if available in Bioconductor annotation packages.\nraw_data <- ReadAffy(filenames = cel_files)\n\n# Perform PLIER quantification, which is an iterative algorithm (Iter-PLIER).\n# The 'plier' function from the 'plier' package implements this algorithm.\nes_plier <- plier(raw_data)\n\n# Extract expression matrix\nexpression_matrix <- exprs(es_plier)\n\n# Write results to a TSV file\nwrite.table(expression_matrix, file = output_file, sep = \"\\t\", quote = FALSE, row.names = TRUE)\n\nmessage(paste(\"Probeset quantification completed. Results saved to:\", output_file))\nEOF\n\n# Execute the R script\nRscript quantify_probesets.R\n\n# Example directory structure for input CEL files:\n# mkdir -p cel_files\n# touch cel_files/sample1.CEL\n# touch cel_files/sample2.CEL",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/plier.html"
+        },
+        {
+            "step_order": 3,
+            "description": "http://exon.ucsc.edu/documentation/mjay_library/hjay.pgf",
+            "tool_name": "clipper (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "latest (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install clipper (if not already installed)\n# git clone https://github.com/yeolab/clipper.git\n# cd clipper\n# pip install .\n\n# Placeholder for genome reference files (e.g., hg38)\n# mkdir -p reference_data\n# wget -P reference_data http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz\n# gunzip reference_data/hg38.fa.gz\n# samtools faidx reference_data/hg38.fa\n\n# Define input files (placeholders)\nIP_BAM=\"ip_sample.bam\"\nCONTROL_BAM=\"control_sample.bam\"\nGENOME_FASTA=\"reference_data/hg38.fa\"\nOUTPUT_PREFIX=\"eclip_peaks\"\n\n# Run clipper for peak calling\npython clipper.py -b \"${IP_BAM}\" -c \"${CONTROL_BAM}\" -g \"${GENOME_FASTA}\" -o \"${OUTPUT_PREFIX}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/clipper"
+        }
+    ],
+    "raw_text": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize. Iter-plier algorithm used to quantify probesets.\nhttp://exon.ucsc.edu/documentation/mjay_library/hjay.pgf",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

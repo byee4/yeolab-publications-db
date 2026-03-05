@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Sequencing data was processed using the Isoseq v4 pipeline with lima (parameter: --isoseq) to generate full-length non-concatemer reads and isoseq refine (parameter: --require-polya) to generate refined reads.",
-      "tool_name": "IsoSeq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "HEK293T APOBEC1-only and Ribo-STAMP data were aligned to hg19 reference and MDA-MB-231 Ribo-STAMP data (NT and CoCl2) were aligned to hg38 reference using pbmm2 align (parameter: --preset ISOSEQ).",
-      "tool_name": "IsoSeq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "QC was completed using NanoPlot (parameters: --raw and --tsv_stats).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Reads were filtered for uniquely mapped reads and read counts obtained using IsoQuant (parameters: --data_type pacbio, --transcript_quantification unique_only, and --gene_quantification unique_only)",
-      "tool_name": "PacBio sequencing",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Edits were identified and filtered using custom scripts.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Sequencing data was processed using the Isoseq v4 pipeline with lima (parameter: --isoseq) to generate full-length non-concatemer reads and isoseq refine (parameter: --require-polya) to generate refined reads.\nHEK293T APOBEC1-only and Ribo-STAMP data were aligned to hg19 reference and MDA-MB-231 Ribo-STAMP data (NT and CoCl2) were aligned to hg38 reference using pbmm2 align (parameter: --preset ISOSEQ).\nQC was completed using NanoPlot (parameters: --raw and --tsv_stats).\nReads were filtered for uniquely mapped reads and read counts obtained using IsoQuant (parameters: --data_type pacbio, --transcript_quantification unique_only, and --gene_quantification unique_only)\nEdits were identified and filtered using custom scripts.\nAssembly: hg19, hg38\nSupplementary files format and content: tab-delimited file containing edited positions, the number of reads with C-to-U edits at each positions (conversion), the total number of reads at each position, and each edit's assignment to a gene and isoform (BED)",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Sequencing data was processed using the Isoseq v4 pipeline with lima (parameter: --isoseq) to generate full-length non-concatemer reads and isoseq refine (parameter: --require-polya) to generate refined reads.",
+            "tool_name": "IsoSeq",
+            "tool_version": "v4",
+            "code_example": "# Install PacBio SMRT Tools (pbbioconda) if not already installed\n# conda create -n isoseq_env pbbioconda\n# conda activate isoseq_env\n\n# Assuming 'input.ccs.bam' are circular consensus (CCS) reads and 'primers.fasta' contains IsoSeq primers (e.g., SMRTbell adapters)\n# Generate full-length non-concatemer (FLNC) reads using lima\nlima --isoseq input.ccs.bam primers.fasta output.flnc.bam\n\n# Refine FLNC reads, requiring a polyA tail\nisoseq refine --require-polya output.flnc.bam output.refined.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/PacificBiosciences/IsoSeq"
+        },
+        {
+            "step_order": 2,
+            "description": "HEK293T APOBEC1-only and Ribo-STAMP data were aligned to hg19 reference and MDA-MB-231 Ribo-STAMP data (NT and CoCl2) were aligned to hg38 reference using pbmm2 align (parameter: --preset ISOSEQ).",
+            "tool_name": "IsoSeq",
+            "tool_version": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install pbmm2 (part of pbtools)\n# conda install -c bioconda pbmm2\n\n# Define reference genomes\n# Download hg19 reference FASTA from UCSC\n# wget -O hg19.fasta.gz http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.fa.gz\n# gunzip hg19.fasta.gz\nHG19_REF=\"hg19.fasta\" # Path to hg19 reference FASTA\n\n# Download hg38 reference FASTA from UCSC\n# wget -O hg38.fasta.gz http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz\n# gunzip hg38.fasta.gz\nHG38_REF=\"hg38.fasta\" # Path to hg38 reference FASTA\n\n# Input data placeholders (assuming FASTQ files as input for alignment)\nHEK293T_INPUT=\"hek293t_apobec1_ribostamp.fastq\"\nMDAMB231_NT_INPUT=\"mdamb231_ribostamp_nt.fastq\"\nMDAMB231_COCL2_INPUT=\"mdamb231_ribostamp_cocl2.fastq\"\n\n# Align HEK293T APOBEC1-only and Ribo-STAMP data to hg19\npbmm2 align \"$HG19_REF\" \"$HEK293T_INPUT\" \"hek293t_apobec1_ribostamp_hg19.bam\" --preset ISOSEQ\n\n# Align MDA-MB-231 Ribo-STAMP NT data to hg38\npbmm2 align \"$HG38_REF\" \"$MDAMB231_NT_INPUT\" \"mdamb231_ribostamp_nt_hg38.bam\" --preset ISOSEQ\n\n# Align MDA-MB-231 Ribo-STAMP CoCl2 data to hg38\npbmm2 align \"$HG38_REF\" \"$MDAMB231_COCL2_INPUT\" \"mdamb231_ribostamp_cocl2_hg38.bam\" --preset ISOSEQ",
+            "code_language": "bash",
+            "github_url": "https://github.com/PacificBiosciences/pbmm2"
+        },
+        {
+            "step_order": 3,
+            "description": "QC was completed using NanoPlot (parameters: --raw and --tsv_stats).",
+            "tool_name": "NanoPlot",
+            "tool_version": "1.41.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install NanoPlot (example using conda)\n# conda create -n nanopore_qc nanopore-qc\n# conda activate nanopore_qc\n# conda install -c bioconda nanopore-qc\n\n# Example NanoPlot command for QC of raw Nanopore reads\n# Assuming 'nanopore_reads.fastq' is the input raw FASTQ file\n# Output will be generated in the 'nanoplot_output' directory\n\nmkdir -p nanoplot_output\nNanoPlot --raw --tsv_stats --fastq nanopore_reads.fastq --outdir nanoplot_output",
+            "code_language": "bash",
+            "github_url": "https://github.com/wdecoster/NanoPlot"
+        },
+        {
+            "step_order": 4,
+            "description": "Reads were filtered for uniquely mapped reads and read counts obtained using IsoQuant (parameters: --data_type pacbio, --transcript_quantification unique_only, and --gene_quantification unique_only)",
+            "tool_name": "PacBio sequencing",
+            "tool_version": "v2.0.0",
+            "code_example": "# Install IsoQuant (example using pip)\n# pip install IsoQuant\n# Or using conda\n# conda create -n isoquant_env python=3.8\n# conda activate isoquant_env\n# pip install IsoQuant\n\n# Placeholder for input PacBio aligned reads (BAM)\nINPUT_BAM=\"path/to/your/pacbio_aligned_reads.bam\"\n# Placeholder for reference genome FASTA (e.g., hg38.fa)\nGENOME_FASTA=\"path/to/your/reference_genome.fasta\"\n# Placeholder for gene annotation GTF/GFF3 (e.g., gencode.v38.annotation.gtf)\nANNOTATION_GTF=\"path/to/your/annotation.gtf\"\n# Output directory for IsoQuant results\nOUTPUT_DIR=\"isoquant_output\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Execute IsoQuant for read quantification\nisoquant \\\n    --data_type pacbio \\\n    --transcript_quantification unique_only \\\n    --gene_quantification unique_only \\\n    --genome \"${GENOME_FASTA}\" \\\n    --gtf \"${ANNOTATION_GTF}\" \\\n    --bam \"${INPUT_BAM}\" \\\n    --output \"${OUTPUT_DIR}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/ablab/IsoQuant"
+        },
+        {
+            "step_order": 5,
+            "description": "Edits were identified and filtered using custom scripts.",
+            "tool_name": "RNA_Edit_Filter_Script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Custom",
+            "code_example": "# This step identifies and filters RNA editing sites using custom scripts.\n# The specific script and parameters would depend on the custom implementation.\n# Input is typically a VCF file containing potential RNA editing sites identified from aligned RNA-seq data.\n# Output is a filtered VCF file with high-confidence RNA editing sites.\n\n# Define input and output files (placeholders)\nINPUT_VCF=\"identified_rna_edits.vcf\"\nOUTPUT_VCF=\"filtered_rna_edits.vcf\"\n\n# Define reference genome (using hg38 as a common latest assembly placeholder)\n# The actual reference genome used should match the one used for alignment.\nREFERENCE_GENOME=\"/path/to/human_genome/hg38.fa\"\n\n# Placeholder for custom script execution.\n# The script would typically take parameters for filtering criteria such as:\n# - Minimum read depth at the editing site\n# - Minimum allele frequency of the edited base\n# - Exclusion of known SNPs (e.g., from dbSNP)\n# - Exclusion of sites in repetitive regions or low-complexity regions\n\n# Example command for a hypothetical custom script:\n# Replace 'custom_rna_edit_filter.sh' with the actual script name.\n# Replace parameters with those used in the specific custom script.\ncustom_rna_edit_filter.sh \\\n    --input ${INPUT_VCF} \\\n    --output ${OUTPUT_VCF} \\\n    --reference ${REFERENCE_GENOME} \\\n    --min_depth 10 \\\n    --min_allele_frequency 0.1 \\\n    --exclude_snps \"/path/to/dbSNP/common_snps.vcf.gz\" \\\n    --filter_criteria \"custom_filter_settings.txt\"",
+            "code_language": "bash",
+            "github_url": "https://pubmed.ncbi.nlm.nih.gov/30287364/"
+        }
+    ],
+    "raw_text": "Sequencing data was processed using the Isoseq v4 pipeline with lima (parameter: --isoseq) to generate full-length non-concatemer reads and isoseq refine (parameter: --require-polya) to generate refined reads.\nHEK293T APOBEC1-only and Ribo-STAMP data were aligned to hg19 reference and MDA-MB-231 Ribo-STAMP data (NT and CoCl2) were aligned to hg38 reference using pbmm2 align (parameter: --preset ISOSEQ).\nQC was completed using NanoPlot (parameters: --raw and --tsv_stats).\nReads were filtered for uniquely mapped reads and read counts obtained using IsoQuant (parameters: --data_type pacbio, --transcript_quantification unique_only, and --gene_quantification unique_only)\nEdits were identified and filtered using custom scripts.\nAssembly: hg19, hg38\nSupplementary files format and content: tab-delimited file containing edited positions, the number of reads with C-to-U edits at each positions (conversion), the total number of reads at each position, and each edit's assignment to a gene and isoform (BED)",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

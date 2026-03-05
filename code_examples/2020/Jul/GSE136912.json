@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "CLIPSeqTool0.1.8 was used to trim the adapaters, align the reads to the genome and perform deduplications",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Kallisto0.44.0 was used to quantify transcripts abundance in terms of TPM",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "CLIPSeqTool0.1.8 was used to trim the adapaters, align the reads to the genome and perform deduplications\nKallisto0.44.0 was used to quantify transcripts abundance in terms of TPM\nGenome_build: hg38\nSupplementary_files_format_and_content: tab-delimited text files include TPM values",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "CLIPSeqTool0.1.8 was used to trim the adapaters, align the reads to the genome and perform deduplications",
+            "tool_name": "CLIPSeqTool",
+            "tool_version": "0.1.8",
+            "code_example": "# Assuming CLIPSeqTool is installed and available in the PATH\n# For example, it might be a custom script or part of a larger pipeline.\n# If it's a Python script, you might run it with `python CLIPSeqTool.py ...`\n# If it's a compiled binary, `CLIPSeqTool ...`\n\n# Placeholder for input reads, genome index, and output directory\nINPUT_READS=\"input_reads.fastq.gz\"\nGENOME_INDEX_DIR=\"/path/to/genome/index/hg38\"\nOUTPUT_DIR=\"./clipseq_output\"\n\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Execute CLIPSeqTool to trim adapters, align reads, and perform deduplication\n# The exact parameters are inferred based on the description of its functions.\n# This command assumes a common CLI structure for such a tool.\nCLIPSeqTool0.1.8 \\\n  --input \"${INPUT_READS}\" \\\n  --genome_index \"${GENOME_INDEX_DIR}\" \\\n  --output_dir \"${OUTPUT_DIR}\" \\\n  --trim_adapters \\\n  --align_reads \\\n  --deduplicate\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 2,
+            "description": "Kallisto0.44.0 was used to quantify transcripts abundance in terms of TPM",
+            "tool_name": "Kallisto",
+            "tool_version": "0.44.0",
+            "code_example": "# Install Kallisto 0.44.0 (example using conda)\n# conda create -n kallisto_env kallisto=0.44.0 -c bioconda -y\n# conda activate kallisto_env\n\n# Placeholder for Kallisto index (e.g., built from a reference transcriptome like human GRCh38)\n# kallisto index -i transcriptome.idx transcripts.fasta.gz\n\n# Quantify transcripts abundance in terms of TPM\n# Input: Paired-end FASTQ files (read1.fastq.gz, read2.fastq.gz)\n# Output: Quantification results in kallisto_output directory (including abundance.tsv with TPM values)\nkallisto quant -i transcriptome.idx -o kallisto_output read1.fastq.gz read2.fastq.gz",
+            "code_language": "bash",
+            "github_url": "https://github.com/pachterlab/kallisto"
+        }
+    ],
+    "raw_text": "CLIPSeqTool0.1.8 was used to trim the adapaters, align the reads to the genome and perform deduplications\nKallisto0.44.0 was used to quantify transcripts abundance in terms of TPM\nGenome_build: hg38\nSupplementary_files_format_and_content: tab-delimited text files include TPM values",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

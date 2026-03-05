@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "remove adapter with Cutadapt",
-      "tool_name": "cutadapt",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "align to genome using bowtie2 or bwa-mem",
-      "tool_name": "Bowtie2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "generate count tables along reporter sequence using Pysamstats",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "remove adapter with Cutadapt\nalign to genome using bowtie2 or bwa-mem\ngenerate count tables along reporter sequence using Pysamstats\nAssembly: 6X MS2 and 6X PP7 stem-loop-bearing mRNAs (alternating):  6X MS2 and 6X PP7 alternating and 50 bp apart mRNA.fa, 6X MS2 and 6X PP7 alternating and 50 bp apart mRNA features.txt\nAssembly: 2X MS2 and 2X PP7 stem-loop-bearing mRNAs (alternating):  2X MS2 and 2X PP7 alternating and 50 bp apart mRNA.fa, 2X MS2 and 2X PP7 alternating and 50 bp apart mRNA features.txt\nAssembly: 2X MS2 and 2X PP7 stem-loop-bearing mRNAs (50bp apart):  2X MS2 (50 bp apart)-350 bp-2X PP7 (50 bp apart) mRNA.fa, 2X MS2 (50 bp apart)-350 bp-2X PP7 (50 bp apart) mRNA features.txt\nSupplementary files format and content: count tables with called edits along reporter sequences",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "remove adapter with Cutadapt",
+            "tool_name": "cutadapt",
+            "tool_version": "4.0",
+            "code_example": "# Install Cutadapt (if not already installed)\n# conda create -n cutadapt_env cutadapt=4.0 -y\n# conda activate cutadapt_env\n\n# Define input and output file paths\nINPUT_READ1=\"input_R1.fastq.gz\"\nINPUT_READ2=\"input_R2.fastq.gz\" # Required for paired-end\nOUTPUT_READ1=\"trimmed_R1.fastq.gz\"\nOUTPUT_READ2=\"trimmed_R2.fastq.gz\" # Required for paired-end\n\n# Define adapter sequences (replace with actual adapters for your library prep)\n# Example placeholder adapters (replace with actual sequences, e.g., from library prep kit or sequencing facility)\n# For Illumina, common forward adapter: AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\n# For Illumina, common reverse adapter: AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT\nADAPTER_FWD=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\"\nADAPTER_REV=\"AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT\"\n\n# Run Cutadapt for paired-end reads\ncutadapt -a \"${ADAPTER_FWD}\" -A \"${ADAPTER_REV}\" \\\n         -o \"${OUTPUT_READ1}\" -p \"${OUTPUT_READ2}\" \\\n         \"${INPUT_READ1}\" \"${INPUT_READ2}\" \\\n         --minimum-length 15 \\\n         --quality-cutoff 20 \\\n         --trim-n\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 2,
+            "description": "align to genome using bowtie2 or bwa-mem",
+            "tool_name": "Bowtie2",
+            "tool_version": "2.4.5",
+            "code_example": "# Install Bowtie2 (if not already installed)\n# conda install -c bioconda bowtie2\n\n# Example: Build Bowtie2 index (if not already available)\n# Replace 'path/to/genome.fa' with your reference genome FASTA file (e.g., hg38.fa)\n# bowtie2-build path/to/genome.fa path/to/genome_index\n\n# Align reads to the genome using Bowtie2\n# Replace 'path/to/genome_index' with the path to your Bowtie2 index (e.g., hg38_index)\n# Replace 'path/to/reads.fastq.gz' with your input FASTQ file (e.g., sample_R1.fastq.gz for single-end)\n# Replace 'output_aligned.sam' with your desired output SAM file name\n# Using common parameters for single-end reads and 8 threads.\n# For paired-end reads, use -1 <reads_1.fastq.gz> -2 <reads_2.fastq.gz> instead of -U.\n\nbowtie2 -x path/to/genome_index -U path/to/reads.fastq.gz -S output_aligned.sam --threads 8",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie2"
+        },
+        {
+            "step_order": 3,
+            "description": "generate count tables along reporter sequence using Pysamstats",
+            "tool_name": "Pysamstats",
+            "tool_version": "1.1.2",
+            "code_example": "# Install pysamstats if not already installed\n# pip install pysamstats\n\n# Define input and output files\nINPUT_BAM=\"aligned_reads.bam\" # Placeholder for the input alignment file\nREPORTER_BED=\"reporter_sequences.bed\" # Placeholder for the BED file defining reporter sequences\nOUTPUT_COUNTS=\"reporter_counts.tsv\"\nREFERENCE_FASTA=\"GRCh38.p14.genome.fa\" # Placeholder for the latest human reference genome FASTA\n\n# Generate count tables (e.g., coverage) along reporter sequences using pysamstats\n# The --type parameter can be adjusted based on the specific \"count\" desired (e.g., coverage, reads, gc, tlen, etc.)\n# 'coverage' is a common and reasonable default for \"generate count tables along reporter sequence\".\npysamstats --type coverage --fasta \"${REFERENCE_FASTA}\" --regions \"${REPORTER_BED}\" \"${INPUT_BAM}\" > \"${OUTPUT_COUNTS}\"",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "remove adapter with Cutadapt\nalign to genome using bowtie2 or bwa-mem\ngenerate count tables along reporter sequence using Pysamstats\nAssembly: 6X MS2 and 6X PP7 stem-loop-bearing mRNAs (alternating):  6X MS2 and 6X PP7 alternating and 50 bp apart mRNA.fa, 6X MS2 and 6X PP7 alternating and 50 bp apart mRNA features.txt\nAssembly: 2X MS2 and 2X PP7 stem-loop-bearing mRNAs (alternating):  2X MS2 and 2X PP7 alternating and 50 bp apart mRNA.fa, 2X MS2 and 2X PP7 alternating and 50 bp apart mRNA features.txt\nAssembly: 2X MS2 and 2X PP7 stem-loop-bearing mRNAs (50bp apart):  2X MS2 (50 bp apart)-350 bp-2X PP7 (50 bp apart) mRNA.fa, 2X MS2 (50 bp apart)-350 bp-2X PP7 (50 bp apart) mRNA features.txt\nSupplementary files format and content: count tables with called edits along reporter sequences",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

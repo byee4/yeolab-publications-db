@@ -1,61 +1,61 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "First, adapter trimming was performed with\u00c2 cutadapt\u00c2 (v1.14).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Next, reads were mapped with STAR (v2.4.0i) against a database of repetitive elements, with mapping reads discarded from further analysis.",
-      "tool_name": "STAR",
-      "tool_version": "2.4.0i",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Remaining reads were then mapped to the mouse genome (mm10) with STAR (v2.4.0i)",
-      "tool_name": "STAR",
-      "tool_version": "2.4.0i",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Stranded reads mapping to GENCODE (vM20) genes were quantified with featureCounts (subread-1.6.4).",
-      "tool_name": "featureCounts",
-      "tool_version": "1.6.4",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Mitochondrial genes were discarded, and only genes with at least 0.5 reads per million across all datasets were kept for further analysis.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Differential expression in polysome versus input was quantified with edgeR (v3.26.8) with dispersion = 0.06 estimated from the subset of experiments with multiple replicates.",
-      "tool_name": "edgeR",
-      "tool_version": "3.26.8",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "First, adapter trimming was performed with\u00c2\u00a0cutadapt\u00c2\u00a0(v1.14).\nNext, reads were mapped with STAR (v2.4.0i) against a database of repetitive elements, with mapping reads discarded from further analysis.\nRemaining reads were then mapped to the mouse genome (mm10) with STAR (v2.4.0i)\nStranded reads mapping to GENCODE (vM20) genes were quantified with featureCounts (subread-1.6.4). Mitochondrial genes were discarded, and only genes with at least 0.5 reads per million across all datasets were kept for further analysis.\nDifferential expression in polysome versus input was quantified with edgeR (v3.26.8) with dispersion = 0.06 estimated from the subset of experiments with multiple replicates.\nGenome_build: mm10\nSupplementary_files_format_and_content: EdgeR output files (*.txt.gz*) contain gene identifier, log(fold-change in polysome versus input), log(counts per million), and p-value (polysome versus input)",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "First, adapter trimming was performed with\u00c2 cutadapt\u00c2 (v1.14).",
+            "tool_name": "cutadapt",
+            "tool_version": "1.14",
+            "code_example": "# Install cutadapt if not already installed\n# conda install -c bioconda cutadapt=1.14\n\n# Example command for adapter trimming with cutadapt.\n# The specific adapter sequence(s) and input/output filenames were not provided in the description.\n# Replace 'ADAPTER_SEQUENCE' with the actual adapter sequence(s) used (e.g., Illumina universal adapter).\n# Replace 'input.fastq.gz' with your input FASTQ file.\n# Replace 'trimmed.fastq.gz' with your desired output FASTQ file.\n# For paired-end reads, use -A for the reverse complement adapter and -o/-p for paired outputs.\ncutadapt -a ADAPTER_SEQUENCE -o trimmed.fastq.gz input.fastq.gz",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 2,
+            "description": "Next, reads were mapped with STAR (v2.4.0i) against a database of repetitive elements, with mapping reads discarded from further analysis.",
+            "tool_name": "STAR",
+            "tool_version": "2.4.0i",
+            "code_example": "# Install STAR (example, uncomment if needed)\n# conda install -c bioconda star=2.4.0i\n\n# Define variables\n# Replace with your actual input FASTQ files\nINPUT_R1=\"input_reads_R1.fastq.gz\"\nINPUT_R2=\"input_reads_R2.fastq.gz\" # Set to empty string if single-end: INPUT_R2=\"\"\n\n# Replace with the path to your STAR-indexed repetitive elements database\nSTAR_INDEX=\"path/to/repetitive_elements_STAR_index\"\n\nOUTPUT_DIR=\"star_repetitive_mapping_output\"\n\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run STAR to map against repetitive elements.\n# The key here is that reads mapping to these elements are 'discarded from further analysis'.\n# This implies we are either interested in the unmapped reads for downstream, or simply performing\n# this mapping as a filtering step and the output BAM itself is not used for gene quantification.\n# We will output both mapped BAM and unmapped FASTQ for flexibility.\n# Parameters are set to be permissive for mapping to repetitive elements (e.g., allowing multiple alignments).\nSTAR --genomeDir \"${STAR_INDEX}\" \\\n     --readFilesIn \"${INPUT_R1}\" ${INPUT_R2:+\"${INPUT_R2}\"} \\\n     --runThreadN 8 \\\n     --outFileNamePrefix \"${OUTPUT_DIR}/\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outReadsUnmapped Fastx \\\n     --outFilterMultimapNmax 100 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterScoreMinOverLread 0 \\\n     --outFilterMatchNminOverLread 0 \\\n     --alignIntronMax 1 \\\n     --alignMatesGapMax 1000000 \\\n     --alignSJDBoverhangMin 1000000 \\\n     --alignSJoverhangMin 1000000 \\\n     --outSAMattributes All \\\n     --outSAMunmapped Within \\\n     --outSAMprimaryFlag AllBestScore \\\n     --outSAMmapqUnique 255\n\n# After this step, the reads in ${OUTPUT_DIR}/unmapped_to_repetitive_R1.fastq.gz (and R2 if paired-end)\n# would be considered for 'further analysis', while the mapped reads in ${OUTPUT_DIR}/Aligned.sortedByCoordinate.out.bam\n# are effectively 'discarded' for the main analysis pipeline (e.g., gene expression quantification).",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "Remaining reads were then mapped to the mouse genome (mm10) with STAR (v2.4.0i)",
+            "tool_name": "STAR",
+            "tool_version": "2.4.0i",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star=2.4.0i\n\n# Define variables\nGENOME_DIR=\"/path/to/STAR_index/mm10\"\nREADS_R1=\"sample_R1.fastq.gz\"\nREADS_R2=\"sample_R2.fastq.gz\" # Assuming paired-end reads; adjust if single-end\nOUTPUT_PREFIX=\"sample_aligned_\"\nTHREADS=8\n\n# Create genome index if it doesn't exist (this is a one-time step per genome version)\n# STAR --runThreadN ${THREADS} --runMode genomeGenerate --genomeDir ${GENOME_DIR} \\\n#      --genomeFastaFiles /path/to/mm10.fa --sjdbGTFfile /path/to/mm10.gtf\n\n# Map reads to the mouse genome (mm10)\nSTAR --runThreadN ${THREADS} \\\n     --genomeDir ${GENOME_DIR} \\\n     --readFilesIn ${READS_R1} ${READS_R2} \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix ${OUTPUT_PREFIX} \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes All \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 10 \\\n     --alignIntronMin 20 --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --quantMode GeneCounts # Optional: output gene counts\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 4,
+            "description": "Stranded reads mapping to GENCODE (vM20) genes were quantified with featureCounts (subread-1.6.4).",
+            "tool_name": "featureCounts",
+            "tool_version": "1.6.4",
+            "code_example": "# Install featureCounts (part of subread package)\n# conda install -c bioconda subread=1.6.4\n\n# Download GENCODE vM20 GTF annotation file\n# wget -O gencode.vM20.annotation.gtf.gz ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M20/gencode.vM20.annotation.gtf.gz\n# gunzip gencode.vM20.annotation.gtf.gz\n\n# Run featureCounts to quantify stranded reads against GENCODE vM20 genes\n# -p: Assume paired-end reads (common for RNA-seq, adjust if single-end)\n# -s 2: Assume reverse stranded library (e.g., Illumina TruSeq stranded, adjust to 1 for forward or 0 for unstranded if different)\n# -a: Specify the GTF annotation file\n# -o: Specify the output counts file\nfeatureCounts -p -s 2 -a gencode.vM20.annotation.gtf -o gene_counts.txt input.bam",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 5,
+            "description": "Mitochondrial genes were discarded, and only genes with at least 0.5 reads per million across all datasets were kept for further analysis.",
+            "tool_name": "R (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Custom script",
+            "code_example": "# This script assumes 'gene_counts.tsv' is a tab-separated file with gene IDs as row names and sample IDs as column names.\n# It also assumes 'gene_annotations.tsv' is a tab-separated file with gene IDs and chromosome information.\n# The output will be 'filtered_gene_counts.tsv'.\n\n# Example: Create dummy input files for demonstration purposes (uncomment to run with dummy data)\n# echo -e \"gene_id\\tsample1\\tsample2\\tsample3\" > gene_counts.tsv\n# echo -e \"gene1\\t1000\\t1200\\t1100\" >> gene_counts.tsv\n# echo -e \"gene2\\t50\\t60\\t55\" >> gene_counts.tsv\n# echo -e \"gene_mito1\\t10000\\t11000\\t10500\" >> gene_counts.tsv\n# echo -e \"gene3\\t0\\t1\\t0\" >> gene_counts.tsv\n# echo -e \"gene4\\t50\\t60\\t70\" >> gene_counts.tsv\n# echo -e \"gene_mito2\\t20000\\t21000\\t20500\" >> gene_counts.tsv\n# echo -e \"gene5\\t100\\t120\\t110\" >> gene_counts.tsv\n# echo -e \"gene6\\t0\\t0\\t0\" >> gene_counts.tsv\n\n# echo -e \"gene_id\\tchromosome\" > gene_annotations.tsv\n# echo -e \"gene1\\tchr1\" >> gene_annotations.tsv\n# echo -e \"gene2\\tchr2\" >> gene_annotations.tsv\n# echo -e \"gene_mito1\\tchrM\" >> gene_annotations.tsv\n# echo -e \"gene3\\tchr3\" >> gene_annotations.tsv\n# echo -e \"gene4\\tchr4\" >> gene_annotations.tsv\n# echo -e \"gene_mito2\\tMT\" >> gene_annotations.tsv\n# echo -e \"gene5\\tchr5\" >> gene_annotations.tsv\n# echo -e \"gene6\\tchr6\" >> gene_annotations.tsv\n\n# R script for filtering gene expression data\ncat << 'EOF' > filter_expression.R\n# Load necessary packages (if not installed, uncomment and run BiocManager::install() or install.packages())\n# if (!requireNamespace(\"BiocManager\", quietly = TRUE))\n#     install.packages(\"BiocManager\")\n# BiocManager::install(\"data.table\") # For faster reading/writing if needed\n\n# Read gene counts matrix\n# Assumes gene IDs are in the first column and sample counts in subsequent columns\ncounts_df <- read.delim(\"gene_counts.tsv\", row.names = 1, check.names = FALSE)\n\n# Read gene annotations\n# Assumes gene IDs are in the first column and chromosome information in a 'chromosome' column\ngene_annotations <- read.delim(\"gene_annotations.tsv\", row.names = 1, check.names = FALSE)\n\n# Ensure annotations match counts matrix row names\ngene_annotations <- gene_annotations[rownames(counts_df), , drop = FALSE]\n\n# 1. Discard mitochondrial genes\n# Identify mitochondrial genes (case-insensitive for 'chrM' or 'MT' in the chromosome column)\nmito_gene_ids <- rownames(gene_annotations)[grepl(\"chrM|MT\", gene_annotations$chromosome, ignore.case = TRUE)]\nmessage(paste(\"Identified\", length(mito_gene_ids), \"mitochondrial genes.\"))\n\n# Filter out mitochondrial genes from the counts matrix\ncounts_filtered_mito <- counts_df[!rownames(counts_df) %in% mito_gene_ids, , drop = FALSE]\nmessage(paste(\"Genes after discarding mitochondrial:\", nrow(counts_filtered_mito)))\n\n# Check if any genes remain after mitochondrial filtering\nif (nrow(counts_filtered_mito) == 0) {\n    warning(\"No genes remaining after mitochondrial filtering. Outputting an empty file.\")\n    write.table(data.frame(), \"filtered_gene_counts.tsv\", sep = \"\\t\", quote = FALSE, col.names = NA)\n    quit(save = \"no\")\n}\n\n# 2. Calculate Reads Per Million (RPM) for remaining genes\n# Calculate total reads per sample from the filtered counts\ntotal_reads_per_sample <- colSums(counts_filtered_mito)\n\n# Handle samples with zero total reads to avoid division by zero (set to 1 to make RPM 0 for all genes in that sample)\ntotal_reads_per_sample[total_reads_per_sample == 0] <- 1\n\n# Calculate RPM matrix\nrpm_matrix <- sweep(counts_filtered_mito, 2, total_reads_per_sample, FUN = \"/\") * 1e6\n\n# 3. Keep only genes with at least 0.5 RPM across ALL datasets\n# Apply 'all' function to check if RPM is >= 0.5 for every sample for each gene\ngenes_to_keep_idx <- apply(rpm_matrix, 1, function(row) all(row >= 0.5))\nfinal_counts_matrix <- counts_filtered_mito[genes_to_keep_idx, , drop = FALSE]\nmessage(paste(\"Genes after RPM filtering:\", nrow(final_counts_matrix)))\n\n# Save the final filtered counts matrix\nwrite.table(final_counts_matrix, \"filtered_gene_counts.tsv\", sep = \"\\t\", quote = FALSE, col.names = NA)\nEOF\n\n# Execute the R script\nRscript filter_expression.R",
+            "code_language": "bash",
+            "github_url": "https://f1000research.com/articles/4-1070/v2"
+        },
+        {
+            "step_order": 6,
+            "description": "Differential expression in polysome versus input was quantified with edgeR (v3.26.8) with dispersion = 0.06 estimated from the subset of experiments with multiple replicates.",
+            "tool_name": "edgeR",
+            "tool_version": "3.26.8",
+            "code_example": "# Install edgeR (if not already installed)\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\"); BiocManager::install(\"edgeR\")'\n# conda install -c bioconda bioconductor-edger\n\n# Create a dummy count matrix for demonstration purposes.\n# In a real scenario, this 'counts.tsv' would be generated by a quantification tool\n# like featureCounts, HTSeq, or Salmon/Kallisto followed by tximport.\ncat << 'EOF' > counts.tsv\nGene\tPolysome_Rep1\tPolysome_Rep2\tInput_Rep1\tInput_Rep2\nGeneA\t100\t120\t50\t60\nGeneB\t20\t25\t80\t90\nGeneC\t500\t550\t480\t520\nGeneD\t10\t12\t5\t6\nGeneE\t300\t310\t320\t330\nEOF\n\n# R script for differential expression analysis with edgeR\ncat << 'EOF' > run_edger.R\nlibrary(edgeR)\n\n# Load count data\n# Assuming counts.tsv has genes as rows and samples as columns, with the first column as gene names\ncounts_data <- read.delim(\"counts.tsv\", row.names = 1)\n\n# Define experimental groups\n# Adjust sample names and groups based on your actual data structure\nsamples <- colnames(counts_data)\ngroup <- factor(c(\"Polysome\", \"Polysome\", \"Input\", \"Input\")) # Assuming 2 polysome and 2 input samples\n\n# Create a DGEList object\ndge <- DGEList(counts=counts_data, group=group)\n\n# Filter out lowly expressed genes (optional but highly recommended)\n# This removes genes that are unlikely to be differentially expressed and improves statistical power.\nkeep <- filterByExpr(dge)\ndge <- dge[keep,,keep.lib.sizes=FALSE]\n\n# Normalize library sizes using TMM method\ndge <- calcNormFactors(dge)\n\n# Estimate dispersion\n# The description states \"dispersion = 0.06 estimated from the subset of experiments with multiple replicates.\"\n# This implies that the standard edgeR dispersion estimation process was performed, and 0.06 was the resulting\n# common dispersion value (or a value derived from it). The estimateDisp function performs this estimation.\n# If a fixed dispersion value was to be explicitly used, it could be set as: dge$common.dispersion <- 0.06\ndge <- estimateDisp(dge)\n\n# Print estimated common dispersion (for verification)\ncat(\"Estimated common dispersion: \", dge$common.dispersion, \"\\n\")\n\n# Fit a GLM (Generalized Linear Model)\ndesign <- model.matrix(~group)\nfit <- glmFit(dge, design)\n\n# Perform likelihood ratio test for differential expression (Polysome vs Input)\n# 'coef=2' typically corresponds to the second coefficient in the design matrix,\n# which represents the log-fold-change for the 'Polysome' group relative to the reference 'Input' group.\nlrt <- glmLRT(fit, coef=2)\n\n# Get top differentially expressed genes\nresults <- topTags(lrt, n=Inf)$table\n\n# Save results to a CSV file\nwrite.csv(results, \"differential_expression_results.csv\", row.names = TRUE)\n\ncat(\"Differential expression analysis complete. Results saved to differential_expression_results.csv\\n\")\nEOF\n\n# Execute the R script\nRscript run_edger.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/edgeR.html"
+        }
+    ],
+    "raw_text": "First, adapter trimming was performed with\u00c2\u00a0cutadapt\u00c2\u00a0(v1.14).\nNext, reads were mapped with STAR (v2.4.0i) against a database of repetitive elements, with mapping reads discarded from further analysis.\nRemaining reads were then mapped to the mouse genome (mm10) with STAR (v2.4.0i)\nStranded reads mapping to GENCODE (vM20) genes were quantified with featureCounts (subread-1.6.4). Mitochondrial genes were discarded, and only genes with at least 0.5 reads per million across all datasets were kept for further analysis.\nDifferential expression in polysome versus input was quantified with edgeR (v3.26.8) with dispersion = 0.06 estimated from the subset of experiments with multiple replicates.\nGenome_build: mm10\nSupplementary_files_format_and_content: EdgeR output files (*.txt.gz*) contain gene identifier, log(fold-change in polysome versus input), log(counts per million), and p-value (polysome versus input)",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

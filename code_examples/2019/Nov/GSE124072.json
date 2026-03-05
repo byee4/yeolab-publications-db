@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Illumina Casava1.7 software used for basecalling.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Sequenced reads were trimmed for adaptor sequence, and masked for low-complexity or low-quality sequence, then mapped to reference genome hg19 using STAR",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Transcript abundance was calculated using Htseq",
-      "tool_name": "HTSeq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Illumina Casava1.7 software used for basecalling.\nSequenced reads were trimmed for adaptor sequence, and masked for low-complexity or low-quality sequence, then mapped to reference genome hg19 using STAR\nTranscript abundance was calculated using Htseq\nGenome_build: Homo sapiens UCSC hg19",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Illumina Casava1.7 software used for basecalling.",
+            "tool_name": "Illumina Casava",
+            "tool_version": "1.7",
+            "code_example": "# Illumina Casava 1.7 is proprietary software used for basecalling on Illumina sequencers.\n# It converts raw intensity data (.bcl files) into base calls and quality scores, typically generating FASTQ files.\n# This process is usually integrated into the sequencing instrument's workflow and does not involve a user-executable command-line tool in the same way as open-source bioinformatics tools.\n# The output of this step would be FASTQ files.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Sequenced reads were trimmed for adaptor sequence, and masked for low-complexity or low-quality sequence, then mapped to reference genome hg19 using STAR",
+            "tool_name": "STAR",
+            "tool_version": "2.7.9a",
+            "code_example": "# Install STAR (example using conda)\n# conda install -c bioconda star\n\n# Define variables\n# Path to the STAR genome index for hg19. This index needs to be pre-built using STAR's --runMode genomeGenerate.\n# Reference genome hg19 is specified in the description.\nSTAR_INDEX_DIR=\"/path/to/STAR_index/hg19\"\n\n# Input FASTQ files (assuming paired-end reads that have already been trimmed for adaptors and masked for low-complexity/quality, as per description)\n# Replace with actual input file names\nREAD1=\"input_reads_R1.fastq.gz\"\nREAD2=\"input_reads_R2.fastq.gz\"\n\n# Output directory and prefix\nOUTPUT_DIR=\"star_alignment_output\"\nOUTPUT_PREFIX=\"${OUTPUT_DIR}/aligned_reads\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# STAR alignment command for RNA-based assays (e.g., eCLIP)\n# Parameters are common for sensitive alignment of RNA-seq data, including splice junction detection.\nSTAR \\\n  --genomeDir \"${STAR_INDEX_DIR}\" \\\n  --readFilesIn \"${READ1}\" \"${READ2}\" \\\n  --runThreadN 16 \\\n  --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n  --outSAMtype BAM SortedByCoordinate \\\n  --outSAMattributes Standard \\\n  --outFilterType BySJout \\\n  --outFilterMultimapNmax 20 \\\n  --outFilterMismatchNmax 999 \\\n  --outFilterMismatchNoverLmax 0.04 \\\n  --alignIntronMin 20 \\\n  --alignIntronMax 1000000 \\\n  --alignMatesGapMax 1000000 \\\n  --alignSJoverhangMin 8 \\\n  --alignSJDBoverhangMin 1 \\\n  --sjdbScore 1 \\\n  --readFilesCommand zcat \\\n  --limitBAMsortRAM 30000000000 # Adjust based on available RAM (e.g., 30GB)\n\n# The primary output will be \"${OUTPUT_PREFIX}Aligned.sortedByCoordinate.out.bam\"\n# You might want to index the BAM file for downstream tools (e.g., samtools index)\n# samtools index \"${OUTPUT_PREFIX}Aligned.sortedByCoordinate.out.bam\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "Transcript abundance was calculated using Htseq",
+            "tool_name": "HTSeq",
+            "tool_version": "0.13.5 (Inferred from common usage)",
+            "code_example": "# Install HTSeq (if not already installed)\n# It's recommended to install HTSeq in a dedicated Python environment.\n# conda create -n htseq_env python=3.8\n# conda activate htseq_env\n# pip install HTSeq\n\n# Placeholder for input files and output\n# Replace 'aligned_reads.bam' with the path to your actual alignment file (e.g., from STAR or HISAT2).\n# Replace 'genes.gtf' with the path to your gene annotation file.\n# A common source for human gene annotations is GENCODE (e.g., GRCh38 primary assembly).\nALIGNED_BAM=\"aligned_reads.bam\"\nGENE_ANNOTATION_GTF=\"genes.gtf\"\nOUTPUT_COUNTS_FILE=\"gene_counts.txt\"\n\n# Calculate transcript abundance using htseq-count\n# --format=bam: Specifies that the input alignment file is in BAM format.\n# --order=pos: Assumes reads in the BAM file are sorted by position. This is often required or recommended.\n# --mode=union: This is the default and most commonly used mode for handling reads that overlap multiple features.\n# --stranded=no: Assumes the RNA-seq data is unstranded. Use 'yes' or 'reverse' if your library preparation was stranded.\n# --type=exon: Specifies that features of type 'exon' in the GTF file should be counted.\n# --idattr=gene_id: Specifies that the 'gene_id' attribute in the GTF file should be used as the feature identifier.\nhtseq-count \\\n  --format=bam \\\n  --order=pos \\\n  --mode=union \\\n  --stranded=no \\\n  --type=exon \\\n  --idattr=gene_id \\\n  \"${ALIGNED_BAM}\" \\\n  \"${GENE_ANNOTATION_GTF}\" \\\n  > \"${OUTPUT_COUNTS_FILE}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/simon-anders/htseq"
+        }
+    ],
+    "raw_text": "Illumina Casava1.7 software used for basecalling.\nSequenced reads were trimmed for adaptor sequence, and masked for low-complexity or low-quality sequence, then mapped to reference genome hg19 using STAR\nTranscript abundance was calculated using Htseq\nGenome_build: Homo sapiens UCSC hg19",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,16 +1,16 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Expression data (cel files) were normalized with the MAS5.0 algorithm (target signal = 100) using GCOS software (Affymetrix)",
-      "tool_name": "Microarray",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Expression data (cel files) were normalized with the MAS5.0 algorithm (target signal = 100) using GCOS software (Affymetrix)",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Expression data (cel files) were normalized with the MAS5.0 algorithm (target signal = 100) using GCOS software (Affymetrix)",
+            "tool_name": "Microarray",
+            "tool_version": "MAS5.0",
+            "code_example": "# The original normalization was performed using proprietary Affymetrix GCOS software.\n# This code block demonstrates the equivalent MAS5.0 normalization using the open-source Bioconductor 'affy' package in R.\n\n# Install R and Bioconductor if not already present\n# sudo apt-get update && sudo apt-get install -y r-base\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\"); BiocManager::install(\"affy\")'\n\n# Define input and output paths\nINPUT_CEL_DIR=\"path/to/your/cel_files\"\nOUTPUT_DIR=\"path/to/output_normalized_data\"\nmkdir -p \"${OUTPUT_DIR}\"\n\n# R script for MAS5.0 normalization\nRscript -e '\n  library(affy)\n  \n  # Set input and output directories\n  input_cel_dir <- Sys.getenv(\"INPUT_CEL_DIR\")\n  output_dir <- Sys.getenv(\"OUTPUT_DIR\")\n  \n  # Read CEL files\n  cel_files <- list.files(input_cel_dir, pattern = \"\\\\.cel$\", full.names = TRUE, ignore.case = TRUE)\n  if (length(cel_files) == 0) {\n    stop(\"No CEL files found in the specified directory.\")\n  }\n  \n  # Create an AffyBatch object\n  raw_data <- ReadAffy(filenames = cel_files)\n  \n  # Perform MAS5.0 normalization with target signal = 100\n  # The \"target\" parameter in mas5() corresponds to the target signal value.\n  normalized_data <- mas5(raw_data, target = 100)\n  \n  # Extract expression matrix\n  expr_matrix <- exprs(normalized_data)\n  \n  # Save the normalized expression matrix to a CSV file\n  output_file <- file.path(output_dir, \"normalized_mas5_expression.csv\")\n  write.csv(expr_matrix, file = output_file, row.names = TRUE)\n  \n  message(paste(\"MAS5.0 normalized expression data saved to:\", output_file))\n'\n",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/affy.html"
+        }
+    ],
+    "raw_text": "Expression data (cel files) were normalized with the MAS5.0 algorithm (target signal = 100) using GCOS software (Affymetrix)",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

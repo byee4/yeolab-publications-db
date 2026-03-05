@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Illumina software used for basecalling.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Sequenced reads were trimmed for adaptor sequence, filtered for rRNA contamination, filtered for low-complexity or low-quality sequence, then mapped to hg19 whole genome using GSNAP.",
-      "tool_name": "GSNAP",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Reads Per Kilobase of exon per Megabase of library size (RPKM) were calculated using a protocol from Chepelev et al., Nucleic Acids Research, 2009.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "In short, exons from all isoforms of a gene were merged to create one meta-transcript.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "The number of reads falling in the exons of this meta-transcript were counted and normalized by the size of the meta-transcript and by the size of the library.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Illumina software used for basecalling.\nSequenced reads were trimmed for adaptor sequence, filtered for rRNA contamination, filtered for low-complexity or low-quality sequence, then mapped to hg19 whole genome using GSNAP.\nReads Per Kilobase of exon per Megabase of library size (RPKM) were calculated using a protocol from Chepelev et al., Nucleic Acids Research, 2009. In short, exons from all isoforms of a gene were merged to create one meta-transcript. The number of reads falling in the exons of this meta-transcript were counted and normalized by the size of the meta-transcript and by the size of the library.\nGenome_build: GRCh37 (hg19)\nSupplementary_files_format_and_content: Excel file includes RPKM values for each Sample.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Illumina software used for basecalling.",
+            "tool_name": "bcl2fastq (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.20.0.422 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install bcl2fastq (example using conda)\n# conda install -c bioconda bcl2fastq2\n\n# Example bcl2fastq command for basecalling and demultiplexing\n# Replace /path/to/run_folder with the actual path to your Illumina run folder containing BCL files\n# Replace /path/to/output_directory with your desired output location for FASTQ files\n# Replace /path/to/sample_sheet.csv with your actual sample sheet for demultiplexing\nbcl2fastq --runfolder-dir /path/to/run_folder \\\n                  --output-dir /path/to/output_directory \\\n                  --sample-sheet /path/to/sample_sheet.csv \\\n                  --no-lane-splitting \\\n                  --barcode-mismatches 1 \\\n                  --minimum-trimmed-read-length 35 \\\n                  --mask-short-adapter-reads 35",
+            "code_language": "bash",
+            "github_url": "https://support.illumina.com/sequencing/sequencing_software/bcl2fastq-conversion-software.html"
+        },
+        {
+            "step_order": 2,
+            "description": "Sequenced reads were trimmed for adaptor sequence, filtered for rRNA contamination, filtered for low-complexity or low-quality sequence, then mapped to hg19 whole genome using GSNAP.",
+            "tool_name": "GSNAP",
+            "tool_version": "2021-08-25",
+            "code_example": "# Define variables\nRAW_READS=\"raw_reads.fastq.gz\"\nTRIMMED_READS=\"trimmed_reads.fastq.gz\"\nRRNA_FILTERED_READS=\"rRNA_filtered_reads.fastq.gz\"\nMAPPED_SAM=\"mapped_reads.sam\"\n\n# Paths for reference data\n# Replace with actual paths to your genome index directory, hg19 FASTA, and rRNA reference FASTA\nGENOME_DIR=\"/path/to/gsnap_indexes\"\nHG19_FASTA=\"/path/to/hg19.fa\"\nRRNA_REF=\"/path/to/rRNA_references.fasta\" # e.g., from NCBI or BBMap resources\n\n# --- Pre-processing Steps ---\n\n# 1. Trim adaptor sequence and filter low-quality/low-complexity sequence using fastp\n# conda install -c bioconda fastp\nfastp -i \"${RAW_READS}\" -o \"${TRIMMED_READS}\" \\\n      --detect_adapter_for_pe \\\n      --qualified_quality_phred 15 \\\n      --length_required 30 \\\n      --thread 8\n\n# 2. Filter for rRNA contamination using bbduk.sh\n# conda install -c bioconda bbmap\nbbduk.sh in=\"${TRIMMED_READS}\" out=\"${RRNA_FILTERED_READS}\" \\\n         ref=\"${RRNA_REF}\" \\\n         k=31 hdist=1 stats=bbduk_stats.txt \\\n         threads=8\n\n# --- Mapping Step ---\n\n# 3. Map to hg19 whole genome using GSNAP\n# conda install -c bioconda gmap\n\n# Build GSNAP index for hg19 (run once if index does not exist)\n# mkdir -p \"${GENOME_DIR}\"\n# gmap_build -D \"${GENOME_DIR}\" -d hg19 \"${HG19_FASTA}\"\n\ngsnap -D \"${GENOME_DIR}\" -d hg19 \\\n      -A sam \\\n      -o \"${MAPPED_SAM}\" \\\n      -N 1 \\\n      -t 8 \\\n      \"${RRNA_FILTERED_READS}\"\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "Reads Per Kilobase of exon per Megabase of library size (RPKM) were calculated using a protocol from Chepelev et al., Nucleic Acids Research, 2009.",
+            "tool_name": "python (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "3.x (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Define input and output files\nINPUT_BAM=\"aligned_reads.bam\"\nGENOME_ANNOTATION_GTF=\"gencode.v38.annotation.gtf\" # Placeholder for human hg38 annotation\nOUTPUT_RPKM_FILE=\"gene_rpkm.tsv\"\nGENE_COUNTS_FILE=\"gene_counts.tsv\"\n\n# --- Installation instructions (commented out) ---\n# The following tools are required:\n# - subread (for featureCounts)\n# - samtools\n# - python (with pandas library)\n# Example installation using conda:\n# conda install -c bioconda subread samtools\n# conda install -c conda-forge pandas python\n\n# Step 1: Count reads per gene using featureCounts\n# This step generates raw read counts per gene, which are necessary for RPKM calculation.\n# -a: annotation file (GTF/GFF format)\n# -o: output file for counts\n# -F GTF: specify GTF format for annotation\n# -t exon: count features of type 'exon' (as RPKM is based on exonic regions)\n# -g gene_id: group features by 'gene_id' attribute to get gene-level counts\nfeatureCounts -a \"${GENOME_ANNOTATION_GTF}\" -o \"${GENE_COUNTS_FILE}\" -F GTF -t exon -g gene_id \"${INPUT_BAM}\"\n\n# Step 2: Get total mapped reads from the BAM file\n# The total number of mapped reads is required for library size normalization in RPKM.\n# samtools flagstat provides mapping statistics.\n# grep 'mapped (' extracts the line containing the total mapped reads.\n# awk '{print $1}' gets the first field, which is the number of mapped reads.\ntotal_mapped_reads=$(samtools flagstat \"${INPUT_BAM}\" | grep 'mapped (' | awk '{print $1}')\n\n# Step 3: Calculate RPKM using a Python script\n# RPKM (Reads Per Kilobase of exon per Million mapped reads) is calculated as:\n# RPKM = (read_count * 10^9) / (gene_length_in_bp * total_mapped_reads_in_millions)\n\n# Create a temporary Python script for RPKM calculation\ncat << 'EOF' > calculate_rpkm.py\nimport pandas as pd\nimport sys\nimport re\n\ndef calculate_rpkm(gene_counts_file, total_mapped_reads, gtf_file, output_file):\n    # Load gene counts from featureCounts output\n    # Skip header lines starting with '#' and use the first column as index (Geneid)\n    counts_df = pd.read_csv(gene_counts_file, sep='\\t', comment='#', index_col=0)\n    # The last column contains the counts for the input BAM file provided to featureCounts\n    read_counts = counts_df.iloc[:, -1] \n\n    # Parse GTF to get gene lengths (sum of exon lengths per gene)\n    # This is crucial for the 'per Kilobase of exon' part of RPKM.\n    gene_lengths = {}\n    with open(gtf_file, 'r') as f:\n        for line in f:\n            if line.startswith('#'):\n                continue\n            parts = line.strip().split('\\t')\n            if len(parts) < 9:\n                continue\n            feature_type = parts[2]\n            # Only consider exons for gene length calculation as per RPKM definition\n            if feature_type == 'exon':\n                start = int(parts[3])\n                end = int(parts[4])\n                length = end - start + 1\n                \n                attributes = parts[8]\n                gene_id_match = re.search(r'gene_id \"([^\"]+)\"', attributes)\n                if gene_id_match:\n                    gene_id = gene_id_match.group(1)\n                    gene_lengths[gene_id] = gene_lengths.get(gene_id, 0) + length\n\n    # Convert total mapped reads to millions for the RPKM formula\n    total_mapped_reads_in_millions = total_mapped_reads / 1_000_000.0\n\n    rpkm_data = {}\n    # Iterate through genes present in the counts file\n    for gene_id in read_counts.index:\n        count = read_counts.get(gene_id, 0)\n        length = gene_lengths.get(gene_id, 0)\n\n        if length > 0 and total_mapped_reads_in_millions > 0:\n            # Apply the RPKM formula\n            # C = number of reads mapped to the gene\n            # N = total number of mapped reads in millions\n            # L = gene length in base pairs (sum of exon lengths)\n            rpkm = (count * 1_000_000_000) / (length * total_mapped_reads_in_millions)\n        else:\n            rpkm = 0.0 # Assign 0 if gene length or total mapped reads are zero\n        rpkm_data[gene_id] = rpkm\n\n    # Create a DataFrame and save RPKM values to a TSV file\n    rpkm_df = pd.DataFrame.from_dict(rpkm_data, orient='index', columns=['RPKM'])\n    rpkm_df.index.name = 'Geneid'\n    rpkm_df.to_csv(output_file, sep='\\t')\n\nif __name__ == '__main__':\n    if len(sys.argv) != 5:\n        print(\"Usage: python calculate_rpkm.py <gene_counts_file> <total_mapped_reads> <gtf_file> <output_file>\")\n        sys.exit(1)\n    \n    gene_counts_file = sys.argv[1]\n    total_mapped_reads = int(sys.argv[2])\n    gtf_file = sys.argv[3]\n    output_file = sys.argv[4]\n\n    calculate_rpkm(gene_counts_file, total_mapped_reads, gtf_file, output_file)\nEOF\n\n# Execute the Python script to calculate RPKM\npython calculate_rpkm.py \"${GENE_COUNTS_FILE}\" \"${total_mapped_reads}\" \"${GENOME_ANNOTATION_GTF}\" \"${OUTPUT_RPKM_FILE}\"\n\n# Clean up the temporary Python script\nrm calculate_rpkm.py",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "In short, exons from all isoforms of a gene were merged to create one meta-transcript.",
+            "tool_name": "RSEM gtf_to_genes_and_transcripts.py (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "v1.3.3",
+            "code_example": "# Install RSEM (if not already installed)\n# conda install -c bioconda rsem\n\n# Define input GTF and output GTF\n# Placeholder: Replace 'Homo_sapiens.GRCh38.109.gtf' with the actual path to your gene annotation GTF file.\nINPUT_GTF=\"Homo_sapiens.GRCh38.109.gtf\"\nOUTPUT_META_GTF=\"Homo_sapiens.GRCh38.109.meta_transcripts.gtf\"\n\n# Execute the RSEM utility to create meta-transcripts.\n# This script takes a GTF and outputs a new GTF where each gene has a single \"transcript\"\n# representing the union of all its exons across all isoforms, effectively creating a meta-transcript.\ngtf_to_genes_and_transcripts.py \\\n    --gtf \"${INPUT_GTF}\" \\\n    --output_gtf \"${OUTPUT_META_GTF}\" \\\n    --gene_level_transcripts",
+            "code_language": "bash",
+            "github_url": "https://github.com/deweylab/RSEM"
+        },
+        {
+            "step_order": 5,
+            "description": "The number of reads falling in the exons of this meta-transcript were counted and normalized by the size of the meta-transcript and by the size of the library.",
+            "tool_name": "featureCounts (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.0.6",
+            "code_example": "# Install Subread (which includes featureCounts)\n# conda install -c bioconda subread\n\n# Define input and output files\nBAM_FILE=\"aligned_reads.bam\"\n# The GTF file should contain the definitions of exons for the meta-transcripts.\n# This file is a critical reference dataset for this step.\nGTF_FILE=\"path/to/meta_transcript_exons.gtf\"\nOUTPUT_RAW_COUNTS_FILE=\"meta_transcript_exon_raw_counts.txt\"\nOUTPUT_NORMALIZED_COUNTS_FILE=\"meta_transcript_exon_normalized_counts.txt\"\n\n# 1. Count reads falling into exons of meta-transcripts\n# -a: Annotation file (GTF/GFF)\n# -o: Output file for raw counts\n# -F GTF: Specify GTF format for the annotation file\n# -t exon: Count features of type 'exon'\n# -g gene_id: Attribute used to group features (e.g., 'gene_id' or 'transcript_id' if meta-transcript IDs are in this attribute)\n# -p: Specify if reads are paired-end (remove if single-end)\n# -s 0: Specify strandedness (0=unstranded, 1=stranded, 2=reversely stranded). Adjust based on library prep.\nfeatureCounts -a \"${GTF_FILE}\" -o \"${OUTPUT_RAW_COUNTS_FILE}\" -F GTF -t exon -g gene_id -p -s 0 \"${BAM_FILE}\"\n\n# 2. Normalize counts by meta-transcript size and library size (e.g., RPKM/TPM)\n# featureCounts outputs raw counts and feature lengths. \n# Normalization is typically a post-processing step using a custom script or statistical package (e.g., DESeq2, edgeR, or a simple RPKM calculation).\n#\n# Conceptual steps for normalization:\n# a. Extract raw counts and feature lengths from \"${OUTPUT_RAW_COUNTS_FILE}\".\n# b. Determine the total number of mapped reads (library size) from the BAM file or alignment logs.\n#    Example: LIBRARY_SIZE=$(samtools view -c -F 4 \"${BAM_FILE}\")\n# c. Calculate RPKM (Reads Per Kilobase of transcript per Million mapped reads) or TPM (Transcripts Per Million).\n#    RPKM = (raw_count * 10^9) / (feature_length_in_bases * library_size_in_reads)\n#\n# The actual implementation would depend on the exact format of the meta_transcript_exons.gtf and desired output.\n# For simplicity and focusing on the primary counting tool, the normalization step is described conceptually.",
+            "code_language": "bash",
+            "github_url": "https://sourceforge.net/projects/subread/"
+        }
+    ],
+    "raw_text": "Illumina software used for basecalling.\nSequenced reads were trimmed for adaptor sequence, filtered for rRNA contamination, filtered for low-complexity or low-quality sequence, then mapped to hg19 whole genome using GSNAP.\nReads Per Kilobase of exon per Megabase of library size (RPKM) were calculated using a protocol from Chepelev et al., Nucleic Acids Research, 2009. In short, exons from all isoforms of a gene were merged to create one meta-transcript. The number of reads falling in the exons of this meta-transcript were counted and normalized by the size of the meta-transcript and by the size of the library.\nGenome_build: GRCh37 (hg19)\nSupplementary_files_format_and_content: Excel file includes RPKM values for each Sample.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

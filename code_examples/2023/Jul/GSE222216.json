@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Transcript abundance was quantified using Salmon [v1.3.0] with GENCODE v37 annotation.",
-      "tool_name": "Salmon",
-      "tool_version": "1.3.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Gene level quantification was performed using tximeta [v1.8.4].",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Differential gene expression was analyzed by DESeq2 [v1.30.1]",
-      "tool_name": "DESeq2",
-      "tool_version": "1.30.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "processed data files format and content: gene counts",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Transcript abundance was quantified using Salmon [v1.3.0] with GENCODE v37 annotation.\nGene level quantification was performed using tximeta [v1.8.4].\nDifferential gene expression was analyzed by DESeq2 [v1.30.1]\ngenome build: HG19\nprocessed data files format and content: gene counts",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Transcript abundance was quantified using Salmon [v1.3.0] with GENCODE v37 annotation.",
+            "tool_name": "Salmon",
+            "tool_version": "1.3.0",
+            "code_example": "# Install Salmon (if not already installed)\n# conda install -c bioconda salmon=1.3.0\n\n# --- Reference Data Setup ---\n# Create a directory for reference data\nmkdir -p reference_data\n\n# Define paths for GENCODE v37 annotation\nGENCODE_TRANSCRIPTS_FASTA=\"reference_data/gencode.v37.transcripts.fa\"\nSALMON_INDEX_DIR=\"gencode_v37_salmon_index\"\n\n# Download GENCODE v37 human transcripts FASTA (required for Salmon indexing)\n# Source: ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_37/gencode.v37.transcripts.fa.gz\nif [ ! -f \"${GENCODE_TRANSCRIPTS_FASTA}\" ]; then\n    echo \"Downloading GENCODE v37 transcripts FASTA...\"\n    wget -O \"${GENCODE_TRANSCRIPTS_FASTA}.gz\" ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_37/gencode.v37.transcripts.fa.gz\n    gunzip -f \"${GENCODE_TRANSCRIPTS_FASTA}.gz\"\nfi\n\n# --- Salmon Indexing ---\n# Build Salmon index using GENCODE v37 transcripts\n# The --gencode flag is recommended for GENCODE annotations\nif [ ! -d \"${SALMON_INDEX_DIR}\" ]; then\n    echo \"Building Salmon index...\"\n    salmon index -t \"${GENCODE_TRANSCRIPTS_FASTA}\" -i \"${SALMON_INDEX_DIR}\" --gencode\nfi\n\n# --- Salmon Quantification ---\n# Define input and output paths\n# Replace these with your actual input FASTQ files and desired output directory\nREADS_R1=\"raw_data/sample_R1.fastq.gz\" # Placeholder for forward reads\nREADS_R2=\"raw_data/sample_R2.fastq.gz\" # Placeholder for reverse reads (if paired-end)\nOUTPUT_DIR=\"salmon_quant_output\"\n\n# Create a directory for raw data (placeholder)\nmkdir -p raw_data\n# Example: touch raw_data/sample_R1.fastq.gz raw_data/sample_R2.fastq.gz\n\necho \"Running Salmon quantification...\"\n# Salmon quantification command\n# -i: path to the Salmon index\n# -l A: automatically detect library type (e.g., strandedness)\n# -1: path to forward reads (gzipped FASTQ)\n# -2: path to reverse reads (gzipped FASTQ) - omit for single-end\n# --gcBias: enable GC bias correction (recommended for RNA-seq)\n# --seqBias: enable sequence-specific bias correction (recommended for RNA-seq)\n# -o: output directory\nsalmon quant -i \"${SALMON_INDEX_DIR}\" \\\n             -l A \\\n             -1 \"${READS_R1}\" \\\n             -2 \"${READS_R2}\" \\\n             --gcBias \\\n             --seqBias \\\n             -o \"${OUTPUT_DIR}\"\n\necho \"Salmon quantification complete. Results are in ${OUTPUT_DIR}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/COMBINE-lab/salmon"
+        },
+        {
+            "step_order": 2,
+            "description": "Gene level quantification was performed using tximeta [v1.8.4].",
+            "tool_name": "tximeta",
+            "tool_version": "1.8.4",
+            "code_example": "# Install BiocManager if not already installed\n# R -q -e \"if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager')\"\n\n# Install tximeta and other necessary packages\n# R -q -e \"BiocManager::install(c('tximeta', 'SummarizedExperiment'))\"\n\n# --- Prepare dummy input data for demonstration ---\n# Create dummy quantification directories and files (e.g., from Salmon)\nmkdir -p quant_results/sample1 quant_results/sample2 quant_results/sample3\n# Create empty quant.sf files as placeholders\ntouch quant_results/sample1/quant.sf\ntouch quant_results/sample2/quant.sf\ntouch quant_results/sample3/quant.sf\n\n# Placeholder for the transcriptome annotation (GTF/GFF)\n# For human GRCh38, Ensembl release 109 (or latest) is a common choice.\n# You would typically have this file pre-downloaded or generated.\n# Example command to download a GTF (uncomment and run if needed):\n# wget -nc ftp://ftp.ensembl.org/pub/release-109/gtf/homo_sapiens/Homo_sapiens.GRCh38.109.gtf.gz\n# Ensure this file exists in the current directory or provide its full path.\nGTF_FILE=\"Homo_sapiens.GRCh38.109.gtf.gz\" # Placeholder, replace with actual path\n\n# Create an R script to perform gene-level quantification using tximeta\ncat << 'EOF' > run_tximeta.R\nlibrary(tximeta)\nlibrary(SummarizedExperiment)\n\n# --- Configuration ---\n# Paths to quantification directories (e.g., Salmon output)\nquant_dirs <- c(\n  \"quant_results/sample1\",\n  \"quant_results/sample2\",\n  \"quant_results/sample3\"\n)\nfiles <- file.path(quant_dirs, \"quant.sf\")\n\n# Sample metadata\ncoldata <- data.frame(\n  names = basename(quant_dirs),\n  files = files,\n  stringsAsFactors = FALSE\n)\n\n# Path to the transcriptome annotation GTF/GFF file\n# This should match the GTF used for building the Salmon/Kallisto index.\ngtf_file <- Sys.getenv(\"GTF_FILE\") # Get GTF path from environment variable\n\n# --- Import and Summarize ---\n# Import quantification data using tximeta\n# tximeta automatically tries to link to the correct annotation based on the index.\n# If it cannot, you might need to manually specify the GTF or ensure the index\n# was built with a recognized annotation source.\nse <- tximeta(coldata)\n\n# Summarize to gene level\n# tximeta often provides the necessary 'tx2gene' mapping automatically.\ngene_se <- summarizeToGene(se)\n\n# Access gene-level counts\ngene_counts <- assay(gene_se, \"counts\")\n\n# Save results\nwrite.csv(gene_counts, \"gene_level_counts.csv\")\n\nmessage(\"Gene level quantification completed and saved to gene_level_counts.csv\")\nEOF\n\n# Set the GTF_FILE environment variable for the R script\nexport GTF_FILE=\"${GTF_FILE}\"\n\n# Execute the R script\nRscript run_tximeta.R\n\n# Clean up dummy files (optional)\n# rm -rf quant_results run_tximeta.R gene_level_counts.csv",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/tximeta.html"
+        },
+        {
+            "step_order": 3,
+            "description": "Differential gene expression was analyzed by DESeq2 [v1.30.1]",
+            "tool_name": "DESeq2",
+            "tool_version": "1.30.1",
+            "code_example": "# Installation:\n# conda install -c bioconda bioconductor-deseq2=1.30.1\n\n# --- Placeholder for input data ---\n# In a real scenario, replace these with actual paths to your count matrix and sample information.\n# Example: counts.csv should have genes as rows and samples as columns, with the first column being gene IDs.\n# Example: sample_info.csv should have sample names as rows and experimental conditions as columns (e.g., 'condition', 'batch').\n# Make sure row names of colData match column names of countData.\n\n# Create dummy counts.csv and sample_info.csv for demonstration purposes.\n# In a real pipeline, these files would be generated by upstream steps (e.g., featureCounts, Salmon, Kallisto).\necho \"gene_id,sample1,sample2,sample3,sample4,sample5,sample6,sample7,sample8,sample9,sample10\" > counts.csv\necho \"geneA,100,120,110,90,130,500,550,520,480,600\" >> counts.csv\necho \"geneB,50,60,55,45,65,200,220,210,190,230\" >> counts.csv\necho \"geneC,200,210,190,220,180,100,110,90,120,80\" >> counts.csv\necho \"geneD,300,320,310,290,330,300,320,310,290,330\" >> counts.csv\necho \"geneE,10,12,11,9,13,50,55,52,48,60\" >> counts.csv\n\necho \"sample,condition\" > sample_info.csv\necho \"sample1,control\" >> sample_info.csv\necho \"sample2,control\" >> sample_info.csv\necho \"sample3,control\" >> sample_info.csv\necho \"sample4,control\" >> sample_info.csv\necho \"sample5,control\" >> sample_info.csv\necho \"sample6,treated\" >> sample_info.csv\necho \"sample7,treated\" >> sample_info.csv\necho \"sample8,treated\" >> sample_info.csv\necho \"sample9,treated\" >> sample_info.csv\necho \"sample10,treated\" >> sample_info.csv\n\n# Create the R script for DESeq2 analysis\ncat << 'EOF' > run_deseq2.R\n# Load DESeq2 library\nlibrary(DESeq2)\n\n# Load count data\n# Assuming counts.csv has gene IDs in the first column and samples in subsequent columns\ncount_data_raw <- read.csv(\"counts.csv\", row.names = 1)\n# Ensure count data is integer matrix\ncount_data <- as.matrix(round(count_data_raw))\n\n# Load sample information\n# Assuming sample_info.csv has sample names and condition information\nsample_info <- read.csv(\"sample_info.csv\", row.names = 1)\n\n# Ensure sample names in sample_info match column names in count_data\nif (!all(rownames(sample_info) == colnames(count_data))) {\n  # Attempt to reorder sample_info to match count_data columns\n  sample_info <- sample_info[colnames(count_data), , drop = FALSE]\n  if (!all(rownames(sample_info) == colnames(count_data))) {\n    stop(\"Sample names in 'sample_info.csv' do not match column names in 'counts.csv'.\")\n  }\n}\n\n# Create DESeqDataSet object\n# The design formula should reflect your experimental setup.\n# Here, we assume a simple comparison between 'treated' and 'control' conditions.\ndds <- DESeqDataSetFromMatrix(countData = count_data,\n                              colData = sample_info,\n                              design = ~ condition) # Example design formula\n\n# Pre-filtering: remove genes with very low counts\n# This helps to reduce the number of tests and improve statistical power.\nkeep <- rowSums(counts(dds)) >= 10\ndds <- dds[keep,]\n\n# Run DESeq2 analysis\ndds <- DESeq(dds)\n\n# Extract results for a specific contrast (e.g., treated vs control)\n# The levels for contrast should match the levels of your 'condition' factor.\n# You might need to adjust 'treated' and 'control' based on your actual data.\nres <- results(dds, contrast = c(\"condition\", \"treated\", \"control\"))\n\n# Order results by adjusted p-value\nres <- res[order(res$padj),]\n\n# Save results\nwrite.csv(as.data.frame(res), \"deseq2_results.csv\")\n\n# Optional: Save normalized counts\nnorm_counts <- counts(dds, normalized=TRUE)\nwrite.csv(as.data.frame(norm_counts), \"deseq2_normalized_counts.csv\")\nEOF\n\n# Execute the R script\nRscript run_deseq2.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/DESeq2.html"
+        },
+        {
+            "step_order": 4,
+            "description": "processed data files format and content: gene counts",
+            "tool_name": "RSEM (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.3.3",
+            "code_example": "# conda install -c bioconda rsem\n\n# Define variables\nINPUT_BAM=\"aligned_reads.bam\" # Path to the input BAM file (e.g., from STAR alignment)\nRSEM_REFERENCE_INDEX=\"path/to/rsem_reference_index/GRCh38\" # Path to the RSEM reference index (prepared using rsem-prepare-reference for human GRCh38)\nOUTPUT_PREFIX=\"sample_gene_counts\" # Prefix for output files\n\n# Execute RSEM to calculate gene and isoform expression\n# --bam: Specifies that the input is a BAM file\n# --paired-end: Specifies that the input reads are paired-end\n# --no-qualities: (Optional) Use if the BAM file does not contain quality scores (e.g., from pseudo-alignment)\n# --output-genome-bam: (Optional) Output a genome-aligned BAM file sorted by coordinate\n# --seed 12345: (Optional) Set a random seed for reproducibility\nrsem-calculate-expression \\\n    --bam \\\n    --paired-end \\\n    \"${INPUT_BAM}\" \\\n    \"${RSEM_REFERENCE_INDEX}\" \\\n    \"${OUTPUT_PREFIX}\"\n\n# The main output files will be:\n# ${OUTPUT_PREFIX}.genes.results (contains gene-level counts and FPKM/TPM)\n# ${OUTPUT_PREFIX}.isoforms.results (contains isoform-level counts and FPKM/TPM)",
+            "code_language": "bash",
+            "github_url": "https://github.com/deweylab/RSEM"
+        }
+    ],
+    "raw_text": "Transcript abundance was quantified using Salmon [v1.3.0] with GENCODE v37 annotation.\nGene level quantification was performed using tximeta [v1.8.4].\nDifferential gene expression was analyzed by DESeq2 [v1.30.1]\ngenome build: HG19\nprocessed data files format and content: gene counts",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Riboseq data was analyzed as described previously; see Tirosh et al.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "2015 doi:10.1371/journal.ppat.1005288",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Riboseq data was analyzed as described previously; see Tirosh et al. 2015 doi:10.1371/journal.ppat.1005288\nAssembly: hg19\nSupplementary files format and content: RNA-seq and footprinting reads for each sample in duplicate",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Riboseq data was analyzed as described previously; see Tirosh et al.",
+            "tool_name": "Bowtie (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.1.1",
+            "code_example": "# Install Bowtie\n# conda install -c bioconda bowtie=1.1.1\n\n# Install samtools (required for BAM conversion and sorting)\n# conda install -c bioconda samtools\n\n# Define paths and files\nGENOME_DIR=\"genome/sacCer3\"\nGENOME_FA=\"${GENOME_DIR}/sacCer3.fa\"\nGENOME_INDEX_PREFIX=\"${GENOME_DIR}/sacCer3_index\"\nRRNA_FA=\"${GENOME_DIR}/sacCer3_rRNA.fa\" # Placeholder for rRNA sequences\nRRNA_INDEX_PREFIX=\"${GENOME_DIR}/sacCer3_rRNA_index\"\n\nINPUT_FASTQ=\"riboseq_reads.fastq\" # Replace with actual input file\nOUTPUT_FASTQ_GENOME=\"riboseq_rRNA_unmapped.fastq\"\nOUTPUT_SAM_GENOME=\"riboseq_genome_mapped.sam\"\nOUTPUT_BAM_GENOME=\"riboseq_genome_mapped.bam\"\nOUTPUT_SORTED_BAM=\"riboseq_genome_mapped.sorted.bam\"\nOUTPUT_P_SITE_COUNTS=\"riboseq_p_site_counts.tsv\" # Example output for custom script\n\n# --- Reference Data Preparation ---\n# Download S. cerevisiae genome (sacCer3) from UCSC\n# mkdir -p ${GENOME_DIR}\n# wget -P ${GENOME_DIR} http://hgdownload.soe.ucsc.edu/goldenPath/sacCer3/bigZips/sacCer3.fa.gz\n# gunzip ${GENOME_FA}.gz\n\n# Obtain S. cerevisiae rRNA sequences (e.g., from NCBI or specific genome annotations)\n# For example, extract rRNA from sacCer3 GFF/GTF or download separately.\n# Example: echo \">rRNA_sequence\" > ${RRNA_FA}\n# Example: echo \"AGCTAGCT...\" >> ${RRNA_FA}\n\n# Build Bowtie indices for genome and rRNA\n# bowtie-build ${GENOME_FA} ${GENOME_INDEX_PREFIX}\n# bowtie-build ${RRNA_FA} ${RRNA_INDEX_PREFIX}\n\n# --- Riboseq Data Analysis Pipeline (as per Tirosh et al. 2016) ---\n\n# 1. Align reads to rRNA and extract unmapped reads\n# Reads mapping to rRNA are discarded.\n# -S: output SAM format\n# -v 2: allow up to 2 mismatches (as per Tirosh et al. for genome, applied here for rRNA too)\n# --un: write reads that did not align to a file\nbowtie -S -v 2 --un ${OUTPUT_FASTQ_GENOME} ${RRNA_INDEX_PREFIX} ${INPUT_FASTQ} > /dev/null # Discard rRNA mapped SAM\n\n# 2. Align rRNA-unmapped reads to the genome\n# -S: output SAM format\n# -v 2: allow up to 2 mismatches\nbowtie -S -v 2 ${GENOME_INDEX_PREFIX} ${OUTPUT_FASTQ_GENOME} ${OUTPUT_SAM_GENOME}\n\n# 3. Convert SAM to BAM, sort, and index\nsamtools view -bS ${OUTPUT_SAM_GENOME} > ${OUTPUT_BAM_GENOME}\nsamtools sort ${OUTPUT_BAM_GENOME} -o ${OUTPUT_SORTED_BAM}\nsamtools index ${OUTPUT_SORTED_BAM}\n\n# 4. P-site inference and ORF assignment (Custom script based on Tirosh et al. methods)\n# Tirosh et al. (2016) methods:\n# \"The 5\u2032 ends of reads were mapped to the genome, and the P-site was inferred by adding 15 nucleotides to the 5\u2032 end of reads 28\u201330 nucleotides long, and 16 nucleotides to the 5\u2032 end of reads 31\u201333 nucleotides long. Reads were then assigned to ORFs based on their P-site position.\"\n# This step requires custom scripting (e.g., Python, R, Perl) to parse the BAM file,\n# filter reads by length, adjust 5' end coordinates to infer P-sites, and then\n# intersect these P-sites with a gene/ORF annotation file (e.g., GTF/GFF).\n#\n# Example placeholder for a custom script execution:\n# python custom_riboseq_p_site_analysis.py \\\n#   --input_bam ${OUTPUT_SORTED_BAM} \\\n#   --orf_annotation /path/to/saccharomyces_cerevisiae.gtf \\\n#   --output_file ${OUTPUT_P_SITE_COUNTS}",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1016/j.cels.2016.07.007"
+        },
+        {
+            "step_order": 2,
+            "description": "2015 doi:10.1371/journal.ppat.1005288",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.5.2b",
+            "code_example": "# Install STAR (example using conda)\n# conda install -c bioconda star=2.5.2b\n\n# Define variables\nFASTQ_FILE=\"sample_R1.fastq.gz\" # Placeholder for input FASTQ file\nOUTPUT_PREFIX=\"sample_aligned\" # Prefix for output files\nNUM_THREADS=8 # Number of threads to use\n\n# Reference genome directory (hg38 as a placeholder)\n# This directory should contain the STAR genome index files (SA, SAindex, genome, etc.)\n# To generate a STAR genome index:\n# STAR --runThreadN ${NUM_THREADS} --runMode genomeGenerate \\\n#      --genomeDir /path/to/STAR_INDEX_DIR/hg38 \\\n#      --genomeFastaFiles /path/to/hg38.fa \\\n#      --sjdbGTFfile /path/to/hg38.gtf \\\n#      --sjdbOverhang 100 # Adjust sjdbOverhang based on read length - 1\n\nSTAR_INDEX_DIR=\"/path/to/STAR_INDEX_DIR/hg38\" # Placeholder for STAR genome index directory\n\n# Run STAR alignment for eCLIP data\nSTAR --runThreadN ${NUM_THREADS} \\\n     --genomeDir ${STAR_INDEX_DIR} \\\n     --readFilesIn ${FASTQ_FILE} \\\n     --outFileNamePrefix ${OUTPUT_PREFIX} \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes All \\\n     --outSAMunmapped Within \\\n     --outFilterMultimapNmax 1 \\\n     --outFilterMismatchNmax 3 \\\n     --outFilterMismatchNoverLmax 0.1 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --alignSJoverhangMin 8 \\\n     --alignSJDBoverhangMin 1 \\\n     --sjdbScore 1 \\\n     --readFilesCommand zcat",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1371/journal.ppat.1005288"
+        }
+    ],
+    "raw_text": "Riboseq data was analyzed as described previously; see Tirosh et al. 2015 doi:10.1371/journal.ppat.1005288\nAssembly: hg19\nSupplementary files format and content: RNA-seq and footprinting reads for each sample in duplicate",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

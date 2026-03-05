@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize.",
-      "tool_name": "Microarray",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Iter-plier algorithm used to quantify probesets.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "http://exon.ucsc.edu/documentation/mjay_library/hjay.pgf",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize. Iter-plier algorithm used to quantify probesets.\nhttp://exon.ucsc.edu/documentation/mjay_library/hjay.pgf",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize.",
+            "tool_name": "Microarray",
+            "tool_version": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Affy Power Tools (APT) via Bioconda\n# conda install -c bioconda affy-power-tools\n\n# Example usage of apt-probeset-summarize\n# This command processes Affymetrix CEL files to generate summarized probe set data.\n# Replace 'path/to/library.cdf', 'path/to/input_cel_file_1.CEL', etc., and 'path/to/output_dir' with actual paths.\n# The --analysis parameter specifies the summarization algorithm (e.g., rma, mas5, plier).\n# The --output-dir parameter specifies where to write the output files.\n\napt-probeset-summarize \\\n    --cdf-file path/to/library.cdf \\\n    --analysis rma \\\n    --cel-files path/to/input_cel_file_1.CEL path/to/input_cel_file_2.CEL \\\n    --output-dir path/to/output_dir",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Iter-plier algorithm used to quantify probesets.",
+            "tool_name": "affy (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.78.0",
+            "code_example": "# Install R and Bioconductor if not already present\n# R -e \"install.packages('BiocManager')\"\n# R -e \"BiocManager::install('affy')\"\n\n# Create an R script to perform Iter-plier background correction and RMA quantification\ncat << 'EOF' > quantify_probesets.R\nlibrary(affy)\n\n# Define input and output directories\n# Assumes raw Affymetrix .CEL files are located in the 'raw_cel_files' directory.\n# Create this directory and place your .CEL files there before running.\ninput_dir <- \"raw_cel_files\"\noutput_dir <- \"quantified_results\"\ndir.create(output_dir, showWarnings = FALSE)\n\n# Check if input directory exists\nif (!dir.exists(input_dir)) {\n  stop(\"Input directory '\", input_dir, \"' not found. Please create it and place .CEL files inside.\")\n}\n\n# List all .CEL files in the input directory\ncel_files <- list.celfiles(path=input_dir, full.names=TRUE)\n\nif (length(cel_files) == 0) {\n  stop(\"No .CEL files found in the input directory: \", input_dir)\n}\nprint(paste(\"Found\", length(cel_files), \".CEL files for quantification.\"))\n\n# Read the .CEL files into an AffyBatch object\n# This step reads raw intensity data from the arrays.\nraw_data <- ReadAffy(filenames=cel_files)\n\n# Perform IterPLIER background correction\n# The IterPLIER algorithm is used to estimate and subtract background noise.\n# This function is part of the 'affy' package.\nbg_corrected_affybatch <- bg.correct.iterplier(raw_data)\n\n# Perform RMA (Robust Multi-array Average) normalization and summarization\n# RMA is a widely used method for normalizing and summarizing Affymetrix GeneChip data.\n# This step quantifies probesets by combining probe intensities into a single expression value per probeset.\neset <- rma(bg_corrected_affybatch)\n\n# Extract the expression matrix (quantified probeset values)\nexpression_matrix <- exprs(eset)\n\n# Get probeset IDs\nprobeset_ids <- featureNames(eset)\n\n# Combine probeset IDs with the expression matrix into a data frame\nquantified_data <- data.frame(ProbesetID = probeset_ids, expression_matrix)\n\n# Define the output file path\noutput_file <- file.path(output_dir, \"probeset_quantification_iterplier_rma.csv\")\n\n# Write the quantified probeset data to a CSV file\nwrite.csv(quantified_data, output_file, row.names = FALSE)\n\nprint(paste(\"Probeset quantification complete. Results saved to:\", output_file))\nEOF\n\n# Create input directory for CEL files (if it doesn't exist)\nmkdir -p raw_cel_files\n\n# Execute the R script to perform quantification\nRscript quantify_probesets.R\n\n# Example of creating dummy CEL files for testing (optional)\n# This part is for demonstration if you don't have actual CEL files.\n# It will create empty files, which 'ReadAffy' will likely fail on,\n# but shows the expected input structure.\n# touch raw_cel_files/sample_A.CEL\n# touch raw_cel_files/sample_B.CEL\n",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/affy.html"
+        },
+        {
+            "step_order": 3,
+            "description": "http://exon.ucsc.edu/documentation/mjay_library/hjay.pgf",
+            "tool_name": "clipper (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install clipper (if not already installed)\n# git clone https://github.com/yeolab/clipper.git\n# cd clipper\n# python setup.py install # Or just run the script directly\n\n# Example usage for eCLIP peak calling with clipper\n# Assuming input BAM files and a control BAM file are available\n# Replace with actual file paths and species\nINPUT_BAM=\"input.bam\"\nCONTROL_BAM=\"control.bam\"\nOUTPUT_PREFIX=\"peaks\"\nSPECIES=\"hg38\" # Placeholder for latest assembly\n\n# Run clipper\npython clipper.py \\\n    -o \"${OUTPUT_PREFIX}.bed\" \\\n    -s \"${SPECIES}\" \\\n    -b \"${INPUT_BAM}\" \\\n    -c \"${CONTROL_BAM}\" \\\n    --bonferroni \\\n    --fdr 0.05 \\\n    --window 100 \\\n    --step 20",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/clipper"
+        }
+    ],
+    "raw_text": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize. Iter-plier algorithm used to quantify probesets.\nhttp://exon.ucsc.edu/documentation/mjay_library/hjay.pgf",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

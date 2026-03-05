@@ -1,16 +1,16 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Reads were aligned to hg38 using SlamDunk (v0.4.3) with inclusion of multi-mapping reads.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Reads were aligned to hg38 using SlamDunk (v0.4.3) with inclusion of multi-mapping reads.\nAssembly: hg38\nSupplementary files format and content: C->T conversion counts within 3' UTR regions output by SlamDunk",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Reads were aligned to hg38 using SlamDunk (v0.4.3) with inclusion of multi-mapping reads.",
+            "tool_name": "SlamDunk",
+            "tool_version": "0.4.3",
+            "code_example": "# Install SlamDunk (example using pip)\n# pip install slamdunk==0.4.3\n\n# Define paths\nREADS_FILE=\"input_reads.fastq.gz\" # Replace with actual input file(s)\nOUTPUT_DIR=\"slamdunk_aligned_output\"\nREFERENCE_FASTA=\"/path/to/hg38.fa\" # Placeholder for hg38 reference genome FASTA\nSTAR_INDEX_DIR=\"/path/to/STAR_index_hg38\" # Placeholder for pre-built STAR index for hg38\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Align reads to hg38 using SlamDunk (v0.4.3)\n# The --star-args \"--outFilterMultimapNmax 100\" parameter is used to include multi-mapping reads,\n# allowing up to 100 alignments per read. Adjust this value if a different threshold is desired.\nslamdunk align \\\n    -r \"${REFERENCE_FASTA}\" \\\n    -o \"${OUTPUT_DIR}\" \\\n    --star-index \"${STAR_INDEX_DIR}\" \\\n    --star-args \"--outFilterMultimapNmax 100\" \\\n    \"${READS_FILE}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/t-neumann/slamdunk"
+        }
+    ],
+    "raw_text": "Reads were aligned to hg38 using SlamDunk (v0.4.3) with inclusion of multi-mapping reads.\nAssembly: hg38\nSupplementary files format and content: C->T conversion counts within 3' UTR regions output by SlamDunk",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

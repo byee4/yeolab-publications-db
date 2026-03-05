@@ -1,16 +1,16 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Probe level analysis was performed on the Affymetrix raw data (.cel files) with the robust multichip average (RMA) method implemented in the Bioconductor package 'aroma.affymetrix' to obtain a log2 expression value for each gene probe set",
-      "tool_name": "R",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Probe level analysis was performed on the Affymetrix raw data (.cel files) with the robust multichip average (RMA) method implemented in the Bioconductor package 'aroma.affymetrix' to obtain a log2 expression value for each gene probe set",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Probe level analysis was performed on the Affymetrix raw data (.cel files) with the robust multichip average (RMA) method implemented in the Bioconductor package 'aroma.affymetrix' to obtain a log2 expression value for each gene probe set",
+            "tool_name": "R",
+            "tool_version": "R 4.3.x (Bioconductor 3.18)",
+            "code_example": "#!/bin/bash\n\n# Define environment variables for input/output\n# Replace with your actual CEL file directory and desired output file\nexport CEL_FILES_DIR=\"data/cel_files\"\nexport OUTPUT_FILE=\"results/rma_log2_expression.tsv\"\n\n# Create output directory if it doesn't exist\nmkdir -p $(dirname \"$OUTPUT_FILE\")\n\n# --- R Installation (commented out) ---\n# # Install R if not available (example for Ubuntu/Debian)\n# # sudo apt update\n# # sudo apt install r-base\n\n# # Install Bioconductor and aroma.affymetrix package\n# # Start R and run:\n# # if (!requireNamespace(\"BiocManager\", quietly = TRUE))\n# #     install.packages(\"BiocManager\")\n# # BiocManager::install(\"aroma.affymetrix\") # aroma.affymetrix is part of aroma.core\n\n# --- R Script for RMA Analysis ---\n# Create a temporary R script\ncat << 'EOF' > rma_analysis.R\n# R script (rma_analysis.R)\n\nlibrary(aroma.affymetrix)\n\n# --- Configuration ---\ncel_files_dir <- Sys.getenv(\"CEL_FILES_DIR\", \"path/to/your/cel_files\") # Directory containing .cel files\noutput_file <- Sys.getenv(\"OUTPUT_FILE\", \"rma_log2_expression.tsv\") # Output file name\n\n# Check if the directory exists\nif (!dir.exists(cel_files_dir)) {\n    stop(paste(\"CEL files directory not found:\", cel_files_dir))\n}\n\n# --- Load Affymetrix CEL files ---\n# Create an AffymetrixCelSet object from the specified directory\n# This will automatically detect the chip type from the .cel files\nmessage(paste(\"Loading CEL files from:\", cel_files_dir))\ncs <- AffymetrixCelSet$byPath(cel_files_dir)\nmessage(paste(\"Detected chip type:\", getChipType(cs)))\nmessage(paste(\"Number of arrays:\", length(cs)))\n\n# --- Perform Robust Multichip Average (RMA) ---\n# This function performs background correction, quantile normalization,\n# and median polish summarization to obtain log2 expression values.\nmessage(\"Performing RMA...\")\nds <- doRMA(cs, verbose=TRUE)\n\n# --- Extract log2 expression matrix ---\n# The expression values are already in log2 scale after RMA\nmessage(\"Extracting log2 expression matrix...\")\nexpr_matrix <- extractMatrix(ds)\n\n# --- Write results to file ---\nmessage(paste(\"Writing log2 expression matrix to:\", output_file))\nwrite.table(expr_matrix, file=output_file, sep=\"\\t\", quote=FALSE, row.names=TRUE)\n\nmessage(\"RMA analysis complete.\")\nEOF\n\n# Execute the R script\nRscript rma_analysis.R\n\n# Clean up the temporary R script\nrm rma_analysis.R",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Probe level analysis was performed on the Affymetrix raw data (.cel files) with the robust multichip average (RMA) method implemented in the Bioconductor package 'aroma.affymetrix' to obtain a log2 expression value for each gene probe set",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

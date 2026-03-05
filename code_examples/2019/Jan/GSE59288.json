@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "The raw sequencing reads were mapped to each species\u00e2\u0080\u0099 reference genome and the splice junctions using Bowtie, allowing up to three mismatches.",
-      "tool_name": "Bowtie",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Only uniquely mapped reads were used to calculate the gene expression levels.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Gene expression levels were calculated using the read coverage normalized by gene length and the total number of reads mapped to genes in a sample.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "The raw sequencing reads were mapped to each species\u00e2\u0080\u0099 reference genome and the splice junctions using Bowtie, allowing up to three mismatches.\nOnly uniquely mapped reads were used to calculate the gene expression levels.\nGene expression levels were calculated using the read coverage normalized by gene length and the total number of reads mapped to genes in a sample.\nGenome_build: human: hg19; chimpanzee: panTro3.\nSupplementary_files_format_and_content: tab-delimited text file shows RPKM values of each gene in each sample.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "The raw sequencing reads were mapped to each species\u00e2\u0080\u0099 reference genome and the splice junctions using Bowtie, allowing up to three mismatches.",
+            "tool_name": "Bowtie",
+            "tool_version": "2.4.5 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Bowtie2 (if not already installed)\n# conda install -c bioconda bowtie2\n\n# Placeholder for reference genome and splice junction index. \n# Bowtie2 is not inherently splice-aware. For RNA-seq alignment involving splice junctions, \n# splice-aware aligners like STAR or HISAT2 are typically used. \n# If Bowtie2 was used, it implies a custom index that incorporates splice junction sequences, \n# or that splice junction handling was performed by a downstream tool or a custom pre-processing step.\n# For demonstration, we assume a pre-built Bowtie2 index named 'genome_and_junctions_index'.\n# Example for building a standard genome index (replace 'reference.fa' with your actual reference genome file):\n# bowtie2-build reference.fa genome_and_junctions_index\n\n# Align raw sequencing reads to the reference genome and splice junctions\n# -x: specify the basename of the index\n# -N 3: allow up to 3 mismatches in the seed alignment (as per description)\n# -U: specify single-end reads (use -1 and -2 for paired-end reads)\n# -S: output alignments in SAM format\n\nbowtie2 -x genome_and_junctions_index -N 3 -U raw_sequencing_reads.fastq -S aligned_reads.sam",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie2"
+        },
+        {
+            "step_order": 2,
+            "description": "Only uniquely mapped reads were used to calculate the gene expression levels.",
+            "tool_name": "RSEM (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.3.3 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install RSEM via conda\n# conda install -c bioconda rsem\n\n# Define variables\n# Placeholder: Replace with actual genome FASTA (e.g., GRCh38.primary_assembly.genome.fa)\nGENOME_FA=\"path/to/reference_genome.fa\"\n# Placeholder: Replace with actual gene annotation GTF (e.g., gencode.v38.annotation.gtf)\nGTF_FILE=\"path/to/gene_annotation.gtf\"\n# Name for the RSEM reference index\nRSEM_REF_NAME=\"rsem_reference_index\"\n# Placeholder: Replace with your uniquely mapped BAM file\n# This BAM file is assumed to contain only uniquely mapped reads, as per the description.\nINPUT_BAM=\"path/to/sample_uniquely_mapped.bam\"\n# Prefix for output files\nOUTPUT_PREFIX=\"sample_gene_expression\"\n# Number of threads to use\nNUM_THREADS=8\n\n# 1. Prepare RSEM reference (run once per reference genome/annotation combination)\n# This step builds the RSEM index. It's crucial that the GTF and genome FASTA match the alignment.\n# If you have already prepared an RSEM reference, you can skip this step.\n# rsem-prepare-reference --gtf \"${GTF_FILE}\" --star --num-threads \"${NUM_THREADS}\" \"${GENOME_FA}\" \"${RSEM_REF_NAME}\"\n\n# 2. Calculate gene expression levels from uniquely mapped BAM files\n# --bam: specifies that the input is a BAM file.\n# --no-qualities: speeds up processing by ignoring quality scores (often not needed for quantification).\n# --forward-prob 0.5: assumes unstranded data. Adjust to 1.0 for forward-stranded, 0.0 for reverse-stranded.\n# The description \"Only uniquely mapped reads were used\" implies that the input BAM file\n# has already been filtered to contain only uniquely mapped reads (e.g., using samtools view -q 1).\n# RSEM will then quantify expression based on these provided unique alignments.\nrsem-calculate-expression \\\n    --bam \\\n    --no-qualities \\\n    --forward-prob 0.5 \\\n    --num-threads \"${NUM_THREADS}\" \\\n    \"${INPUT_BAM}\" \\\n    \"${RSEM_REF_NAME}\" \\\n    \"${OUTPUT_PREFIX}\"\n\n# Output files will include:\n# ${OUTPUT_PREFIX}.genes.results (gene-level expression values like TPM, FPKM, counts)\n# ${OUTPUT_PREFIX}.isoforms.results (isoform-level expression values)\n# ${OUTPUT_PREFIX}.stat (statistics about the run)",
+            "code_language": "bash",
+            "github_url": "https://github.com/deweylab/RSEM"
+        },
+        {
+            "step_order": 3,
+            "description": "Gene expression levels were calculated using the read coverage normalized by gene length and the total number of reads mapped to genes in a sample.",
+            "tool_name": "RSEM (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.3.3 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install RSEM (if not already installed)\n# conda install -c bioconda rsem\n\n# Placeholder for reference genome and annotation (e.g., human hg38 and GENCODE v44)\n# Download human reference genome (e.g., hg38 primary assembly)\n# wget -O genome.fa.gz \"http://ftp.ensembl.org/pub/release-110/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz\"\n# gunzip genome.fa.gz\n# Download human gene annotation (e.g., GENCODE v44 GTF for GRCh38)\n# wget -O annotation.gtf.gz \"http://ftp.ensembl.org/pub/release-110/gtf/homo_sapiens/Homo_sapiens.GRCh38.110.gtf.gz\"\n# gunzip annotation.gtf.gz\n\n# Prepare RSEM reference (run once per reference, e.g., for hg38)\n# rsem-prepare-reference --gtf annotation.gtf genome.fa RSEM_reference_index\n\n# Assume 'aligned_reads.bam' is the input BAM file from a splice-aware aligner (e.g., STAR)\n# Assume 'RSEM_reference_index' is the directory created by rsem-prepare-reference\n# Assume 'sample_output' is the desired prefix for output files (e.g., 'SRR1234567')\n\n# Calculate gene expression levels using mapped reads, normalizing by gene length and total mapped reads.\n# Use --paired-end if reads are paired-end, otherwise omit for single-end.\nrsem-calculate-expression \\\n    --bam \\\n    --no-qualities \\\n    --paired-end \\\n    aligned_reads.bam \\\n    RSEM_reference_index \\\n    sample_output",
+            "code_language": "bash",
+            "github_url": "https://github.com/deweylab/RSEM"
+        }
+    ],
+    "raw_text": "The raw sequencing reads were mapped to each species\u00e2\u0080\u0099 reference genome and the splice junctions using Bowtie, allowing up to three mismatches.\nOnly uniquely mapped reads were used to calculate the gene expression levels.\nGene expression levels were calculated using the read coverage normalized by gene length and the total number of reads mapped to genes in a sample.\nGenome_build: human: hg19; chimpanzee: panTro3.\nSupplementary_files_format_and_content: tab-delimited text file shows RPKM values of each gene in each sample.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

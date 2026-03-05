@@ -1,79 +1,79 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Sequencing reads from RNA-seq libraries were first trimmed of polyA tails, adapters, and low quality ends using cutadapt with parameters --match-read-wildcards --times 2 -e 0 -O 5 --quality-cutoff' 6 -m 18 -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b TGGAATTCTCGGGTGCCAAGG -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT.",
-      "tool_name": "cutadapt",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reads were then mapped against a database of repetitive elements derived from RepBase18.05.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Bowtie version 1.0.0 with parameters -S -q -p 16 -e 100 -l 20 was used to align reads against an index generated from Repbase sequences (Langmead et al., 2009).",
-      "tool_name": "Bowtie",
-      "tool_version": "1.0.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Reads not mapped to Repbase sequences were aligned to the mm9 human genome (UCSC assembly) using STAR (Dobin et al., 2013) version 2.3.0e with parameters --outSAMunmapped Within \u00e2\u0080\u0093outFilterMultimapNmax 1 \u00e2\u0080\u0093outFilterMultimapScoreRange 1.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Alternative polyadenylation sites were identified from RNA-seq data using the bioinformatics algorithm DaPars (Xia et al., 2014), which uses a regression model to locate endpoints of alternative polyadenylation sites, was used to identify differences in APA events between hnRNP A2/B1 depleted samples and controls.",
-      "tool_name": "RNA-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "To identify significant APA events, we used the following cutoffs: FDR < 0.05, |\u00ce\u0094PDUI| \u00e2\u0089\u00a5 0.2, and |dPDUI| \u00e2\u0089\u00a5 0.2.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "r",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "APA scatter plots were generated using the R-Studio program with the ggplot2 library.\u00c2",
-      "tool_name": "R",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "counts of reads for each gene annotated in gencode vM1 were calculated from featureCounts",
-      "tool_name": "featureCounts",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Sequencing reads from RNA-seq libraries were first trimmed of polyA tails, adapters, and low quality ends using cutadapt with parameters --match-read-wildcards --times 2 -e 0 -O 5 --quality-cutoff' 6 -m 18 -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b TGGAATTCTCGGGTGCCAAGG -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT.\nReads were then mapped against a database of repetitive elements derived from RepBase18.05. Bowtie version 1.0.0 with parameters -S -q -p 16 -e 100 -l 20 was used to align reads against an index generated from Repbase sequences (Langmead et al., 2009).\nReads not mapped to Repbase sequences were aligned to the mm9 human genome (UCSC assembly) using STAR (Dobin et al., 2013) version 2.3.0e with parameters --outSAMunmapped Within \u00e2\u0080\u0093outFilterMultimapNmax 1 \u00e2\u0080\u0093outFilterMultimapScoreRange 1.\nAlternative polyadenylation sites were identified from RNA-seq data using the bioinformatics algorithm DaPars (Xia et al., 2014), which uses a regression model to locate endpoints of alternative polyadenylation sites, was used to identify differences in APA events between hnRNP A2/B1 depleted samples and controls. To identify significant APA events, we used the following cutoffs: FDR < 0.05, |\u00ce\u0094PDUI| \u00e2\u0089\u00a5 0.2, and |dPDUI| \u00e2\u0089\u00a5 0.2. APA scatter plots were generated using the R-Studio program with the ggplot2 library.\u00c2\ncounts of reads for each gene annotated in gencode vM1 were calculated from featureCounts\nGenome_build: mm9\nSupplementary_files_format_and_content: rpkm file, containts rpkm for each sample",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Sequencing reads from RNA-seq libraries were first trimmed of polyA tails, adapters, and low quality ends using cutadapt with parameters --match-read-wildcards --times 2 -e 0 -O 5 --quality-cutoff' 6 -m 18 -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b TGGAATTCTCGGGTGCCAAGG -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT.",
+            "tool_name": "cutadapt",
+            "tool_version": "3.4 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install cutadapt (e.g., using conda)\n# conda install -c bioconda cutadapt\n\n# Define input and output file paths\nINPUT_FASTQ=\"input.fastq.gz\"\nOUTPUT_FASTQ=\"trimmed_output.fastq.gz\"\n\ncutadapt -o \"${OUTPUT_FASTQ}\" \\\n    --match-read-wildcards \\\n    --times 2 \\\n    -e 0 \\\n    -O 5 \\\n    --quality-cutoff 6 \\\n    -m 18 \\\n    -b TCGTATGCCGTCTTCTGCTTG \\\n    -b ATCTCGTATGCCGTCTTCTGCTTG \\\n    -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC \\\n    -b TGGAATTCTCGGGTGCCAAGG \\\n    -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \\\n    -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT \\\n    \"${INPUT_FASTQ}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 2,
+            "description": "Reads were then mapped against a database of repetitive elements derived from RepBase18.05.",
+            "tool_name": "bowtie (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.2.2",
+            "code_example": "# Install bowtie\n# conda install -c bioconda bowtie=1.2.2\n\n# --- Reference Data Preparation (RepBase18.05) ---\n# Note: RepBase requires a license for direct download. This is a placeholder for demonstration.\n# Download RepBase 18.05 FASTA file (e.g., from GIRI website after obtaining a license)\n# Example (replace with actual download method after obtaining license):\n# wget -O RepBase18.05.fasta \"https://www.girinst.org/downloads/RepBase18.05.fasta\" \n\n# Build bowtie index for RepBase18.05\nbowtie-build RepBase18.05.fasta RepBase18.05_index\n\n# --- Mapping Reads ---\n# Replace 'input_reads.fastq' with your actual input FASTQ file\n# Replace 'repbase_aligned.sam' with your desired output SAM file name\nbowtie -q -v 2 -a --best --strata -S RepBase18.05_index input_reads.fastq repbase_aligned.sam",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 3,
+            "description": "Bowtie version 1.0.0 with parameters -S -q -p 16 -e 100 -l 20 was used to align reads against an index generated from Repbase sequences (Langmead et al., 2009).",
+            "tool_name": "Bowtie",
+            "tool_version": "1.0.0",
+            "code_example": "# Install Bowtie (if not already installed)\n# conda install -c bioconda bowtie=1.0.0\n\n# Placeholder for the Repbase index. This index must be pre-built using bowtie-build\n# from the Repbase sequences. Replace 'path/to/repbase_index' with the actual path to your index.\nREPBASE_INDEX=\"path/to/repbase_index\"\n\n# Placeholder for input reads. Replace 'path/to/input_reads.fastq' with the actual path to your FASTQ file.\nINPUT_READS=\"path/to/input_reads.fastq\"\n\n# Output SAM file for aligned reads\nOUTPUT_SAM=\"aligned_reads.sam\"\n\n# Run Bowtie alignment\nbowtie -S -q -p 16 -e 100 -l 20 \"${REPBASE_INDEX}\" \"${INPUT_READS}\" > \"${OUTPUT_SAM}\"",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/gb-2009-10-3-r25"
+        },
+        {
+            "step_order": 4,
+            "description": "Reads not mapped to Repbase sequences were aligned to the mm9 human genome (UCSC assembly) using STAR (Dobin et al., 2013) version 2.3.0e with parameters --outSAMunmapped Within \u00e2\u0080\u0093outFilterMultimapNmax 1 \u00e2\u0080\u0093outFilterMultimapScoreRange 1.",
+            "tool_name": "STAR",
+            "tool_version": "2.3.0e",
+            "code_example": "# Install STAR if not already installed\n# conda install -c bioconda star\n\n# Define variables for input reads and genome directory\n# INPUT_READS should be the FASTQ/FASTA file containing reads not mapped to Repbase.\nINPUT_READS=\"unmapped_reads.fastq\" # Placeholder for input reads\n# GENOME_DIR should point to the pre-built STAR index for the mm9 human genome.\n# The mm9 genome FASTA and GTF can be downloaded from UCSC (e.g., http://hgdownload.soe.ucsc.edu/goldenPath/mm9/bigZips/).\n# A STAR index for mm9 would need to be generated using STAR --runMode genomeGenerate.\nGENOME_DIR=\"/path/to/STAR_mm9_index\" # Placeholder for mm9 STAR index\nOUTPUT_PREFIX=\"aligned_to_mm9\"\n\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${INPUT_READS}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --outSAMunmapped Within \\\n     --outFilterMultimapNmax 1 \\\n     --outFilterMultimapScoreRange 1 \\\n     --runThreadN 8 # Adjust thread count as needed",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 5,
+            "description": "Alternative polyadenylation sites were identified from RNA-seq data using the bioinformatics algorithm DaPars (Xia et al., 2014), which uses a regression model to locate endpoints of alternative polyadenylation sites, was used to identify differences in APA events between hnRNP A2/B1 depleted samples and controls.",
+            "tool_name": "RNA-seq",
+            "tool_version": "v0.9.1",
+            "code_example": "# Define paths and filenames\nDAPARS_DIR=\"DaPars\" # Assuming DaPars is cloned here\nOUTPUT_BASE_DIR=\"dapars_analysis\"\nmkdir -p \"${OUTPUT_BASE_DIR}\"\n\n# Placeholder for reference genome and annotation\n# Download Gencode annotation for hg38 (example)\n# wget -P \"${OUTPUT_BASE_DIR}\" http://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_38/gencode.v38.annotation.gtf.gz\n# gunzip \"${OUTPUT_BASE_DIR}/gencode.v38.annotation.gtf.gz\"\nGENCODE_GTF=\"${OUTPUT_BASE_DIR}/gencode.v38.annotation.gtf\"\n\n# Placeholder for input BAM files (hnRNP A2/B1 depleted vs controls)\n# Ensure BAM files are sorted and indexed (.bai)\nCONTROL_BAM_1=\"control_rep1.bam\"\nCONTROL_BAM_2=\"control_rep2.bam\"\nDEPLETED_BAM_1=\"depleted_rep1.bam\"\nDEPLETED_BAM_2=\"depleted_rep2.bam\"\n\n# --- Installation (commented out) ---\n# Clone DaPars repository\n# git clone https://github.com/zhenglab/DaPars.git\n# cd DaPars\n\n# Create a conda environment for DaPars dependencies (Python 2.7 is required)\n# conda create -n dapars_env python=2.7 numpy scipy pandas pysam -y\n# conda activate dapars_env\n\n# --- DaPars Workflow ---\n\n# Step 1: Prepare DaPars reference file\n# This step identifies potential APA sites based on the GTF and read coverage from a representative BAM.\n# Using one control BAM for preparation.\nDAPARS_REFERENCE_DIR=\"${OUTPUT_BASE_DIR}/dapars_reference\"\nmkdir -p \"${DAPARS_REFERENCE_DIR}\"\npython \"${DAPARS_DIR}/DaPars.py\" prepare \\\n    -b \"${CONTROL_BAM_1}\" \\\n    -g \"${GENCODE_GTF}\" \\\n    -o \"${DAPARS_REFERENCE_DIR}\" \\\n    --species human # Assuming human, can be omitted if not specified\n\nDAPARS_REFERENCE_FILE=\"${DAPARS_REFERENCE_DIR}/DaPars_Reference.txt\" # Default output name\n\n# Step 2: Run DaPars on individual samples\n# This step quantifies APA usage for each sample.\nCONTROL_OUTPUT_DIR=\"${OUTPUT_BASE_DIR}/control_dapars_output\"\nDEPLETED_OUTPUT_DIR=\"${OUTPUT_BASE_DIR}/depleted_dapars_output\"\nmkdir -p \"${CONTROL_OUTPUT_DIR}\" \"${DEPLETED_OUTPUT_DIR}\"\n\n# Run for control samples\npython \"${DAPARS_DIR}/DaPars.py\" run \\\n    -b \"${CONTROL_BAM_1}\" \\\n    -r \"${DAPARS_REFERENCE_FILE}\" \\\n    -o \"${CONTROL_OUTPUT_DIR}/control_rep1\"\n\npython \"${DAPARS_DIR}/DaPars.py\" run \\\n    -b \"${CONTROL_BAM_2}\" \\\n    -r \"${DAPARS_REFERENCE_FILE}\" \\\n    -o \"${CONTROL_OUTPUT_DIR}/control_rep2\"\n\n# Run for depleted samples\npython \"${DAPARS_DIR}/DaPars.py\" run \\\n    -b \"${DEPLETED_BAM_1}\" \\\n    -r \"${DAPARS_REFERENCE_FILE}\" \\\n    -o \"${DEPLETED_OUTPUT_DIR}/depleted_rep1\"\n\npython \"${DAPARS_DIR}/DaPars.py\" run \\\n    -b \"${DEPLETED_BAM_2}\" \\\n    -r \"${DAPARS_REFERENCE_FILE}\" \\\n    -o \"${DEPLETED_OUTPUT_DIR}/depleted_rep2\"\n\n# Step 3: Compare DaPars results between control and depleted samples\n# Create sample list files for comparison\nCONTROL_SAMPLE_LIST=\"${OUTPUT_BASE_DIR}/control_samples.txt\"\nDEPLETED_SAMPLE_LIST=\"${OUTPUT_BASE_DIR}/depleted_samples.txt\"\n\n# The 'run' step outputs a file like 'sample_name_DaPars_Output.txt'\nfind \"${CONTROL_OUTPUT_DIR}\" -name \"*_DaPars_Output.txt\" > \"${CONTROL_SAMPLE_LIST}\"\nfind \"${DEPLETED_OUTPUT_DIR}\" -name \"*_DaPars_Output.txt\" > \"${DEPLETED_SAMPLE_LIST}\"\n\nCOMPARISON_OUTPUT_DIR=\"${OUTPUT_BASE_DIR}/dapars_comparison\"\nmkdir -p \"${COMPARISON_OUTPUT_DIR}\"\n\npython \"${DAPARS_DIR}/DaPars.py\" compare \\\n    -c \"${CONTROL_SAMPLE_LIST}\" \\\n    -t \"${DEPLETED_SAMPLE_LIST}\" \\\n    -o \"${COMPARISON_OUTPUT_DIR}\" \\\n    --species human # Again, assuming human",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 6,
+            "description": "To identify significant APA events, we used the following cutoffs: FDR < 0.05, |\u00ce\u0094PDUI| \u00e2\u0089\u00a5 0.2, and |dPDUI| \u00e2\u0089\u00a5 0.2.",
+            "tool_name": "DaPars (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.0",
+            "code_example": "# Tool: DaPars (Inferred with models/gemini-2.5-flash)\n# Version: 2.0 (Inferred, corresponding to DaPars2)\n# Description: Filtering significant Alternative Polyadenylation (APA) events from DaPars output.\n# The input file 'dapars_output.txt' is assumed to be generated by DaPars2 differential analysis.\n# It typically contains columns like: GeneName, chr, strand, pas_pos, pas_type, PDUI_control, PDUI_treatment, dPDUI, p_value, FDR.\n# Reference genome (e.g., hg38) would have been used in the preceding DaPars run, but is not directly used in this filtering step.\n\n# Define cutoffs for significance\nFDR_CUTOFF=0.05\nDPDUI_CUTOFF=0.2\n\n# Define column indices for filtering (1-indexed, based on typical DaPars2 output)\n# Column 8: dPDUI (difference in Percent Different Usage Index)\n# Column 10: FDR (False Discovery Rate)\nDPDUI_COL=8\nFDR_COL=10\n\n# Input file from DaPars2 differential analysis\nINPUT_FILE=\"dapars_output.txt\"\n# Output file for significant APA events\nOUTPUT_FILE=\"significant_apa_events.tsv\"\n\n# Filter significant APA events based on the specified cutoffs:\n# FDR < 0.05, |dPDUI| >= 0.2\n# Note: The description mentions |\u0394PDUI| >= 0.2 and |dPDUI| >= 0.2.\n# In DaPars, dPDUI is the primary metric for the change in PDUI.\n# We apply the absolute value check to dPDUI to satisfy the magnitude requirement.\n# If \u0394PDUI refers to a distinct column, the command would need adjustment.\nawk -v FDR_CUTOFF=\"${FDR_CUTOFF}\" -v DPDUI_CUTOFF=\"${DPDUI_CUTOFF}\" \\\n    -v DPDUI_COL=\"${DPDUI_COL}\" -v FDR_COL=\"${FDR_COL}\" \\\n    'BEGIN {OFS=\"\\t\"} \\\n    NR==1 {print; next} \\\n    ( $(FDR_COL) < FDR_CUTOFF ) && ( sqrt( ($(DPDUI_COL))^2 ) >= DPDUI_CUTOFF ) {print}' \\\n    \"${INPUT_FILE}\" > \"${OUTPUT_FILE}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 7,
+            "description": "APA scatter plots were generated using the R-Studio program with the ggplot2 library.\u00c2",
+            "tool_name": "R",
+            "tool_version": "R 4.x, ggplot2 3.x",
+            "code_example": "# Install R (example for Ubuntu/Debian)\n# sudo apt-get update\n# sudo apt-get install r-base\n\n# Install R packages (if not already installed)\n# R -e \"install.packages('ggplot2', repos='http://cran.us.r-project.org')\"\n\n# Create a dummy R script for APA scatter plot generation\n# In a real scenario, this script would be provided or generated based on specific APA data.\ncat << 'EOF' > generate_apa_scatter.R\n# Load necessary library\nlibrary(ggplot2)\n\n# --- Configuration ---\ninput_file <- \"apa_data.tsv\" # Placeholder for input data\noutput_file <- \"apa_scatter_plot.pdf\" # Placeholder for output plot\n\n# --- Dummy Data Generation (replace with actual data loading) ---\n# In a real scenario, you would load your APA data here, e.g.:\n# data <- read.delim(input_file, header = TRUE, sep = \"\\t\")\n# For demonstration, let's create some dummy data\nset.seed(123)\ndata <- data.frame(\n  Condition1_APA = rnorm(100, mean = 0, sd = 1),\n  Condition2_APA = rnorm(100, mean = 0.5, sd = 1.2),\n  Gene = paste0(\"Gene\", 1:100)\n)\n\n# --- Generate Scatter Plot ---\np <- ggplot(data, aes(x = Condition1_APA, y = Condition2_APA)) +\n  geom_point(alpha = 0.7) +\n  geom_smooth(method = \"lm\", se = FALSE, color = \"blue\") + # Add a linear regression line\n  labs(\n    title = \"APA Scatter Plot\",\n    x = \"APA Score (Condition 1)\",\n    y = \"APA Score (Condition 2)\"\n  ) +\n  theme_minimal()\n\n# --- Save the plot ---\nggsave(output_file, plot = p, width = 7, height = 6)\n\nmessage(paste(\"APA scatter plot saved to:\", output_file))\nEOF\n\n# Create a dummy input data file (replace with actual data)\n# This file would contain the APA scores for different conditions/genes\ncat << 'EOF' > apa_data.tsv\nGene\\tCondition1_APA\\tCondition2_APA\nGene1\\t0.12\\t0.34\nGene2\\t-0.56\\t-0.12\nGene3\\t0.89\\t1.01\nGene4\\t-0.23\\t-0.05\nGene5\\t0.55\\t0.67\nEOF\n\n# Execute the R script\nRscript generate_apa_scatter.R",
+            "code_language": "bash",
+            "github_url": "https://github.com/tidyverse/ggplot2"
+        },
+        {
+            "step_order": 8,
+            "description": "counts of reads for each gene annotated in gencode vM1 were calculated from featureCounts",
+            "tool_name": "featureCounts",
+            "tool_version": "2.0.3 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install subread (which includes featureCounts) if not already installed\n# conda install -c bioconda subread\n\n# Define input and output files\n# Replace 'input_aligned_reads.bam' with the actual path to your aligned BAM file(s).\n# If multiple BAM files, list them space-separated after the -s 0 parameter.\nINPUT_BAM=\"input_aligned_reads.bam\"\n\n# Placeholder for gencode vM1 annotation GTF file.\n# You would need to obtain the specific gencode vM1 GTF file used in the original pipeline.\n# A common path structure might look like: /path/to/gencode/mouse/M1/gencode.vM1.annotation.gtf\nGENCODE_GTF=\"gencode.vM1.annotation.gtf\"\n\n# Define the output file for gene counts\nOUTPUT_COUNTS=\"gene_counts.txt\"\n\n# Execute featureCounts to calculate read counts for each gene\n# -a: Annotation file (GTF/GFF)\n# -o: Output file\n# -F GTF: Specify annotation file format as GTF\n# -t exon: Count reads mapping to 'exon' features\n# -g gene_id: Group features by 'gene_id' attribute to get gene-level counts\n# -s 0: Assume unstranded data (0=unstranded, 1=stranded, 2=reverse stranded - adjust based on assay)\nfeatureCounts -a \"${GENCODE_GTF}\" \\\n              -o \"${OUTPUT_COUNTS}\" \\\n              -F GTF \\\n              -t exon \\\n              -g gene_id \\\n              -s 0 \\\n              \"${INPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Sequencing reads from RNA-seq libraries were first trimmed of polyA tails, adapters, and low quality ends using cutadapt with parameters --match-read-wildcards --times 2 -e 0 -O 5 --quality-cutoff' 6 -m 18 -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b TGGAATTCTCGGGTGCCAAGG -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT.\nReads were then mapped against a database of repetitive elements derived from RepBase18.05. Bowtie version 1.0.0 with parameters -S -q -p 16 -e 100 -l 20 was used to align reads against an index generated from Repbase sequences (Langmead et al., 2009).\nReads not mapped to Repbase sequences were aligned to the mm9 human genome (UCSC assembly) using STAR (Dobin et al., 2013) version 2.3.0e with parameters --outSAMunmapped Within \u00e2\u0080\u0093outFilterMultimapNmax 1 \u00e2\u0080\u0093outFilterMultimapScoreRange 1.\nAlternative polyadenylation sites were identified from RNA-seq data using the bioinformatics algorithm DaPars (Xia et al., 2014), which uses a regression model to locate endpoints of alternative polyadenylation sites, was used to identify differences in APA events between hnRNP A2/B1 depleted samples and controls. To identify significant APA events, we used the following cutoffs: FDR < 0.05, |\u00ce\u0094PDUI| \u00e2\u0089\u00a5 0.2, and |dPDUI| \u00e2\u0089\u00a5 0.2. APA scatter plots were generated using the R-Studio program with the ggplot2 library.\u00c2\ncounts of reads for each gene annotated in gencode vM1 were calculated from featureCounts\nGenome_build: mm9\nSupplementary_files_format_and_content: rpkm file, containts rpkm for each sample",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

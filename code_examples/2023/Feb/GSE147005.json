@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Fastq files were generated and demultiplexed with the bcl2fastq v2.17.1.14 Conversion Software (Illumina)",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Sequenced reads were trimmed for adaptor sequence and transcript abundances were computed using kallisto v0.46.0",
-      "tool_name": "kallisto",
-      "tool_version": "0.46.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "kallisto index was generated using Gencode annotation, GRCm38_vM19",
-      "tool_name": "kallisto",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Differential gene expression analysis was performed with the kallisto abundance tables using tximport and DESeq2",
-      "tool_name": "kallisto",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Fastq files were generated and demultiplexed with the bcl2fastq v2.17.1.14 Conversion Software (Illumina)\nSequenced reads were trimmed for adaptor sequence and transcript abundances were computed using kallisto v0.46.0\nkallisto index was generated using Gencode annotation, GRCm38_vM19\nDifferential gene expression analysis was performed with the kallisto abundance tables using tximport and DESeq2\nGenome_build: mm10\nSupplementary_files_format_and_content: Table of TPM values of annotated transcripts and DESeq2 output of differential gene expression",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Fastq files were generated and demultiplexed with the bcl2fastq v2.17.1.14 Conversion Software (Illumina)",
+            "tool_name": "bcl2fastq",
+            "tool_version": "2.17.1.14",
+            "code_example": "# Install bcl2fastq (e.g., via Illumina installer or specific environment setup)\n# For example, on some systems, it might be available as a module:\n# module load bcl2fastq/2.17.1.14\n\n# Example command for bcl2fastq\n# Replace /path/to/run_directory and /path/to/output_directory with actual paths\nbcl2fastq --runfolder-dir /path/to/run_directory --output-dir /path/to/output_directory --no-lane-splitting --minimum-trimmed-read-length 0 --mask-short-adapter-reads 0 --barcode-mismatches 1 --ignore-missing-bcl --ignore-missing-stats --ignore-missing-positions --create-fastq-for-index-reads --loading-threads 4 --processing-threads 4 --writing-threads 4",
+            "code_language": "bash",
+            "github_url": "https://support.illumina.com/sequencing/sequencing_software/bcl2fastq-conversion-software.html"
+        },
+        {
+            "step_order": 2,
+            "description": "Sequenced reads were trimmed for adaptor sequence and transcript abundances were computed using kallisto v0.46.0",
+            "tool_name": "kallisto",
+            "tool_version": "0.46.0",
+            "code_example": "# Install kallisto (if not already installed)\n# conda install -c bioconda kallisto=0.46.0\n\n# Placeholder for kallisto index (e.g., built from human GRCh38/hg38 transcriptome)\n# To build the index, you would typically use a command like:\n# kallisto index -i human_transcriptome.idx gencode.vXX.transcripts.fa.gz\n\n# Placeholder for input sequenced reads (replace with actual file paths)\nREAD1=\"sample_R1.fastq.gz\"\nREAD2=\"sample_R2.fastq.gz\"\n\n# Placeholder for kallisto index file\nKALLISTO_INDEX=\"human_transcriptome.idx\" # e.g., built from GENCODE human transcriptome (GRCh38)\n\n# Output directory for kallisto results\nOUTPUT_DIR=\"kallisto_quant_output\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Compute transcript abundances using kallisto\nkallisto quant \\\n  -i \"${KALLISTO_INDEX}\" \\\n  -o \"${OUTPUT_DIR}\" \\\n  \"${READ1}\" \"${READ2}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/pachterlab/kallisto"
+        },
+        {
+            "step_order": 3,
+            "description": "kallisto index was generated using Gencode annotation, GRCm38_vM19",
+            "tool_name": "kallisto",
+            "tool_version": "0.48.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install kallisto\n# conda install -c bioconda kallisto\n\n# Download Gencode vM19 (GRCm38) transcriptome FASTA\n# wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M19/gencode.vM19.transcripts.fa.gz\n# gunzip gencode.vM19.transcripts.fa.gz\n\n# Generate kallisto index\nkallisto index -i gencode.vM19.grcm38.idx gencode.vM19.transcripts.fa",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1038/nbt.3519"
+        },
+        {
+            "step_order": 4,
+            "description": "Differential gene expression analysis was performed with the kallisto abundance tables using tximport and DESeq2",
+            "tool_name": "kallisto",
+            "tool_version": "Not specified",
+            "code_example": "# Install kallisto (if not already installed)\n# conda install -c bioconda kallisto\n\n# Reference data (placeholder - replace with actual paths and versions)\n# For kallisto, a transcriptome FASTA file is required to build an index.\n# Example: Download human Gencode v44 transcriptome FASTA\n# wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_44/gencode.v44.transcripts.fa.gz\n# gunzip gencode.v44.transcripts.fa.gz\n\n# Build kallisto index\n# kallisto index -i human_gencode_v44_transcriptome.idx gencode.v44.transcripts.fa\n\n# Perform kallisto quantification for each sample\n# Replace with actual sample names, read files, and index path\nSAMPLES=(\"sample_1\" \"sample_2\" \"sample_3\" \"sample_4\") # Example sample names\nINDEX=\"human_gencode_v44_transcriptome.idx\" # Path to kallisto index\nOUTPUT_DIR=\"kallisto_quant_results\"\nmkdir -p \"${OUTPUT_DIR}\"\n\nfor SAMPLE in \"${SAMPLES[@]}\"; do\n    READ1=\"${SAMPLE}_R1.fastq.gz\" # Adjust if your files are named differently\n    READ2=\"${SAMPLE}_R2.fastq.gz\" # Adjust if your files are named differently\n    kallisto quant -i \"${INDEX}\" -o \"${OUTPUT_DIR}/${SAMPLE}\" \"${READ1}\" \"${READ2}\"\ndone\n\n# Create the R script file for tximport and DESeq2 analysis\ncat << 'EOF' > run_deseq2.R\n# Install R packages (if not already installed)\n# if (!requireNamespace(\"BiocManager\", quietly = TRUE))\n#     install.packages(\"BiocManager\")\n# BiocManager::install(\"tximport\")\n# BiocManager::install(\"DESeq2\")\n# BiocManager::install(\"AnnotationDbi\") # For gene mapping\n# BiocManager::install(\"org.Hs.eg.db\") # For human gene mapping\n\nlibrary(tximport)\nlibrary(DESeq2)\n# library(AnnotationDbi)\n# library(org.Hs.eg.db) # Example for human\n\n# Define paths to kallisto output directories\n# These should match the output from the kallisto quant step\nkallisto_output_dir <- \"kallisto_quant_results\"\nsample_names <- c(\"sample_1\", \"sample_2\", \"sample_3\", \"sample_4\") # Must match samples used in kallisto quant\nfiles <- file.path(kallisto_output_dir, sample_names, \"abundance.h5\")\nnames(files) <- sample_names\n\n# Create a sample information table (design matrix)\n# Replace with your actual experimental design (e.g., conditions, batches)\n# Example: 2 conditions, 2 replicates each\nsample_info <- data.frame(\n  sample = sample_names,\n  condition = factor(c(\"control\", \"control\", \"treated\", \"treated\")),\n  replicate = factor(c(\"rep1\", \"rep2\", \"rep1\", \"rep2\"))\n)\nrownames(sample_info) <- sample_names\n\n# Optional: Create a transcript-to-gene mapping table if performing gene-level DGE\n# This step requires a GTF/GFF file used for the transcriptome or an annotation package.\n# Example for human using Gencode v44 and org.Hs.eg.db:\n# txdb <- makeTxDbFromGFF(\"gencode.v44.annotation.gtf.gz\") # Requires GenomicFeatures package\n# k <- keys(txdb, keytype = \"TXNAME\")\n# tx2gene <- select(txdb, k, \"GENEID\", \"TXNAME\")\n# txi <- tximport(files, type = \"kallisto\", tx2gene = tx2gene, ignoreTxVersion = TRUE)\n\n# Import kallisto abundance data using tximport\n# Use txOut=TRUE for transcript-level analysis, or tx2gene for gene-level analysis\ntxi <- tximport(files, type = \"kallisto\", txOut = TRUE) # Example: transcript-level analysis\n\n# Create DESeq2 object\ndds <- DESeqDataSetFromTximport(txi, colData = sample_info, design = ~ condition)\n\n# Pre-filtering (optional, but recommended for DESeq2)\n# Remove genes/transcripts with very low counts across all samples\nkeep <- rowSums(counts(dds)) >= 10\ndds <- dds[keep,]\n\n# Run DESeq2 analysis\ndds <- DESeq(dds)\n\n# Get results\nres <- results(dds)\nsummary(res)\n\n# Order results by adjusted p-value\nres_ordered <- res[order(res$padj),]\n\n# Save results\nwrite.csv(as.data.frame(res_ordered), file = \"deseq2_results.csv\")\n\n# Optional: Generate an MA plot\n# png(\"deseq2_MA_plot.png\")\n# plotMA(res, main=\"DESeq2 MA-plot\")\n# dev.off()\nEOF\n\n# Execute the R script for differential gene expression analysis\nRscript run_deseq2.R",
+            "code_language": "bash",
+            "github_url": "https://github.com/pachterlab/kallisto"
+        }
+    ],
+    "raw_text": "Fastq files were generated and demultiplexed with the bcl2fastq v2.17.1.14 Conversion Software (Illumina)\nSequenced reads were trimmed for adaptor sequence and transcript abundances were computed using kallisto v0.46.0\nkallisto index was generated using Gencode annotation, GRCm38_vM19\nDifferential gene expression analysis was performed with the kallisto abundance tables using tximport and DESeq2\nGenome_build: mm10\nSupplementary_files_format_and_content: Table of TPM values of annotated transcripts and DESeq2 output of differential gene expression",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

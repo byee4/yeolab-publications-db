@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Adaptors were trimmed using trimmomatic (SE for Kasumi-1 cells, PE for CD34+ cells).",
-      "tool_name": "Trimmomatic",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Trimmed reads were aligned to the human genome (hg19) with TopHat v2.0.11.",
-      "tool_name": "TopHat",
-      "tool_version": "2.0.11",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Differential gene expression was determined using Cuffdiff v.2.1.1.",
-      "tool_name": "Cufflinks",
-      "tool_version": "2.1.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Adaptors were trimmed using trimmomatic (SE for Kasumi-1 cells, PE for CD34+ cells).\nTrimmed reads were aligned to the human genome (hg19) with TopHat v2.0.11.\nDifferential gene expression was determined using Cuffdiff v.2.1.1.\nGenome_build: hg19 (GRCh37)\nSupplementary_files_format_and_content: *_gene_exp.diff: Cuffdiff differential gene expression output; tab delimited text file.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Adaptors were trimmed using trimmomatic (SE for Kasumi-1 cells, PE for CD34+ cells).",
+            "tool_name": "Trimmomatic",
+            "tool_version": "0.39",
+            "code_example": "# Install Trimmomatic (if not already installed)\n# conda install -c bioconda trimmomatic=0.39\n\n# Define Trimmomatic path and adapter file paths\nTRIMMOMATIC_JAR=\"/path/to/trimmomatic-0.39.jar\" # Adjust path to your Trimmomatic .jar file\nADAPTER_FILE_PE=\"/path/to/Trimmomatic/adapters/TruSeq3-PE.fa\" # Path to Illumina adapter file for Paired-End\nADAPTER_FILE_SE=\"/path/to/Trimmomatic/adapters/TruSeq3-SE.fa\" # Path to Illumina adapter file for Single-End\nTHREADS=8 # Number of threads to use\n\n# --- Scenario 1: Single-End (SE) for Kasumi-1 cells ---\n# Assuming input file is kasumi1_raw.fastq.gz\nINPUT_SE_FASTQ=\"kasumi1_raw.fastq.gz\"\nOUTPUT_SE_TRIMMED=\"kasumi1_trimmed.fastq.gz\"\n\necho \"Trimming adapters for Single-End reads (Kasumi-1 cells)...\"\njava -jar \"${TRIMMOMATIC_JAR}\" SE -phred33 \\\n    \"${INPUT_SE_FASTQ}\" \\\n    \"${OUTPUT_SE_TRIMMED}\" \\\n    ILLUMINACLIP:\"${ADAPTER_FILE_SE}\":2:30:10 \\\n    LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36 \\\n    -threads \"${THREADS}\"\n\necho \"\"\n\n# --- Scenario 2: Paired-End (PE) for CD34+ cells ---\n# Assuming input files are cd34_R1_raw.fastq.gz and cd34_R2_raw.fastq.gz\nINPUT_PE_R1=\"cd34_R1_raw.fastq.gz\"\nINPUT_PE_R2=\"cd34_R2_raw.fastq.gz\"\nOUTPUT_PE_R1_PAIRED=\"cd34_R1_paired.fastq.gz\"\nOUTPUT_PE_R1_UNPAIRED=\"cd34_R1_unpaired.fastq.gz\"\nOUTPUT_PE_R2_PAIRED=\"cd34_R2_paired.fastq.gz\"\nOUTPUT_PE_R2_UNPAIRED=\"cd34_R2_unpaired.fastq.gz\"\n\necho \"Trimming adapters for Paired-End reads (CD34+ cells)...\"\njava -jar \"${TRIMMOMATIC_JAR}\" PE -phred33 \\\n    \"${INPUT_PE_R1}\" \"${INPUT_PE_R2}\" \\\n    \"${OUTPUT_PE_R1_PAIRED}\" \"${OUTPUT_PE_R1_UNPAIRED}\" \\\n    \"${OUTPUT_PE_R2_PAIRED}\" \"${OUTPUT_PE_R2_UNPAIRED}\" \\\n    ILLUMINACLIP:\"${ADAPTER_FILE_PE}\":2:30:10 \\\n    LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36 \\\n    -threads \"${THREADS}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Trimmed reads were aligned to the human genome (hg19) with TopHat v2.0.11.",
+            "tool_name": "TopHat",
+            "tool_version": "2.0.11",
+            "code_example": "# Install TopHat v2.0.11\n# conda create -n tophat_env tophat=2.0.11 -y\n# conda activate tophat_env\n\n# --- Reference Genome Preparation (if not already done) ---\n# TopHat v2 uses Bowtie2 for alignment. Ensure hg19 Bowtie2 index is available.\n# Download hg19 reference genome FASTA\n# mkdir -p ref/hg19\n# wget -P ref/hg19 http://hgdownload.cse.ucsc.edu/goldenPath/hg19/bigZips/hg19.fa.gz\n# gunzip ref/hg19/hg19.fa.gz\n\n# Build Bowtie2 index for hg19\n# bowtie2-build ref/hg19/hg19.fa ref/hg19/hg19_index\n\n# --- Alignment Step ---\n# Define input and output paths\nINPUT_READS=\"trimmed_reads.fastq\" # Placeholder for your trimmed reads file\nGENOME_INDEX_PREFIX=\"ref/hg19/hg19_index\" # Path to the Bowtie2 index prefix for hg19\nOUTPUT_DIR=\"tophat_alignment_hg19\"\n\n# Run TopHat alignment\n# -o: Output directory\n# -p: Number of threads (adjust as needed)\ntophat -o \"${OUTPUT_DIR}\" -p 8 \"${GENOME_INDEX_PREFIX}\" \"${INPUT_READS}\"",
+            "code_language": "bash",
+            "github_url": "https://ccb.jhu.edu/software/tophat/index.shtml"
+        },
+        {
+            "step_order": 3,
+            "description": "Differential gene expression was determined using Cuffdiff v.2.1.1.",
+            "tool_name": "Cufflinks",
+            "tool_version": "2.1.1",
+            "code_example": "# Install Cufflinks (which includes Cuffdiff)\n# conda install -c bioconda cufflinks=2.1.1\n\n# Define variables for input and output\n# TRANSCRIPTS_GTF is typically generated by Cufflinks or StringTie from aligned reads\nTRANSCRIPTS_GTF=\"path/to/merged_transcripts.gtf\"\n\n# Comma-separated BAM files for each condition/sample group\n# Replace with actual paths to your aligned BAM files\nSAMPLE1_BAMS=\"path/to/sample1_rep1.bam,path/to/sample1_rep2.bam\"\nSAMPLE2_BAMS=\"path/to/sample2_rep1.bam,path/to/sample2_rep2.bam\"\n\nOUTPUT_DIR=\"cuffdiff_output\"\n\n# Placeholder for reference genome FASTA and annotation GTF\n# Use the latest assembly (e.g., GRCh38/hg38) and corresponding annotation (e.g., Ensembl, Gencode)\nGENOME_FASTA=\"path/to/GRCh38.fa\"\nGENOME_ANNOTATION_GTF=\"path/to/GRCh38.gtf\"\n\n# Create output directory\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run Cuffdiff for differential expression analysis\n# -o: output directory\n# -L: comma-separated list of condition labels (must match the order of BAM groups)\n# -b: enable bias correction using a reference genome FASTA file\n# -u: use a reference annotation GTF to guide assembly and quantification\ncuffdiff -o \"${OUTPUT_DIR}\" \\\n         -L \"ConditionA,ConditionB\" \\\n         -b \"${GENOME_FASTA}\" \\\n         -u \"${GENOME_ANNOTATION_GTF}\" \\\n         \"${TRANSCRIPTS_GTF}\" \\\n         \"${SAMPLE1_BAMS}\" \\\n         \"${SAMPLE2_BAMS}\"\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/cole-trapnell-lab/cufflinks"
+        }
+    ],
+    "raw_text": "Adaptors were trimmed using trimmomatic (SE for Kasumi-1 cells, PE for CD34+ cells).\nTrimmed reads were aligned to the human genome (hg19) with TopHat v2.0.11.\nDifferential gene expression was determined using Cuffdiff v.2.1.1.\nGenome_build: hg19 (GRCh37)\nSupplementary_files_format_and_content: *_gene_exp.diff: Cuffdiff differential gene expression output; tab delimited text file.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "RNA-sequencing reads were trimmed using cutadapt (v1.4.0) of adaptor sequences, and mapped to repetitive elements (RepBase v18.04) using the STAR (v2.4.0i).",
-      "tool_name": "STAR",
-      "tool_version": "2.4.0i",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reads did not map to repetitive elements were then mapped to the human genome (hg19).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Using GENCODE (v19) gene annotations and featureCounts (v.1.5.0) to create read count matrices.",
-      "tool_name": "featureCounts",
-      "tool_version": "1.5.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "The transcript RPKMs of input and polysome fractions were calculated from the read count matrices.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "RNA-sequencing reads were trimmed using cutadapt (v1.4.0) of adaptor sequences, and mapped to repetitive elements (RepBase v18.04) using the STAR (v2.4.0i). Reads did not map to repetitive elements were then mapped to the human genome (hg19). Using GENCODE (v19) gene annotations and featureCounts (v.1.5.0) to create read count matrices.\nThe transcript RPKMs of input and polysome fractions were calculated from the read count matrices.\nGenome_build: Homo sapiens UCSC hg19 (GRCh37)\nSupplementary_files_format_and_content: msi_polysome_RPKM.csv: Comma-separated text file includes RPKM values.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "RNA-sequencing reads were trimmed using cutadapt (v1.4.0) of adaptor sequences, and mapped to repetitive elements (RepBase v18.04) using the STAR (v2.4.0i).",
+            "tool_name": "STAR",
+            "tool_version": "2.4.0i",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star=2.4.0i\n\n# Define input and output paths\n# Assuming 'trimmed_reads.fastq.gz' is the output from cutadapt trimming\nREADS=\"trimmed_reads.fastq.gz\"\n\n# Placeholder for the STAR index built from RepBase v18.04 sequences.\n# This index needs to be pre-built using STAR's --runMode genomeGenerate command.\nREPBASE_STAR_INDEX=\"/path/to/RepBase_v18.04_STAR_index\"\n\nOUTPUT_PREFIX=\"repbase_mapped_star\"\nTHREADS=8 # Adjust based on available computational resources\n\n# Map RNA-sequencing reads to repetitive elements using STAR\nSTAR --runThreadN ${THREADS} \\\n     --genomeDir ${REPBASE_STAR_INDEX} \\\n     --readFilesIn ${READS} \\\n     --outFileNamePrefix ${OUTPUT_PREFIX} \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outBAMcompression 6",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "Reads did not map to repetitive elements were then mapped to the human genome (hg19).",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.5.2b (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install STAR (example using conda)\n# conda install -c bioconda star=2.5.2b\n\n# Align reads to the human genome (hg19)\n# Assumes a STAR genome index for hg19 is pre-built at /path/to/star_index/hg19.\n# The hg19 reference genome can be obtained from sources like UCSC (e.g., hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.fa.gz).\n# Assumes 'filtered_reads.fastq.gz' contains reads that did not map to repetitive elements.\n# The output BAM file will be named 'aligned_reads_Aligned.sortedByCoordinate.out.bam'.\nSTAR --runThreadN 8 \\\n     --genomeDir /path/to/star_index/hg19 \\\n     --readFilesIn filtered_reads.fastq.gz \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix aligned_reads_ \\\n     --outFilterMultimapNmax 1 \\\n     --outFilterMismatchNmax 3 \\\n     --outFilterScoreMinOverLread 0.66 \\\n     --outFilterMatchNminOverLread 0.66 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --outSAMattributes All \\\n     --outSAMunmapped Within \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --limitBAMsortRAM 30000000000",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip"
+        },
+        {
+            "step_order": 3,
+            "description": "Using GENCODE (v19) gene annotations and featureCounts (v.1.5.0) to create read count matrices.",
+            "tool_name": "featureCounts",
+            "tool_version": "1.5.0",
+            "code_example": "# Install featureCounts (part of Subread package)\n# conda install -c bioconda subread\n\n# Placeholder for GENCODE v19 annotation GTF file\n# Ensure gencode.v19.annotation.gtf is available in the working directory or specified path\n# Example download (replace with actual path if already available):\n# wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19/gencode.v19.annotation.gtf.gz\n# gunzip gencode.v19.annotation.gtf.gz\nGENCODE_GTF=\"gencode.v19.annotation.gtf\"\n\n# Placeholder for input BAM files (e.g., aligned RNA-seq reads)\n# Replace with actual BAM file paths, space-separated for multiple files\nINPUT_BAM_FILES=\"sample1.bam sample2.bam\"\n\n# Output file for the read count matrix\nOUTPUT_COUNTS=\"gene_read_counts.txt\"\n\nfeatureCounts -a \"${GENCODE_GTF}\" \\\n              -o \"${OUTPUT_COUNTS}\" \\\n              -t exon \\\n              -g gene_id \\\n              ${INPUT_BAM_FILES}",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "The transcript RPKMs of input and polysome fractions were calculated from the read count matrices.",
+            "tool_name": "edgeR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "4.0.0",
+            "code_example": "# Install R and Bioconductor if not already installed\n# sudo apt-get update\n# sudo apt-get install r-base\n# R -e \"if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager'); BiocManager::install('edgeR')\"\n\n# --- Reference Data Preparation (Example for Human GENCODE v38) ---\n# Transcript/gene lengths are crucial for RPKM calculation. They can be derived from a GTF/GFF annotation file.\n# Example command to download a GTF file and generate a gene_lengths.tsv (requires a custom script like gtf_to_genelength.py):\n# wget -nc ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_38/gencode.v38.annotation.gtf.gz\n# gunzip -c gencode.v38.annotation.gtf.gz > gencode.v38.annotation.gtf\n# python gtf_to_genelength.py gencode.v38.annotation.gtf > gene_lengths.tsv\n# (A simple gtf_to_genelength.py script would parse the GTF to extract gene_id/transcript_id and calculate the effective length for each entry)\n\n# Create dummy input files for demonstration purposes.\n# In a real pipeline, these count matrices would be outputs from an upstream quantification step (e.g., featureCounts, HTSeq-count, Salmon, Kallisto).\n# The 'GeneID' column (or 'TranscriptID') should match the IDs in 'gene_lengths.tsv'.\ncat <<EOF > input_counts.tsv\nGeneID\tInput_Rep1\tInput_Rep2\nGeneA\t100\t120\nGeneB\t50\t60\nGeneC\t200\t210\nEOF\n\ncat <<EOF > polysome_counts.tsv\nGeneID\tPolysome_Rep1\tPolysome_Rep2\nGeneA\t150\t160\nGeneB\t80\t90\nGeneC\t300\t310\nEOF\n\ncat <<EOF > gene_lengths.tsv\nGeneID\tLength\nGeneA\t1000\nGeneB\t2000\nGeneC\t500\nEOF\n\n# R script to calculate RPKM for input and polysome fractions using edgeR\nRscript -e '\n  # Load the edgeR library\n  library(edgeR)\n\n  # Define input and output file names\n  input_counts_file <- \"input_counts.tsv\"\n  polysome_counts_file <- \"polysome_counts.tsv\"\n  gene_lengths_file <- \"gene_lengths.tsv\"\n  output_input_rpkm_file <- \"input_rpkm.tsv\"\n  output_polysome_rpkm_file <- \"polysome_rpkm.tsv\"\n\n  # Load gene/transcript lengths. Ensure the first column is the ID and second is Length.\n  gene_lengths <- read.delim(gene_lengths_file, row.names = 1, stringsAsFactors = FALSE)\n\n  # --- Process Input Fraction ---\n  # Load input fraction read counts. Ensure the first column is the ID.\n  input_counts_df <- read.delim(input_counts_file, row.names = 1, stringsAsFactors = FALSE)\n  \n  # Ensure gene/transcript order in counts matches gene_lengths for correct RPKM calculation\n  # Only keep IDs present in both counts and lengths, and in the same order\n  common_ids_input <- intersect(rownames(input_counts_df), rownames(gene_lengths))\n  input_counts_df <- input_counts_df[common_ids_input, , drop = FALSE]\n  gene_lengths_input <- gene_lengths[common_ids_input, , drop = FALSE]\n\n  # Create a DGEList object for the input fraction\n  dge_input <- DGEList(counts = input_counts_df, genes = gene_lengths_input)\n\n  # Calculate RPKM for the input fraction\n  # gene.length parameter expects a vector of lengths corresponding to the rows of the counts matrix\n  rpkm_input <- rpkm(dge_input, gene.length = dge_input$genes$Length)\n\n  # Write the input RPKM matrix to a TSV file\n  write.table(rpkm_input, output_input_rpkm_file, sep = \"\\t\", quote = FALSE, col.names = NA)\n  message(paste(\"Input RPKM values saved to:\", output_input_rpkm_file))\n\n  # --- Process Polysome Fraction ---\n  # Load polysome fraction read counts\n  polysome_counts_df <- read.delim(polysome_counts_file, row.names = 1, stringsAsFactors = FALSE)\n\n  # Ensure gene/transcript order in counts matches gene_lengths\n  common_ids_polysome <- intersect(rownames(polysome_counts_df), rownames(gene_lengths))\n  polysome_counts_df <- polysome_counts_df[common_ids_polysome, , drop = FALSE]\n  gene_lengths_polysome <- gene_lengths[common_ids_polysome, , drop = FALSE]\n\n  # Create a DGEList object for the polysome fraction\n  dge_polysome <- DGEList(counts = polysome_counts_df, genes = gene_lengths_polysome)\n\n  # Calculate RPKM for the polysome fraction\n  rpkm_polysome <- rpkm(dge_polysome, gene.length = dge_polysome$genes$Length)\n\n  # Write the polysome RPKM matrix to a TSV file\n  write.table(rpkm_polysome, output_polysome_rpkm_file, sep = \"\\t\", quote = FALSE, col.names = NA)\n  message(paste(\"Polysome RPKM values saved to:\", output_polysome_rpkm_file))\n'\n\n# Clean up dummy files (optional, in a real pipeline these would be inputs and outputs handled by the workflow manager)\n# rm input_counts.tsv polysome_counts.tsv gene_lengths.tsv\n",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/edgeR.html"
+        }
+    ],
+    "raw_text": "RNA-sequencing reads were trimmed using cutadapt (v1.4.0) of adaptor sequences, and mapped to repetitive elements (RepBase v18.04) using the STAR (v2.4.0i). Reads did not map to repetitive elements were then mapped to the human genome (hg19). Using GENCODE (v19) gene annotations and featureCounts (v.1.5.0) to create read count matrices.\nThe transcript RPKMs of input and polysome fractions were calculated from the read count matrices.\nGenome_build: Homo sapiens UCSC hg19 (GRCh37)\nSupplementary_files_format_and_content: msi_polysome_RPKM.csv: Comma-separated text file includes RPKM values.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

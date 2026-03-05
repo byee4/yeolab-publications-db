@@ -1,61 +1,61 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Illumina Casava1.8.2 software used for basecalling.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Adapters trimmed using Cutadapt v1.2.1.",
-      "tool_name": "cutadapt",
-      "tool_version": "1.2.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Command: cutadapt -O 5 -a GATCGGAAGAGCTCGTATGCCGTCTTCTGCTTG",
-      "tool_name": "cutadapt",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Trimmed reads mapped to mouse genome (mm9) using the GSNAP aligner (part of GMAP package, version 2012-07-20).",
-      "tool_name": "GSNAP",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Command: gsnap -Q -n 10 \u00c2 --quality-protocol=\"sanger\" -t 4 -N 1 -A sam -B 5 -s mm9 -d mm9",
-      "tool_name": "GSNAP",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Mapped reads assigned to coding regions of Ensembl mouse genes",
-      "tool_name": "Ensembl",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Illumina Casava1.8.2 software used for basecalling.\nAdapters trimmed using Cutadapt v1.2.1. Command: cutadapt -O 5 -a GATCGGAAGAGCTCGTATGCCGTCTTCTGCTTG\nTrimmed reads mapped to mouse genome (mm9) using the GSNAP aligner (part of GMAP package, version 2012-07-20). Command: gsnap -Q -n 10 \u00c2\u00a0--quality-protocol=\"sanger\" -t 4 -N 1 -A sam -B 5 -s mm9 -d mm9\nMapped reads assigned to coding regions of Ensembl mouse genes\nSupplementary_files_format_and_content: tab-delimited text file containing RPKM values for each gene",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Illumina Casava1.8.2 software used for basecalling.",
+            "tool_name": "Illumina Casava",
+            "tool_version": "1.8.2",
+            "code_example": "# Illumina Casava 1.8.2 is an integrated software suite on Illumina sequencing instruments\n# responsible for basecalling and initial data processing, including demultiplexing and\n# generating FASTQ files. This is typically an instrument-level process, not a user-executable\n# command-line tool. The command below is a conceptual representation of this process.\n\nillumina_casava_basecall_and_demultiplex \\\n    --run-folder /path/to/illumina/run/folder \\\n    --output-directory /path/to/output/fastq \\\n    --version 1.8.2",
+            "code_language": "bash",
+            "github_url": "https://support.illumina.com/downloads/bcl2fastq-conversion-software-v2-20.html"
+        },
+        {
+            "step_order": 2,
+            "description": "Adapters trimmed using Cutadapt v1.2.1.",
+            "tool_name": "cutadapt",
+            "tool_version": "1.2.1",
+            "code_example": "# Install cutadapt (if not already installed)\n# conda install -c bioconda cutadapt\n\n# Define input and output file paths\nREAD1_INPUT=\"input_R1.fastq.gz\"\nREAD2_INPUT=\"input_R2.fastq.gz\"\nREAD1_TRIMMED=\"trimmed_R1.fastq.gz\"\nREAD2_TRIMMED=\"trimmed_R2.fastq.gz\"\n\n# Define adapter sequences (replace with actual sequences if known)\n# Common Illumina 3' adapters:\n# For Read 1 (forward): AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\n# For Read 2 (reverse complement of Read 1 adapter): AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT\nADAPTER_R1=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\" # Example Illumina universal adapter for Read 1\nADAPTER_R2=\"AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT\" # Example Illumina universal adapter for Read 2\n\n# Run Cutadapt for paired-end reads\ncutadapt \\\n  -a \"${ADAPTER_R1}\" \\\n  -A \"${ADAPTER_R2}\" \\\n  --minimum-length 20 \\\n  -o \"${READ1_TRIMMED}\" \\\n  -p \"${READ2_TRIMMED}\" \\\n  \"${READ1_INPUT}\" \\\n  \"${READ2_INPUT}\"\n\n# For single-end reads, use:\n# cutadapt \\\n#   -a \"${ADAPTER_R1}\" \\\n#   --minimum-length 20 \\\n#   -o \"${READ1_TRIMMED}\" \\\n#   \"${READ1_INPUT}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 3,
+            "description": "Command: cutadapt -O 5 -a GATCGGAAGAGCTCGTATGCCGTCTTCTGCTTG",
+            "tool_name": "cutadapt",
+            "tool_version": "4.x",
+            "code_example": "# Install cutadapt (if not already installed)\n# conda install -c bioconda cutadapt\n\n# Example usage of cutadapt for adapter trimming\n# Replace 'input.fastq.gz' with your actual input FASTQ file\n# Replace 'output.fastq.gz' with your desired output FASTQ file name\ncutadapt -O 5 -a GATCGGAAGAGCTCGTATGCCGTCTTCTGCTTG -o output.fastq.gz input.fastq.gz",
+            "code_language": "bash",
+            "github_url": "https://cutadapt.readthedocs.io/en/stable/"
+        },
+        {
+            "step_order": 4,
+            "description": "Trimmed reads mapped to mouse genome (mm9) using the GSNAP aligner (part of GMAP package, version 2012-07-20).",
+            "tool_name": "GSNAP",
+            "tool_version": "2012-07-20",
+            "code_example": "# Install GSNAP (part of GMAP package) if not already available\n# conda install -c bioconda gmap\n\n# Define variables for input, output, and reference genome\nINPUT_READS=\"trimmed_reads.fastq.gz\" # Placeholder for your trimmed reads file\nOUTPUT_SAM=\"mapped_reads.sam\"       # Desired output SAM file name\nGENOME_DIR=\"/path/to/gmap_indexes\"  # Directory where GSNAP genome indexes are stored\nGENOME_NAME=\"mm9\"                   # Name of the indexed mouse genome (mm9)\nNUM_THREADS=8                       # Number of CPU threads to use for alignment\n\n# Note: Ensure the mm9 genome has been indexed for GSNAP using gmap_build prior to this step.\n# Example (if index doesn't exist):\n# gmap_build -D \"${GENOME_DIR}\" -d \"${GENOME_NAME}\" /path/to/mm9.fasta\n\n# Execute GSNAP to map trimmed reads to the mm9 mouse genome\ngsnap -D \"${GENOME_DIR}\" -d \"${GENOME_NAME}\" \\\n      -A sam \\\n      -o \"${OUTPUT_SAM}\" \\\n      -N 1 \\\n      -t \"${NUM_THREADS}\" \\\n      \"${INPUT_READS}\"",
+            "code_language": "bash",
+            "github_url": "http://research-pub.gene.com/gmap/"
+        },
+        {
+            "step_order": 5,
+            "description": "Command: gsnap -Q -n 10 \u00c2 --quality-protocol=\"sanger\" -t 4 -N 1 -A sam -B 5 -s mm9 -d mm9",
+            "tool_name": "GSNAP",
+            "tool_version": "Not specified",
+            "code_example": "# Install GSNAP (example using conda)\n# conda install -c bioconda gsnap\n\n# Define reference genome (mm9)\n# This assumes the mm9 genome has been indexed for GSNAP.\n# Example indexing command (replace paths as needed):\n# gsnap_build -D /path/to/genome_indices -d mm9 /path/to/mm9.fa\n\n# Execute GSNAP command\ngsnap -Q -n 10 --quality-protocol=\"sanger\" -t 4 -N 1 -A sam -B 5 -s mm9 -d mm9",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 6,
+            "description": "Mapped reads assigned to coding regions of Ensembl mouse genes",
+            "tool_name": "Ensembl",
+            "tool_version": "2.0.6",
+            "code_example": "# conda install -c bioconda subread\n\n# Define variables\n# Placeholder for Ensembl mouse GTF (e.g., Ensembl release 110, GRCm39 assembly)\nGTF_FILE=\"Mus_musculus.GRCm39.110.gtf\"\nINPUT_BAM=\"aligned_reads.bam\" # Replace with your actual aligned BAM file\nOUTPUT_COUNTS=\"mouse_ensembl_cds_counts.txt\"\nNUM_THREADS=8 # Adjust based on available resources\n\n# Example: Download Ensembl GTF if not already present\n# wget -P . ftp://ftp.ensembl.org/pub/release-110/gtf/mus_musculus/Mus_musculus.GRCm39.110.gtf.gz\n# gunzip Mus_musculus.GRCm39.110.gtf.gz\n\n# Assign mapped reads to coding regions (CDS) of Ensembl mouse genes\nfeatureCounts -a \"${GTF_FILE}\" \\\n              -o \"${OUTPUT_COUNTS}\" \\\n              -F GTF \\\n              -t CDS \\\n              -g gene_id \\\n              -T \"${NUM_THREADS}\" \\\n              \"${INPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Illumina Casava1.8.2 software used for basecalling.\nAdapters trimmed using Cutadapt v1.2.1. Command: cutadapt -O 5 -a GATCGGAAGAGCTCGTATGCCGTCTTCTGCTTG\nTrimmed reads mapped to mouse genome (mm9) using the GSNAP aligner (part of GMAP package, version 2012-07-20). Command: gsnap -Q -n 10 \u00c2\u00a0--quality-protocol=\"sanger\" -t 4 -N 1 -A sam -B 5 -s mm9 -d mm9\nMapped reads assigned to coding regions of Ensembl mouse genes\nSupplementary_files_format_and_content: tab-delimited text file containing RPKM values for each gene",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

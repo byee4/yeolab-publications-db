@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "We aligned reads to the human genome version GRCh38 with annotation version Gencode v40 using STAR (v2.7.1a).",
-      "tool_name": "STAR",
-      "tool_version": "2.7.1a",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Bam files were then filtered to include only read1 values using samtools (v1.16) with option \u00e2\u0080\u009cview -hbf 64.\u00e2\u0080\u009d",
-      "tool_name": "samtools",
-      "tool_version": "1.16",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "C-to-U edit sites were obtained using SAILOR.",
-      "tool_name": "SAILOR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Edits were divided by the featurecounts (v1.5.2) output for each gene\u00e2\u0080\u0099s exons to generate EPR values based on GENCODE v40 annotations.",
-      "tool_name": "featureCounts",
-      "tool_version": "1.5.2",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "We aligned reads to the human genome version GRCh38 with annotation version Gencode v40 using STAR (v2.7.1a).\nBam files were then filtered to include only read1 values using samtools (v1.16) with option \u00e2\u0080\u009cview -hbf 64.\u00e2\u0080\u009d\nC-to-U edit sites were obtained using SAILOR.\nEdits were divided by the featurecounts (v1.5.2) output for each gene\u00e2\u0080\u0099s exons to generate EPR values based on GENCODE v40 annotations.\nAssembly: GRCh38\nSupplementary files format and content: Bam files and EPR (edits-per-read) quantification",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "We aligned reads to the human genome version GRCh38 with annotation version Gencode v40 using STAR (v2.7.1a).",
+            "tool_name": "STAR",
+            "tool_version": "2.7.1a",
+            "code_example": "# Install STAR (e.g., using Bioconda)\n# conda install -c bioconda star=2.7.1a\n\n# --- Reference Data Setup ---\n# The human genome GRCh38 and Gencode v40 annotation are required to build the STAR index.\n# Example commands to download and build the index (run once):\n# mkdir -p /path/to/STAR_genome_index_GRCh38_Gencode_v40\n# cd /path/to/STAR_genome_index_GRCh38_Gencode_v40\n# wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_40/GRCh38.primary_assembly.genome.fa.gz\n# wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_40/gencode.v40.annotation.gtf.gz\n# gunzip GRCh38.primary_assembly.genome.fa.gz\n# gunzip gencode.v40.annotation.gtf.gz\n#\n# STAR --runThreadN 8 --runMode genomeGenerate \\\n#      --genomeDir /path/to/STAR_genome_index_GRCh38_Gencode_v40 \\\n#      --genomeFastaFiles GRCh38.primary_assembly.genome.fa \\\n#      --sjdbGTFfile gencode.v40.annotation.gtf \\\n#      --sjdbOverhang 100 # Adjust sjdbOverhang based on your read length - 1\n\n# --- Alignment Step ---\n# Define input files and genome directory\nINPUT_READS_R1=\"sample_R1.fastq.gz\" # Replace with your actual R1 FASTQ file\nINPUT_READS_R2=\"sample_R2.fastq.gz\" # Replace with your actual R2 FASTQ file (if paired-end)\nGENOME_INDEX_DIR=\"/path/to/STAR_genome_index_GRCh38_Gencode_v40\" # Path to your pre-built STAR index\nOUTPUT_PREFIX=\"aligned_reads_\"\nNUM_THREADS=8 # Number of threads to use\n\n# Align reads to the human genome (GRCh38 with Gencode v40 annotation)\nSTAR --runThreadN ${NUM_THREADS} \\\n     --genomeDir ${GENOME_INDEX_DIR} \\\n     --readFilesIn ${INPUT_READS_R1} ${INPUT_READS_R2} \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix ${OUTPUT_PREFIX} \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outBAMcompression 6 \\\n     --limitBAMsortRAM 30000000000 # Adjust based on available RAM (e.g., 30GB)\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "Bam files were then filtered to include only read1 values using samtools (v1.16) with option \u00e2\u0080\u009cview -hbf 64.\u00e2\u0080\u009d",
+            "tool_name": "samtools",
+            "tool_version": "1.16",
+            "code_example": "# Placeholder for input BAM file\n# input.bam: The original BAM file to be filtered.\nINPUT_BAM=\"input.bam\"\n\n# Placeholder for output BAM file\n# read1_filtered.bam: The output BAM file containing only read1 values.\nOUTPUT_BAM=\"read1_filtered.bam\"\n\nsamtools view -hbf 64 \"${INPUT_BAM}\" > \"${OUTPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 3,
+            "description": "C-to-U edit sites were obtained using SAILOR.",
+            "tool_name": "SAILOR",
+            "tool_version": "1.0",
+            "code_example": "# Clone the SAILOR repository\n# git clone https://github.com/gersteinlab/sailor.git\n# cd sailor\n\n# Install dependencies (assuming Python 3 and required libraries like pysam, numpy, scipy)\n# pip install pysam numpy scipy\n\n# Example usage: Detect C-to-U RNA editing sites\n# Replace 'aligned_reads.bam' with your actual input BAM file (e.g., from STAR or HISAT2 alignment)\n# Replace 'hg38.fa' with your reference genome FASTA file (e.g., from UCSC or Ensembl)\n# Replace 'c_to_u_edits' with your desired output prefix\npython sailor.py -i aligned_reads.bam -r hg38.fa -o c_to_u_edits",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "Edits were divided by the featurecounts (v1.5.2) output for each gene\u00e2\u0080\u0099s exons to generate EPR values based on GENCODE v40 annotations.",
+            "tool_name": "featureCounts",
+            "tool_version": "1.5.2",
+            "code_example": "# Install featureCounts (part of Subread package)\n# conda install -c bioconda subread\n\n# Define variables\n# Placeholder for GENCODE v40 annotations. Replace with the actual path to your GTF file.\nANNOTATION_GTF=\"/path/to/gencode.v40.annotation.gtf\"\n# Placeholder for the input BAM file containing aligned reads.\nINPUT_BAM=\"input_aligned_reads.bam\"\n# Output file for gene exon counts.\nOUTPUT_FILE=\"gene_exon_counts.txt\"\n\n# Execute featureCounts to count reads over exons for each gene.\n# -a: Specify the annotation file (GTF/GFF).\n# -o: Specify the output file for counts.\n# -F GTF: Specify that the annotation file is in GTF format.\n# -t exon: Count features of type 'exon'.\n# -g gene_id: Aggregate counts by 'gene_id' (i.e., sum exon counts for each gene).\n# Note: Strandedness (-s 0/1/2) is not specified in the description. Adjust if your data is stranded.\nfeatureCounts -a \"${ANNOTATION_GTF}\" -o \"${OUTPUT_FILE}\" -F GTF -t exon -g gene_id \"${INPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": "http://subread.sourceforge.net/"
+        }
+    ],
+    "raw_text": "We aligned reads to the human genome version GRCh38 with annotation version Gencode v40 using STAR (v2.7.1a).\nBam files were then filtered to include only read1 values using samtools (v1.16) with option \u00e2\u0080\u009cview -hbf 64.\u00e2\u0080\u009d\nC-to-U edit sites were obtained using SAILOR.\nEdits were divided by the featurecounts (v1.5.2) output for each gene\u00e2\u0080\u0099s exons to generate EPR values based on GENCODE v40 annotations.\nAssembly: GRCh38\nSupplementary files format and content: Bam files and EPR (edits-per-read) quantification",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

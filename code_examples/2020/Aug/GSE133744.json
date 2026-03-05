@@ -1,16 +1,16 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Analysis and normalization were performed using two methods: dChip 1.3 (Li and Wong, 2001) and Drop Method (Aimone and Gage, 2004) software packages.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Analysis and normalization were performed using two methods: dChip 1.3 (Li and Wong, 2001) and Drop Method (Aimone and Gage, 2004) software packages.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Analysis and normalization were performed using two methods: dChip 1.3 (Li and Wong, 2001) and Drop Method (Aimone and Gage, 2004) software packages.",
+            "tool_name": "dChip",
+            "tool_version": "1.3",
+            "code_example": "# --- dChip 1.3 (Li and Wong, 2001) ---\n# dChip is primarily a Windows-based GUI software for microarray analysis.\n# Direct command-line execution in a typical bash environment is not common.\n# The following represents the conceptual steps for normalization and analysis\n# that would typically be performed using dChip.\n\n# # Installation of dChip (typically a Windows executable download and install)\n# # No direct bash installation command is generally available for dChip.\n\n# Conceptual command for dChip normalization and analysis:\n# This command is illustrative and not directly executable in a standard bash environment.\n# It represents the actions performed by dChip on Affymetrix CEL files.\n# dchip_process \\\n#   --input-celfiles \"path/to/raw_data/*.CEL\" \\\n#   --normalization-method \"model_based\" \\\n#   --expression-index-method \"PM_only\" \\\n#   --output-dir \"dchip_normalized_output\" \\\n#   --log-file \"dchip_run.log\"\n\n# --- Drop Method (Aimone and Gage, 2004) ---\n# The Drop Method is a normalization technique, often implemented in statistical environments like R or MATLAB.\n# This example assumes an R script implementation.\n\n# # Install R if not already installed\n# # sudo apt-get update && sudo apt-get install -y r-base\n\n# Create a placeholder R script for the Drop Method\ncat << 'EOF' > drop_method_normalization.R\n# R script to perform Drop Method normalization\n# Based on Aimone and Gage, 2004 (J Neurosci Methods)\n\n# Function to implement a simplified Drop Method (conceptual)\n# In a real scenario, this would involve more complex statistical modeling\n# and handling of microarray data structures (e.g., AffyBatch object).\nperform_drop_normalization <- function(raw_data_matrix) {\n  # raw_data_matrix: A matrix where rows are probes and columns are samples\n  \n  cat(\"Performing conceptual Drop Method normalization...\\n\")\n  \n  # The Drop Method involves identifying and removing outlier probes/arrays\n  # based on their distribution relative to other arrays.\n  # This is a highly simplified representation for demonstration.\n  \n  # Example: Simple quantile normalization as a stand-in for a normalization step\n  # A true Drop Method implementation would be more sophisticated.\n  normalized_data <- apply(raw_data_matrix, 2, function(x) {\n    rank_x <- rank(x, ties.method = \"average\")\n    sorted_x <- sort(x)\n    return(sorted_x[rank_x])\n  })\n  \n  cat(\"Drop Method normalization complete.\\n\")\n  return(normalized_data)\n}\n\n# Load example raw data (replace with actual data loading, e.g., from CEL files)\n# For demonstration, create a dummy matrix\nset.seed(123)\nnum_probes <- 1000\nnum_samples <- 5\nraw_microarray_data <- matrix(rnorm(num_probes * num_samples, mean = 10, sd = 2),\n                              nrow = num_probes, ncol = num_samples)\ncolnames(raw_microarray_data) <- paste0(\"Sample_\", 1:num_samples)\nrownames(raw_microarray_data) <- paste0(\"Probe_\", 1:num_probes)\n\n# Perform normalization\nnormalized_data_drop <- perform_drop_normalization(raw_microarray_data)\n\n# Save normalized data\nwrite.csv(normalized_data_drop, \"drop_method_normalized_data.csv\", row.names = TRUE)\n\ncat(\"Normalized data saved to drop_method_normalized_data.csv\\n\")\nEOF\n\nRscript drop_method_normalization.R",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Analysis and normalization were performed using two methods: dChip 1.3 (Li and Wong, 2001) and Drop Method (Aimone and Gage, 2004) software packages.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

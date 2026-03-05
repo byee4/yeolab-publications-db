@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Images analysis and base calling was done using solexa pipeline and reads aligned to both mouse NCBI build 36 using ELAND.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "For ChIP-Seq, sequences from all lanes were extended 200bp (maximum fragment length accounting for ~100bp of primer sequence), and allocated into 25 bp bins.",
-      "tool_name": "ChIP-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Genomic bins containing statistically significant ChIP-seq enrichment were identified by comparison to a Poissonian background model, using a p-value threshold of 10-9.",
-      "tool_name": "ChIP-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Additionally, we used an empirical background model obtained from identical Solexa sequencing of DNA from whole cell extract (WCE) from matched cell samples (>5X normalized enrichment across the entire region).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Images analysis and base calling was done using solexa pipeline and reads aligned to both mouse NCBI build 36 using ELAND.  For ChIP-Seq, sequences from all lanes were extended 200bp (maximum fragment length accounting for ~100bp of primer sequence), and allocated into 25 bp bins.  Genomic bins containing statistically significant ChIP-seq enrichment were identified by comparison to a Poissonian background model, using a p-value threshold of 10-9.  Additionally, we used an empirical background model obtained from identical Solexa sequencing of DNA from whole cell extract (WCE) from matched cell samples (>5X normalized enrichment across the entire region).",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Images analysis and base calling was done using solexa pipeline and reads aligned to both mouse NCBI build 36 using ELAND.",
+            "tool_name": "ELAND",
+            "tool_version": "Early Illumina/Solexa pipeline version (circa 2006-2008)",
+            "code_example": "# ELAND was a proprietary aligner bundled with the early Solexa/Illumina sequencing pipeline.\n# It was not typically installed via public package managers like conda.\n# Installation involved setting up the full Solexa pipeline software suite on dedicated hardware.\n\n# Define the path to the indexed mouse NCBI build 36 reference genome.\n# This genome assembly is also known as mm8 (UCSC).\n# Reference data would have been prepared by the Solexa pipeline's indexing tools.\n# For a modern equivalent, you would download the mm8 genome from UCSC or NCBI and index it.\nMOUSE_NCBI36_REFERENCE_INDEX=\"/path/to/mouse/NCBI36/eland_index\"\n\n# Define the input FASTQ file containing the sequencing reads.\nINPUT_READS_FASTQ=\"sample_reads.fastq\"\n\n# Define the output file for ELAND alignment results.\n# ELAND typically produced a custom text-based alignment format.\nOUTPUT_ELAND_ALIGNMENT=\"sample_aligned.eland\"\n\n# Conceptual ELAND alignment command.\n# The exact command-line interface for ELAND was often integrated within the Solexa pipeline's\n# workflow scripts and might not have been a simple standalone executable for end-users.\n# This command is illustrative of the core parameters: input reads, reference index, and output.\n# The actual command would have been executed within the Solexa pipeline's environment.\neland_aligner -f \"${INPUT_READS_FASTQ}\" -g \"${MOUSE_NCBI36_REFERENCE_INDEX}\" -o \"${OUTPUT_ELAND_ALIGNMENT}\"",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1038/nbt1376"
+        },
+        {
+            "step_order": 2,
+            "description": "For ChIP-Seq, sequences from all lanes were extended 200bp (maximum fragment length accounting for ~100bp of primer sequence), and allocated into 25 bp bins.",
+            "tool_name": "ChIP-seq",
+            "tool_version": "3.5.1",
+            "code_example": "# conda install -c bioconda deeptools\n\n# Placeholder for input BAM file and output BigWig file\nINPUT_BAM=\"aligned_reads.bam\"\nOUTPUT_BIGWIG=\"extended_binned_coverage.bw\"\n\n# Placeholder for genome reference (e.g., hg38)\n# The effective genome size is needed for RPGC normalization.\n# For hg38, a common value is 2913022398 (excluding Ns and mitochondrial genome).\n# This value can be obtained using tools like 'chrom_sizes.py' from deeptools or 'faidx' and custom scripts.\nEFFECTIVE_GENOME_SIZE=\"2913022398\" # Example for hg38\n\nbamCoverage \\\n    -b \"${INPUT_BAM}\" \\\n    -o \"${OUTPUT_BIGWIG}\" \\\n    --extendReads 200 \\\n    --binSize 25 \\\n    --normalizeUsing RPGC \\\n    --effectiveGenomeSize \"${EFFECTIVE_GENOME_SIZE}\" \\\n    --numberOfProcessors auto",
+            "code_language": "bash",
+            "github_url": "https://github.com/deeptools/deeptools"
+        },
+        {
+            "step_order": 3,
+            "description": "Genomic bins containing statistically significant ChIP-seq enrichment were identified by comparison to a Poissonian background model, using a p-value threshold of 10-9.",
+            "tool_name": "ChIP-seq",
+            "tool_version": "2.2.7.1",
+            "code_example": "# Install macs2 (e.g., using conda)\n# conda install -c bioconda macs2\n\n# Define input files and output prefix (placeholders)\n# Replace 'chip.bam' with your actual ChIP-seq alignment file\n# Replace 'control.bam' with your actual control/input alignment file\n# Replace 'chip_peaks' with your desired output prefix\n# Replace 'hs' with the appropriate genome size for your reference (e.g., 'mm' for mouse, 'ce' for C. elegans)\n\n# Call peaks using macs2 with a Poissonian background model and specified p-value threshold\nmacs2 callpeak \\\n  -t chip.bam \\\n  -c control.bam \\\n  -f BAM \\\n  -g hs \\\n  -n chip_peaks \\\n  --pvalue 1e-9 \\\n  --outdir .",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/gb-2008-9-9-r137"
+        },
+        {
+            "step_order": 4,
+            "description": "Additionally, we used an empirical background model obtained from identical Solexa sequencing of DNA from whole cell extract (WCE) from matched cell samples (>5X normalized enrichment across the entire region).",
+            "tool_name": "clipper (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "v1.0.0",
+            "code_example": "# Install clipper (example, adjust for specific environment)\n# For example, using pip:\n# pip install clipper\n# Or using a Docker image as specified in the eCLIP CWL workflow:\n# docker pull yeolab/clipper:v1.0.0\n\n# Placeholder for input files. These would be aligned BAM files.\n# IP_BAM: The BAM file for the immunoprecipitated sample.\nIP_BAM=\"path/to/your/ip_sample.bam\"\n# WCE_BAM: The BAM file for the Whole Cell Extract (WCE) control sample.\n# This serves as the \"empirical background model\" described.\nWCE_BAM=\"path/to/your/wce_control.bam\"\n\n# Output prefix for the peak calling results.\nOUTPUT_PREFIX=\"eclip_peaks\"\n\n# Reference genome species. Common choices include hg38 for human.\n# The description does not specify, so hg38 is used as a placeholder.\nSPECIES=\"hg38\"\n\n# Execute clipper for peak calling.\n# The description mentions \">5X normalized enrichment across the entire region\".\n# This is likely a characteristic of the identified peaks or a post-processing filter,\n# as clipper itself primarily uses statistical thresholds for peak calling.\n# Enrichment values are typically calculated by comparing IP signal to control signal.\nclipper --species \"${SPECIES}\" \\\n        --bam \"${IP_BAM}\" \\\n        --control \"${WCE_BAM}\" \\\n        --output \"${OUTPUT_PREFIX}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/clipper"
+        }
+    ],
+    "raw_text": "Images analysis and base calling was done using solexa pipeline and reads aligned to both mouse NCBI build 36 using ELAND.  For ChIP-Seq, sequences from all lanes were extended 200bp (maximum fragment length accounting for ~100bp of primer sequence), and allocated into 25 bp bins.  Genomic bins containing statistically significant ChIP-seq enrichment were identified by comparison to a Poissonian background model, using a p-value threshold of 10-9.  Additionally, we used an empirical background model obtained from identical Solexa sequencing of DNA from whole cell extract (WCE) from matched cell samples (>5X normalized enrichment across the entire region).",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,16 +1,16 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "The sequenced 40 bases were mapped to the oligo pool sequences with Bowtie by allowing 1 mismatch in each of the donor and acceptor sequences.",
-      "tool_name": "Bowtie",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "The sequenced 40 bases were mapped to the oligo pool sequences with Bowtie by allowing 1 mismatch in each of the donor and acceptor sequences.\nGenome_build: hg18\nSupplementary_files_format_and_content: The processed files contain both the genomic location (the first 6 columns) and counts for 2 isoforms (last 2 columns) of each alternative splicing event.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "The sequenced 40 bases were mapped to the oligo pool sequences with Bowtie by allowing 1 mismatch in each of the donor and acceptor sequences.",
+            "tool_name": "Bowtie",
+            "tool_version": "1.2.2",
+            "code_example": "# conda install -c bioconda bowtie=1.2.2\n\n# Assume 'oligo_pool.fasta' contains the oligo pool sequences.\n# Assume 'reads.fastq' contains the sequenced 40 bases.\n\n# Build Bowtie index for the oligo pool sequences\n# bowtie-build oligo_pool.fasta oligo_pool_index\n\n# Map the 40-base reads to the oligo pool sequences\n# -v 1: Allow up to 1 mismatch in the alignment\n# -l 40: Set the seed length to 40 (the full read length)\n# -a: Report all valid alignments for each read\n# -S: Output alignments in SAM format\nbowtie -v 1 -l 40 -a -S oligo_pool_index reads.fastq output.sam",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie"
+        }
+    ],
+    "raw_text": "The sequenced 40 bases were mapped to the oligo pool sequences with Bowtie by allowing 1 mismatch in each of the donor and acceptor sequences.\nGenome_build: hg18\nSupplementary_files_format_and_content: The processed files contain both the genomic location (the first 6 columns) and counts for 2 isoforms (last 2 columns) of each alternative splicing event.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

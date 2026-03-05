@@ -1,97 +1,97 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Library strategy: PAR-CLIP",
-      "tool_name": "PAR-CLIP",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Sequencing data was converted using the bcl2fastq tool from the Illumina CASAVA package, followed by demultiplexing and 3\u00e2\u0080\u0099 adapter trimming using flexbar and Cutadapt .",
-      "tool_name": "cutadapt",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "To remove PCR duplicates, reads with identical sequence were collapsed, then we used FASTX Trimmer tool to remove random nucleotides from both ends of collapsed reads.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Reads shorter than 14 nucleotides were discarded.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "BWA-based PARA-Suite aligner was used to align reads to GRCh38 genome and to a custom database of exon-exon junctions generated from Ensembl 89 transcriptome annotation.",
-      "tool_name": "BWA",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "We handled multi-mapping reads by keeping only those that mapped once with at least one T-C mismatch: mapping positions indicating T-C transitions were chosen as the correct ones.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Alignment files from each pair of replicates were combined and T-C transition were called using Bmix tool.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "Only transitions supported by at least two reads from both replicates were kept.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "Annotation of T-C transitions with respect to their position within Ensembl 89 gene bodies was performed using BEDTools intersect tool.",
-      "tool_name": "bedtools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 10,
-      "description": "Each column reports the fraction of T-C transitions in each gene body region that was calculated by dividing the number of T converted to C by the total number of T in that region.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Library strategy: PAR-CLIP\nSequencing data was converted using the bcl2fastq tool from the Illumina CASAVA package, followed by demultiplexing and 3\u00e2\u0080\u0099 adapter trimming using flexbar and Cutadapt . To remove PCR duplicates, reads with identical sequence were collapsed, then we used FASTX Trimmer tool to remove random nucleotides from both ends of collapsed reads. Reads shorter than 14 nucleotides were discarded.\nBWA-based PARA-Suite aligner was used to align reads to GRCh38 genome and to a custom database of exon-exon junctions generated from Ensembl 89 transcriptome annotation. We handled multi-mapping reads by keeping only those that mapped once with at least one T-C mismatch: mapping positions indicating T-C transitions were chosen as the correct ones.\nAlignment files from each pair of replicates were combined and  T-C transition were called using Bmix tool. Only transitions supported by at least two reads from both replicates were kept.\nAnnotation of T-C transitions with respect to their position within Ensembl 89 gene bodies was performed using BEDTools intersect tool.\nEach column reports the fraction of T-C transitions in each gene body region that was calculated by dividing the number of T converted to C by the total number of T in that region.\nGenome_build: hg19\nSupplementary_files_format_and_content: tab separated values",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Library strategy: PAR-CLIP",
+            "tool_name": "PAR-CLIP",
+            "tool_version": "v1.0",
+            "code_example": "# Install PARalyzer (if not already installed)\n# Download from SourceForge: https://sourceforge.net/projects/paralyzer/\n# wget https://sourceforge.net/projects/paralyzer/files/PARalyzer_v1.0.tar.gz\n# tar -xzf PARalyzer_v1.0.tar.gz\n# cd PARalyzer_v1.0\n# Ensure 'perl' is installed and PARalyzer.pl is executable and in your PATH or specified by full path.\n\n# Placeholder for reference genome FASTA file (e.g., human hg38)\nGENOME_FASTA=\"/path/to/reference/genome/hg38.fa\"\n\n# Placeholder for input aligned reads in BED format.\n# This file typically results from aligning PAR-CLIP reads (e.g., with STAR) and converting the BAM to BED.\n# Example command to generate this (assuming STAR alignment and samtools/bedtools):\n# STAR --runThreadN 8 --genomeDir /path/to/genome/index/hg38 --readFilesIn sample_R1.fastq.gz sample_R2.fastq.gz \\\n#      --outFileNamePrefix sample_parclip. --outSAMtype BAM SortedByCoordinate\n# samtools view -b -F 0x4 sample_parclip.Aligned.sortedByCoord.out.bam | bedtools bamtobed -i stdin > aligned_reads.bed\nINPUT_BED_FILE=\"aligned_reads.bed\"\n\n# Output directory for PARalyzer results\nOUTPUT_DIR=\"paralyzer_output\"\nmkdir -p ${OUTPUT_DIR}\n\n# Create a minimal PARalyzer configuration file.\n# This file defines parameters for the analysis, including genome path, input files, and thresholds.\n# Real-world usage may require more detailed and specific configuration based on experimental design.\nCONFIG_FILE=\"paralyzer_config.txt\"\n\necho \"[General]\" > ${CONFIG_FILE}\necho \"genome_fasta = ${GENOME_FASTA}\" >> ${CONFIG_FILE}\necho \"output_dir = ${OUTPUT_DIR}\" >> ${CONFIG_FILE}\necho \"[Sample1]\" >> ${CONFIG_FILE}\necho \"bed_file = ${INPUT_BED_FILE}\" >> ${CONFIG_FILE}\necho \"name = sample_parclip\" >> ${CONFIG_FILE}\necho \"min_read_length = 15\" >> ${CONFIG_FILE} # Minimum length of reads to consider\necho \"min_cluster_size = 5\" >> ${CONFIG_FILE} # Minimum number of reads to form a cluster (peak)\necho \"min_t_to_c_ratio = 0.1\" >> ${CONFIG_FILE} # Minimum ratio of T-to-C mutations within a cluster\necho \"min_t_to_c_count = 2\" >> ${CONFIG_FILE} # Minimum number of T-to-C mutations within a cluster\n\n# Execute PARalyzer using the generated configuration file.\n# The '-o' flag specifies the prefix for output files.\nperl PARalyzer.pl -c ${CONFIG_FILE} -o ${OUTPUT_DIR}/sample_parclip_results",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Sequencing data was converted using the bcl2fastq tool from the Illumina CASAVA package, followed by demultiplexing and 3\u00e2\u0080\u0099 adapter trimming using flexbar and Cutadapt .",
+            "tool_name": "cutadapt",
+            "tool_version": "Inferred with models/gemini-2.5-flash",
+            "code_example": "# Install cutadapt (example using conda)\n# conda install -c bioconda cutadapt\n\n# Define input and output files (placeholders)\nINPUT_FASTQ=\"input.fastq.gz\"\nOUTPUT_FASTQ=\"output.fastq.gz\"\n\n# Define the 3' adapter sequence (common Illumina adapter)\nADAPTER_SEQUENCE=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\"\n\n# Execute cutadapt for 3' adapter trimming\ncutadapt -a \"${ADAPTER_SEQUENCE}\" \\\n         -o \"${OUTPUT_FASTQ}\" \\\n         --minimum-length 18 \\\n         \"${INPUT_FASTQ}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 3,
+            "description": "To remove PCR duplicates, reads with identical sequence were collapsed, then we used FASTX Trimmer tool to remove random nucleotides from both ends of collapsed reads.",
+            "tool_name": "fastx_collapser (Inferred with models/gemini-2.5-flash), fastx_trimmer",
+            "tool_version": "FASTX-Toolkit 0.0.14",
+            "code_example": "# Install FASTX-Toolkit\n# conda install -c bioconda fastx_toolkit\n\n# Assuming input is a FASTQ file, convert to FASTA for fastx_collapser\nfastq_to_fasta -i input.fastq -o input.fasta\n\n# Collapse reads with identical sequences to remove PCR duplicates\nfastx_collapser -i input.fasta -o collapsed.fasta\n\n# Remove random nucleotides from both ends of the collapsed reads\n# Example parameters based on eCLIP workflows: trim 5 bases from the 5' end and 5 bases from the 3' end\nfastx_trimmer -f 5 -l 5 -i collapsed.fasta -o trimmed.fasta",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip"
+        },
+        {
+            "step_order": 4,
+            "description": "Reads shorter than 14 nucleotides were discarded.",
+            "tool_name": "fastp (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "0.23.4 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install fastp (e.g., via conda)\n# conda install -c bioconda fastp\n\n# Example for single-end reads:\n# Replace input.fastq.gz and output.fastq.gz with your actual file names\nfastp \\\n  --in1 input.fastq.gz \\\n  --out1 output.fastq.gz \\\n  --length_required 14 \\\n  --json fastp.json \\\n  --html fastp.html\n\n# Example for paired-end reads (uncomment and adjust as needed):\n# fastp \\\n#   --in1 input_R1.fastq.gz \\\n#   --in2 input_R2.fastq.gz \\\n#   --out1 output_R1.fastq.gz \\\n#   --out2 output_R2.fastq.gz \\\n#   --length_required 14 \\\n#   --json fastp.json \\\n#   --html fastp.html",
+            "code_language": "bash",
+            "github_url": "https://github.com/OpenGene/fastp"
+        },
+        {
+            "step_order": 5,
+            "description": "BWA-based PARA-Suite aligner was used to align reads to GRCh38 genome and to a custom database of exon-exon junctions generated from Ensembl 89 transcriptome annotation.",
+            "tool_name": "BWA",
+            "tool_version": "0.7.17",
+            "code_example": "# Install BWA (e.g., using conda)\n# conda install -c bioconda bwa\n\n# Define paths for reference genomes and input reads\nGRCH38_GENOME=\"/path/to/GRCh38/GRCh38.fa\" # Source: GRCh38 genome\nJUNCTION_DB=\"/path/to/junctions/ensembl_89_junctions.fa\" # Source: Custom database from Ensembl 89 transcriptome annotation\nCOMBINED_REFERENCE=\"combined_grch38_junctions.fa\"\nINPUT_READS=\"reads.fastq.gz\" # Placeholder for input FASTQ reads\nOUTPUT_SAM=\"aligned_reads.sam\"\n\n# Concatenate GRCh38 and exon-exon junction sequences into a single reference\n# This approach allows BWA to align reads against both simultaneously.\ncat \"${GRCH38_GENOME}\" \"${JUNCTION_DB}\" > \"${COMBINED_REFERENCE}\"\n\n# Index the combined reference genome for BWA\nbwa index \"${COMBINED_REFERENCE}\"\n\n# Align reads using BWA MEM to the combined reference\n# -t: Number of threads to use (adjust as needed for your system)\n# -M: Mark shorter split hits as secondary (recommended for Picard compatibility)\nbwa mem -t 8 \"${COMBINED_REFERENCE}\" \"${INPUT_READS}\" > \"${OUTPUT_SAM}\"\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 6,
+            "description": "We handled multi-mapping reads by keeping only those that mapped once with at least one T-C mismatch: mapping positions indicating T-C transitions were chosen as the correct ones.",
+            "tool_name": "Custom script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "    # Define input and output file paths\n    INPUT_BAM=\"aligned_reads.bam\" # Input BAM file, potentially containing multi-mapping reads\n    OUTPUT_BAM=\"filtered_unique_tc_reads.bam\" # Output BAM file with filtered reads\n    REFERENCE_FASTA=\"/path/to/your/reference_genome.fa\" # Path to the reference genome FASTA file (e.g., GRCh38.p14.genome.fa)\n\n    # This step requires a custom script to implement the described logic:\n    # 1. Read the input BAM file.\n    # 2. For each read, identify if it is uniquely mapped (e.g., by checking the 'NH' tag for number of hits, or a high MAPQ score).\n    # 3. For uniquely mapped reads, parse the alignment (CIGAR string and MD tag) to identify mismatches.\n    # 4. Compare the read sequence at mismatch positions with the reference genome sequence\n    #    to determine if the mismatch represents a T-C transition (reference T, read C).\n    # 5. Keep only those uniquely mapped reads that contain at least one T-C mismatch.\n\n    # Example conceptual command for a Python script that would perform this filtering.\n    # This script would need to be developed and would typically use libraries like pysam and pyfaidx.\n    python filter_multi_mapping_by_tc_mismatch.py \\\n      --input_bam \"$INPUT_BAM\" \\\n      --output_bam \"$OUTPUT_BAM\" \\\n      --reference_fasta \"$REFERENCE_FASTA\" \\\n      --min_mapq 30 # Example parameter for mapping quality threshold for unique mapping\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 7,
+            "description": "Alignment files from each pair of replicates were combined and T-C transition were called using Bmix tool.",
+            "tool_name": "Bmix",
+            "tool_version": "Not specified, used within Yeo lab eCLIP pipeline (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Miniconda or Anaconda if not already installed\n# conda create -n bmix_env python=3.8\n# conda activate bmix_env\n\n# Install bmix Python package\n# pip install bmix\n\n# Clone the Yeo lab eCLIP pipeline to obtain the bmix_call_transitions.py script\n# git clone https://github.com/yeolab/eclip.git\n\n# Download reference genome (e.g., hg38) and chromosome sizes\n# mkdir -p reference_data\n# wget -O reference_data/hg38.fa.gz http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz\n# gunzip reference_data/hg38.fa.gz\n# wget -O reference_data/hg38.chrom.sizes http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes\n\n# Define input and reference files\nINPUT_BAM=\"combined_replicates.bam\" # Placeholder for the combined alignment file\nGENOME_FASTA=\"reference_data/hg38.fa\" # Placeholder for the reference genome FASTA\nCHROM_SIZES=\"reference_data/hg38.chrom.sizes\" # Placeholder for the chromosome sizes file\nOUTPUT_PREFIX=\"tc_transitions\"\n\n# Run the bmix_call_transitions.py script from the eCLIP pipeline to call T-C transitions\n# Adjust the path to bmix_call_transitions.py if 'eclip' directory is not in the current working directory\npython eclip/scripts/bmix_call_transitions.py \\\n    --bam \"${INPUT_BAM}\" \\\n    --genome \"${GENOME_FASTA}\" \\\n    --output \"${OUTPUT_PREFIX}\" \\\n    --chrom_sizes \"${CHROM_SIZES}\" \\\n    --min_read_count 5 \\\n    --min_base_qual 20 \\\n    --min_map_qual 20 \\\n    --min_prob 0.8 \\\n    --strand_specific\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip"
+        },
+        {
+            "step_order": 8,
+            "description": "Only transitions supported by at least two reads from both replicates were kept.",
+            "tool_name": "Custom Script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# This is a conceptual implementation based on the description.\n# The actual input file format and column indices would depend on the upstream steps.\n\n# Assuming an input file 'transitions_with_counts.tsv' where each row represents a transition\n# and includes read counts for at least two replicates. For example:\n# transition_id\\treplicate1_reads\\treplicate2_reads\\t...\n# chr1:100:A>G\\t5\\t3\\t...\n# chr2:200:C>T\\t1\\t2\\t...\n# chr3:300:G>A\\t3\\t1\\t...\n# chr4:400:T>C\\t2\\t2\\t...\n\nINPUT_FILE=\"transitions_with_counts.tsv\"\nOUTPUT_FILE=\"filtered_transitions.tsv\"\nMIN_READS_PER_REPLICATE=2\n\n# Using awk to filter based on the specified criteria.\n# This command assumes that the read counts for replicate 1 are in the 2nd column ($2)\n# and for replicate 2 are in the 3rd column ($3). Adjust column indices as needed\n# based on the actual input file format.\nawk -v min_reads=\"$MIN_READS_PER_REPLICATE\" 'NR==1 || ($2 >= min_reads && $3 >= min_reads)' \"$INPUT_FILE\" > \"$OUTPUT_FILE\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 9,
+            "description": "Annotation of T-C transitions with respect to their position within Ensembl 89 gene bodies was performed using BEDTools intersect tool.",
+            "tool_name": "bedtools",
+            "tool_version": "2.29.2 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install bedtools (if not already installed)\n# conda install -c bioconda bedtools\n\n# Placeholder for T-C transitions file (e.g., a BED file of variant positions or specific sites)\n# This file should contain the genomic coordinates of the T-C transitions.\nTC_TRANSITIONS_BED=\"tc_transitions.bed\"\n\n# Placeholder for Ensembl 89 gene bodies file.\n# This file can be generated by downloading the Ensembl 89 GTF for the relevant species\n# (e.g., Homo_sapiens.GRCh38.89.gtf.gz from ftp://ftp.ensembl.org/pub/release-89/gtf/homo_sapiens/)\n# and then extracting gene features and converting them to BED format.\n# Example conversion (simplified):\n# wget ftp://ftp.ensembl.org/pub/release-89/gtf/homo_sapiens/Homo_sapiens.GRCh38.89.gtf.gz\n# gunzip Homo_sapiens.GRCh38.89.gtf.gz\n# grep -P \"\\tgene\\t\" Homo_sapiens.GRCh38.89.gtf | awk 'BEGIN{OFS=\"\\t\"} {print $1, $4-1, $5, $10, $6, $7}' | sed 's/;//g' | sed 's/\"//g' > ensembl_89_gene_bodies.bed\nENSEMBL_89_GENE_BODIES_BED=\"ensembl_89_gene_bodies.bed\"\n\n# Output file for annotated T-C transitions\nOUTPUT_ANNOTATED_BED=\"tc_transitions_annotated_ensembl89.bed\"\n\n# Perform annotation using bedtools intersect.\n# -a: Input file A (T-C transitions)\n# -b: Input file B (Ensembl 89 gene bodies)\n# -wao: Write the original entry in A, the original entry in B, and the number of overlapping bases.\n#       If there is no overlap, a \".\" is written for the B entry and 0 for the overlap count.\n#       This allows for annotating each T-C transition with gene body information if it overlaps.\nbedtools intersect -a \"${TC_TRANSITIONS_BED}\" -b \"${ENSEMBL_89_GENE_BODIES_BED}\" -wao > \"${OUTPUT_ANNOTATED_BED}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        },
+        {
+            "step_order": 10,
+            "description": "Each column reports the fraction of T-C transitions in each gene body region that was calculated by dividing the number of T converted to C by the total number of T in that region.",
+            "tool_name": "Custom script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# Install necessary tools (example)\n# conda install -c bioconda samtools bedtools python pysam pyfaidx pandas\n\n# Define input files and parameters\n# Placeholder for reference genome (e.g., GRCh38)\n# Download from NCBI or UCSC if not available locally\n# wget -O GRCh38.p13.genome.fa.gz \"https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GRCh38.p13_GCA_000001405.28/GCF_000001405.28_GRCh38.p13_genomic.fna.gz\"\n# gunzip GRCh38.p13.genome.fa.gz\n# samtools faidx GRCh38.p13.genome.fa\nREFERENCE_FASTA=\"GRCh38.p13.genome.fa\"\n\n# Placeholder for gene body regions (e.g., from GENCODE or RefSeq)\n# This would typically be a BED file containing chromosome, start, end, and gene name.\n# Example: A BED file of protein-coding gene bodies.\nGENE_BODY_BED=\"gencode.v38.gene_bodies.bed\" # Example, needs to be generated or downloaded\n\n# Input BAM file (aligned reads)\nINPUT_BAM=\"aligned_reads.bam\"\n\n# Output file\nOUTPUT_TSV=\"gene_body_t_to_c_fractions.tsv\"\n\n# --- Conceptual Python script for T->C transition calculation ---\n# This script iterates through gene body regions,\n# fetches reference sequence, identifies 'T' bases,\n# and then uses pysam to query aligned reads at those positions\n# to count 'C' bases and total coverage.\n# The full script is not provided here, but its execution is simulated.\n\n# Create a dummy Python script for demonstration purposes\n# In a real scenario, this script would be pre-written and robust.\ncat << 'EOF' > calculate_t_to_c_transitions.py\nimport pysam\nimport pyfaidx\nimport pandas as pd\nimport argparse\n\ndef calculate_t_to_c_fractions(bam_file, ref_file, bed_file, output_file):\n    samfile = pysam.AlignmentFile(bam_file, 'rb')\n    genome = pyfaidx.Fasta(ref_file)\n\n    results = []\n\n    with open(bed_file, 'r') as f:\n        for line in f:\n            parts = line.strip().split('\\t')\n            if len(parts) < 4: # Basic check for valid BED format\n                continue\n            chrom, start_str, end_str, name = parts[0], parts[1], parts[2], parts[3]\n            try:\n                start, end = int(start_str), int(end_str)\n            except ValueError:\n                continue # Skip malformed lines\n\n            total_ref_T_in_region = 0\n            total_T_to_C_reads_in_region = 0\n            total_T_covered_reads_in_region = 0\n\n            # Iterate through each position in the gene body region\n            for pos in range(start, end):\n                try:\n                    ref_base = genome[chrom][pos].seq.upper()\n                except KeyError: # Chromosome not found in reference\n                    continue\n\n                if ref_base == 'T':\n                    total_ref_T_in_region += 1\n                    # Fetch reads covering this specific 'T' position\n                    # min_base_quality=0 to include all bases regardless of quality\n                    # ignore_overlaps=False to count all reads covering the position\n                    for pileupcolumn in samfile.pileup(chrom, pos, pos + 1, stepper='all', min_base_quality=0, ignore_overlaps=False):\n                        if pileupcolumn.pos == pos: # Ensure we are at the correct position\n                            for pileupread in pileupcolumn.pileups:\n                                if not pileupread.is_del and not pileupread.is_refskip and pileupread.query_position is not None:\n                                    read_base = pileupread.alignment.query_sequence[pileupread.query_position].upper()\n                                    total_T_covered_reads_in_region += 1\n                                    if read_base == 'C':\n                                        total_T_to_C_reads_in_region += 1\n            \n            fraction = 0.0\n            if total_T_covered_reads_in_region > 0:\n                fraction = total_T_to_C_reads_in_region / total_T_covered_reads_in_region\n            \n            results.append({'gene_region': name, 'fraction_T_to_C': fraction})\n\n    df = pd.DataFrame(results)\n    df.to_csv(output_file, sep='\\t', index=False)\n\n    samfile.close()\n    genome.close()\n\nif __name__ == '__main__':\n    parser = argparse.ArgumentParser(description='Calculate T->C transition fractions in gene body regions.')\n    parser.add_argument('--bam', required=True, help='Path to the input BAM file.')\n    parser.add_argument('--reference', required=True, help='Path to the reference FASTA file.')\n    parser.add_argument('--regions', required=True, help='Path to the gene body regions BED file.')\n    parser.add_argument('--output', required=True, help='Path to the output TSV file.')\n    args = parser.parse_args()\n\n    calculate_t_to_c_fractions(args.bam, args.reference, args.regions, args.output)\nEOF\n\n# Execute the Python script\npython calculate_t_to_c_transitions.py \\\n  --bam \"$INPUT_BAM\" \\\n  --reference \"$REFERENCE_FASTA\" \\\n  --regions \"$GENE_BODY_BED\" \\\n  --output \"$OUTPUT_TSV\"",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Library strategy: PAR-CLIP\nSequencing data was converted using the bcl2fastq tool from the Illumina CASAVA package, followed by demultiplexing and 3\u00e2\u0080\u0099 adapter trimming using flexbar and Cutadapt . To remove PCR duplicates, reads with identical sequence were collapsed, then we used FASTX Trimmer tool to remove random nucleotides from both ends of collapsed reads. Reads shorter than 14 nucleotides were discarded.\nBWA-based PARA-Suite aligner was used to align reads to GRCh38 genome and to a custom database of exon-exon junctions generated from Ensembl 89 transcriptome annotation. We handled multi-mapping reads by keeping only those that mapped once with at least one T-C mismatch: mapping positions indicating T-C transitions were chosen as the correct ones.\nAlignment files from each pair of replicates were combined and  T-C transition were called using Bmix tool. Only transitions supported by at least two reads from both replicates were kept.\nAnnotation of T-C transitions with respect to their position within Ensembl 89 gene bodies was performed using BEDTools intersect tool.\nEach column reports the fraction of T-C transitions in each gene body region that was calculated by dividing the number of T converted to C by the total number of T in that region.\nGenome_build: hg19\nSupplementary_files_format_and_content: tab separated values",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

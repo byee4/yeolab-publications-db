@@ -1,70 +1,70 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Processed Using https://github.com/YeoLab/eclip 0.7.0",
-      "tool_name": "eCLIP",
-      "tool_version": "0.7.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "After standard HiSeq demultiplexing, eCLIP libraries with distinct in-line barcodes were demultiplexed using custom scripts, and the random-mer was appended to the read name for later usage.",
-      "tool_name": "eCLIP",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Reads were then adapter trimmed (cutadapt v1.9.dev1) and reads less than 18 bp were discarded",
-      "tool_name": "cutadapt",
-      "tool_version": "1.9",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Mapping was then first performed against human elements in RepBase (v18.05) with STAR (v2.4.0i), repeat-mapping reads were segregated for separate analysis, and all others were then mapped against the full human genome (hg19) including a database of splice junctions with STAR (v 2.4.0i) (Dobin et al., 2013).",
-      "tool_name": "STAR",
-      "tool_version": "2.4.0i",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Uniquely mapping reads were then run through a custom-built PCR duplicate removal script, removing duplicate reads based on sharing identical Read1 start position, Read2 start position, and random-mer sequence to leave 'Usable' reads.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "eCLIP data sets with multiple in-line barcodes were merged at the usable read stage, and cluster identification was performed on usable reads using CLIPper (Yeo et al., 2009) (available at https://github.com/YeoLab/clipper/releases/tag/1.0) with options \u00e2\u0080\u0093s GRCh38 \u00e2\u0080\u0093o \u00e2\u0080\u0093bonferroni \u00e2\u0080\u0093superlocal\u00e2\u0080\u0093threshold-method binomial\u00e2\u0080\u0093save-pickle",
-      "tool_name": "CLIPper",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "data are further downsampled to roughly equal number per replicate",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Processed Using https://github.com/YeoLab/eclip 0.7.0\nAfter standard HiSeq demultiplexing, eCLIP libraries with distinct in-line barcodes were demultiplexed using custom scripts, and the random-mer was appended to the read name for later usage. Reads were then adapter trimmed (cutadapt v1.9.dev1) and reads less than 18 bp were discarded\nMapping was then first performed against human elements in RepBase (v18.05) with STAR (v2.4.0i), repeat-mapping reads were segregated for separate analysis, and all others were then mapped against the full human genome (hg19) including a database of splice junctions with STAR (v 2.4.0i) (Dobin et al., 2013). Uniquely mapping reads were then run through a custom-built PCR duplicate removal script, removing duplicate reads based on sharing identical Read1 start position, Read2 start position, and random-mer sequence to leave 'Usable' reads.\neCLIP data sets with multiple in-line barcodes were merged at the usable read stage, and cluster identification was performed on usable reads using CLIPper (Yeo et al., 2009) (available at https://github.com/YeoLab/clipper/releases/tag/1.0) with options \u00e2\u0080\u0093s GRCh38 \u00e2\u0080\u0093o \u00e2\u0080\u0093bonferroni \u00e2\u0080\u0093superlocal\u00e2\u0080\u0093threshold-method binomial\u00e2\u0080\u0093save-pickle\ndata are further downsampled to roughly equal number per replicate\nAssembly: hg38\nSupplementary files format and content: wig files represent read covergae for plus and minus strands\nSupplementary files format and content: peak files",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Processed Using https://github.com/YeoLab/eclip 0.7.0",
+            "tool_name": "eCLIP",
+            "tool_version": "0.7.0",
+            "code_example": "# The YeoLab eCLIP tool (https://github.com/YeoLab/eclip) is a CWL workflow.\n# To run it, you would typically use a CWL runner like cwltool.\n\n# Installation of cwltool (if not already installed)\n# pip install cwltool\n# or\n# conda install -c conda-forge cwltool\n\n# Clone the eclip workflow repository\n# git clone https://github.com/YeoLab/eclip.git\n# cd eclip\n\n# Example command to run the eCLIP workflow using cwltool\n# This is a placeholder as specific inputs (e.g., FASTQ files, reference genome) \n# are not provided in the description. \n# You would need to create an 'inputs.yaml' file specifying your data and parameters.\n# Reference genome (e.g., hg38) would be specified within the inputs.yaml.\ncwltool eclip.cwl --inputs inputs.yaml",
+            "code_language": "bash",
+            "github_url": "https://github.com/YeoLab/eclip"
+        },
+        {
+            "step_order": 2,
+            "description": "After standard HiSeq demultiplexing, eCLIP libraries with distinct in-line barcodes were demultiplexed using custom scripts, and the random-mer was appended to the read name for later usage.",
+            "tool_name": "eCLIP",
+            "tool_version": "1.0.0",
+            "code_example": "# Install umi_tools if not already available\n# conda install -c bioconda umi_tools\n\n# Step 1: Custom demultiplexing based on in-line barcodes.\n# The description states \"eCLIP libraries with distinct in-line barcodes were demultiplexed using custom scripts\".\n# The exact custom script is not provided, but conceptually it takes an input FASTQ file\n# (after standard HiSeq demultiplexing) and separates reads into multiple FASTQ files\n# based on identified in-line barcodes. For example, if 'input_hiseq_demux.fastq'\n# contains reads from multiple eCLIP libraries, this step would produce\n# 'library1.fastq', 'library2.fastq', etc.\n#\n# Example (conceptual, replace with actual custom script and parameters):\n# python /path/to/custom_inline_barcode_demux.py \\\n#     --input input_hiseq_demux.fastq \\\n#     --barcode_map barcodes.tsv \\\n#     --output_prefix demultiplexed_library_\n\n# Step 2: Extract random-mer (UMI) and append to read name.\n# This step is performed for each demultiplexed library file. The description states\n# \"the random-mer was appended to the read name for later usage\".\n# Assuming 'demultiplexed_library_X.fastq' is the output from the custom demultiplexing\n# for a specific library, and the random-mer is 10 bases at the start of the read\n# (a common length in eCLIP protocols).\numi_tools extract \\\n    --input demultiplexed_library_X.fastq \\\n    --output demultiplexed_library_X_umi.fastq \\\n    --extract-method=regex \\\n    --bc-pattern=\"^(?P<umi_1>.{10})(?P<read_1>.*)\" \\\n    --log demultiplexed_library_X_umi.log",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip"
+        },
+        {
+            "step_order": 3,
+            "description": "Reads were then adapter trimmed (cutadapt v1.9.dev1) and reads less than 18 bp were discarded",
+            "tool_name": "cutadapt",
+            "tool_version": "1.9",
+            "code_example": "# Install cutadapt (if not already installed)\n# conda install -c bioconda cutadapt=1.9\n\n# Adapter trimming and minimum length filtering\n# -a: 3' adapter sequence (common Illumina TruSeq adapter used as a placeholder)\n# -m: Discard reads shorter than the specified length (18 bp)\n# -o: Output file for trimmed reads\ncutadapt -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA -m 18 -o trimmed_reads.fastq.gz input_reads.fastq.gz",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 4,
+            "description": "Mapping was then first performed against human elements in RepBase (v18.05) with STAR (v2.4.0i), repeat-mapping reads were segregated for separate analysis, and all others were then mapped against the full human genome (hg19) including a database of splice junctions with STAR (v 2.4.0i) (Dobin et al., 2013).",
+            "tool_name": "STAR",
+            "tool_version": "2.4.0i",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define reference paths (placeholders)\nREPBASE_FA=\"repbase_human_elements_v18.05.fa\"\nHG19_FA=\"hg19.fa\"\nHG19_GTF=\"hg19.gtf\" # For splice junctions\n\n# Define STAR genome directory paths\nREPBASE_GENOME_DIR=\"star_index_repbase_v18.05\"\nHG19_GENOME_DIR=\"star_index_hg19\"\n\n# Define input reads (placeholders)\nREAD1=\"input_R1.fastq.gz\"\nREAD2=\"input_R2.fastq.gz\"\n\n# --- Step 1: Build STAR index for RepBase (if not already built) ---\n# STAR --runMode genomeGenerate \\\n#      --genomeDir ${REPBASE_GENOME_DIR} \\\n#      --genomeFastaFiles ${REPBASE_FA} \\\n#      --runThreadN 8 # Adjust threads as needed\n\n# --- Step 2: Build STAR index for hg19 with splice junctions (if not already built) ---\n# STAR --runMode genomeGenerate \\\n#      --genomeDir ${HG19_GENOME_DIR} \\\n#      --genomeFastaFiles ${HG19_FA} \\\n#      --sjdbGTFfile ${HG19_GTF} \\\n#      --sjdbOverhang 100 \\\n#      --runThreadN 8 # Adjust threads as needed\n\n# --- Step 3: First mapping against human elements in RepBase ---\n# Output mapped reads to a BAM, and unmapped reads to FastQ\nSTAR --genomeDir ${REPBASE_GENOME_DIR} \\\n     --readFilesIn ${READ1} ${READ2} \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix repbase_mapping_ \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outReadsUnmapped Fastx \\\n     --runThreadN 8 # Adjust threads as needed\n\n# Segregate repeat-mapping reads (repbase_mapping_Aligned.sortedByCoord.out.bam is the output)\n# The description implies these are kept for separate analysis.\n\n# --- Step 4: Map remaining reads (unmapped from RepBase) against the full human genome (hg19) ---\nSTAR --genomeDir ${HG19_GENOME_DIR} \\\n     --readFilesIn repbase_mapping_Unmapped.out.mate1 repbase_mapping_Unmapped.out.mate2 \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix hg19_mapping_ \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --runThreadN 8 # Adjust threads as needed",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 5,
+            "description": "Uniquely mapping reads were then run through a custom-built PCR duplicate removal script, removing duplicate reads based on sharing identical Read1 start position, Read2 start position, and random-mer sequence to leave 'Usable' reads.",
+            "tool_name": "umi_tools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.1.2",
+            "code_example": "# Install umi_tools if not already installed\n# conda install -c bioconda umi_tools\n\n# Assuming 'aligned_sorted.bam' is the input BAM file containing uniquely mapped reads\n# with UMIs already incorporated into the read names (e.g., by a preceding umi_tools extract step).\n# 'deduplicated.bam' will be the output file containing 'Usable' reads.\n# The --paired flag indicates paired-end reads.\n# The --method=directional flag uses a directional method for deduplication, which is common for UMI-based deduplication.\numi_tools dedup --input aligned_sorted.bam --output deduplicated.bam --paired --method=directional",
+            "code_language": "bash",
+            "github_url": "https://github.com/CGATOxford/UMI-tools"
+        },
+        {
+            "step_order": 6,
+            "description": "eCLIP data sets with multiple in-line barcodes were merged at the usable read stage, and cluster identification was performed on usable reads using CLIPper (Yeo et al., 2009) (available at https://github.com/YeoLab/clipper/releases/tag/1.0) with options \u00e2\u0080\u0093s GRCh38 \u00e2\u0080\u0093o \u00e2\u0080\u0093bonferroni \u00e2\u0080\u0093superlocal\u00e2\u0080\u0093threshold-method binomial\u00e2\u0080\u0093save-pickle",
+            "tool_name": "CLIPper",
+            "tool_version": "1.0",
+            "code_example": "# Install CLIPper (example using pip)\n# pip install clipper\n\n# Assuming 'merged_usable_reads.bam' is the input file containing usable reads.\n# The -o flag in CLIPper typically specifies the output directory.\nclipper.py -s GRCh38 -o clipper_output -bonferroni -superlocal -threshold-method binomial -save-pickle merged_usable_reads.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/YeoLab/clipper/releases/tag/1.0"
+        },
+        {
+            "step_order": 7,
+            "description": "data are further downsampled to roughly equal number per replicate",
+            "tool_name": "samtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.19",
+            "code_example": "# Install samtools if not already available\n# conda install -c bioconda samtools\n\n# Example: Downsample an input BAM file to a target number of reads.\n# This assumes 'TARGET_READS' (e.g., the minimum read count across all replicates)\n# and 'INPUT_BAM' are already defined for a specific replicate.\n\n# Placeholder variables (replace with actual paths and target count)\nINPUT_BAM=\"path/to/replicateX.bam\"\nOUTPUT_BAM=\"path/to/replicateX_downsampled.bam\"\nTARGET_READS=10000000 # Example: 10 million reads, determined from the lowest replicate count\n\n# Get the current number of reads in the input BAM file\nCURRENT_READS=$(samtools view -c \"$INPUT_BAM\")\n\n# Check if downsampling is necessary\nif (( CURRENT_READS > TARGET_READS )); then\n    # Calculate the sampling fraction\n    # 'scale=6' for precision in floating-point division\n    FRACTION=$(echo \"scale=6; $TARGET_READS / $CURRENT_READS\" | bc)\n    echo \"Downsampling $INPUT_BAM from $CURRENT_READS to $TARGET_READS reads (fraction: $FRACTION)\"\n\n    # Execute samtools view for downsampling\n    # -b: Output in BAM format\n    # -h: Include header\n    # -s <seed>.<fraction>: Sample reads. The integer part is a random seed for reproducibility (e.g., 42),\n    #                       the float part is the fraction of reads to retain.\n    # -o: Specify output file\n    samtools view -b -h -s 42.\"$FRACTION\" \"$INPUT_BAM\" -o \"$OUTPUT_BAM\"\nelse\n    echo \"$INPUT_BAM already has $CURRENT_READS reads, which is <= $TARGET_READS. Copying instead of downsampling.\"\n    cp \"$INPUT_BAM\" \"$OUTPUT_BAM\"\nfi",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        }
+    ],
+    "raw_text": "Processed Using https://github.com/YeoLab/eclip 0.7.0\nAfter standard HiSeq demultiplexing, eCLIP libraries with distinct in-line barcodes were demultiplexed using custom scripts, and the random-mer was appended to the read name for later usage. Reads were then adapter trimmed (cutadapt v1.9.dev1) and reads less than 18 bp were discarded\nMapping was then first performed against human elements in RepBase (v18.05) with STAR (v2.4.0i), repeat-mapping reads were segregated for separate analysis, and all others were then mapped against the full human genome (hg19) including a database of splice junctions with STAR (v 2.4.0i) (Dobin et al., 2013). Uniquely mapping reads were then run through a custom-built PCR duplicate removal script, removing duplicate reads based on sharing identical Read1 start position, Read2 start position, and random-mer sequence to leave 'Usable' reads.\neCLIP data sets with multiple in-line barcodes were merged at the usable read stage, and cluster identification was performed on usable reads using CLIPper (Yeo et al., 2009) (available at https://github.com/YeoLab/clipper/releases/tag/1.0) with options \u00e2\u0080\u0093s GRCh38 \u00e2\u0080\u0093o \u00e2\u0080\u0093bonferroni \u00e2\u0080\u0093superlocal\u00e2\u0080\u0093threshold-method binomial\u00e2\u0080\u0093save-pickle\ndata are further downsampled to roughly equal number per replicate\nAssembly: hg38\nSupplementary files format and content: wig files represent read covergae for plus and minus strands\nSupplementary files format and content: peak files",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

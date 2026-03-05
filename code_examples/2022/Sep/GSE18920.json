@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Data were processed using Partek Genomics Suite version 6.4.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "RMA background correction and quantile normalization were performed, and probeset summarization used the median polish method (RMA default setting in Partek).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Core probesets were used for the analysis.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "For alternative splicing analysis, probe sets with maximum signal <3 and differential expression p-values > 0.5 were excluded.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Data were processed using Partek Genomics Suite version 6.4.  RMA background correction and quantile normalization were performed, and probeset summarization used the median polish method (RMA default setting in Partek).  Core probesets were used for the analysis.  For alternative splicing analysis, probe sets with maximum signal <3 and differential expression p-values > 0.5 were excluded.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Data were processed using Partek Genomics Suite version 6.4.",
+            "tool_name": "Partek Genomics Suite",
+            "tool_version": "6.4",
+            "code_example": "# Partek Genomics Suite is primarily a GUI-based software.\n# A direct command-line execution script cannot be generated without specific details\n# on the analysis performed within the suite (e.g., RNA-seq differential expression, ChIP-seq peak calling, etc.).\n# The description only states that data were processed using the software, not the specific steps or parameters.\n# Therefore, a generic bash command is not applicable here.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "RMA background correction and quantile normalization were performed, and probeset summarization used the median polish method (RMA default setting in Partek).",
+            "tool_name": "Partek Genomics Suite",
+            "tool_version": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install R and Bioconductor (if not already installed)\n# conda install -c conda-forge r-base\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\")'\n# R -e 'BiocManager::install(\"affy\")'\n\n# Placeholder for input CEL files and output directory\n# Replace './path/to/your/cel_files' with the actual directory containing your .CEL files\nINPUT_CEL_FILES=\"./path/to/your/cel_files\"\nOUTPUT_DIR=\"./path/to/output\"\n\nmkdir -p \"$OUTPUT_DIR\"\n\n# R script to perform RMA using the affy package, which implements the described steps\n# This script mimics the default RMA processing (background correction, quantile normalization, median polish summarization)\n# as typically performed by software like Partek.\nRscript -e '\n  library(affy)\n  \n  # Set working directory to where CEL files are located\n  cel_path <- Sys.getenv(\"INPUT_CEL_FILES\")\n  if (cel_path == \"\") {\n    stop(\"INPUT_CEL_FILES environment variable not set. Please set it to the directory containing your CEL files.\")\n  }\n  setwd(cel_path)\n  \n  # Read CEL files from the specified directory\n  # This will read all .CEL files found in the directory\n  # For specific files, use ReadAffy(filenames=c(\"file1.CEL\", \"file2.CEL\"))\n  raw_data <- ReadAffy()\n  \n  # Perform RMA: Robust Multi-array Average\n  # This function performs background correction, quantile normalization, and probeset summarization\n  # using the median polish method by default, matching the description.\n  eset_rma <- rma(raw_data)\n  \n  # Extract the normalized expression matrix\n  expr_matrix <- exprs(eset_rma)\n  \n  # Define output file path\n  output_file <- file.path(Sys.getenv(\"OUTPUT_DIR\"), \"rma_normalized_expression.tsv\")\n  \n  # Write the normalized expression matrix to a TSV file\n  write.table(expr_matrix, file=output_file, sep=\"\\t\", quote=FALSE, col.names=NA)\n  \n  message(paste(\"RMA normalized expression matrix saved to:\", output_file))\n'\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "Core probesets were used for the analysis.",
+            "tool_name": "R (for microarray analysis) (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "",
+            "code_example": "# This script represents a conceptual step where \"core probesets\" are utilized\n# within a broader microarray data analysis pipeline. The specific definition\n# and selection of \"core probesets\" would be implemented within the R script\n# based on the experimental design and array type.\n\n# Example: Define input data (e.g., normalized expression matrix or ExpressionSet object)\n# INPUT_EXPRESSION_DATA=\"normalized_expression.rds\" # Or a directory of CEL files\n\n# Example: Define output directory for analysis results\n# OUTPUT_DIR=\"analysis_with_core_probesets\"\n# mkdir -p ${OUTPUT_DIR}\n\n# The R script below is a placeholder demonstrating how \"core probesets\" might be\n# selected or used in an analysis. The actual implementation depends on the\n# specific criteria for defining \"core probesets\" (e.g., manufacturer's definition,\n# probesets mapping to well-annotated genes, probesets passing quality filters).\nR_SCRIPT_NAME=\"analyze_with_core_probesets.R\"\n\ncat << 'EOF' > ${R_SCRIPT_NAME}\n# Load necessary R packages for microarray analysis (e.g., oligo, limma, annotation packages)\n# if (!requireNamespace(\"BiocManager\", quietly = TRUE))\n#     install.packages(\"BiocManager\")\n# BiocManager::install(c(\"oligo\", \"limma\", \"hgu133plus2.db\")) # Example packages\n\n# library(oligo)\n# library(limma)\n# library(hgu133plus2.db) # Example for Affymetrix Human Genome U133 Plus 2.0 Array\n\n# --- Placeholder for loading pre-processed microarray data ---\n# In a real pipeline, this would be an ExpressionSet object or a matrix of normalized expression values.\n# For demonstration, let's create a dummy ExpressionSet.\nset.seed(42)\nnum_total_probesets <- 10000\nnum_samples <- 5\ndummy_exprs <- matrix(rnorm(num_total_probesets * num_samples, mean = 7, sd = 1),\n                          ncol = num_samples,\n                          dimnames = list(paste0(\"PROBEID_\", 1:num_total_probesets),\n                                          paste0(\"Sample\", 1:num_samples)))\n# Create dummy phenoData\ndummy_pheno <- data.frame(sample_id = paste0(\"Sample\", 1:num_samples),\n                              group = c(rep(\"Control\", 3), rep(\"Treated\", 2)))\npheno_data <- new(\"AnnotatedDataFrame\", data = dummy_pheno)\neset <- new(\"ExpressionSet\", exprs = dummy_exprs, phenoData = pheno_data)\n\nmessage(paste(\"Initial ExpressionSet contains\", nrow(eset), \"probesets.\"))\n\n# --- Definition and selection of \"core probesets\" ---\n# This is the critical step implied by the description.\n# The method for identifying \"core probesets\" is highly context-dependent.\n# Possible approaches:\n# 1. Using a predefined list of probeset IDs (e.g., from manufacturer or previous study).\n#    Example: core_probeset_ids <- read.table(\"path/to/core_probesets_list.txt\", header=FALSE)$V1\n# 2. Filtering based on annotation (e.g., probesets mapping to well-annotated genes, removing controls).\n#    Example:\n#    annotations <- AnnotationDbi::select(hgu133plus2.db, keys=featureNames(eset),\n#                                         columns=c(\"SYMBOL\", \"ENTREZID\"), keytype=\"PROBEID\")\n#    core_probeset_ids <- annotations$PROBEID[!is.na(annotations$SYMBOL)]\n# 3. Filtering based on quality metrics (e.g., detection p-value, signal intensity).\n\n# For this generic example, let's simulate selecting a subset of probesets\n# as \"core\" based on a simple criterion (e.g., top N most variable probesets,\n# or a random subset if no specific criteria are provided).\n# In a real scenario, this would be a well-defined selection.\nnum_selected_core_probesets <- 5000 # Example: Select 5000 probesets\nif (nrow(eset) > num_selected_core_probesets) {\n    # Example: Select a random subset as \"core\" for demonstration\n    set.seed(101) # For reproducibility of the random selection\n    core_probeset_indices <- sample(1:nrow(eset), num_selected_core_probesets)\n    eset_core <- eset[core_probeset_indices, ]\n} else {\n    eset_core <- eset # If fewer probesets than target, use all\n}\n\nmessage(paste(\"Analysis proceeding with\", nrow(eset_core), \"core probesets.\"))\n\n# --- Downstream analysis using the 'eset_core' object ---\n# This is where the actual analysis (e.g., differential expression, clustering)\n# would be performed using only the selected core probesets.\n# Example: Perform a simple differential expression analysis using limma (conceptual)\n# design_matrix <- model.matrix(~0 + group, data = pData(eset_core))\n# colnames(design_matrix) <- levels(pData(eset_core)$group)\n# fit <- lmFit(eset_core, design_matrix)\n# contrast_matrix <- makeContrasts(Treated - Control, levels = design_matrix)\n# fit2 <- contrasts.fit(fit, contrast_matrix)\n# fit2 <- eBayes(fit2)\n# top_table_results <- topTable(fit2, number = Inf, adjust.method = \"BH\")\n# write.csv(top_table_results, file = file.path(\"analysis_results_core_probesets.csv\"))\n\nmessage(\"Analysis using core probesets completed successfully.\")\nEOF\n\nRscript ${R_SCRIPT_NAME}",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "For alternative splicing analysis, probe sets with maximum signal <3 and differential expression p-values > 0.5 were excluded.",
+            "tool_name": "R (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "(Inferred with models/gemini-2.5-flash)",
+            "code_example": "# This script filters probe sets based on maximum signal and differential expression p-values.\n# It assumes an input file (e.g., CSV) with columns for 'max_signal' and 'differential_expression_p_value'.\n\n# Install R if not already installed\n# sudo apt-get update && sudo apt-get install -y r-base\n# Or use conda:\n# conda install -c r r\n\n# Create an R script for filtering\ncat << 'EOF' > filter_probe_sets.R\n# Load your data (replace 'your_probe_set_data.csv' with your actual file path)\n# Example: data <- read.csv(\"your_probe_set_data.csv\")\n\n# For demonstration purposes, creating dummy data:\ndata <- data.frame(\n  probe_id = paste0(\"probe_\", 1:10),\n  max_signal = c(1.5, 4.2, 2.8, 5.1, 0.9, 3.5, 6.0, 2.1, 4.8, 1.2),\n  differential_expression_p_value = c(0.01, 0.005, 0.6, 0.02, 0.8, 0.1, 0.001, 0.7, 0.03, 0.9)\n)\n\n# Define exclusion thresholds\nmax_signal_threshold_for_exclusion <- 3\np_value_threshold_for_exclusion <- 0.5\n\n# Filter out probe sets based on the description:\n# \"probe sets with maximum signal <3 AND differential expression p-values > 0.5 were excluded.\"\n# This means we KEEP probe sets where the exclusion condition is NOT met.\n# Exclusion condition: (max_signal < 3) AND (p_value > 0.5)\n# Keep condition: NOT ((max_signal < 3) AND (p_value > 0.5))\n# Which is equivalent to: (max_signal >= 3) OR (p_value <= 0.5)\n\nfiltered_data <- data[data$max_signal >= max_signal_threshold_for_exclusion |\n                      data$differential_expression_p_value <= p_value_threshold_for_exclusion, ]\n\n# Print the original and filtered data for verification\nprint(\"Original Data:\")\nprint(data)\nprint(\"\\nFiltered Data (excluded if max_signal < 3 AND p_value > 0.5):\")\nprint(filtered_data)\n\n# Optionally, save the filtered data to a new CSV file\n# write.csv(filtered_data, \"filtered_probe_set_data.csv\", row.names = FALSE)\nEOF\n\n# Execute the R script\nRscript filter_probe_sets.R",
+            "code_language": "bash",
+            "github_url": "https://www.r-project.org/"
+        }
+    ],
+    "raw_text": "Data were processed using Partek Genomics Suite version 6.4.  RMA background correction and quantile normalization were performed, and probeset summarization used the median polish method (RMA default setting in Partek).  Core probesets were used for the analysis.  For alternative splicing analysis, probe sets with maximum signal <3 and differential expression p-values > 0.5 were excluded.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

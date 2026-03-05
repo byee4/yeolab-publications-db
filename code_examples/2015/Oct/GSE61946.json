@@ -1,88 +1,88 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Quality Control.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Quality of sequencing data is analyzed using the software FastQC v0.10.1.",
-      "tool_name": "FastQC",
-      "tool_version": "0.10.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "The results are examined to determine if samples are of questionable quality on an array of metrics.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Mapping.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Alignment of sequencing data to reference genomes is performed with the software RNA-Star 2.3.0e.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Parameters are set to default and reads are mapped to references along with splice junction databases.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Gene Expression Quantification.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "To obtain gene expression values, several quantification methods are used (Sailfish 0.6.3, Cufflinks 2.2.0).",
-      "tool_name": "Cufflinks",
-      "tool_version": "2.2.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "Expression values are calculated for entries in the gene annotation references.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Quality Control. Quality of sequencing data is analyzed using the software FastQC v0.10.1. The results are examined to determine if samples are of questionable quality on an array of metrics.\nMapping. Alignment of sequencing data to reference genomes is performed with the software RNA-Star 2.3.0e. Parameters are set to default and reads are mapped to references along with splice junction databases.\nGene Expression Quantification. To obtain gene expression values, several quantification methods are used (Sailfish 0.6.3, Cufflinks 2.2.0). Expression values are calculated for entries in the gene annotation references.\nGenome_build: hg19\nSupplementary_files_format_and_content: Txt file of ensemble identifiers with RPKMs of samples used in study",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Quality Control.",
+            "tool_name": "FastQC (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "0.11.9",
+            "code_example": "# Install FastQC (if not already installed)\n# conda install -c bioconda fastqc=0.11.9\n\n# Run FastQC on input FASTQ file\n# Replace 'input_reads.fastq.gz' with your actual input file\n# The '-o .' option specifies the output directory as the current directory.\nfastqc input_reads.fastq.gz -o .",
+            "code_language": "bash",
+            "github_url": "https://www.bioinformatics.babraham.ac.uk/projects/fastqc/"
+        },
+        {
+            "step_order": 2,
+            "description": "Quality of sequencing data is analyzed using the software FastQC v0.10.1.",
+            "tool_name": "FastQC",
+            "tool_version": "0.10.1",
+            "code_example": "# Install FastQC (example using conda)\n# conda install -c bioconda fastqc\n\n# Run FastQC to analyze sequencing data quality\n# Assuming 'input.fastq.gz' is the raw sequencing data file\n# And 'fastqc_output' is the directory where reports will be saved\nmkdir -p fastqc_output\nfastqc -o fastqc_output input.fastq.gz",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "The results are examined to determine if samples are of questionable quality on an array of metrics.",
+            "tool_name": "MultiQC (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.19",
+            "code_example": "# Install MultiQC if not already installed\n# conda install -c bioconda multiqc\n\n# Assuming various QC output files (e.g., FastQC reports, alignment logs) are located in a 'qc_results' directory.\n# MultiQC will scan this directory and its subdirectories for supported QC output files.\n# The report will be generated in the 'multiqc_reports' directory.\nmkdir -p multiqc_reports\nmultiqc qc_results/ --outdir multiqc_reports/ --filename \"sample_quality_assessment_report.html\" --title \"Sample Quality Assessment\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/ewels/MultiQC"
+        },
+        {
+            "step_order": 4,
+            "description": "Mapping.",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.7.0f",
+            "code_example": "# Install STAR (example using conda)\n# conda install -c bioconda star\n\n# Define variables (replace with actual paths and filenames)\nGENOME_DIR=\"/path/to/STAR_genome_index/hg38\"\nREAD1_FASTQ=\"sample_R1.fastq.gz\"\nREAD2_FASTQ=\"sample_R2.fastq.gz\"\nOUTPUT_PREFIX=\"aligned_sample_\"\nTHREADS=8\n\n# Create output directory if it doesn't exist\n# mkdir -p \"$(dirname ${OUTPUT_PREFIX})\"\n\n# Execute STAR alignment\nSTAR \\\n  --runThreadN ${THREADS} \\\n  --genomeDir ${GENOME_DIR} \\\n  --readFilesIn ${READ1_FASTQ} ${READ2_FASTQ} \\\n  --readFilesCommand zcat \\\n  --outFileNamePrefix ${OUTPUT_PREFIX} \\\n  --outSAMtype BAM SortedByCoordinate \\\n  --outSAMattributes All \\\n  --outFilterMultimapNmax 1 \\\n  --outFilterMismatchNmax 3 \\\n  --alignIntronMax 200000 \\\n  --alignMatesGapMax 200000 \\\n  --outFilterScoreMinOverLread 0.6 \\\n  --outFilterMatchNminOverLread 0.6 \\\n  --outFilterMatchNmin 15 \\\n  --outReadsUnmapped Fastx\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 5,
+            "description": "Alignment of sequencing data to reference genomes is performed with the software RNA-Star 2.3.0e.",
+            "tool_name": "RNA-Star",
+            "tool_version": "2.3.0e",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Placeholder for STAR genome index directory (e.g., for human hg38)\n# Replace with your actual genome index path\nGENOME_DIR=\"/path/to/STAR_index/hg38\"\n\n# Placeholder for input sequencing data (FASTQ file(s))\n# For single-end reads: READS_FILE=\"input_reads.fastq.gz\"\n# For paired-end reads: READS_FILE=\"input_reads_R1.fastq.gz input_reads_R2.fastq.gz\"\nREADS_FILE=\"input_reads.fastq.gz\"\n\n# Placeholder for output prefix\nOUTPUT_PREFIX=\"aligned_output\"\n\n# Number of threads to use\nNUM_THREADS=8\n\n# Run STAR alignment\nSTAR \\\n  --genomeDir \"${GENOME_DIR}\" \\\n  --readFilesIn \"${READS_FILE}\" \\\n  --runThreadN \"${NUM_THREADS}\" \\\n  --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n  --outSAMtype BAM SortedByCoordinate \\\n  --outBAMcompression 1 \\\n  --quantMode GeneCounts \\\n  --outFilterType BySJout \\\n  --outFilterMismatchNmax 10 \\\n  --outFilterMismatchNoverLmax 0.04 \\\n  --alignIntronMin 20 \\\n  --alignIntronMax 1000000 \\\n  --alignMatesGapMax 1000000 \\\n  --alignSJoverhangMin 8 \\\n  --alignSJDBoverhangMin 1\n\n# The primary output BAM file will be named: ${OUTPUT_PREFIX}Aligned.sortedByCoord.out.bam\n# The gene counts file will be named: ${OUTPUT_PREFIX}ReadsPerGene.out.tab",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 6,
+            "description": "Parameters are set to default and reads are mapped to references along with splice junction databases.",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Create STAR genome index (if not already created)\n# This step is typically done once per genome/annotation version.\n# It requires a genome FASTA file and a GTF/GFF annotation file to build the splice junction database.\n# Example for GRCh38:\n# GENOME_FASTA=\"/path/to/genome/GRCh38.primary_assembly.genome.fa\"\n# GTF_FILE=\"/path/to/annotation/gencode.v38.annotation.gtf\"\n# STAR --runMode genomeGenerate \\\n#      --genomeDir /path/to/STAR_index/GRCh38 \\\n#      --genomeFastaFiles ${GENOME_FASTA} \\\n#      --sjdbGTFfile ${GTF_FILE} \\\n#      --sjdbOverhang 100 \\\n#      --runThreadN 8\n\nTHREADS=8\nGENOME_DIR=\"/path/to/STAR_index/GRCh38\" # Placeholder for GRCh38 genome index\nREAD1=\"sample_R1.fastq.gz\" # Placeholder for input R1 FASTQ file\nREAD2=\"sample_R2.fastq.gz\" # Placeholder for input R2 FASTQ file (remove if single-end)\nOUTPUT_PREFIX=\"sample_aligned_\" # Prefix for output files\n\nSTAR --runThreadN ${THREADS} \\\n     --genomeDir ${GENOME_DIR} \\\n     --readFilesIn ${READ1} ${READ2} \\\n     --outFileNamePrefix ${OUTPUT_PREFIX} \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outSAMattributes Standard \\\n     --outFilterType BySJout \\\n     --outFilterMultimapNmax 20 \\\n     --alignSJDBoverhangMin 1 \\\n     --alignSJoverhangMin 8 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --limitBAMsortRAM 30000000000 # Adjust based on available RAM (e.g., 30GB)\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 7,
+            "description": "Gene Expression Quantification.",
+            "tool_name": "Salmon (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.10.2 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Salmon (example using conda)\n# conda create -n salmon_env salmon -y\n# conda activate salmon_env\n\n# --- Placeholder for Salmon index creation (if not already available) ---\n# This step assumes you have a FASTA file of the transcriptome (e.g., from Ensembl or GENCODE)\n# For example, using human GRCh38 (hg38) transcriptome:\n# wget https://ftp.ensembl.org/pub/release-109/fasta/homo_sapiens/cdna/Homo_sapiens.GRCh38.cdna.all.fa.gz\n# gunzip Homo_sapiens.GRCh38.cdna.all.fa.gz\n# salmon index -t Homo_sapiens.GRCh38.cdna.all.fa -i salmon_index_hg38 --gencode\n\n# --- Gene Expression Quantification using Salmon ---\n# Input FASTQ files (replace with actual file names)\nREAD1=\"read1.fastq.gz\"\nREAD2=\"read2.fastq.gz\"\n# Salmon index path (replace with actual path to your index, e.g., 'salmon_index_hg38')\nSALMON_INDEX=\"salmon_index_hg38\"\n# Output directory\nOUTPUT_DIR=\"salmon_quant_output\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run Salmon quantification (paired-end, common parameters)\nsalmon quant -i \"${SALMON_INDEX}\" \\\n             -l A \\\n             -1 \"${READ1}\" \\\n             -2 \"${READ2}\" \\\n             -o \"${OUTPUT_DIR}\" \\\n             --validateMappings \\\n             --gcBias \\\n             --seqBias",
+            "code_language": "bash",
+            "github_url": "https://github.com/COMBINE-lab/salmon"
+        },
+        {
+            "step_order": 8,
+            "description": "To obtain gene expression values, several quantification methods are used (Sailfish 0.6.3, Cufflinks 2.2.0).",
+            "tool_name": "Cufflinks",
+            "tool_version": "2.2.0",
+            "code_example": "# Install Cufflinks (e.g., via Bioconda)\n# conda install -c bioconda cufflinks=2.2.0\n\n# Define input and output files/directories\nINPUT_BAM=\"aligned_reads.bam\" # Placeholder: Replace with your aligned RNA-seq BAM file\nGENOME_GTF=\"gencode.v38.annotation.gtf\" # Placeholder: Replace with your genome annotation GTF file (e.g., from GENCODE or Ensembl)\nOUTPUT_DIR=\"cufflinks_output\"\nNUM_THREADS=\"8\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run Cufflinks for transcript assembly and quantification\ncufflinks \\\n  -o \"${OUTPUT_DIR}\" \\\n  -g \"${GENOME_GTF}\" \\\n  -p \"${NUM_THREADS}\" \\\n  \"${INPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": "https://www.nature.com/articles/nprot.2012.041"
+        },
+        {
+            "step_order": 9,
+            "description": "Expression values are calculated for entries in the gene annotation references.",
+            "tool_name": "RSEM (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.3.3",
+            "code_example": "# Install RSEM (example using conda)\n# conda install -c bioconda rsem\n\n# --- Prerequisite: RSEM Reference Preparation (run once per genome/annotation) ---\n# This step builds the necessary indices for RSEM quantification from a reference genome and GTF annotation.\n# Replace 'GRCh38.primary_assembly.genome.fa' with your reference genome FASTA file (e.g., downloaded from Ensembl/Gencode).\n# Replace 'gencode.v38.annotation.gtf' with your gene annotation GTF file (e.g., downloaded from Ensembl/Gencode).\n# The output reference files will be prefixed with 'GRCh38_rsem_ref'.\n# rsem-prepare-reference --gtf gencode.v38.annotation.gtf GRCh38.primary_assembly.genome.fa GRCh38_rsem_ref\n\n# --- Main Step: Calculate expression values ---\n# This command calculates gene and isoform expression levels from RNA-seq reads.\n# Replace 'read1.fastq.gz' and 'read2.fastq.gz' with your input paired-end FASTQ files.\n# Replace 'GRCh38_rsem_ref' with the prefix of the RSEM reference prepared in the prerequisite step.\n# 'sample_output' will be the prefix for all output files (e.g., sample_output.genes.results, sample_output.isoforms.results).\nrsem-calculate-expression --paired-end read1.fastq.gz read2.fastq.gz GRCh38_rsem_ref sample_output",
+            "code_language": "bash",
+            "github_url": "https://github.com/deweylab/RSEM"
+        }
+    ],
+    "raw_text": "Quality Control. Quality of sequencing data is analyzed using the software FastQC v0.10.1. The results are examined to determine if samples are of questionable quality on an array of metrics.\nMapping. Alignment of sequencing data to reference genomes is performed with the software RNA-Star 2.3.0e. Parameters are set to default and reads are mapped to references along with splice junction databases.\nGene Expression Quantification. To obtain gene expression values, several quantification methods are used (Sailfish 0.6.3, Cufflinks 2.2.0). Expression values are calculated for entries in the gene annotation references.\nGenome_build: hg19\nSupplementary_files_format_and_content: Txt file of ensemble identifiers with RPKMs of samples used in study",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

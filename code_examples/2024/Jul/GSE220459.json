@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "The raw data was mapped using STAR.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://github.com/alexdobin/STAR"
-    },
-    {
-      "step_order": 2,
-      "description": "We calculated the gene-level read counts and identified differentially expressed genes by in-house script.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://cutadapt.readthedocs.io"
-    }
-  ],
-  "raw_text": "The raw data was mapped using STAR.\nWe calculated the gene-level read counts and identified differentially expressed genes by in-house script.\nAssembly: mm10",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "The raw data was mapped using STAR.",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install STAR (example using conda)\n# conda create -n star_env star -y\n# conda activate star_env\n\n# Build STAR genome index (run once per genome, e.g., GRCh38)\n# mkdir -p /path/to/genome_index/GRCh38\n# STAR --runThreadN 8 \\\n#      --runMode genomeGenerate \\\n#      --genomeDir /path/to/genome_index/GRCh38 \\\n#      --genomeFastaFiles /path/to/fasta/GRCh38.primary_assembly.genome.fa \\\n#      --sjdbGTFfile /path/to/gtf/gencode.v38.annotation.gtf \\\n#      --sjdbOverhang 100 # Recommended: (read_length - 1)\n\n# Map raw data using STAR (example for paired-end reads)\nSTAR --runThreadN 8 \\\n     --genomeDir /path/to/genome_index/GRCh38 \\\n     --readFilesIn sample_R1.fastq.gz sample_R2.fastq.gz \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix sample_ \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outBAMcompression 6 \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 3 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --quantMode GeneCounts # Optional: for gene-level quantification",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "We calculated the gene-level read counts and identified differentially expressed genes by in-house script.",
+            "tool_name": "In-house script",
+            "tool_version": "N/A",
+            "code_example": "# This script calculates gene-level read counts and identifies differentially expressed genes.\n# The specific implementation details are within the \"in-house script\".\n#\n# Pre-requisite: Gene-level read counts (e.g., from featureCounts, HTSeq-count, or RSEM).\n# Example for generating counts (assuming aligned BAM files in 'aligned_bams/'):\n# # conda install -c bioconda subread\n# # featureCounts -a gencode.v44.annotation.gtf -o gene_counts.tsv -F GTF -t exon -g gene_id aligned_bams/*.bam\n#\n# Input for DE analysis: gene_counts.tsv (gene-level read counts), sample_metadata.tsv (experimental design)\n# Output: diff_exp_results.tsv (table of differentially expressed genes)\n#\n# Reference datasets (placeholders):\n# - Gene annotation: gencode.v44.annotation.gtf (GENCODE human release 44, GRCh38)\n\n# Execute the in-house script for differential expression analysis.\n# The actual command, script name, and parameters will depend on the specific in-house implementation.\n# This is a placeholder command demonstrating typical inputs and outputs.\nRscript run_inhouse_de_script.R \\\n  --counts_file gene_counts.tsv \\\n  --metadata_file sample_metadata.tsv \\\n  --output_file diff_exp_results.tsv \\\n  --design_formula \"~ condition + batch\" \\\n  --min_reads_per_gene 10 \\\n  --fdr_threshold 0.05 \\\n  --log2fc_threshold 1.0",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "The raw data was mapped using STAR.\nWe calculated the gene-level read counts and identified differentially expressed genes by in-house script.\nAssembly: mm10",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

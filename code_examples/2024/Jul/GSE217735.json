@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Illumina RTA was used to create .bcl files, and bcl2fastq v2.20.0.422 software was used for base calling (for samples split between flowcells and later merged per run)",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Raw reads were mapped against sgRNA library and raw counts table of sgRNA was generated using MAGeCK v0.5.9.3",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Illumina RTA was used to create .bcl files, and bcl2fastq v2.20.0.422 software was used for base calling (for samples split between flowcells and later merged per run)\nRaw reads were mapped against sgRNA library and raw counts table of sgRNA was generated using MAGeCK v0.5.9.3\nSupplementary files format and content: raw counts table in txt format of every sample in CRISPR sgRNA project",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Illumina RTA was used to create .bcl files, and bcl2fastq v2.20.0.422 software was used for base calling (for samples split between flowcells and later merged per run)",
+            "tool_name": "bcl2fastq",
+            "tool_version": "2.20.0.422",
+            "code_example": "# Install bcl2fastq (typically downloaded from Illumina's website or via conda)\n# conda create -n bcl2fastq_env bcl2fastq=2.20.0.422\n# conda activate bcl2fastq_env\n\n# Define the Illumina run folder (top-level directory containing BCL files, SampleSheet.csv, etc.)\n# Replace with the actual path to your Illumina run folder\nILLUMINA_RUN_FOLDER=\"/path/to/illumina/run/folder\"\n\n# Define the output directory for demultiplexed FASTQ files\n# Replace with your desired output path\nOUTPUT_FASTQ_DIR=\"/path/to/output/fastqs\"\n\n# Create the output directory if it doesn't exist\nmkdir -p \"${OUTPUT_FASTQ_DIR}\"\n\n# Execute bcl2fastq for base calling and demultiplexing\n# bcl2fastq will read the SampleSheet.csv from the run folder by default\nbcl2fastq --runfolder-dir \"${ILLUMINA_RUN_FOLDER}\" \\\n          --output-dir \"${OUTPUT_FASTQ_DIR}\" \\\n          --no-lane-splitting # Use this if you want to merge data from different lanes into a single sample file\n",
+            "code_language": "bash",
+            "github_url": "https://support.illumina.com/sequencing/sequencing_software/bcl2fastq-conversion-software.html"
+        },
+        {
+            "step_order": 2,
+            "description": "Raw reads were mapped against sgRNA library and raw counts table of sgRNA was generated using MAGeCK v0.5.9.3",
+            "tool_name": "MAGeCK",
+            "tool_version": "0.5.9.3",
+            "code_example": "# Install MAGeCK (if not already installed)\n# conda install -c bioconda mageck\n\n# Assuming 'sgRNA_library.txt' is the sgRNA library definition file\n# and 'sample1.bam', 'sample2.bam' are the alignment files generated from mapping raw reads.\n# The actual sample IDs and BAM files would need to be specified based on the experiment.\n\nmageck count \\\n  -l sgRNA_library.txt \\\n  --sample-id sample1,sample2 \\\n  --bam-file sample1.bam,sample2.bam \\\n  -n sgRNA_counts",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Illumina RTA was used to create .bcl files, and bcl2fastq v2.20.0.422 software was used for base calling (for samples split between flowcells and later merged per run)\nRaw reads were mapped against sgRNA library and raw counts table of sgRNA was generated using MAGeCK v0.5.9.3\nSupplementary files format and content: raw counts table in txt format of every sample in CRISPR sgRNA project",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

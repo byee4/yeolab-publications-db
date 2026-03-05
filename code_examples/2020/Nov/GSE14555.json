@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "All .CEL files (within each species) were pre-processed using the default settings of the justGCRMA function of gcrma package version 2.8.0 (Wu et al., 2004) as implemented in R.",
-      "tool_name": "R",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "This function background corrects perfect-match probe intensities using probe sequence information, log2-transforms the data, quantile normalizes across the arrays, and summarizes probe intensities via the robust multiarray average (RMA) method (Irizarry et al., 2003) to give an intensity value (log2 scale) for each probe set.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "All .CEL files (within each species) were pre-processed using the default settings of the justGCRMA function of gcrma package version 2.8.0 (Wu et al., 2004) as implemented in R. This function background corrects perfect-match probe intensities using probe sequence information, log2-transforms the data, quantile normalizes across the arrays, and summarizes probe intensities via the robust multiarray average (RMA) method (Irizarry et al., 2003) to give an intensity value (log2 scale) for each probe set.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "All .CEL files (within each species) were pre-processed using the default settings of the justGCRMA function of gcrma package version 2.8.0 (Wu et al., 2004) as implemented in R.",
+            "tool_name": "R",
+            "tool_version": "gcrma 2.8.0",
+            "code_example": "# Install Bioconductor if not already installed\n# if (!requireNamespace(\"BiocManager\", quietly = TRUE))\n#     install.packages(\"BiocManager\")\n#\n# # Install gcrma package version 2.8.0.\n# # Note: gcrma 2.8.0 is a very old version (released with Bioconductor 2.0 / R 2.5).\n# # Installing this specific version on a modern R environment might be challenging\n# # and may require using an older Bioconductor release or specific archival methods.\n# # For a modern setup, BiocManager::install(\"gcrma\") would install the latest version.\n# # Example for installing a specific old Bioconductor package version (requires specific Bioconductor version):\n# # BiocManager::install(\"gcrma\", version = \"2.0\") # This would attempt to install gcrma from Bioconductor 2.0\n# # However, this command itself might not work directly without setting up the correct R version first.\n# # For demonstration, we assume gcrma and its dependencies (like affy) are available.\n\n# Create an R script to preprocess CEL files\ncat << 'EOF' > preprocess_cel_files.R\n# Load necessary libraries\n# gcrma depends on affy and Biobase\nlibrary(affy)\nlibrary(gcrma)\n\n# Define the directory containing .CEL files\n# The description mentions \"within each species\", implying this script\n# would be run separately for each species' set of CEL files.\ninput_celfiles_dir <- \".\" # Current directory, adjust as needed\n\n# List all .CEL files in the specified directory\ncel_files <- list.files(path = input_celfiles_dir, pattern = \"\\\\.CEL$\", full.names = TRUE, ignore.case = TRUE)\n\nif (length(cel_files) == 0) {\n    stop(paste(\"No .CEL files found in the directory:\", input_celfiles_dir))\n}\n\nmessage(paste(\"Found\", length(cel_files), \".CEL files for processing.\"))\n\n# Read CEL files into an AffyBatch object\n# This step requires the 'affy' package.\nraw_data <- ReadAffy(filenames = cel_files)\n\n# Pre-process using justGCRMA with default settings\n# The output is an ExpressionSet object, which contains the normalized expression matrix.\n# The 'justGCRMA' function is from the 'gcrma' package.\nmessage(\"Starting justGCRMA pre-processing with default settings...\")\neset <- justGCRMA(raw_data)\nmessage(\"justGCRMA pre-processing complete.\")\n\n# Extract the normalized expression matrix from the ExpressionSet object\nnormalized_expression_matrix <- exprs(eset)\n\n# Define the output file name\noutput_file <- \"normalized_expression_matrix.tsv\"\n\n# Save the normalized expression matrix to a tab-separated file\n# Row names (probe IDs) and column names (sample IDs) are included.\nwrite.table(normalized_expression_matrix, file = output_file, sep = \"\\t\", quote = FALSE, row.names = TRUE)\n\nmessage(paste(\"Normalized expression matrix saved to:\", output_file))\nEOF\n\n# Execute the R script using Rscript\nRscript preprocess_cel_files.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/gcrma.html"
+        },
+        {
+            "step_order": 2,
+            "description": "This function background corrects perfect-match probe intensities using probe sequence information, log2-transforms the data, quantile normalizes across the arrays, and summarizes probe intensities via the robust multiarray average (RMA) method (Irizarry et al., 2003) to give an intensity value (log2 scale) for each probe set.",
+            "tool_name": "R (affy/oligo package) (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# This script demonstrates how to perform RMA normalization and summarization\n# using the 'affy' R package, which implements the described steps.\n# Replace 'path/to/cel_files' with the actual directory containing your .CEL files.\n# Replace 'output_rma_expression.tsv' with your desired output file name.\n\n# Install Bioconductor and 'affy' package if not already installed\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\"); BiocManager::install(\"affy\")'\n\n# Create an R script to perform RMA\ncat << 'EOF' > run_rma.R\nlibrary(affy)\n\n# Define the path to your CEL files\ncel_files_path <- Sys.getenv(\"CEL_FILES_PATH\", \".\") # Default to current directory\n\n# Read CEL files\n# This assumes all .CEL files in the specified directory are part of the experiment.\n# You might need to filter them if there are other files.\nraw_data <- ReadAffy(celfile.path = cel_files_path)\n\n# Perform RMA normalization and summarization\n# This function automatically handles background correction, log2-transformation,\n# quantile normalization, and summarization as described by Irizarry et al. (2003).\neset <- rma(raw_data)\n\n# Extract expression matrix\nexpr_matrix <- exprs(eset)\n\n# Define the output file name\noutput_file <- Sys.getenv(\"OUTPUT_FILE\", \"rma_expression.tsv\")\n\n# Write results to a tab-separated file\nwrite.table(expr_matrix, file = output_file, sep = \"\\t\", quote = FALSE, row.names = TRUE)\n\nmessage(paste(\"RMA processed data saved to:\", output_file))\nEOF\n\n# Set environment variables for the R script\nexport CEL_FILES_PATH=\"/path/to/your/cel_files\" # IMPORTANT: Replace with your actual CEL file directory\nexport OUTPUT_FILE=\"rma_expression.tsv\"\n\n# Execute the R script\nRscript run_rma.R\n\n# Clean up the R script\nrm run_rma.R",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "All .CEL files (within each species) were pre-processed using the default settings of the justGCRMA function of gcrma package version 2.8.0 (Wu et al., 2004) as implemented in R. This function background corrects perfect-match probe intensities using probe sequence information, log2-transforms the data, quantile normalizes across the arrays, and summarizes probe intensities via the robust multiarray average (RMA) method (Irizarry et al., 2003) to give an intensity value (log2 scale) for each probe set.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

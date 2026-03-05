@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Library strategy: Ribosome profiling",
-      "tool_name": "Ribo-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Fastq reads were trimmed and mapped to human rRNA sequences using bowtie allowing 2 mismatches.",
-      "tool_name": "Bowtie",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Unmapped reads were mapped to human genome GRCh38 with Ensembl gene annotation release 83 using STAR with parameters \u00e2\u0080\u0098--outSAMattributes All --outFilterMismatchNmax 2 --alignEndsType EndToEnd --outFilterIntronMotifs RemoveNoncanonicalUnannotated --alignIntronMax 20000 --outMultimapperOrder Random --outSAMmultNmax 1\u00e2\u0080\u0099",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Reads with mapQ=0 or NH>5 were filtered out and only primary loci are counted.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Library strategy: Ribosome profiling\nFastq reads were trimmed and mapped to human rRNA sequences using bowtie allowing 2 mismatches.\nUnmapped reads were mapped to human genome GRCh38 with Ensembl gene annotation release 83 using STAR with parameters \u00e2\u0080\u0098--outSAMattributes All --outFilterMismatchNmax 2 --alignEndsType EndToEnd --outFilterIntronMotifs RemoveNoncanonicalUnannotated --alignIntronMax 20000 --outMultimapperOrder Random --outSAMmultNmax 1\u00e2\u0080\u0099\nReads with mapQ=0 or NH>5 were filtered out and only primary loci are counted.\nGenome_build: GRCh38\nSupplementary_files_format_and_content: tab-delimited text files include Ensembl gene id, gene symbol, length and raw counts",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Library strategy: Ribosome profiling",
+            "tool_name": "Ribo-seq",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define reference genome paths (replace with actual paths)\n# For human GRCh38 and Gencode v44\nGENOME_DIR=\"/path/to/STAR_genome_index_GRCh38\" # Directory for STAR genome index\nGENOME_FASTA=\"/path/to/GRCh38.primary_assembly.genome.fa\" # e.g., from Gencode or Ensembl\nGTF_FILE=\"/path/to/gencode.v44.annotation.gtf\" # e.g., from Gencode\n\n# Define input and output paths\nINPUT_FASTQ=\"ribo_seq_sample_R1.fastq.gz\" # Assuming single-end reads, common for Ribo-seq\nOUTPUT_PREFIX=\"ribo_seq_aligned\" # Prefix for output files\n\n# Define typical Ribo-seq read length for sjdbOverhang (e.g., 30nt)\n# sjdbOverhang should be readLength - 1\nREAD_LENGTH=30\nSJDB_OVERHANG=$((READ_LENGTH - 1))\n\n# 1. Build STAR genome index (run once per genome version)\n# Check if index directory exists and is populated\nif [ ! -d \"${GENOME_DIR}\" ] || [ -z \"$(ls -A ${GENOME_DIR})\" ]; then\n    echo \"Building STAR genome index for GRCh38...\"\n    mkdir -p \"${GENOME_DIR}\"\n    STAR --runMode genomeGenerate \\\n         --genomeDir \"${GENOME_DIR}\" \\\n         --genomeFastaFiles \"${GENOME_FASTA}\" \\\n         --sjdbGTFfile \"${GTF_FILE}\" \\\n         --sjdbOverhang \"${SJDB_OVERHANG}\" \\\n         --runThreadN 8 # Adjust thread count as needed\nelse\n    echo \"STAR genome index already exists at ${GENOME_DIR}\"\nfi\n\n# 2. Align Ribo-seq reads\necho \"Aligning Ribo-seq reads with STAR...\"\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${INPUT_FASTQ}\" \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}_\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outFilterType BySJout \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.04 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --alignSJFilterReads UniqueBoth \\\n     --alignSJDBoverhangMin 1 \\\n     --runThreadN 8 # Adjust thread count as needed",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "Fastq reads were trimmed and mapped to human rRNA sequences using bowtie allowing 2 mismatches.",
+            "tool_name": "Bowtie",
+            "tool_version": "1.3.1",
+            "code_example": "# Install Bowtie (if not already installed)\n# conda install -c bioconda bowtie=1.3.1\n\n# Reference: Human rRNA sequences index (e.g., 'hg38_rRNA')\n# This index needs to be built beforehand from a FASTA file containing human rRNA sequences.\n# A common source for human rRNA sequences is NCBI or UCSC. For example, the eCLIP pipeline\n# often uses a custom FASTA file containing known human rRNA sequences (e.g., NR_003286.2 for 18S, NR_003287.2 for 28S).\n# Example command to build the index:\n# bowtie-build human_rRNA.fa hg38_rRNA\n\n# Input: Placeholder for trimmed Fastq reads\nINPUT_FASTQ=\"trimmed_reads.fastq\"\n# Output: SAM file containing reads mapped to rRNA\nOUTPUT_SAM=\"rRNA_mapped.sam\"\n\n# Map reads to human rRNA sequences allowing 2 mismatches\n# -v 2: Allow up to 2 mismatches in the alignment\n# -S: Output alignments in SAM format\n# hg38_rRNA: The name of the pre-built Bowtie index for human rRNA sequences\n# ${INPUT_FASTQ}: The input Fastq file\nbowtie -v 2 -S \"${OUTPUT_SAM}\" hg38_rRNA \"${INPUT_FASTQ}\"\n\n# If the primary goal is to filter out rRNA reads, you would typically use the --un option to output unmapped reads:\n# bowtie -v 2 --un \"non_rRNA_reads.fastq\" hg38_rRNA \"${INPUT_FASTQ}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie"
+        },
+        {
+            "step_order": 3,
+            "description": "Unmapped reads were mapped to human genome GRCh38 with Ensembl gene annotation release 83 using STAR with parameters \u00e2\u0080\u0098--outSAMattributes All --outFilterMismatchNmax 2 --alignEndsType EndToEnd --outFilterIntronMotifs RemoveNoncanonicalUnannotated --alignIntronMax 20000 --outMultimapperOrder Random --outSAMmultNmax 1\u00e2\u0080\u0099",
+            "tool_name": "STAR",
+            "tool_version": "STAR (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# --- Prepare Genome Index (if not already done) ---\n# Download GRCh38 primary assembly FASTA (Ensembl release 83 corresponds to GRCh38.p7)\n# wget http://ftp.ensembl.org/pub/release-83/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz\n# gunzip Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz\n\n# Download Ensembl 83 GTF annotation\n# wget http://ftp.ensembl.org/pub/release-83/gtf/homo_sapiens/Homo_sapiens.GRCh38.83.gtf.gz\n# gunzip Homo_sapiens.GRCh38.83.gtf.gz\n\n# Create STAR genome index\n# mkdir STAR_GRCh38_Ensembl83_index\n# STAR --runThreadN 8 \\\n#      --runMode genomeGenerate \\\n#      --genomeDir STAR_GRCh38_Ensembl83_index \\\n#      --genomeFastaFiles Homo_sapiens.GRCh38.dna.primary_assembly.fa \\\n#      --sjdbGTFfile Homo_sapiens.GRCh38.83.gtf \\\n#      --sjdbOverhang 100 # Adjust sjdbOverhang based on your read length (e.g., ReadLength - 1)\n\n# --- Alignment Step ---\n# Define input and output\nINPUT_FASTQ=\"input.fastq.gz\" # Replace with your actual input FASTQ file(s)\nOUTPUT_PREFIX=\"aligned_reads_STAR_GRCh38_Ensembl83_\"\nGENOME_DIR=\"STAR_GRCh38_Ensembl83_index\"\nNUM_THREADS=8 # Adjust as needed\n\nSTAR --runThreadN ${NUM_THREADS} \\\n     --genomeDir ${GENOME_DIR} \\\n     --readFilesIn ${INPUT_FASTQ} \\\n     --outFileNamePrefix ${OUTPUT_PREFIX} \\\n     --outSAMattributes All \\\n     --outFilterMismatchNmax 2 \\\n     --alignEndsType EndToEnd \\\n     --outFilterIntronMotifs RemoveNoncanonicalUnannotated \\\n     --alignIntronMax 20000 \\\n     --outMultimapperOrder Random \\\n     --outSAMmultNmax 1",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 4,
+            "description": "Reads with mapQ=0 or NH>5 were filtered out and only primary loci are counted.",
+            "tool_name": "samtools (Inferred with models/gemini-2.5-flash), awk (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "samtools 1.9",
+            "code_example": "# Install samtools if not already installed\n# conda install -c bioconda samtools\n\n# Filter reads based on mapQ, NH tag, and primary alignment status\n# -F 0x100: Exclude secondary alignments\n# -F 0x800: Exclude supplementary alignments\n# -q 1: Exclude reads with mapping quality 0\n# The awk command filters out reads where the NH tag is greater than 5.\n# It prints headers, reads without an NH tag, or reads where NH is 0-5.\nsamtools view -h -F 0x100 -F 0x800 -q 1 input.bam | \\\nawk 'BEGIN{FS=\"\\t\"}{if($1 ~ /^@/ || $0 !~ /NH:i:[0-9]+/ || $0 ~ /NH:i:[0-5]$/) print}' | \\\nsamtools view -bS -o filtered.bam",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Library strategy: Ribosome profiling\nFastq reads were trimmed and mapped to human rRNA sequences using bowtie allowing 2 mismatches.\nUnmapped reads were mapped to human genome GRCh38 with Ensembl gene annotation release 83 using STAR with parameters \u00e2\u0080\u0098--outSAMattributes All --outFilterMismatchNmax 2 --alignEndsType EndToEnd --outFilterIntronMotifs RemoveNoncanonicalUnannotated --alignIntronMax 20000 --outMultimapperOrder Random --outSAMmultNmax 1\u00e2\u0080\u0099\nReads with mapQ=0 or NH>5 were filtered out and only primary loci are counted.\nGenome_build: GRCh38\nSupplementary_files_format_and_content: tab-delimited text files include Ensembl gene id, gene symbol, length and raw counts",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,61 +1,61 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Reads were mapped either to the mouse or yeast genome with bowtie2 -p 8 --local --very-sensitive-local --no-unal --no-mixed --no-discordant --phred33 -I 10 -X 700 (v1.2.2).",
-      "tool_name": "Bowtie2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Mapped reads were then converted into bed files.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "A scale factor for Spike-In normalization was calculated for each sample by dividing 1000 from the sequencing depth of mapped yeast reads.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Bed files were normalized using bedtools genomcov (v2.29.2) with the respective scaling factor calculated as describe above.",
-      "tool_name": "bedtools",
-      "tool_version": "2.29.2",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Peaks calls were determined using macs2 macs2 callpeak -broad --broad-cutoff 0.1 -B --nomodel --keep-dup all -f BED (v2.1.2).",
-      "tool_name": "MACS2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "none provided by the submitter",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Reads were mapped either to the mouse or yeast genome with bowtie2 -p 8 --local --very-sensitive-local --no-unal --no-mixed --no-discordant --phred33 -I 10 -X 700 (v1.2.2). Mapped reads were then converted into bed files. A scale factor for Spike-In normalization was calculated for each sample by dividing 1000 from the sequencing depth of mapped yeast reads. Bed files were normalized using bedtools genomcov (v2.29.2) with the respective scaling factor calculated as describe above. Peaks calls were determined using macs2 macs2 callpeak -broad --broad-cutoff 0.1 -B --nomodel --keep-dup all -f BED (v2.1.2).\nnone provided by the submitter\nAssembly: mm10\nSupplementary files format and content: Normalized bedgraph files",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Reads were mapped either to the mouse or yeast genome with bowtie2 -p 8 --local --very-sensitive-local --no-unal --no-mixed --no-discordant --phred33 -I 10 -X 700 (v1.2.2).",
+            "tool_name": "Bowtie2",
+            "tool_version": "1.2.2",
+            "code_example": "# Install Bowtie2 (if not already installed)\n# conda install -c bioconda bowtie2\n\n# Placeholder for genome index path and prefix\n# Replace 'path/to/genome_index/index_prefix' with the actual path to your chosen genome index (e.g., mouse or yeast).\n# For example, for mouse (mm10), it might be 'path/to/mm10_index/mm10'\n# For yeast (sacCer3), it might be 'path/to/sacCer3_index/sacCer3'\nGENOME_INDEX=\"path/to/genome_index/index_prefix\"\n\n# Placeholder for input FASTQ files (assuming paired-end based on -I and -X parameters)\n# Replace 'reads_R1.fastq' and 'reads_R2.fastq' with your actual input read files.\nREADS_R1=\"reads_R1.fastq\"\nREADS_R2=\"reads_R2.fastq\"\n\n# Placeholder for output SAM file\nOUTPUT_SAM=\"mapped_reads.sam\"\n\nbowtie2 \\\n  -p 8 \\\n  --local \\\n  --very-sensitive-local \\\n  --no-unal \\\n  --no-mixed \\\n  --no-discordant \\\n  --phred33 \\\n  -I 10 \\\n  -X 700 \\\n  -x \"${GENOME_INDEX}\" \\\n  -1 \"${READS_R1}\" \\\n  -2 \"${READS_R2}\" \\\n  -S \"${OUTPUT_SAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie2"
+        },
+        {
+            "step_order": 2,
+            "description": "Mapped reads were then converted into bed files.",
+            "tool_name": "bedtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.31.0",
+            "code_example": "# Install bedtools (if not already installed)\n# conda install -c bioconda bedtools\n\n# Convert mapped reads (BAM format) to BED format.\n# Replace 'input.bam' with the path to your mapped reads BAM file.\n# Replace 'output.bed' with the desired name for your output BED file.\nbedtools bamtobed -i input.bam > output.bed",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        },
+        {
+            "step_order": 3,
+            "description": "A scale factor for Spike-In normalization was calculated for each sample by dividing 1000 from the sequencing depth of mapped yeast reads.",
+            "tool_name": "awk (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# Example: Assume yeast_mapped_reads.txt contains the total count of mapped yeast reads.\n# This file would typically be generated by a previous step, such as mapping reads to a yeast spike-in genome and counting them.\n# Example content of yeast_mapped_reads.txt:\n# 12345678\n\n# Read the sequencing depth of mapped yeast reads from a file or variable\n# For demonstration, we assume it's in 'yeast_mapped_reads.txt'\nYEAST_READ_DEPTH=$(cat yeast_mapped_reads.txt)\n\n# Calculate the scale factor by dividing the sequencing depth by 1000\n# Using awk for floating-point division to ensure precision\nSCALE_FACTOR=$(echo \"$YEAST_READ_DEPTH\" | awk '{print $1 / 1000}')\n\n# Output the calculated scale factor (e.g., to a file or stdout for subsequent steps)\necho \"$SCALE_FACTOR\" > spike_in_scale_factor.txt\n\necho \"Calculated Spike-In Normalization Scale Factor: $SCALE_FACTOR\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper"
+        },
+        {
+            "step_order": 4,
+            "description": "Bed files were normalized using bedtools genomcov (v2.29.2) with the respective scaling factor calculated as describe above.",
+            "tool_name": "bedtools",
+            "tool_version": "2.29.2",
+            "code_example": "# Install bedtools (if not already installed)\n# conda install -c bioconda bedtools=2.29.2\n\n# Define input and output file paths and the scaling factor\nINPUT_BED=\"input.bed\"\nGENOME_SIZES=\"hg38.chrom.sizes\" # Placeholder: Replace with your actual genome chrom.sizes file\nSCALING_FACTOR=\"1.0\" # Placeholder: Replace with the calculated scaling factor\nOUTPUT_BEDGRAPH=\"normalized_coverage.bedgraph\"\n\n# Normalize bed file coverage using bedtools genomcov with the specified scaling factor\n# The -bg flag outputs coverage in bedGraph format.\nbedtools genomcov -i \"${INPUT_BED}\" -g \"${GENOME_SIZES}\" -bg -scale \"${SCALING_FACTOR}\" > \"${OUTPUT_BEDGRAPH}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        },
+        {
+            "step_order": 5,
+            "description": "Peaks calls were determined using macs2 macs2 callpeak -broad --broad-cutoff 0.1 -B --nomodel --keep-dup all -f BED (v2.1.2).",
+            "tool_name": "MACS2",
+            "tool_version": "2.1.2",
+            "code_example": "# Install MACS2 if not already installed\n# conda install -c bioconda macs2\n\n# Example usage of macs2 callpeak\n# Replace 'treatment.bed', 'control.bed', 'genome_size', and 'output_prefix' with actual values.\n# 'genome_size' can be 'hs' for human, 'mm' for mouse, or a specific number (e.g., 2.7e9 for human).\nmacs2 callpeak -t treatment.bed -c control.bed -f BED -g genome_size -n output_prefix -broad --broad-cutoff 0.1 -B --nomodel --keep-dup all",
+            "code_language": "bash",
+            "github_url": "https://github.com/macs3-project/MACS"
+        },
+        {
+            "step_order": 6,
+            "description": "none provided by the submitter",
+            "tool_name": "(Inferred with models/gemini-2.5-flash)",
+            "tool_version": null,
+            "code_example": "",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Reads were mapped either to the mouse or yeast genome with bowtie2 -p 8 --local --very-sensitive-local --no-unal --no-mixed --no-discordant --phred33 -I 10 -X 700 (v1.2.2). Mapped reads were then converted into bed files. A scale factor for Spike-In normalization was calculated for each sample by dividing 1000 from the sequencing depth of mapped yeast reads. Bed files were normalized using bedtools genomcov (v2.29.2) with the respective scaling factor calculated as describe above. Peaks calls were determined using macs2 macs2 callpeak -broad --broad-cutoff 0.1 -B --nomodel --keep-dup all -f BED (v2.1.2).\nnone provided by the submitter\nAssembly: mm10\nSupplementary files format and content: Normalized bedgraph files",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

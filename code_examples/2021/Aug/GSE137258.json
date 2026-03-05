@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Library strategy: DNA-seq",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "CRISPR screening data was aligned and processed using MaGeCK.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Library strategy: DNA-seq\nCRISPR screening data was aligned and processed using MaGeCK.\nGenome_build: hg19\nSupplementary_files_format_and_content: MaGeCK processed gene summary",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Library strategy: DNA-seq",
+            "tool_name": "FastQC (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "0.11.9 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install FastQC (if not already installed)\n# conda install -c bioconda fastqc\n\n# Define input FASTQ files and output directory\n# Replace with actual paths to your DNA-seq raw data\nREAD1=\"sample_R1.fastq.gz\"\nREAD2=\"sample_R2.fastq.gz\"\nOUTPUT_DIR=\"fastqc_results\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run FastQC on the raw DNA-seq FASTQ files\n# This performs quality control checks on the sequencing data\nfastqc \"${READ1}\" \"${READ2}\" -o \"${OUTPUT_DIR}\"",
+            "code_language": "bash",
+            "github_url": "https://www.bioinformatics.babraham.ac.uk/projects/fastqc/"
+        },
+        {
+            "step_order": 2,
+            "description": "CRISPR screening data was aligned and processed using MaGeCK.",
+            "tool_name": "MaGeCK",
+            "tool_version": "0.5.9.3",
+            "code_example": "# Install MaGeCK (if not already installed)\n# conda install -c bioconda mageck\n\n# Example: Perform MaGeCK analysis for gene essentiality testing.\n# This assumes 'sgRNA_counts.txt' contains read counts for sgRNAs across samples,\n# 'sgRNA_library.txt' maps sgRNAs to target genes, and 'design_matrix.txt'\n# specifies control and treatment samples. Replace placeholder file names and paths\n# with actual data.\n\n# Example content for sgRNA_counts.txt (tab-separated):\n# sgRNA_ID\\tSample1_Control\\tSample2_Control\\tSample3_Treatment\\tSample4_Treatment\n# sgRNA1\\t100\\t120\\t50\\t60\n# sgRNA2\\t200\\t210\\t180\\t190\n# ...\n\n# Example content for sgRNA_library.txt (tab-separated):\n# sgRNA_ID\\tGene_ID\n# sgRNA1\\tGeneA\n# sgRNA2\\tGeneB\n# ...\n\n# Example content for design_matrix.txt (tab-separated):\n# Sample_ID\\tCondition\n# Sample1_Control\\tcontrol\n# Sample2_Control\\tcontrol\n# Sample3_Treatment\\ttreatment\n# Sample4_Treatment\\ttreatment\n\nmageck test \\\n    -k sgRNA_counts.txt \\\n    -l sgRNA_library.txt \\\n    -n mageck_results \\\n    -d design_matrix.txt \\\n    --control-id control \\\n    --treatment-id treatment",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Library strategy: DNA-seq\nCRISPR screening data was aligned and processed using MaGeCK.\nGenome_build: hg19\nSupplementary_files_format_and_content: MaGeCK processed gene summary",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

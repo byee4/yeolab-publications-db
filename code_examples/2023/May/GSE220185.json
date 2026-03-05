@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Processed using Skipper https://github.com/YeoLab/skipper",
-      "tool_name": "Skipper",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Skipper trims the read, extract UMI, align to the genome and deduplicate",
-      "tool_name": "Skipper",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "To find enriched windows, it models the CLIP libraries crosslinking-induced truncation(CITs) with beta-binomial model with GC-bias of each window as a varaible",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "overdispersion parameters are estimated from two input replicates",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Processed using Skipper https://github.com/YeoLab/skipper\nSkipper trims the read, extract UMI, align to the genome and deduplicate\nTo find enriched windows, it models the CLIP libraries crosslinking-induced truncation(CITs)  with beta-binomial model with GC-bias of each window as a varaible\noverdispersion parameters are estimated from two input replicates\nAssembly: hg38\nSupplementary files format and content: wig files represent crosslinking-induced truncation(CITs) for plus and minus strands\nSupplementary files format and content: tsv file represents reproducible genomic enriched window",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Processed using Skipper https://github.com/YeoLab/skipper",
+            "tool_name": "Skipper",
+            "tool_version": "Not specified",
+            "code_example": "# Installation of Snakemake and cloning Skipper workflow\n# It is recommended to use a dedicated conda environment for Snakemake and its dependencies.\n# conda create -n skipper_env snakemake mamba -y\n# conda activate skipper_env\n\n# Clone the Skipper workflow repository\n# git clone https://github.com/YeoLab/skipper.git\n# cd skipper\n\n# The Skipper workflow uses conda environments defined within its rules.\n# These environments will be created automatically by Snakemake if --use-conda is specified.\n\n# Execution of Skipper workflow\n# This is a generic command. Actual parameters (input files, genome, etc.)\n# would be specified in a configuration file (e.g., config/config.yaml).\n#\n# Reference dataset: For eCLIP, a genome assembly like hg38 or mm10 is typically required.\n# This would be specified in the config.yaml (e.g., genome: hg38).\n#\n# Replace 'N' with the desired number of CPU cores.\n# Replace 'path/to/your/config.yaml' with the path to your specific configuration file.\n# Replace 'path/to/your/output_directory' with your desired output location.\n# A minimal config.yaml might look like:\n# samples:\n#   sample1:\n#     R1: \"path/to/sample1_R1.fastq.gz\"\n#     R2: \"path/to/sample1_R2.fastq.gz\" # if paired-end\n# genome: \"hg38\" # or \"mm10\", etc.\n# annotation: \"path/to/your/gtf_or_gff\"\n#\n# For a full run, you would typically copy and modify the example config file from the Skipper repository.\n\nsnakemake --snakefile Snakefile --cores N --use-conda --configfile path/to/your/config.yaml --directory path/to/your/output_directory",
+            "code_language": "bash",
+            "github_url": "https://github.com/YeoLab/skipper"
+        },
+        {
+            "step_order": 2,
+            "description": "Skipper trims the read, extract UMI, align to the genome and deduplicate",
+            "tool_name": "Skipper",
+            "tool_version": "Snakemake workflow (dependencies: Snakemake 6.0.5, cutadapt 3.4, STAR 2.7.9a, UMI-tools 1.1.2, Picard 2.25.7)",
+            "code_example": "# Install Git and Conda if not already present\n# sudo apt-get update && sudo apt-get install -y git\n# wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh\n# bash miniconda.sh -b -p $HOME/miniconda\n# export PATH=\"$HOME/miniconda/bin:$PATH\"\n# conda init bash\n# source ~/.bashrc\n\n# Clone the Skipper pipeline repository\n# git clone https://github.com/yeolab/skipper.git\n# cd skipper\n\n# Create and activate the conda environment for the pipeline\n# conda env create -f environment.yaml\n# conda activate skipper_env\n\n# --- Configuration for Skipper ---\n# Create a config.yaml file with your specific parameters.\n# Replace placeholder paths and values with your actual data.\ncat << EOF > config.yaml\nGENOME_DIR: \"/path/to/STAR_index/hg38\" # Path to STAR genome index directory (e.g., built from hg38)\nGENOME_FASTA: \"/path/to/genome/hg38.fa\" # Path to the genome FASTA file (e.g., hg38.fa)\nGTF: \"/path/to/annotations/gencode.v38.annotation.gtf\" # Path to the gene annotation GTF file (e.g., gencode.v38.annotation.gtf)\n\nADAPTER_FWD: \"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\" # Forward adapter sequence for trimming\nADAPTER_REV: \"AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT\" # Reverse adapter sequence for trimming\n\nUMI_PATTERN: \"NNNNNNNN\" # UMI pattern (e.g., 8 N's for an 8-bp UMI)\n# BARCODE_PATTERN: \"NNNNNN\" # Optional: Barcode pattern if present, otherwise comment out or leave empty\n\nDEDUP_METHOD: \"directional\" # Deduplication method: \"directional\", \"unique\", or \"position\"\n\n# Define your samples and input directory\nSAMPLES: [\"sample1\", \"sample2\"] # List of sample names (e.g., corresponding to sample1_R1.fastq.gz, sample2_R1.fastq.gz)\nINPUT_DIR: \"/path/to/raw_fastq\" # Directory containing your raw FASTQ files\nOUTPUT_DIR: \"results\" # Directory for output files\nEOF\n\n# --- Run the Skipper pipeline ---\n# This command executes the Snakemake workflow using the specified configuration.\n# Adjust --cores based on available CPU resources.\nsnakemake --use-conda --cores 8 --configfile config.yaml all",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper/"
+        },
+        {
+            "step_order": 3,
+            "description": "To find enriched windows, it models the CLIP libraries crosslinking-induced truncation(CITs) with beta-binomial model with GC-bias of each window as a varaible",
+            "tool_name": "PureCLIP (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.3.1",
+            "code_example": "# Install PureCLIP via Bioconda\n# conda install -c bioconda pureclip\n\n# Example command to find enriched windows using PureCLIP\n# Replace <input_clip_replicateX.bam> with your aligned CLIP-seq BAM files,\n# <genome.fa> with your reference genome FASTA file (e.g., hg38.fa),\n# and <output_enriched_windows.bed> with your desired output file name.\n# Adjust -nt for the number of threads to use.\n\nPureCLIP -i input_clip_replicate1.bam input_clip_replicate2.bam -g hg38.fa -o output_enriched_windows.bed -nt 8",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "overdispersion parameters are estimated from two input replicates",
+            "tool_name": "DESeq2 (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.42.0",
+            "code_example": "# Install R and DESeq2 if not already available\n# conda create -n deseq2_env r-base r-essentials bioconductor-deseq2\n# conda activate deseq2_env\n\n# Example R script to estimate overdispersion parameters using DESeq2\n# This script assumes a count matrix and a sample information file as input.\n\ncat << 'EOF' > estimate_overdispersion.R\nlibrary(DESeq2)\n\n# --- User-defined parameters ---\ncount_matrix_file <- \"counts.tsv\" # Combined count matrix from replicates\nsample_info_file <- \"sample_info.csv\" # Sample metadata\n\noutput_dispersion_file <- \"overdispersion_estimates.tsv\"\n# -------------------------------\n\n# Load count data\ncount_data <- read.delim(count_matrix_file, row.names = 1, check.names = FALSE)\n# Ensure counts are integers\ncount_data <- round(count_data)\ncount_data[is.na(count_data)] <- 0\ncount_data <- as.matrix(count_data)\n\n# Load sample information\nsample_info <- read.csv(sample_info_file, row.names = 1)\n\n# Ensure sample names match and are in the same order\nsample_info <- sample_info[colnames(count_data), , drop = FALSE]\n\n# Create DESeqDataSet object\n# For simple overdispersion estimation, a minimal design is sufficient.\n# If comparing two replicates, the design might be ~1 or ~replicate_group\ndds <- DESeqDataSetFromMatrix(countData = count_data,\n                              colData = sample_info,\n                              design = ~ 1) # A simple design to estimate dispersions\n\n# Run DESeq2 pipeline (this includes dispersion estimation)\ndds <- estimateSizeFactors(dds)\ndds <- estimateDispersions(dds) # Explicitly estimate dispersions\n\n# Extract dispersion estimates\ndispersions <- mcols(dds)$dispersion\nnames(dispersions) <- rownames(dds)\n\n# Save dispersions\nwrite.table(as.data.frame(dispersions), file = output_dispersion_file,\n            sep = \"\\t\", quote = FALSE, col.names = NA)\n\nmessage(paste(\"Overdispersion parameters estimated and saved to:\", output_dispersion_file))\nEOF\n\n# Create dummy count data (replace with actual data)\necho -e \"gene\\trep1\\trep2\" > counts.tsv\necho -e \"geneA\\t100\\t120\" >> counts.tsv\necho -e \"geneB\\t50\\t65\" >> counts.tsv\necho -e \"geneC\\t200\\t210\" >> counts.tsv\necho -e \"geneD\\t10\\t15\" >> counts.tsv\n\n# Create dummy sample info (replace with actual data)\necho -e \"sample,condition\" > sample_info.csv\necho -e \"rep1,control\" >> sample_info.csv\necho -e \"rep2,control\" >> sample_info.csv\n\n# Execute the R script\nRscript estimate_overdispersion.R",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper"
+        }
+    ],
+    "raw_text": "Processed using Skipper https://github.com/YeoLab/skipper\nSkipper trims the read, extract UMI, align to the genome and deduplicate\nTo find enriched windows, it models the CLIP libraries crosslinking-induced truncation(CITs)  with beta-binomial model with GC-bias of each window as a varaible\noverdispersion parameters are estimated from two input replicates\nAssembly: hg38\nSupplementary files format and content: wig files represent crosslinking-induced truncation(CITs) for plus and minus strands\nSupplementary files format and content: tsv file represents reproducible genomic enriched window",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

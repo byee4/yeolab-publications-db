@@ -1,16 +1,16 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Raw data were log2 transformed and normalized to 75 percentile according to Agilent protocol.",
-      "tool_name": "Microarray",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Raw data were log2 transformed and normalized to 75 percentile according to Agilent protocol.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Raw data were log2 transformed and normalized to 75 percentile according to Agilent protocol.",
+            "tool_name": "Microarray",
+            "tool_version": "3.56.2",
+            "code_example": "# Install R and Bioconductor if not already installed\n# sudo apt-get update\n# sudo apt-get install r-base\n# R -e \"if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager'); BiocManager::install('limma')\"\n\n# Create a dummy input file for demonstration. \n# In a real scenario, this would be raw intensity data from multiple Agilent arrays,\n# typically background-subtracted data from Agilent Feature Extraction software.\n# This example simulates a matrix of raw intensities for 3 samples and 100 probes.\necho \"Probe\\tSample1\\tSample2\\tSample3\" > input_raw_agilent_intensities.txt\nfor i in $(seq 1 100); do\n    s1=$(awk -v min=500 -v max=2000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')\n    s2=$(awk -v min=600 -v max=2200 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')\n    s3=$(awk -v min=400 -v max=1800 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')\n    echo \"Probe$i\\t$s1\\t$s2\\t$s3\" >> input_raw_agilent_intensities.txt\ndone\n\n# R script for log2 transformation and 75th percentile normalization\nRscript -e '\n  library(limma) # limma is a robust package for microarray analysis\n\n  # Define input and output files\n  input_file <- \"input_raw_agilent_intensities.txt\"\n  output_file <- \"normalized_agilent_data.txt\"\n\n  # Read raw intensity data\n  raw_data_df <- read.table(input_file, header = TRUE, sep = \"\\t\", row.names = 1)\n  raw_intensities_matrix <- as.matrix(raw_data_df)\n\n  # Step 1: Log2 transformation\n  log2_transformed_data <- log2(raw_intensities_matrix)\n\n  # Step 2: 75th percentile normalization\n  # This method scales each sample (column) so its 75th percentile intensity matches a common target.\n  # Calculate the 75th percentile for each sample\n  percentile_75_per_sample <- apply(log2_transformed_data, 2, function(x) quantile(x, 0.75, na.rm = TRUE))\n\n  # Calculate the mean 75th percentile across all samples to use as a common target\n  target_percentile_75 <- mean(percentile_75_per_sample)\n\n  # Apply scaling: divide each sample by its 75th percentile and multiply by the target 75th percentile\n  normalized_data <- sweep(log2_transformed_data, 2, percentile_75_per_sample, FUN = \"/\") * target_percentile_75\n\n  # Write the normalized data to an output file\n  write.table(normalized_data, file = output_file, sep = \"\\t\", quote = FALSE, row.names = TRUE)\n\n  cat(paste0(\"Log2 transformed and 75th percentile normalized data saved to \", output_file, \"\\n\"))\n'\n",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/limma.html"
+        }
+    ],
+    "raw_text": "Raw data were log2 transformed and normalized to 75 percentile according to Agilent protocol.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "RNA-seq raw reads were trimmed for adaptor sequences or low-quality bases and mapped to both the human genome (hg19 build) and the HCMV Merlin genome (Genbank AY446894.2) with GSNAP, with additional filtering for repetitive regions.",
-      "tool_name": "GSNAP",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Virus-mapping reads were obtained from the HSV-2 and HIV-1 samples using Genbank accessions NC_001798.1 and K03455.1, respectively.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Genome coverage files for visualization (bigWig format) were generated using UCSC tools bedGraphToBigWig and genomeCoverageBed, and strand-corrected.",
-      "tool_name": "UCSC tools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "RNA-seq raw reads were trimmed for adaptor sequences or low-quality bases and mapped to both the human genome (hg19 build) and the HCMV Merlin genome (Genbank AY446894.2) with GSNAP, with additional filtering for repetitive regions. Virus-mapping reads were obtained from the HSV-2 and HIV-1 samples using Genbank accessions NC_001798.1 and K03455.1, respectively.\nGenome coverage files for visualization (bigWig format) were generated using UCSC tools bedGraphToBigWig and genomeCoverageBed, and strand-corrected.\nGenome_build: hg19\nSupplementary_files_format_and_content: bigWig (each .bw includes human transcriptome only)",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "RNA-seq raw reads were trimmed for adaptor sequences or low-quality bases and mapped to both the human genome (hg19 build) and the HCMV Merlin genome (Genbank AY446894.2) with GSNAP, with additional filtering for repetitive regions.",
+            "tool_name": "GSNAP",
+            "tool_version": "2023-09-27",
+            "code_example": "# Install GSNAP (if not already installed)\n# conda install -c bioconda gsnap\n# conda install -c bioconda samtools\n\n# --- Reference Genome Preparation ---\n# Download human genome (hg19 build) FASTA from UCSC\n# wget https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.fa.gz\n# gunzip hg19.fa.gz\n\n# Download HCMV Merlin genome (Genbank AY446894.2) FASTA from NCBI\n# wget -O HCMV_Merlin.fa \"https://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?tool=efetch&db=nuccore&retmode=text&rettype=fasta&id=AY446894.2\"\n\n# Concatenate genomes into a single FASTA file for combined indexing\n# cat hg19.fa HCMV_Merlin.fa > combined_genome.fa\n\n# Build GSNAP index for the combined genome\n# mkdir -p gsnap_index\n# gmap_build -D gsnap_index -d combined_genome_index combined_genome.fa\n\n# --- GSNAP Alignment ---\n# Assuming trimmed_reads_R1.fastq.gz and trimmed_reads_R2.fastq.gz are the input trimmed RNA-seq reads\n# Replace with actual input file names\n\ngsnap \\\n  --gunzip \\\n  -D gsnap_index \\\n  -d combined_genome_index \\\n  -A sam \\\n  --pairmax-dna=1000 \\\n  --splice-mode=rna \\\n  --orientation=fr \\\n  --mask-low-complexity \\\n  trimmed_reads_R1.fastq.gz \\\n  trimmed_reads_R2.fastq.gz \\\n  > aligned_reads.sam\n\n# Convert SAM to BAM and sort\nsamtools view -bS aligned_reads.sam > aligned_reads.bam\nsamtools sort aligned_reads.bam -o aligned_reads.sorted.bam\nsamtools index aligned_reads.sorted.bam",
+            "code_language": "bash",
+            "github_url": "http://research-pub.gene.com/gmap/"
+        },
+        {
+            "step_order": 2,
+            "description": "Virus-mapping reads were obtained from the HSV-2 and HIV-1 samples using Genbank accessions NC_001798.1 and K03455.1, respectively.",
+            "tool_name": "bowtie2 (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.5.1 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install bowtie2, samtools, and ncbi-datasets-cli if not already installed\n# conda install -c bioconda bowtie2 samtools ncbi-datasets-cli\n\n# --- Download HSV-2 reference genome (NC_001798.1) ---\necho \"Downloading HSV-2 reference genome (NC_001798.1)...\"\ndatasets download genome accession NC_001798.1 --filename HSV2.zip\nunzip -o HSV2.zip\nmv ncbi_dataset/data/NC_001798.1/NC_001798.1.fna HSV2.fasta\nrm -rf ncbi_dataset HSV2.zip\n\n# --- Build Bowtie2 index for HSV-2 ---\necho \"Building Bowtie2 index for HSV-2...\"\nbowtie2-build HSV2.fasta HSV2_index\n\n# --- Download HIV-1 reference genome (K03455.1) ---\necho \"Downloading HIV-1 reference genome (K03455.1)...\"\ndatasets download genome accession K03455.1 --filename HIV1.zip\nunzip -o HIV1.zip\nmv ncbi_dataset/data/K03455.1/K03455.1.fna HIV1.fasta\nrm -rf ncbi_dataset HIV1.zip\n\n# --- Build Bowtie2 index for HIV-1 ---\necho \"Building Bowtie2 index for HIV-1...\"\nbowtie2-build HIV1.fasta HIV1_index\n\n# --- Align HSV-2 sample reads ---\n# Assuming 'hsv2_reads.fastq' is the input FASTQ file for HSV-2\n# If reads are paired-end, use -1 <read1.fastq> -2 <read2.fastq>\necho \"Aligning HSV-2 reads...\"\nbowtie2 -x HSV2_index -U hsv2_reads.fastq -S hsv2_mapped.sam --threads 4\n\n# Convert SAM to BAM, sort, and index\nsamtools view -bS hsv2_mapped.sam | samtools sort -o hsv2_mapped.bam\nsamtools index hsv2_mapped.bam\nrm hsv2_mapped.sam # Clean up SAM file\n\n# --- Align HIV-1 sample reads ---\n# Assuming 'hiv1_reads.fastq' is the input FASTQ file for HIV-1\n# If reads are paired-end, use -1 <read1.fastq> -2 <read2.fastq>\necho \"Aligning HIV-1 reads...\"\nbowtie2 -x HIV1_index -U hiv1_reads.fastq -S hiv1_mapped.sam --threads 4\n\n# Convert SAM to BAM, sort, and index\nsamtools view -bS hiv1_mapped.sam | samtools sort -o hiv1_mapped.bam\nsamtools index hiv1_mapped.bam\nrm hiv1_mapped.sam # Clean up SAM file\n\necho \"Mapping complete. Output BAM files: hsv2_mapped.bam, hiv1_mapped.bam\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie2"
+        },
+        {
+            "step_order": 3,
+            "description": "Genome coverage files for visualization (bigWig format) were generated using UCSC tools bedGraphToBigWig and genomeCoverageBed, and strand-corrected.",
+            "tool_name": "UCSC tools",
+            "tool_version": "Not specified",
+            "code_example": "# Install bedtools\n# conda install -c bioconda bedtools\n\n# Install UCSC tools (specifically bedGraphToBigWig and fetchChromSizes)\n# conda install -c bioconda ucsc-bedgraphtobigwig ucsc-fetchchromsizes\n\n# Define input BAM file and output prefixes\nINPUT_BAM=\"aligned.bam\" # Replace with your actual aligned BAM file\nOUTPUT_PREFIX=\"sample_coverage\" # Prefix for output bigWig files\nGENOME=\"hg38\" # Placeholder: Replace with your actual genome assembly (e.g., hg19, mm10)\n\n# Get chrom.sizes file for the specified genome\n# This file is essential for both bedtools genomeCoverage and bedGraphToBigWig\nCHROM_SIZES=\"${GENOME}.chrom.sizes\"\nfetchChromSizes \"${GENOME}\" > \"${CHROM_SIZES}\"\n\n# Generate strand-specific bedGraph files using bedtools genomeCoverage\n# -ibam: Input BAM file\n# -g: Genome file (chrom.sizes)\n# -bg: Output in bedGraph format\n# -strand +: Calculate coverage for the positive strand\n# -strand -: Calculate coverage for the negative strand\nbedtools genomeCoverage -ibam \"${INPUT_BAM}\" -g \"${CHROM_SIZES}\" -bg -strand + > \"${OUTPUT_PREFIX}_plus.bedGraph\"\nbedtools genomeCoverage -ibam \"${INPUT_BAM}\" -g \"${CHROM_SIZES}\" -bg -strand - > \"${OUTPUT_PREFIX}_minus.bedGraph\"\n\n# Sort bedGraph files by chromosome and start position\n# This is a requirement for bedGraphToBigWig\nsort -k1,1 -k2,2n \"${OUTPUT_PREFIX}_plus.bedGraph\" > \"${OUTPUT_PREFIX}_plus_sorted.bedGraph\"\nsort -k1,1 -k2,2n \"${OUTPUT_PREFIX}_minus.bedGraph\" > \"${OUTPUT_PREFIX}_minus_sorted.bedGraph\"\n\n# Convert sorted bedGraph files to bigWig format using UCSC bedGraphToBigWig\n# Input bedGraph file, chrom.sizes file, output bigWig file\nbedGraphToBigWig \"${OUTPUT_PREFIX}_plus_sorted.bedGraph\" \"${CHROM_SIZES}\" \"${OUTPUT_PREFIX}_plus.bigWig\"\nbedGraphToBigWig \"${OUTPUT_PREFIX}_minus_sorted.bedGraph\" \"${CHROM_SIZES}\" \"${OUTPUT_PREFIX}_minus.bigWig\"\n\n# Clean up intermediate files (optional)\n# rm \"${OUTPUT_PREFIX}_plus.bedGraph\" \"${OUTPUT_PREFIX}_minus.bedGraph\"\n# rm \"${OUTPUT_PREFIX}_plus_sorted.bedGraph\" \"${OUTPUT_PREFIX}_minus_sorted.bedGraph\"\n# rm \"${CHROM_SIZES}\"",
+            "code_language": "bash",
+            "github_url": "https://genome.ucsc.edu/goldenPath/help/bigWig.html"
+        }
+    ],
+    "raw_text": "RNA-seq raw reads were trimmed for adaptor sequences or low-quality bases and mapped to both the human genome (hg19 build) and the HCMV Merlin genome (Genbank AY446894.2) with GSNAP, with additional filtering for repetitive regions. Virus-mapping reads were obtained from the HSV-2 and HIV-1 samples using Genbank accessions NC_001798.1 and K03455.1, respectively.\nGenome coverage files for visualization (bigWig format) were generated using UCSC tools bedGraphToBigWig and genomeCoverageBed, and strand-corrected.\nGenome_build: hg19\nSupplementary_files_format_and_content: bigWig (each .bw includes human transcriptome only)",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

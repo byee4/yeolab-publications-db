@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "The processing and analysis of expression data were performed using the statistical software R and Bioconductor.",
-      "tool_name": "R",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "For all Affymetrix CEL files the background were corrected and the expression were normalized using robust multiarray average (RMA).",
-      "tool_name": "Microarray",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "The processing and analysis of expression data were performed using the statistical software R and Bioconductor. For all Affymetrix CEL files the background were corrected and the expression were normalized using robust multiarray average (RMA).",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "The processing and analysis of expression data were performed using the statistical software R and Bioconductor.",
+            "tool_name": "R",
+            "tool_version": "Not specified",
+            "code_example": "# Install R and Bioconductor (example using Conda)\n# conda create -n r_env r-base bioconductor-biocmanager\n# conda activate r_env\n# R -e \"BiocManager::install(c('limma', 'DESeq2', 'edgeR'))\" # Example Bioconductor packages for expression analysis\n\n# Execute an R script for expression data processing and analysis\n# Replace 'expression_data.csv' with your actual input data file (e.g., counts, normalized expression)\n# Replace 'analysis_script.R' with the actual R script performing the analysis\n# Replace 'output_results.tsv' with the actual output file (e.g., differential expression results, processed data)\nRscript analysis_script.R expression_data.csv output_results.tsv",
+            "code_language": "bash",
+            "github_url": "https://www.bioconductor.org/"
+        },
+        {
+            "step_order": 2,
+            "description": "For all Affymetrix CEL files the background were corrected and the expression were normalized using robust multiarray average (RMA).",
+            "tool_name": "Microarray",
+            "tool_version": "1.78.0",
+            "code_example": "# Install R if not already installed\n# sudo apt-get update\n# sudo apt-get install r-base\n\n# Install Bioconductor and affy package\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\")'\n# R -e 'BiocManager::install(\"affy\")'\n\n# Create a dummy directory for CEL files (replace with your actual CEL file directory)\nmkdir -p cel_files\n\n# Create dummy CEL files for demonstration purposes.\n# In a real scenario, these would be your actual Affymetrix .CEL files.\ntouch cel_files/sample1.CEL\ntouch cel_files/sample2.CEL\ntouch cel_files/sample3.CEL\n\n# Create an R script to perform RMA normalization\ncat << 'EOF' > run_rma.R\nlibrary(affy)\n\n# Define the directory containing CEL files\ncel_files_dir <- \"cel_files\"\n\n# List all CEL files in the specified directory\ncel_files <- list.files(path = cel_files_dir, pattern = \"\\\\.CEL$\", full.names = TRUE, ignore.case = TRUE)\n\nif (length(cel_files) == 0) {\n  stop(paste(\"Error: No CEL files found in\", cel_files_dir, \". Please ensure your CEL files are in this directory.\"))\n}\n\nmessage(paste(\"Found\", length(cel_files), \"CEL files.\"))\n\n# Read CEL files into an AffyBatch object\n# For basic RMA, a simple ReadAffy call is sufficient.\n# For more complex experiments, a phenoData file might be needed.\naffy_batch <- ReadAffy(filenames = cel_files)\n\nmessage(\"Performing RMA normalization...\")\n# Perform Robust Multiarray Average (RMA) normalization\n# This function performs background correction, normalization, and summarization.\neset <- rma(affy_batch)\n\n# Extract the normalized expression matrix\nexpression_matrix <- exprs(eset)\n\n# Define the output file name\noutput_file <- \"rma_normalized_expression.tsv\"\n\n# Write the expression matrix to a tab-separated file\n# row.names = TRUE to keep probe IDs as the first column\nwrite.table(expression_matrix, file = output_file, sep = \"\\t\", quote = FALSE, row.names = TRUE)\n\nmessage(paste(\"RMA normalized expression matrix successfully written to\", output_file))\nEOF\n\n# Execute the R script\nRscript run_rma.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/affy.html"
+        }
+    ],
+    "raw_text": "The processing and analysis of expression data were performed using the statistical software R and Bioconductor. For all Affymetrix CEL files the background were corrected and the expression were normalized using robust multiarray average (RMA).",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

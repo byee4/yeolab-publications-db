@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Reads were aligned to mm10 by BWA",
-      "tool_name": "BWA",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reads with low quality (MAPQ < 30) were filtered out.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "If multiple reads were mapped to the exact same location, only one read was kept.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Reads were aligned to mm10 by BWA\nReads with low quality (MAPQ < 30) were filtered out. If multiple reads were mapped to the exact same location, only one read was kept.\nGenome_build: mm10\nSupplementary_files_format_and_content: bigwig",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Reads were aligned to mm10 by BWA",
+            "tool_name": "BWA",
+            "tool_version": "0.7.17",
+            "code_example": "# Install BWA and Samtools if not already installed\n# conda install -c bioconda bwa samtools\n\n# --- Reference Genome Preparation ---\n# Download the mm10 reference genome (example from UCSC)\n# mkdir -p ref/mm10\n# wget -P ref/mm10 https://hgdownload.soe.ucsc.edu/goldenPath/mm10/bigZips/mm10.fa.gz\n# gunzip ref/mm10/mm10.fa.gz\n\n# Index the reference genome for BWA\n# bwa index ref/mm10/mm10.fa\n\n# --- Alignment Command ---\n# Assuming input reads are paired-end: reads_R1.fastq.gz and reads_R2.fastq.gz\n# And the reference genome is indexed at ref/mm10/mm10.fa\nbwa mem -t 8 ref/mm10/mm10.fa reads_R1.fastq.gz reads_R2.fastq.gz | samtools view -bS -o aligned_reads.bam -",
+            "code_language": "bash",
+            "github_url": "https://github.com/lh3/bwa"
+        },
+        {
+            "step_order": 2,
+            "description": "Reads with low quality (MAPQ < 30) were filtered out.",
+            "tool_name": "samtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.10 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install samtools (if not already installed)\n# conda install -c bioconda samtools\n\n# Filter reads with mapping quality (MAPQ) less than 30\nsamtools view -b -q 30 -o filtered_reads.bam input_reads.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 3,
+            "description": "If multiple reads were mapped to the exact same location, only one read was kept.",
+            "tool_name": "samtools markdup (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.15",
+            "code_example": "# Install samtools if not already installed\n# conda install -c bioconda samtools=1.15\n\n# Input: A coordinate-sorted BAM file. This step assumes the input BAM is already sorted.\n# Example input from a previous alignment step:\nINPUT_BAM=\"aligned_reads.sorted.bam\"\nOUTPUT_DEDUP_BAM=\"aligned_reads.dedup.bam\"\n\n# Remove PCR duplicates based on mapping coordinates.\n# If multiple reads map to the exact same genomic location, only one is kept.\n# -r: Remove duplicate reads (rather than just marking them).\n# -s: Output statistics to stderr (optional, but useful for logging).\nsamtools markdup -r -s \"${INPUT_BAM}\" \"${OUTPUT_DEDUP_BAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        }
+    ],
+    "raw_text": "Reads were aligned to mm10 by BWA\nReads with low quality (MAPQ < 30) were filtered out. If multiple reads were mapped to the exact same location, only one read was kept.\nGenome_build: mm10\nSupplementary_files_format_and_content: bigwig",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

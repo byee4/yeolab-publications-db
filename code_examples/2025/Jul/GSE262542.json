@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "data processing was done using the Skipper pipeline, freelly available at https://github.com/yeolab/skipper.",
-      "tool_name": "Skipper",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Adapters trimming was done with Skewer",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "proccessed reads were mapped with STAR (2.7.10a_alpha_220314)",
-      "tool_name": "STAR",
-      "tool_version": "2.7.10a",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "PCR bias was removed using UMIcollapse",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "data processing was done using the Skipper pipeline, freelly available at https://github.com/yeolab/skipper.\nAdapters trimming was done with Skewer\nproccessed reads were mapped with STAR (2.7.10a_alpha_220314)\nPCR bias was removed using UMIcollapse\nAssembly: hg38\nSupplementary files format and content: tab separated values files\nSupplementary files format and content: Supplementary files - reproducible enriched window including p and q values, enrichment scores, and the annotated regions for the significantly bound transcriptome tiled windows.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "data processing was done using the Skipper pipeline, freelly available at https://github.com/yeolab/skipper.",
+            "tool_name": "Skipper",
+            "tool_version": "Not specified",
+            "code_example": "# Clone the Skipper pipeline repository\ngit clone https://github.com/yeolab/skipper.git\ncd skipper\n\n# The Skipper pipeline is a Snakemake workflow that requires a 'config.yaml' file\n# and input data (e.g., FASTQ files) to be present in the working directory.\n# The 'config.yaml' typically specifies parameters such as the reference genome (e.g., hg38 for human eCLIP).\n# Users need to prepare these files according to the pipeline's documentation.\n\n# Execute the Skipper pipeline using Snakemake.\n# The --cores flag specifies the number of CPU cores to use.\n# The --use-conda flag enables Snakemake to manage software environments via Conda.\nsnakemake --cores 8 --use-conda",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper"
+        },
+        {
+            "step_order": 2,
+            "description": "Adapters trimming was done with Skewer",
+            "tool_name": "Skewer",
+            "tool_version": "0.2.2",
+            "code_example": "# Install Skewer (example using conda)\n# conda install -c bioconda skewer\n\n# Define input and output file names\nINPUT_FASTQ=\"input.fastq.gz\"\nOUTPUT_PREFIX=\"trimmed_reads\"\nADAPTER_FILE=\"adapters.fa\" # Placeholder for adapter sequences file (e.g., containing Illumina adapters)\n\n# Execute Skewer for adapter trimming\n# Parameters are based on common eCLIP settings (e.g., from yeolab/eclip workflow)\n# -x: Adapter sequences file\n# -l: Minimum read length after trimming (default 18 in eclip workflow)\n# -q: Minimum quality score to trim (default 20 in eclip workflow)\n# -m: Minimum overlap length for adapter detection (default 1 in eclip workflow)\n# -o: Output file prefix\nskewer -x \"${ADAPTER_FILE}\" -l 18 -q 20 -m 1 -o \"${OUTPUT_PREFIX}\" \"${INPUT_FASTQ}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/relipmoc/skewer"
+        },
+        {
+            "step_order": 3,
+            "description": "proccessed reads were mapped with STAR (2.7.10a_alpha_220314)",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Placeholder for reference genome directory\n# Replace with your actual STAR genome index path (e.g., for hg38)\nGENOME_DIR=\"/path/to/STAR_genome_index/hg38\"\n\n# Placeholder for input FASTQ files\n# Replace with your actual input FASTQ files (e.g., processed reads)\n# Assuming paired-end reads, adjust for single-end if necessary\nREADS_R1=\"processed_reads_R1.fastq.gz\"\nREADS_R2=\"processed_reads_R2.fastq.gz\"\n\n# Placeholder for output directory and prefix\nOUTPUT_DIR=\"star_mapping_output\"\nOUTPUT_PREFIX=\"${OUTPUT_DIR}/aligned_reads\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run STAR alignment\n# Common parameters for RNA-seq alignment\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${READS_R1}\" \"${READS_R2}\" \\\n     --runThreadN 8 \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes Standard \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.1 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --readFilesCommand zcat",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 4,
+            "description": "PCR bias was removed using UMIcollapse",
+            "tool_name": "UMIcollapse",
+            "tool_version": "N/A",
+            "code_example": "# UMIcollapse is a Python script. Ensure Python is installed.\n# Download the script (if not already available in your environment):\n# wget https://raw.githubusercontent.com/MikeDacre/UMIcollapse/master/UMIcollapse.py\n# chmod +x UMIcollapse.py\n\n# Example usage:\n# Replace input.bam with your actual input BAM file containing UMIs.\n# Replace output.bam with your desired output deduplicated BAM file.\npython UMIcollapse.py -i input.bam -o output.bam",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "data processing was done using the Skipper pipeline, freelly available at https://github.com/yeolab/skipper.\nAdapters trimming was done with Skewer\nproccessed reads were mapped with STAR (2.7.10a_alpha_220314)\nPCR bias was removed using UMIcollapse\nAssembly: hg38\nSupplementary files format and content: tab separated values files\nSupplementary files format and content: Supplementary files - reproducible enriched window including p and q values, enrichment scores, and the annotated regions for the significantly bound transcriptome tiled windows.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

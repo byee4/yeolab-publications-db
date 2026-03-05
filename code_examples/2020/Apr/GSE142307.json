@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Bowtie2-alignment tool",
-      "tool_name": "Bowtie2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Macs2-peak calling",
-      "tool_name": "MACS2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Bowtie2-alignment tool\nMacs2-peak calling\nGenome_build: hg38",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Bowtie2-alignment tool",
+            "tool_name": "Bowtie2",
+            "tool_version": "2.4.5",
+            "code_example": "# Install Bowtie2 and Samtools (if not already installed)\n# conda install -c bioconda bowtie2=2.4.5 samtools=1.17 # Samtools version for compatibility\n\n# Define variables\nGENOME_INDEX=\"/path/to/genome/index/hg38\" # Placeholder for hg38 genome index (e.g., from ENCODE)\nINPUT_FASTQ=\"input.fastq.gz\" # Single-end FASTQ file\nOUTPUT_BAM=\"aligned_reads.bam\"\nTHREADS=8 # Number of threads to use\nSAMPLE_ID=\"sample_1\" # Unique sample identifier\nSAMPLE_NAME=\"MySample\" # Sample name\nLIBRARY_NAME=\"eCLIP_Library\" # Library name\nFLOWCELL_LANE=\"FCID_Lane1\" # Flowcell ID and lane\n\n# Align reads with Bowtie2 and pipe to samtools for BAM conversion\n# -x: Path to the genome index basename\n# -U: Path to the single-end FASTQ file\n# -p: Number of threads\n# --rg-id, --rg: Read group information for SAM/BAM header\n# -S: Output SAM format to stdout, then pipe to samtools\nbowtie2 -x \"${GENOME_INDEX}\" \\\n        -U \"${INPUT_FASTQ}\" \\\n        -p \"${THREADS}\" \\\n        --rg-id \"${SAMPLE_ID}\" \\\n        --rg \"SM:${SAMPLE_NAME}\" \\\n        --rg \"LB:${LIBRARY_NAME}\" \\\n        --rg \"PL:ILLUMINA\" \\\n        --rg \"PU:${FLOWCELL_LANE}\" \\\n        -S - | samtools view -bS -o \"${OUTPUT_BAM}\" -",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie2"
+        },
+        {
+            "step_order": 2,
+            "description": "Macs2-peak calling",
+            "tool_name": "MACS2",
+            "tool_version": "2.2.7.1",
+            "code_example": "# Install MACS2 (if not already installed)\n# conda install -c bioconda macs2\n\n# Define input files and parameters\nTREATMENT_BAM=\"treatment.sorted.bam\" # Path to the treatment BAM file (e.g., ChIP-seq IP sample)\nCONTROL_BAM=\"control.sorted.bam\"   # Path to the control BAM file (e.g., Input or IgG control)\nGENOME_SIZE=\"hs\"                     # Effective genome size. Use 'hs' for human, 'mm' for mouse, 'ce' for C. elegans, 'dm' for D. melanogaster.\n                                     # For other genomes, provide the estimated mappable genome size in base pairs (e.g., 2.7e9 for human hg38).\nOUTPUT_PREFIX=\"my_chip_peaks\"        # Prefix for all output files (e.g., my_chip_peaks_peaks.narrowPeak)\nOUTPUT_DIR=\"macs2_output\"            # Directory where all output files will be saved\nQ_VALUE_CUTOFF=\"0.01\"                # FDR cutoff for peak calling. Common values are 0.01 (1%) or 0.05 (5%).\n\n# Create the output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Execute MACS2 peak calling\n# -t: Treatment file (ChIP-seq IP)\n# -c: Control file (Input or IgG)\n# -f: Format of input files (BAMPE for paired-end BAM, BAM for single-end BAM)\n# -g: Effective genome size\n# -n: Name of the experiment, used as prefix for output files\n# --outdir: Output directory\n# -q: Q-value (FDR) cutoff for peak detection\n# --keep-dup all: Keep all reads at the same genomic location (default is 'auto')\n# --verbose 2: Set verbose level to 2 for more detailed logging\nmacs2 callpeak \\\n    -t \"${TREATMENT_BAM}\" \\\n    -c \"${CONTROL_BAM}\" \\\n    -f BAMPE \\\n    -g \"${GENOME_SIZE}\" \\\n    -n \"${OUTPUT_PREFIX}\" \\\n    --outdir \"${OUTPUT_DIR}\" \\\n    -q \"${Q_VALUE_CUTOFF}\" \\\n    --keep-dup all \\\n    --verbose 2",
+            "code_language": "bash",
+            "github_url": "https://github.com/macs3-project/MACS"
+        }
+    ],
+    "raw_text": "Bowtie2-alignment tool\nMacs2-peak calling\nGenome_build: hg38",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

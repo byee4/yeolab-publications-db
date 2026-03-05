@@ -1,97 +1,97 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Sequencing adapters were trimmed from the raw reads with skewer.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reads were aligned to the human genome version GRCh38_p126.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "A STAR index (version 2.7.1a) was built with the \u00e2\u0080\u0093sjdbOverhang=50 argument.",
-      "tool_name": "STAR",
-      "tool_version": "2.7.1a",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Splice junctions from Gencode gene models (release M28) were provided via the \u00e2\u0080\u0093sjdbGTFfile argument.",
-      "tool_name": "GENCODE",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "STAR alignments were generated with the following parameters: \u00e2\u0080\u0093outFilterType BySJout, \u00e2\u0080\u0093quantMode TranscriptomeSAM, \u00e2\u0080\u0093outFilterIntronMotifs RemoveNoncanonicalUnannotated, \u00e2\u0080\u0093outSAMstrandField intronMotif, \u00e2\u0080\u0093outSAMattributes NH HI AS nM MD XS and \u00e2\u0080\u0093outSAMunmapped Within.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Alignments were obtained with the following parameters: \u00e2\u0080\u0093readFilesCommand zcat \u00e2\u0080\u0093outFilterType BySJout \u00e2\u0080\u0093outFilterMultimapNmax 20 \u00e2\u0080\u0093alignSJoverhangMin 8 \u00e2\u0080\u0093alignSJDBoverhangMin 1 \u00e2\u0080\u0093outFilterMismatchNmax 999 \u00e2\u0080\u0093outFilterMismatchNoverLmax 0.6 \u00e2\u0080\u0093alignIntronMin 20 \u00e2\u0080\u0093alignIntronMax 1000000 \u00e2\u0080\u0093alignMatesGapMax 1000000 \u00e2\u0080\u0093quantMode GeneCounts \u00e2\u0080\u0093outSAMunmapped Within \u00e2\u0080\u0093outSAMattributes NH HI AS nM MD XS \u00e2\u0080\u0093outSAMstrandField intronMotif \u00e2\u0080\u0093outSAMtype BAM SortedByCoordinate \u00e2\u0080\u0093outBAMcompression 6.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Alignments sharing the same UMI and genomic coordinate were deduplicated using the collapse_UMI_bam tool (Lexogen).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "The raw gene expression matrix was constructed from the 'forward' column of STAR's ReadsPerGene.out.tab output files using R.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "Gene symbols and biotype information were extracted from the Gencode GTF file.",
-      "tool_name": "GENCODE",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 10,
-      "description": "To calculate normalized counts per million (CPM) TMM normalization was applied across all genes annotated as protein_coding with the edgeR R package.",
-      "tool_name": "edgeR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Sequencing adapters were trimmed from the raw reads with skewer. Reads were aligned to the human genome version GRCh38_p126. A STAR index (version 2.7.1a) was built with the \u00e2\u0080\u0093sjdbOverhang=50 argument. Splice junctions from Gencode gene models (release M28) were provided via the \u00e2\u0080\u0093sjdbGTFfile argument. STAR alignments were generated with the following parameters: \u00e2\u0080\u0093outFilterType BySJout, \u00e2\u0080\u0093quantMode TranscriptomeSAM, \u00e2\u0080\u0093outFilterIntronMotifs RemoveNoncanonicalUnannotated, \u00e2\u0080\u0093outSAMstrandField intronMotif, \u00e2\u0080\u0093outSAMattributes NH HI AS nM MD XS and \u00e2\u0080\u0093outSAMunmapped Within. Alignments were obtained with the following parameters: \u00e2\u0080\u0093readFilesCommand zcat \u00e2\u0080\u0093outFilterType BySJout \u00e2\u0080\u0093outFilterMultimapNmax 20 \u00e2\u0080\u0093alignSJoverhangMin 8 \u00e2\u0080\u0093alignSJDBoverhangMin 1 \u00e2\u0080\u0093outFilterMismatchNmax 999 \u00e2\u0080\u0093outFilterMismatchNoverLmax 0.6 \u00e2\u0080\u0093alignIntronMin 20 \u00e2\u0080\u0093alignIntronMax 1000000 \u00e2\u0080\u0093alignMatesGapMax 1000000 \u00e2\u0080\u0093quantMode GeneCounts \u00e2\u0080\u0093outSAMunmapped Within \u00e2\u0080\u0093outSAMattributes NH HI AS nM MD XS \u00e2\u0080\u0093outSAMstrandField intronMotif \u00e2\u0080\u0093outSAMtype BAM SortedByCoordinate \u00e2\u0080\u0093outBAMcompression 6. Alignments sharing the same UMI and genomic coordinate were deduplicated using the collapse_UMI_bam tool (Lexogen). The raw gene expression matrix was constructed from the 'forward' column of STAR's ReadsPerGene.out.tab output files using R. Gene symbols and biotype information were extracted from the Gencode GTF file. To calculate normalized counts per million (CPM) TMM normalization was applied across all genes annotated as protein_coding with the edgeR R package.\nAssembly: GRCh38\nSupplementary files format and content: File raw_and_normalized_counts.xlsx is a microsoft excel file with three worksheets: 1. sample information 2. raw count table 3. normalized count table (log2 counts per million)",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Sequencing adapters were trimmed from the raw reads with skewer.",
+            "tool_name": "skewer",
+            "tool_version": "0.2.2 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install skewer (if not already installed)\n# conda install -c bioconda skewer\n\n# Define input and output file paths\n# Replace with actual input raw read files (e.g., from a sequencing run)\nRAW_READS_R1=\"raw_reads_R1.fastq.gz\"\nRAW_READS_R2=\"raw_reads_R2.fastq.gz\"\nOUTPUT_PREFIX=\"trimmed_reads\"\n\n# Trim sequencing adapters using skewer\n# skewer automatically detects adapters if -x is not specified.\n# -o: Output file prefix. skewer will append '-trimmed-pair1.fastq.gz' and '-trimmed-pair2.fastq.gz' for paired-end reads.\nskewer -o \"${OUTPUT_PREFIX}\" \"${RAW_READS_R1}\" \"${RAW_READS_R2}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/relipmoc/skewer"
+        },
+        {
+            "step_order": 2,
+            "description": "Reads were aligned to the human genome version GRCh38_p126.",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.7.10a (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables\n# GENOME_DIR should point to the directory containing the pre-built STAR genome index for GRCh38_p126.\n# This index needs to be generated once using STAR --runMode genomeGenerate with the GRCh38_p126 FASTA and GTF files.\n# Reference genome source: NCBI (e.g., GCF_000001405.40_GRCh38.p14, where p126 would be a specific patch release).\nGENOME_DIR=\"/path/to/STAR_GRCh38_p126_index\"\nREAD1=\"sample_R1.fastq.gz\" # Placeholder for input read 1 file\nREAD2=\"sample_R2.fastq.gz\" # Placeholder for input read 2 file (remove if single-end data)\nOUTPUT_PREFIX=\"aligned_GRCh38_p126_\" # Prefix for output files\nTHREADS=8 # Number of threads to use\n\n# Align reads to the human genome GRCh38_p126\nSTAR --genomeDir ${GENOME_DIR} \\\n     --readFilesIn ${READ1} ${READ2} \\\n     --runThreadN ${THREADS} \\\n     --outFileNamePrefix ${OUTPUT_PREFIX} \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outSAMattributes Standard \\\n     --quantMode GeneCounts \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNoverLmax 0.04 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "A STAR index (version 2.7.1a) was built with the \u00e2\u0080\u0093sjdbOverhang=50 argument.",
+            "tool_name": "STAR",
+            "tool_version": "2.7.1a",
+            "code_example": "# Install STAR if not already installed\n# conda install -c bioconda star\n\n# Define input and output paths\n# Replace with actual paths to your genome FASTA and GTF files\nGENOME_DIR=\"path/to/genome_references\" \nOUTPUT_INDEX_DIR=\"path/to/star_index\"\n\n# Placeholder for genome and GTF files (e.g., GRCh38, Gencode v44)\n# Download from sources like GENCODE (https://www.gencodegenes.org/human/) or Ensembl\nGENOME_FA=\"${GENOME_DIR}/GRCh38.primary_assembly.genome.fa\"\nGTF_FILE=\"${GENOME_DIR}/gencode.v44.annotation.gtf\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_INDEX_DIR}\"\n\n# Build STAR index\nSTAR --runMode genomeGenerate \\\n     --genomeDir \"${OUTPUT_INDEX_DIR}\" \\\n     --genomeFastaFiles \"${GENOME_FA}\" \\\n     --sjdbGTFfile \"${GTF_FILE}\" \\\n     --sjdbOverhang 50 \\\n     --runThreadN 8 # Adjust number of threads as needed\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 4,
+            "description": "Splice junctions from Gencode gene models (release M28) were provided via the \u00e2\u0080\u0093sjdbGTFfile argument.",
+            "tool_name": "GENCODE",
+            "tool_version": "2.7.9a",
+            "code_example": "# Install STAR if not already available\n# conda install -c bioconda star\n\n# Define reference paths (placeholders)\n# Gencode M28 is based on the GRCh38 human reference genome.\nGENOME_FASTA=\"/path/to/GRCh38.primary_assembly.genome.fa\" \nGENCODE_GTF=\"/path/to/gencode.vM28.annotation.gtf\" # Gencode gene models (release M28)\nSTAR_INDEX_DIR=\"/path/to/STAR_genome_index_gencodeM28\"\n\n# Create STAR genome index with Gencode M28 splice junctions\n# The --sjdbGTFfile argument is primarily used during genome index generation\n# to incorporate known splice junctions into the index for improved alignment.\nmkdir -p \"${STAR_INDEX_DIR}\"\n\nSTAR \\\n  --runMode genomeGenerate \\\n  --genomeDir \"${STAR_INDEX_DIR}\" \\\n  --genomeFastaFiles \"${GENOME_FASTA}\" \\\n  --sjdbGTFfile \"${GENCODE_GTF}\" \\\n  --sjdbOverhang 100 \\\n  --runThreadN 8 # Adjust number of threads as needed",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 5,
+            "description": "STAR alignments were generated with the following parameters: \u00e2\u0080\u0093outFilterType BySJout, \u00e2\u0080\u0093quantMode TranscriptomeSAM, \u00e2\u0080\u0093outFilterIntronMotifs RemoveNoncanonicalUnannotated, \u00e2\u0080\u0093outSAMstrandField intronMotif, \u00e2\u0080\u0093outSAMattributes NH HI AS nM MD XS and \u00e2\u0080\u0093outSAMunmapped Within.",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR if not already installed\n# conda install -c bioconda star\n\n# Placeholder for STAR genome index directory (e.g., hg38)\nGENOME_DIR=\"/path/to/star_genome_index_hg38\"\n\n# Placeholder for input FASTQ files (adjust for single-end or paired-end)\nREAD1=\"sample_R1.fastq.gz\"\nREAD2=\"sample_R2.fastq.gz\" # Remove if single-end\n\n# Placeholder for output file prefix\nOUTPUT_PREFIX=\"sample_aligned_\"\n\nSTAR \\\n  --runThreadN 8 \\\n  --genomeDir \"${GENOME_DIR}\" \\\n  --readFilesIn \"${READ1}\" \"${READ2}\" \\\n  --readFilesCommand zcat \\\n  --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n  --outFilterType BySJout \\\n  --quantMode TranscriptomeSAM \\\n  --outFilterIntronMotifs RemoveNoncanonicalUnannotated \\\n  --outSAMstrandField intronMotif \\\n  --outSAMattributes NH HI AS nM MD XS \\\n  --outSAMunmapped Within",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 6,
+            "description": "Alignments were obtained with the following parameters: \u00e2\u0080\u0093readFilesCommand zcat \u00e2\u0080\u0093outFilterType BySJout \u00e2\u0080\u0093outFilterMultimapNmax 20 \u00e2\u0080\u0093alignSJoverhangMin 8 \u00e2\u0080\u0093alignSJDBoverhangMin 1 \u00e2\u0080\u0093outFilterMismatchNmax 999 \u00e2\u0080\u0093outFilterMismatchNoverLmax 0.6 \u00e2\u0080\u0093alignIntronMin 20 \u00e2\u0080\u0093alignIntronMax 1000000 \u00e2\u0080\u0093alignMatesGapMax 1000000 \u00e2\u0080\u0093quantMode GeneCounts \u00e2\u0080\u0093outSAMunmapped Within \u00e2\u0080\u0093outSAMattributes NH HI AS nM MD XS \u00e2\u0080\u0093outSAMstrandField intronMotif \u00e2\u0080\u0093outSAMtype BAM SortedByCoordinate \u00e2\u0080\u0093outBAMcompression 6.",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Not specified",
+            "code_example": "# Install STAR (example using conda)\n# conda install -c bioconda star\n\n# Define variables\n# Placeholder for a human GRCh38 STAR genome index. This directory should contain files like SA, SAindex, genome, etc.\nGENOME_DIR=\"/path/to/STAR_genome_index_GRCh38\"\n# Placeholder for input FASTQ files. Adjust for single-end reads if necessary.\nREAD1=\"sample_R1.fastq.gz\"\nREAD2=\"sample_R2.fastq.gz\"\n# Prefix for all output files generated by STAR\nOUTPUT_PREFIX=\"sample_aligned\"\n\n# STAR alignment command\nSTAR \\\n    --genomeDir \"${GENOME_DIR}\" \\\n    --readFilesIn \"${READ1}\" \"${READ2}\" \\\n    --readFilesCommand zcat \\\n    --outFilterType BySJout \\\n    --outFilterMultimapNmax 20 \\\n    --alignSJoverhangMin 8 \\\n    --alignSJDBoverhangMin 1 \\\n    --outFilterMismatchNmax 999 \\\n    --outFilterMismatchNoverLmax 0.6 \\\n    --alignIntronMin 20 \\\n    --alignIntronMax 1000000 \\\n    --alignMatesGapMax 1000000 \\\n    --quantMode GeneCounts \\\n    --outSAMunmapped Within \\\n    --outSAMattributes NH HI AS nM MD XS \\\n    --outSAMstrandField intronMotif \\\n    --outSAMtype BAM SortedByCoordinate \\\n    --outBAMcompression 6 \\\n    --outFileNamePrefix \"${OUTPUT_PREFIX}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 7,
+            "description": "Alignments sharing the same UMI and genomic coordinate were deduplicated using the collapse_UMI_bam tool (Lexogen).",
+            "tool_name": "collapse_UMI_bam",
+            "tool_version": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Python if not already available\n# conda install python\n\n# Download the collapse_UMI_bam.py script from Lexogen's resources.\n# The exact URL might vary or be provided with the specific kit.\n# wget -O collapse_UMI_bam.py \"https://www.lexogen.com/fileadmin/user_upload/support/QuantSeq/collapse_UMI_bam.py\"\n# chmod +x collapse_UMI_bam.py\n\n# Ensure the input BAM file is sorted by coordinate before deduplication.\n# samtools sort -o input.sorted.bam input.bam\n# samtools index input.sorted.bam\n\n# Execute the deduplication using collapse_UMI_bam.py\n# Replace 'input.bam' with your actual input BAM file and 'deduplicated.bam' with your desired output file name.\npython collapse_UMI_bam.py -i input.bam -o deduplicated.bam",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 8,
+            "description": "The raw gene expression matrix was constructed from the 'forward' column of STAR's ReadsPerGene.out.tab output files using R.",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a",
+            "code_example": "# --- Installation (commented out) ---\n# To install STAR and R (if not already available):\n# conda create -n star_r_env star r-base -y\n# conda activate star_r_env\n\n# --- Placeholder for STAR alignment (upstream step) ---\n# This step generates the 'ReadsPerGene.out.tab' files for each sample.\n# For demonstration, we assume these files already exist in sample-specific directories.\n# Example STAR alignment command (replace with actual genome/annotation paths and sample data):\n# STAR --runThreadN 8 \\\n#      --genomeDir /path/to/STAR_genome_index/hg38 \\\n#      --readFilesIn sample1_R1.fastq.gz sample1_R2.fastq.gz \\\n#      --readFilesCommand zcat \\\n#      --outFileNamePrefix sample1/ \\\n#      --outSAMtype BAM SortedByCoordinate \\\n#      --outReadsPerGene FeatureCounts \\\n#      --quantMode GeneCounts\n\n# --- Create dummy sample directories and files for demonstration ---\n# In a real pipeline, these files would be generated by STAR.\nmkdir -p sample1 sample2 sample3\necho -e \"N_unmapped\\t0\\t0\\t0\\nN_multimapping\\t0\\t0\\t0\\nN_noFeature\\t0\\t0\\t0\\nN_ambiguous\\t0\\t0\\t0\\nGENE1\\t100\\t50\\t50\\nGENE2\\t200\\t120\\t80\\nGENE3\\t150\\t70\\t80\" > sample1/ReadsPerGene.out.tab\necho -e \"N_unmapped\\t0\\t0\\t0\\nN_multimapping\\t0\\t0\\t0\\nN_noFeature\\t0\\t0\\t0\\nN_ambiguous\\t0\\t0\\t0\\nGENE1\\t110\\t60\\t50\\nGENE2\\t210\\t130\\t80\\nGENE3\\t160\\t75\\t85\" > sample2/ReadsPerGene.out.tab\necho -e \"N_unmapped\\t0\\t0\\t0\\nN_multimapping\\t0\\t0\\t0\\nN_noFeature\\t0\\t0\\t0\\nN_ambiguous\\t0\\t0\\t0\\nGENE1\\t90\\t45\\t45\\nGENE2\\t190\\t110\\t80\\nGENE3\\t140\\t65\\t75\" > sample3/ReadsPerGene.out.tab\n\n# --- R script to construct the gene expression matrix ---\n# This script reads the 'forward' column (column 3) from STAR's ReadsPerGene.out.tab files\n# for multiple samples and combines them into a single gene expression matrix.\ncat << 'EOF' > construct_expression_matrix.R\n# R script to construct gene expression matrix from STAR's ReadsPerGene.out.tab\n# Assumes 'ReadsPerGene.out.tab' files are located in subdirectories named after samples.\n\n# List of sample directories (replace with actual sample directories or pass as argument)\nsample_dirs <- c(\"sample1\", \"sample2\", \"sample3\")\n\n# Initialize an empty list to store counts for each sample\nall_counts <- list()\ngene_ids <- NULL\n\nfor (s_dir in sample_dirs) {\n  file_path <- file.path(s_dir, \"ReadsPerGene.out.tab\")\n  if (!file.exists(file_path)) {\n    warning(paste(\"File not found:\", file_path))\n    next\n  }\n  \n  # Read the file, skipping the first 4 lines (STAR header)\n  # and assuming tab-separated values.\n  # The 'ReadsPerGene.out.tab' file typically has 4 columns:\n  # 1. Gene ID\n  # 2. Unstranded counts\n  # 3. Forward strand counts\n  # 4. Reverse strand counts\n  data <- read.table(file_path, sep=\"\\t\", header=FALSE, skip=4, stringsAsFactors=FALSE)\n  \n  # The first column is Gene ID, the third column is forward strand counts.\n  if (is.null(gene_ids)) {\n    gene_ids <- data[, 1]\n  } else {\n    # Ensure gene IDs are consistent across samples\n    if (!all(gene_ids == data[, 1])) {\n      stop(\"Gene IDs are not consistent across samples.\")\n    }\n  }\n  \n  # Store forward strand counts (column 3).\n  all_counts[[s_dir]] <- data[, 3]\n}\n\n# Combine all counts into a matrix.\nif (length(all_counts) > 0) {\n  expression_matrix <- do.call(cbind, all_counts)\n  colnames(expression_matrix) <- sample_dirs\n  rownames(expression_matrix) <- gene_ids\n  \n  # Save the matrix as a tab-separated file.\n  write.table(expression_matrix, \"gene_expression_matrix_forward_strand.tsv\", sep=\"\\t\", row.names=TRUE, quote=FALSE)\n  \n  message(\"Gene expression matrix constructed and saved to gene_expression_matrix_forward_strand.tsv\")\n} else {\n  message(\"No valid sample data found to construct matrix.\")\n}\nEOF\n\n# Execute the R script to construct the matrix\nRscript construct_expression_matrix.R\n\n# --- Clean up dummy files (optional) ---\n# rm -rf sample1 sample2 sample3 construct_expression_matrix.R",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 9,
+            "description": "Gene symbols and biotype information were extracted from the Gencode GTF file.",
+            "tool_name": "GENCODE",
+            "tool_version": "latest (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Input Gencode GTF file (replace with your specific version and species, e.g., gencode.v45.annotation.gtf for human or gencode.vM25.annotation.gtf for mouse)\nGENCODE_GTF=\"gencode.annotation.gtf\"\n\n# Output file for gene symbols and biotypes\nOUTPUT_FILE=\"gene_info.tsv\"\n\n# Extract gene_id, gene_name, and gene_type for 'gene' features\nawk '\n$3 == \"gene\" {\n    gene_id = \"\"; gene_name = \"\"; gene_type = \"\";\n    # Split the 9th column (attributes) by semicolon and space\n    split($9, attrs, \"; \");\n    for (i=1; i<=length(attrs); i++) {\n        # Remove leading/trailing spaces and quotes\n        gsub(/^ +| +$/, \"\", attrs[i]);\n        gsub(/\"/, \"\", attrs[i]);\n        \n        if (attrs[i] ~ /^gene_id/) {\n            gene_id = substr(attrs[i], index(attrs[i], \" \") + 1);\n        } else if (attrs[i] ~ /^gene_name/) {\n            gene_name = substr(attrs[i], index(attrs[i], \" \") + 1);\n        } else if (attrs[i] ~ /^gene_type/) {\n            gene_type = substr(attrs[i], index(attrs[i], \" \") + 1);\n        }\n    }\n    # Print gene_id, gene_name, and gene_type separated by tabs\n    print gene_id \"\\t\" gene_name \"\\t\" gene_type\n}' \"${GENCODE_GTF}\" > \"${OUTPUT_FILE}\"",
+            "code_language": "bash",
+            "github_url": "https://www.gencodegenes.org/"
+        },
+        {
+            "step_order": 10,
+            "description": "To calculate normalized counts per million (CPM) TMM normalization was applied across all genes annotated as protein_coding with the edgeR R package.",
+            "tool_name": "edgeR",
+            "tool_version": "",
+            "code_example": "# Install R and Bioconductor if not already present\n# sudo apt-get update && sudo apt-get install -y r-base\n# R -e 'install.packages(\"BiocManager\", repos=\"https://cloud.r-project.org\")'\n# R -e 'BiocManager::install(\"edgeR\")'\n\n# Create a dummy raw_counts.tsv for demonstration\n# In a real pipeline, this file would be generated by an upstream step (e.g., featureCounts, htseq-count)\ncat <<EOF > raw_counts.tsv\nGeneID\tSample1\tSample2\tSample3\nGeneA\t100\t150\t120\nGeneB\t200\t220\t180\nGeneC\t50\t60\t70\nGeneD\t10\t15\t12\nEOF\n\n# Create the R script for edgeR processing\ncat <<'EOF' > normalize_cpm_tmm.R\n# Load edgeR package\nlibrary(edgeR)\n\n# --- Configuration ---\ninput_counts_file <- \"raw_counts.tsv\" # Assumed input file containing raw counts\noutput_cpm_file <- \"normalized_cpm_tmm.tsv\" # Output file for normalized CPM values\n\n# --- Main processing ---\n\n# 1. Read raw counts\n# Assuming the first column is gene IDs and subsequent columns are sample counts.\n# The description implies that only protein_coding genes are included in the input.\ncounts_data <- read.delim(input_counts_file, row.names = 1, check.names = FALSE)\n\n# Ensure counts are numeric and non-negative integers\ncounts_matrix <- as.matrix(counts_data)\ncounts_matrix <- round(counts_matrix) # Ensure integers if not already\ncounts_matrix[counts_matrix < 0] <- 0 # Ensure non-negative\n\n# 2. Create a DGEList object\n# A DGEList object is required by edgeR for normalization.\ndge <- DGEList(counts = counts_matrix)\n\n# 3. Apply TMM normalization\n# TMM (Trimmed Mean of M-values) normalization is applied to calculate normalization factors.\ndge <- calcNormFactors(dge, method = \"TMM\")\n\n# 4. Calculate normalized CPM values\n# CPM (Counts Per Million) values are calculated using the TMM normalization factors.\n# normalized.lib.sizes = TRUE ensures library sizes are adjusted by normalization factors.\n# log = FALSE ensures raw CPM values (not log-transformed) are returned.\n# prior.count = 0 ensures no pseudo-counts are added before CPM calculation.\ncpm_values <- cpm(dge, normalized.lib.sizes = TRUE, log = FALSE, prior.count = 0)\n\n# 5. Save the normalized CPM matrix\n# The resulting matrix is saved to a tab-separated file.\nwrite.table(cpm_values, file = output_cpm_file, sep = \"\\t\", quote = FALSE, col.names = NA)\n\nmessage(paste(\"Normalized CPM (TMM) values saved to:\", output_cpm_file))\nEOF\n\n# Execute the R script to perform TMM normalization and CPM calculation\nRscript normalize_cpm_tmm.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/edgeR.html"
+        }
+    ],
+    "raw_text": "Sequencing adapters were trimmed from the raw reads with skewer. Reads were aligned to the human genome version GRCh38_p126. A STAR index (version 2.7.1a) was built with the \u00e2\u0080\u0093sjdbOverhang=50 argument. Splice junctions from Gencode gene models (release M28) were provided via the \u00e2\u0080\u0093sjdbGTFfile argument. STAR alignments were generated with the following parameters: \u00e2\u0080\u0093outFilterType BySJout, \u00e2\u0080\u0093quantMode TranscriptomeSAM, \u00e2\u0080\u0093outFilterIntronMotifs RemoveNoncanonicalUnannotated, \u00e2\u0080\u0093outSAMstrandField intronMotif, \u00e2\u0080\u0093outSAMattributes NH HI AS nM MD XS and \u00e2\u0080\u0093outSAMunmapped Within. Alignments were obtained with the following parameters: \u00e2\u0080\u0093readFilesCommand zcat \u00e2\u0080\u0093outFilterType BySJout \u00e2\u0080\u0093outFilterMultimapNmax 20 \u00e2\u0080\u0093alignSJoverhangMin 8 \u00e2\u0080\u0093alignSJDBoverhangMin 1 \u00e2\u0080\u0093outFilterMismatchNmax 999 \u00e2\u0080\u0093outFilterMismatchNoverLmax 0.6 \u00e2\u0080\u0093alignIntronMin 20 \u00e2\u0080\u0093alignIntronMax 1000000 \u00e2\u0080\u0093alignMatesGapMax 1000000 \u00e2\u0080\u0093quantMode GeneCounts \u00e2\u0080\u0093outSAMunmapped Within \u00e2\u0080\u0093outSAMattributes NH HI AS nM MD XS \u00e2\u0080\u0093outSAMstrandField intronMotif \u00e2\u0080\u0093outSAMtype BAM SortedByCoordinate \u00e2\u0080\u0093outBAMcompression 6. Alignments sharing the same UMI and genomic coordinate were deduplicated using the collapse_UMI_bam tool (Lexogen). The raw gene expression matrix was constructed from the 'forward' column of STAR's ReadsPerGene.out.tab output files using R. Gene symbols and biotype information were extracted from the Gencode GTF file. To calculate normalized counts per million (CPM) TMM normalization was applied across all genes annotated as protein_coding with the edgeR R package.\nAssembly: GRCh38\nSupplementary files format and content: File raw_and_normalized_counts.xlsx is a microsoft excel file with three worksheets: 1. sample information 2. raw count table 3. normalized count table (log2 counts per million)",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

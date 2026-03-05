@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Sequenced reads were trimmed for adaptor sequence, and masked for low-complexity or low-quality sequence, then mapped to mm9 whole genome using STAR aligner with the default settings",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reads counts for each gene were generated and were further used to compute the rpkm values",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Sequenced reads were trimmed for adaptor sequence, and masked for low-complexity or low-quality sequence, then mapped to mm9 whole genome using STAR aligner with the default settings\nReads counts for each gene were generated and were further used to compute the rpkm values\nGenome_build: mm9\nSupplementary_files_format_and_content: tab-delimited text files include RPKM values for each Sample ...",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Sequenced reads were trimmed for adaptor sequence, and masked for low-complexity or low-quality sequence, then mapped to mm9 whole genome using STAR aligner with the default settings",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR (e.g., using conda)\n# conda install -c bioconda star\n\n# --- Reference Genome Setup (mm9) ---\n# Download mm9 genome fasta (example from UCSC)\n# wget https://hgdownload.soe.ucsc.edu/goldenPath/mm9/bigZips/mm9.fa.gz\n# gunzip mm9.fa.gz\n#\n# Define directory for STAR index\n# GENOME_DIR=\"mm9_star_index\"\n#\n# Create STAR index for mm9 (adjust --runThreadN based on available cores)\n# STAR --runMode genomeGenerate \\\n#      --genomeDir ${GENOME_DIR} \\\n#      --genomeFastaFiles mm9.fa \\\n#      --runThreadN 8\n\n# --- Alignment Step ---\n# Define input and output variables\nREADS=\"input_reads.fastq.gz\" # Replace with your actual input FASTQ file\nOUTPUT_PREFIX=\"aligned_mm9\" # Prefix for output files\nGENOME_DIR=\"mm9_star_index\" # Path to your pre-built STAR index for mm9\n\n# Placeholder for trimming adaptor sequences and masking low-complexity/low-quality sequence.\n# The specific tool for this pre-processing step (e.g., fastp, Trimmomatic) was not specified.\n# Example (using fastp):\n# fastp -i ${RAW_READS} -o ${TRIMMED_READS} --trim_poly_g --trim_poly_x --detect_adapter_for_pe --qualified_quality_phred 15 --length_required 30\n\n# Run STAR alignment with default settings to mm9 whole genome\n# --runThreadN is an example; adjust based on available cores\nSTAR --genomeDir ${GENOME_DIR} \\\n     --readFilesIn ${READS} \\\n     --outFileNamePrefix ${OUTPUT_PREFIX} \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --runThreadN 8",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "Reads counts for each gene were generated and were further used to compute the rpkm values",
+            "tool_name": "RSEM (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.3.3",
+            "code_example": "# Install RSEM (if not already installed)\n# conda install -c bioconda rsem\n\n# --- Placeholder for reference data ---\n# Replace with actual paths to your indexed genome FASTA and gene annotation GTF.\n# For human, common choices are GRCh38/hg38 and Gencode annotations.\n# Example:\n# GENOME_FASTA=\"/path/to/human/GRCh38.primary_assembly.genome.fa\"\n# GENE_GTF=\"/path/to/human/gencode.v38.annotation.gtf\"\n# RSEM_INDEX_PREFIX=\"/path/to/rsem_index/GRCh38_gencode_v38\"\n\n# --- Build RSEM index (run once per reference genome/annotation combination) ---\n# This step prepares the reference files for RSEM quantification.\n# rsem-prepare-reference --gtf \"${GENE_GTF}\" \"${GENOME_FASTA}\" \"${RSEM_INDEX_PREFIX}\"\n\n# --- Actual RSEM calculation for gene counts and FPKM/RPKM values ---\n# INPUT_BAM: Path to the alignment file (BAM format) for a given sample.\n# RSEM_INDEX_PREFIX: Path to the pre-built RSEM index.\n# OUTPUT_PREFIX: Base name for output files (e.g., sample_name).\n# RSEM will generate files like:\n#   - ${OUTPUT_PREFIX}.genes.results (contains gene-level counts, FPKM, TPM)\n#   - ${OUTPUT_PREFIX}.isoforms.results (contains isoform-level counts, FPKM, TPM)\n#   - ${OUTPUT_PREFIX}.stat (alignment statistics)\n\nINPUT_BAM=\"path/to/your_sample_aligned.bam\"\nRSEM_INDEX_PREFIX=\"path/to/your_rsem_index\" # e.g., /path/to/rsem_index/GRCh38_gencode_v38\nOUTPUT_PREFIX=\"your_sample_quantification\"\n\nrsem-calculate-expression \\\n    --bam \\\n    --paired-end \\\n    --no-qualities \\\n    --forward-prob 0.5 \\\n    --num-threads 8 \\\n    \"${INPUT_BAM}\" \\\n    \"${RSEM_INDEX_PREFIX}\" \\\n    \"${OUTPUT_PREFIX}\"\n\n# The RPKM values will be found in the 'FPKM' column of the ${OUTPUT_PREFIX}.genes.results file.\n# For single-end data, FPKM is equivalent to RPKM. For paired-end data, FPKM refers to Fragments Per Kilobase per Million mapped fragments.\n# Example of how to extract RPKM for all genes:\n# awk 'NR > 1 {print $1, $7}' \"${OUTPUT_PREFIX}.genes.results\" > \"${OUTPUT_PREFIX}.genes.rpkm.tsv\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/deweylab/RSEM"
+        }
+    ],
+    "raw_text": "Sequenced reads were trimmed for adaptor sequence, and masked for low-complexity or low-quality sequence, then mapped to mm9 whole genome using STAR aligner with the default settings\nReads counts for each gene were generated and were further used to compute the rpkm values\nGenome_build: mm9\nSupplementary_files_format_and_content: tab-delimited text files include RPKM values for each Sample ...",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Reads were downsampled to an equivalent number of reads per sample using seqtk sample (version 1.2)",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Adaptors were trimmed with trimmomatic (version 0.39) [1] with the options ILLUMINACLIP:Trimmomatic-0.39/adapters/NexteraPE-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:25 MINLEN:24",
-      "tool_name": "Trimmomatic",
-      "tool_version": "0.39",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Reads were then aligned to the mouse genome (mm10) with bowtie2 (version 2.4.4) using default parameters",
-      "tool_name": "Bowtie2",
-      "tool_version": "2.4.4",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Duplicates were removed with picard through gatk MarkDuplicates (version 4.2.5.0)",
-      "tool_name": "Picard",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Peak detection was performed using macs2 callpeak (version 2.2.7.1) with the parameters \u00e2\u0080\u009c-g mm --qvalue 0.05 --shift 100 --extsize 200 --format BAMPE --keep-dup=all --cutoff-analysis \u00e2\u0080\u0093bdg\u00e2\u0080\u0099\u00e2\u0080\u0099.",
-      "tool_name": "MACS2",
-      "tool_version": "2.2.7",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Reads were downsampled to an equivalent number of reads per sample using seqtk sample (version 1.2)\nAdaptors were trimmed with trimmomatic (version 0.39) [1] with the options ILLUMINACLIP:Trimmomatic-0.39/adapters/NexteraPE-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:25 MINLEN:24\nReads were then aligned to the mouse genome (mm10) with bowtie2 (version 2.4.4) using default parameters\nDuplicates were removed with picard through gatk MarkDuplicates (version 4.2.5.0)\nPeak detection was performed using macs2 callpeak (version 2.2.7.1) with the parameters \u00e2\u0080\u009c-g mm --qvalue 0.05 --shift 100 --extsize 200 --format BAMPE --keep-dup=all --cutoff-analysis \u00e2\u0080\u0093bdg\u00e2\u0080\u0099\u00e2\u0080\u0099.\nAssembly: mm10\nSupplementary files format and content: bedgraph data files for each sample",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Reads were downsampled to an equivalent number of reads per sample using seqtk sample (version 1.2)",
+            "tool_name": "seqtk sample",
+            "tool_version": "1.2",
+            "code_example": "# Install seqtk if not already available\n# conda install -c bioconda seqtk\n\n# Define input and output files (placeholders)\nINPUT_FASTQ=\"sample_R1.fastq.gz\" # Replace with your actual input FASTQ file\nOUTPUT_FASTQ=\"sample_downsampled_R1.fastq.gz\" # Replace with your desired output FASTQ file\n\n# Determine the target number of reads.\n# This typically involves finding the minimum read count across all samples\n# and using that as the target for downsampling all samples to an equivalent number.\n# For example, if the minimum read count across all samples is 10,000,000:\nTARGET_READ_COUNT=\"10000000\" # Placeholder: Replace with the actual target read count\n\n# Downsample reads using seqtk sample\n# -s11 sets a random seed for reproducibility\nseqtk sample -s11 \"${INPUT_FASTQ}\" \"${TARGET_READ_COUNT}\" > \"${OUTPUT_FASTQ}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/lh3/seqtk"
+        },
+        {
+            "step_order": 2,
+            "description": "Adaptors were trimmed with trimmomatic (version 0.39) [1] with the options ILLUMINACLIP:Trimmomatic-0.39/adapters/NexteraPE-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:25 MINLEN:24",
+            "tool_name": "Trimmomatic",
+            "tool_version": "0.39",
+            "code_example": "# Install Trimmomatic (if not already installed)\n# wget http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/Trimmomatic-0.39.zip\n# unzip Trimmomatic-0.39.zip\n# TRIMMOMATIC_DIR=\"$(pwd)/Trimmomatic-0.39\"\n\n# Define input and output file paths (placeholders)\n# Replace with actual input/output file names\nINPUT_R1=\"input_R1.fastq.gz\"\nINPUT_R2=\"input_R2.fastq.gz\"\nOUTPUT_R1_PAIRED=\"output_R1_paired.fastq.gz\"\nOUTPUT_R1_UNPAIRED=\"output_R1_unpaired.fastq.gz\"\nOUTPUT_R2_PAIRED=\"output_R2_paired.fastq.gz\"\nOUTPUT_R2_UNPAIRED=\"output_R2_unpaired.fastq.gz\"\n\n# Define Trimmomatic JAR path and adapter file path\n# Adjust TRIMMOMATIC_JAR and ADAPTER_FILE paths if Trimmomatic is installed elsewhere\nTRIMMOMATIC_JAR=\"Trimmomatic-0.39/trimmomatic-0.39.jar\"\nADAPTER_FILE=\"Trimmomatic-0.39/adapters/NexteraPE-PE.fa\"\n\n# Run Trimmomatic\njava -jar \"${TRIMMOMATIC_JAR}\" PE \\\n  \"${INPUT_R1}\" \"${INPUT_R2}\" \\\n  \"${OUTPUT_R1_PAIRED}\" \"${OUTPUT_R1_UNPAIRED}\" \\\n  \"${OUTPUT_R2_PAIRED}\" \"${OUTPUT_R2_UNPAIRED}\" \\\n  ILLUMINACLIP:\"${ADAPTER_FILE}\":2:30:10 \\\n  LEADING:3 TRAILING:3 SLIDINGWINDOW:4:25 MINLEN:24",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "Reads were then aligned to the mouse genome (mm10) with bowtie2 (version 2.4.4) using default parameters",
+            "tool_name": "Bowtie2",
+            "tool_version": "2.4.4",
+            "code_example": "# Install Bowtie2 (if not already installed)\n# conda install -c bioconda bowtie2=2.4.4\n\n# Placeholder for Bowtie2 index for mouse genome (mm10)\n# Ensure the index is built and available at this path.\n# Example: bowtie2-build /path/to/mm10.fa /path/to/bowtie2_indices/mm10_index\nMM10_INDEX_PREFIX=\"/path/to/bowtie2_indices/mm10_index\"\n\n# Placeholder for input FASTQ file(s)\n# For single-end reads:\nINPUT_FASTQ=\"input_reads.fastq\" # Replace with your actual input FASTQ file\n\n# For paired-end reads (uncomment and modify if applicable):\n# INPUT_FASTQ_R1=\"input_reads_R1.fastq\"\n# INPUT_FASTQ_R2=\"input_reads_R2.fastq\"\n\n# Placeholder for output SAM file\nOUTPUT_SAM=\"aligned_reads.sam\" # Replace with your desired output SAM file\n\n# Align reads to the mouse genome (mm10) with bowtie2 (version 2.4.4) using default parameters\n# -x: specifies the index prefix\n# -U: specifies unpaired reads (use -1 <reads_1.fastq> -2 <reads_2.fastq> for paired-end)\n# -S: specifies the output SAM file\n# Default parameters are used as stated in the description.\nbowtie2 -x \"${MM10_INDEX_PREFIX}\" -U \"${INPUT_FASTQ}\" -S \"${OUTPUT_SAM}\"\n\n# If using paired-end reads, use the following command instead:\n# bowtie2 -x \"${MM10_INDEX_PREFIX}\" -1 \"${INPUT_FASTQ_R1}\" -2 \"${INPUT_FASTQ_R2}\" -S \"${OUTPUT_SAM}\"\n\n# Optional: Convert SAM to BAM and sort (requires samtools)\n# samtools view -bS \"${OUTPUT_SAM}\" | samtools sort -o \"aligned_reads.bam\"\n# samtools index \"aligned_reads.bam\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie2"
+        },
+        {
+            "step_order": 4,
+            "description": "Duplicates were removed with picard through gatk MarkDuplicates (version 4.2.5.0)",
+            "tool_name": "Picard",
+            "tool_version": "4.2.5.0",
+            "code_example": "# Install GATK (which includes Picard tools like MarkDuplicates)\n# conda install -c bioconda gatk4\n\n# Run MarkDuplicates to remove duplicates\n# -I: Input BAM file\n# -O: Output BAM file with duplicates removed\n# -M: File to write duplication metrics to\ngatk MarkDuplicates \\\n  -I input.bam \\\n  -O output.bam \\\n  -M metrics.txt",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 5,
+            "description": "Peak detection was performed using macs2 callpeak (version 2.2.7.1) with the parameters \u00e2\u0080\u009c-g mm --qvalue 0.05 --shift 100 --extsize 200 --format BAMPE --keep-dup=all --cutoff-analysis \u00e2\u0080\u0093bdg\u00e2\u0080\u0099\u00e2\u0080\u0099.",
+            "tool_name": "MACS2",
+            "tool_version": "2.2.7",
+            "code_example": "# Install MACS2 if not already installed\n# conda install -c bioconda macs2\n\n# Placeholder for input files and output prefix\n# Replace treatment.bam with your actual treatment BAM file\n# Replace control.bam with your actual control BAM file (if applicable, MACS2 can run without control)\n# Replace output_prefix with your desired output file prefix\n\nmacs2 callpeak -t treatment.bam -c control.bam -f BAMPE -g mm -n output_prefix --qvalue 0.05 --shift 100 --extsize 200 --keep-dup=all --cutoff-analysis --bdg",
+            "code_language": "bash",
+            "github_url": "https://github.com/macs3-project/MACS"
+        }
+    ],
+    "raw_text": "Reads were downsampled to an equivalent number of reads per sample using seqtk sample (version 1.2)\nAdaptors were trimmed with trimmomatic (version 0.39) [1] with the options ILLUMINACLIP:Trimmomatic-0.39/adapters/NexteraPE-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:25 MINLEN:24\nReads were then aligned to the mouse genome (mm10) with bowtie2 (version 2.4.4) using default parameters\nDuplicates were removed with picard through gatk MarkDuplicates (version 4.2.5.0)\nPeak detection was performed using macs2 callpeak (version 2.2.7.1) with the parameters \u00e2\u0080\u009c-g mm --qvalue 0.05 --shift 100 --extsize 200 --format BAMPE --keep-dup=all --cutoff-analysis \u00e2\u0080\u0093bdg\u00e2\u0080\u0099\u00e2\u0080\u0099.\nAssembly: mm10\nSupplementary files format and content: bedgraph data files for each sample",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

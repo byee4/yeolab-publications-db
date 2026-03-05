@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Alignment, cell barcode processing, umis processing, abundance measurements: cellranger count (version 2.1.1)",
-      "tool_name": "Cell Ranger",
-      "tool_version": "2.1.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Cells and genes filtering, dimension reduction: Scanpy (version 1.7.2)",
-      "tool_name": "Scanpy",
-      "tool_version": "1.7.2",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Alignment, cell barcode processing, umis processing, abundance measurements: cellranger count (version 2.1.1)\nCells and genes filtering, dimension reduction: Scanpy (version 1.7.2)\nAssembly: mm10\nSupplementary files format and content: Tab-separated values files and matrix files",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Alignment, cell barcode processing, umis processing, abundance measurements: cellranger count (version 2.1.1)",
+            "tool_name": "Cell Ranger",
+            "tool_version": "2.1.1",
+            "code_example": "# Download and install Cell Ranger from 10x Genomics website (version 2.1.1 or compatible)\n# https://www.10xgenomics.com/support/software/cell-ranger/downloads\n\n# Define variables for clarity\nOUTPUT_ID=\"my_cellranger_run\"\nTRANSCRIPTOME_REF=\"/path/to/refdata-gex-GRCh38-2020-A\" # Placeholder: Use a Cell Ranger-compatible transcriptome reference (e.g., human GRCh38)\nFASTQ_DIR=\"/path/to/your/fastq_files\" # Directory containing your FASTQ files\nSAMPLE_NAME=\"my_sample\" # Name of your sample (matches FASTQ file prefix, e.g., my_sample_S1_L001_R1_001.fastq.gz)\nEXPECTED_CELLS=3000 # Optional: Adjust based on your experiment's expected cell count\n\n# Execute cellranger count\ncellranger count \\\n    --id=\"${OUTPUT_ID}\" \\\n    --transcriptome=\"${TRANSCRIPTOME_REF}\" \\\n    --fastqs=\"${FASTQ_DIR}\" \\\n    --sample=\"${SAMPLE_NAME}\" \\\n    --expect-cells=\"${EXPECTED_CELLS}\" \\\n    --localcores=8 \\\n    --localmem=64",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Cells and genes filtering, dimension reduction: Scanpy (version 1.7.2)",
+            "tool_name": "Scanpy",
+            "tool_version": "1.7.2",
+            "code_example": "# Install Scanpy and its dependencies (if not already installed)\n# conda create -n scanpy_env python=3.8\n# conda activate scanpy_env\n# conda install -c conda-forge scanpy python-igraph leidenalg\n\n# Create a Python script for Scanpy operations\ncat << 'EOF' > run_scanpy_processing.py\nimport scanpy as sc\nimport numpy as np\nimport pandas as pd\n\n# Set verbosity for scanpy\nsc.settings.verbosity = 3             # errors (0), warnings (1), info (2), hints (3)\nsc.logging.print_header()\nsc.settings.set_figure_params(dpi=80, facecolor='white')\n\n# --- Configuration --- #\nINPUT_H5AD = \"input_raw_counts.h5ad\" # Replace with your actual input file\nOUTPUT_H5AD = \"output_processed.h5ad\"\n\n# --- Load Data ---\ntry:\n    adata = sc.read_h5ad(INPUT_H5AD)\nexcept FileNotFoundError:\n    print(f\"Error: Input file {INPUT_H5AD} not found. Creating a dummy AnnData object for demonstration.\")\n    # Create a dummy AnnData object for demonstration purposes\n    n_cells = 1000\n    n_genes = 2000\n    counts = np.random.randint(0, 100, size=(n_cells, n_genes))\n    gene_names = [f'gene_{i}' for i in range(n_genes)]\n    cell_names = [f'cell_{i}' for i in range(n_cells)]\n    adata = sc.AnnData(counts, obs=pd.DataFrame(index=cell_names), var=pd.DataFrame(index=gene_names))\n    adata.var['mt'] = adata.var_names.str.startswith('MT-') # Dummy mitochondrial genes\n\nprint(f\"Initial AnnData object: {adata}\")\n\n# --- Quality Control and Filtering ---\n# Calculate QC metrics\nsc.pp.calculate_qc_metrics(adata, qc_vars=['mt'], percent_top=None, log1p=False, inplace=True)\n\n# Filter cells based on number of genes and counts\n# Example thresholds: min_genes=200, max_genes=2500, max_counts=10000, max_mt_percent=5\nprint(\"Filtering cells...\")\ninitial_cells = adata.n_obs\nsc.pp.filter_cells(adata, min_genes=200)\nadata = adata[adata.obs.n_genes_by_counts < 2500, :]\nadata = adata[adata.obs.total_counts < 10000, :]\nadata = adata[adata.obs.pct_counts_mt < 5, :]\nprint(f\"Filtered {initial_cells - adata.n_obs} cells. Remaining cells: {adata.n_obs}\")\n\n# Filter genes based on number of cells\nprint(\"Filtering genes...\")\ninitial_genes = adata.n_vars\nsc.pp.filter_genes(adata, min_cells=3)\nprint(f\"Filtered {initial_genes - adata.n_vars} genes. Remaining genes: {adata.n_vars}\")\n\n# --- Normalization and Log-transformation ---\nprint(\"Normalizing and log-transforming data...\")\nsc.pp.normalize_total(adata, target_sum=1e4) # Normalize each cell's total counts to 10,000\nsc.pp.log1p(adata) # Log-transform the data\n\n# --- Feature Selection (Highly Variable Genes) ---\nprint(\"Identifying highly variable genes...\")\nsc.pp.highly_variable_genes(adata, min_mean=0.0125, max_mean=3, min_disp=0.5)\n\n# Subset to highly variable genes for dimension reduction\nadata = adata[:, adata.var.highly_variable]\nprint(f\"Number of highly variable genes: {adata.n_vars}\")\n\n# --- Scaling ---\nprint(\"Scaling data...\")\nsc.pp.scale(adata, max_value=10) # Scale data to unit variance, clip values above 10\n\n# --- Dimension Reduction ---\nprint(\"Performing PCA...\")\nsc.tl.pca(adata, svd_solver='arpack')\n\nprint(\"Computing neighbors graph...\")\nsc.pp.neighbors(adata, n_neighbors=10, n_pcs=40) # Use 40 principal components for neighbor graph\n\nprint(\"Performing UMAP...\")\nsc.tl.umap(adata) # Uniform Manifold Approximation and Projection\n\n# --- Save Processed Data ---\nprint(f\"Saving processed AnnData object to {OUTPUT_H5AD}\")\nadata.write(OUTPUT_H5AD)\nprint(\"Processing complete.\")\nEOF\n\n# Execute the Python script\npython run_scanpy_processing.py",
+            "code_language": "bash",
+            "github_url": "https://github.com/scverse/scanpy"
+        }
+    ],
+    "raw_text": "Alignment, cell barcode processing, umis processing, abundance measurements: cellranger count (version 2.1.1)\nCells and genes filtering, dimension reduction: Scanpy (version 1.7.2)\nAssembly: mm10\nSupplementary files format and content: Tab-separated values files and matrix files",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

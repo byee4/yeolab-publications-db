@@ -1,16 +1,16 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "The data were normalised using quantile normalisation with IlluminaGUI in R",
-      "tool_name": "R",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "The data were normalised using quantile normalisation with IlluminaGUI in R",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "The data were normalised using quantile normalisation with IlluminaGUI in R",
+            "tool_name": "R",
+            "tool_version": "Not specified",
+            "code_example": "# Install R and limma if not already present\n# conda install -c conda-forge r-base\n# conda install -c bioconda bioconductor-limma\n\n# Create a dummy R script for quantile normalization\n# This script assumes 'input_data.tsv' contains the data matrix\n# and will output 'normalized_data.tsv'\ncat << 'EOF' > normalize_data.R\n# Load necessary library\nlibrary(limma)\n\n# --- Configuration ---\ninput_file <- \"input_data.tsv\" # Placeholder for input data file\noutput_file <- \"normalized_data.tsv\" # Placeholder for output data file\n\n# --- Load Data ---\n# Assuming input_data.tsv is a tab-separated file with header\n# and the first column is gene/feature IDs, and subsequent columns are samples\n# Adjust read.delim parameters based on actual file format\ndata_matrix <- as.matrix(read.delim(input_file, row.names = 1, sep = \"\\t\", header = TRUE))\n\n# --- Perform Quantile Normalization ---\n# The 'method=\"quantile\"' argument specifies quantile normalization\nnormalized_matrix <- normalizeBetweenArrays(data_matrix, method = \"quantile\")\n\n# --- Save Normalized Data ---\n# Write the normalized matrix to a new tab-separated file\nwrite.table(normalized_matrix, file = output_file, sep = \"\\t\", quote = FALSE, col.names = NA)\n\nmessage(paste(\"Quantile normalization complete. Normalized data saved to:\", output_file))\nEOF\n\n# Create a dummy input file for demonstration\necho -e \"Gene\\tSample1\\tSample2\\tSample3\" > input_data.tsv\necho -e \"GeneA\\t100\\t120\\t90\" >> input_data.tsv\necho -e \"GeneB\\t50\\t60\\t45\" >> input_data.tsv\necho -e \"GeneC\\t200\\t210\\t180\" >> input_data.tsv\necho -e \"GeneD\\t75\\t80\\t70\" >> input_data.tsv\n\n# Execute the R script\nRscript normalize_data.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/limma.html"
+        }
+    ],
+    "raw_text": "The data were normalised using quantile normalisation with IlluminaGUI in R",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

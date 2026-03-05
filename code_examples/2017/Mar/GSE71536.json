@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Demultiplexing: Reads were demultiplexed based on the presence of the gene-specific primer at the beginning of R2, and a random-mer was extracted off of the beginning of R1.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Read trimming: Reads were trimmed at the 3' end using the cutadapt program, with options \"--discard-untrimmed flag -a Gene_Specific_Primer\"",
-      "tool_name": "cutadapt",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Tail counting: Non-PCR duplicate reads were counted by summing reads with the same sequence that did not have the same randommer sequence as any other read.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Counts were performed for unique only (hamming distance > 0), as well as randommers at least 1 nt apart (hamming distance >1)",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Demultiplexing: Reads were demultiplexed based on the presence of the gene-specific primer at the beginning of R2, and a random-mer was extracted off of the beginning of R1.\nRead trimming: Reads were trimmed at the 3' end using the cutadapt program, with options \"--discard-untrimmed flag -a Gene_Specific_Primer\"\nTail counting: Non-PCR duplicate reads were counted by summing reads with the same sequence that did not have the same randommer sequence as any other read. Counts were performed for unique only (hamming distance > 0), as well as randommers at least 1 nt apart (hamming distance >1)\nGenome_build: Analysis was done on raw reads without genome mapping\nSupplementary_files_format_and_content: Processed files are tab-delimited files, with each line containing the sample ID, trimmed sequence, total number of observed reads for that sequence,  number of non-PCR duplicate reads for that sequence (hamming distance > 0), and number of non-PCR duplciate reads for that sequence (hamming distance > 1)",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Demultiplexing: Reads were demultiplexed based on the presence of the gene-specific primer at the beginning of R2, and a random-mer was extracted off of the beginning of R1.",
+            "tool_name": "eclip_primer_umi_demultiplex.py",
+            "tool_version": "(Inferred with models/gemini-2.5-flash)",
+            "code_example": "# This script performs demultiplexing for eCLIP data.\n# It identifies reads based on a gene-specific primer at the 5' end of R2,\n# and extracts a random-mer (UMI) from the 5' end of R1, appending it to the read ID.\n\n# Define input files (placeholders)\nREAD1_INPUT=\"sample_R1.fastq.gz\"\nREAD2_INPUT=\"sample_R2.fastq.gz\"\n\n# Define parameters inferred from the description\n# Replace with actual primer sequence and random-mer length\nGENE_SPECIFIC_PRIMER_SEQ=\"YOUR_GENE_SPECIFIC_PRIMER_SEQUENCE\" # Example: \"GATCGGAAGAGCACACGTCTGAACTCCAGTCAC\"\nRANDOM_MER_LENGTH=10 # Example: 10 bp random-mer\n\n# Define output files\nOUTPUT_PREFIX=\"demultiplexed_sample\"\nREAD1_OUTPUT=\"${OUTPUT_PREFIX}_R1.fastq.gz\"\nREAD2_OUTPUT=\"${OUTPUT_PREFIX}_R2.fastq.gz\"\nLOG_FILE=\"${OUTPUT_PREFIX}.log\"\n\n# Installation (example for tools that might be used internally by such a script)\n# # conda install -c bioconda umi_tools cutadapt\n\n# Execute the inferred custom demultiplexing script.\n# This script is assumed to be a custom Python script (e.g., from the eCLIP pipeline)\n# that combines primer detection/filtering in R2 and random-mer extraction in R1.\n# It would typically filter out reads not containing the primer and move the random-mer\n# from R1 to the read header of both R1 and R2.\npython eclip_primer_umi_demultiplex.py \\\n    --read1 \"${READ1_INPUT}\" \\\n    --read2 \"${READ2_INPUT}\" \\\n    --primer_r2 \"${GENE_SPECIFIC_PRIMER_SEQ}\" \\\n    --random_mer_length_r1 \"${RANDOM_MER_LENGTH}\" \\\n    --output_prefix \"${OUTPUT_PREFIX}\" \\\n    --log_file \"${LOG_FILE}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 2,
+            "description": "Read trimming: Reads were trimmed at the 3' end using the cutadapt program, with options \"--discard-untrimmed flag -a Gene_Specific_Primer\"",
+            "tool_name": "cutadapt",
+            "tool_version": "3.4 (Inferred)",
+            "code_example": "# Install cutadapt (example using conda)\n# conda install -c bioconda cutadapt=3.4\n\n# Trim reads at the 3' end using the specified primer, discarding reads that do not contain the primer.\ncutadapt --discard-untrimmed -a \"Gene_Specific_Primer\" -o trimmed_reads.fastq.gz raw_reads.fastq.gz",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 3,
+            "description": "Tail counting: Non-PCR duplicate reads were counted by summing reads with the same sequence that did not have the same randommer sequence as any other read.",
+            "tool_name": "umi_tools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.1.2",
+            "code_example": "# Install umi_tools if not already installed\n# conda install -c bioconda umi_tools\n\n# Input BAM file (e.g., aligned reads with UMIs in read IDs)\nINPUT_BAM=\"aligned_reads_with_umis.bam\"\n# Output deduplicated BAM file\nOUTPUT_DEDUP_BAM=\"deduplicated_reads.bam\"\n\n# Perform UMI deduplication. This step identifies and removes PCR duplicates\n# based on mapping position and Unique Molecular Identifier (UMI/randommer).\n# Reads with the same genomic coordinates but different UMIs are considered unique.\n# The description \"summing reads with the same sequence that did not have the same randommer sequence as any other read\"\n# directly corresponds to the output of this deduplication process.\numi_tools dedup \\\n    -I \"${INPUT_BAM}\" \\\n    -S \"${OUTPUT_DEDUP_BAM}\" \\\n    --extract-umi-method=read_id \\\n    --umi-separator=\":\" \\\n    --method=unique \\\n    --log=\"umi_tools_dedup.log\"\n\n# To perform the \"tail counting\" (i.e., counting the non-PCR duplicate reads) after deduplication:\n# samtools view -c \"${OUTPUT_DEDUP_BAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/CGATOxford/UMI-tools"
+        },
+        {
+            "step_order": 4,
+            "description": "Counts were performed for unique only (hamming distance > 0), as well as randommers at least 1 nt apart (hamming distance >1)",
+            "tool_name": "umi_tools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.1.2",
+            "code_example": "# Install umi_tools\n# conda install -c bioconda umi_tools=1.1.2\n\n# Example usage:\n# This command assumes that UMIs have already been extracted from reads\n# and appended to the read names (e.g., using `umi_tools extract`).\n# The input BAM file should be sorted by coordinate or read name, depending on the UMI extraction method.\n\n# Input BAM file with UMIs in read names (e.g., from a previous alignment and UMI extraction step)\nINPUT_BAM=\"aligned_reads_with_umis.bam\"\n# Output BAM file containing deduplicated reads, with one read per unique UMI group\nOUTPUT_BAM=\"deduplicated_reads.bam\"\n# Log file for umi_tools output and statistics\nLOG_FILE=\"umi_tools_dedup.log\"\n\n# Perform UMI deduplication based on sequence similarity, correcting for sequencing errors.\n# --method=cluster: This method groups UMIs based on their sequence similarity, allowing for error correction.\n# --s_dist=1: This parameter specifies the maximum Hamming distance between two UMIs to be considered the same UMI.\n#             Setting s_dist=1 means that UMIs differing by 0 or 1 nucleotide are grouped together.\n#             This addresses the description's criteria:\n#             - \"Counts were performed for unique only (hamming distance > 0)\": The output BAM will contain reads with unique UMIs\n#               after deduplication, where 'unique' implies distinct UMI sequences or distinct UMI groups.\n#             - \"as well as randommers at least 1 nt apart (hamming distance >1)\": By grouping UMIs with s_dist=1,\n#               UMIs that are 0 or 1 mismatch apart are considered part of the same 'randommer' group. This implies that\n#               only 'randommers' (i.e., the representative UMIs of the clusters) that are separated by a Hamming distance\n#               of 2 or more (i.e., >1) are counted as truly distinct, fulfilling the specified criterion.\numi_tools dedup \\\n    --input=\"${INPUT_BAM}\" \\\n    --output=\"${OUTPUT_BAM}\" \\\n    --method=cluster \\\n    --s_dist=1 \\\n    --log=\"${LOG_FILE}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/CGATOxford/UMI-tools"
+        }
+    ],
+    "raw_text": "Demultiplexing: Reads were demultiplexed based on the presence of the gene-specific primer at the beginning of R2, and a random-mer was extracted off of the beginning of R1.\nRead trimming: Reads were trimmed at the 3' end using the cutadapt program, with options \"--discard-untrimmed flag -a Gene_Specific_Primer\"\nTail counting: Non-PCR duplicate reads were counted by summing reads with the same sequence that did not have the same randommer sequence as any other read. Counts were performed for unique only (hamming distance > 0), as well as randommers at least 1 nt apart (hamming distance >1)\nGenome_build: Analysis was done on raw reads without genome mapping\nSupplementary_files_format_and_content: Processed files are tab-delimited files, with each line containing the sample ID, trimmed sequence, total number of observed reads for that sequence,  number of non-PCR duplicate reads for that sequence (hamming distance > 0), and number of non-PCR duplciate reads for that sequence (hamming distance > 1)",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

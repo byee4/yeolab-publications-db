@@ -1,106 +1,106 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Reads were trimmed of adapter sequences TCGTATGCCGTCTTCTGCTTG, ATCTCGTATGCCGTCTTCTGCTTG, CGACAGGTTCAGAGTTCTACAGTCCGACGATC GATCGGAAGAGCACACGTCTGAACTCCAGTCAC using cutadapt v1.8.1",
-      "tool_name": "cutadapt",
-      "tool_version": "1.8.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Trimmed reads were aligned to RepBase v18.05 using STAR v2.4.01",
-      "tool_name": "STAR",
-      "tool_version": "2.4.01",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Reads that didn't align to RepBase were aligned to hg19 using STAR v2.4.01 and a splice junction database derived from GENCODE v19",
-      "tool_name": "STAR",
-      "tool_version": "2.4.01",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Transcripts per million (TPM) per transcript was calculated from reads that didn't align to RepBase were quasi-aligned to GENCODE v19 protein coding and lincRNA transcripts using Sailfish v0.6.3",
-      "tool_name": "GENCODE",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "TPM per gene was calculated by summing the TPM for all transcripts of a gene",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Percent spliced-in (Psi) was calculated from junction read output from STAR aligner (SJ.out.tab) were used to create a de novo splicing index in conjunction with GENCODE v19 gene annotations, using outrigger",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Outlier cells were calculated using K-means clustering with k=3 on the expression matrix and omitting cells which clustered into a group consisting of a majority of other cell types",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "Modality was calculated using anchor on the psi scores for all events detected in at least 10 cells, for each cell type",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "Waypoints were calculated using bonvoyage on the psi scores for all events detected in at least 10 cells, for each cell type",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 10,
-      "description": "Splicing events were annotated using poshsplice to annotate corresponding genes, splice site strength using MaxEntScan, intron and exon lengths, conservation of alternative splicing from Merkin et al Science 2012,",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 11,
-      "description": "Genes were annotated with attributes available in Gencode v19, Phylostrata for the matching ENSEMBL identifiers in Domazet-Loso et al MBE 2008, and TF or RBP category from Gerstberger et al Nat Rev Gen 2014",
-      "tool_name": "GENCODE",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Reads were trimmed of adapter sequences TCGTATGCCGTCTTCTGCTTG, ATCTCGTATGCCGTCTTCTGCTTG, CGACAGGTTCAGAGTTCTACAGTCCGACGATC GATCGGAAGAGCACACGTCTGAACTCCAGTCAC using cutadapt v1.8.1\nTrimmed reads were aligned to RepBase v18.05 using STAR v2.4.01\nReads that didn't align to RepBase were aligned to hg19 using STAR v2.4.01 and a splice junction database derived from GENCODE v19\nTranscripts per million (TPM) per transcript was calculated from reads that didn't align to RepBase were quasi-aligned to GENCODE v19 protein coding and lincRNA transcripts using Sailfish v0.6.3\nTPM per gene was calculated by summing the TPM for all transcripts of a gene\nPercent spliced-in (Psi) was calculated from junction read output from STAR aligner (SJ.out.tab) were used to create a de novo splicing index in conjunction with GENCODE v19 gene annotations, using outrigger\nOutlier cells were calculated using K-means clustering with k=3 on the expression matrix and omitting cells which clustered into a group consisting of a majority of other cell types\nModality was calculated using anchor on the psi scores for all events detected in at least 10 cells, for each cell type\nWaypoints were calculated using bonvoyage on the psi scores for all events detected in at least 10 cells, for each cell type\nSplicing events were annotated using poshsplice to annotate corresponding genes, splice site strength using MaxEntScan, intron and exon lengths, conservation of alternative splicing from Merkin et al Science 2012,\nGenes were annotated with attributes available in Gencode v19, Phylostrata for the matching ENSEMBL identifiers in Domazet-Loso et al MBE 2008, and TF or RBP category from Gerstberger et al Nat Rev Gen 2014\nGenome_build: hg19\nSupplementary_files_format_and_content: \"metadata.csv.gz\" contains sample metadata, \"splicing.csv.gz\" contains Psi scores, \"splicing_feature.csv.gz\" contains metadata for splicing events, \"expression.csv.gz\" contains TPM values for genes, \"expression_feature.csv.gz\" contains metadata for genes, \"mapping_stats.csv.gz\" contains the number and percentages of reads mapped for each samples",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Reads were trimmed of adapter sequences TCGTATGCCGTCTTCTGCTTG, ATCTCGTATGCCGTCTTCTGCTTG, CGACAGGTTCAGAGTTCTACAGTCCGACGATC GATCGGAAGAGCACACGTCTGAACTCCAGTCAC using cutadapt v1.8.1",
+            "tool_name": "cutadapt",
+            "tool_version": "1.8.1",
+            "code_example": "# Install cutadapt (version 1.8.1 is quite old, consider using a virtual environment or specific package manager for older versions)\n# conda create -n cutadapt_1_8_1 cutadapt=1.8.1\n# conda activate cutadapt_1_8_1\n\n# Placeholder for input and output files. Adjust as needed.\n# If reads are paired-end, use -A for the reverse read adapter and -o/-p for paired output.\nINPUT_READS=\"input_reads.fastq.gz\"\nOUTPUT_TRIMMED_READS=\"trimmed_reads.fastq.gz\"\n\n# Adapter sequences identified from the description\nADAPTER1=\"TCGTATGCCGTCTTCTGCTTG\"\nADAPTER2=\"ATCTCGTATGCCGTCTTCTGCTTG\"\nADAPTER3=\"CGACAGGTTCAGAGTTCTACAGTCCGACGATC\"\nADAPTER4=\"GATCGGAAGAGCACACGTCTGAACTCCAGTCAC\"\n\n# Execute cutadapt to trim the specified adapter sequences\n# Assuming these are 3' adapters (-a). If they were 5' adapters, -g would be used.\ncutadapt -a \"${ADAPTER1}\" \\\n         -a \"${ADAPTER2}\" \\\n         -a \"${ADAPTER3}\" \\\n         -a \"${ADAPTER4}\" \\\n         -o \"${OUTPUT_TRIMMED_READS}\" \\\n         \"${INPUT_READS}\"\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 2,
+            "description": "Trimmed reads were aligned to RepBase v18.05 using STAR v2.4.01",
+            "tool_name": "STAR",
+            "tool_version": "2.4.01",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star=2.4.01\n\n# --- Reference Preparation: RepBase v18.05 STAR Index ---\n# RepBase v18.05 is a database of repetitive elements. You would typically download\n# the FASTA file from the Genetic Information Research Institute (GIRI).\n# The exact download URL might require registration or vary, this is a placeholder.\n# For example:\n# mkdir -p reference/repbase_v18.05\n# cd reference/repbase_v18.05\n# wget -O repbase_v18.05.fasta.gz \"http://www.girinst.org/repbase/update/RepBase_v18.05.fasta.gz\" # Placeholder URL\n# gunzip repbase_v18.05.fasta.gz\n# cd ../../\n\n# Define paths for reference files\nFASTA_FILE=\"reference/repbase_v18.05/repbase_v18.05.fasta\" # Path to your downloaded RepBase FASTA\nGENOME_DIR=\"reference/repbase_v18.05_star_index\"\n\n# Create directory for STAR index\nmkdir -p \"${GENOME_DIR}\"\n\n# Build STAR genome index for RepBase v18.05\n# Note: For non-spliced alignment to a collection of sequences like RepBase,\n# STAR's default parameters for genome generation are usually sufficient.\n# The --sjdbGTFfile parameter is not needed here as there are no introns.\nSTAR --runMode genomeGenerate \\\n     --genomeDir \"${GENOME_DIR}\" \\\n     --genomeFastaFiles \"${FASTA_FILE}\" \\\n     --runThreadN 8 # Adjust number of threads as appropriate\n\n# --- Alignment Step ---\n# Define input and output paths\nINPUT_READS=\"trimmed_reads.fastq.gz\" # Replace with your actual trimmed reads file\nOUTPUT_PREFIX=\"aligned_to_repbase\" # Prefix for output files\n\n# Run STAR alignment\n# Parameters chosen for alignment to repetitive elements:\n# --outFilterMultimapNmax 100: Allows reads to map to up to 100 locations, common for repetitive elements.\n# --alignIntronMax 1: Effectively disables intron searching, as RepBase sequences do not contain introns.\n# --alignEndsType Local: Local alignment can be useful for partial matches to repetitive elements.\nSTAR --runThreadN 8 \\\n     --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${INPUT_READS}\" \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}_\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outFilterMultimapNmax 100 \\\n     --outFilterMismatchNmax 10 \\\n     --alignIntronMax 1 \\\n     --alignEndsType Local\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "Reads that didn't align to RepBase were aligned to hg19 using STAR v2.4.01 and a splice junction database derived from GENCODE v19",
+            "tool_name": "STAR",
+            "tool_version": "2.4.01",
+            "code_example": "# Install STAR if not already installed\n# conda install -c bioconda star=2.4.01\n\n# Define paths for reference genome index and input reads\n# The STAR genome index for hg19 and GENCODE v19 annotations\n# should have been pre-built using a command similar to:\n# STAR --runMode genomeGenerate \\\n#      --genomeDir /path/to/star_index/hg19_gencode_v19 \\\n#      --genomeFastaFiles /path/to/hg19.fa \\\n#      --sjdbGTFfile /path/to/gencode.v19.annotation.gtf \\\n#      --sjdbOverhang 100 # A common value, adjust as needed based on read length\n\nGENOME_DIR=\"/path/to/star_index/hg19_gencode_v19\" # Placeholder for the pre-built STAR index\nINPUT_READS=\"unaligned_to_repbase.fastq.gz\" # Placeholder for the FASTQ file containing reads that didn't align to RepBase\nOUTPUT_PREFIX=\"aligned_to_hg19\" # Prefix for output files\n\n# Align reads to hg19 using STAR with the GENCODE v19-derived splice junction database\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${INPUT_READS}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --runThreadN 8 # Example: use 8 threads, adjust as needed\n     # Other common parameters might include:\n     # --outSAMtype BAM SortedByCoordinate # Output sorted BAM\n     # --outSAMunmapped Within # Keep unmapped reads in BAM\n     # --outFilterMultimapNmax 20 # Max number of loci the read is allowed to map to\n     # --outFilterMismatchNmax 999 # Max number of mismatches per read\n     # --outFilterMismatchNoverLmax 0.04 # Max fraction of mismatches per read length\n     # --quantMode GeneCounts # If gene quantification is desired\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 4,
+            "description": "Transcripts per million (TPM) per transcript was calculated from reads that didn't align to RepBase were quasi-aligned to GENCODE v19 protein coding and lincRNA transcripts using Sailfish v0.6.3",
+            "tool_name": "GENCODE",
+            "tool_version": "0.6.3",
+            "code_example": "# Install Sailfish\n# conda install -c bioconda sailfish=0.6.3\n\n# Placeholder for Sailfish index built from GENCODE v19 protein coding and lincRNA transcripts.\n# This index would have been created using a command like:\n# sailfish index -t <path_to_gencode_v19_pc_lincRNA_transcripts.fa> -o gencode_v19_pc_lincRNA_sailfish_index -k 25\nSAILFISH_INDEX=\"gencode_v19_pc_lincRNA_sailfish_index\"\n\n# Placeholder for input reads (reads that didn't align to RepBase)\nINPUT_READS=\"unaligned_reads.fastq\"\n\n# Output directory for Sailfish results\nOUTPUT_DIR=\"sailfish_tpm_output\"\n\n# Run Sailfish quantification\n# -i: Path to the Sailfish index\n# -r: Input FASTQ file (assuming single-end reads based on common usage for Sailfish v0.6.3 without explicit mention)\n# -o: Output directory\n# -l U: Library type (U for unstranded, single-end reads). Adjust if paired-end or stranded.\nsailfish quant -i \"${SAILFISH_INDEX}\" -r \"${INPUT_READS}\" -o \"${OUTPUT_DIR}\" -l U",
+            "code_language": "bash",
+            "github_url": "https://github.com/kingsfordgroup/sailfish"
+        },
+        {
+            "step_order": 5,
+            "description": "TPM per gene was calculated by summing the TPM for all transcripts of a gene",
+            "tool_name": "RSEM (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.3.3",
+            "code_example": "# Install RSEM (example using conda)\n# conda install -c bioconda rsem\n\n# --- Reference Preparation (run once) ---\n# Download human GRCh38 genome FASTA and Ensembl GTF (release 109 as example)\n# mkdir -p rsem_ref\n# cd rsem_ref\n# wget ftp://ftp.ensembl.org/pub/release-109/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz\n# wget ftp://ftp.ensembl.org/pub/release-109/gtf/homo_sapiens/Homo_sapiens.GRCh38.109.gtf.gz\n# gunzip Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz\n# gunzip Homo_sapiens.GRCh38.109.gtf.gz\n# GENOME_FASTA=\"Homo_sapiens.GRCh38.dna.primary_assembly.fa\"\n# GTF_FILE=\"Homo_sapiens.GRCh38.109.gtf\"\n# RSEM_REFERENCE_INDEX=\"Homo_sapiens_GRCh38_Ensembl109_rsem_index\"\n\n# Build RSEM reference (this can take a long time and significant memory)\n# rsem-prepare-reference \\\n#     --gtf ${GTF_FILE} \\\n#     --num-threads 8 \\\n#     ${GENOME_FASTA} \\\n#     ${RSEM_REFERENCE_INDEX}\n# cd ..\n# --- End Reference Preparation ---\n\n# Define variables for expression calculation\nINPUT_BAM=\"path/to/your/aligned_reads.bam\" # Replace with actual input BAM file (e.g., from STAR alignment)\nRSEM_REFERENCE_INDEX=\"path/to/your/rsem_ref/Homo_sapiens_GRCh38_Ensembl109_rsem_index\" # Path to your RSEM reference index\nSAMPLE_NAME=\"your_sample_name\" # Replace with your sample name\nNUM_THREADS=8 # Number of threads to use\n\n# Execute RSEM to calculate expression\n# This command will output gene-level TPMs in ${SAMPLE_NAME}.genes.results\n# RSEM calculates gene-level TPMs by summing the estimated TPMs for all transcripts of a gene.\n# --bam: Input is a BAM file\n# --no-qualities: Often needed if BAM is from STAR and quality scores are not standard\n# --paired-end: Use if reads are paired-end (remove if single-end)\n# --num-threads: Number of threads\n# --output-genome-bam: Output a genome-aligned BAM file (optional, can be large)\nrsem-calculate-expression \\\n    --bam \\\n    --no-qualities \\\n    --paired-end \\\n    --num-threads ${NUM_THREADS} \\\n    ${INPUT_BAM} \\\n    ${RSEM_REFERENCE_INDEX} \\\n    ${SAMPLE_NAME}\n\n# To extract the gene-level TPMs:\n# The 'TPM' column in the ${SAMPLE_NAME}.genes.results file contains the desired values.\n# For example, to view the first few lines of gene results:\n# head ${SAMPLE_NAME}.genes.results\n# To extract just the gene_id and TPM columns:\n# awk 'NR > 1 {print $1, $6}' ${SAMPLE_NAME}.genes.results > ${SAMPLE_NAME}.gene_tpm.tsv",
+            "code_language": "bash",
+            "github_url": "https://github.com/deweylab/RSEM"
+        },
+        {
+            "step_order": 6,
+            "description": "Percent spliced-in (Psi) was calculated from junction read output from STAR aligner (SJ.out.tab) were used to create a de novo splicing index in conjunction with GENCODE v19 gene annotations, using outrigger",
+            "tool_name": "STAR",
+            "tool_version": "v0.1.0",
+            "code_example": "# Install outrigger (example using pip)\n# pip install outrigger\n\n# STAR aligner (version 2.7.10a or similar) is assumed to have been run upstream\n# to generate the SJ.out.tab file.\n\n# Define variables\nGENCODE_VERSION=\"v19\"\nGENOME_ASSEMBLY=\"hg19\" # Inferred from GENCODE v19\nGENCODE_GTF=\"gencode.${GENCODE_VERSION}.annotation.gtf\"\nGENOME_FASTA=\"${GENOME_ASSEMBLY}.fa\"\nSTAR_SJ_OUT_TAB=\"sample_SJ.out.tab\" # Placeholder for STAR's junction output\nOUTRIGGER_INDEX_DIR=\"outrigger_index_${GENOME_ASSEMBLY}_${GENCODE_VERSION}\"\nOUTPUT_PSI_FILE=\"sample_psi.csv\"\n\n# Download GENCODE v19 GTF (if not already present)\n# wget -O \"${GENCODE_GTF}.gz\" ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19/gencode.v19.annotation.gtf.gz\n# gunzip -f \"${GENCODE_GTF}.gz\"\n\n# Download hg19 genome FASTA (if not already present, required for outrigger index)\n# wget -O \"${GENOME_FASTA}.gz\" http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.fa.gz\n# gunzip -f \"${GENOME_FASTA}.gz\"\n\n# 1. Create a de novo splicing index using outrigger\n# This step uses the GENCODE v19 gene annotations (GTF) and the corresponding genome FASTA.\noutrigger index \\\n    --gtf \"${GENCODE_GTF}\" \\\n    --fasta \"${GENOME_FASTA}\" \\\n    --output-folder \"${OUTRIGGER_INDEX_DIR}\"\n\n# 2. Calculate Percent spliced-in (Psi) values\n# This step uses the STAR junction read output (SJ.out.tab) and the previously created outrigger index.\noutrigger psi \\\n    --outrigger-index \"${OUTRIGGER_INDEX_DIR}\" \\\n    --sj-out-tab \"${STAR_SJ_OUT_TAB}\" \\\n    --output-file \"${OUTPUT_PSI_FILE}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/outrigger"
+        },
+        {
+            "step_order": 7,
+            "description": "Outlier cells were calculated using K-means clustering with k=3 on the expression matrix and omitting cells which clustered into a group consisting of a majority of other cell types",
+            "tool_name": "scikit-learn (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.2.2",
+            "code_example": "# Install necessary libraries\n# pip install scikit-learn pandas numpy\n\n# Create dummy input files for demonstration if they don't exist\npython3 -c \"\nimport pandas as pd\nimport numpy as np\nimport os\n\nif not os.path.exists('expression_matrix.csv'):\n    np.random.seed(42)\n    expression_data = np.random.rand(100, 50) * 100\n    expression_df = pd.DataFrame(expression_data, columns=[f'gene_{i}' for i in range(50)])\n    expression_df.index.name = 'cell_id'\n    expression_df.to_csv('expression_matrix.csv')\n    print('Created dummy expression_matrix.csv')\n\nif not os.path.exists('cell_types.csv'):\n    cell_types = np.random.choice(['TypeA', 'TypeB', 'TypeC', 'TypeD'], size=100, p=[0.4, 0.3, 0.2, 0.1])\n    cell_types_df = pd.DataFrame({'cell_type': cell_types}, index=expression_df.index if 'expression_df' in locals() else pd.RangeIndex(start=0, stop=100, name='cell_id'))\n    cell_types_df.index.name = 'cell_id'\n    cell_types_df.to_csv('cell_types.csv')\n    print('Created dummy cell_types.csv')\n\"\n\n# Execute the Python script for K-means clustering and outlier filtering\npython3 -c \"\nimport pandas as pd\nimport numpy as np\nfrom sklearn.cluster import KMeans\n\n# Load expression matrix (e.g., from 'expression_matrix.csv')\n# This file is expected to have cell IDs as index and gene expression values as columns.\nexpression_matrix = pd.read_csv('expression_matrix.csv', index_col='cell_id')\n\n# Load known cell types (e.g., from 'cell_types.csv')\n# This file is expected to have cell IDs as index and a 'cell_type' column.\ncell_types_df = pd.read_csv('cell_types.csv', index_col='cell_id')\ncell_types = cell_types_df['cell_type']\n\n# Ensure cell_types index matches expression_matrix index\ncommon_cells = expression_matrix.index.intersection(cell_types.index)\nexpression_matrix = expression_matrix.loc[common_cells]\ncell_types = cell_types.loc[common_cells]\n\n# Perform K-means clustering with k=3\nk = 3\nkmeans = KMeans(n_clusters=k, random_state=42, n_init=10) # n_init for robust results\ncluster_labels = kmeans.fit_predict(expression_matrix)\n\n# Add cluster labels to the expression matrix for easier filtering\nclustered_data = expression_matrix.copy()\nclustered_data['cluster_label'] = cluster_labels\nclustered_data['known_cell_type'] = cell_types\n\n# Identify outlier clusters based on cell type composition\noutlier_cells_indices = []\nfor cluster_id in range(k):\n    cluster_cells = clustered_data[clustered_data['cluster_label'] == cluster_id]\n    \n    if not cluster_cells.empty:\n        # Get counts of known cell types within this cluster\n        type_counts = cluster_cells['known_cell_type'].value_counts()\n        \n        if not type_counts.empty:\n            # Identify the most frequent cell type in this cluster\n            most_frequent_type = type_counts.index[0]\n            \n            # Calculate the number of cells that are NOT the most frequent type\n            num_other_types = cluster_cells.shape[0] - type_counts.iloc[0]\n            \n            # Check if a majority of cells are 'other cell types'\n            # This means if the count of all cell types *except* the most frequent one\n            # is greater than the count of the most frequent one.\n            if num_other_types > type_counts.iloc[0]:\n                print(f'Cluster {cluster_id} identified as an outlier cluster: majority of other cell types.')\n                outlier_cells_indices.extend(cluster_cells.index.tolist())\n            else:\n                print(f'Cluster {cluster_id} is considered valid.')\n        else:\n            print(f'Cluster {cluster_id} is empty or has no known cell types.')\n    else:\n        print(f'Cluster {cluster_id} is empty.')\n\n# Filter out outlier cells\nfiltered_expression_matrix = expression_matrix.loc[\n    ~expression_matrix.index.isin(outlier_cells_indices)\n]\n\nprint(f'\\nOriginal number of cells: {expression_matrix.shape[0]}')\nprint(f'Number of outlier cells removed: {len(outlier_cells_indices)}')\nprint(f'Number of cells after filtering: {filtered_expression_matrix.shape[0]}')\n\n# Save the filtered expression matrix\nfiltered_expression_matrix.to_csv('filtered_expression_matrix.csv')\nprint('Filtered expression matrix saved to filtered_expression_matrix.csv')\n\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 8,
+            "description": "Modality was calculated using anchor on the psi scores for all events detected in at least 10 cells, for each cell type",
+            "tool_name": "Custom Python script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# This script calculates splicing modality using a method referred to as \"anchor\".\n# The \"anchor\" method likely involves statistical modeling (e.g., mixture models like beta-binomial mixture models)\n# to characterize the distribution of PSI scores for each splicing event within a given cell type.\n# The tool is inferred as a custom Python script, as a standard command-line tool\n# named \"anchor\" specifically for modality calculation on psi scores is not widely documented.\n\n# Prerequisites: Python 3.x with common scientific libraries (e.g., pandas, numpy, scipy, scikit-learn for mixture models).\n# # conda create -n modality_env python=3.9\n# # conda activate modality_env\n# # pip install pandas numpy scipy scikit-learn\n\n# Input: A TSV or CSV file containing PSI scores for all events across cells.\n#        This file should include columns for event ID, cell ID, cell type, and PSI value.\n#        Example format (long format):\n#        event_id    cell_id    cell_type    psi_score\n#        event1      cellA1     Type1        0.15\n#        event1      cellA2     Type1        0.18\n#        ...\n#        event2      cellB1     Type2        0.80\n#        ...\n\n# Output: A TSV or CSV file with modality results for each event per cell type.\n#         Example format:\n#         event_id    cell_type    modality_type    modality_score    p_value\n\n# Define input and output paths and parameters\nINPUT_PSI_SCORES=\"all_events_psi_scores.tsv\"\nOUTPUT_MODALITY_RESULTS=\"splicing_modality_results.tsv\"\nMIN_CELLS_THRESHOLD=10\nCELL_TYPE_COLUMN=\"cell_type\" # Column in INPUT_PSI_SCORES that identifies cell type\nEVENT_ID_COLUMN=\"event_id\"   # Column in INPUT_PSI_SCORES that identifies the splicing event\nPSI_SCORE_COLUMN=\"psi_score\" # Column in INPUT_PSI_SCORES that contains the PSI value\n\n# Execute the hypothetical custom Python script\n# This script would conceptually:\n# 1. Load the input PSI scores file.\n# 2. Group data by the specified cell type column.\n# 3. For each cell type:\n#    a. Filter events to include only those detected (i.e., having a non-NaN PSI score) in at least MIN_CELLS_THRESHOLD cells.\n#    b. For each filtered event, apply the \"anchor\" modality calculation method\n#       (e.g., fitting a beta-binomial mixture model or similar statistical test\n#       to determine if the PSI distribution is unimodal, bimodal, etc.).\n# 4. Aggregate and save the results to the specified output file.\n\npython /path/to/custom_scripts/calculate_splicing_modality.py \\\n  --input_psi_scores \"${INPUT_PSI_SCORES}\" \\\n  --output_modality_results \"${OUTPUT_MODALITY_RESULTS}\" \\\n  --min_cells_per_event \"${MIN_CELLS_THRESHOLD}\" \\\n  --cell_type_column \"${CELL_TYPE_COLUMN}\" \\\n  --event_id_column \"${EVENT_ID_COLUMN}\" \\\n  --psi_score_column \"${PSI_SCORE_COLUMN}\" \\\n  --modality_method \"anchor\" # Explicitly state the method used within the script\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 9,
+            "description": "Waypoints were calculated using bonvoyage on the psi scores for all events detected in at least 10 cells, for each cell type",
+            "tool_name": "bonvoyage",
+            "tool_version": "0.1.0",
+            "code_example": "# Install bonvoyage (if not already installed)\n# pip install bonvoyage\n\n# Assuming 'psi_scores_celltypeX.tsv' contains PSI scores for events for a specific cell type.\n# The description implies that events are already filtered to be detected in at least 10 cells.\n# The 'min_cells_per_event' parameter in bonvoyage can enforce this filtering if not done upstream.\n# The tool calculates waypoints based on these psi scores for each cell type.\n\n# Example for processing a single cell type:\nCELL_TYPE=\"example_cell_type\"\nINPUT_PSI_FILE=\"${CELL_TYPE}_psi_scores.tsv\"\nOUTPUT_PREFIX=\"${CELL_TYPE}_waypoints\"\n\nbonvoyage --psi_table \"${INPUT_PSI_FILE}\" --output_prefix \"${OUTPUT_PREFIX}\" --min_cells_per_event 10",
+            "code_language": "bash",
+            "github_url": "https://github.com/YeoLab/bonvoyage"
+        },
+        {
+            "step_order": 10,
+            "description": "Splicing events were annotated using poshsplice to annotate corresponding genes, splice site strength using MaxEntScan, intron and exon lengths, conservation of alternative splicing from Merkin et al Science 2012,",
+            "tool_name": "poshsplice",
+            "tool_version": "0.1.0",
+            "code_example": "# Install poshsplice and its dependency maxentscan\n# pip install poshsplice maxentscan\n\n# Download MaxEntScan models (if not already present)\n# maxentscan download_models\n# Assuming models are downloaded to ~/.maxentscan_models or a specified path\nMAXENTSCAN_MODEL_DIR=\"${HOME}/.maxentscan_models\" # Adjust path if models are elsewhere\n\n# Define input files and reference data\nINPUT_BAM=\"input.bam\" # Placeholder for aligned RNA-seq reads\nGENOME_FASTA=\"hg38.fa\" # Placeholder for reference genome FASTA (e.g., GRCh38)\nGENE_ANNOTATION_GTF=\"gencode.v38.annotation.gtf\" # Placeholder for gene annotation GTF (e.g., GENCODE v38)\nOUTPUT_DIR=\"poshsplice_output\"\n\n# Create output directory\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run poshsplice to annotate splicing events, genes, intron/exon lengths, and splice site strength\n# Parameters inferred:\n# -b: Input BAM file\n# -g: Gene annotation GTF file\n# -o: Output directory\n# --genome: Reference genome FASTA for sequence extraction (needed for MaxEntScan)\n# --maxentscan-model-dir: Path to MaxEntScan models for splice site strength calculation\nposhsplice \\\n    -b \"${INPUT_BAM}\" \\\n    -g \"${GENE_ANNOTATION_GTF}\" \\\n    -o \"${OUTPUT_DIR}\" \\\n    --genome \"${GENOME_FASTA}\" \\\n    --maxentscan-model-dir \"${MAXENTSCAN_MODEL_DIR}\"\n\n# Note on \"conservation of alternative splicing from Merkin et al Science 2012\":\n# poshsplice identifies splicing events. The conservation analysis from Merkin et al.\n# likely involves a post-processing step comparing the identified events to a\n# database or set of conserved events derived from the Merkin et al. publication.\n# This step would typically be implemented as a custom script using poshsplice's output.\n# Example (conceptual, not an actual command):\n# python custom_conservation_script.py \\\n#     --poshsplice_events \"${OUTPUT_DIR}/splicing_events.tsv\" \\\n#     --merkin_conservation_db \"merkin_et_al_conserved_events.tsv\" \\\n#     --output_file \"${OUTPUT_DIR}/conserved_splicing_events.tsv\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 11,
+            "description": "Genes were annotated with attributes available in Gencode v19, Phylostrata for the matching ENSEMBL identifiers in Domazet-Loso et al MBE 2008, and TF or RBP category from Gerstberger et al Nat Rev Gen 2014",
+            "tool_name": "GENCODE",
+            "tool_version": "N/A",
+            "code_example": "# --- Reference Datasets ---\n# Gencode v19 annotation GTF file\nGENCODE_GTF_URL=\"https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19/gencode.v19.annotation.gtf.gz\"\nGENCODE_GTF_FILE=\"gencode.v19.annotation.gtf.gz\"\nGENCODE_GENES_TSV=\"gencode_v19_genes.tsv\"\n\n# Domazet-Loso et al. MBE 2008 Phylostrata data\n# Source: Domazet-Loso, T., & Tautz, D. (2008). A phylogenetically based transcriptomics approach... MBE, 25(11), 2413-2421. DOI: 10.1093/molbev/msn191\n# This data is typically found in supplementary tables or derived databases. A direct download link for a pre-processed file is not readily available and would require specific processing of supplementary materials or database queries.\n# For demonstration, we simulate a file. In a real pipeline, this would be downloaded or generated from the original source.\nPHYLOSTRATA_FILE=\"domazet_loso_phylostrata.tsv\"\n\n# Gerstberger et al. Nat Rev Gen 2014 TF/RBP categories\n# Source: Gerstberger, S., Hafner, M., & Tuschl, T. (2014). A census of human RNA-binding proteins. Nat Rev Gen, 15(12), 829-840. DOI: 10.1038/nrg3763\n# This data is typically found in supplementary tables. A direct download link for a pre-processed file mapped to ENSEMBL IDs is not readily available and would require specific processing of supplementary materials and gene ID mapping.\n# For demonstration, we simulate a file. In a real pipeline, this would be downloaded or generated and mapped to ENSEMBL IDs.\nTF_RBP_FILE=\"gerstberger_tf_rbp.tsv\"\n\n# --- Step 1: Download Gencode v19 GTF ---\necho \"Downloading Gencode v19 GTF...\"\nwget -nc \"${GENCODE_GTF_URL}\"\n\n# --- Step 2: Extract gene attributes from Gencode GTF ---\n# Extract gene_id (without version suffix), gene_name, gene_type\necho \"Extracting gene attributes from Gencode GTF...\"\nzcat \"${GENCODE_GTF_FILE}\" | \\\nawk '$3 == \"gene\" {\n    gene_id = gene_name = gene_type = \"\";\n    for (i=9; i<=NF; i++) {\n        if ($i ~ /^gene_id \"/) { gene_id = substr($i, 10, length($i)-11); }\n        else if ($i ~ /^gene_name \"/) { gene_name = substr($i, 12, length($i)-13); }\n        else if ($i ~ /^gene_type \"/) { gene_type = substr($i, 12, length($i)-13); }\n    }\n    # Remove version suffix from ENSEMBL gene ID for consistent joining\n    gsub(/\\.[0-9]+$/, \"\", gene_id);\n    print gene_id \"\\t\" gene_name \"\\t\" gene_type;\n}' | sort -k1,1 > \"${GENCODE_GENES_TSV}\"\n\n# --- Step 3: Simulate/Prepare Phylostrata data ---\n# In a real scenario, this file would be downloaded or processed from supplementary data.\n# Example content: ENSEMBL_ID<tab>Phylostratum\necho \"Preparing dummy Phylostrata data...\"\ncat <<EOF > \"${PHYLOSTRATA_FILE}\"\nENSG00000000003\\t1\nENSG00000000005\\t2\nENSG00000000419\\t3\nENSG00000000457\\t4\nENSG00000000460\\t5\nENSG00000000971\\t6\nENSG00000001036\\t7\nENSG00000001084\\t8\nENSG00000001167\\t9\nENSG00000001461\\t10\nEOF\nsort -k1,1 \"${PHYLOSTRATA_FILE}\" -o \"${PHYLOSTRATA_FILE}\"\n\n# --- Step 4: Simulate/Prepare TF/RBP category data ---\n# In a real scenario, this file would be downloaded or processed from supplementary data and mapped to ENSEMBL IDs.\n# Example content: ENSEMBL_ID<tab>Category (e.g., RBP, TF)\necho \"Preparing dummy TF/RBP data...\"\ncat <<EOF > \"${TF_RBP_FILE}\"\nENSG00000000003\\tRBP\nENSG00000000457\\tTF\nENSG00000001036\\tRBP\nENSG00000001461\\tTF\nEOF\nsort -k1,1 \"${TF_RBP_FILE}\" -o \"${TF_RBP_FILE}\"\n\n# --- Step 5: Join all attributes based on ENSEMBL gene ID ---\n# Join Gencode attributes with Phylostrata\necho \"Joining Gencode attributes with Phylostrata...\"\njoin -t $'\\t' -a 1 -e \"NA\" -o auto \"${GENCODE_GENES_TSV}\" \"${PHYLOSTRATA_FILE}\" > gencode_phylostrata.tsv\n\n# Join the result with TF/RBP categories\necho \"Joining with TF/RBP categories...\"\njoin -t $'\\t' -a 1 -e \"NA\" -o auto gencode_phylostrata.tsv \"${TF_RBP_FILE}\" > annotated_genes.tsv\n\necho \"Annotation complete. Output: annotated_genes.tsv\"\necho \"Example output (first 5 lines):\"\nhead -n 5 annotated_genes.tsv",
+            "code_language": "bash",
+            "github_url": "https://www.gencodegenes.org/human/release_19.html"
+        }
+    ],
+    "raw_text": "Reads were trimmed of adapter sequences TCGTATGCCGTCTTCTGCTTG, ATCTCGTATGCCGTCTTCTGCTTG, CGACAGGTTCAGAGTTCTACAGTCCGACGATC GATCGGAAGAGCACACGTCTGAACTCCAGTCAC using cutadapt v1.8.1\nTrimmed reads were aligned to RepBase v18.05 using STAR v2.4.01\nReads that didn't align to RepBase were aligned to hg19 using STAR v2.4.01 and a splice junction database derived from GENCODE v19\nTranscripts per million (TPM) per transcript was calculated from reads that didn't align to RepBase were quasi-aligned to GENCODE v19 protein coding and lincRNA transcripts using Sailfish v0.6.3\nTPM per gene was calculated by summing the TPM for all transcripts of a gene\nPercent spliced-in (Psi) was calculated from junction read output from STAR aligner (SJ.out.tab) were used to create a de novo splicing index in conjunction with GENCODE v19 gene annotations, using outrigger\nOutlier cells were calculated using K-means clustering with k=3 on the expression matrix and omitting cells which clustered into a group consisting of a majority of other cell types\nModality was calculated using anchor on the psi scores for all events detected in at least 10 cells, for each cell type\nWaypoints were calculated using bonvoyage on the psi scores for all events detected in at least 10 cells, for each cell type\nSplicing events were annotated using poshsplice to annotate corresponding genes, splice site strength using MaxEntScan, intron and exon lengths, conservation of alternative splicing from Merkin et al Science 2012,\nGenes were annotated with attributes available in Gencode v19, Phylostrata for the matching ENSEMBL identifiers in Domazet-Loso et al MBE 2008, and TF or RBP category from Gerstberger et al Nat Rev Gen 2014\nGenome_build: hg19\nSupplementary_files_format_and_content: \"metadata.csv.gz\" contains sample metadata, \"splicing.csv.gz\" contains Psi scores, \"splicing_feature.csv.gz\" contains metadata for splicing events, \"expression.csv.gz\" contains TPM values for genes, \"expression_feature.csv.gz\" contains metadata for genes, \"mapping_stats.csv.gz\" contains the number and percentages of reads mapped for each samples",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

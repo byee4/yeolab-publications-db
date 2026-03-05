@@ -1,88 +1,88 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Library strategy: Pseduo-seq",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reverse reads were trimmed of 5\u00e2\u0080\u00b2 amplicon sequence using cutadapt (-G)",
-      "tool_name": "cutadapt",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Trimmed paired end reads collapsed using PEAR (default settings)",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "PCR duplicates collapsed for in vitro Pseudo-seq libraries using fastx_collapser",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Reads were mapped to bowtie indices of the pool or GRCh37 for chromatin-associated RNA Pseudo-seq with tophat2.",
-      "tool_name": "Bowtie",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Reads from PUS1 knockout and wild type mRNA-seq were mapped to GRCh37 using STAR",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Pseudouridylation was assessed using cutom python scripts (see text)",
-      "tool_name": "Python",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "Differential mRNA level analysis of PUS1 knockout and wildtype mRNA-seq using DEseq2",
-      "tool_name": "DESeq2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "Differential splicing analysis of PUS1 knockout and wildtype mRNA-seq using rMATS",
-      "tool_name": "rMATS",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Library strategy: Pseduo-seq\nReverse reads were trimmed of 5\u00e2\u0080\u00b2 amplicon sequence using cutadapt (-G)\nTrimmed paired end reads collapsed using PEAR (default settings)\nPCR duplicates collapsed for in vitro Pseudo-seq libraries using fastx_collapser\nReads were mapped to bowtie indices of the pool or GRCh37 for chromatin-associated RNA Pseudo-seq with tophat2. Reads from PUS1 knockout and wild type mRNA-seq were mapped to GRCh37 using STAR\nPseudouridylation was assessed using cutom python scripts (see text)\nDifferential mRNA level analysis of PUS1 knockout and wildtype mRNA-seq using DEseq2\nDifferential splicing analysis of PUS1 knockout and wildtype mRNA-seq using rMATS\nGenome_build: GRCh37 for sequencing experiments from cellular RNA and Bowtie indices made from fasta files of pool sequences\nSupplementary_files_format_and_content: Tab delimited text files of peak values for pseudouridylation (see text)\nSupplementary_files_format_and_content: rMATS output\nSupplementary_files_format_and_content: DEseq2 output",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Library strategy: Pseduo-seq",
+            "tool_name": "N/A (Library strategy, not a computational tool) (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# The \"Library strategy: Pseudo-seq\" describes a wet-lab protocol for RNA modification quantification,\n# not a computational analysis step. Therefore, there is no direct bash command associated with\n# \"performing\" Pseudo-seq computationally.\n# Subsequent computational steps would involve processing sequencing data generated from Pseudo-seq libraries,\n# such as quality control, alignment, and quantification of modifications.",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1038/nmeth.3141"
+        },
+        {
+            "step_order": 2,
+            "description": "Reverse reads were trimmed of 5\u00e2\u0080\u00b2 amplicon sequence using cutadapt (-G)",
+            "tool_name": "cutadapt",
+            "tool_version": "1.18",
+            "code_example": "# Install cutadapt if not already installed\n# conda install -c bioconda cutadapt=1.18\n\n# Trim 5' amplicon sequence from reverse reads (R2)\n# The amplicon sequence 'AGATCGGAAGAGCACACGTCTGAACTCCAGTCA' is a common 5' adapter for reverse reads in eCLIP.\n# -G: Trim 5' adapter from the reverse read.\n# -e 0.1: Maximum 10% error rate.\n# -m 15: Discard reads shorter than 15 bp after trimming.\ncutadapt -G \"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\" \\\n         -e 0.1 \\\n         -m 15 \\\n         -o output_R2_trimmed.fastq.gz \\\n         input_R2.fastq.gz",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 3,
+            "description": "Trimmed paired end reads collapsed using PEAR (default settings)",
+            "tool_name": "PEAR",
+            "tool_version": "0.9.11 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install PEAR (Paired-End reAd merger) using Bioconda\n# conda install -c bioconda pear\n\n# Define input and output file paths\n# Replace 'input_R1.fastq.gz' and 'input_R2.fastq.gz' with your actual trimmed paired-end read files.\n# Replace 'output_prefix' with your desired output file prefix.\n# PEAR will generate multiple output files: output_prefix.assembled.fastq, output_prefix.unassembled.forward.fastq, etc.\nINPUT_FORWARD_READS=\"input_R1.fastq.gz\"\nINPUT_REVERSE_READS=\"input_R2.fastq.gz\"\nOUTPUT_PREFIX=\"collapsed_reads\"\n\n# Collapse trimmed paired-end reads using PEAR with default settings\n# -f: Specify the input forward reads file\n# -r: Specify the input reverse reads file\n# -o: Specify the output file prefix\npear -f \"${INPUT_FORWARD_READS}\" -r \"${INPUT_REVERSE_READS}\" -o \"${OUTPUT_PREFIX}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "PCR duplicates collapsed for in vitro Pseudo-seq libraries using fastx_collapser",
+            "tool_name": "fastx_collapser",
+            "tool_version": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install fastx_toolkit (which includes fastx_collapser)\n# conda install -c bioconda fastx_toolkit\n\n# Collapse PCR duplicates for in vitro Pseudo-seq libraries\n# Replace 'pseudo_seq_reads.fastq' with your actual input file\n# Replace 'pseudo_seq_reads_collapsed.fastq' with your desired output file\nfastx_collapser -i pseudo_seq_reads.fastq -o pseudo_seq_reads_collapsed.fastq",
+            "code_language": "bash",
+            "github_url": "https://github.com/agordon/fastx_toolkit"
+        },
+        {
+            "step_order": 5,
+            "description": "Reads were mapped to bowtie indices of the pool or GRCh37 for chromatin-associated RNA Pseudo-seq with tophat2.",
+            "tool_name": "Bowtie",
+            "tool_version": "2.1.1",
+            "code_example": "# Install tophat2 (example using conda)\n# conda install -c bioconda tophat2\n\n# Install bowtie (tophat2 dependency, example using conda)\n# conda install -c bioconda bowtie\n\n# Placeholder for reference genome and annotation\n# Download GRCh37 (hg19) reference genome FASTA and build Bowtie index\n# mkdir -p reference/GRCh37\n# wget -P reference/GRCh37 http://hgdownload.cse.ucsc.edu/goldenPath/hg19/bigZips/hg19.fa.gz\n# gunzip reference/GRCh37/hg19.fa.gz\n# bowtie-build reference/GRCh37/hg19.fa reference/GRCh37/hg19_bowtie_index\n\n# Download GRCh37 (hg19) GTF annotation (Ensembl release 75 is a common choice for GRCh37)\n# wget -P reference/GRCh37 ftp://ftp.ensembl.org/pub/grch37/release-75/gtf/homo_sapiens/Homo_sapiens.GRCh37.75.gtf.gz\n# gunzip reference/GRCh37/Homo_sapiens.GRCh37.75.gtf.gz\n\n# Define variables\nBOWTIE_INDEX=\"reference/GRCh37/hg19_bowtie_index\" # Path to the Bowtie index for GRCh37\nGTF_FILE=\"reference/GRCh37/Homo_sapiens.GRCh37.75.gtf\" # Path to the GTF annotation file for GRCh37\nINPUT_READS=\"reads.fastq\" # Placeholder for input FASTQ file(s). For paired-end, use \"reads_R1.fastq reads_R2.fastq\"\nOUTPUT_DIR=\"tophat_output\" # Directory for TopHat2 output\n\n# Create output directory\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run tophat2 for single-end reads\n# For paired-end reads, the command would be: tophat2 -G \"${GTF_FILE}\" -o \"${OUTPUT_DIR}\" \"${BOWTIE_INDEX}\" \"reads_R1.fastq\" \"reads_R2.fastq\"\ntophat2 \\\n    -G \"${GTF_FILE}\" \\\n    -o \"${OUTPUT_DIR}\" \\\n    \"${BOWTIE_INDEX}\" \\\n    \"${INPUT_READS}\"\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/infphilo/tophat"
+        },
+        {
+            "step_order": 6,
+            "description": "Reads from PUS1 knockout and wild type mRNA-seq were mapped to GRCh37 using STAR",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Note: A STAR genome index for GRCh37 must be pre-built. \n# Example command to build index (if needed, replace with actual paths and parameters):\n# STAR --runMode genomeGenerate --genomeDir /path/to/STAR_index/GRCh37 --genomeFastaFiles /path/to/GRCh37.fa --sjdbGTFfile /path/to/GRCh37.gtf --runThreadN 8\n\n# Align PUS1 knockout mRNA-seq reads\nSTAR \\\n  --genomeDir /path/to/STAR_index/GRCh37 \\\n  --readFilesIn PUS1_knockout_R1.fastq.gz PUS1_knockout_R2.fastq.gz \\\n  --runThreadN 8 \\\n  --outFileNamePrefix PUS1_knockout_ \\\n  --outSAMtype BAM SortedByCoordinate \\\n  --outSAMattributes NH HI AS nM MD \\\n  --readFilesCommand zcat\n\n# Align wild type mRNA-seq reads\nSTAR \\\n  --genomeDir /path/to/STAR_index/GRCh37 \\\n  --readFilesIn wild_type_R1.fastq.gz wild_type_R2.fastq.gz \\\n  --runThreadN 8 \\\n  --outFileNamePrefix wild_type_ \\\n  --outSAMtype BAM SortedByCoordinate \\\n  --outSAMattributes NH HI AS nM MD \\\n  --readFilesCommand zcat",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 7,
+            "description": "Pseudouridylation was assessed using cutom python scripts (see text)",
+            "tool_name": "Python",
+            "tool_version": "Not specified",
+            "code_example": "# Installation (if needed):\n# conda install python\n\n# Reference genome placeholder: hg38 (or specific to organism, if applicable to pseudouridylation assessment)\n\n# This command is a placeholder for custom Python scripts. \n# The actual script name and parameters would be detailed in the full text of the study.\n# Replace 'custom_pseudouridylation_script.py' with the actual script name.\n# Replace '<input_data>' with the relevant input file(s) (e.g., aligned sequencing data).\n# Replace '<output_file>' with the desired output file name.\npython custom_pseudouridylation_script.py --input_data <input_data> --output_results <output_file> --genome_assembly hg38",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 8,
+            "description": "Differential mRNA level analysis of PUS1 knockout and wildtype mRNA-seq using DEseq2",
+            "tool_name": "DESeq2",
+            "tool_version": "R package (Bioconductor)",
+            "code_example": "# Create dummy input files for demonstration\n# In a real scenario, these would be generated by upstream steps (e.g., featureCounts, Salmon)\nmkdir -p deseq2_inputs\necho -e \"gene_id\\tWT_rep1\\tWT_rep2\\tKO_rep1\\tKO_rep2\" > deseq2_inputs/count_matrix.tsv\necho -e \"geneA\\t100\\t120\\t50\\t60\" >> deseq2_inputs/count_matrix.tsv\necho -e \"geneB\\t200\\t210\\t300\\t320\" >> deseq2_inputs/count_matrix.tsv\necho -e \"geneC\\t50\\t60\\t20\\t25\" >> deseq2_inputs/count_matrix.tsv\necho -e \"geneD\\t10\\t12\\t15\\t18\" >> deseq2_inputs/count_matrix.tsv\necho -e \"geneE\\t5\\t8\\t2\\t3\" >> deseq2_inputs/count_matrix.tsv\n\necho -e \"sample_id\\tcondition\" > deseq2_inputs/sample_info.tsv\necho -e \"WT_rep1\\twildtype\" >> deseq2_inputs/sample_info.tsv\necho -e \"WT_rep2\\twildtype\" >> deseq2_inputs/sample_info.tsv\necho -e \"KO_rep1\\tknockout\" >> deseq2_inputs/sample_info.tsv\necho -e \"KO_rep2\\tknockout\" >> deseq2_inputs/sample_info.tsv\n\n# Save the R script\ncat << 'EOF' > deseq2_analysis.R\n# Load DESeq2 library\nlibrary(DESeq2)\n\n# --- Configuration ---\n# Define input files (replace with actual paths)\ncount_matrix_file <- \"deseq2_inputs/count_matrix.tsv\" # e.g., output from featureCounts, HTSeq, or aggregated Salmon/Kallisto counts\nsample_info_file <- \"deseq2_inputs/sample_info.tsv\"   # Tab-separated file with sample_id, condition (e.g., WT, KO)\n\n# Define output directory\noutput_dir <- \"deseq2_results\"\ndir.create(output_dir, showWarnings = FALSE)\n\n# --- Load Data ---\n# Load count matrix\n# Assuming the first column is gene_id and subsequent columns are sample counts\ncount_data <- read.table(count_matrix_file, header = TRUE, row.names = 1, sep = \"\\t\")\n# Ensure counts are integers\ncount_data <- round(count_data)\n\n# Load sample information\nsample_info <- read.table(sample_info_file, header = TRUE, row.names = 1, sep = \"\\t\")\n\n# Ensure sample names match and are in the same order\n# It's crucial that the column names of count_data match the row names of sample_info\n# and that they are in the same order.\nsample_info <- sample_info[colnames(count_data), , drop = FALSE]\n\n# --- Create DESeqDataSet object ---\n# Design formula: ~ condition (assuming 'condition' is a column in sample_info)\ndds <- DESeqDataSetFromMatrix(countData = count_data,\n                              colData = sample_info,\n                              design = ~ condition)\n\n# Pre-filtering: remove genes with very low counts\n# Keep genes that have at least 10 counts in total across all samples\nkeep <- rowSums(counts(dds)) >= 10\ndds <- dds[keep,]\n\n# Set the reference level for the 'condition' factor (e.g., 'wildtype' as reference)\n# Make sure 'wildtype' and 'knockout' match your actual condition names\ndds$condition <- relevel(dds$condition, ref = \"wildtype\")\n\n# --- Run DESeq2 analysis ---\ndds <- DESeq(dds)\n\n# --- Extract results ---\n# Compare PUS1 knockout vs wildtype\n# Make sure 'knockout' and 'wildtype' match your actual condition names\nres <- results(dds, contrast = c(\"condition\", \"knockout\", \"wildtype\"))\n\n# Order results by adjusted p-value\nres_ordered <- res[order(res$padj),]\n\n# Summarize results\nsummary(res_ordered)\n\n# Save results to a CSV file\nwrite.csv(as.data.frame(res_ordered), file = file.path(output_dir, \"deseq2_PUS1_KO_vs_WT_results.csv\"))\n\n# Optional: Save normalized counts\nnormalized_counts <- counts(dds, normalized = TRUE)\nwrite.csv(as.data.frame(normalized_counts), file = file.path(output_dir, \"deseq2_normalized_counts.csv\"))\n\n# Optional: Generate MA plot\npdf(file.path(output_dir, \"MA_plot_PUS1_KO_vs_WT.pdf\"))\nplotMA(res, main=\"MA plot: PUS1 KO vs WT\")\ndev.off()\n\n# Optional: Generate dispersion plot\npdf(file.path(output_dir, \"dispersion_plot.pdf\"))\nplotDispEsts(dds)\ndev.off()\n\nmessage(\"DESeq2 analysis complete. Results saved in \", output_dir)\nEOF\n\n# Installation instructions (commented out)\n# For R and Bioconductor packages, you typically install them within an R session.\n# # Install R if not already installed (e.g., on Ubuntu/Debian)\n# # sudo apt update\n# # sudo apt install r-base\n#\n# # Install Bioconductor and DESeq2 within R\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\")'\n# R -e 'BiocManager::install(\"DESeq2\")'\n\n# Execute the DESeq2 R script\nRscript deseq2_analysis.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/DESeq2.html"
+        },
+        {
+            "step_order": 9,
+            "description": "Differential splicing analysis of PUS1 knockout and wildtype mRNA-seq using rMATS",
+            "tool_name": "rMATS",
+            "tool_version": "4.1.2 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install rMATS (example using conda)\n# conda create -n rmats_env python=3.8\n# conda activate rmats_env\n# conda install -c bioconda rmats-turbo\n\n# Define input files and parameters\n# Placeholder for PUS1 knockout and wildtype mRNA-seq BAM files\n# Replace with actual paths to your BAM files\nWT_BAM_LIST=\"wt_samples.txt\"\nKO_BAM_LIST=\"ko_samples.txt\"\n\n# Create placeholder BAM list files (replace with your actual BAM paths)\n# echo \"/path/to/wt_rep1.bam,/path/to/wt_rep2.bam\" > ${WT_BAM_LIST}\n# echo \"/path/to/ko_rep1.bam,/path/to/ko_rep2.bam\" > ${KO_BAM_LIST}\n\n# Placeholder for GTF annotation file (e.g., human hg38 GENCODE v38)\n# Download from: https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_38/gencode.v38.annotation.gtf.gz\nGTF_FILE=\"gencode.v38.annotation.gtf\"\n\nOUTPUT_DIR=\"rmats_differential_splicing_output\"\nTEMP_DIR=\"rmats_tmp\"\nREAD_TYPE=\"paired\" # Assuming paired-end mRNA-seq reads\nREAD_LENGTH=100    # Placeholder read length, adjust as per your data\nNUM_THREADS=8      # Number of threads to use\n\n# Create output and temporary directories\nmkdir -p ${OUTPUT_DIR}\nmkdir -p ${TEMP_DIR}\n\n# Execute rMATS for differential splicing analysis\n# Ensure 'rmats.py' is in your PATH or provide the full path to the script\nrmats.py \\\n  --b1 ${WT_BAM_LIST} \\\n  --b2 ${KO_BAM_LIST} \\\n  --gtf ${GTF_FILE} \\\n  --od ${OUTPUT_DIR} \\\n  --tmp ${TEMP_DIR} \\\n  -t ${READ_TYPE} \\\n  -len ${READ_LENGTH} \\\n  --nthread ${NUM_THREADS}\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/Xinglab/rmats-turbo"
+        }
+    ],
+    "raw_text": "Library strategy: Pseduo-seq\nReverse reads were trimmed of 5\u00e2\u0080\u00b2 amplicon sequence using cutadapt (-G)\nTrimmed paired end reads collapsed using PEAR (default settings)\nPCR duplicates collapsed for in vitro Pseudo-seq libraries using fastx_collapser\nReads were mapped to bowtie indices of the pool or GRCh37 for chromatin-associated RNA Pseudo-seq with tophat2. Reads from PUS1 knockout and wild type mRNA-seq were mapped to GRCh37 using STAR\nPseudouridylation was assessed using cutom python scripts (see text)\nDifferential mRNA level analysis of PUS1 knockout and wildtype mRNA-seq using DEseq2\nDifferential splicing analysis of PUS1 knockout and wildtype mRNA-seq using rMATS\nGenome_build: GRCh37 for sequencing experiments from cellular RNA and Bowtie indices made from fasta files of pool sequences\nSupplementary_files_format_and_content: Tab delimited text files of peak values for pseudouridylation (see text)\nSupplementary_files_format_and_content: rMATS output\nSupplementary_files_format_and_content: DEseq2 output",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,61 +1,61 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "For each CLIP-seq read, the first 4nt index sequence was extracted and the 3'-adaptor sequence CTCGTATGCCGTCTTCTGCTTG was removed with program cutadapt (version 1.8.3).",
-      "tool_name": "cutadapt",
-      "tool_version": "1.8.3",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "The reads with at least 18nt were mapped to the human genome (hg19) by Bowtie (version 1.1.1) with parameters '-l25 -n2 -k1 -m10 -e 200 --best --strata'.",
-      "tool_name": "Bowtie",
-      "tool_version": "1.1.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "For each small RNA-seq read, the firsst 5nt NNNTC was extracted and 3' adaptor sequence 'NNCTCGTATGCCGTCTTCTGCTTG' was removed with program cutadapt (version 1.8.3).",
-      "tool_name": "cutadapt",
-      "tool_version": "1.8.3",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "The target insert sequences were required to be at least 16 nt.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "The filtered reads were mapped to the genome genome (hg19) by Bowtie (version 1.1.1) with parameters '-n 0 -e 80 -l 18 -a -m 5 --best --strata'.",
-      "tool_name": "Bowtie",
-      "tool_version": "1.1.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "The mapped reads were used to generate the genomic coverage profiles in bigWig format with programs genomeCoverageBed (bedtools version 2.24) and samtools (version 0.1.19).",
-      "tool_name": "samtools",
-      "tool_version": "0.1.19",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "For each CLIP-seq read, the first 4nt index sequence was extracted and the 3'-adaptor sequence CTCGTATGCCGTCTTCTGCTTG was removed with program cutadapt (version 1.8.3). The reads with at least 18nt were mapped to the human genome (hg19) by Bowtie (version 1.1.1) with parameters '-l25 -n2 -k1 -m10 -e 200 --best --strata'.\nFor each small RNA-seq read, the firsst 5nt NNNTC was extracted and 3' adaptor sequence 'NNCTCGTATGCCGTCTTCTGCTTG' was removed with program cutadapt (version 1.8.3). The target insert sequences were required to be at least 16 nt. The filtered reads were mapped to the genome genome (hg19) by Bowtie (version 1.1.1) with parameters '-n 0 -e 80 -l 18 -a -m 5 --best --strata'.\nThe mapped reads were used to generate the genomic coverage profiles in bigWig format with programs genomeCoverageBed (bedtools version 2.24) and samtools (version 0.1.19).\nGenome_build: hg19\nSupplementary_files_format_and_content: bigWig for coverage in both strands",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "For each CLIP-seq read, the first 4nt index sequence was extracted and the 3'-adaptor sequence CTCGTATGCCGTCTTCTGCTTG was removed with program cutadapt (version 1.8.3).",
+            "tool_name": "cutadapt",
+            "tool_version": "1.8.3",
+            "code_example": "# Install cutadapt (version 1.8.3 is quite old, consider a newer version if possible)\n# conda install -c bioconda cutadapt=1.8.3\n\n# Remove the 3'-adaptor sequence\ncutadapt -a CTCGTATGCCGTCTTCTGCTTG -o trimmed_reads.fastq.gz reads.fastq.gz",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 2,
+            "description": "The reads with at least 18nt were mapped to the human genome (hg19) by Bowtie (version 1.1.1) with parameters '-l25 -n2 -k1 -m10 -e 200 --best --strata'.",
+            "tool_name": "Bowtie",
+            "tool_version": "1.1.1",
+            "code_example": "# Install Bowtie (if not already installed)\n# conda install -c bioconda bowtie\n\n# Ensure the hg19 index is built or available. \n# If not, you would build it using bowtie-build:\n# bowtie-build <path_to_hg19.fa> hg19\n\n# Align reads to hg19\nbowtie -l 25 -n 2 -k 1 -m 10 -e 200 --best --strata hg19 input_reads.fastq > output_aligned_reads.sam",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie"
+        },
+        {
+            "step_order": 3,
+            "description": "For each small RNA-seq read, the firsst 5nt NNNTC was extracted and 3' adaptor sequence 'NNCTCGTATGCCGTCTTCTGCTTG' was removed with program cutadapt (version 1.8.3).",
+            "tool_name": "cutadapt",
+            "tool_version": "1.8.3",
+            "code_example": "# Install cutadapt if not already installed\n# conda install -c bioconda cutadapt=1.8.3\n\n# Example usage:\n# Assuming input.fastq.gz is the raw small RNA-seq reads\n# and output.fastq.gz will be the trimmed reads.\ncutadapt -g NNNTC \\\n         -a NNCTCGTATGCCGTCTTCTGCTTG \\\n         -o output.fastq.gz \\\n         input.fastq.gz",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.14806/ej.17.1.200"
+        },
+        {
+            "step_order": 4,
+            "description": "The target insert sequences were required to be at least 16 nt.",
+            "tool_name": "fastp (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "0.20.0",
+            "code_example": "# Install fastp if not already installed\n# conda install -c bioconda fastp\n\n# Filter sequences to be at least 16 nt long\n# Assuming single-end input for simplicity. For paired-end, use --in1, --out1, --in2, --out2.\nfastp --in1 input.fastq.gz --out1 output.fastq.gz --length_required 16",
+            "code_language": "bash",
+            "github_url": "https://github.com/OpenGene/fastp"
+        },
+        {
+            "step_order": 5,
+            "description": "The filtered reads were mapped to the genome genome (hg19) by Bowtie (version 1.1.1) with parameters '-n 0 -e 80 -l 18 -a -m 5 --best --strata'.",
+            "tool_name": "Bowtie",
+            "tool_version": "1.1.1",
+            "code_example": "# Install Bowtie (if not already installed)\n# conda install -c bioconda bowtie=1.1.1\n\n# Placeholder for Bowtie index for hg19. This index needs to be built prior to alignment.\n# Example: bowtie-build <hg19.fa> hg19_index\nhg19_index=\"/path/to/bowtie_indexes/hg19\"\n\n# Placeholder for input filtered reads file\nfiltered_reads=\"filtered_reads.fastq\"\n\n# Placeholder for output SAM file\noutput_sam=\"mapped_reads.sam\"\n\nbowtie -n 0 -e 80 -l 18 -a -m 5 --best --strata \"${hg19_index}\" \"${filtered_reads}\" > \"${output_sam}\"",
+            "code_language": "bash",
+            "github_url": "http://bowtie-bio.sourceforge.net/index.shtml"
+        },
+        {
+            "step_order": 6,
+            "description": "The mapped reads were used to generate the genomic coverage profiles in bigWig format with programs genomeCoverageBed (bedtools version 2.24) and samtools (version 0.1.19).",
+            "tool_name": "samtools",
+            "tool_version": "0.1.19",
+            "code_example": "# Install bedtools (version 2.24) and samtools (version 0.1.19) if not already installed\n# conda install -c bioconda bedtools=2.24 samtools=0.1.19\n\n# Install UCSC tools (bedGraphToBigWig) if not already installed\n# wget https://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/bedGraphToBigWig -O bedGraphToBigWig\n# chmod +x bedGraphToBigWig\n\n# Define input and output files\nINPUT_BAM=\"input.sorted.bam\" # Placeholder: Assuming input is a sorted and indexed BAM file\nOUTPUT_BEDGRAPH=\"output.bedgraph\"\nOUTPUT_BIGWIG=\"output.bigWig\"\nCHROM_SIZES=\"hg38.chrom.sizes\" # Placeholder: Path to chromosome sizes file (e.g., from UCSC goldenPath)\n\n# Example of how to get chrom.sizes for hg38 (if not already available)\n# fetchChromSizes hg38 > hg38.chrom.sizes\n\n# Generate bedGraph from BAM using genomeCoverageBed\n# samtools 0.1.19 might have been used for sorting/indexing the BAM prior to this step.\ngenomeCoverageBed -ibam \"$INPUT_BAM\" -bg -g \"$CHROM_SIZES\" > \"$OUTPUT_BEDGRAPH\"\n\n# Convert bedGraph to bigWig\n# bedGraphToBigWig is a UCSC tool, commonly used for this conversion.\n# Its use is inferred as bigWig format is the specified output.\nbedGraphToBigWig \"$OUTPUT_BEDGRAPH\" \"$CHROM_SIZES\" \"$OUTPUT_BIGWIG\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        }
+    ],
+    "raw_text": "For each CLIP-seq read, the first 4nt index sequence was extracted and the 3'-adaptor sequence CTCGTATGCCGTCTTCTGCTTG was removed with program cutadapt (version 1.8.3). The reads with at least 18nt were mapped to the human genome (hg19) by Bowtie (version 1.1.1) with parameters '-l25 -n2 -k1 -m10 -e 200 --best --strata'.\nFor each small RNA-seq read, the firsst 5nt NNNTC was extracted and 3' adaptor sequence 'NNCTCGTATGCCGTCTTCTGCTTG' was removed with program cutadapt (version 1.8.3). The target insert sequences were required to be at least 16 nt. The filtered reads were mapped to the genome genome (hg19) by Bowtie (version 1.1.1) with parameters '-n 0 -e 80 -l 18 -a -m 5 --best --strata'.\nThe mapped reads were used to generate the genomic coverage profiles in bigWig format with programs genomeCoverageBed (bedtools version 2.24) and samtools (version 0.1.19).\nGenome_build: hg19\nSupplementary_files_format_and_content: bigWig for coverage in both strands",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

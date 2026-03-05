@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "BCL files were converted to FASTQ using bcl2fastq2-v2.20.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "CellRanger v3.0.2 was used to demultiplex the FASTQ reads, align them to the hg38 human transcriptome (pre-mRNA) reference and extract the UMI and nuclei barcodes.",
-      "tool_name": "Cell Ranger",
-      "tool_version": "3.0.2",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "We used CellBender remove-background to remove ambient RNA and other technical artifacts from the count matrices.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Nuclei with over 10,000 UMI counts were filtered.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "UMI counts were normalized by the total number of UMIs per nucleus and converted to transcripts-per-10,000 (TP10K) as the final expression unit.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "BCL files were converted to FASTQ using bcl2fastq2-v2.20.\nCellRanger v3.0.2 was used to demultiplex the FASTQ reads, align them to the hg38 human transcriptome (pre-mRNA) reference and extract the UMI and nuclei barcodes.\nWe used CellBender remove-background to remove ambient RNA and other technical artifacts from the count matrices.\nNuclei with over 10,000 UMI counts were filtered.\nUMI counts were normalized by the total number of UMIs per nucleus and converted to transcripts-per-10,000 (TP10K) as the final expression unit.\nAssembly: Hg38\nSupplementary files format and content: H5ad file of aggregated processed single-nuclei RNA sequencing data from all 45 human specimens; found in totaldata-final-toshare.h5ad\nSupplementary files format and content: H5ad file of processed single-nuclei RNA sequencing data from the patient-derived organoid (untreated); found in adata_010nuc_10x.h5ad\nSupplementary files format and content: H5ad file of processed single-nuclei RNA sequencing data from the patient-derived organoid (treated with 5-FU, SM38, and oxaliplatin); found in adata_010orgCRT_10x.h5ad",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "BCL files were converted to FASTQ using bcl2fastq2-v2.20.",
+            "tool_name": "bcl2fastq2",
+            "tool_version": "v2.20",
+            "code_example": "# Install bcl2fastq2 (example using conda)\n# conda install -c bioconda bcl2fastq2\n\n# Define input run directory and output directory\nRUN_DIR=\"/path/to/your/bcl_run_folder\"\nOUTPUT_DIR=\"/path/to/your/fastq_output_folder\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Execute bcl2fastq2\nbcl2fastq --runfolder-dir \"${RUN_DIR}\" --output-dir \"${OUTPUT_DIR}\"",
+            "code_language": "bash",
+            "github_url": "https://support.illumina.com/sequencing/sequencing_software/bcl2fastq-conversion-software.html"
+        },
+        {
+            "step_order": 2,
+            "description": "CellRanger v3.0.2 was used to demultiplex the FASTQ reads, align them to the hg38 human transcriptome (pre-mRNA) reference and extract the UMI and nuclei barcodes.",
+            "tool_name": "Cell Ranger",
+            "tool_version": "3.0.2",
+            "code_example": "# Install Cell Ranger (example using conda, adjust as needed)\n# # Download and install Cell Ranger from 10x Genomics website\n# # e.g., wget https://cf.10xgenomics.com/releases/cell-ranger/cellranger-3.0.2.tar.gz\n# # tar -xzf cellranger-3.0.2.tar.gz\n# # export PATH=/path/to/cellranger-3.0.2:$PATH\n\n# Define variables for inputs and outputs\nFASTQ_DIR=\"/path/to/your/fastq_files\" # Directory containing FASTQ files (e.g., SampleName_S1_L001_R1_001.fastq.gz)\nSAMPLE_ID=\"your_sample_name\" # A unique ID for your sample, typically matching the prefix of your FASTQ files\nTRANSCRIPTOME_REF=\"/path/to/cellranger_references/refdata-gex-GRCh38-2020-A\" # Path to the pre-built Cell Ranger transcriptome reference (hg38, including pre-mRNA)\nOUTPUT_DIR=\"./cellranger_output\" # Output directory for Cell Ranger results\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run Cell Ranger count\ncellranger count \\\n    --id=\"${SAMPLE_ID}\" \\\n    --transcriptome=\"${TRANSCRIPTOME_REF}\" \\\n    --fastqs=\"${FASTQ_DIR}\" \\\n    --sample=\"${SAMPLE_ID}\" \\\n    --localcores=8 \\\n    --localmem=64 \\\n    --output-directory=\"${OUTPUT_DIR}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "We used CellBender remove-background to remove ambient RNA and other technical artifacts from the count matrices.",
+            "tool_name": "CellBender",
+            "tool_version": "0.3.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install CellBender (if not already installed)\n# pip install cellbender\n\n# Example usage of CellBender remove-background to remove ambient RNA and other technical artifacts\n# Replace input_counts.h5 and cleaned_counts.h5 with actual file paths for your count matrices.\n# Adjust parameters like --expected-cells, --total-droplets-included, --fpr, and --epochs as needed for your dataset.\ncellbender remove-background \\\n    --input input_counts.h5 \\\n    --output cleaned_counts.h5 \\\n    --cuda \\\n    --expected-cells 5000 \\\n    --total-droplets-included 20000 \\\n    --fpr 0.01 \\\n    --epochs 150",
+            "code_language": "bash",
+            "github_url": "https://github.com/broadinstitute/CellBender"
+        },
+        {
+            "step_order": 4,
+            "description": "Nuclei with over 10,000 UMI counts were filtered.",
+            "tool_name": "Seurat (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "4.x",
+            "code_example": "#!/bin/bash\n\n# Define input and output paths\nINPUT_SEURAT_OBJECT=\"input_seurat_object.rds\" # Placeholder for input Seurat object\nOUTPUT_SEURAT_OBJECT=\"filtered_seurat_object.rds\" # Placeholder for output Seurat object\nUMI_THRESHOLD=10000\n\n# Check if input file exists\nif [ ! -f \"$INPUT_SEURAT_OBJECT\" ]; then\n    echo \"Error: Input Seurat object not found at $INPUT_SEURAT_OBJECT\"\n    exit 1\nfi\n\n# R script to perform filtering\nR_SCRIPT=$(cat <<EOF\n# Load Seurat library\n# install.packages(\"Seurat\") # Uncomment to install if not already installed\nlibrary(Seurat)\n\n# Load the input Seurat object\nif (!file.exists(\"$INPUT_SEURAT_OBJECT\")) {\n  stop(\"Input Seurat object not found.\")\n}\npbmc <- readRDS(\"$INPUT_SEURAT_OBJECT\")\n\n# Filter cells based on UMI counts\n# Description: \"Nuclei with over 10,000 UMI counts were filtered.\"\n# This implies removing cells where nCount_RNA > 10000.\n# So, we retain cells where nCount_RNA <= 10000.\n# 'nCount_RNA' is the total UMI count for each cell, automatically calculated by Seurat.\npbmc_filtered <- subset(pbmc, subset = nCount_RNA <= $UMI_THRESHOLD)\n\n# Save the filtered Seurat object\nsaveRDS(pbmc_filtered, file = \"$OUTPUT_SEURAT_OBJECT\")\n\nmessage(paste(\"Original number of cells:\", ncol(pbmc)))\nmessage(paste(\"Number of cells after filtering:\", ncol(pbmc_filtered)))\nmessage(paste(\"Filtered out\", ncol(pbmc) - ncol(pbmc_filtered), \"cells with >\", $UMI_THRESHOLD, \"UMI counts.\"))\nEOF\n)\n\n# Execute the R script\nRscript -e \"$R_SCRIPT\"\n\necho \"Filtering complete. Filtered Seurat object saved to $OUTPUT_SEURAT_OBJECT\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/satijalab/seurat"
+        },
+        {
+            "step_order": 5,
+            "description": "UMI counts were normalized by the total number of UMIs per nucleus and converted to transcripts-per-10,000 (TP10K) as the final expression unit.",
+            "tool_name": "pandas (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.5.3",
+            "code_example": "# Install pandas (if not already installed)\n# pip install pandas\n\n# Create a dummy UMI count matrix for demonstration\n# In a real scenario, this would be loaded from a file (e.g., output from a UMI quantification tool)\ncat <<EOF > raw_umi_counts.tsv\ngene1\t10\t20\t5\ngene2\t5\t10\t2\ngene3\t15\t30\t8\nEOF\n\n# Python script to perform TP10K normalization\n# This script assumes an input file `raw_umi_counts.tsv` where rows are genes and columns are nuclei/cells.\n# The first column is assumed to be gene names, and subsequent columns are UMI counts.\npython -c '\nimport pandas as pd\n\ninput_file = \"raw_umi_counts.tsv\"\noutput_file = \"normalized_tp10k_expression.tsv\"\n\n# Read the UMI count matrix\n# Assuming the first column is gene names and subsequent columns are UMI counts for nuclei\n# header=None because our dummy file has no header row for counts\n# index_col=0 sets the first column (gene names) as the index\numi_counts_df = pd.read_csv(input_file, sep=\"\\t\", header=None, index_col=0)\n\n# Assign generic column names (e.g., nucleus_1, nucleus_2, ...) if not present\n# This makes the output more readable if the input had no column headers\numi_counts_df.columns = [f\"nucleus_{i+1}\" for i in range(umi_counts_df.shape[1])]\n\n# Calculate the total number of UMIs per nucleus (column sums)\ntotal_umis_per_nucleus = umi_counts_df.sum(axis=0)\n\n# Normalize UMI counts to Transcripts Per 10,000 (TP10K)\n# Formula: (UMI_count / total_UMIs_per_nucleus) * 10000\n# This operation is performed column-wise (per nucleus)\ntp10k_df = (umi_counts_df / total_umis_per_nucleus) * 10000\n\n# Print a preview of the normalized data\nprint(\"Normalized TP10K expression matrix (first 5 rows, first 5 columns):\")\nprint(tp10k_df.head())\n\n# Save the normalized TP10K expression matrix to a TSV file\n# index=True to write the gene names (index) as the first column\n# header=True to write the column names (nucleus IDs) as the first row\ntp10k_df.to_csv(output_file, sep=\"\\t\", index=True, header=True)\nprint(f\"Normalization complete. Output saved to {output_file}\")\n'",
+            "code_language": "bash",
+            "github_url": "https://github.com/pandas-dev/pandas"
+        }
+    ],
+    "raw_text": "BCL files were converted to FASTQ using bcl2fastq2-v2.20.\nCellRanger v3.0.2 was used to demultiplex the FASTQ reads, align them to the hg38 human transcriptome (pre-mRNA) reference and extract the UMI and nuclei barcodes.\nWe used CellBender remove-background to remove ambient RNA and other technical artifacts from the count matrices.\nNuclei with over 10,000 UMI counts were filtered.\nUMI counts were normalized by the total number of UMIs per nucleus and converted to transcripts-per-10,000 (TP10K) as the final expression unit.\nAssembly: Hg38\nSupplementary files format and content: H5ad file of aggregated processed single-nuclei RNA sequencing data from all 45 human specimens; found in totaldata-final-toshare.h5ad\nSupplementary files format and content: H5ad file of processed single-nuclei RNA sequencing data from the patient-derived organoid (untreated); found in adata_010nuc_10x.h5ad\nSupplementary files format and content: H5ad file of processed single-nuclei RNA sequencing data from the patient-derived organoid (treated with 5-FU, SM38, and oxaliplatin); found in adata_010orgCRT_10x.h5ad",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

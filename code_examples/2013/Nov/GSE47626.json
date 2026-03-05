@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Paired end reads from all libraries were mapped to both the human (hg19, GRCh37) and chimpanzee (panTro3, CGSC 2.1.3) genomes using STAR (v2.2.0c).",
-      "tool_name": "STAR",
-      "tool_version": "2.2.0c",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Due to the lack of annotation in the chimpanzee genome, human gene models (RefSeq) were used to quantify gene expression.",
-      "tool_name": "RefSeq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "To avoid bias introduced by genome insertions and deletions, only reads mapping to both the human and chimpanzee genomes uniquely were used from each sample when comparing gene expression values (~4% of reads mapped to only one genome per sample).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "To calculate gene expression, read counts in the exons of RefSeq transcripts where calculated using HOMER",
-      "tool_name": "HOMER",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Paired end reads from all libraries were mapped to both the human (hg19, GRCh37) and chimpanzee (panTro3, CGSC 2.1.3) genomes using STAR (v2.2.0c). Due to the lack of annotation in the chimpanzee genome, human gene models (RefSeq) were used to quantify gene expression. To avoid bias introduced by genome insertions and deletions, only reads mapping to both the human and chimpanzee genomes uniquely were used from each sample when comparing gene expression values (~4% of reads mapped to only one genome per sample).  To calculate gene expression, read counts in the exons of RefSeq transcripts where calculated using HOMER\nGenome_build: GRCh37, panTro3\nGenome_build: Pan_troglodytes-2.1.3\nSupplementary_files_format_and_content: File \"rpkm.txt.gz\" (linked as a supplementary file to the Series record) is a tab-delimited text file with RPKM values from all experiments and gene annotation information for RefSeq protein-coding genes (hg19 assembly)",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Paired end reads from all libraries were mapped to both the human (hg19, GRCh37) and chimpanzee (panTro3, CGSC 2.1.3) genomes using STAR (v2.2.0c).",
+            "tool_name": "STAR",
+            "tool_version": "2.2.0c",
+            "code_example": "# Install STAR (example using conda)\n# conda install -c bioconda star\n\n# --- Reference Genome Preparation (Conceptual) ---\n# For mapping to \"both\" human (hg19) and chimpanzee (panTro3) genomes,\n# a common strategy is to concatenate their FASTA files and build a single STAR index.\n# This allows reads to map to either genome within the same alignment run.\n\n# Placeholder paths for reference genomes and annotations.\n# Replace these with actual paths to your hg19 and panTro3 files.\n# HUMAN_GENOME_FASTA=\"path/to/hg19.fa\"\n# CHIMP_GENOME_FASTA=\"path/to/panTro3.fa\"\n# HUMAN_GTF=\"path/to/hg19.gtf\" # Optional: For splice junction annotation\n# CHIMP_GTF=\"path/to/panTro3.gtf\" # Optional\n\n# Define directory for the combined genome index\n# COMBINED_GENOME_DIR=\"combined_hg19_panTro3_index\"\n# mkdir -p \"${COMBINED_GENOME_DIR}\"\n\n# Concatenate FASTA files to create a combined reference\n# cat \"${HUMAN_GENOME_FASTA}\" \"${CHIMP_GENOME_FASTA}\" > \"${COMBINED_GENOME_DIR}/combined_genome.fa\"\n\n# Concatenate GTF files (if available and desired for splice-aware alignment)\n# If using GTF, ensure chromosome names in GTF match those in FASTA.\n# If GTF is not used, remove the --sjdbGTFfile parameter from genomeGenerate.\n# cat \"${HUMAN_GTF}\" \"${CHIMP_GTF}\" > \"${COMBINED_GENOME_DIR}/combined_annotations.gtf\"\n# GENOME_ANNOTATION_PARAM=\"--sjdbGTFfile ${COMBINED_GENOME_DIR}/combined_annotations.gtf\"\n\n# Build STAR index for the combined genome (example command)\n# This step needs to be run once before alignment.\n# STAR --runMode genomeGenerate \\\n#      --genomeDir \"${COMBINED_GENOME_DIR}\" \\\n#      --genomeFastaFiles \"${COMBINED_GENOME_DIR}/combined_genome.fa\" \\\n#      --runThreadN 8 \\\n#      ${GENOME_ANNOTATION_PARAM} # Uncomment if using GTF\n\n# --- STAR Alignment (v2.2.0c) ---\n# Assuming the combined genome index has been pre-built at 'combined_hg19_panTro3_index'.\n\n# Define input files and output directory.\n# Replace with your actual paired-end FASTQ.gz files.\nINPUT_READ1=\"sample_R1.fastq.gz\"\nINPUT_READ2=\"sample_R2.fastq.gz\"\nGENOME_INDEX_DIR=\"combined_hg19_panTro3_index\" # Path to the pre-built combined genome index\nOUTPUT_DIR=\"star_output\"\nOUTPUT_PREFIX=\"sample_aligned\" # Prefix for output files\n\nmkdir -p \"${OUTPUT_DIR}\"\n\nSTAR --genomeDir \"${GENOME_INDEX_DIR}\" \\\n     --readFilesIn \"${INPUT_READ1}\" \"${INPUT_READ2}\" \\\n     --readFilesCommand zcat \\\n     --runThreadN 8 \\\n     --outFileNamePrefix \"${OUTPUT_DIR}/${OUTPUT_PREFIX}_\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes All \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterType BySJout \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.1 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "Due to the lack of annotation in the chimpanzee genome, human gene models (RefSeq) were used to quantify gene expression.",
+            "tool_name": "RefSeq",
+            "tool_version": "2.0.6",
+            "code_example": "# Install featureCounts (part of Subread package)\n# conda install -c bioconda subread\n\n# Define reference human RefSeq gene models (e.g., for hg38)\n# This GTF file contains gene annotations derived from RefSeq for the human genome.\n# Source: UCSC Genome Browser, refGene track for hg38\nREFSEQ_GTF=\"https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/refGene.gtf.gz\"\n\n# Placeholder for input BAM file containing chimpanzee reads aligned to the human genome.\n# The description implies chimpanzee reads are quantified against human gene models.\nINPUT_BAM=\"chimpanzee_sample_aligned_to_human_genome.bam\"\n\n# Output file for gene expression counts\nOUTPUT_COUNTS=\"gene_expression_counts.txt\"\n\n# Quantify gene expression using featureCounts\n# -a: Annotation file (GTF/GFF)\n# -F GTF: Specify annotation file format as GTF\n# -t exon: Count reads mapping to 'exon' features\n# -g gene_id: Aggregate counts by 'gene_id' attribute in the GTF\n# -o: Output file for counts\n# Assuming single-end reads for this example; add -p for paired-end reads if applicable.\nfeatureCounts -a \"${REFSEQ_GTF}\" \\\n              -F GTF \\\n              -t exon \\\n              -g gene_id \\\n              -o \"${OUTPUT_COUNTS}\" \\\n              \"${INPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "To avoid bias introduced by genome insertions and deletions, only reads mapping to both the human and chimpanzee genomes uniquely were used from each sample when comparing gene expression values (~4% of reads mapped to only one genome per sample).",
+            "tool_name": "samtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.19",
+            "code_example": "# This pipeline assumes that raw reads have already been aligned to both the human (e.g., hg38) and chimpanzee (e.g., panTro6) genomes using a suitable aligner like STAR, and the resulting BAM files are sorted and indexed.\n# The goal is to identify reads that map uniquely to *both* genomes and then filter one of the alignments (e.g., human) to retain only these common uniquely mapped reads for downstream gene expression analysis.\n\n# Assume the following input files exist from prior alignment steps:\n# human_alignment/Aligned.sortedByCoordinate.out.bam (full alignment to human genome)\n# chimp_alignment/Aligned.sortedByCoordinate.out.bam (full alignment to chimpanzee genome)\n\n# --- Installation (commented out) ---\n# # conda install -c bioconda samtools\n\n# --- Step 1: Extract read IDs that map uniquely to the human genome ---\n# A read is considered uniquely mapped if it has a high mapping quality (implicitly handled by STAR's NH:i:1 tag)\n# and is not a secondary (0x100) or unmapped (0x4) alignment. For STAR, NH:i:1 indicates a unique alignment.\n# We extract the query name (read ID) for these reads.\nsamtools view -F 0x4 -F 0x100 human_alignment/Aligned.sortedByCoordinate.out.bam | \\\n    awk '($0 ~ /NH:i:1/) {print $1}' | sort | uniq > human_unique_read_ids.txt\n\n# --- Step 2: Extract read IDs that map uniquely to the chimpanzee genome ---\nsamtools view -F 0x4 -F 0x100 chimp_alignment/Aligned.sortedByCoordinate.out.bam | \\\n    awk '($0 ~ /NH:i:1/) {print $1}' | sort | uniq > chimp_unique_read_ids.txt\n\n# --- Step 3: Find common read IDs that are present in both unique lists ---\n# These are the reads that mapped uniquely to *both* the human and chimpanzee genomes.\ncomm -12 human_unique_read_ids.txt chimp_unique_read_ids.txt > common_unique_read_ids.txt\n\n# --- Step 4: Filter the human alignment BAM to keep only the common uniquely mapped reads ---\n# This creates the final BAM file containing only the reads that satisfy the criteria,\n# aligned to the human genome, ready for gene expression quantification.\nsamtools view -N common_unique_read_ids.txt -b human_alignment/Aligned.sortedByCoordinate.out.bam > final_filtered_reads_human_alignment.bam\n\n# --- Step 5: Index the final filtered BAM file ---\nsamtools index final_filtered_reads_human_alignment.bam\n\n# --- Step 6: Clean up intermediate files ---\nrm human_unique_read_ids.txt chimp_unique_read_ids.txt common_unique_read_ids.txt\n\n# Reference genomes used for initial alignment (not directly in this script, but implied):\n# Human: GRCh38 (hg38) - Source: UCSC Genome Browser, NCBI\n# Chimpanzee: panTro6 - Source: UCSC Genome Browser, NCBI",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 4,
+            "description": "To calculate gene expression, read counts in the exons of RefSeq transcripts where calculated using HOMER",
+            "tool_name": "HOMER",
+            "tool_version": "Inferred with models/gemini-2.5-flash",
+            "code_example": "# Install HOMER (if not already installed)\n# conda install -c bioconda homer\n\n# Define variables\nINPUT_BAM=\"input.bam\" # Replace with your input BAM file (e.g., alignment file)\nGENOME_ASSEMBLY=\"hg38\" # Replace with your genome assembly (e.g., hg19, mm10, hg38)\nOUTPUT_TAG_DIRECTORY=\"homer_tags_for_expression\"\nOUTPUT_FILE=\"gene_expression_counts.txt\"\nNUM_CPUS=8 # Adjust the number of CPUs as needed for parallel processing\n\n# 1. Create a HOMER Tag Directory from the BAM file\n# This step processes the BAM file into a HOMER-specific format for efficient downstream analysis.\n# It's crucial for HOMER's quantification functions.\nmakeTagDirectory \"${OUTPUT_TAG_DIRECTORY}\" \"${INPUT_BAM}\" -cpu \"${NUM_CPUS}\"\n\n# 2. Calculate gene expression (read counts in RefSeq transcripts/genes) using annotatePeaks.pl\n# The -gene option quantifies reads over gene bodies (transcription start site to transcription end site).\n# The -refseq option instructs HOMER to use its built-in RefSeq annotations for the specified genome.\n# The output will be a tab-separated file containing gene-level read counts and other annotations.\nannotatePeaks.pl \"${OUTPUT_TAG_DIRECTORY}\" \"${GENOME_ASSEMBLY}\" -gene -refseq -cpu \"${NUM_CPUS}\" > \"${OUTPUT_FILE}\"\n",
+            "code_language": "bash",
+            "github_url": "http://homer.ucsd.edu/homer/"
+        }
+    ],
+    "raw_text": "Paired end reads from all libraries were mapped to both the human (hg19, GRCh37) and chimpanzee (panTro3, CGSC 2.1.3) genomes using STAR (v2.2.0c). Due to the lack of annotation in the chimpanzee genome, human gene models (RefSeq) were used to quantify gene expression. To avoid bias introduced by genome insertions and deletions, only reads mapping to both the human and chimpanzee genomes uniquely were used from each sample when comparing gene expression values (~4% of reads mapped to only one genome per sample).  To calculate gene expression, read counts in the exons of RefSeq transcripts where calculated using HOMER\nGenome_build: GRCh37, panTro3\nGenome_build: Pan_troglodytes-2.1.3\nSupplementary_files_format_and_content: File \"rpkm.txt.gz\" (linked as a supplementary file to the Series record) is a tab-delimited text file with RPKM values from all experiments and gene annotation information for RefSeq protein-coding genes (hg19 assembly)",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

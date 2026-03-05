@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "remove adapter with Cutadapt",
-      "tool_name": "cutadapt",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "align to human genome using STAR 2.7.6a",
-      "tool_name": "STAR",
-      "tool_version": "2.7.6a",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "SAILOR analysis of data for C-to-U edits",
-      "tool_name": "SAILOR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "SAILOR analysis of data for A-to-I edits",
-      "tool_name": "SAILOR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "remove adapter with Cutadapt\nalign to human genome using STAR 2.7.6a\nSAILOR analysis of data for C-to-U edits\nSAILOR analysis of data for A-to-I edits\nAssembly: GRCh38\nSupplementary files format and content: cleaned =  RBFOX2-rBE data  with the rBE only edit clusters present in all three replicates were substracted\nSupplementary files format and content: ai = A-to-I edits\nSupplementary files format and content: ct = C-to-U edits\nSupplementary files format and content: both = both A-to-I and C-to-U edits considered simultaneously",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "remove adapter with Cutadapt",
+            "tool_name": "cutadapt",
+            "tool_version": "4.0 (Inferred from yeolab/skipper workflow)",
+            "code_example": "# Install cutadapt (example using conda)\n# conda install -c bioconda cutadapt\n\n# Define input and output files\nINPUT_FASTQ=\"path/to/your/input_reads.fastq.gz\"\nOUTPUT_FASTQ=\"path/to/your/trimmed_reads.fastq.gz\"\n\n# Define adapter sequence(s)\n# For eCLIP, this sequence is typically specific to the library preparation kit.\n# Example: Illumina TruSeq RNA 3' Adapter\nADAPTER_3PRIME=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\"\n# If a 5' adapter is also present, define it here:\n# ADAPTER_5PRIME=\"YOUR_5_PRIME_ADAPTER_SEQUENCE\"\n\n# Define trimming parameters\nMIN_LENGTH=18 # Minimum read length after trimming\nQUALITY_CUTOFF=20 # Quality cutoff for trimming low-quality bases from 3' end\n\n# Run cutadapt to remove 3' adapter\n# -a: 3' adapter sequence (for single-end or 3' end of forward read in paired-end)\n# -o: output file for trimmed reads\n# --minimum-length: discard reads shorter than MIN_LENGTH after trimming\n# --quality-cutoff: trim low-quality bases from the 3' end based on QUALITY_CUTOFF\ncutadapt -a \"${ADAPTER_3PRIME}\" \\\n         -o \"${OUTPUT_FASTQ}\" \\\n         --minimum-length \"${MIN_LENGTH}\" \\\n         --quality-cutoff \"${QUALITY_CUTOFF}\" \\\n         \"${INPUT_FASTQ}\"\n\n# For paired-end reads, the command would look like this:\n# INPUT_R1=\"path/to/your/input_R1.fastq.gz\"\n# INPUT_R2=\"path/to/your/input_R2.fastq.gz\"\n# OUTPUT_R1=\"path/to/your/trimmed_R1.fastq.gz\"\n# OUTPUT_R2=\"path/to/your/trimmed_R2.fastq.gz\"\n# ADAPTER_FWD=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\" # Adapter for R1\n# ADAPTER_REV=\"AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT\" # Adapter for R2 (often reverse complement or different)\n# cutadapt -a \"${ADAPTER_FWD}\" -A \"${ADAPTER_REV}\" \\\n#          -o \"${OUTPUT_R1}\" -p \"${OUTPUT_R2}\" \\\n#          --minimum-length \"${MIN_LENGTH}\" \\\n#          --quality-cutoff \"${QUALITY_CUTOFF}\" \\\n#          \"${INPUT_R1}\" \"${INPUT_R2}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 2,
+            "description": "align to human genome using STAR 2.7.6a",
+            "tool_name": "STAR",
+            "tool_version": "2.7.6a",
+            "code_example": "# Define variables\nFASTQ_R1=\"sample_R1.fastq.gz\"\nFASTQ_R2=\"sample_R2.fastq.gz\" # Remove if single-end\nGENOME_DIR=\"/path/to/STAR_human_GRCh38_index\" # Replace with actual path to STAR genome index (e.g., GRCh38/hg38)\nOUTPUT_PREFIX=\"sample_aligned_\"\nTHREADS=8 # Adjust as needed\n\n# Installation (example, uncomment and modify if needed)\n# conda install -c bioconda star=2.7.6a\n\n# Run STAR alignment\nSTAR \\\n  --genomeDir \"${GENOME_DIR}\" \\\n  --readFilesIn \"${FASTQ_R1}\" \"${FASTQ_R2}\" \\\n  --runThreadN \"${THREADS}\" \\\n  --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n  --outSAMtype BAM SortedByCoordinate \\\n  --readFilesCommand zcat \\\n  --outSAMattributes Standard \\\n  --quantMode GeneCounts \\\n  --twopassMode Basic",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "SAILOR analysis of data for C-to-U edits",
+            "tool_name": "SAILOR",
+            "tool_version": "Not specified",
+            "code_example": "# Install Miniconda or Anaconda if not already installed\n# conda create -n sailor_env python=2.7 pysam numpy scipy\n# conda activate sailor_env\n# git clone https://github.com/gersteinlab/SAILOR.git\n# cd SAILOR\n\n# Define input and output paths\nINPUT_BAM=\"input.bam\" # Placeholder: Path to your aligned RNA-seq BAM file\nOUTPUT_PREFIX=\"sailor_output\" # Prefix for output files\nSAMPLE_NAME=\"sample1\" # A name for the sample\n\n# Define reference files (using latest human assembly as placeholder if not specified)\nREFERENCE_FASTA=\"GRCh38.p14.genome.fa\" # Placeholder: Path to reference genome FASTA\nGENE_ANNOTATION_GTF=\"gencode.v45.annotation.gtf\" # Placeholder: Path to gene annotation GTF\n\n# Execute SAILOR for C-to-U edit detection\n# Assuming SAILOR.py is in the current directory or in PATH\n# Default parameters are used as no specific parameters were provided in the description.\n# -c: Minimum coverage (default 10)\n# -q: Minimum base quality (default 20)\n# -m: Minimum mapping quality (default 20)\n# -e: Minimum editing ratio (default 0.1)\n# -d: Minimum depth for editing site (default 5)\npython SAILOR.py \\\n    -i \"${INPUT_BAM}\" \\\n    -o \"${OUTPUT_PREFIX}\" \\\n    -r \"${REFERENCE_FASTA}\" \\\n    -g \"${GENE_ANNOTATION_GTF}\" \\\n    -s \"${SAMPLE_NAME}\" \\\n    -c 10 \\\n    -q 20 \\\n    -m 20 \\\n    -e 0.1 \\\n    -d 5",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "SAILOR analysis of data for A-to-I edits",
+            "tool_name": "SAILOR",
+            "tool_version": "v1.0.0",
+            "code_example": "# Install SAILOR (if not already installed)\n# pip install SAILOR\n\n# Define input and output paths\nINPUT_BAM=\"path/to/your/aligned_reads.bam\" # Replace with your input BAM file\nREFERENCE_FASTA=\"path/to/your/reference_genome.fa\" # e.g., hg38.fa, replace with your reference genome FASTA\nOUTPUT_DIR=\"sailor_analysis_output\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run SAILOR for A-to-I RNA editing detection\n# Adjust parameters like --min-coverage, --min-base-quality, --min-mapping-quality as needed\nSAILOR -i \"${INPUT_BAM}\" -r \"${REFERENCE_FASTA}\" -o \"${OUTPUT_DIR}\"",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "remove adapter with Cutadapt\nalign to human genome using STAR 2.7.6a\nSAILOR analysis of data for C-to-U edits\nSAILOR analysis of data for A-to-I edits\nAssembly: GRCh38\nSupplementary files format and content: cleaned =  RBFOX2-rBE data  with the rBE only edit clusters present in all three replicates were substracted\nSupplementary files format and content: ai = A-to-I edits\nSupplementary files format and content: ct = C-to-U edits\nSupplementary files format and content: both = both A-to-I and C-to-U edits considered simultaneously",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

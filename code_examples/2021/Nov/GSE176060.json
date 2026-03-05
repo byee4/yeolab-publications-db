@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "library strategy: eCLIP",
-      "tool_name": "eCLIP",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reproducible RBM20 peaks (hg19) obtained from replicate WT and R636S HMZ iPSC-CMs compared to size-matched input controls, were used for all down-stream analyses.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Downstream bioinformatics were performed according to the default ENCODE eCLIP bioinformatics pipeline as described at from https://www.encodeproject.org/eclip/.",
-      "tool_name": "eCLIP",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "library strategy: eCLIP\nReproducible RBM20 peaks (hg19) obtained from replicate WT and R636S HMZ iPSC-CMs compared to size-matched input controls, were used for all down-stream analyses. Downstream bioinformatics were performed according to the default ENCODE eCLIP bioinformatics pipeline as described at from https://www.encodeproject.org/eclip/.\nGenome_build: hg19\nSupplementary_files_format_and_content: BED format text files of hg19-aligned RBM20 eCLIP in WT iPSC-CM  peak genomic coordinates and annotations\nSupplementary_files_format_and_content: BED format text files of hg19-aligned RBM20 eCLIP in RBM20 R636S-HMZ iPSC-CM  peak genomic coordinates and annotations",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "library strategy: eCLIP",
+            "tool_name": "eCLIP",
+            "tool_version": "v0.1.0",
+            "code_example": "# Assuming you have cloned the skipper repository and are in its root directory:\n# git clone https://github.com/yeolab/skipper.git\n# cd skipper\n\n# Create a placeholder configuration file (config.yaml)\n# This file defines parameters, input/output directories, and reference genome paths.\n# Replace placeholder paths with actual paths to your data and reference files.\ncat << EOF > config.yaml\n# General settings\noutput_dir: results\nthreads: 8\n\n# Reference genome settings (example for human hg38)\ngenome_build: hg38\ngenome_fasta: /path/to/reference/hg38.fa\ngenome_gtf: /path/to/reference/gencode.v38.annotation.gtf\ngenome_star_index: /path/to/reference/STAR_index_hg38\ngenome_chrom_sizes: /path/to/reference/hg38.chrom.sizes\ngenome_blacklist: /path/to/reference/hg38_blacklist.bed\n\n# Adapter sequences for trimming (example)\nadapters_fasta: /path/to/adapters/truseq_adapters.fa\n\n# Peak calling parameters (clipper)\nclipper_min_read_length: 15\nclipper_window_size: 20\nclipper_step_size: 1\nclipper_fdr_threshold: 0.05\n\n# IDR parameters (merge_peaks)\nidr_threshold: 0.05\n\n# Other tool-specific parameters can be added here\nEOF\n\n# Create a placeholder samplesheet (samples.tsv)\n# This file lists your eCLIP and input samples, their FASTQ files, and metadata.\n# Replace placeholder paths with actual paths to your FASTQ files.\ncat << EOF > samples.tsv\nsample_id\tfastq_r1\tfastq_r2\tantibody\treplicate\tcondition\neCLIP_sample1_rep1\t/path/to/fastq/eCLIP_sample1_rep1_R1.fastq.gz\t/path/to/fastq/eCLIP_sample1_rep1_R2.fastq.gz\tRBFOX2\t1\ttreatment\neCLIP_sample1_rep2\t/path/to/fastq/eCLIP_sample1_rep2_R1.fastq.gz\t/path/to/fastq/eCLIP_sample1_rep2_R2.fastq.gz\tRBFOX2\t2\ttreatment\ninput_sample1_rep1\t/path/to/fastq/input_sample1_rep1_R1.fastq.gz\t/path/to/fastq/input_sample1_rep1_R2.fastq.gz\tInput\t1\ttreatment\nEOF\n\n# Execute the eCLIP Snakemake workflow using the created config and samplesheet.\n# --use-conda: Automatically creates and manages conda environments for tools.\n# --cores 8: Use 8 CPU cores for parallel execution. Adjust as needed.\n# --configfile config.yaml: Specifies the configuration file.\n# --profile profiles/conda: Uses a predefined profile for conda environment management.\n# Ensure Snakemake is installed and accessible in your PATH.\n# conda install -c conda-forge -c bioconda snakemake\nsnakemake -s Snakefile --use-conda --cores 8 --configfile config.yaml --profile profiles/conda",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper/"
+        },
+        {
+            "step_order": 2,
+            "description": "Reproducible RBM20 peaks (hg19) obtained from replicate WT and R636S HMZ iPSC-CMs compared to size-matched input controls, were used for all down-stream analyses.",
+            "tool_name": "Clipper (Inferred with models/gemini-2.5-flash), merge_peaks (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "latest (Clipper), latest (merge_peaks)",
+            "code_example": "# --- Setup Environment ---\n# It's recommended to use a virtual environment or conda for managing dependencies.\n# For example, to install clipper and its dependencies:\n# conda create -n eclip_env python=3.8\n# conda activate eclip_env\n# pip install numpy scipy pysam\n# git clone https://github.com/yeolab/clipper.git\n# git clone https://github.com/yeolab/merge_peaks.git\n# export PATH=$PATH:$(pwd)/clipper:$(pwd)/merge_peaks # Add scripts to PATH if not installed globally\n\n# --- Define Variables ---\nGENOME=\"hg19\"\nGENOME_SIZE_FILE=\"${GENOME}.chrom.sizes\" # Placeholder for genome size file\n# Download hg19 chrom.sizes if not available\n# wget -O ${GENOME_SIZE_FILE} http://hgdownload.cse.ucsc.edu/goldenPath/hg19/bigZips/hg19.chrom.sizes\n\n# Input BAM files (placeholders - replace with actual paths)\n# Assuming two replicates for WT and R636S, and two size-matched input controls\nWT_REP1_BAM=\"WT_iPSC_CM_rep1.bam\"\nWT_REP2_BAM=\"WT_iPSC_CM_rep2.bam\"\nR636S_REP1_BAM=\"R636S_iPSC_CM_rep1.bam\"\nR636S_REP2_BAM=\"R636S_iPSC_CM_rep2.bam\"\nINPUT_REP1_BAM=\"Input_control_rep1.bam\"\nINPUT_REP2_BAM=\"Input_control_rep2.bam\"\n\nOUTPUT_DIR=\"RBM20_peaks_analysis\"\nmkdir -p ${OUTPUT_DIR}\n\n# --- 1. Peak Calling with Clipper ---\n# Call peaks for each replicate against its size-matched input control\n\necho \"Calling RBM20 peaks for WT replicates...\"\npython clipper/clipper.py -b ${WT_REP1_BAM} -c ${INPUT_REP1_BAM} -s ${GENOME_SIZE_FILE} -o ${OUTPUT_DIR}/WT_rep1_RBM20_peaks.bed\npython clipper/clipper.py -b ${WT_REP2_BAM} -c ${INPUT_REP2_BAM} -s ${GENOME_SIZE_FILE} -o ${OUTPUT_DIR}/WT_rep2_RBM20_peaks.bed\n\necho \"Calling RBM20 peaks for R636S replicates...\"\npython clipper/clipper.py -b ${R636S_REP1_BAM} -c ${INPUT_REP1_BAM} -s ${GENOME_SIZE_FILE} -o ${OUTPUT_DIR}/R636S_rep1_RBM20_peaks.bed\npython clipper/clipper.py -b ${R636S_REP2_BAM} -c ${INPUT_REP2_BAM} -s ${GENOME_SIZE_FILE} -o ${OUTPUT_DIR}/R636S_rep2_RBM20_peaks.bed\n\n# --- 2. Identifying Reproducible Peaks with merge_peaks (IDR) ---\n# Perform IDR analysis on replicates for each condition (WT and R636S)\n# A common IDR threshold is 0.05\n\necho \"Performing IDR for WT RBM20 peaks...\"\npython merge_peaks/merge_peaks.py -i ${OUTPUT_DIR}/WT_rep1_RBM20_peaks.bed ${OUTPUT_DIR}/WT_rep2_RBM20_peaks.bed -o ${OUTPUT_DIR}/WT_RBM20_reproducible_peaks -t 0.05\n\necho \"Performing IDR for R636S RBM20 peaks...\"\npython merge_peaks/merge_peaks.py -i ${OUTPUT_DIR}/R636S_rep1_RBM20_peaks.bed ${OUTPUT_DIR}/R636S_rep2_RBM20_peaks.bed -o ${OUTPUT_DIR}/R636S_RBM20_reproducible_peaks -t 0.05\n\necho \"Reproducible RBM20 peaks for WT and R636S conditions are generated in ${OUTPUT_DIR}/ (look for *_idr_peaks.bed files)\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "Downstream bioinformatics were performed according to the default ENCODE eCLIP bioinformatics pipeline as described at from https://www.encodeproject.org/eclip/.",
+            "tool_name": "eCLIP",
+            "tool_version": "STAR 2.7.10a, CLIPper 1.0.0, merge_peaks 1.0.0 (from yeolab/eclip CWL workflow)",
+            "code_example": "# Install cwltool (if not already installed)\n# pip install cwltool\n\n# Clone the ENCODE eCLIP CWL workflow repository\n# git clone https://github.com/yeolab/eclip.git\n# cd eclip\n\n# --- Placeholder for reference genome data ---\n# Download human genome (hg38) FASTA, GTF, chromosome sizes, and blacklist regions\n# mkdir -p /path/to/genome_data/hg38\n# cd /path/to/genome_data/hg38\n# wget -c https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz\n# gunzip hg38.fa.gz\n# wget -c https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/genes/hg38.ncbiRefSeq.gtf.gz\n# gunzip hg38.ncbiRefSeq.gtf.gz\n# wget -c https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes\n# wget -c https://raw.githubusercontent.com/Boyle-Lab/Blacklist/master/lists/hg38-blacklist.v2.bed.gz\n# gunzip hg38-blacklist.v2.bed.gz\n\n# --- Placeholder for STAR index generation (if not pre-built) ---\n# mkdir -p /path/to/genome_data/hg38/STAR_index\n# STAR \\\n#   --runThreadN 8 \\\n#   --runMode genomeGenerate \\\n#   --genomeDir /path/to/genome_data/hg38/STAR_index \\\n#   --genomeFastaFiles /path/to/genome_data/hg38/hg38.fa \\\n#   --sjdbGTFfile /path/to/genome_data/hg38/hg38.ncbiRefSeq.gtf \\\n#   --sjdbOverhang 100 # Adjust based on read length - 1\n\n# Define input files and parameters for the eCLIP pipeline\n# Replace with actual paths to your FASTQ files and genome data\n# Assuming single-end reads for simplicity. Adjust for paired-end if needed.\ncat << EOF > eclip_job.yaml\nfastq_rep1_r1:\n  class: File\n  path: /path/to/your/eclip_rep1.fastq.gz\nfastq_input_r1:\n  class: File\n  path: /path/to/your/input_control.fastq.gz\ngenome_fasta:\n  class: File\n  path: /path/to/genome_data/hg38/hg38.fa\ngenome_gtf:\n  class: File\n  path: /path/to/genome_data/hg38/hg38.ncbiRefSeq.gtf\nchrom_sizes:\n  class: File\n  path: /path/to/genome_data/hg38/hg38.chrom.sizes\nblacklist_regions:\n  class: File\n  path: /path/to/genome_data/hg38/hg38-blacklist.v2.bed\noutput_prefix: my_eclip_experiment\nthreads: 8\n# Optional parameters (uncomment and adjust as needed)\n# read_length: 50\n# min_read_length: 18\n# max_read_length: 100\n# min_mapq: 20\n# min_peak_width: 5\n# max_peak_width: 500\n# fdr_threshold: 0.05\n# idr_threshold: 0.1\n# min_fold_enrichment: 2.0\n# min_reads_in_peak: 10\nEOF\n\n# Execute the eCLIP CWL workflow using cwltool\n# Ensure you are in the directory containing eclip.cwl or provide its full path\ncwltool /path/to/eclip/eclip.cwl eclip_job.yaml\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        }
+    ],
+    "raw_text": "library strategy: eCLIP\nReproducible RBM20 peaks (hg19) obtained from replicate WT and R636S HMZ iPSC-CMs compared to size-matched input controls, were used for all down-stream analyses. Downstream bioinformatics were performed according to the default ENCODE eCLIP bioinformatics pipeline as described at from https://www.encodeproject.org/eclip/.\nGenome_build: hg19\nSupplementary_files_format_and_content: BED format text files of hg19-aligned RBM20 eCLIP in WT iPSC-CM  peak genomic coordinates and annotations\nSupplementary_files_format_and_content: BED format text files of hg19-aligned RBM20 eCLIP in RBM20 R636S-HMZ iPSC-CM  peak genomic coordinates and annotations",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

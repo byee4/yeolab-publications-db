@@ -1,16 +1,16 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "See GSM*_README.txt supplementary file linked below",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "See GSM*_README.txt supplementary file linked below",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "See GSM*_README.txt supplementary file linked below",
+            "tool_name": "eclip CWL workflow (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "unknown",
+            "code_example": "# Installation:\n# Ensure cwltool is installed:\n# conda install -c bioconda cwltool\n# Clone the eCLIP workflow repository:\n# git clone https://github.com/yeolab/eclip.git\n# cd eclip\n\n# The eCLIP CWL workflow (eclip.cwl) requires an input YAML file specifying\n# paths to input FASTQ files (replicates and controls), genome reference files (hg38),\n# and other assay-specific parameters. The description implies the use of the human genome (hg38)\n# and processing of replicates for reproducible peak identification.\n#\n# Example input YAML structure (eclip_inputs.yaml):\n# fastq_files:\n#   - class: File\n#     path: /path/to/replicate1.fastq.gz\n#   - class: File\n#     path: /path/to/replicate2.fastq.gz\n# control_fastq_files:\n#   - class: File\n#     path: /path/to/control1.fastq.gz\n#   - class: File\n#     path: /path/to/control2.fastq.gz\n# genome_fasta:\n#   class: File\n#   path: /path/to/hg38/hg38.fa\n# chrom_sizes:\n#   class: File\n#   path: /path/to/hg38/hg38.chrom.sizes\n# gtf:\n#   class: File\n#   path: /path/to/hg38/hg38.gtf\n# adapter_fasta:\n#   class: File\n#   path: /path/to/adapters.fa\n# output_dir: \"eclip_analysis_results\"\n# num_threads: 16 # Example parameter, adjust as needed\n\n# Execute the eCLIP CWL workflow\n# Replace 'eclip_inputs.yaml' with the actual path to your input parameter file.\ncwltool --beta-dependency-resolvers-configuration eclip.cwl eclip_inputs.yaml",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip"
+        }
+    ],
+    "raw_text": "See GSM*_README.txt supplementary file linked below",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

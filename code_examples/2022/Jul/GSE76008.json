@@ -1,16 +1,16 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "The data were normalized with variance stabilization and quantile normalization using the lumi (v2.16.0) package in R (v3.1.0).",
-      "tool_name": "R",
-      "tool_version": "3.1.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "The data were normalized with variance stabilization and quantile normalization using the lumi (v2.16.0) package in R (v3.1.0).",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "The data were normalized with variance stabilization and quantile normalization using the lumi (v2.16.0) package in R (v3.1.0).",
+            "tool_name": "R",
+            "tool_version": "3.1.0",
+            "code_example": "# Install R (v3.1.0) if not already installed. Specific old versions of R might require manual installation or using tools like `r-env` or `conda`.\n# For example, using conda:\n# conda create -n r3.1 r-base=3.1.0 -y\n# conda activate r3.1\n\n# Install BiocManager (if not already installed)\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\", repos=\"https://cran.rstudio.com\")'\n\n# Install lumi package (v2.16.0) compatible with R 3.1.0 (Bioconductor 2.14)\n# R -e 'BiocManager::install(\"lumi\", version=\"2.14\", ask=FALSE)'\n\n# Create an R script for normalization\ncat << 'EOF' > normalize_lumi_data.R\n# Load the lumi package\nlibrary(lumi)\n\n# --- Input data loading ---\n# This script assumes you have a LumiBatch object named 'lumi_object'\n# available in your R environment or can load it from a file.\n# Replace 'path/to/your/input_lumi_object.RData' with the actual path\n# to your LumiBatch object saved from a previous step, or\n# load raw data using lumiR() or similar.\n\n# Example: Load a pre-saved LumiBatch object\n# load(\"path/to/your/input_lumi_object.RData\")\n# If starting from raw data, use lumiR:\n# lumi_object <- lumiR(\"path/to/your/raw_data.txt\")\n\n# For demonstration, creating a dummy LumiBatch object if not loaded\nif (!exists(\"lumi_object\")) {\n    message(\"Input 'lumi_object' not found. Creating a dummy object for demonstration.\")\n    # Simulate expression data (e.g., 100 probes, 5 samples)\n    exprs_data <- matrix(rnorm(100 * 5, mean = 1000, sd = 200), nrow = 100, ncol = 5)\n    rownames(exprs_data) <- paste0(\"Probe\", 1:100)\n    colnames(exprs_data) <- paste0(\"Sample\", 1:5)\n    # Simulate pheno data\n    pheno_data <- data.frame(row.names = colnames(exprs_data),\n                             Group = c(\"A\", \"A\", \"B\", \"B\", \"A\"))\n    # Create a LumiBatch object\n    lumi_object <- new(\"LumiBatch\", exprs = exprs_data, phenoData = new(\"AnnotatedDataFrame\", data = pheno_data))\n    message(\"Dummy LumiBatch object created.\")\n}\n\n# Perform variance stabilization transformation (VST)\n# The 'lumiT' function with method=\"vst\" performs variance stabilization.\nmessage(\"Performing variance stabilization transformation...\")\nvst_lumi_object <- lumiT(lumi_object, method = \"vst\")\n\n# Perform quantile normalization\n# The 'lumiN' function with method=\"quantile\" performs quantile normalization.\nmessage(\"Performing quantile normalization...\")\nnormalized_lumi_object <- lumiN(vst_lumi_object, method = \"quantile\")\n\n# --- Output data saving ---\n# Save the normalized expression matrix to a tab-separated file\nwrite.table(exprs(normalized_lumi_object),\n            file = \"normalized_expression_data.txt\",\n            sep = \"\\t\", quote = FALSE, row.names = TRUE, col.names = TRUE)\nmessage(\"Normalized expression data saved to normalized_expression_data.txt\")\n\n# Optionally, save the entire normalized LumiBatch object for further R analysis\nsave(normalized_lumi_object, file = \"normalized_lumi_object.RData\")\nmessage(\"Normalized LumiBatch object saved to normalized_lumi_object.RData\")\nEOF\n\n# Execute the R script using the specified R version\n# Ensure R 3.1.0 is in your PATH or specify its full path if needed.\nRscript normalize_lumi_data.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/lumi.html"
+        }
+    ],
+    "raw_text": "The data were normalized with variance stabilization and quantile normalization using the lumi (v2.16.0) package in R (v3.1.0).",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

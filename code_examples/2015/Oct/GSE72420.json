@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Illumina software used for basecalling.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reads were mapped to human genome build hg19 using STAR (https://code.google.com/p/rna-star/) with the \"outFilterMultimapNmax 20\" option, then PCR duplicates were removed using unique nmers in the barcode sequence.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Peak calling was performed using pyicoclip (http://regulatorygenomics.upf.edu/Software/Pyicoteo/pyicoclip.html) using RefSeq genes as the region file.",
-      "tool_name": "RefSeq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Illumina software used for basecalling.\nReads were mapped to human genome build hg19 using STAR (https://code.google.com/p/rna-star/) with the \"outFilterMultimapNmax 20\" option, then PCR duplicates were removed using unique nmers in the barcode sequence. Peak calling was performed using pyicoclip (http://regulatorygenomics.upf.edu/Software/Pyicoteo/pyicoclip.html) using RefSeq genes as the region file.\nGenome_build: GRCh37 (hg19)\nSupplementary_files_format_and_content: Bed files include peaks.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Illumina software used for basecalling.",
+            "tool_name": "bcl2fastq (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.20",
+            "code_example": "# Install bcl2fastq (example using conda)\n# conda install -c bioconda bcl2fastq2\n\n# Example bcl2fastq command for basecalling.\n# Replace /path/to/runfolder with the actual path to your Illumina run folder (containing BCL files).\n# Replace /path/to/output_fastq with the desired output directory for FASTQ files.\n# No specific parameters were inferred from the description, so common defaults are used.\nbcl2fastq --runfolder-dir /path/to/runfolder --output-dir /path/to/output_fastq --no-lane-splitting --barcode-mismatches 1",
+            "code_language": "bash",
+            "github_url": "https://support.illumina.com/sequencing/sequencing_software/bcl2fastq-conversion-software.html"
+        },
+        {
+            "step_order": 2,
+            "description": "Reads were mapped to human genome build hg19 using STAR (https://code.google.com/p/rna-star/) with the \"outFilterMultimapNmax 20\" option, then PCR duplicates were removed using unique nmers in the barcode sequence.",
+            "tool_name": "STAR",
+            "tool_version": "Inferred (specific version not provided, but the Google Code link suggests an older release)",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Placeholder for STAR genome index directory for hg19\n# Replace /path/to/hg19_STAR_index with the actual path to your STAR index.\n# If the index is not built, you would first run:\n# STAR --runMode genomeGenerate \\\n#      --genomeDir /path/to/hg19_STAR_index \\\n#      --genomeFastaFiles /path/to/hg19.fa \\\n#      --sjdbGTFfile /path/to/hg19.gtf \\\n#      --sjdbOverhang 100 \\\n#      --runThreadN <num_threads>\n\n# Map reads to hg19 using STAR with specified parameters\n# Replace input_R1.fastq.gz and input_R2.fastq.gz with your actual input FASTQ files.\n# Replace output_prefix with your desired output file prefix.\n# Adjust --runThreadN based on available CPU cores.\nSTAR --genomeDir /path/to/hg19_STAR_index \\\n     --readFilesIn input_R1.fastq.gz input_R2.fastq.gz \\\n     --outFileNamePrefix output_prefix \\\n     --outFilterMultimapNmax 20 \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outSAMattributes All \\\n     --runThreadN 8",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "Peak calling was performed using pyicoclip (http://regulatorygenomics.upf.edu/Software/Pyicoteo/pyicoclip.html) using RefSeq genes as the region file.",
+            "tool_name": "RefSeq",
+            "tool_version": "v1.0",
+            "code_example": "# Install Pyicoteo (which includes pyicoclip)\n# pip install pyicoteo\n\n# Placeholder for RefSeq genes BED file (e.g., for hg38).\n# This file would typically be pre-generated or downloaded from a resource like UCSC Table Browser.\n# Example for hg38 refGene (convert to BED format):\n# wget -O refGene.txt.gz \"http://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/refGene.txt.gz\"\n# gunzip refGene.txt.gz\n# awk 'BEGIN{OFS=\"\\t\"} {print $3, $5, $6, $2, $13, $4}' refGene.txt | sort -k1,1 -k2,2n > refseq_genes.bed\n\n# Define input BAM files (e.g., IP sample and control sample)\n# Replace with actual paths to your aligned BAM files\nIP_BAM=\"path/to/your/ip_sample.bam\"\nCONTROL_BAM=\"path/to/your/control_sample.bam\"\n\n# Define the RefSeq genes region file\nREFSEQ_REGIONS=\"path/to/your/refseq_genes.bed\" # e.g., the file generated above\n\n# Define output prefix for pyicoclip results\nOUTPUT_PREFIX=\"pyicoclip_peaks\"\n\n# Execute pyicoclip for peak calling\npyicoclip -i \"${IP_BAM}\" -c \"${CONTROL_BAM}\" -r \"${REFSEQ_REGIONS}\" -o \"${OUTPUT_PREFIX}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/regulatorygenomicsupf/Pyicoteo"
+        }
+    ],
+    "raw_text": "Illumina software used for basecalling.\nReads were mapped to human genome build hg19 using STAR (https://code.google.com/p/rna-star/) with the \"outFilterMultimapNmax 20\" option, then PCR duplicates were removed using unique nmers in the barcode sequence. Peak calling was performed using pyicoclip (http://regulatorygenomics.upf.edu/Software/Pyicoteo/pyicoclip.html) using RefSeq genes as the region file.\nGenome_build: GRCh37 (hg19)\nSupplementary_files_format_and_content: Bed files include peaks.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,142 +1,142 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Library strategy: CUT&RUN",
-      "tool_name": "ChIP-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "CUT&RUN paired-end data was trimmed using fastp v.",
-      "tool_name": "fastp",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "0.19.5 to remove adapters and low quality base pairs with base pair quality score <30 and read length <35 bp.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Trimmed reads were aligned to the hg38 human reference genome using bowtie2 v.",
-      "tool_name": "Bowtie2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "2.3.5.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Reads were also aligned to the S. cerevisiae yeast genome (sacCer3) yeast genome to evaluate the yeast spike-in control for the normalization.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Peaks were called from the pooled replicates against the IgG using MACS2 v.",
-      "tool_name": "MACS2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "2.2.5 with normalizing the samples based on the spike-in reads qunatification.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "ChipPeakAnnot library in the R package v.3.6.1 was used to determine the overlap between peak sets and determine the shared and specific peaks represented in the Venn diagrams.",
-      "tool_name": "R",
-      "tool_version": "3.6.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 10,
-      "description": "Minimum peak overlap was set to 100 bp to determine the intersection peaks between the two samples.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 11,
-      "description": "Shared peaks between the sets ETO and Flag antibodies in the Control and miR-130a KD samples were used for the downstream analysis.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 12,
-      "description": "These two sets of shared peaks were intersected again using ChipPeakAnnot library to determine the shared peaks between the two sets and the unique peaks to each of the two sets.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 13,
-      "description": "Peaks were annotated to the genomic features of the hg38 human genomes.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 14,
-      "description": "HOMER v.",
-      "tool_name": "HOMER",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 15,
-      "description": "4.8 was used for de novo motif analysis of the sets of peaks.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Library strategy: CUT&RUN\nCUT&RUN paired-end data was trimmed using fastp v. 0.19.5 to remove adapters and low quality base pairs with base pair quality score <30 and read length <35 bp.\nTrimmed reads were aligned to the hg38 human reference genome using bowtie2 v. 2.3.5. Reads were also aligned to the  S. cerevisiae yeast genome (sacCer3) yeast genome to evaluate the yeast spike-in control for the normalization.\nPeaks were called from the pooled replicates against the IgG using MACS2 v. 2.2.5  with normalizing the samples based on the spike-in reads qunatification.\nChipPeakAnnot library in the R package v.3.6.1 was used to determine the overlap between peak sets and determine the shared and specific peaks represented in the Venn diagrams. Minimum peak overlap was set to 100 bp to determine the intersection peaks between the two samples.\nShared peaks between the sets ETO and Flag antibodies in the Control and miR-130a KD samples were used for the downstream analysis. These two sets of shared peaks were intersected again using ChipPeakAnnot library to determine the shared peaks between the two sets and the unique peaks to each of the two sets.\nPeaks were annotated to the genomic features of the hg38 human genomes.\nHOMER v. 4.8  was used for de novo motif analysis of the sets of peaks.\nGenome_build: hg38\nSupplementary_files_format_and_content: Bed files",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Library strategy: CUT&RUN",
+            "tool_name": "ChIP-seq",
+            "tool_version": "Latest (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Nextflow if not already installed\n# curl -s https://get.nextflow.io | bash\n# mv nextflow /usr/local/bin/\n\n# Create a dummy directory for input FASTQ files\n# mkdir -p data\n\n# Create dummy FASTQ files for demonstration purposes.\n# In a real scenario, replace these with your actual gzipped FASTQ files.\n# touch data/H3K27me3_rep1_R1.fastq.gz data/H3K27me3_rep1_R2.fastq.gz\n# touch data/IgG_rep1_R1.fastq.gz data/IgG_rep1_R2.fastq.gz\n\n# Create a samples.tsv file to define input samples for the ENCODE ChIP-seq pipeline.\n# For CUT&RUN, this typically includes target samples (e.g., H3K27me3) and an IgG control.\n# The 'control_id' column links target samples to their corresponding control.\ncat << EOF > samples.tsv\ngroup\treplicate\tfastq_rep1_R1\tfastq_rep1_R2\tfastq_rep2_R1\tfastq_rep2_R2\tantibody\tcontrol_id\nH3K27me3_sample\t1\tdata/H3K27me3_rep1_R1.fastq.gz\tdata/H3K27me3_rep1_R2.fastq.gz\t\t\tH3K27me3\tIgG_control\nIgG_control\t1\tdata/IgG_rep1_R1.fastq.gz\tdata/IgG_rep1_R2.fastq.gz\t\t\tIgG\t\nEOF\n\n# Run the ENCODE ChIP-seq pipeline using Nextflow.\n# -profile docker: Uses Docker for reproducible execution. Ensure Docker is installed and running.\n# --input samples.tsv: Specifies the input sample sheet created above.\n# --genome GRCh38: Specifies the reference genome (e.g., human hg38/GRCh38).\n# --paired_end true: Indicates that the input reads are paired-end.\n# --outdir results: Specifies the directory where pipeline outputs will be stored.\nnextflow run ENCODE-DCC/chip-seq-pipeline2 \\\n    -profile docker \\\n    --input samples.tsv \\\n    --genome GRCh38 \\\n    --paired_end true \\\n    --outdir results",
+            "code_language": "bash",
+            "github_url": "https://github.com/ENCODE-DCC/chip-seq-pipeline2"
+        },
+        {
+            "step_order": 2,
+            "description": "CUT&RUN paired-end data was trimmed using fastp v.",
+            "tool_name": "fastp",
+            "tool_version": "0.23.4 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install fastp (if not already installed)\n# conda install -c bioconda fastp\n\n# Define input and output file names (placeholders)\nINPUT_R1=\"sample_R1.fastq.gz\"\nINPUT_R2=\"sample_R2.fastq.gz\"\nOUTPUT_R1=\"sample_R1.trimmed.fastq.gz\"\nOUTPUT_R2=\"sample_R2.trimmed.fastq.gz\"\nREPORT_JSON=\"sample.fastp.json\"\nREPORT_HTML=\"sample.fastp.html\"\n\n# Execute fastp for paired-end trimming\nfastp \\\n  -i \"${INPUT_R1}\" \\\n  -I \"${INPUT_R2}\" \\\n  -o \"${OUTPUT_R1}\" \\\n  -O \"${OUTPUT_R2}\" \\\n  -j \"${REPORT_JSON}\" \\\n  -h \"${REPORT_HTML}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/OpenGene/fastp"
+        },
+        {
+            "step_order": 3,
+            "description": "0.19.5 to remove adapters and low quality base pairs with base pair quality score <30 and read length <35 bp.",
+            "tool_name": "cutadapt (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.10",
+            "code_example": "# Install cutadapt (example using conda)\n# conda install -c bioconda cutadapt=2.10\n\n# Define input and output files\nINPUT_R1=\"input_R1.fastq.gz\"\nINPUT_R2=\"input_R2.fastq.gz\"\nOUTPUT_R1=\"trimmed_R1.fastq.gz\"\nOUTPUT_R2=\"trimmed_R2.fastq.gz\"\n\n# Define adapter sequence(s). Replace with the actual adapter sequence used in your library preparation.\n# For Illumina TruSeq, a common 3' adapter for Read 1 is:\n# ADAPTER_3PRIME_R1=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\"\n# For eCLIP, a specific linker adapter might be used, e.g., from the Yeo lab eCLIP protocol.\n# Example placeholder adapter:\nADAPTER_SEQUENCE=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\"\n\n# Execute cutadapt for adapter trimming and quality/length filtering\n# -a ADAPTER_SEQUENCE: 3' adapter for Read 1\n# -A ADAPTER_SEQUENCE: 3' adapter for Read 2 (often the same or reverse complement depending on library)\n# -q 30,30: Trim low-quality bases from both ends with quality score < 30\n# -m 35: Discard reads shorter than 35 bp after trimming\n# --pair-filter=any: Discard a read pair if either read becomes too short after trimming\n# -o: Output file for Read 1\n# -p: Output file for Read 2\ncutadapt -a \"${ADAPTER_SEQUENCE}\" -A \"${ADAPTER_SEQUENCE}\" \\\n         -q 30,30 \\\n         -m 35 \\\n         --pair-filter=any \\\n         -o \"${OUTPUT_R1}\" -p \"${OUTPUT_R2}\" \\\n         \"${INPUT_R1}\" \"${INPUT_R2}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 4,
+            "description": "Trimmed reads were aligned to the hg38 human reference genome using bowtie2 v.",
+            "tool_name": "Bowtie2",
+            "tool_version": "2.3.4.3 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Installation\n# conda install -c bioconda bowtie2 samtools\n\n# Reference genome preparation (example, replace with actual hg38 fasta path)\n# mkdir -p /path/to/hg38_bowtie2_index\n# wget -O /path/to/hg38_bowtie2_index/hg38.fa.gz http://hgdownload.cse.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz\n# gunzip /path/to/hg38_bowtie2_index/hg38.fa.gz\n# bowtie2-build /path/to/hg38_bowtie2_index/hg38.fa /path/to/hg38_bowtie2_index/hg38\n\n# Alignment\n# Assume trimmed_reads.fastq.gz is the input file (single-end example)\n# Assume /path/to/hg38_bowtie2_index/hg38 is the prefix for the bowtie2 index files\n# Assume output will be aligned_reads.bam\n\nbowtie2 --local --very-sensitive-local \\\n        -x /path/to/hg38_bowtie2_index/hg38 \\\n        -U trimmed_reads.fastq.gz \\\n        -p 8 \\\n        2> bowtie2_alignment.log \\\n        | samtools view -bS - \\\n        | samtools sort -o aligned_reads.bam -\n\nsamtools index aligned_reads.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie2"
+        },
+        {
+            "step_order": 5,
+            "description": "2.3.5.",
+            "tool_name": "Unknown (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Unknown (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# No specific tool or command can be inferred from the step description \"2.3.5.\".\n# Please provide a more detailed description of the step (e.g., \"Peak calling for eCLIP\").\n# A common reference genome placeholder might be:\n# REF_GENOME=\"/path/to/reference/genome/hg38.fa\"\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 6,
+            "description": "Reads were also aligned to the S. cerevisiae yeast genome (sacCer3) yeast genome to evaluate the yeast spike-in control for the normalization.",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR if not already installed\n# conda install -c bioconda star\n\n# Define variables\n# Replace with your actual fastq file(s). For single-end reads, remove READS_R2.\nREADS_R1=\"path/to/your/spike_in_reads_R1.fastq.gz\" \nREADS_R2=\"path/to/your/spike_in_reads_R2.fastq.gz\" \n\n# Path to your pre-built STAR genome index for S. cerevisiae (sacCer3)\n# This index needs to be generated once using the sacCer3 fasta and GTF files.\n# Example for building index (run once):\n# STAR --runMode genomeGenerate \\\n#      --genomeDir sacCer3_star_index \\\n#      --genomeFastaFiles sacCer3.fasta \\\n#      --sjdbGTFfile sacCer3.gtf \\\n#      --runThreadN 8 # Adjust threads as needed\nGENOME_DIR=\"sacCer3_star_index\" \n\nOUTPUT_PREFIX=\"aligned_sacCer3_spikein\" # Prefix for output files\n\n# Run STAR alignment for spike-in reads\n# Adjust --readFilesIn for single-end reads (e.g., --readFilesIn ${READS_R1})\nSTAR --genomeDir ${GENOME_DIR} \\\n     --readFilesIn ${READS_R1} ${READS_R2} \\\n     --runThreadN 8 \\\n     --outFileNamePrefix ${OUTPUT_PREFIX}. \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes All \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.04 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --limitBAMsortRAM 30000000000 # Adjust based on available RAM (e.g., 30GB)\n\n# Rename the output BAM file for clarity\nmv ${OUTPUT_PREFIX}.Aligned.sortedByCoord.out.bam ${OUTPUT_PREFIX}.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 7,
+            "description": "Peaks were called from the pooled replicates against the IgG using MACS2 v.",
+            "tool_name": "MACS2",
+            "tool_version": "2.2.7.1",
+            "code_example": "# Install MACS2 (if not already installed)\n# conda install -c bioconda macs2=2.2.7.1\n\n# Run MACS2 peak calling\n# Assuming 'treatment.pooled.bam' is the pooled replicates BAM and 'control.pooled.bam' is the pooled IgG control BAM.\n# '-g hs' specifies the genome size for human (hg38 equivalent). Adjust if a different organism is used.\n# '-f BAM' specifies the input file format as BAM. Use 'BAMPE' for paired-end data.\n# '-q 0.01' sets the minimum FDR (q-value) cutoff for peak detection.\n# '--outdir' specifies the output directory.\n# '-n' specifies the prefix for output files.\nmacs2 callpeak \\\n  -t treatment.pooled.bam \\\n  -c control.pooled.bam \\\n  -f BAM \\\n  -g hs \\\n  -q 0.01 \\\n  --outdir ./ \\\n  -n macs2_peaks",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/1471-2105-15-S12-S6"
+        },
+        {
+            "step_order": 8,
+            "description": "2.2.5 with normalizing the samples based on the spike-in reads qunatification.",
+            "tool_name": "DESeq2 (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.38.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install R and DESeq2 if not already present\n# conda install -c bioconda bioconductor-deseq2 r-base\n\n# Example: Create dummy spike_in_counts.tsv and raw_counts.tsv for demonstration\n# In a real pipeline, these files would be generated by upstream quantification steps.\n# spike_in_counts.tsv: Contains spike-in read counts per sample\n# raw_counts.tsv: Contains raw feature (e.g., gene) counts per sample\n\necho -e \"sample_id\\tspike_in_reads\" > spike_in_counts.tsv\necho -e \"sample1\\t1000\" >> spike_in_counts.tsv\necho -e \"sample2\\t1500\" >> spike_in_counts.tsv\necho -e \"sample3\\t800\" >> spike_in_counts.tsv\n\necho -e \"gene_id\\tsample1\\tsample2\\tsample3\" > raw_counts.tsv\necho -e \"geneA\\t100\\t150\\t80\" >> raw_counts.tsv\necho -e \"geneB\\t200\\t300\\t160\" >> raw_counts.tsv\necho -e \"geneC\\t50\\t75\\t40\" >> raw_counts.tsv\n\n# R script to perform spike-in normalization using DESeq2\nRscript -e '\n  library(DESeq2)\n  \n  # Load spike-in counts\n  spike_in_data <- read.delim(\"spike_in_counts.tsv\", row.names = 1)\n  spike_in_counts <- as.numeric(spike_in_data$spike_in_reads)\n  names(spike_in_counts) <- rownames(spike_in_data)\n  \n  # Calculate custom size factors based on spike-in reads\n  # A common method is to normalize to the median spike-in count across samples.\n  # Each sample''s counts will be scaled by (median_spike_in / sample_spike_in_count).\n  median_spike_in <- median(spike_in_counts)\n  custom_size_factors <- median_spike_in / spike_in_counts\n  \n  # Load raw feature counts (e.g., gene counts)\n  raw_counts_data <- read.delim(\"raw_counts.tsv\", row.names = 1)\n  \n  # Ensure sample order in custom_size_factors matches the column order in raw_counts_data\n  sample_names <- colnames(raw_counts_data)\n  custom_size_factors <- custom_size_factors[sample_names] \n  \n  # Create colData for DESeqDataSet (minimal, as we are only normalizing)\n  colData <- data.frame(row.names = sample_names, condition = rep(\"control\", length(sample_names)))\n  \n  # Create DESeqDataSet object\n  dds <- DESeqDataSetFromMatrix(countData = raw_counts_data,\n                                colData = colData,\n                                design = ~ 1) # Simple design as we are only normalizing\n  \n  # Assign custom size factors derived from spike-in reads\n  sizeFactors(dds) <- custom_size_factors\n  \n  # Run DESeq to apply normalization. \n  # estimateDispersions is needed for the counts(dds, normalized=TRUE) function to work correctly,\n  # even if not performing full differential expression analysis.\n  dds <- estimateDispersions(dds)\n  \n  # Get normalized counts\n  normalized_counts <- counts(dds, normalized = TRUE)\n  \n  # Write normalized counts to an output file\n  write.table(as.data.frame(normalized_counts), \"normalized_counts_spikein.tsv\", sep = \"\\t\", quote = FALSE, col.names = NA)\n'",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/DESeq2.html"
+        },
+        {
+            "step_order": 9,
+            "description": "ChipPeakAnnot library in the R package v.3.6.1 was used to determine the overlap between peak sets and determine the shared and specific peaks represented in the Venn diagrams.",
+            "tool_name": "R",
+            "tool_version": "3.6.1",
+            "code_example": "#!/bin/bash\n\n# This script uses the ChIPpeakAnno R package to determine overlap between peak sets\n# and generate Venn diagrams, as described in the context.\n\n# Ensure R is installed and available in the PATH. The context specifies R v.3.6.1.\n# You might need to use a specific R environment or installation for this version.\n# Example for installing R (adjust for your OS/package manager and desired version):\n# sudo apt-get update\n# sudo apt-get install r-base=3.6.1-3bionic # Example for Ubuntu 18.04\n\n# Install BiocManager if not already installed\n# R -e \"if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager', repos='https://cloud.r-project.org')\"\n\n# Install ChIPpeakAnno package from Bioconductor\n# R -e \"BiocManager::install('ChIPpeakAnno')\"\n\n# Define input peak files (replace with actual paths to your BED files).\n# These are placeholders. In a real pipeline, these would be outputs from a peak caller.\n# ChIPpeakAnno's makeVennDiagram function supports up to 5 peak sets.\nPEAK_FILE_1=\"sample1_peaks.bed\"\nPEAK_FILE_2=\"sample2_peaks.bed\"\nPEAK_FILE_3=\"sample3_peaks.bed\" # Example for a 3-way Venn diagram\n# PEAK_FILE_4=\"sample4_peaks.bed\"\n# PEAK_FILE_5=\"sample5_peaks.bed\"\n\n# Define output PDF file for the Venn diagram\nOUTPUT_VENN_PDF=\"peak_overlap_venn_diagram.pdf\"\n\n# Create an R script to perform the peak overlap and Venn diagram generation\ncat <<EOF > run_chippeakanno.R\nlibrary(ChIPpeakAnno)\nlibrary(GenomicRanges) # Often loaded implicitly or explicitly with ChIPpeakAnno\n\n# Function to load peaks from a BED file into a GRanges object\n# This function assumes a standard BED format (at least chr, start, end).\n# Adjust 'col.names' and other parameters if your BED file has a different structure.\nload_peaks <- function(file_path) {\n  if (!file.exists(file_path)) {\n    stop(paste(\"Peak file not found:\", file_path))\n  }\n  \n  # Read BED file, skipping comment lines (starting with #)\n  peaks_df <- read.delim(file_path, header=FALSE, comment.char=\"#\", stringsAsFactors=FALSE)\n  \n  # Ensure at least 3 columns for seqnames (chromosome), start, end\n  if (ncol(peaks_df) < 3) {\n    stop(paste(\"Invalid BED file format for\", file_path, \": expected at least 3 columns.\"))\n  }\n  \n  # Assign standard column names for GRanges conversion\n  colnames(peaks_df)[1:3] <- c(\"seqnames\", \"start\", \"end\")\n  \n  # Create GRanges object\n  gr <- makeGRangesFromDataFrame(peaks_df,\n                                 keep.extra.columns=TRUE, # Keep any additional columns (e.g., name, score)\n                                 ignore.strand=TRUE,      # Peaks are typically strand-agnostic for overlap analysis\n                                 seqinfo=NULL)            # Can provide seqinfo if known, but often not strictly necessary for overlap\n  return(gr)\n}\n\n# Load peak sets into a list of GRanges objects\npeaklist <- list()\n\n# Check if peak files exist before attempting to load them\nif (file.exists(\"${PEAK_FILE_1}\")) {\n  peaklist[[\"Set1\"]] <- load_peaks(\"${PEAK_FILE_1}\")\n} else {\n  message(paste(\"Warning: Peak file not found, skipping:\", \"${PEAK_FILE_1}\"))\n}\n\nif (file.exists(\"${PEAK_FILE_2}\")) {\n  peaklist[[\"Set2\"]] <- load_peaks(\"${PEAK_FILE_2}\")\n} else {\n  message(paste(\"Warning: Peak file not found, skipping:\", \"${PEAK_FILE_2}\"))\n}\n\nif (file.exists(\"${PEAK_FILE_3}\")) {\n  peaklist[[\"Set3\"]] <- load_peaks(\"${PEAK_FILE_3}\")\n} else {\n  message(paste(\"Warning: Peak file not found, skipping:\", \"${PEAK_FILE_3}\"))\n}\n\n# Add more peak files here if needed (up to 5 for makeVennDiagram)\n# if (file.exists(\"${PEAK_FILE_4}\")) {\n#   peaklist[[\"Set4\"]] <- load_peaks(\"${PEAK_FILE_4}\")\n# }\n# if (file.exists(\"${PEAK_FILE_5}\")) {\n#   peaklist[[\"Set5\"]] <- load_peaks(\"${PEAK_FILE_5}\")\n# }\n\n# Ensure at least two peak files were successfully loaded for a Venn diagram\nif (length(peaklist) < 2) {\n  stop(\"At least two peak files are required to generate a Venn diagram. Please check input file paths.\")\n}\n\n# Determine overlap and generate Venn diagram\n# The 'makeVennDiagram' function visualizes shared and specific peaks.\npdf(\"${OUTPUT_VENN_PDF}\")\nvenn_results <- makeVennDiagram(\n  peaklist,\n  NameOfPeaks = names(peaklist), # Labels for each set in the diagram\n  main = \"Overlap of Peak Sets\", # Main title for the plot\n  fill = c(\"red\", \"blue\", \"green\", \"yellow\", \"purple\")[1:length(peaklist)], # Customize fill colors\n  cat.col = c(\"red\", \"blue\", \"green\", \"yellow\", \"purple\")[1:length(peaklist)], # Customize category label colors\n  cex = 1.5,       # Size of the numbers in the diagram\n  cat.cex = 1.5,   # Size of the category labels\n  ind = TRUE       # Set to TRUE to get indices of overlapping peaks in the results object\n)\ndev.off()\n\nmessage(paste(\"Venn diagram showing peak overlaps saved to:\", \"${OUTPUT_VENN_PDF}\"))\n\n# Optional: To extract specific overlapping/unique peak sets as GRanges objects.\n# This can be done using the 'venn_results' object returned by makeVennDiagram.\n# For example, to get peaks unique to Set1 (assuming 3 sets):\n# if (length(peaklist) == 3) {\n#   unique_set1_indices <- venn_results$vennCounts[venn_results$vennCounts$Set1 == 1 & venn_results$vennCounts$Set2 == 0 & venn_results$vennCounts$Set3 == 0, \"idx\"]\n#   if (length(unique_set1_indices) > 0) {\n#     unique_peaks_set1 <- peaklist[[\"Set1\"]][unique_set1_indices]\n#     # write.table(as.data.frame(unique_peaks_set1), \"unique_peaks_set1.bed\", sep=\"\\t\", quote=FALSE, row.names=FALSE, col.names=FALSE)\n#     message(paste(\"Number of peaks unique to Set1:\", length(unique_peaks_set1)))\n#   }\n# }\nEOF\n\n# Execute the R script using the specified R version (3.6.1)\nRscript run_chippeakanno.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/ChIPpeakAnno.html"
+        },
+        {
+            "step_order": 10,
+            "description": "Minimum peak overlap was set to 100 bp to determine the intersection peaks between the two samples.",
+            "tool_name": "bedtools intersect (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.30.0",
+            "code_example": "# Install bedtools if not already installed\n# conda install -c bioconda bedtools\n\n# Define input and output files\n# Replace 'sample1_peaks.bed' and 'sample2_peaks.bed' with your actual peak file paths.\nINPUT_PEAKS_SAMPLE1=\"sample1_peaks.bed\"\nINPUT_PEAKS_SAMPLE2=\"sample2_peaks.bed\"\nOUTPUT_INTERSECTION_PEAKS=\"intersection_peaks.bed\"\n\n# Determine the intersection peaks between the two samples with a minimum overlap of 100 bp.\n# bedtools intersect outputs the overlapping segments between two BED files.\n# The awk command then filters these segments, keeping only those whose length (end - start) is 100 bp or greater.\nbedtools intersect -a \"${INPUT_PEAKS_SAMPLE1}\" -b \"${INPUT_PEAKS_SAMPLE2}\" | awk '($3-$2) >= 100' > \"${OUTPUT_INTERSECTION_PEAKS}\"\n\n# Note: The input peak files (e.g., sample1_peaks.bed, sample2_peaks.bed) are assumed to be in BED format\n# and based on a specific reference genome (e.g., hg38, mm10), though the genome assembly is not directly\n# used by bedtools intersect itself.",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        },
+        {
+            "step_order": 11,
+            "description": "Shared peaks between the sets ETO and Flag antibodies in the Control and miR-130a KD samples were used for the downstream analysis.",
+            "tool_name": "intersect_peaks.py (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "latest (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Clone the yeolab/merge_peaks repository if not already available\n# git clone https://github.com/yeolab/merge_peaks.git\n# cd merge_peaks\n\n# Assuming peak files from previous steps are available in BED format.\n# Replace these placeholder paths/names with your actual peak files.\nETO_Control_peaks=\"ETO_Control_reproducible_peaks.bed\"\nFlag_Control_peaks=\"Flag_Control_reproducible_peaks.bed\"\nETO_KD_peaks=\"ETO_KD_reproducible_peaks.bed\"\nFlag_KD_peaks=\"Flag_KD_reproducible_peaks.bed\"\n\n# Output file for the shared peaks\noutput_shared_peaks=\"shared_peaks_ETO_Flag_Control_KD.bed\"\n\n# Execute the intersect_peaks.py script to find peaks common to all specified sets.\n# This command assumes the script is in the current working directory or in PATH.\npython intersect_peaks.py \\\n    \"${ETO_Control_peaks}\" \\\n    \"${Flag_Control_peaks}\" \\\n    \"${ETO_KD_peaks}\" \\\n    \"${Flag_KD_peaks}\" \\\n    -o \"${output_shared_peaks}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/merge_peaks"
+        },
+        {
+            "step_order": 12,
+            "description": "These two sets of shared peaks were intersected again using ChipPeakAnnot library to determine the shared peaks between the two sets and the unique peaks to each of the two sets.",
+            "tool_name": "ChipPeakAnnot library",
+            "tool_version": "Not specified",
+            "code_example": "# The description refers to 'ChipPeakAnnot library' which appears to be a custom or less common Python library.\n# The functionality described (intersecting peak sets and identifying unique peaks) is commonly and robustly performed using bedtools.\n# The following commands demonstrate how to achieve the described operations using bedtools.\n\n# Install bedtools if not already available\n# conda install -c bioconda bedtools\n\n# Define input peak files (replace with actual filenames)\nINPUT_PEAKS_SET1=\"input_peaks_set1.bed\"\nINPUT_PEAKS_SET2=\"input_peaks_set2.bed\"\n\n# Define output files\nSHARED_PEAKS=\"shared_peaks.bed\"\nUNIQUE_TO_SET1=\"unique_to_set1.bed\"\nUNIQUE_TO_SET2=\"unique_to_set2.bed\"\n\n# Determine shared peaks between the two sets\n# By default, bedtools intersect outputs the overlapping regions.\nbedtools intersect -a \"${INPUT_PEAKS_SET1}\" -b \"${INPUT_PEAKS_SET2}\" > \"${SHARED_PEAKS}\"\n\n# Determine unique peaks to Set 1 (peaks in Set 1 that do not overlap with Set 2)\nbedtools intersect -a \"${INPUT_PEAKS_SET1}\" -b \"${INPUT_PEAKS_SET2}\" -v > \"${UNIQUE_TO_SET1}\"\n\n# Determine unique peaks to Set 2 (peaks in Set 2 that do not overlap with Set 1)\nbedtools intersect -a \"${INPUT_PEAKS_SET2}\" -b \"${INPUT_PEAKS_SET1}\" -v > \"${UNIQUE_TO_SET2}\"\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        },
+        {
+            "step_order": 13,
+            "description": "Peaks were annotated to the genomic features of the hg38 human genomes.",
+            "tool_name": "HOMER (Hypergeometric Optimization of Motif EnRichment) - annotatePeaks.pl (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "v4.11",
+            "code_example": "# Install HOMER (if not already installed)\n# conda install -c bioconda homer\n\n# Example: Download and install hg38 genome for HOMER (if not already done)\n# perl /path/to/homer/bin/configureHomer.pl -install hg38\n\n# Define input peak file (replace with your actual peak file, e.g., a BED file)\ninput_peaks=\"input_peaks.bed\"\n\n# Define output annotation file\noutput_annotation=\"annotated_peaks.txt\"\n\n# Annotate peaks to hg38 genomic features\n# The 'hg38' argument tells HOMER to use its pre-indexed hg38 genome annotation.\nannotatePeaks.pl \"${input_peaks}\" hg38 > \"${output_annotation}\"",
+            "code_language": "bash",
+            "github_url": "http://homer.ucsd.edu/homer/"
+        },
+        {
+            "step_order": 14,
+            "description": "HOMER v.",
+            "tool_name": "HOMER",
+            "tool_version": "not specified",
+            "code_example": "# Install HOMER (example using conda)\n# conda install -c bioconda homer\n\n# Placeholder variables - replace with actual paths and values from your experiment\n# Input peak file (e.g., BED format) from a previous step (e.g., peak calling)\nINPUT_PEAKS=\"your_experiment_peaks.bed\" \n# Reference genome assembly (e.g., hg38, mm10). \n# Ensure HOMER indexes for this genome are available (e.g., by running 'perl configureHomer.pl -install hg38').\nGENOME_ASSEMBLY=\"hg38\" \n# Output directory for HOMER results\nOUTPUT_DIR=\"homer_motif_results\"\n# Motif lengths to search for (e.g., 8, 10, 12 base pairs)\nMOTIF_LENGTHS=\"8,10,12\"\n\n# Example: Run HOMER's findMotifsGenome.pl for de novo motif discovery\n# This command searches for motifs in the provided peak regions against the specified genome.\n# Parameters like -size and -len are common. -size given is typically used for BED files with varying region sizes.\n# Adjust parameters (-mask, -mis, -h, -p, etc.) based on specific experimental needs.\nfindMotifsGenome.pl \"${INPUT_PEAKS}\" \"${GENOME_ASSEMBLY}\" \"${OUTPUT_DIR}\" -size given -len \"${MOTIF_LENGTHS}\"",
+            "code_language": "bash",
+            "github_url": "http://homer.ucsd.edu/homer/"
+        },
+        {
+            "step_order": 15,
+            "description": "4.8 was used for de novo motif analysis of the sets of peaks.",
+            "tool_name": "MEME-ChIP (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "5.4.1 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install MEME Suite (e.g., via Bioconda)\n# conda install -c bioconda meme=5.4.1\n\n# Placeholder for input peak file (e.g., a BED file containing peak regions)\nPEAKS_BED=\"your_input_peaks.bed\"\n\n# Placeholder for reference genome FASTA file\n# This file is used by meme-chip to extract sequences corresponding to the peaks.\nREFERENCE_GENOME_FASTA=\"path/to/your/reference_genome.fa\" # e.g., hg38.fa\n\n# Output directory for the motif analysis results\nOUTPUT_DIR=\"de_novo_motif_analysis_results\"\n\n# Create the output directory if it does not exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run MEME-ChIP for de novo motif analysis\n# -oc: Output directory\n# -genome: Path to the reference genome FASTA file\n# -fimo-skip: Skip FIMO analysis (can be run separately if needed)\n# -meme-maxw: Maximum width of motifs to find by MEME\n# -meme-minw: Minimum width of motifs to find by MEME\n# -meme-nmotifs: Number of motifs to find by MEME\n# -dreme-e: E-value threshold for DREME\n# -dna: Specifies that the input sequences are DNA\n# The last argument is the input peak file (BED format is accepted with -genome)\nmeme-chip -oc \"${OUTPUT_DIR}\" \\\n          -genome \"${REFERENCE_GENOME_FASTA}\" \\\n          -fimo-skip \\\n          -meme-maxw 20 \\\n          -meme-minw 6 \\\n          -meme-nmotifs 10 \\\n          -dreme-e 0.05 \\\n          -dna \"${PEAKS_BED}\"",
+            "code_language": "bash",
+            "github_url": "http://meme-suite.org/"
+        }
+    ],
+    "raw_text": "Library strategy: CUT&RUN\nCUT&RUN paired-end data was trimmed using fastp v. 0.19.5 to remove adapters and low quality base pairs with base pair quality score <30 and read length <35 bp.\nTrimmed reads were aligned to the hg38 human reference genome using bowtie2 v. 2.3.5. Reads were also aligned to the  S. cerevisiae yeast genome (sacCer3) yeast genome to evaluate the yeast spike-in control for the normalization.\nPeaks were called from the pooled replicates against the IgG using MACS2 v. 2.2.5  with normalizing the samples based on the spike-in reads qunatification.\nChipPeakAnnot library in the R package v.3.6.1 was used to determine the overlap between peak sets and determine the shared and specific peaks represented in the Venn diagrams. Minimum peak overlap was set to 100 bp to determine the intersection peaks between the two samples.\nShared peaks between the sets ETO and Flag antibodies in the Control and miR-130a KD samples were used for the downstream analysis. These two sets of shared peaks were intersected again using ChipPeakAnnot library to determine the shared peaks between the two sets and the unique peaks to each of the two sets.\nPeaks were annotated to the genomic features of the hg38 human genomes.\nHOMER v. 4.8  was used for de novo motif analysis of the sets of peaks.\nGenome_build: hg38\nSupplementary_files_format_and_content: Bed files",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

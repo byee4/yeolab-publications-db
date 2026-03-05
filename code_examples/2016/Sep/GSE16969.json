@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "The data were analyzed with MicroArray Suite version 5.0 (MAS 5.0) using Affymetrix default analysis settings and Robust Multi-Array Average (RMA) analysis as normalization method.",
-      "tool_name": "Microarray",
-      "tool_version": "5.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "The trimmed mean target intensity of each array was set arbitrarily to 100.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "The data were analyzed with MicroArray Suite version 5.0 (MAS 5.0) using Affymetrix default analysis settings and Robust Multi-Array Average (RMA) analysis as normalization method. The trimmed mean target intensity of each array was set arbitrarily to 100.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "The data were analyzed with MicroArray Suite version 5.0 (MAS 5.0) using Affymetrix default analysis settings and Robust Multi-Array Average (RMA) analysis as normalization method.",
+            "tool_name": "Microarray",
+            "tool_version": "5.0",
+            "code_example": "# MAS 5.0 (MicroArray Suite) is a proprietary, GUI-based software by Affymetrix.\n# The following R script demonstrates how to perform Robust Multi-Array Average (RMA)\n# normalization, which is a standard method for Affymetrix data analysis, often\n# performed using Bioconductor packages on raw .CEL files.\n\n# Install R and Bioconductor if not already present\n# sudo apt-get update && sudo apt-get install -y r-base\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\"); BiocManager::install(\"affy\")'\n\n# Create an R script to perform RMA\ncat << 'EOF' > run_rma.R\nlibrary(affy)\n\n# Set working directory to where CEL files are located or specify path\n# Replace \"/path/to/your/cel_files\" with the actual directory containing your .CEL files\ncel_files_dir <- Sys.getenv(\"CEL_FILES_DIR\", \".\") # Default to current directory\ncel_files <- list.files(path = cel_files_dir, pattern = \"\\\\.CEL$\", full.names = TRUE, ignore.case = TRUE)\n\nif (length(cel_files) == 0) {\n  stop(\"No .CEL files found in the specified directory: \", cel_files_dir)\n}\n\n# Read the AffyBatch object from CEL files\nraw_data <- ReadAffy(filenames = cel_files)\n\n# Perform RMA normalization and summarization\n# This includes background correction, normalization, and summarization steps\nrma_data <- rma(raw_data)\n\n# Extract expression matrix\nexpression_matrix <- exprs(rma_data)\n\n# Write normalized expression matrix to a file\noutput_file <- Sys.getenv(\"OUTPUT_FILE\", \"rma_normalized_expression.tsv\")\nwrite.table(expression_matrix, file = output_file, sep = \"\\t\", quote = FALSE, row.names = TRUE)\n\nmessage(paste(\"RMA normalized expression matrix written to:\", output_file))\nEOF\n\n# Execute the R script\n# Set the environment variable for the directory containing your .CEL files\n# Example: export CEL_FILES_DIR=\"./data/affymetrix_cels\"\nexport CEL_FILES_DIR=\"/path/to/your/cel_files\"\nexport OUTPUT_FILE=\"rma_normalized_expression.tsv\"\nRscript run_rma.R",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "The trimmed mean target intensity of each array was set arbitrarily to 100.",
+            "tool_name": "R (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "4.x",
+            "code_example": "# Install R and necessary packages if not already installed.\n# For example, using conda:\n# conda install -c r r-base\n\n# Create an R script to perform the trimmed mean scaling normalization.\n# This script assumes input data is a tab-separated file with identifiers\n# (e.g., Probe IDs) in the first column and array intensities in subsequent columns.\n# Replace 'input_intensities.tsv' and 'output_normalized_intensities.tsv' with actual file names.\n\ncat << 'EOF' > normalize_trimmed_mean.R\n# R script for trimmed mean target intensity normalization\n# This script scales the intensity of each array such that its trimmed mean\n# equals a specified target intensity.\n\n# Function to perform trimmed mean scaling normalization\n# Args:\n#   input_file: Path to the input tab-separated file containing intensities.\n#               Assumes first column is identifiers (e.g., ProbeID) and\n#               subsequent columns are array intensities.\n#   output_file: Path to the output tab-separated file for normalized intensities.\n#   target_intensity: The desired trimmed mean intensity for each array (default: 100).\n#   trim_fraction: The fraction (0 to 0.5) of observations to be trimmed from each end\n#                  when calculating the mean (default: 0.02, i.e., 2% from each end).\nnormalize_trimmed_mean_scaling <- function(input_file, output_file, target_intensity = 100, trim_fraction = 0.02) {\n  # Check if input file exists\n  if (!file.exists(input_file)) {\n    stop(paste(\"Error: Input file not found at\", input_file))\n  }\n\n  # Read the input intensity data\n  # Assuming the first column is probe IDs/identifiers and subsequent columns are array intensities\n  # check.names=FALSE to prevent R from modifying column names (e.g., adding X to numeric names)\n  data_raw <- read.delim(input_file, header = TRUE, row.names = 1, sep = \"\\t\", check.names = FALSE)\n\n  # Ensure data is numeric for calculations\n  data_numeric <- as.matrix(data_raw)\n  if (!is.numeric(data_numeric)) {\n    stop(\"Error: Intensity columns must contain numeric values.\")\n  }\n\n  # Calculate trimmed mean for each array (column)\n  # na.rm = TRUE to handle potential missing values\n  trimmed_means <- apply(data_numeric, 2, function(x) mean(x, trim = trim_fraction, na.rm = TRUE))\n\n  # Check for any NaN or Inf in trimmed means, which could indicate issues (e.g., all NAs in a column)\n  if (any(is.nan(trimmed_means)) || any(is.infinite(trimmed_means))) {\n    stop(\"Error: Trimmed mean calculation resulted in NaN or Inf for some arrays. Check input data.\")\n  }\n\n  # Calculate scaling factors\n  # Avoid division by zero if a trimmed mean is 0\n  scaling_factors <- ifelse(trimmed_means == 0, 0, target_intensity / trimmed_means)\n\n  # Apply scaling to each array\n  # sweep applies a function (here, multiplication) to the rows or columns of a matrix\n  # using a vector of values (scaling_factors)\n  normalized_data <- sweep(data_numeric, 2, scaling_factors, \"*\")\n\n  # Combine with original row names (probe IDs/identifiers)\n  normalized_df <- as.data.frame(normalized_data)\n  normalized_df <- cbind(Identifier = rownames(data_raw), normalized_df)\n\n  # Write the normalized data to an output file\n  write.table(normalized_df, output_file, sep = \"\\t\", row.names = FALSE, quote = FALSE)\n\n  message(paste(\"Normalization complete. Output written to:\", output_file))\n  message(\"\\nTrimmed means before scaling:\")\n  print(trimmed_means)\n  message(\"\\nScaling factors applied:\")\n  print(scaling_factors)\n}\n\n# --- Script execution ---\n# Define input and output files (PLACEHOLDERS - REPLACE WITH ACTUAL PATHS)\n# Example: input_intensities.tsv should contain columns like:\n# Identifier    Array1_Intensity    Array2_Intensity\n# ProbeA        1200                1500\n# ProbeB        800                 950\ninput_file_path <- \"input_intensities.tsv\"\noutput_file_path <- \"output_normalized_intensities.tsv\"\n\n# Define parameters based on the description\ntarget_intensity_val <- 100\ntrim_fraction_val <- 0.02 # This is an inferred parameter (2% from each end, total 4% trimmed)\n\n# Run the normalization function\nnormalize_trimmed_mean_scaling(\n  input_file = input_file_path,\n  output_file = output_file_path,\n  target_intensity = target_intensity_val,\n  trim_fraction = trim_fraction_val\n)\nEOF\n\n# Execute the R script\n# Ensure 'input_intensities.tsv' exists in the current directory or provide full path\n# and that R is installed and in your PATH.\nRscript normalize_trimmed_mean.R",
+            "code_language": "bash",
+            "github_url": "https://www.r-project.org/"
+        }
+    ],
+    "raw_text": "The data were analyzed with MicroArray Suite version 5.0 (MAS 5.0) using Affymetrix default analysis settings and Robust Multi-Array Average (RMA) analysis as normalization method. The trimmed mean target intensity of each array was set arbitrarily to 100.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

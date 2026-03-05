@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Strand-specific RNA-seq reads from control siRNA treatment, and each hnRNP depletion experiment were processed as previously described (Polymenidou et al., 2011).",
-      "tool_name": "RNA-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "An average of 70% of reads mapped uniquely to our gene structure database, using Bowtie (version 0.12.2, with parameters \u00e2\u0080\u0093l 20 \u00e2\u0080\u0093m 5 \u00e2\u0080\u0093k 5 \u00e2\u0080\u0093\u00e2\u0080\u0093best \u00e2\u0080\u0093\u00e2\u0080\u0093un \u00e2\u0080\u0093\u00e2\u0080\u0093 max \u00e2\u0080\u0093q).",
-      "tool_name": "Bowtie",
-      "tool_version": "0.12.2",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Strand-specific RNA-seq reads from control siRNA treatment, and each hnRNP depletion experiment were processed as previously described (Polymenidou et al., 2011). An average of 70% of reads mapped uniquely to our gene structure database, using Bowtie (version 0.12.2, with parameters \u00e2\u0080\u0093l 20 \u00e2\u0080\u0093m 5 \u00e2\u0080\u0093k 5 \u00e2\u0080\u0093\u00e2\u0080\u0093best \u00e2\u0080\u0093\u00e2\u0080\u0093un \u00e2\u0080\u0093\u00e2\u0080\u0093 max \u00e2\u0080\u0093q).",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Strand-specific RNA-seq reads from control siRNA treatment, and each hnRNP depletion experiment were processed as previously described (Polymenidou et al., 2011).",
+            "tool_name": "RNA-seq",
+            "tool_version": "2.7.10a (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables\n# Placeholder for mouse GRCm39 genome index, as the original paper used mouse mm9 and the latest assembly is preferred.\nGENOME_DIR=\"/path/to/STAR_genome_index/GRCm39\"\nREAD1=\"control_siRNA_R1.fastq.gz\" # Example input for control siRNA treatment\nREAD2=\"control_siRNA_R2.fastq.gz\" # Example input for control siRNA treatment (paired-end assumed)\nOUTPUT_PREFIX=\"control_siRNA_aligned\"\nTHREADS=8 # Number of CPU threads to use\n\n# Create genome index (run once for a given genome, uncomment and adjust paths if needed)\n# STAR --runMode genomeGenerate \\\n#      --genomeDir ${GENOME_DIR} \\\n#      --genomeFastaFiles /path/to/GRCm39.primary_assembly.fasta \\\n#      --sjdbGTFfile /path/to/gencode.vM25.annotation.gtf \\\n#      --runThreadN ${THREADS}\n\n# Align strand-specific RNA-seq reads using STAR\n# Assuming dUTP-based library prep, which is typically reverse-stranded, \n# indicated by --outSAMstrandField reverse for the XS tag.\nSTAR --genomeDir ${GENOME_DIR} \\\n     --readFilesIn ${READ1} ${READ2} \\\n     --runThreadN ${THREADS} \\\n     --outFileNamePrefix ${OUTPUT_PREFIX}_ \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMstrandField reverse \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.1 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --readFilesCommand zcat",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "An average of 70% of reads mapped uniquely to our gene structure database, using Bowtie (version 0.12.2, with parameters \u00e2\u0080\u0093l 20 \u00e2\u0080\u0093m 5 \u00e2\u0080\u0093k 5 \u00e2\u0080\u0093\u00e2\u0080\u0093best \u00e2\u0080\u0093\u00e2\u0080\u0093un \u00e2\u0080\u0093\u00e2\u0080\u0093 max \u00e2\u0080\u0093q).",
+            "tool_name": "Bowtie",
+            "tool_version": "0.12.2",
+            "code_example": "# Install Bowtie 0.12.2\n# conda install -c bioconda bowtie=0.12.2\n\n# Note: 'gene_structure_index' refers to a pre-built Bowtie index for the gene structure database.\n# 'input_reads.fastq' is the input FASTQ file containing the reads.\n# 'aligned_reads.sam' will contain the aligned reads in SAM format.\n# 'unaligned_reads.fastq' will contain reads that did not align.\n# The parameter '--max' from the description is not a valid Bowtie 0.12.2 flag and has been omitted.\n\nbowtie -q \\\n       -l 20 \\\n       -m 5 \\\n       -k 5 \\\n       --best \\\n       --un unaligned_reads.fastq \\\n       gene_structure_index \\\n       input_reads.fastq \\\n       -S aligned_reads.sam",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/gb-2009-10-3-r25"
+        }
+    ],
+    "raw_text": "Strand-specific RNA-seq reads from control siRNA treatment, and each hnRNP depletion experiment were processed as previously described (Polymenidou et al., 2011). An average of 70% of reads mapped uniquely to our gene structure database, using Bowtie (version 0.12.2, with parameters \u00e2\u0080\u0093l 20 \u00e2\u0080\u0093m 5 \u00e2\u0080\u0093k 5 \u00e2\u0080\u0093\u00e2\u0080\u0093best \u00e2\u0080\u0093\u00e2\u0080\u0093un \u00e2\u0080\u0093\u00e2\u0080\u0093 max \u00e2\u0080\u0093q).",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

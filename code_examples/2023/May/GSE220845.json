@@ -1,16 +1,16 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "For quantification of alternative RNA splicing, fastq files are adapter-trimmed by cutadapt 3.4 and aligned to GRCh38 by STAR 2.7 .6 and analyzed using rMATS (v4.1.1) (Shen et al., 2014) using the GENCODE (v35) GTF annotation for GRCh38 and the following parameters: -t paired --libType fr-unstranded \u00e2\u0080\u0093readLength 150 --novelSS",
-      "tool_name": "STAR",
-      "tool_version": "2.7",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "For quantification of alternative RNA splicing, fastq files are adapter-trimmed by cutadapt 3.4 and aligned to GRCh38 by STAR 2.7 .6 and analyzed using rMATS (v4.1.1) (Shen et al., 2014) using the GENCODE (v35) GTF annotation for GRCh38 and the following parameters: -t paired --libType fr-unstranded \u00e2\u0080\u0093readLength 150 --novelSS\nSupplementary files format and content: hg38\nSupplementary files format and content: tsv file represents rMATs output files . For column definitions, see https://github.com/Xinglab/rmats-turbo\nSupplementary files format and content: file naming is SAMPLE1_SAMPLE2_EVENTTYPE.MATS.JC.txt",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "For quantification of alternative RNA splicing, fastq files are adapter-trimmed by cutadapt 3.4 and aligned to GRCh38 by STAR 2.7 .6 and analyzed using rMATS (v4.1.1) (Shen et al., 2014) using the GENCODE (v35) GTF annotation for GRCh38 and the following parameters: -t paired --libType fr-unstranded \u00e2\u0080\u0093readLength 150 --novelSS",
+            "tool_name": "STAR",
+            "tool_version": "2.7",
+            "code_example": "# Install STAR if not already installed\n# conda install -c bioconda star\n\n# Define variables for input and output\nFASTQ_R1=\"path/to/your/sample_R1.fastq.gz\" # Adapter-trimmed fastq file R1\nFASTQ_R2=\"path/to/your/sample_R2.fastq.gz\" # Adapter-trimmed fastq file R2\nOUTPUT_DIR=\"path/to/your/output_directory\"\nSAMPLE_PREFIX=\"sample_name\" # e.g., SRR1234567\n\n# Reference datasets (GRCh38, GENCODE v35 GTF)\n# Ensure the STAR genome index for GRCh38 (with GENCODE v35) is pre-built.\n# Example command to build index (run once):\n# STAR --runMode genomeGenerate --genomeDir \"path/to/your/STAR_genome_index/GRCh38_gencode_v35\" \\\n#      --genomeFastaFiles \"path/to/your/references/GRCh38.primary_assembly.genome.fa\" \\\n#      --sjdbGTFfile \"path/to/your/annotations/gencode.v35.annotation.gtf\" \\\n#      --sjdbOverhang 149 --runThreadN 16 # Adjust sjdbOverhang to read length - 1 (150-1=149)\n\nGENOME_DIR=\"path/to/your/STAR_genome_index/GRCh38_gencode_v35\" # Path to pre-built STAR index\nGTF_FILE=\"path/to/your/annotations/gencode.v35.annotation.gtf\" # GENCODE v35 GTF file\nNUM_THREADS=8 # Adjust as needed\nREAD_LENGTH=150 # Inferred from rMATS parameter --readLength 150\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}/aligned_reads\"\n\n# Run STAR alignment\nSTAR \\\n  --genomeDir \"${GENOME_DIR}\" \\\n  --readFilesIn \"${FASTQ_R1}\" \"${FASTQ_R2}\" \\\n  --readFilesCommand zcat \\\n  --runThreadN \"${NUM_THREADS}\" \\\n  --outFileNamePrefix \"${OUTPUT_DIR}/aligned_reads/${SAMPLE_PREFIX}.\" \\\n  --outSAMtype BAM SortedByCoordinate \\\n  --outSAMunmapped Within \\\n  --quantMode GeneCounts \\\n  --sjdbGTFfile \"${GTF_FILE}\" \\\n  --sjdbOverhang $((READ_LENGTH - 1)) # Read length - 1 for splice junction database overhang\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        }
+    ],
+    "raw_text": "For quantification of alternative RNA splicing, fastq files are adapter-trimmed by cutadapt 3.4 and aligned to GRCh38 by STAR 2.7 .6 and analyzed using rMATS (v4.1.1) (Shen et al., 2014) using the GENCODE (v35) GTF annotation for GRCh38 and the following parameters: -t paired --libType fr-unstranded \u00e2\u0080\u0093readLength 150 --novelSS\nSupplementary files format and content: hg38\nSupplementary files format and content: tsv file represents rMATs output files . For column definitions, see https://github.com/Xinglab/rmats-turbo\nSupplementary files format and content: file naming is SAMPLE1_SAMPLE2_EVENTTYPE.MATS.JC.txt",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

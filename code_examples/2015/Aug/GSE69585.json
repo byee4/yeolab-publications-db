@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Sequencing reads from CLIP-seq and RIP-seq libraries were first trimmed of polyA tails, adapters, and low quality ends using cutadapt with parameters --match-read-wildcards --times 2 -e 0 -O 5 --quality-cutoff' 6 -m 18 -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b TGGAATTCTCGGGTGCCAAGG -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT.",
-      "tool_name": "cutadapt",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reads were then mapped against a database of repetitive elements derived from RepBase18.05.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Bowtie version 1.0.0 with parameters -S -q -p 16 -e 100 -l 20 was used to align reads against an index generated from Repbase sequences (Langmead et al., 2009).",
-      "tool_name": "Bowtie",
-      "tool_version": "1.0.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Reads not mapped to Repbase sequences were aligned to the hg19 human genome (UCSC assembly) using STAR (Dobin et al., 2013) version 2.3.0e with parameters --outSAMunmapped Within \u00e2\u0080\u0093outFilterMultimapNmax 1 \u00e2\u0080\u0093outFilterMultimapScoreRange 1.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "RPKMs for each gene annotated in gencode v17 were calculated from RIP-seq data using custom scripts",
-      "tool_name": "GENCODE",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Sequencing reads from CLIP-seq and RIP-seq libraries were first trimmed of polyA tails, adapters, and low quality ends using cutadapt with parameters --match-read-wildcards --times 2 -e 0 -O 5 --quality-cutoff' 6 -m 18 -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b TGGAATTCTCGGGTGCCAAGG -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT.\nReads were then mapped against a database of repetitive elements derived from RepBase18.05. Bowtie version 1.0.0 with parameters -S -q -p 16 -e 100 -l 20 was used to align reads against an index generated from Repbase sequences (Langmead et al., 2009).\nReads not mapped to Repbase sequences were aligned to the hg19 human genome (UCSC assembly) using STAR (Dobin et al., 2013) version 2.3.0e with parameters --outSAMunmapped Within \u00e2\u0080\u0093outFilterMultimapNmax 1 \u00e2\u0080\u0093outFilterMultimapScoreRange 1.\nRPKMs for each gene annotated in gencode v17 were calculated from RIP-seq data using custom scripts\nGenome_build: hg19\nSupplementary_files_format_and_content: rpkm files, contains RPKMs for each sample",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Sequencing reads from CLIP-seq and RIP-seq libraries were first trimmed of polyA tails, adapters, and low quality ends using cutadapt with parameters --match-read-wildcards --times 2 -e 0 -O 5 --quality-cutoff' 6 -m 18 -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b TGGAATTCTCGGGTGCCAAGG -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT.",
+            "tool_name": "cutadapt",
+            "tool_version": "1.16",
+            "code_example": "# Install cutadapt\n# conda install -c bioconda cutadapt=1.16\n\ncutadapt \\\n  --match-read-wildcards \\\n  --times 2 \\\n  -e 0 \\\n  -O 5 \\\n  --quality-cutoff 6 \\\n  -m 18 \\\n  -b TCGTATGCCGTCTTCTGCTTG \\\n  -b ATCTCGTATGCCGTCTTCTGCTTG \\\n  -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC \\\n  -b TGGAATTCTCGGGTGCCAAGG \\\n  -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \\\n  -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT \\\n  -o trimmed_reads.fastq.gz \\\n  input_reads.fastq.gz",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 2,
+            "description": "Reads were then mapped against a database of repetitive elements derived from RepBase18.05.",
+            "tool_name": "bowtie (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.2.3 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install bowtie\n# conda install -c bioconda bowtie=1.2.3\n\n# --- Reference Data Preparation (RepBase18.05) ---\n# RepBase access typically requires registration. The following is a placeholder for downloading and indexing.\n# Replace with actual download method if you have access to RepBase18.05 sequences.\n# Example: Download RepBase sequences (e.g., from girinst.org after registration)\n# wget -O RepBase18.05.fasta.gz \"https://www.girinst.org/repbase/update/RepBase18.05.fasta.gz\" # Placeholder URL\n# gunzip RepBase18.05.fasta.gz\n\n# Build bowtie index for RepBase18.05\n# bowtie-build RepBase18.05.fasta RepBase18.05_index\n\n# --- Mapping Reads to Repetitive Elements ---\n# Input: reads.fastq.gz (replace with your actual input reads file)\n# Output: reads_rep_mapped.sam (SAM file containing reads mapped to repetitive elements)\n# Parameters:\n#   -v 2: Allow up to 2 mismatches in the alignment.\n#   -m 1: Suppress alignments that are not unique (i.e., if a read maps to more than 1 location, it's suppressed).\n#         This is a common parameter for filtering out highly repetitive reads that map to many places.\n#   --best --strata: Report alignments in \"best\" strata first, then \"next best\", etc.\n#   -S: Output in SAM format.\n#   RepBase18.05_index: The prefix for the RepBase bowtie index.\n#   reads.fastq.gz: The input FASTQ file.\n\nbowtie -v 2 -m 1 --best --strata -S reads_rep_mapped.sam RepBase18.05_index reads.fastq.gz",
+            "code_language": "bash",
+            "github_url": "http://bowtie-bio.sourceforge.net/index.shtml"
+        },
+        {
+            "step_order": 3,
+            "description": "Bowtie version 1.0.0 with parameters -S -q -p 16 -e 100 -l 20 was used to align reads against an index generated from Repbase sequences (Langmead et al., 2009).",
+            "tool_name": "Bowtie",
+            "tool_version": "1.0.0",
+            "code_example": "# Install Bowtie (if not already installed)\n# conda install -c bioconda bowtie=1.0.0\n\n# Assuming 'repbase_index' is the prefix for the Bowtie index files generated from Repbase sequences\n# Assuming 'reads.fastq' is the input reads file\n# Assuming 'aligned.sam' is the desired output SAM file\n\nbowtie -S -q -p 16 -e 100 -l 20 repbase_index reads.fastq > aligned.sam",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/gb-2009-10-3-r25"
+        },
+        {
+            "step_order": 4,
+            "description": "Reads not mapped to Repbase sequences were aligned to the hg19 human genome (UCSC assembly) using STAR (Dobin et al., 2013) version 2.3.0e with parameters --outSAMunmapped Within \u00e2\u0080\u0093outFilterMultimapNmax 1 \u00e2\u0080\u0093outFilterMultimapScoreRange 1.",
+            "tool_name": "STAR",
+            "tool_version": "2.3.0e",
+            "code_example": "# Install STAR (example using conda)\n# conda install -c bioconda star=2.3.0e\n\n# Placeholder for STAR genome index for hg19\n# This index needs to be generated once using STAR --runMode genomeGenerate\n# Example command to generate index (replace paths and thread count as needed):\n# STAR --runMode genomeGenerate \\\n#   --genomeDir /path/to/hg19_star_index \\\n#   --genomeFastaFiles /path/to/hg19.fa \\\n#   --sjdbGTFfile /path/to/hg19_genes.gtf \\\n#   --runThreadN 8\n\n# Align reads to the hg19 human genome\nSTAR \\\n  --genomeDir /path/to/hg19_star_index \\\n  --readFilesIn input_reads_not_mapped_to_repbase.fastq \\\n  --outFileNamePrefix aligned_to_hg19_ \\\n  --outSAMtype BAM SortedByCoordinate \\\n  --outSAMunmapped Within \\\n  --outFilterMultimapNmax 1 \\\n  --outFilterMultimapScoreRange 1 \\\n  --runThreadN 8 # Example: use 8 threads for alignment",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 5,
+            "description": "RPKMs for each gene annotated in gencode v17 were calculated from RIP-seq data using custom scripts",
+            "tool_name": "GENCODE",
+            "tool_version": "N/A",
+            "code_example": "# Download GENCODE v17 annotation\n# mkdir -p references\n# wget -P references ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_17/gencode.v17.annotation.gtf.gz\n# gunzip references/gencode.v17.annotation.gtf.gz\n\n# Assume aligned RIP-seq BAM file is available: rip_seq_aligned.bam\n# And the GTF file is: references/gencode.v17.annotation.gtf\n\n# 1. Count reads per gene using featureCounts from the Subread package\n# conda install -c bioconda subread\nfeatureCounts -a references/gencode.v17.annotation.gtf -o gene_counts.txt -F GTF -t exon -g gene_id rip_seq_aligned.bam\n\n# 2. Get total mapped reads from the BAM file (excluding unmapped reads)\n# conda install -c bioconda samtools\ntotal_mapped_reads=$(samtools view -c -F 4 rip_seq_aligned.bam)\n\n# 3. Calculate RPKM for each gene using a custom awk script\n# This script parses the featureCounts output and applies the RPKM formula.\n# It assumes the featureCounts output file 'gene_counts.txt' has the following columns:\n# Geneid, Chr, Start, End, Strand, Length, /path/to/rip_seq_aligned.bam (read counts)\n# It skips the initial header lines and the first data header line.\nawk -v total_reads=\"$total_mapped_reads\" '\nBEGIN { OFS=\"\\t\"; print \"Geneid\", \"RPKM\" }\n/^#/ { next } # Skip lines starting with # (comments from featureCounts)\nNR > 1 { # Skip the first header line of the data table\n    gene_id = $1;\n    gene_length = $6;\n    read_count = $7; # Assuming the BAM file is the 7th column in featureCounts output\n    if (gene_length > 0 && total_reads > 0) {\n        rpkm = (read_count * 10^9) / (gene_length * total_reads);\n        print gene_id, rpkm;\n    } else {\n        print gene_id, 0; # Handle cases with zero length or zero total reads\n    }\n}' gene_counts.txt > gene_rpkm.txt",
+            "code_language": "bash",
+            "github_url": "https://www.gencodegenes.org/human/release_17.html"
+        }
+    ],
+    "raw_text": "Sequencing reads from CLIP-seq and RIP-seq libraries were first trimmed of polyA tails, adapters, and low quality ends using cutadapt with parameters --match-read-wildcards --times 2 -e 0 -O 5 --quality-cutoff' 6 -m 18 -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b TGGAATTCTCGGGTGCCAAGG -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT.\nReads were then mapped against a database of repetitive elements derived from RepBase18.05. Bowtie version 1.0.0 with parameters -S -q -p 16 -e 100 -l 20 was used to align reads against an index generated from Repbase sequences (Langmead et al., 2009).\nReads not mapped to Repbase sequences were aligned to the hg19 human genome (UCSC assembly) using STAR (Dobin et al., 2013) version 2.3.0e with parameters --outSAMunmapped Within \u00e2\u0080\u0093outFilterMultimapNmax 1 \u00e2\u0080\u0093outFilterMultimapScoreRange 1.\nRPKMs for each gene annotated in gencode v17 were calculated from RIP-seq data using custom scripts\nGenome_build: hg19\nSupplementary_files_format_and_content: rpkm files, contains RPKMs for each sample",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

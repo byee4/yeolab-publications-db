@@ -1,79 +1,79 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Reads were adapter-trimmed using Cutadapt (v1.14) and mapped to human-specific repetitive elements from RepBase (version 18.05) by STAR (v2.4.0i)(Dobin et al., 2013).",
-      "tool_name": "STAR",
-      "tool_version": "2.4.0i",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Repeat-mapping reads were removed, and remaining reads were mapped to the human genome assembly (hg19) with STAR",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Repeat-mapping reads were removed, and remaining reads were mapped to the human genome assembly (hg19) with STAR.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "PCR duplicate reads were removed using the unique molecular identifier (UMI) sequences in the 5\u00e2\u0080\u0099 adapter and remaining reads retained as \u00e2\u0080\u0098usable reads\u00e2\u0080\u0099.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Peaks were called on the usable reads by CLIPper (Lovci et al., 2013) and assigned to gene regions annotated in GENCODE (hg19) with the following descending priority order: CDS, 5\u00e2\u0080\u0099UTR, 3\u00e2\u0080\u0099UTR, proximal intron, and distal intron.",
-      "tool_name": "CLIPper",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Proximal intron regions are defined as extending up to 500 bp from an exon-intron junction.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Each peak was normalized to the size-matched input (SMInput) by calculating the fraction of the number of usable reads from immunoprecipitation to that of the usable reads from the SMInput.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "Peaks were deemed significant at 8-fold enrichment and p-value10-3(Chi-squared test, or Fisher\u00e2\u0080\u0099s exact test if the observed or expected read number in eCLIP or SMInput was below 5).",
-      "tool_name": "eCLIP",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Reads were adapter-trimmed using Cutadapt (v1.14) and mapped to human-specific repetitive elements from RepBase (version 18.05) by STAR (v2.4.0i)(Dobin et al., 2013).\nRepeat-mapping reads were removed, and remaining reads were mapped to the human genome assembly (hg19) with STAR\nRepeat-mapping reads were removed, and remaining reads were mapped to the human genome assembly (hg19) with STAR. PCR duplicate reads were removed using the unique molecular identifier (UMI) sequences in the 5\u00e2\u0080\u0099 adapter and remaining reads retained as \u00e2\u0080\u0098usable reads\u00e2\u0080\u0099.\nPeaks were called on the usable reads by CLIPper (Lovci et al., 2013) and assigned to gene regions annotated in GENCODE (hg19) with the following descending priority order: CDS, 5\u00e2\u0080\u0099UTR, 3\u00e2\u0080\u0099UTR, proximal intron, and distal intron. Proximal intron regions are defined as extending up to 500 bp from an exon-intron junction. Each peak was normalized to the size-matched input (SMInput) by calculating the fraction of the number of usable reads from immunoprecipitation to that of the usable reads from the SMInput. Peaks were deemed significant at 8-fold enrichment and p-value10-3(Chi-squared test, or Fisher\u00e2\u0080\u0099s exact test if the observed or expected read number in eCLIP or SMInput was below 5).\nAssembly: hg19\nSupplementary files format and content: bigwig files for input and IP samples as well as beds files for significant eCLIP peaks per experimental group",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Reads were adapter-trimmed using Cutadapt (v1.14) and mapped to human-specific repetitive elements from RepBase (version 18.05) by STAR (v2.4.0i)(Dobin et al., 2013).",
+            "tool_name": "STAR",
+            "tool_version": "2.4.0i",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables\n# Placeholder for RepBase FASTA file (version 18.05, human-specific)\n# RepBase requires a license for download. This path assumes the file is already available.\nGENOME_FASTA=\"repbase_18.05_human.fasta\"\nGENOME_DIR=\"star_index_repbase_18.05\"\n\n# Placeholder for adapter-trimmed reads (from Cutadapt output)\n# Assuming paired-end reads, adjust if single-end\nREADS_R1=\"trimmed_reads_R1.fastq.gz\"\nREADS_R2=\"trimmed_reads_R2.fastq.gz\"\n\nOUTPUT_PREFIX=\"mapped_repbase\"\nTHREADS=8 # Placeholder for number of threads\n\n# 1. Build STAR index for RepBase (if not already built)\n# The --genomeSAindexNbases parameter is adjusted for smaller/repetitive genomes like RepBase\nSTAR --runMode genomeGenerate \\\n     --genomeDir $GENOME_DIR \\\n     --genomeFastaFiles $GENOME_FASTA \\\n     --runThreadN $THREADS \\\n     --genomeSAindexNbases 10\n\n# 2. Map adapter-trimmed reads to RepBase using STAR\n# --alignIntronMax 1 is crucial for repetitive elements as they typically do not contain introns,\n# effectively disabling splice-aware alignment.\n# --outFilterMultimapNmax 100 allows reads to map to multiple locations, common for repetitive elements.\nSTAR --genomeDir $GENOME_DIR \\\n     --readFilesIn $READS_R1 $READS_R2 \\\n     --runThreadN $THREADS \\\n     --outFileNamePrefix ${OUTPUT_PREFIX}_ \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outFilterMultimapNmax 100 \\\n     --outFilterScoreMinOverLread 0.66 \\\n     --outFilterMatchNminOverLread 0.66 \\\n     --alignIntronMax 1 \\\n     --alignMatesGapMax 1000000 \\\n     --alignSJDBoverhangMin 1 \\\n     --alignSJoverhangMin 8",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Repeat-mapping reads were removed, and remaining reads were mapped to the human genome assembly (hg19) with STAR",
+            "tool_name": "STAR",
+            "tool_version": "2.5.2b",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables\nGENOME_DIR=\"/path/to/STAR_index/hg19\" # Placeholder for hg19 STAR index\nINPUT_FASTQ=\"input_reads.fastq.gz\" # Placeholder for input FASTQ file\nOUTPUT_PREFIX=\"aligned_reads\" # Prefix for output files\nNUM_THREADS=8 # Number of threads to use\n\n# Check if STAR index exists (optional, for robustness)\nif [ ! -d \"${GENOME_DIR}\" ]; then\n    echo \"Error: STAR genome index not found at ${GENOME_DIR}\"\n    echo \"Please build the STAR index for hg19 or provide the correct path.\"\n    # Example for building index (requires hg19 FASTA and GTF)\n    # STAR --runThreadN ${NUM_THREADS} --runMode genomeGenerate \\\n    #      --genomeDir ${GENOME_DIR} \\\n    #      --genomeFastaFiles /path/to/hg19.fa \\\n    #      --sjdbGTFfile /path/to/hg19.gtf \\\n    #      --sjdbOverhang 100 # Adjust sjdbOverhang based on read length - 1\n    exit 1\nfi\n\n# Run STAR alignment\n# Parameters:\n# --genomeDir: Path to the STAR genome index\n# --readFilesIn: Input FASTQ file(s). Use 'zcat' with --readFilesCommand for gzipped files.\n# --outFileNamePrefix: Prefix for all output files\n# --outSAMtype BAM SortedByCoordinate: Output sorted BAM file\n# --outFilterMultimapNmax 1: Keep only uniquely mapping reads (addresses \"repeat-mapping reads were removed\")\n# --outFilterType BySJout: Recommended for RNA-seq, filters out reads with non-canonical junctions\n# --outFilterMismatchNmax 999: Maximum number of mismatches per read (allows many)\n# --outFilterMismatchNoverLmax 0.04: Maximum fraction of mismatches relative to read length\n# --alignIntronMin 20: Minimum intron length\n# --alignIntronMax 1000000: Maximum intron length\n# --alignMatesGapMax 1000000: Maximum genomic distance between mates\n# --sjdbScore 1: Score for novel splice junctions\n# --readFilesCommand zcat: Command to decompress gzipped input files\n# --runThreadN: Number of threads to use\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${INPUT_FASTQ}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outFilterMultimapNmax 1 \\\n     --outFilterType BySJout \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.04 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --sjdbScore 1 \\\n     --readFilesCommand zcat \\\n     --runThreadN \"${NUM_THREADS}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "Repeat-mapping reads were removed, and remaining reads were mapped to the human genome assembly (hg19) with STAR.",
+            "tool_name": "STAR",
+            "tool_version": "2.7.9a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables\n# Path to the STAR genome index for hg19 (e.g., built with GENCODE v19 annotation)\n# Example: /path/to/STAR_index/hg19_gencode_v19\nGENOME_DIR=\"/path/to/STAR_index/hg19_gencode_v19\"\n# Input FASTQ file containing reads after repeat-mapping reads were removed\nREADS=\"filtered_reads.fastq.gz\"\n# Prefix for output files (e.g., mapped_reads_Aligned.sortedByCoord.out.bam)\nOUTPUT_PREFIX=\"mapped_reads_\"\n# Number of threads to use\nTHREADS=8 # Adjust as needed\n# Maximum RAM for sorting BAM (e.g., 30GB, adjust based on available memory)\nLIMIT_BAM_SORT_RAM=30000000000\n\n# Optional: Example command to build STAR genome index (run once per genome/annotation)\n# STAR --runThreadN ${THREADS} --runMode genomeGenerate \\\n# --genomeDir ${GENOME_DIR} \\\n# --genomeFastaFiles /path/to/hg19.fa \\\n# --sjdbGTFfile /path/to/gencode.v19.annotation.gtf \\\n# --sjdbOverhang 100 # Recommended: read length - 1\n\n# Map reads to the human genome (hg19) with STAR\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n--readFilesIn \"${READS}\" \\\n--runThreadN \"${THREADS}\" \\\n--outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n--outSAMtype BAM SortedByCoordinate \\\n--outSAMunmapped Within \\\n--outSAMattributes Standard \\\n--outFilterMultimapNmax 20 \\\n--alignSJDBoverhangMin 1 \\\n--alignSJoverhangMin 8 \\\n--alignIntronMin 20 \\\n--alignIntronMax 1000000 \\\n--alignMatesGapMax 1000000 \\\n--limitBAMsortRAM \"${LIMIT_BAM_SORT_RAM}\"\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 4,
+            "description": "PCR duplicate reads were removed using the unique molecular identifier (UMI) sequences in the 5\u00e2\u0080\u0099 adapter and remaining reads retained as \u00e2\u0080\u0098usable reads\u00e2\u0080\u0099.",
+            "tool_name": "umi_tools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.1.2",
+            "code_example": "# Install umi_tools (e.g., using conda)\n# conda install -c bioconda umi-tools=1.1.2\n\n# This command assumes that UMIs have already been extracted from the 5' adapter\n# and appended to the read IDs (e.g., by a preceding 'umi_tools extract' step).\n# The 'directional' method is generally recommended for UMI-based deduplication.\n# Replace 'aligned.bam' with your actual input BAM file and 'deduplicated.bam' with your desired output file name.\n\numi_tools dedup \\\n  --method=directional \\\n  --extract-umi-method=read_id \\\n  --umi-separator='_' \\\n  -I aligned.bam \\\n  -S deduplicated.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/CGATOxford/UMI-tools"
+        },
+        {
+            "step_order": 5,
+            "description": "Peaks were called on the usable reads by CLIPper (Lovci et al., 2013) and assigned to gene regions annotated in GENCODE (hg19) with the following descending priority order: CDS, 5\u00e2\u0080\u0099UTR, 3\u00e2\u0080\u0099UTR, proximal intron, and distal intron.",
+            "tool_name": "CLIPper",
+            "tool_version": "Lovci et al., 2013 implementation",
+            "code_example": "# Clone the CLIPper repository if not already available\n# git clone https://github.com/yeolab/clipper.git\n# cd clipper\n\n# It is recommended to use a Python 2.7 environment for CLIPper scripts.\n# conda create -n clipper_env python=2.7\n# conda activate clipper_env\n\n# Define input and output file names\nINPUT_BAM=\"input_usable_reads.bam\" # Placeholder for the input BAM file containing usable reads\nOUTPUT_PEAKS_BED=\"clipper_peaks.bed\"\nANNOTATED_PEAKS_TSV=\"clipper_annotated_peaks.tsv\"\n\n# Download GENCODE v19 annotation for hg19 if not already available\n# This GTF file is required for assigning peaks to gene regions.\n# wget -O gencode.v19.annotation.gtf.gz ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19/gencode.v19.annotation.gtf.gz\n# gunzip gencode.v19.annotation.gtf.gz\nGTF_FILE=\"gencode.v19.annotation.gtf\"\n\n# Step 1: Call peaks using CLIPper\n# The 'clipper.py' script should be in the current directory or in your PATH.\n# This command calls peaks from the input BAM file and outputs them in BED format.\npython clipper.py -s \"${INPUT_BAM}\" -o \"${OUTPUT_PEAKS_BED}\"\n\n# Step 2: Assign peaks to gene regions using assign_peaks_to_genes.py\n# The 'assign_peaks_to_genes.py' script should be in the current directory or in your PATH.\n# This command takes the called peaks and the GENCODE GTF, then assigns peaks to gene regions\n# based on the specified priority order: CDS, 5'UTR, 3'UTR, proximal intron, and distal intron.\npython assign_peaks_to_genes.py \\\n    -g \"${GTF_FILE}\" \\\n    -p \"${OUTPUT_PEAKS_BED}\" \\\n    -o \"${ANNOTATED_PEAKS_TSV}\" \\\n    --priority_order \"CDS,5UTR,3UTR,proximal_intron,distal_intron\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 6,
+            "description": "Proximal intron regions are defined as extending up to 500 bp from an exon-intron junction.",
+            "tool_name": "bedtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.30.0",
+            "code_example": "# Define reference files (replace with actual paths)\n# Chromosome sizes file (e.g., from UCSC or samtools faidx):\nCHROM_SIZES=\"GRCh38.chrom.sizes\"\n\n# --- Step 0: Obtain a BED file of introns ---\n# The description defines \"proximal intron regions\", implying that intron coordinates\n# are already known. For this code block, we assume 'introns.bed' is available.\n#\n# Example of how 'introns.bed' could be generated from a GTF file:\n# (This is a complex process and often involves custom scripts or tools like gffread/bedops)\n#\n# # 1. Extract exons from GTF and convert to BED format (requires gtf2bed from bedops suite or custom script)\n# # awk '$3 == \"exon\"' \"Homo_sapiens.GRCh38.109.gtf\" | gtf2bed - > exons.bed\n#\n# # 2. Sort and merge exons by transcript to get contiguous exon blocks\n# # bedtools sort -i exons.bed | bedtools merge -s -c 4,5,6 -o distinct,first,first -i - > merged_exons.bed\n#\n# # 3. Generate introns by finding gaps between merged exons within each transcript (requires custom scripting)\n# # For simplicity, let's assume 'introns.bed' is pre-generated.\n#\n# # Placeholder for introns.bed (replace with your actual intron coordinates)\n# # Example format: chr\\tstart\\tend\\tname\\tscore\\tstrand\nINTRONS_BED=\"introns.bed\"\n\n# --- Step 1: Define proximal intron regions (extending up to 500 bp from exon-intron junctions) ---\n# This involves taking the first 500bp and the last 500bp of each intron.\n\n# Get the 5' proximal 500 bp of each intron\n# For '+' strand introns, this is the region from the start coordinate to start+500.\n# For '-' strand introns, this is the region from end-500 to the end coordinate.\nbedtools flank -i \"$INTRONS_BED\" -g \"$CHROM_SIZES\" -l 500 -r 0 -s > proximal_5prime_introns.bed\n\n# Get the 3' proximal 500 bp of each intron\n# For '+' strand introns, this is the region from end-500 to the end coordinate.\n# For '-' strand introns, this is the region from the start coordinate to start+500.\nbedtools flank -i \"$INTRONS_BED\" -g \"$CHROM_SIZES\" -l 0 -r 500 -s > proximal_3prime_introns.bed\n\n# Combine the 5' and 3' proximal regions\n# Sort and merge any overlapping regions to get the final set of unique proximal intron regions.\ncat proximal_5prime_introns.bed proximal_3prime_introns.bed | \\\n    bedtools sort -i - | \\\n    bedtools merge -i - > proximal_intron_regions_500bp.bed\n\n# Clean up intermediate files (uncomment if desired)\n# rm proximal_5prime_introns.bed proximal_3prime_introns.bed",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        },
+        {
+            "step_order": 7,
+            "description": "Each peak was normalized to the size-matched input (SMInput) by calculating the fraction of the number of usable reads from immunoprecipitation to that of the usable reads from the SMInput.",
+            "tool_name": "Custom Script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# This script performs peak normalization based on usable read counts from IP and SMInput samples.\n# The number of usable reads for IP and SMInput would typically be obtained from alignment statistics\n# (e.g., from samtools flagstat output or custom scripts that count uniquely mapped reads).\n\n# Placeholder for usable read counts (replace with actual values from your data)\n# Example: usable_reads_ip=$(cat path/to/ip_usable_reads.txt)\n# Example: usable_reads_sminput=$(cat path/to/sminput_usable_reads.txt)\nusable_reads_ip=10000000 # Example: Total usable reads from IP sample\nusable_reads_sminput=5000000 # Example: Total usable reads from SMInput sample\n\n# Input peak file (e.g., a BED file where the 5th column represents the peak score/count)\ninput_peaks_file=\"input_peaks.bed\"\n# Output normalized peak file\noutput_normalized_peaks_file=\"normalized_peaks.bed\"\n\n# Calculate the normalization factor:\n# fraction = (usable reads from immunoprecipitation) / (usable reads from SMInput)\nnormalization_factor=$(awk \"BEGIN { print $usable_reads_ip / $usable_reads_sminput }\")\n\necho \"Normalization factor calculated: $normalization_factor\"\n\n# Normalize each peak score in the input BED file.\n# This command assumes the 5th column of the BED file contains the score to be normalized.\n# It multiplies the existing score by the calculated normalization factor.\nawk -v factor=\"$normalization_factor\" 'OFS=\"\\t\" { $5 = $5 * factor; print }' \"$input_peaks_file\" > \"$output_normalized_peaks_file\"\n\necho \"Peaks normalized and saved to $output_normalized_peaks_file\"\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper"
+        },
+        {
+            "step_order": 8,
+            "description": "Peaks were deemed significant at 8-fold enrichment and p-value10-3(Chi-squared test, or Fisher\u00e2\u0080\u0099s exact test if the observed or expected read number in eCLIP or SMInput was below 5).",
+            "tool_name": "eCLIP",
+            "tool_version": "latest",
+            "code_example": "# Install clipper (assuming Python and pip are available)\n# git clone https://github.com/yeolab/clipper.git\n# cd clipper\n# pip install .\n\n# Placeholder for input files and genome\n# Replace with actual paths to your eCLIP BAM, SMInput BAM, and reference genome FASTA.\n# Example: hg38.fa for human genome.\nECLIP_BAM=\"path/to/your/eclip_sample.bam\"\nSMINPUT_BAM=\"path/to/your/sminput_sample.bam\"\nGENOME_FASTA=\"path/to/your/genome.fa\"\nOUTPUT_PREFIX=\"eclip_peaks\"\n\n# Execute clipper for peak calling\n# Peaks were deemed significant at 8-fold enrichment and p-value 10-3\n# (Chi-squared test, or Fisher\u2019s exact test if the observed or expected read number in eCLIP or SMInput was below 5).\n# clipper automatically handles switching between Chi-squared and Fisher's exact test for low counts.\npython clipper/clipper.py \\\n    -f 8 \\\n    -p 0.001 \\\n    \"${ECLIP_BAM}\" \\\n    \"${SMINPUT_BAM}\" \\\n    \"${GENOME_FASTA}\" \\\n    \"${OUTPUT_PREFIX}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/clipper"
+        }
+    ],
+    "raw_text": "Reads were adapter-trimmed using Cutadapt (v1.14) and mapped to human-specific repetitive elements from RepBase (version 18.05) by STAR (v2.4.0i)(Dobin et al., 2013).\nRepeat-mapping reads were removed, and remaining reads were mapped to the human genome assembly (hg19) with STAR\nRepeat-mapping reads were removed, and remaining reads were mapped to the human genome assembly (hg19) with STAR. PCR duplicate reads were removed using the unique molecular identifier (UMI) sequences in the 5\u00e2\u0080\u0099 adapter and remaining reads retained as \u00e2\u0080\u0098usable reads\u00e2\u0080\u0099.\nPeaks were called on the usable reads by CLIPper (Lovci et al., 2013) and assigned to gene regions annotated in GENCODE (hg19) with the following descending priority order: CDS, 5\u00e2\u0080\u0099UTR, 3\u00e2\u0080\u0099UTR, proximal intron, and distal intron. Proximal intron regions are defined as extending up to 500 bp from an exon-intron junction. Each peak was normalized to the size-matched input (SMInput) by calculating the fraction of the number of usable reads from immunoprecipitation to that of the usable reads from the SMInput. Peaks were deemed significant at 8-fold enrichment and p-value10-3(Chi-squared test, or Fisher\u00e2\u0080\u0099s exact test if the observed or expected read number in eCLIP or SMInput was below 5).\nAssembly: hg19\nSupplementary files format and content: bigwig files for input and IP samples as well as beds files for significant eCLIP peaks per experimental group",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

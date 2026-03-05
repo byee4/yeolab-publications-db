@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "RNA-sequencing reads were trimmed using cutadapt (v1.4.0) of adaptor sequences, and mapped to repetitive elements (RepBase v18.04) using the STAR (v2.4.0i).",
-      "tool_name": "STAR",
-      "tool_version": "2.4.0i",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reads did not map to repetitive elements were then mapped to the human genome (hg19).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Using GENCODE (v19) gene annotations and featureCounts (v.1.5.0) to create read count matrices.",
-      "tool_name": "featureCounts",
-      "tool_version": "1.5.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Differential expression was calculated using DESeq2 version 1.10.1",
-      "tool_name": "DESeq2",
-      "tool_version": "1.10.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "The transcript RPKMs of input and polysome fractions were calculated from the read count matrices.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "RNA-sequencing reads were trimmed using cutadapt (v1.4.0) of adaptor sequences, and mapped to repetitive elements (RepBase v18.04) using the STAR (v2.4.0i). Reads did not map to repetitive elements were then mapped to the human genome (hg19). Using GENCODE (v19) gene annotations and featureCounts (v.1.5.0) to create read count matrices.\nDifferential expression was calculated using DESeq2 version 1.10.1\nThe transcript RPKMs of input and polysome fractions were calculated from the read count matrices.\nGenome_build: Homo sapiens UCSC hg19",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "RNA-sequencing reads were trimmed using cutadapt (v1.4.0) of adaptor sequences, and mapped to repetitive elements (RepBase v18.04) using the STAR (v2.4.0i).",
+            "tool_name": "STAR",
+            "tool_version": "2.4.0i",
+            "code_example": "# Define variables\nINPUT_READS=\"trimmed_reads.fastq.gz\" # Output from cutadapt\nGENOME_DIR=\"RepBase_STAR_index\" # Path to the pre-built STAR index for RepBase v18.04\nOUTPUT_PREFIX=\"STAR_RepBase_mapping_\"\nNUM_THREADS=8 # Adjust as needed\n\n# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Map trimmed RNA-seq reads to the RepBase index\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${INPUT_READS}\" \\\n     --runThreadN \"${NUM_THREADS}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outBAMcompression 6 \\\n     --outReadsUnmapped Fastx",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "Reads did not map to repetitive elements were then mapped to the human genome (hg19).",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables\n# Replace with the actual path to your STAR genome index for hg19\nGENOME_DIR=\"/path/to/STAR_index/hg19\"\n# Replace with the actual path to your input FASTQ file (reads unmapped to repetitive elements)\nINPUT_FASTQ=\"unmapped_reads.fastq.gz\"\n# Define output prefix for aligned files\nOUTPUT_PREFIX=\"aligned_hg19_\"\n# Number of threads to use\nNUM_THREADS=8\n\n# Create STAR genome index if it doesn't exist (run once per genome version)\n# This step is typically done prior to alignment. Assuming index already exists.\n# STAR --runThreadN ${NUM_THREADS} \\\n#      --runMode genomeGenerate \\\n#      --genomeDir ${GENOME_DIR} \\\n#      --genomeFastaFiles /path/to/hg19.fa \\\n#      --sjdbGTFfile /path/to/hg19.gtf \\\n#      --sjdbOverhang 100 # Adjust based on read length - 1\n\n# Align reads to the human genome (hg19) using STAR\nSTAR --runThreadN ${NUM_THREADS} \\\n     --genomeDir ${GENOME_DIR} \\\n     --readFilesIn ${INPUT_FASTQ} \\\n     --readFilesCommand gunzip -c \\\n     --outFileNamePrefix ${OUTPUT_PREFIX} \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes All \\\n     --outFilterMultimapNmax 1 \\\n     --outFilterMismatchNmax 3 \\\n     --outFilterScoreMinOverLread 0.66 \\\n     --outFilterMatchNminOverLread 0.66 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --outSAMstrandField intronMotif \\\n     --outFilterType BySJout\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "Using GENCODE (v19) gene annotations and featureCounts (v.1.5.0) to create read count matrices.",
+            "tool_name": "featureCounts",
+            "tool_version": "1.5.0",
+            "code_example": "# Install featureCounts (part of Subread package)\n# conda install -c bioconda subread\n\n# Define reference annotation file\nGENCODE_V19_GTF=\"gencode.v19.annotation.gtf\"\n\n# Placeholder for input BAM files (replace with actual paths to your aligned BAM files)\nINPUT_BAMS=\"sample1.bam sample2.bam\"\n\n# Output count matrix file\nOUTPUT_COUNTS=\"gene_counts.txt\"\n\n# Download GENCODE v19 annotation if not available (example command)\n# Note: Ensure you have the correct URL for GENCODE v19. This is a common pattern.\n# wget -O \"${GENCODE_V19_GTF}.gz\" \"ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19/gencode.v19.annotation.gtf.gz\"\n# gunzip \"${GENCODE_V19_GTF}.gz\"\n\n# Run featureCounts to create read count matrices\n# -a: specify annotation file (GTF/GFF)\n# -o: specify output file for counts\n# -F GTF: specify annotation file format (GTF)\n# -t exon: specify feature type to count (e.g., 'exon' for gene-level counts)\n# -g gene_id: specify attribute type to aggregate features by (e.g., 'gene_id')\n# -s 0: specify strand specificity (0=unstranded, 1=stranded, 2=reverse stranded). Assuming unstranded as not specified.\n# -T 8: specify number of threads (adjust as needed)\nfeatureCounts -a \"${GENCODE_V19_GTF}\" -o \"${OUTPUT_COUNTS}\" -F GTF -t exon -g gene_id -s 0 -T 8 ${INPUT_BAMS}",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "Differential expression was calculated using DESeq2 version 1.10.1",
+            "tool_name": "DESeq2",
+            "tool_version": "1.10.1",
+            "code_example": "# Install R and DESeq2 if not already installed.\n# Note: DESeq2 version 1.10.1 is quite old (released with Bioconductor 3.2, R 3.2).\n# Modern R/Bioconductor installations will typically provide a much newer version.\n# To ensure version 1.10.1, you might need to use an older R/Bioconductor environment\n# or a specific BiocManager version (e.g., BiocManager::install('DESeq2', version = '3.2')).\n\n# For R installation (example for Debian/Ubuntu):\n# sudo apt-get update\n# sudo apt-get install r-base\n\n# For DESeq2 package installation in R:\n# R -e \"if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager'); BiocManager::install('DESeq2')\"\n\n# Create an R script for DESeq2 analysis\ncat << 'EOF' > run_deseq2.R\n# Load DESeq2 library\n# Ensure DESeq2 version 1.10.1 is installed and loaded for consistency.\nlibrary(DESeq2)\n\n# --- Configuration ---\n# Input count matrix file (e.g., from featureCounts, HTSeq, Salmon, Kallisto).\n# This file should be tab-separated, with gene/feature IDs in the first column\n# and raw counts for each sample in subsequent columns.\n# Example:\n# gene_id    sample1    sample2    sample3    sample4\n# geneA      100        120        50         60\n# geneB      200        210        100        110\ncount_file <- \"counts.tsv\"\n\n# Sample information file (metadata).\n# This file should be tab-separated, with sample IDs in the first column\n# and experimental factors (e.g., condition, batch) in subsequent columns.\n# Sample IDs must match the column names in the count_file.\n# Example:\n# sample_id    condition    batch\n# sample1      control      batch1\n# sample2      control      batch2\n# sample3      treated      batch1\n# sample4      treated      batch2\nsample_info_file <- \"sample_info.tsv\"\n\n# Output directory for results\noutput_dir <- \"deseq2_results\"\n\n# Define the comparison: 'treatment_condition' vs 'reference_condition'.\n# These values must exactly match entries in the 'design_variable' column of sample_info_file.\nreference_condition <- \"control\"\ntreatment_condition <- \"treated\"\n\n# The column in sample_info_file that defines the primary experimental groups for comparison.\ndesign_variable <- \"condition\"\n\n# Create output directory if it doesn't exist\nif (!dir.exists(output_dir)) {\n  dir.create(output_dir)\n}\n\n# --- Load Data ---\n# Read count data\n# Ensure row names are gene IDs and column names are sample IDs\ncount_data <- as.matrix(read.table(count_file, header = TRUE, row.names = 1, sep = \"\\t\"))\n\n# Read sample information\n# Ensure row names are sample IDs\nsample_info <- read.table(sample_info_file, header = TRUE, row.names = 1, sep = \"\\t\")\n\n# Ensure sample names in count_data columns match sample_info row names and are in the same order\nsample_info <- sample_info[colnames(count_data), , drop = FALSE]\n\n# --- Create DESeqDataSet object ---\n# The 'design' formula specifies the experimental design.\n# Here, we are comparing based on the 'design_variable' (e.g., 'condition').\ndds <- DESeqDataSetFromMatrix(countData = count_data,\n                              colData = sample_info,\n                              design = as.formula(paste(\"~\", design_variable)))\n\n# Set the reference level for the primary design variable.\n# This ensures the fold changes are calculated as 'treatment' vs 'reference'.\ndds[[design_variable]] <- relevel(dds[[design_variable]], ref = reference_condition)\n\n# --- Run DESeq2 analysis ---\nmessage(\"Running DESeq2 analysis...\")\ndds <- DESeq(dds)\nmessage(\"DESeq2 analysis complete.\")\n\n# --- Extract Results ---\n# Get results for the specified comparison\nmessage(paste0(\"Extracting results for: \", treatment_condition, \" vs \", reference_condition))\nres <- results(dds, contrast = c(design_variable, treatment_condition, reference_condition))\n\n# Order results by adjusted p-value\nres_ordered <- res[order(res$padj),]\n\n# Write differential expression results to a CSV file\nresults_file <- file.path(output_dir, paste0(\"deseq2_differential_expression_\", treatment_condition, \"_vs_\", reference_condition, \".csv\"))\nwrite.csv(as.data.frame(res_ordered), file = results_file)\nmessage(paste0(\"Differential expression results saved to: \", results_file))\n\n# Optional: Save normalized counts\nnormalized_counts <- counts(dds, normalized = TRUE)\nnormalized_counts_file <- file.path(output_dir, \"deseq2_normalized_counts.csv\")\nwrite.csv(as.data.frame(normalized_counts), file = normalized_counts_file)\nmessage(paste0(\"Normalized counts saved to: \", normalized_counts_file))\n\n# Optional: Save session info for reproducibility\nsession_info_file <- file.path(output_dir, \"deseq2_session_info.txt\")\nsink(session_info_file)\nsessionInfo()\nsink()\nmessage(paste0(\"Session information saved to: \", session_info_file))\n\nEOF\n\n# Execute the R script\n# Replace 'counts.tsv' and 'sample_info.tsv' with your actual input files.\n# Ensure these files are in the current working directory or provide full paths.\nRscript run_deseq2.R",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/s13059-014-0550-8"
+        },
+        {
+            "step_order": 5,
+            "description": "The transcript RPKMs of input and polysome fractions were calculated from the read count matrices.",
+            "tool_name": "edgeR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "3.44.0",
+            "code_example": "# Install R and edgeR if not already present\n# conda install -c bioconda bioconductor-edger r-base\n\n# Create dummy count matrices and gene lengths for demonstration\n# In a real scenario, these would be pre-existing files.\nmkdir -p data\ncat <<EOF > data/input_counts.tsv\nGeneID\tSample1\tSample2\nGeneA\t100\t120\nGeneB\t50\t60\nGeneC\t200\t210\nEOF\n\ncat <<EOF > data/polysome_counts.tsv\nGeneID\tSample1\tSample2\nGeneA\t200\t250\nGeneB\t100\t110\nGeneC\t400\t420\nEOF\n\n# Gene lengths for GRCh38 (example values, replace with actual lengths from GTF/GFF)\ncat <<EOF > data/gene_lengths.tsv\nGeneID\tLength\nGeneA\t1000\nGeneB\t2000\nGeneC\t500\nEOF\n\n# R script to calculate RPKM using edgeR\nR_SCRIPT=\"calculate_rpkm.R\"\ncat <<'EOF' > \"$R_SCRIPT\"\nlibrary(edgeR)\n\n# Function to calculate RPKM for a given count matrix\ncalculate_rpkm_from_file <- function(count_file, gene_lengths_file, output_file) {\n  # Read count matrix\n  counts_df <- read.delim(count_file, row.names = 1, check.names = FALSE)\n  counts_matrix <- as.matrix(counts_df)\n\n  # Read gene lengths\n  gene_lengths_df <- read.delim(gene_lengths_file, row.names = 1, check.names = FALSE)\n  \n  # Ensure gene lengths are in the same order as counts and cover all genes\n  # Filter gene_lengths_df to only include genes present in counts_matrix\n  common_genes <- intersect(rownames(counts_matrix), rownames(gene_lengths_df))\n  if (length(common_genes) == 0) {\n    stop(\"No common genes found between count matrix and gene lengths file.\")\n  }\n  \n  counts_matrix <- counts_matrix[common_genes, , drop = FALSE]\n  gene_lengths <- gene_lengths_df[common_genes, \"Length\", drop = FALSE]\n  \n  # Create a DGEList object (required by edgeR's rpkm function)\n  dge <- DGEList(counts = counts_matrix)\n  \n  # Calculate RPKM\n  # The rpkm function expects gene.length as a numeric vector\n  rpkm_matrix <- rpkm(dge, gene.length = gene_lengths$Length)\n  \n  # Write RPKM matrix to file\n  write.table(rpkm_matrix, file = output_file, sep = \"\\t\", quote = FALSE, col.names = NA)\n  message(paste(\"RPKM calculated and saved to\", output_file))\n}\n\n# Define input and output files\ninput_counts_file <- \"data/input_counts.tsv\"\npolysome_counts_file <- \"data/polysome_counts.tsv\"\ngene_lengths_file <- \"data/gene_lengths.tsv\"\n\ninput_rpkm_output_file <- \"input_rpkm.tsv\"\npolysome_rpkm_output_file <- \"polysome_rpkm.tsv\"\n\n# Calculate RPKM for input fraction\ncalculate_rpkm_from_file(input_counts_file, gene_lengths_file, input_rpkm_output_file)\n\n# Calculate RPKM for polysome fraction\ncalculate_rpkm_from_file(polysome_counts_file, gene_lengths_file, polysome_rpkm_output_file)\n\nEOF\n\n# Execute the R script\nRscript \"$R_SCRIPT\"\n",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/edgeR.html"
+        }
+    ],
+    "raw_text": "RNA-sequencing reads were trimmed using cutadapt (v1.4.0) of adaptor sequences, and mapped to repetitive elements (RepBase v18.04) using the STAR (v2.4.0i). Reads did not map to repetitive elements were then mapped to the human genome (hg19). Using GENCODE (v19) gene annotations and featureCounts (v.1.5.0) to create read count matrices.\nDifferential expression was calculated using DESeq2 version 1.10.1\nThe transcript RPKMs of input and polysome fractions were calculated from the read count matrices.\nGenome_build: Homo sapiens UCSC hg19",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Preprocessing: 10bp were trimmed from the beginning of each read to remove possible adapter contamination",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Alignment: Reads were aligned using Bsmap with the following flags: -v 0.05 -s 16 -w 100 -S 1 -p 8 -",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Methylation calling: CpGs in the reference sequence were compared to the sequence in the aligned read.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "If bisulfite conversion (signifying an unmethylated cytosine) was detected, the read added to the unmethylated count for that CpG, otherwise, it added to the methylated count.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Preprocessing: 10bp were trimmed from the beginning of each read to remove possible adapter contamination\nAlignment: Reads were aligned using Bsmap with the following flags: -v 0.05 -s 16 -w 100 -S 1 -p 8 -\nMethylation calling: CpGs in the reference sequence were compared to the sequence in the aligned read. If bisulfite conversion (signifying an unmethylated cytosine) was detected, the read added to the unmethylated count for that CpG, otherwise, it added to the methylated count.\nGenome_build: Homo sapiens UCSC hg19\nSupplementary_files_format_and_content: Bed files contain the number of methylated and total reads for CpGs covered by RRBS with the columns: chromosome, start, end, number of reads methylated divided by number of reads seen, methylation percent*1000",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Preprocessing: 10bp were trimmed from the beginning of each read to remove possible adapter contamination",
+            "tool_name": "cutadapt (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.18",
+            "code_example": "# Install cutadapt (if not already installed)\n# conda install -c bioconda cutadapt=1.18\n\n# Define input and output file paths\nINPUT_FASTQ=\"input.fastq.gz\"\nOUTPUT_FASTQ=\"output.fastq.gz\"\n\n# Trim 10bp from the beginning (5' end) of each read\ncutadapt -u 10 -o \"${OUTPUT_FASTQ}\" \"${INPUT_FASTQ}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 2,
+            "description": "Alignment: Reads were aligned using Bsmap with the following flags: -v 0.05 -s 16 -w 100 -S 1 -p 8 -",
+            "tool_name": "Bsmap",
+            "tool_version": "",
+            "code_example": "# Install Bsmap (example using conda)\n# conda install -c bioconda bsmap\n\n# Placeholder for reference genome and input reads\n# Replace 'path/to/human_hg38.fa' with the actual path to your reference genome (e.g., hg38 for human).\n# Replace 'path/to/reads_R1.fastq.gz' and 'path/to/reads_R2.fastq.gz' with your actual paired-end input read files.\n# Bsmap is typically used for bisulfite sequencing data.\nREFERENCE_GENOME=\"path/to/human_hg38.fa\"\nREADS_R1=\"path/to/reads_R1.fastq.gz\"\nREADS_R2=\"path/to/reads_R2.fastq.gz\"\nOUTPUT_BAM=\"aligned.bam\"\n\n# Align reads using Bsmap with specified flags\nbsmap -v 0.05 -s 16 -w 100 -S 1 -p 8 -d \"${REFERENCE_GENOME}\" -o \"${OUTPUT_BAM}\" \"${READS_R1}\" \"${READS_R2}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "Methylation calling: CpGs in the reference sequence were compared to the sequence in the aligned read.",
+            "tool_name": "methylDackel (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "0.9.1",
+            "code_example": "# Install methylDackel (example using conda)\n# conda install -c bioconda methyldackel\n\n# Placeholder for reference genome (e.g., human hg38)\n# Download hg38 reference genome if not available\n# wget -O hg38.fa.gz http://hgdownload.cse.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz\n# gunzip hg38.fa.gz\n# samtools faidx hg38.fa # Index the reference for methylDackel\n\nREFERENCE_GENOME=\"hg38.fa\"\nALIGNED_READS=\"aligned_reads.bam\"\nOUTPUT_PREFIX=\"methylation_calls\"\n\n# Extract methylation information from aligned reads\n# This command will generate a .bedGraph file for CpG methylation\nmethylDackel extract \\\n    --output ${OUTPUT_PREFIX} \\\n    ${REFERENCE_GENOME} \\\n    ${ALIGNED_READS}",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "If bisulfite conversion (signifying an unmethylated cytosine) was detected, the read added to the unmethylated count for that CpG, otherwise, it added to the methylated count.",
+            "tool_name": "MethylDackel (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "0.6.0",
+            "code_example": "# Install MethylDackel (e.g., via conda)\n# conda install -c bioconda methyldackel\n\n# Define variables\nREFERENCE_GENOME=\"/path/to/GRCh38.fa\" # Placeholder for reference genome (e.g., GRCh38)\nINPUT_BAM=\"aligned_bisulfite_reads.bam\" # Input BAM file containing bisulfite-converted aligned reads\nOUTPUT_PREFIX=\"methylation_calls\" # Prefix for output files\n\n# Execute MethylDackel to extract methylation calls at CpG sites.\n# This command processes bisulfite-converted reads from the BAM file\n# and outputs per-CpG methylation information in a methylKit-compatible format.\n# It counts reads as methylated or unmethylated based on bisulfite conversion status\n# (C to T conversion indicates unmethylated, C remaining C indicates methylated).\nMethylDackel extract \\\n    --methylKit \\\n    -o \"${OUTPUT_PREFIX}\" \\\n    \"${REFERENCE_GENOME}\" \\\n    \"${INPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/dpryan79/MethylDackel"
+        }
+    ],
+    "raw_text": "Preprocessing: 10bp were trimmed from the beginning of each read to remove possible adapter contamination\nAlignment: Reads were aligned using Bsmap with the following flags: -v 0.05 -s 16 -w 100 -S 1 -p 8 -\nMethylation calling: CpGs in the reference sequence were compared to the sequence in the aligned read. If bisulfite conversion (signifying an unmethylated cytosine) was detected, the read added to the unmethylated count for that CpG, otherwise, it added to the methylated count.\nGenome_build: Homo sapiens UCSC hg19\nSupplementary_files_format_and_content: Bed files contain the number of methylated and total reads for CpGs covered by RRBS with the columns: chromosome, start, end, number of reads methylated divided by number of reads seen, methylation percent*1000",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

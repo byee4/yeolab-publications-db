@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Reads were counted by first searching for the CACCG sequence in the primary read file that appears in the vector 5\u00e2\u0080\u0099 to all sgRNA inserts.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "The next 20 nts are the sgRNA insert, which was then mapped to a reference file of all possible sgRNAs present in the library.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Reads were counted by first searching for the CACCG sequence in the primary read file that appears in the vector 5\u00e2\u0080\u0099 to all sgRNA inserts. The next 20 nts are the sgRNA insert, which was then mapped to a reference file of all possible sgRNAs present in the library.\nSupplementary_files_format_and_content: tab-delimited text file, includes sgRNA code and count",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Reads were counted by first searching for the CACCG sequence in the primary read file that appears in the vector 5\u00e2\u0080\u0099 to all sgRNA inserts.",
+            "tool_name": "grep (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# This command counts the number of lines in the primary read file that contain the sequence \"CACCG\".\n# The '-c' option tells grep to output only a count of matching lines.\n# Replace 'primary_read_file.fastq' with the actual path to your read file.\ngrep -c \"CACCG\" primary_read_file.fastq > cac_sequence_count.txt",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "The next 20 nts are the sgRNA insert, which was then mapped to a reference file of all possible sgRNAs present in the library.",
+            "tool_name": "bowtie2 (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.4.5",
+            "code_example": "# Install bowtie2 if not already installed\n# conda install -c bioconda bowtie2\n\n# Define input and output files\n# Assuming 'sgRNA_reads.fastq' contains the extracted 20nt sgRNA inserts\nSGRNA_READS=\"sgRNA_reads.fastq\"\n# 'sgRNA_library.fasta' is the reference file of all possible sgRNAs\nSGRNA_LIBRARY_FASTA=\"sgRNA_library.fasta\"\nINDEX_PREFIX=\"sgRNA_library_index\"\nOUTPUT_SAM=\"sgRNA_mapped.sam\"\nTHREADS=8 # Example number of threads\n\n# 1. Build Bowtie2 index for the sgRNA library\n# This step only needs to be run once for a given reference library\nbowtie2-build \"${SGRNA_LIBRARY_FASTA}\" \"${INDEX_PREFIX}\"\n\n# 2. Map the sgRNA inserts to the indexed library\n# -U for single-end reads\n# -S for SAM output\n# -p for number of threads\nbowtie2 -x \"${INDEX_PREFIX}\" -U \"${SGRNA_READS}\" -S \"${OUTPUT_SAM}\" -p \"${THREADS}\"\n\n# Optional: Convert SAM to BAM, sort, and index\n# samtools view -bS \"${OUTPUT_SAM}\" > \"${OUTPUT_SAM%.sam}.bam\"\n# samtools sort \"${OUTPUT_SAM%.sam}.bam\" -o \"${OUTPUT_SAM%.sam}.sorted.bam\"\n# samtools index \"${OUTPUT_SAM%.sam}.sorted.bam\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie2"
+        }
+    ],
+    "raw_text": "Reads were counted by first searching for the CACCG sequence in the primary read file that appears in the vector 5\u00e2\u0080\u0099 to all sgRNA inserts. The next 20 nts are the sgRNA insert, which was then mapped to a reference file of all possible sgRNAs present in the library.\nSupplementary_files_format_and_content: tab-delimited text file, includes sgRNA code and count",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,133 +1,133 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "library strategy: footprinting and selective 2\u00e2\u0080\u0099-hydroxyl acylation analyzed by primer extension (fSHAPE)",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "SHAPE libraries as follows:",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Full code at https://github.com/meracorley/fSHAPE",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "zcat \"$file\".fastq.gz | umi_tools extract --bc-pattern=NNNNCCCCNNNNN > \"$file\".umi.fastq",
-      "tool_name": "UMI-tools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "cutadapt -a AGATCGGAAGAGCGGTTCAGCAGGAATGCCGAGACCGATCTCGTATGCCGTCTTCTGCTTG --minimum-length=23 --overlap=5 -o \"$file\".trim.fastq \"$file\".umi.fastq",
-      "tool_name": "cutadapt",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "STAR --runThreadN 8 --genomeDir /projects/ps-yeolab4/genomes/GRCh38/star/ --readFilesIn \"$file\".trim.fastq --outFileNamePrefix \"$file\" --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --outSAMtype BAM SortedByCoordinate",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "umitools dedup -I \"$file\"Aligned.sortedByCoord.out.bam --spliced-is-unique -S \"$file\".dedup.bam",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "Total coverage (bedtools genomecov -split -strand + -dz; bedtools genomecov -split -strand - -dz) and 5' end coverage (bedtools genomecov -5 -strand + -dz; bedtools genomecov -5 -strand - -dz) summed at each position in the transcriptome with de-duplicated reads.",
-      "tool_name": "bedtools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "For each human transcript with read coverage, (5'end coverage / total read coverage) calculated at each position and normalized between -protein and +protein SHAPE libraries to calculate \"fSHAPE reactivity\" at each nucleotide in *maps.tar.gz files. -protein SHAPE libraries normalized against untreated SHAPE libraries to produce \"in vitro icSHAPE reactivity\" at each nucleotide in *vitro_icshape.tar.gz files. +protein SHAPE libraries normalized against untreated SHAPE libraries to produce \"in vivo icSHAPE reactivity\" at each nucleotide in *vivo_icshape.tar.gz files.",
-      "tool_name": "SHAPE-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 10,
-      "description": "SHAPE-eCLIP and fSHAPE-eCLIP libraries as follows:",
-      "tool_name": "eCLIP",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 11,
-      "description": "Full code at https://github.com/meracorley/f-SHAPE-eCLIP",
-      "tool_name": "eCLIP",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 12,
-      "description": "eCLIP pipeline (reads mapped with bowtie and STAR, de-duplicated, peaks called for regions with read pileup in IP samples relative to Input)",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 13,
-      "description": "Total coverage and mutation counts summed at each position in the transcriptome with de-duplicated reads.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 14,
-      "description": "For each human transcript with read coverage, (mutation coverage / total read coverage) calculated at each position and normalized between -protein and +protein libraries, or treated and untreated libraries, to calculate \"fSHAPE\" or \"SHAPE\" reactivity at each nucleotide in fshape_clip_maps.tar.gz and *shapeclip_maps.tar.gz files.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "library strategy: footprinting and selective 2\u00e2\u0080\u0099-hydroxyl acylation analyzed by primer extension (fSHAPE)\nSHAPE libraries as follows:\nFull code at https://github.com/meracorley/fSHAPE\nzcat \"$file\".fastq.gz | umi_tools extract --bc-pattern=NNNNCCCCNNNNN > \"$file\".umi.fastq\ncutadapt -a AGATCGGAAGAGCGGTTCAGCAGGAATGCCGAGACCGATCTCGTATGCCGTCTTCTGCTTG --minimum-length=23 --overlap=5 -o \"$file\".trim.fastq \"$file\".umi.fastq\nSTAR --runThreadN 8 --genomeDir /projects/ps-yeolab4/genomes/GRCh38/star/ --readFilesIn \"$file\".trim.fastq --outFileNamePrefix \"$file\" --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --outSAMtype BAM SortedByCoordinate\numitools dedup -I \"$file\"Aligned.sortedByCoord.out.bam --spliced-is-unique -S \"$file\".dedup.bam\nTotal coverage (bedtools genomecov -split -strand + -dz; bedtools genomecov -split -strand - -dz) and 5' end coverage (bedtools genomecov -5 -strand + -dz; bedtools genomecov -5 -strand - -dz) summed at each position in the transcriptome with de-duplicated reads.\nFor each human transcript with read coverage, (5'end coverage / total read coverage) calculated at each position and normalized between -protein and +protein SHAPE libraries to calculate \"fSHAPE reactivity\" at each nucleotide in *maps.tar.gz files. -protein SHAPE libraries normalized against untreated SHAPE libraries to produce \"in vitro icSHAPE reactivity\" at each nucleotide in *vitro_icshape.tar.gz files. +protein SHAPE libraries normalized against untreated SHAPE libraries to produce \"in vivo icSHAPE reactivity\" at each nucleotide in *vivo_icshape.tar.gz files.\nSHAPE-eCLIP and fSHAPE-eCLIP libraries as follows:\nFull code at https://github.com/meracorley/f-SHAPE-eCLIP\neCLIP pipeline (reads mapped with bowtie and STAR, de-duplicated, peaks called for regions with read pileup in IP samples relative to Input)\nTotal coverage and mutation counts summed at each position in the transcriptome with de-duplicated reads.\nFor each human transcript with read coverage, (mutation coverage / total read coverage) calculated at each position and normalized between -protein and +protein libraries, or treated and untreated libraries, to calculate \"fSHAPE\" or \"SHAPE\" reactivity at each nucleotide in fshape_clip_maps.tar.gz and *shapeclip_maps.tar.gz files.\nGenome_build: Hg38 for icSHAPE and fSHAPE, Hg19 for SHAPE-eCLIP and fSHAPE-eCLIP\nSupplementary_files_format_and_content: Tab-delimited .map files for multiple human transcripts: Nucleotide number in transcript, Average SHAPE or fSHAPE reactivity, Standard deviation, Base. Tab-delimited .rx files for multiple human transcripts: SHAPE or fSHAPE reactivity rep1, SHAPE or fSHAPE reactivity rep2.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "library strategy: footprinting and selective 2\u00e2\u0080\u0099-hydroxyl acylation analyzed by primer extension (fSHAPE)",
+            "tool_name": "fSHAPE (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# Example workflow for fSHAPE data analysis\n# Reference genome: hg38 (placeholder)\n\n# 1. Quality control (optional but recommended)\n# fastqc fshape_sample.fastq.gz\n\n# 2. Alignment to reference genome (e.g., using STAR)\n# Install STAR: # conda install -c bioconda star\n# Build STAR index (if not already done, replace paths with actual locations):\n# STAR --runMode genomeGenerate --genomeDir /path/to/STAR_index_hg38 --genomeFastaFiles /path/to/hg38.fa --sjdbGTFfile /path/to/hg38.gtf --runThreadN 8\n\nSTAR --genomeDir /path/to/STAR_index_hg38 \\\n     --readFilesIn fshape_sample.fastq.gz \\\n     --runThreadN 8 \\\n     --outFileNamePrefix fshape_sample_aligned_ \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outFilterMultimapNmax 1 \\\n     --outFilterMismatchNmax 3 \\\n     --alignIntronMax 1 # Assuming no splicing for reactivity mapping, or mapping to a transcript sequence\n\n# 3. Index the aligned BAM file\n# samtools index fshape_sample_aligned_Aligned.sortedByCoord.out.bam\n\n# 4. Calculate read depth/coverage at each position (e.g., using samtools)\n# This output is crucial for identifying primer extension stops.\n# samtools depth -a -o fshape_sample_depth.tsv fshape_sample_aligned_Aligned.sortedByCoord.out.bam\n\n# 5. Custom script for fSHAPE reactivity calculation\n# This step is highly specific to the fSHAPE protocol and involves:\n# - Identifying primer extension stops from the depth file.\n# - Normalizing counts (e.g., against control samples, total reads).\n# - Calculating reactivity scores.\n# - Often involves custom Python/R scripts.\n# python custom_fshape_reactivity_calculator.py \\\n#     --depth_file fshape_sample_depth.tsv \\\n#     --output_reactivity fshape_sample_reactivity.tsv \\\n#     --control_depth_file control_sample_depth.tsv \\\n#     --genome_fasta /path/to/hg38.fa",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1038/nprot.2014.188"
+        },
+        {
+            "step_order": 2,
+            "description": "SHAPE libraries as follows:",
+            "tool_name": "ShapeMapper (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "6.4",
+            "code_example": "# Install ShapeMapper (part of the RNAstructure suite)\n# conda install -c bioconda rnastructure\n# # Alternatively, download and compile from source or use pre-compiled binaries:\n# # https://rna.urmc.rochester.edu/RNAstructure.html\n\n# Example usage of ShapeMapper for SHAPE-MaP data analysis.\n# This command assumes paired-end sequencing data and a reference RNA sequence.\n# Replace 'reference.fasta', 'sample_R1.fastq.gz', 'sample_R2.fastq.gz' with actual file paths.\n# The output will include reactivity profiles and other analysis files.\n\n# Define input and output files\nREFERENCE_SEQUENCE=\"reference.fasta\" # Placeholder: Path to the reference RNA sequence in FASTA format\nINPUT_FASTQ_R1=\"sample_R1.fastq.gz\" # Placeholder: Path to the R1 FASTQ file\nINPUT_FASTQ_R2=\"sample_R2.fastq.gz\" # Placeholder: Path to the R2 FASTQ file (if paired-end)\nOUTPUT_PREFIX=\"sample_shapemapper_output\" # Prefix for output files\n\n# Run ShapeMapper\n# Note: ShapeMapper's exact command line interface can vary slightly depending on the version and specific analysis goals.\n# This is a common pattern for processing SHAPE-MaP data, including alignment, read counting, and reactivity calculation.\nShapeMapper --sequence \"${REFERENCE_SEQUENCE}\" \\\n            --fastq \"${INPUT_FASTQ_R1}\" \"${INPUT_FASTQ_R2}\" \\\n            --output-prefix \"${OUTPUT_PREFIX}\" \\\n            --min-read-length 20 \\\n            --max-read-length 200 \\\n            --min-mapq 20 \\\n            --num-threads 8",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "Full code at https://github.com/meracorley/fSHAPE",
+            "tool_name": "fSHAPE",
+            "tool_version": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install fSHAPE dependencies (example using conda)\n# conda env create -f environment.yaml\n# conda activate fshape_env\n\n# Ensure the SHAPE-MaP pipeline (https://github.com/Weeks-Lab/SHAPE-MaP_pipeline) is installed and configured.\n# Its path and conda environment name will be specified in config.yaml.\n\n# Create a config.yaml file based on your data and reference files\n# Example config.yaml content (replace placeholders with actual paths and values):\n# samples:\n#   sample1:\n#     R1: \"path/to/sample1_R1.fastq.gz\"\n#     R2: \"path/to/sample1_R2.fastq.gz\" # Optional, if paired-end\n#     control_R1: \"path/to/control1_R1.fastq.gz\"\n#     control_R2: \"path/to/control1_R2.fastq.gz\" # Optional, if paired-end\n# genome_fasta: \"/path/to/reference/genome/hg38.fa\" # Placeholder: use your specific genome fasta\n# gtf: \"/path/to/reference/annotation/hg38.gtf\" # Placeholder: use your specific GTF annotation\n# shape_mappers_path: \"/path/to/SHAPE-MaP_pipeline\" # Path to the SHAPE-MaP pipeline scripts\n# shape_mappers_env: \"shape_mappers_conda_env\" # Conda environment name for SHAPE-MaP pipeline\n\n# Execute the fSHAPE Snakemake pipeline\n# Ensure you are in the directory containing the Snakefile and config.yaml\nsnakemake --snakefile Snakefile --configfile config.yaml --cores 8",
+            "code_language": "bash",
+            "github_url": "https://github.com/meracorley/fSHAPE"
+        },
+        {
+            "step_order": 4,
+            "description": "zcat \"$file\".fastq.gz | umi_tools extract --bc-pattern=NNNNCCCCNNNNN > \"$file\".umi.fastq",
+            "tool_name": "UMI-tools",
+            "tool_version": "1.0.1",
+            "code_example": "# Install UMI-tools (e.g., via conda)\n# conda install -c bioconda umi_tools\n\n# Extract UMIs from FASTQ file\nzcat \"$file\".fastq.gz | umi_tools extract --bc-pattern=NNNNCCCCNNNNN > \"$file\".umi.fastq",
+            "code_language": "bash",
+            "github_url": "https://github.com/CGATOxford/UMI-tools"
+        },
+        {
+            "step_order": 5,
+            "description": "cutadapt -a AGATCGGAAGAGCGGTTCAGCAGGAATGCCGAGACCGATCTCGTATGCCGTCTTCTGCTTG --minimum-length=23 --overlap=5 -o \"$file\".trim.fastq \"$file\".umi.fastq",
+            "tool_name": "cutadapt",
+            "tool_version": "Not specified in description",
+            "code_example": "# Install cutadapt (if not already installed)\n# conda install -c bioconda cutadapt\n\n# Define input and output files (example placeholders)\n# file=\"sample_prefix\"\n\ncutadapt -a AGATCGGAAGAGCGGTTCAGCAGGAATGCCGAGACCGATCTCGTATGCCGTCTTCTGCTTG --minimum-length=23 --overlap=5 -o \"$file\".trim.fastq \"$file\".umi.fastq",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 6,
+            "description": "STAR --runThreadN 8 --genomeDir /projects/ps-yeolab4/genomes/GRCh38/star/ --readFilesIn \"$file\".trim.fastq --outFileNamePrefix \"$file\" --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --outSAMtype BAM SortedByCoordinate",
+            "tool_name": "STAR",
+            "tool_version": "2.7.0f",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables (example placeholders)\n# file=\"sample_id\" # Replace with your actual file prefix, e.g., 'SRR1234567'\n# genome_dir=\"/projects/ps-yeolab4/genomes/GRCh38/star/\" # Ensure this path is correct and contains STAR index\n\nSTAR \\\n  --runThreadN 8 \\\n  --genomeDir /projects/ps-yeolab4/genomes/GRCh38/star/ \\\n  --readFilesIn \"$file\".trim.fastq \\\n  --outFileNamePrefix \"$file\" \\\n  --outSAMstrandField intronMotif \\\n  --outFilterIntronMotifs RemoveNoncanonical \\\n  --outSAMtype BAM SortedByCoordinate",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 7,
+            "description": "umitools dedup -I \"$file\"Aligned.sortedByCoord.out.bam --spliced-is-unique -S \"$file\".dedup.bam",
+            "tool_name": "umi-tools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.1.2",
+            "code_example": "# Install umi-tools via conda\n# conda install -c bioconda umi-tools=1.1.2\n\n# Example usage:\n# Assuming 'file' variable is set, e.g., file=\"sample_id\"\numi_tools dedup -I \"$file\"Aligned.sortedByCoord.out.bam --spliced-is-unique -S \"$file\".dedup.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/CGATOxford/UMI-tools"
+        },
+        {
+            "step_order": 8,
+            "description": "Total coverage (bedtools genomecov -split -strand + -dz; bedtools genomecov -split -strand - -dz) and 5' end coverage (bedtools genomecov -5 -strand + -dz; bedtools genomecov -5 -strand - -dz) summed at each position in the transcriptome with de-duplicated reads.",
+            "tool_name": "bedtools",
+            "tool_version": "2.31.0",
+            "code_example": "# Install bedtools if not already installed\n# conda install -c bioconda bedtools\n\n# Placeholder for genome file (e.g., hg38.chrom.sizes)\n# This file should contain chromosome names and their sizes, tab-separated.\n# Example:\n# chr1    248956422\n# chr2    242193529\n# ...\n# You can generate this from a .fasta file using:\n# samtools faidx -i chromsizes genome.fasta > genome.txt\n# If reads are mapped to a transcriptome FASTA, this file should contain the sizes of the transcriptome sequences.\nGENOME_FILE=\"genome.txt\"\n\n# Placeholder for de-duplicated reads in BED format\n# This file should contain the de-duplicated reads, typically after alignment and deduplication.\n# Ensure these reads are in the same coordinate system as specified by GENOME_FILE.\nDEDUPLICATED_READS_BED=\"deduplicated_reads.bed\"\n\n# --- Step 1: Calculate total coverage for plus strand --- \n# -split: Reports coverage for spliced alignments (e.g., RNA-seq) by splitting reads at 'N' gaps.\n# -strand +: Reports coverage only for the plus strand.\n# -dz: Reports zero-coverage regions as well.\nbedtools genomecov -split -strand + -dz -i \"${DEDUPLICATED_READS_BED}\" -g \"${GENOME_FILE}\" > total_plus_coverage.bedgraph\n\n# --- Step 2: Calculate total coverage for minus strand --- \nbedtools genomecov -split -strand - -dz -i \"${DEDUPLICATED_READS_BED}\" -g \"${GENOME_FILE}\" > total_minus_coverage.bedgraph\n\n# --- Step 3: Calculate 5' end coverage for plus strand --- \n# -5: Reports coverage only for the 5' most base of each read.\nbedtools genomecov -5 -strand + -dz -i \"${DEDUPLICATED_READS_BED}\" -g \"${GENOME_FILE}\" > fiveprime_plus_coverage.bedgraph\n\n# --- Step 4: Calculate 5' end coverage for minus strand --- \nbedtools genomecov -5 -strand - -dz -i \"${DEDUPLICATED_READS_BED}\" -g \"${GENOME_FILE}\" > fiveprime_minus_coverage.bedgraph\n\n# --- Step 5: Sum all four coverages at each position --- \n# Use bedtools unionbedg to combine the four bedgraph files, ensuring all positions are considered.\n# Then, use awk to sum the coverage values from the four input files for each genomic position.\n# The output of unionbedg will have columns: chrom, start, end, coverage_file1, coverage_file2, coverage_file3, coverage_file4.\nbedtools unionbedg \\\n    -i total_plus_coverage.bedgraph \\\n    total_minus_coverage.bedgraph \\\n    fiveprime_plus_coverage.bedgraph \\\n    fiveprime_minus_coverage.bedgraph \\\n    -g \"${GENOME_FILE}\" \\\n    | awk 'BEGIN{OFS=\"\\t\"}{print $1, $2, $3, $4+$5+$6+$7}' \\\n    > combined_total_and_fiveprime_coverage.bedgraph\n\n# Clean up intermediate files (optional)\n# rm total_plus_coverage.bedgraph total_minus_coverage.bedgraph fiveprime_plus_coverage.bedgraph fiveprime_minus_coverage.bedgraph",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        },
+        {
+            "step_order": 9,
+            "description": "For each human transcript with read coverage, (5'end coverage / total read coverage) calculated at each position and normalized between -protein and +protein SHAPE libraries to calculate \"fSHAPE reactivity\" at each nucleotide in *maps.tar.gz files. -protein SHAPE libraries normalized against untreated SHAPE libraries to produce \"in vitro icSHAPE reactivity\" at each nucleotide in *vitro_icshape.tar.gz files. +protein SHAPE libraries normalized against untreated SHAPE libraries to produce \"in vivo icSHAPE reactivity\" at each nucleotide in *vivo_icshape.tar.gz files.",
+            "tool_name": "SHAPE-seq",
+            "tool_version": "Not specified (Method-specific implementation)",
+            "code_example": "# Install necessary tools (if not already installed)\n# conda install -c bioconda samtools bedtools\n\n# --- Configuration ---\n# Placeholder for human genome reference files.\n# Replace with actual paths to your reference genome and annotation.\nGENOME_FASTA=\"/path/to/human_genome.fa\" # e.g., hg38\nGENOME_GTF=\"/path/to/gencode.vXX.annotation.gtf\" # e.g., GENCODE v44\nGENOME_SIZES=\"/path/to/human_genome.sizes\" # Chromosome sizes file (e.g., from ucsc-tools fetchChromSizes)\n\n# Input BAM files for different SHAPE libraries (assuming these are already aligned)\nMINUS_PROTEIN_BAM=\"sample_minus_protein.bam\"\nPLUS_PROTEIN_BAM=\"sample_plus_protein.bam\"\nUNTREATED_BAM=\"sample_untreated.bam\"\n\nOUTPUT_DIR=\"shape_reactivity_output\"\nmkdir -p \"${OUTPUT_DIR}\"\n\n# --- Step 1: Calculate total read coverage for each library ---\n# This provides the denominator for the (5'end coverage / total read coverage) ratio.\necho \"Calculating total read coverage...\"\nsamtools depth -a \"${MINUS_PROTEIN_BAM}\" > \"${OUTPUT_DIR}/minus_protein.total_coverage.tsv\"\nsamtools depth -a \"${PLUS_PROTEIN_BAM}\" > \"${OUTPUT_DIR}/plus_protein.total_coverage.tsv\"\nsamtools depth -a \"${UNTREATED_BAM}\" > \"${OUTPUT_DIR}/untreated.total_coverage.tsv\"\n\n# --- Step 2: Calculate 5'end coverage and perform normalization ---\n# The calculation of 5'end coverage and the subsequent normalization steps\n# (fSHAPE, in vitro icSHAPE, in vivo icSHAPE reactivity) are highly specific\n# to the SHAPE-seq protocol and typically implemented via custom scripts\n# (e.g., Python or R) that process the aligned BAM files and reference annotations.\n# There isn't a single, universally standardized command-line tool for these\n# specific reactivity calculations and normalizations as described.\n\necho \"Calculating 5'end coverage and normalizing reactivities using a custom script...\"\necho \"This step involves:\"\necho \"  1. Extracting 5' end positions from aligned reads in BAM files for each human transcript.\"\necho \"  2. Calculating (5'end coverage / total read coverage) at each nucleotide.\"\necho \"  3. Normalizing these ratios as follows:\"\necho \"     - fSHAPE reactivity: Normalized between -protein and +protein SHAPE libraries.\"\necho \"     - in vitro icSHAPE reactivity: -protein SHAPE libraries normalized against untreated SHAPE libraries.\"\necho \"     - in vivo icSHAPE reactivity: +protein SHAPE libraries normalized against untreated SHAPE libraries.\"\necho \"Outputs will be generated as: ${OUTPUT_DIR}/fshape_reactivity.maps.tar.gz, ${OUTPUT_DIR}/in_vitro_icshape.tar.gz, ${OUTPUT_DIR}/in_vivo_icshape.tar.gz\"\n\n# Placeholder for a conceptual custom script call.\n# A real implementation would require a specific script (e.g., Python) that takes\n# the BAM files, total coverage files, and GTF annotation to perform the detailed\n# per-nucleotide calculations and normalizations.\n#\n# Example of how such a custom script might be invoked:\n# python /path/to/custom_shape_seq_processor.py \\\n#     --minus_protein_bam \"${MINUS_PROTEIN_BAM}\" \\\n#     --plus_protein_bam \"${PLUS_PROTEIN_BAM}\" \\\n#     --untreated_bam \"${UNTREATED_BAM}\" \\\n#     --minus_protein_total_coverage \"${OUTPUT_DIR}/minus_protein.total_coverage.tsv\" \\\n#     --plus_protein_total_coverage \"${OUTPUT_DIR}/plus_protein.total_coverage.tsv\" \\\n#     --untreated_total_coverage \"${OUTPUT_DIR}/untreated.total_coverage.tsv\" \\\n#     --genome_gtf \"${GENOME_GTF}\" \\\n#     --output_fshape \"${OUTPUT_DIR}/fshape_reactivity.maps.tar.gz\" \\\n#     --output_invitro \"${OUTPUT_DIR}/in_vitro_icshape.tar.gz\" \\\n#     --output_invivo \"${OUTPUT_DIR}/in_vivo_icshape.tar.gz\"\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 10,
+            "description": "SHAPE-eCLIP and fSHAPE-eCLIP libraries as follows:",
+            "tool_name": "eCLIP",
+            "tool_version": "latest (as of 2020-10-27, last commit to yeolab/eclip)",
+            "code_example": "# This script executes the Yeo Lab eCLIP CWL workflow for processing eCLIP and its variants like SHAPE-eCLIP and fSHAPE-eCLIP.\n# The workflow integrates tools for adapter trimming, alignment, deduplication, peak calling (CLIPper), and IDR (merge_peaks).\n\n# Prerequisites:\n# 1. cwltool: Install with `pip install cwltool`\n# 2. Docker or Singularity: Required by cwltool to run containerized tools within the workflow.\n# 3. Clone the eCLIP workflow repository:\n#    git clone https://github.com/yeolab/eclip.git\n#    cd eclip\n\n# Reference Data Preparation (example for human hg38):\n# - Genome FASTA (e.g., hg38.fa)\n# - Genome GTF (e.g., hg38.gtf)\n# - STAR index for the genome (build using STAR --runMode genomeGenerate)\n# - rRNA FASTA (e.g., hg38_rRNA.fa)\n# - STAR index for rRNA (build using STAR --runMode genomeGenerate)\n# - Adapter FASTA (e.g., adapters.fa, containing common sequencing adapters)\n# - Blacklist BED file (e.g., ENCODE hg38 blacklist)\n\n# Example command to run the eCLIP CWL workflow:\n# Replace placeholder paths and values with your actual data and desired settings.\n# This command assumes you are in the 'eclip' directory after cloning the repository.\n\ncwltool eclip.cwl \\\n    --fastq_files \"path/to/your_sample_R1.fastq.gz\" \\\n    --genome_fasta \"path/to/reference/hg38.fa\" \\\n    --genome_gtf \"path/to/reference/hg38.gtf\" \\\n    --star_index \"path/to/reference/star_index_hg38/\" \\\n    --blacklist_bed \"path/to/reference/hg38_blacklist.bed\" \\\n    --rRNA_fasta \"path/to/reference/rRNA/hg38_rRNA.fa\" \\\n    --rRNA_index \"path/to/reference/rRNA/star_index_rRNA/\" \\\n    --adapter_fasta \"path/to/adapters.fa\" \\\n    --umi_length 4 \\\n    --min_read_length 18 \\\n    --min_mapq 20 \\\n    --output_dir \"eclip_analysis_output\" \\\n    --sample_name \"SHAPE_eCLIP_Sample\" \\\n    --threads 8 \\\n    --memory \"32G\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 11,
+            "description": "Full code at https://github.com/meracorley/f-SHAPE-eCLIP",
+            "tool_name": "eCLIP",
+            "tool_version": "from f-SHAPE-eCLIP repository (based on Yeo Lab Skipper)",
+            "code_example": "# Clone the f-SHAPE-eCLIP pipeline repository\ngit clone https://github.com/meracorley/f-SHAPE-eCLIP.git\ncd f-SHAPE-eCLIP\n\n# --- Installation (commented out as per instructions) ---\n# # Install Snakemake if not already installed\n# conda install -c bioconda -c conda-forge snakemake\n\n# # Create and activate the conda environment for the pipeline\n# # This environment contains tools like cutadapt, STAR, samtools, picard, bedtools, clipper, etc.\n# conda env create -f environment.yaml\n# conda activate fshape_eclip\n\n# --- Configuration ---\n# # Configure the config.yaml file with your specific input files,\n# # output directories, and reference genome paths.\n# # Example configuration for hg38 reference genome:\n# # (Modify config.yaml directly or create a new config file)\n# #\n# # Example snippet from config.yaml:\n# # genome_fasta: \"path/to/your/resources/hg38.fa\"\n# # gtf: \"path/to/your/resources/gencode.v38.annotation.gtf\"\n# # star_index: \"path/to/your/resources/STAR_index_hg38\"\n# # chrom_sizes: \"path/to/your/resources/hg38.chrom.sizes\"\n# #\n# # Placeholder for downloading reference genome (hg38) if not available:\n# # mkdir -p resources\n# # wget -P resources http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz\n# # gunzip resources/hg38.fa.gz\n# # wget -P resources https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_38/gencode.v38.annotation.gtf.gz\n# # gunzip resources/gencode.v38.annotation.gtf.gz\n# #\n# # # Build STAR index (if not pre-built)\n# # STAR --runMode genomeGenerate --genomeDir resources/STAR_index_hg38 --genomeFastaFiles resources/hg38.fa --sjdbGTFfile resources/gencode.v38.annotation.gtf --runThreadN 8\n\n# --- Execution ---\n# # Run the f-SHAPE-eCLIP pipeline using Snakemake\n# # Adjust --cores based on available resources.\n# # The pipeline will use the conda environment defined in environment.yaml\n# # and configured in config.yaml.\nsnakemake --use-conda --cores 8",
+            "code_language": "bash",
+            "github_url": "https://github.com/meracorley/f-SHAPE-eCLIP"
+        },
+        {
+            "step_order": 12,
+            "description": "eCLIP pipeline (reads mapped with bowtie and STAR, de-duplicated, peaks called for regions with read pileup in IP samples relative to Input)",
+            "tool_name": "STAR",
+            "tool_version": "2.7.9a",
+            "code_example": "# Install STAR (example using Conda)\n# conda install -c bioconda star\n\n# --- Reference Data Setup (example for GRCh38) ---\n# This step is typically performed once to build the STAR genome index.\n# Replace '/path/to/genome_index', '/path/to/GRCh38.primary_assembly.fa', and '/path/to/gencode.v38.annotation.gtf' with actual paths.\n# mkdir -p /path/to/genome_index\n# STAR --runThreadN 8 \\\n#      --runMode genomeGenerate \\\n#      --genomeDir /path/to/genome_index \\\n#      --genomeFastaFiles /path/to/GRCh38.primary_assembly.fa \\\n#      --sjdbGTFfile /path/to/gencode.v38.annotation.gtf \\\n#      --sjdbOverhang 100 # Recommended value is (ReadLength - 1)\n\n# --- STAR Alignment Command ---\n# This command aligns sequencing reads to a reference genome using STAR.\n# It assumes a pre-built STAR genome index is available at '/path/to/genome_index'.\n# 'input_R1.fastq.gz' and 'input_R2.fastq.gz' are placeholder names for your input FASTQ files (paired-end example).\n# For single-end reads, remove the second FASTQ file from --readFilesIn.\n# Output BAM file will be 'aligned_reads_Aligned.sortedByCoord.out.bam'.\nSTAR --genomeDir /path/to/genome_index \\\n     --readFilesIn input_R1.fastq.gz input_R2.fastq.gz \\\n     --runThreadN 8 \\\n     --outFileNamePrefix aligned_reads_ \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outReadsUnmapped Fastx \\\n     --outFilterMultimapNmax 1 \\\n     --outFilterMismatchNmax 3 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --limitBAMsortRAM 30000000000 # Adjust based on available RAM (e.g., 30GB)\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 13,
+            "description": "Total coverage and mutation counts summed at each position in the transcriptome with de-duplicated reads.",
+            "tool_name": "samtools and parse_mpileup.py (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "samtools 1.15.1, parse_mpileup.py from skipper workflow (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install samtools (if not already installed)\n# conda install -c bioconda samtools=1.15.1\n\n# Download the parse_mpileup.py script from the Yeo lab skipper workflow.\n# This script is essential for parsing samtools mpileup output to count mutations and coverage.\n# wget https://raw.githubusercontent.com/yeolab/skipper/master/scripts/parse_mpileup.py\n# chmod +x parse_mpileup.py\n\n# Define input and reference files\nDEDUP_BAM=\"input_deduplicated.bam\" # Path to your de-duplicated BAM file\nREFERENCE_FASTA=\"GRCh38.p14.genome.fa\" # Placeholder: Path to your reference genome FASTA file (e.g., GRCh38.p14)\nOUTPUT_MUTATIONS_TSV=\"output_mutations_coverage.tsv.gz\"\n\n# Define parameters (example values commonly used in Yeo lab eCLIP pipeline)\nMIN_BASE_QUALITY=20       # Minimum base quality to consider a base\nMIN_MAPPING_QUALITY=10    # Minimum mapping quality to consider a read\nMAX_DEPTH=1000000         # Maximum per-BAM depth to avoid truncation for high coverage data\n\n# Execute samtools mpileup to generate pileup data and pipe it to parse_mpileup.py\n# The parse_mpileup.py script then processes this data to sum coverage and mutation counts at each position.\nsamtools mpileup \\\n  -q ${MIN_BASE_QUALITY} \\\n  -Q ${MIN_MAPPING_QUALITY} \\\n  -d ${MAX_DEPTH} \\\n  -A \\\n  -B \\\n  -f ${REFERENCE_FASTA} \\\n  ${DEDUP_BAM} \\\n| python parse_mpileup.py --output ${OUTPUT_MUTATIONS_TSV}",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper"
+        },
+        {
+            "step_order": 14,
+            "description": "For each human transcript with read coverage, (mutation coverage / total read coverage) calculated at each position and normalized between -protein and +protein libraries, or treated and untreated libraries, to calculate \"fSHAPE\" or \"SHAPE\" reactivity at each nucleotide in fshape_clip_maps.tar.gz and *shapeclip_maps.tar.gz files.",
+            "tool_name": "Custom SHAPE-MaP analysis script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "    # Define input files and reference data\n    # Placeholder for human reference genome (e.g., GRCh38)\n    REF_GENOME=\"/path/to/human_genome/GRCh38.primary_assembly.genome.fa\"\n    # Placeholder for human transcript annotation (e.g., Gencode v38)\n    TRANSCRIPT_ANNOTATION=\"/path/to/human_genome/gencode.v38.annotation.gtf\"\n\n    # Input BAM files for -protein and +protein libraries (for fSHAPE)\n    NEG_PROTEIN_BAM=\"/path/to/eclip_neg_protein_sample.bam\"\n    POS_PROTEIN_BAM=\"/path/to/eclip_pos_protein_sample.bam\"\n\n    # Input BAM files for treated and untreated libraries (for SHAPE)\n    TREATED_BAM=\"/path/to/treated_sample.bam\"\n    UNTREATED_BAM=\"/path/to/untreated_sample.bam\"\n\n    # Output directory\n    OUTPUT_DIR=\"./shape_reactivity_maps\"\n    mkdir -p ${OUTPUT_DIR}\n\n    # Ensure BAM files are indexed if not already\n    # samtools index ${NEG_PROTEIN_BAM}\n    # samtools index ${POS_PROTEIN_BAM}\n    # samtools index ${TREATED_BAM}\n    # samtools index ${UNTREATED_BAM}\n\n    # Placeholder for a custom script that calculates SHAPE/fSHAPE reactivity.\n    # This script would typically:\n    # 1. Process aligned reads (BAM files) to identify mutations or RT stops.\n    # 2. Calculate mutation coverage / total read coverage at each nucleotide.\n    # 3. Normalize reactivities between the specified control and experimental libraries.\n    # 4. Generate per-nucleotide reactivity maps for each transcript.\n    # 5. Archive the results into the specified .tar.gz files.\n\n    # Example command for fSHAPE calculation (comparing -protein vs +protein libraries)\n    # The actual script name and parameters would depend on the custom implementation.\n    # This command generates 'fshape_clip_maps.tar.gz'\n    python /path/to/custom_shape_analysis_script.py \\\n        --reference ${REF_GENOME} \\\n        --annotation ${TRANSCRIPT_ANNOTATION} \\\n        --control_bam ${NEG_PROTEIN_BAM} \\\n        --experimental_bam ${POS_PROTEIN_BAM} \\\n        --output_prefix ${OUTPUT_DIR}/fshape_output \\\n        --output_tar_gz ${OUTPUT_DIR}/fshape_clip_maps.tar.gz \\\n        --mode fSHAPE_protein_footprinting\n\n    # Example command for SHAPE calculation (comparing treated vs untreated libraries)\n    # This command generates 'shapeclip_maps.tar.gz' (or similar, matching the pattern *shapeclip_maps.tar.gz)\n    python /path/to/custom_shape_analysis_script.py \\\n        --reference ${REF_GENOME} \\\n        --annotation ${TRANSCRIPT_ANNOTATION} \\\n        --control_bam ${UNTREATED_BAM} \\\n        --experimental_bam ${TREATED_BAM} \\\n        --output_prefix ${OUTPUT_DIR}/shape_output \\\n        --output_tar_gz ${OUTPUT_DIR}/shapeclip_maps.tar.gz \\\n        --mode SHAPE_treatment_effect",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1038/nature15752"
+        }
+    ],
+    "raw_text": "library strategy: footprinting and selective 2\u00e2\u0080\u0099-hydroxyl acylation analyzed by primer extension (fSHAPE)\nSHAPE libraries as follows:\nFull code at https://github.com/meracorley/fSHAPE\nzcat \"$file\".fastq.gz | umi_tools extract --bc-pattern=NNNNCCCCNNNNN > \"$file\".umi.fastq\ncutadapt -a AGATCGGAAGAGCGGTTCAGCAGGAATGCCGAGACCGATCTCGTATGCCGTCTTCTGCTTG --minimum-length=23 --overlap=5 -o \"$file\".trim.fastq \"$file\".umi.fastq\nSTAR --runThreadN 8 --genomeDir /projects/ps-yeolab4/genomes/GRCh38/star/ --readFilesIn \"$file\".trim.fastq --outFileNamePrefix \"$file\" --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonical --outSAMtype BAM SortedByCoordinate\numitools dedup -I \"$file\"Aligned.sortedByCoord.out.bam --spliced-is-unique -S \"$file\".dedup.bam\nTotal coverage (bedtools genomecov -split -strand + -dz; bedtools genomecov -split -strand - -dz) and 5' end coverage (bedtools genomecov -5 -strand + -dz; bedtools genomecov -5 -strand - -dz) summed at each position in the transcriptome with de-duplicated reads.\nFor each human transcript with read coverage, (5'end coverage / total read coverage) calculated at each position and normalized between -protein and +protein SHAPE libraries to calculate \"fSHAPE reactivity\" at each nucleotide in *maps.tar.gz files. -protein SHAPE libraries normalized against untreated SHAPE libraries to produce \"in vitro icSHAPE reactivity\" at each nucleotide in *vitro_icshape.tar.gz files. +protein SHAPE libraries normalized against untreated SHAPE libraries to produce \"in vivo icSHAPE reactivity\" at each nucleotide in *vivo_icshape.tar.gz files.\nSHAPE-eCLIP and fSHAPE-eCLIP libraries as follows:\nFull code at https://github.com/meracorley/f-SHAPE-eCLIP\neCLIP pipeline (reads mapped with bowtie and STAR, de-duplicated, peaks called for regions with read pileup in IP samples relative to Input)\nTotal coverage and mutation counts summed at each position in the transcriptome with de-duplicated reads.\nFor each human transcript with read coverage, (mutation coverage / total read coverage) calculated at each position and normalized between -protein and +protein libraries, or treated and untreated libraries, to calculate \"fSHAPE\" or \"SHAPE\" reactivity at each nucleotide in fshape_clip_maps.tar.gz and *shapeclip_maps.tar.gz files.\nGenome_build: Hg38 for icSHAPE and fSHAPE, Hg19 for SHAPE-eCLIP and fSHAPE-eCLIP\nSupplementary_files_format_and_content: Tab-delimited .map files for multiple human transcripts: Nucleotide number in transcript, Average SHAPE or fSHAPE reactivity, Standard deviation, Base. Tab-delimited .rx files for multiple human transcripts: SHAPE or fSHAPE reactivity rep1, SHAPE or fSHAPE reactivity rep2.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

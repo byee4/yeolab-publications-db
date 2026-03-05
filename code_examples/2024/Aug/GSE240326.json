@@ -1,61 +1,61 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "remove adapter with Cutadapt",
-      "tool_name": "cutadapt",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "align to hg38 using STAR 2.4.0 (Homo sapiens) or mm10 using STAR 2.5.2 (Mus musculus)",
-      "tool_name": "STAR",
-      "tool_version": "2.4.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://github.com/alexdobin/STAR"
-    },
-    {
-      "step_order": 3,
-      "description": "SAILOR analysis to call C-to-U edits and keep only sites with score >0.5 and edit fraction <80%",
-      "tool_name": "SAILOR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://github.com/YeoLab/sailor"
-    },
-    {
-      "step_order": 4,
-      "description": "FLARE analysis to call C-to-U edit clusters",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "http://www.htslib.org"
-    },
-    {
-      "step_order": 5,
-      "description": "Intersect the edit clusters from 3 replicates, which yields \"*confident_peaks.bed\"",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Subtract STAMP confident clusters to Buffer only control, which yields \"*cleaned_confident_peaks.bed\"",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "http://homer.ucsd.edu"
-    }
-  ],
-  "raw_text": "remove adapter with Cutadapt\nalign to hg38 using STAR 2.4.0 (Homo sapiens) or mm10 using STAR 2.5.2 (Mus musculus)\nSAILOR analysis to call C-to-U edits and keep only sites with score >0.5 and edit fraction <80%\nFLARE analysis to call C-to-U edit clusters\nIntersect the edit clusters from 3 replicates, which yields \"*confident_peaks.bed\"\nSubtract STAMP confident clusters to Buffer only control, which yields \"*cleaned_confident_peaks.bed\"\nAssembly: hg38\nAssembly: mm10\nSupplementary files format and content: SAILOR step yields bed file: *0.5Score0.8Fraction.fastqTr.sorted.STARUnmapped.out.sorted.STARAligned.out.sorted.bam.combined.readfiltered.formatted.varfiltered.snpfiltered.ranked.bed\nSupplementary files format and content: FLARE step yields .tsv file: \"*merged_sorted_peaks.fdr_0.1.d_15.scored.tsv\"\nSupplementary files format and content: Intersection step yields .bed file:  \"*confident_peaks.bed\"\nSupplementary files format and content: Subtraction step yields .bed file:  \"*cleaned_confident_peaks.bed\"",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "remove adapter with Cutadapt",
+            "tool_name": "cutadapt",
+            "tool_version": "4.1",
+            "code_example": "# Install Cutadapt (if not already installed)\n# conda install -c bioconda cutadapt=4.1\n\n# Define input and output files\n# Replace with your actual input FASTQ files\nINPUT_R1=\"path/to/your/input_read1.fastq.gz\"\nINPUT_R2=\"path/to/your/input_read2.fastq.gz\" # For paired-end reads. Remove if single-end.\n\n# Replace with your desired output FASTQ files\nOUTPUT_R1_TRIMMED=\"path/to/your/output_read1_trimmed.fastq.gz\"\nOUTPUT_R2_TRIMMED=\"path/to/your/output_read2_trimmed.fastq.gz\" # For paired-end reads. Remove if single-end.\n\n# Define a report file for Cutadapt's summary\nREPORT_FILE=\"cutadapt_trimming_report.txt\"\n\n# Define adapter sequences\n# These are common Illumina TruSeq adapters. You MUST replace these with the actual adapter sequences\n# used in your library preparation. If you don't know them, you might need to auto-detect or consult\n# your sequencing provider/library prep kit documentation.\n# For single-end reads, typically only -a ADAPTER_R1 is needed.\n# For paired-end reads, -a ADAPTER_R1 for read 1 and -A ADAPTER_R2 for read 2.\nADAPTER_R1=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\" # Example: Illumina universal adapter\nADAPTER_R2=\"AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT\" # Example: Illumina index adapter (reverse complement of universal adapter)\n\n# Run Cutadapt for paired-end reads\n# Adjust parameters like --minimum-length, --quality-cutoff, --cores as needed.\n# If processing single-end reads, remove -A, -p, and INPUT_R2.\ncutadapt \\\n  -a \"${ADAPTER_R1}\" \\\n  -A \"${ADAPTER_R2}\" \\\n  -o \"${OUTPUT_R1_TRIMMED}\" \\\n  -p \"${OUTPUT_R2_TRIMMED}\" \\\n  --minimum-length 18 \\\n  --quality-cutoff 20 \\\n  --cores 8 \\\n  \"${INPUT_R1}\" \"${INPUT_R2}\" > \"${REPORT_FILE}\" 2>&1\n\n# For single-end reads, the command would look like this:\n# cutadapt \\\n#   -a \"${ADAPTER_R1}\" \\\n#   -o \"${OUTPUT_R1_TRIMMED}\" \\\n#   --minimum-length 18 \\\n#   --quality-cutoff 20 \\\n#   --cores 8 \\\n#   \"${INPUT_R1}\" > \"${REPORT_FILE}\" 2>&1",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 2,
+            "description": "align to hg38 using STAR 2.4.0 (Homo sapiens) or mm10 using STAR 2.5.2 (Mus musculus)",
+            "tool_name": "STAR",
+            "tool_version": "2.4.0",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star=2.4.0\n\n# Define input and output variables\n# Replace with actual paths and filenames\nREAD1=\"input_R1.fastq.gz\"\nREAD2=\"input_R2.fastq.gz\" # Remove if single-end\nOUTPUT_PREFIX=\"aligned_output\"\nNUM_THREADS=8 # Adjust as needed\n\n# Define genome index paths\n# Replace with actual paths to your STAR indices\n# For Homo sapiens (hg38)\nHG38_STAR_INDEX=\"/path/to/STAR_index/hg38\"\n# For Mus musculus (mm10)\nMM10_STAR_INDEX=\"/path/to/STAR_index/mm10\"\n\n# --- Choose the appropriate genome index based on species ---\n# For Homo sapiens (hg38):\nGENOME_DIR=\"${HG38_STAR_INDEX}\"\n# For Mus musculus (mm10):\n# GENOME_DIR=\"${MM10_STAR_INDEX}\"\n\n# Run STAR alignment\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${READ1}\" \"${READ2}\" \\\n     --runThreadN \"${NUM_THREADS}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}_\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMstrandField intronMotif \\\n     --outFilterMultimapNmax 20 \\\n     --alignSJDBoverhangMin 1 \\\n     --alignSJoverhangMin 8 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --outReadsUnmapped Fastx \\\n     --quantMode GeneCounts # Optional: if gene counts are desired, otherwise remove",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "SAILOR analysis to call C-to-U edits and keep only sites with score >0.5 and edit fraction <80%",
+            "tool_name": "SAILOR",
+            "tool_version": "0.1.0",
+            "code_example": "# Install SAILOR (e.g., via conda)\n# conda create -n sailor_env python=3.8\n# conda activate sailor_env\n# conda install -c bioconda sailor=0.1.0\n\n# Define input and output files\n# Replace 'aligned_reads.bam' with your actual input BAM file containing aligned RNA-seq reads.\nINPUT_BAM=\"aligned_reads.bam\"\n# Replace with the path to your reference genome FASTA file (e.g., GRCh38).\nREFERENCE_FASTA=\"path/to/human_genome/GRCh38.p13.genome.fa\"\n# Replace with the path to a VCF file of known SNPs for the reference genome (e.g., dbSNP for GRCh38).\nKNOWN_SNPS_VCF=\"path/to/known_snps/dbSNP_153_GRCh38.vcf.gz\"\n# Define the output file for the filtered C-to-U editing sites.\nOUTPUT_TSV=\"c_to_u_edits_filtered.tsv\"\n\n# Run SAILOR to call C-to-U edits and apply filtering criteria.\n# --min-score 0.5: Filters for sites with an editing score greater than 0.5.\n# --max-edit-fraction 0.8: Filters for sites where the edit fraction is less than 80% (0.8).\n# --fasta: Specifies the reference genome FASTA file.\n# --vcf: Specifies a VCF file of known SNPs to exclude from editing calls.\nsailor call \\\n    --min-score 0.5 \\\n    --max-edit-fraction 0.8 \\\n    --fasta \"${REFERENCE_FASTA}\" \\\n    --vcf \"${KNOWN_SNPS_VCF}\" \\\n    \"${INPUT_BAM}\" \\\n    > \"${OUTPUT_TSV}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "FLARE analysis to call C-to-U edit clusters",
+            "tool_name": "FLARE",
+            "tool_version": "0.1.0",
+            "code_example": "# Clone the FLARE repository\n# git clone https://github.com/yeolab/FLARE.git\n# cd FLARE\n\n# Install dependencies (if not already installed)\n# pip install -r requirements.txt\n\n# Example usage of FLARE to call C-to-U edit clusters\n# Replace <input_bam>, <output_directory>, <reference_fasta>, and <gene_annotation> with actual paths.\n# Reference datasets: GRCh38 is used as a placeholder for human genome.\n# Gene annotation: A GTF file for GRCh38 is used as a placeholder.\n\n# Define placeholder variables\nINPUT_BAM=\"path/to/your/aligned.bam\"\nOUTPUT_DIR=\"flare_c_to_u_edits\"\nREFERENCE_FASTA=\"path/to/GRCh38.fa\" # e.g., from Gencode or Ensembl\nGENE_ANNOTATION=\"path/to/GRCh38.gtf\" # e.g., from Gencode or Ensembl\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Execute FLARE analysis\n# The description implies calling C-to-U edits, which is the default behavior of FLARE.\n# Common parameters might include:\n# --min_reads 5 (minimum reads supporting an edit)\n# --min_edit_frac 0.1 (minimum fraction of reads supporting an edit)\n# --min_coverage 10 (minimum coverage at a site)\n# --min_base_qual 20 (minimum base quality)\n# --min_map_qual 20 (minimum mapping quality)\n# --blacklist (path to a blacklist BED file)\n# --known_edits (path to a VCF of known edits for filtering)\n\npython FLARE.py \\\n    -i \"${INPUT_BAM}\" \\\n    -o \"${OUTPUT_DIR}\" \\\n    -r \"${REFERENCE_FASTA}\" \\\n    -g \"${GENE_ANNOTATION}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/FLARE"
+        },
+        {
+            "step_order": 5,
+            "description": "Intersect the edit clusters from 3 replicates, which yields \"*confident_peaks.bed\"",
+            "tool_name": "merge_peaks (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# Install bedtools if not already installed, as it's a common dependency for intersection operations within pipelines like merge_peaks.\n# conda install -c bioconda bedtools\n\n# Assume input edit cluster BED files are:\n# replicate1_edit_clusters.bed\n# replicate2_edit_clusters.bed\n# replicate3_edit_clusters.bed\n\n# Intersect the edit clusters from the first two replicates\nbedtools intersect -a replicate1_edit_clusters.bed -b replicate2_edit_clusters.bed > temp_intersect_1_2.bed\n\n# Intersect the result with the third replicate to find regions common to all three\nbedtools intersect -a temp_intersect_1_2.bed -b replicate3_edit_clusters.bed > confident_peaks.bed\n\n# Clean up temporary file\nrm temp_intersect_1_2.bed",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/merge_peaks"
+        },
+        {
+            "step_order": 6,
+            "description": "Subtract STAMP confident clusters to Buffer only control, which yields \"*cleaned_confident_peaks.bed\"",
+            "tool_name": "bedtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "v2.30.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install bedtools (if not already installed)\n# conda install -c bioconda bedtools\n\n# Subtract Buffer only control regions from STAMP confident clusters\n# This yields regions that are present in STAMP clusters but not in the control.\n# Assuming 'stamp_confident_clusters.bed' contains the STAMP confident clusters\n# and 'buffer_only_control.bed' contains the Buffer only control regions.\nbedtools subtract -a stamp_confident_clusters.bed -b buffer_only_control.bed > cleaned_confident_peaks.bed",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        }
+    ],
+    "raw_text": "remove adapter with Cutadapt\nalign to hg38 using STAR 2.4.0 (Homo sapiens) or mm10 using STAR 2.5.2 (Mus musculus)\nSAILOR analysis to call C-to-U edits and keep only sites with score >0.5 and edit fraction <80%\nFLARE analysis to call C-to-U edit clusters\nIntersect the edit clusters from 3 replicates, which yields \"*confident_peaks.bed\"\nSubtract STAMP confident clusters to Buffer only control, which yields \"*cleaned_confident_peaks.bed\"\nAssembly: hg38\nAssembly: mm10\nSupplementary files format and content: SAILOR step yields bed file: *0.5Score0.8Fraction.fastqTr.sorted.STARUnmapped.out.sorted.STARAligned.out.sorted.bam.combined.readfiltered.formatted.varfiltered.snpfiltered.ranked.bed\nSupplementary files format and content: FLARE step yields .tsv file: \"*merged_sorted_peaks.fdr_0.1.d_15.scored.tsv\"\nSupplementary files format and content: Intersection step yields .bed file:  \"*confident_peaks.bed\"\nSupplementary files format and content: Subtraction step yields .bed file:  \"*cleaned_confident_peaks.bed\"",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

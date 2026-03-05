@@ -1,16 +1,16 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "R limma package - Normalization : normalizeWithinArrays loess - Statistical analysis :R Anapuce R package.",
-      "tool_name": "limma",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "R limma package - Normalization : normalizeWithinArrays loess - Statistical analysis :R Anapuce R package.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "R limma package - Normalization : normalizeWithinArrays loess - Statistical analysis :R Anapuce R package.",
+            "tool_name": "limma",
+            "tool_version": "Inferred with models/gemini-2.5-flash",
+            "code_example": "# Install R and Bioconductor if not already present\n# For Bioconductor packages like limma:\n# if (!requireNamespace(\"BiocManager\", quietly = TRUE))\n#     install.packages(\"BiocManager\")\n# BiocManager::install(\"limma\")\n\n# For CRAN packages like Anapuce:\n# install.packages(\"Anapuce\")\n# install.packages(\"Biobase\") # Required for ExpressionSet objects\n\n# Create an R script for the analysis\ncat << 'EOF' > run_limma_anapuce_analysis.R\n# Load necessary packages\nlibrary(limma)\nlibrary(Anapuce)\nlibrary(Biobase) # Often needed for ExpressionSet objects\n\n# --- Normalization using limma ---\n# In a real scenario, you would load your raw microarray data, e.g.:\n# targets <- readTargets(\"targets.txt\") # A file describing your arrays\n# RG <- read.maimages(targets, source=\"agilent\") # Read raw red/green intensities\n\n# For demonstration, create a dummy RGList object\nnum_genes <- 100\nnum_arrays <- 5\nRG <- new(\"RGList\", list(\n  R=matrix(rnorm(num_genes * num_arrays, mean=1000, sd=200), num_genes, num_arrays),\n  G=matrix(rnorm(num_genes * num_arrays, mean=800, sd=150), num_genes, num_arrays),\n  targets=data.frame(FileName=paste0(\"array\", 1:num_arrays, \".txt\"),\n                     Group=rep(c(\"Control\", \"Treated\"), length.out=num_arrays))\n))\nRG$genes <- data.frame(ProbeID=paste0(\"Probe_\", 1:num_genes))\n\nprint(\"Performing within-array normalization with loess method using limma...\")\nMA <- normalizeWithinArrays(RG, method=\"loess\")\nprint(\"Normalization complete. First few normalized M values (log-ratio):\")\nprint(head(MA$M))\n\n# --- Statistical analysis using Anapuce ---\n# Anapuce typically works with ExpressionSet objects or similar.\n# For demonstration, we'll create a basic ExpressionSet from the normalized data.\n# In a full pipeline, you might perform background correction and between-array normalization\n# with limma to get log2 expression values (E-values) before Anapuce.\n\n# Create phenoData\npData <- MA$targets\nrownames(pData) <- colnames(MA$M)\nphenoData <- new(\"AnnotatedDataFrame\", data=pData)\n\n# Create featureData\nfData <- MA$genes\nrownames(fData) <- rownames(MA$M)\nfeatureData <- new(\"AnnotatedDataFrame\", data=fData)\n\n# Create ExpressionSet (using M-values as a placeholder for expression data)\n# Note: Anapuce functions often expect log-intensities, not M-values directly.\n# This is a simplified example to show package usage.\neset <- new(\"ExpressionSet\", exprs=MA$M, phenoData=phenoData, featureData=featureData)\n\nprint(\"Performing statistical analysis using Anapuce...\")\n# Specific Anapuce functions would be called here, e.g., for differential expression,\n# quality control, or visualization, using the 'eset' object.\n# Example: anapuce_results <- anapuce(eset, design_matrix, contrast_matrix)\nprint(paste(\"Anapuce package version:\", packageVersion(\"Anapuce\")))\nprint(\"Anapuce analysis placeholder executed. Replace with specific Anapuce functions.\")\n\n# Save results (example)\n# write.csv(MA$M, \"limma_normalized_M_values.csv\")\n# write.csv(exprs(eset), \"anapuce_input_expression.csv\")\nEOF\n\nRscript run_limma_anapuce_analysis.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/limma.html"
+        }
+    ],
+    "raw_text": "R limma package - Normalization : normalizeWithinArrays loess - Statistical analysis :R Anapuce R package.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

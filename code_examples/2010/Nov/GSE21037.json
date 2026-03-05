@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Gene-level signal estimates were derived from the CEL files by RMA-sketch normalization as a method in the apt-probeset-summarize program (see Yeo et al.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "2007; PMID 7967047).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Hierarchical clustering of the full dataset by probeset values was performed by complete linkage using Euclidean distance as a similarity metric in Matlab.",
-      "tool_name": "MATLAB",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Gene-level signal estimates were derived from the CEL files by RMA-sketch normalization as a method in the apt-probeset-summarize program (see Yeo et al. 2007; PMID 7967047). Hierarchical clustering of the full dataset by probeset values was performed by complete linkage using Euclidean distance as a similarity metric in Matlab.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Gene-level signal estimates were derived from the CEL files by RMA-sketch normalization as a method in the apt-probeset-summarize program (see Yeo et al.",
+            "tool_name": "apt-probeset-summarize",
+            "tool_version": "Not specified",
+            "code_example": "# Install Affymetrix Power Tools (APT)\n# conda install -c bioconda affymetrix-power-tools\n\n# Define input CEL files (replace with actual file paths).\n# Example: CEL_FILES=\"sample1.CEL sample2.CEL sample3.CEL\"\n# Or, if all CEL files are in a directory:\nCEL_FILES=$(find /path/to/your/cel_files_directory -name \"*.CEL\" | tr '\\n' ' ')\n\n# Define output directory\nOUTPUT_DIR=\"gene_level_estimates\"\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Define annotation file (replace with the correct annotation file for your array type and genome build).\n# This file provides the mapping from probesets to genes (e.g., a CDF file or a probeset-to-gene mapping file).\n# The specific file depends on the Affymetrix array used (e.g., HuGene-1_0-st-v1, HG-U133_Plus_2).\n# Example for a human array (e.g., HuGene-1_0-st-v1):\n# ANNOTATION_FILE=\"/path/to/HuGene-1_0-st-v1.r2.dt1.hg19.na33.transcript.csv\"\n# Example for an older array:\n# ANNOTATION_FILE=\"/path/to/HG-U133_Plus_2.cdf\"\nANNOTATION_FILE=\"path/to/your_array_annotation.csv\" # Placeholder for the specific array annotation file\n\n# Run apt-probeset-summarize with RMA-sketch normalization\napt-probeset-summarize \\\n    --method rma-sketch \\\n    --cel-files \"${CEL_FILES}\" \\\n    --annotation-file \"${ANNOTATION_FILE}\" \\\n    --output-file \"${OUTPUT_DIR}/gene_level_signals\" \\\n    --log-file \"${OUTPUT_DIR}/apt_log.txt\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "2007; PMID 7967047).",
+            "tool_name": "BLAST (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "legacy BLAST (circa 2007)",
+            "code_example": "# Install BLAST (e.g., using conda)\n# conda install -c bioconda blast\n\n# --- Placeholder for reference database and query sequences ---\n# Replace 'reference.fasta' with your actual reference sequence file (e.g., genome, transcriptome).\n# Replace 'my_blast_db' with your desired database name.\n# This command creates a BLAST database from your reference FASTA file.\nmakeblastdb -in reference.fasta -dbtype nucl -out my_blast_db\n\n# Replace 'query.fasta' with your actual query sequence file.\n\n# Run blastn (Nucleotide BLAST)\n# -query: Input query file\n# -db: BLAST database name\n# -out: Output file in tabular format\n# -outfmt 6: Tabular output format (standard for parsing)\n# -num_threads: Number of CPU threads to use\nblastn -query query.fasta -db my_blast_db -out blastn_results.tsv -outfmt 6 -num_threads 8",
+            "code_language": "bash",
+            "github_url": "https://pubmed.ncbi.nlm.nih.gov/7967047/"
+        },
+        {
+            "step_order": 3,
+            "description": "Hierarchical clustering of the full dataset by probeset values was performed by complete linkage using Euclidean distance as a similarity metric in Matlab.",
+            "tool_name": "MATLAB",
+            "tool_version": "Not specified (Standard Library)",
+            "code_example": "#!/bin/bash\n\n# Input data file (replace with your actual path and format)\n# Example: probeset_data.csv (assuming comma-separated values)\nINPUT_DATA=\"probeset_data.csv\"\nOUTPUT_CLUSTERING_MATRIX=\"hierarchical_clustering_results.csv\"\nOUTPUT_DENDROGRAM_PNG=\"dendrogram.png\"\n\n# Create a temporary MATLAB script for clustering\ncat << EOF > run_clustering.m\n% MATLAB script for hierarchical clustering\n% Load data (adjust 'readmatrix' based on your actual data format, e.g., readtable, then table2array)\ntry\n    data = readmatrix('$INPUT_DATA');\ncatch ME\n    disp(['Error loading data: ', ME.message]);\n    exit(1);\nend\n\n% Calculate pairwise Euclidean distances\nY = pdist(data, 'euclidean');\n\n% Perform hierarchical clustering with complete linkage\nZ = linkage(Y, 'complete');\n\n% Save the clustering result (linkage matrix)\nwritematrix(Z, '$OUTPUT_CLUSTERING_MATRIX');\n\n% Optional: Generate and save a dendrogram image\n% This might require a display server if running headless, or MATLAB's 'batch' mode\n% might handle it if 'figure('visible','off')' is used. For robust headless operation,\n% ensure Xvfb is running or consider alternative plotting libraries.\ntry\n    figure('visible','off'); % Create a figure without displaying it\n    dendrogram(Z);\n    title('Hierarchical Clustering Dendrogram');\n    saveas(gcf, '$OUTPUT_DENDROGRAM_PNG');\n    close(gcf); % Close the figure\ncatch ME\n    disp(['Warning: Could not generate dendrogram image. ', ME.message]);\nend\n\nexit(0); % Exit MATLAB successfully\nEOF\n\n# Execute the MATLAB script in batch mode\n# Assumes MATLAB is installed and its executable is in the system PATH.\nmatlab -batch \"run_clustering\" -logfile matlab_clustering.log\n\n# Clean up the temporary MATLAB script\nrm run_clustering.m",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Gene-level signal estimates were derived from the CEL files by RMA-sketch normalization as a method in the apt-probeset-summarize program (see Yeo et al. 2007; PMID 7967047). Hierarchical clustering of the full dataset by probeset values was performed by complete linkage using Euclidean distance as a similarity metric in Matlab.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

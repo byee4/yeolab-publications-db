@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "The data was analyzed by RNA Express v1.0 in BaseSpace",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reads were aligned to mm10 using STAR with the following parameters: readFilesCommand zcat outFilterType BySJout outSJfilterCountUniqueMin -1 2 2 2 outSJfilterCountTotalMin -1 2 2 2 outFilterIntronMotifs RemoveNoncanonical genomeLoad LoadAndKeep",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Gene expression levels were computed by a proprietary alogorithm in BaseSpace",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Differential expression was performed with DESeq2 using default parameters",
-      "tool_name": "DESeq2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Gene cycling data was computed with eJTK_Cycle",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "The data was analyzed by RNA Express v1.0 in BaseSpace\nReads were aligned to mm10 using STAR with the following parameters: readFilesCommand zcat outFilterType BySJout outSJfilterCountUniqueMin -1 2 2 2 outSJfilterCountTotalMin -1 2 2 2 outFilterIntronMotifs RemoveNoncanonical genomeLoad LoadAndKeep\nGene expression levels were computed by a proprietary alogorithm in BaseSpace\nDifferential expression was performed with DESeq2 using default parameters\nGene cycling data was computed with eJTK_Cycle\nGenome_build: mm10\nSupplementary_files_format_and_content: tab-delimited text files showing gene cycling data",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "The data was analyzed by RNA Express v1.0 in BaseSpace",
+            "tool_name": "RNA Express",
+            "tool_version": "1.0",
+            "code_example": "# The analysis was performed using \"RNA Express v1.0\" within the Illumina BaseSpace platform.\n# This is an application typically run via a graphical user interface or API, not a direct command-line tool.\n# Specific command-line parameters and an executable bash command cannot be generated from the provided description.\n\n# Placeholder for reference genome, commonly used in RNA analysis:\n# REF_GENOME=\"GRCh38\"\n# REF_GTF=\"gencode.v38.annotation.gtf\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Reads were aligned to mm10 using STAR with the following parameters: readFilesCommand zcat outFilterType BySJout outSJfilterCountUniqueMin -1 2 2 2 outSJfilterCountTotalMin -1 2 2 2 outFilterIntronMotifs RemoveNoncanonical genomeLoad LoadAndKeep",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install STAR (example using conda)\n# conda install -c bioconda star\n\n# Create a genome directory (if not already present)\n# mkdir -p /path/to/STAR_genome_index/mm10\n\n# Build STAR genome index (if not already present, using mm10 as reference)\n# This step is usually done once per genome assembly\n# STAR --runMode genomeGenerate \\\n#      --genomeDir /path/to/STAR_genome_index/mm10 \\\n#      --genomeFastaFiles /path/to/mm10.fa \\\n#      --sjdbGTFfile /path/to/mm10.gtf \\\n#      --runThreadN <number_of_threads>\n\n# Align reads using STAR\nSTAR --genomeDir /path/to/STAR_genome_index/mm10 \\\n     --readFilesIn input_reads.fastq.gz \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix output_aligned_prefix_ \\\n     --outFilterType BySJout \\\n     --outSJfilterCountUniqueMin -1 2 2 2 \\\n     --outSJfilterCountTotalMin -1 2 2 2 \\\n     --outFilterIntronMotifs RemoveNoncanonical \\\n     --genomeLoad LoadAndKeep \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outSAMattributes Standard \\\n     --runThreadN <number_of_threads>",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "Gene expression levels were computed by a proprietary alogorithm in BaseSpace",
+            "tool_name": "Proprietary algorithm in BaseSpace (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# Gene expression levels were computed using a proprietary algorithm within Illumina BaseSpace.\n# Specific tool and parameters are not disclosed.\n# Placeholder for a generic gene expression quantification step, assuming human GRCh38 reference:\n# proprietary_expression_tool --input_reads reads.fastq.gz --reference_genome GRCh38.fa --annotation_gtf GRCh38.gtf --output_expression_matrix expression_levels.tsv",
+            "code_language": "bash",
+            "github_url": "https://www.illumina.com/products/by-type/informatics-products/basespace-sequence-hub.html"
+        },
+        {
+            "step_order": 4,
+            "description": "Differential expression was performed with DESeq2 using default parameters",
+            "tool_name": "DESeq2",
+            "tool_version": "1.44.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install R and Bioconductor if not already present\n# sudo apt-get update && sudo apt-get install -y r-base\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\")'\n# R -e 'BiocManager::install(\"DESeq2\")'\n\n# Create dummy count data (replace with your actual counts.tsv)\ncat 'gene_id\\tsampleA\\tsampleB\\tsampleC\\tsampleD\ngene1\\t100\\t120\\t50\\t60\ngene2\\t50\\t60\\t100\\t110\ngene3\\t200\\t210\\t180\\t190\ngene4\\t10\\t12\\t20\\t22' > counts.tsv\n\n# Create dummy sample information (replace with your actual sample_info.tsv)\ncat 'sample\\tcondition\nsampleA\\tcontrol\nsampleB\\tcontrol\nsampleC\\ttreated\nsampleD\\ttreated' > sample_info.tsv\n\n# Create an R script for DESeq2 analysis\ncat << 'EOF' > run_deseq2.R\nlibrary(DESeq2)\n\n# Load count data\ncount_data <- read.table(\"counts.tsv\", header = TRUE, row.names = 1, sep = \"\\t\")\n\n# Load sample information\nsample_info <- read.table(\"sample_info.tsv\", header = TRUE, row.names = 1, sep = \"\\t\")\n\n# Ensure sample order matches count data columns\nsample_info <- sample_info[colnames(count_data), , drop = FALSE]\n\n# Create DESeqDataSet object\ndds <- DESeqDataSetFromMatrix(countData = count_data,\n                              colData = sample_info,\n                              design = ~ condition)\n\n# Run DESeq2 analysis with default parameters\ndds <- DESeq(dds)\n\n# Get results (e.g., comparing 'treated' vs 'control')\nres <- results(dds, contrast = c(\"condition\", \"treated\", \"control\"))\n\n# Order results by adjusted p-value\nres <- res[order(res$padj), ]\n\n# Write results to a CSV file\nwrite.csv(as.data.frame(res), file = \"deseq2_results.csv\")\n\nmessage(\"DESeq2 analysis complete. Results saved to deseq2_results.csv\")\nEOF\n\n# Execute the R script\nRscript run_deseq2.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/DESeq2.html"
+        },
+        {
+            "step_order": 5,
+            "description": "Gene cycling data was computed with eJTK_Cycle",
+            "tool_name": "eJTK_Cycle",
+            "tool_version": "Not specified",
+            "code_example": "# Clone the eJTK_Cycle repository if not already present\n# git clone https://github.com/alan-yeo/eJTK_Cycle.git\n# cd eJTK_Cycle\n\n# Run eJTK_Cycle to compute gene cycling data.\n# This command assumes 'gene_expression_data.tsv' is the input file containing gene expression values\n# (e.g., genes as rows, time points as columns).\n# 'cycling_results.tsv' will be the output file with cycling analysis results.\n# -p: Specifies the period to test for (e.g., 24 for circadian rhythms).\n# -a: Specifies the alpha (significance) level for p-value correction (e.g., 0.05).\npython eJTK_Cycle.py -i gene_expression_data.tsv -o cycling_results.tsv -p 24 -a 0.05",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "The data was analyzed by RNA Express v1.0 in BaseSpace\nReads were aligned to mm10 using STAR with the following parameters: readFilesCommand zcat outFilterType BySJout outSJfilterCountUniqueMin -1 2 2 2 outSJfilterCountTotalMin -1 2 2 2 outFilterIntronMotifs RemoveNoncanonical genomeLoad LoadAndKeep\nGene expression levels were computed by a proprietary alogorithm in BaseSpace\nDifferential expression was performed with DESeq2 using default parameters\nGene cycling data was computed with eJTK_Cycle\nGenome_build: mm10\nSupplementary_files_format_and_content: tab-delimited text files showing gene cycling data",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

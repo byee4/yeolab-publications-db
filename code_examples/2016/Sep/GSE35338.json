@@ -1,16 +1,16 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "CEL files were analyzed wth the Arraystar 4.0 software (DNAstar) using RMA processing with quantile normalization.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "CEL files were analyzed wth the Arraystar 4.0 software (DNAstar) using RMA processing with quantile normalization.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "CEL files were analyzed wth the Arraystar 4.0 software (DNAstar) using RMA processing with quantile normalization.",
+            "tool_name": "Arraystar",
+            "tool_version": "4.0",
+            "code_example": "# Arraystar 4.0 is a commercial, GUI-based software. The following R code provides a conceptual command-line equivalent for RMA processing with quantile normalization, commonly performed on CEL files, using the 'affy' package. This is a programmatic approximation of the described analysis step.\n\n# Install R if not already installed (e.g., on Ubuntu/Debian)\n# sudo apt-get update\n# sudo apt-get install r-base\n\n# Install Bioconductor and 'affy' package in R\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\"); BiocManager::install(\"affy\")'\n\n# Create an R script to perform RMA and quantile normalization\ncat << 'EOF' > analyze_cel_files.R\nlibrary(affy)\n\n# Define the directory containing CEL files\ncel_dir <- \".\" # Assuming CEL files are in the current directory\n# Or specify a path: cel_dir <- \"/path/to/your/cel_files\"\n\n# List all CEL files\ncel_files <- list.files(path = cel_dir, pattern = \"\\\\.CEL$\", full.names = TRUE, ignore.case = TRUE)\n\nif (length(cel_files) == 0) {\n  stop(\"No CEL files found in the specified directory.\")\n}\n\n# Read CEL files\nprint(paste(\"Reading\", length(cel_files), \"CEL files...\"))\naffy_batch <- ReadAffy(filenames = cel_files)\n\n# Perform RMA processing with quantile normalization\nprint(\"Performing RMA processing with quantile normalization...\")\neset <- rma(affy_batch)\n\n# Extract expression matrix\nexpression_matrix <- exprs(eset)\n\n# Save the normalized expression matrix to a CSV file\noutput_file <- \"normalized_expression_matrix.csv\"\nwrite.csv(expression_matrix, file = output_file)\n\nprint(paste(\"Analysis complete. Normalized expression matrix saved to\", output_file))\nEOF\n\n# Execute the R script\nRscript analyze_cel_files.R",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "CEL files were analyzed wth the Arraystar 4.0 software (DNAstar) using RMA processing with quantile normalization.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

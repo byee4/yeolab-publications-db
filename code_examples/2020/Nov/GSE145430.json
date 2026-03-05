@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "RNA-seq reads were aligned to the mouse genome (mm10) and analyzed using the public server Galaxy (usegalaxy.org), which employs the STAR aligner.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "DESeq2 was used for differential expression analysis",
-      "tool_name": "DESeq2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "RNA-seq reads were aligned to the mouse genome (mm10) and analyzed using the public server Galaxy (usegalaxy.org), which employs the STAR aligner.\nDESeq2 was used for differential expression analysis\nGenome_build: mm10\nSupplementary_files_format_and_content: Excel file contains the normalized counts for each sample",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "RNA-seq reads were aligned to the mouse genome (mm10) and analyzed using the public server Galaxy (usegalaxy.org), which employs the STAR aligner.",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# --- Reference Data Setup (mm10 genome and GTF) ---\n# Create a directory for reference files\nmkdir -p star_index_mm10\ncd star_index_mm10\n\n# Download mouse genome (mm10) FASTA from UCSC\n# Using primary assembly for simplicity\nwget https://hgdownload.soe.ucsc.edu/goldenPath/mm10/bigZips/mm10.fa.gz\ngunzip mm10.fa.gz\n\n# Download mouse (mm10, GRCm38) GTF annotation from Ensembl\n# Using a common release, e.g., release 102\nwget http://ftp.ensembl.org/pub/release-102/gtf/mus_musculus/Mus_musculus.GRCm38.102.gtf.gz\ngunzip Mus_musculus.GRCm38.102.gtf.gz\n\n# Define paths\nGENOME_FASTA=\"mm10.fa\"\nGTF_FILE=\"Mus_musculus.GRCm38.102.gtf\"\nSTAR_INDEX_DIR=\"star_index_mm10_dir\" # Directory for STAR index\n\n# Build STAR genome index\n# Adjust --runThreadN based on available cores and --sjdbOverhang based on read length (read_length - 1)\nSTAR --runMode genomeGenerate \\\n     --genomeDir ${STAR_INDEX_DIR} \\\n     --genomeFastaFiles ${GENOME_FASTA} \\\n     --sjdbGTFfile ${GTF_FILE} \\\n     --sjdbOverhang 100 \\\n     --runThreadN 8 # Use appropriate number of threads\n\ncd .. # Go back to the working directory\n\n# --- RNA-seq Alignment ---\n# Define input FASTQ files (assuming paired-end reads)\nREADS_R1=\"reads_R1.fastq.gz\" # Replace with your actual R1 file\nREADS_R2=\"reads_R2.fastq.gz\" # Replace with your actual R2 file\nOUTPUT_PREFIX=\"aligned_reads\"\nSTAR_INDEX_PATH=\"star_index_mm10/${STAR_INDEX_DIR}\" # Path to the generated STAR index\n\n# Perform alignment with STAR\n# Adjust --runThreadN based on available cores\n# Adjust --limitBAMsortRAM based on available RAM (e.g., 30GB for 30,000,000,000 bytes)\nSTAR --genomeDir ${STAR_INDEX_PATH} \\\n     --readFilesIn ${READS_R1} ${READS_R2} \\\n     --readFilesCommand zcat \\\n     --runThreadN 8 \\\n     --outFileNamePrefix ${OUTPUT_PREFIX}. \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes All \\\n     --quantMode GeneCounts \\\n     --outFilterType BySJout \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.1 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --limitBAMsortRAM 30000000000 # Adjust based on available RAM\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "DESeq2 was used for differential expression analysis",
+            "tool_name": "DESeq2",
+            "tool_version": "1.42.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install R and Bioconductor if not already present\n# For Ubuntu/Debian:\n# sudo apt-get update\n# sudo apt-get install r-base\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\"); BiocManager::install(\"DESeq2\")'\n\n# Create a placeholder R script for DESeq2 analysis\ncat << 'EOF' > run_deseq2.R\n# Load DESeq2 library\nlibrary(DESeq2)\n\n# --- Configuration ---\n# Define input files (replace with actual paths and ensure they exist)\n# counts.csv: Your raw count matrix (genes x samples), with gene IDs as the first column and sample names as column headers.\n# sample_info.csv: Your sample metadata (samples x variables), with sample names as the first column and variables as column headers.\ncounts_file <- \"counts.csv\" \nsample_info_file <- \"sample_info.csv\" \ndesign_formula <- \"~ condition\" # Your experimental design formula (e.g., ~ condition + batch)\noutput_prefix <- \"deseq2_results\" # Prefix for output files\n\n# --- Load Data ---\n# Load count data\n# Assuming counts.csv is comma-separated. Adjust read.csv parameters as needed.\ncount_data <- read.csv(counts_file, row.names = 1, check.names = FALSE)\ncount_data <- as.matrix(count_data) # DESeq2 expects a matrix\n\n# Load sample information\n# Assuming sample_info.csv is comma-separated. Adjust read.csv parameters as needed.\nsample_info <- read.csv(sample_info_file, row.names = 1)\n\n# Ensure sample names match and are in the same order\nif (!all(colnames(count_data) == rownames(sample_info))) {\n  stop(\"Sample names in count data and sample information do not match or are not in the same order.\")\n}\n\n# Ensure the 'condition' variable (or whatever is in your design_formula) is a factor\n# For example, if your design is ~ condition, make sure sample_info$condition is a factor.\n# sample_info$condition <- factor(sample_info$condition)\n\n# --- Create DESeqDataSet object ---\ndds <- DESeqDataSetFromMatrix(countData = count_data,\n                              colData = sample_info,\n                              design = as.formula(design_formula))\n\n# --- Pre-filtering (optional but recommended) ---\n# Remove genes with very low counts across all samples (e.g., sum of counts < 10)\nkeep <- rowSums(counts(dds)) >= 10\ndds <- dds[keep,]\n\n# --- Run DESeq2 analysis ---\ndds <- DESeq(dds)\n\n# --- Extract Results ---\n# Get results for the primary contrast (e.g., comparing levels of 'condition')\n# You might need to specify 'contrast' argument for specific comparisons\n# e.g., res <- results(dds, contrast=c(\"condition\", \"treated\", \"untreated\"))\nres <- results(dds)\n\n# Order results by adjusted p-value\nres_ordered <- res[order(res$padj),]\n\n# --- Save Results ---\n# Save full results table\nwrite.csv(as.data.frame(res_ordered), file = paste0(output_prefix, \"_full_results.csv\"))\n\n# Save significant results (e.g., padj < 0.05)\nres_sig <- subset(res_ordered, padj < 0.05)\nwrite.csv(as.data.frame(res_sig), file = paste0(output_prefix, \"_significant_results.csv\"))\n\n# --- Optional: Generate plots ---\n# MA plot\n# png(paste0(output_prefix, \"_MA_plot.png\"))\n# plotMA(res, main=\"MA-plot\")\n# dev.off()\n\n# Dispersion plot\n# png(paste0(output_prefix, \"_dispersion_plot.png\"))\n# plotDispEsts(dds, main=\"Dispersion Estimates\")\n# dev.off()\n\n# PCA plot (requires 'vst' or 'rlog' transformation)\n# vsd <- vst(dds, blind=FALSE)\n# png(paste0(output_prefix, \"_PCA_plot.png\"))\n# plotPCA(vsd, intgroup=\"condition\")\n# dev.off()\n\nmessage(\"DESeq2 analysis complete. Results saved to \", output_prefix, \"_full_results.csv and \", output_prefix, \"_significant_results.csv\")\nEOF\n\n# Execute the R script\nRscript run_deseq2.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/DESeq2.html"
+        }
+    ],
+    "raw_text": "RNA-seq reads were aligned to the mouse genome (mm10) and analyzed using the public server Galaxy (usegalaxy.org), which employs the STAR aligner.\nDESeq2 was used for differential expression analysis\nGenome_build: mm10\nSupplementary_files_format_and_content: Excel file contains the normalized counts for each sample",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

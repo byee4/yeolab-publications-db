@@ -1,70 +1,70 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Demultiplex primers with lima (v2.6.0)",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Refine reads with Isoseq3 refine (v3.8.0)",
-      "tool_name": "IsoSeq",
-      "tool_version": "3.8.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Align reads using pbmm2 (v1.9.0)",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://github.com/alexdobin/STAR"
-    },
-    {
-      "step_order": 4,
-      "description": "Cluster reads with isoseq3 cluster (v3.8.0)",
-      "tool_name": "IsoSeq",
-      "tool_version": "3.8.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Filter for primary mapped reads with custom script",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Identify gene editing using custom script",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "r",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "remove edits found in annotated SNP positions using custom script",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Demultiplex primers with lima (v2.6.0)\nRefine reads with Isoseq3 refine (v3.8.0)\nAlign reads using pbmm2 (v1.9.0)\nCluster reads with isoseq3 cluster (v3.8.0)\nFilter for primary mapped reads with custom script\nIdentify gene editing using custom script\nremove edits found in annotated SNP positions using custom script\nAssembly: hg38\nSupplementary files format and content: isoforms from clustering (.gff)\nSupplementary files format and content: gene edits (.bed)",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Demultiplex primers with lima (v2.6.0)",
+            "tool_name": "lima",
+            "tool_version": "2.6.0",
+            "code_example": "# Install lima (e.g., via Bioconda)\n# conda install -c bioconda lima=2.6.0\n\n# Example usage of lima for demultiplexing primers\n# Replace 'input_reads.fastq' with your actual input sequencing reads file (e.g., PacBio CCS reads).\n# Replace 'primers.fasta' with your FASTA file containing barcode sequences.\n# Replace 'output_demultiplexed_reads' with your desired output prefix.\n# The --ccs flag is commonly used if the input reads are PacBio CCS reads.\n# Adjust other parameters like --min-score, --num-threads, --split-bam-by-barcode as needed based on your data and requirements.\nlima input_reads.fastq primers.fasta output_demultiplexed_reads --ccs --peek-guess --min-score 20 --num-threads 8",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Refine reads with Isoseq3 refine (v3.8.0)",
+            "tool_name": "IsoSeq",
+            "tool_version": "3.8.0",
+            "code_example": "# Install IsoSeq3 via Bioconda\n# conda create -n isoseq3_env python=3.8\n# conda activate isoseq3_env\n# conda install -c bioconda isoseq3=3.8.0\n\n# Example command for refining reads with Isoseq3 (v3.8.0)\n# This step typically follows 'isoseq3 cluster' and requires its output.\n# Replace 'flnc_reads.bam', 'primer_sequences.fasta', 'cluster_report.csv', and 'refined_reads.bam' with actual file paths.\n\n# Input files:\n# --flnc: Full-length non-chimeric (FLNC) reads BAM file (output from 'lima' or 'isoseq3 cluster' if not using 'lima')\n# --primer: FASTA file containing primer sequences used for library preparation\n# --cluster-report: CSV report from 'isoseq3 cluster' containing cluster information\n\n# Output files:\n# --output: Refined FLNC reads BAM file\n# --gff: GFF file containing refined transcript annotations\n\nisoseq3 refine \\\n    --flnc flnc_reads.bam \\\n    --primer primer_sequences.fasta \\\n    --cluster-report cluster_report.csv \\\n    --output refined_reads.bam \\\n    --gff refined_reads.gff",
+            "code_language": "bash",
+            "github_url": "https://github.com/PacificBiosciences/IsoSeq"
+        },
+        {
+            "step_order": 3,
+            "description": "Align reads using pbmm2 (v1.9.0)",
+            "tool_name": "pbmm2",
+            "tool_version": "1.9.0",
+            "code_example": "# Install pbmm2 if not already installed\n# conda install -c bioconda pbmm2=1.9.0\n\n# Define input/output files and reference genome\n# Replace 'reads.fastq' with your actual input reads file (e.g., .fastq, .fasta, .bam)\nREADS_FILE=\"reads.fastq\"\n\n# Replace 'reference.fasta' with the path to your reference genome file (e.g., GRCh38.fasta)\n# pbmm2 can also use an .mmi index file if pre-built (e.g., reference.mmi)\nREFERENCE_GENOME=\"reference.fasta\"\n\n# Define the output BAM file name\nOUTPUT_BAM=\"aligned_reads.bam\"\n\n# Align reads using pbmm2\n# This command performs alignment and outputs a sorted BAM file by default.\npbmm2 align \"${REFERENCE_GENOME}\" \"${READS_FILE}\" \"${OUTPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/PacificBiosciences/pbmm2"
+        },
+        {
+            "step_order": 4,
+            "description": "Cluster reads with isoseq3 cluster (v3.8.0)",
+            "tool_name": "IsoSeq",
+            "tool_version": "3.8.0",
+            "code_example": "# Install isoseq3 via conda if not already installed\n# conda install -c bioconda -c conda-forge pbbioconda\n\n# Cluster reads using isoseq3 cluster\n# Replace input.fasta with your actual input FASTA/FASTQ file containing polished reads\n# Replace output_prefix with your desired output file prefix\nisoseq3 cluster --input input.fasta --output output_prefix",
+            "code_language": "bash",
+            "github_url": "https://github.com/PacificBiosciences/IsoSeq"
+        },
+        {
+            "step_order": 5,
+            "description": "Filter for primary mapped reads with custom script",
+            "tool_name": "samtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.10 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install samtools if not available\n# conda install -c bioconda samtools\n\n# Define input and output file names\nINPUT_BAM=\"input.bam\"\nOUTPUT_BAM=\"primary_mapped.bam\"\n\n# This is a custom script to filter for primary mapped reads.\n# It uses samtools view to exclude secondary and supplementary alignments.\n# Additional filtering logic (e.g., mapping quality, read length, specific flags)\n# could be added here based on specific assay requirements.\n\n# Filter for primary mapped reads (flag -F 256 excludes secondary and supplementary alignments)\n# -b: output in BAM format\nsamtools view -b -F 256 \"${INPUT_BAM}\" > \"${OUTPUT_BAM}\"\n\n# Index the filtered BAM file for downstream processing\nsamtools index \"${OUTPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 6,
+            "description": "Identify gene editing using custom script",
+            "tool_name": "custom script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# Placeholder for a custom gene editing identification script.\n# This script would typically take aligned reads (BAM/CRAM) or variant calls (VCF)\n# and a reference genome to identify specific gene edits.\n\n# Define input and output files (placeholders)\nINPUT_FILE=\"input_variants.vcf\" # Or aligned_reads.bam\nREFERENCE_GENOME=\"/path/to/reference/hg38.fa\"\nOUTPUT_REPORT=\"gene_editing_report.txt\"\n\n# Example execution command for a hypothetical custom Python script\n# Replace 'custom_gene_editing_script.py' with the actual script name\n# and adjust parameters as needed for the specific custom script.\npython custom_gene_editing_script.py \\\n  --input \"${INPUT_FILE}\" \\\n  --reference \"${REFERENCE_GENOME}\" \\\n  --output \"${OUTPUT_REPORT}\"\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 7,
+            "description": "remove edits found in annotated SNP positions using custom script",
+            "tool_name": "filter_snps.py (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# Install dependencies if not already available\n# conda install -c bioconda pysam pybedtools\n\n# Assuming 'input_edits.bed' is the file containing detected edits (e.g., from variant calling or RNA editing detection)\n# Assuming '/path/to/human_grch38_known_snps.vcf.gz' is a VCF file of known SNPs for the human GRCh38 reference genome (e.g., from dbSNP or gnomAD)\n\n# Execute the custom script to remove edits found in annotated SNP positions\npython filter_snps.py \\\n    --input-bed input_edits.bed \\\n    --output-bed filtered_edits.bed \\\n    --vcf /path/to/human_grch38_known_snps.vcf.gz",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip"
+        }
+    ],
+    "raw_text": "Demultiplex primers with lima (v2.6.0)\nRefine reads with Isoseq3 refine (v3.8.0)\nAlign reads using pbmm2 (v1.9.0)\nCluster reads with isoseq3 cluster (v3.8.0)\nFilter for primary mapped reads with custom script\nIdentify gene editing using custom script\nremove edits found in annotated SNP positions using custom script\nAssembly: hg38\nSupplementary files format and content: isoforms from clustering (.gff)\nSupplementary files format and content: gene edits (.bed)",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

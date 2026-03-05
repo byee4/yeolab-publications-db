@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "remove adapter with Cutadapt",
-      "tool_name": "cutadapt",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "align to human genome using STAR 2.7.6a",
-      "tool_name": "STAR",
-      "tool_version": "2.7.6a",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "align unmapped reads from above to 12X MS2 stem-loop reporter mRNA using STAR 2.7.6a",
-      "tool_name": "STAR",
-      "tool_version": "2.7.6a",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "SAILOR analysis of data for C-to-U edits",
-      "tool_name": "SAILOR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "SAILOR analysis of data for A-to-I edits",
-      "tool_name": "SAILOR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "remove adapter with Cutadapt\nalign to human genome using STAR 2.7.6a\nalign unmapped reads from above to 12X MS2 stem-loop reporter mRNA using STAR 2.7.6a\nSAILOR analysis of data for C-to-U edits\nSAILOR analysis of data for A-to-I edits\nAssembly: GRCh38\nAssembly: 12X MS2 stem-loop reporter mRNA\nSupplementary files format and content: The processed data files are in .bed format. They contain SAILOR-identified C-to-U or A-to-I edit information for endogenous transcripts (*non.construct.bed) and the 12X stem-loop-bearing-bearing reporter mRNA (*reporter.construct.bed).",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "remove adapter with Cutadapt",
+            "tool_name": "cutadapt",
+            "tool_version": "4.0",
+            "code_example": "# Install Cutadapt (if not already installed)\n# conda install -c bioconda cutadapt=4.0\n\n# Define input and output file paths (placeholders)\nINPUT_READ1=\"input_R1.fastq.gz\"\nINPUT_READ2=\"input_R2.fastq.gz\"\nOUTPUT_READ1=\"trimmed_R1.fastq.gz\"\nOUTPUT_READ2=\"trimmed_R2.fastq.gz\"\nREPORT_FILE=\"cutadapt_report.txt\"\n\n# Define adapter sequences (common Illumina adapters for eCLIP, adjust as needed based on library prep)\n# For single-end reads, only -a is needed. For paired-end, -a for R1 and -A for R2.\nADAPTER_R1=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\" # Example: Illumina Universal Adapter\nADAPTER_R2=\"AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT\" # Example: Illumina Small RNA 3' Adapter (often used for R2 in some protocols)\n\n# Define trimming parameters\nMIN_LENGTH=15 # Minimum read length after trimming\nQUALITY_CUTOFF=20 # Quality cutoff for 3' end trimming\nTHREADS=8 # Number of CPU cores to use\n\n# Execute Cutadapt for paired-end reads\ncutadapt \\\n  --cores \"${THREADS}\" \\\n  -a \"${ADAPTER_R1}\" \\\n  -A \"${ADAPTER_R2}\" \\\n  -o \"${OUTPUT_READ1}\" \\\n  -p \"${OUTPUT_READ2}\" \\\n  -m \"${MIN_LENGTH}\" \\\n  -q \"${QUALITY_CUTOFF}\" \\\n  \"${INPUT_READ1}\" \\\n  \"${INPUT_READ2}\" \\\n  > \"${REPORT_FILE}\" 2>&1",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 2,
+            "description": "align to human genome using STAR 2.7.6a",
+            "tool_name": "STAR",
+            "tool_version": "2.7.6a",
+            "code_example": "# Install STAR using conda\n# conda create -n star_env star=2.7.6a -c bioconda -c conda-forge\n# conda activate star_env\n\n# Define variables (replace with actual paths and filenames)\n# Reference genome: Human GRCh38 (hg38)\n# Source: GENCODE (for GTF) and UCSC/ENA/NCBI (for FASTA)\nGENOME_DIR=\"/path/to/STAR_human_GRCh38_index\" # Path to pre-built STAR genome index for human GRCh38\nGTF_FILE=\"/path/to/gencode.v44.annotation.gtf.gz\" # Path to human GRCh38 GTF file (e.g., GENCODE v44)\nREAD1=\"sample_R1.fastq.gz\"\nREAD2=\"sample_R2.fastq.gz\" # Remove this line if reads are single-end\nOUTPUT_PREFIX=\"sample_aligned\"\nTHREADS=8 # Number of threads to use\n\n# Example command to generate STAR genome index (run once per genome/GTF combination)\n# STAR --runMode genomeGenerate \\\n#      --genomeDir ${GENOME_DIR} \\\n#      --genomeFastaFiles /path/to/human_GRCh38.fa \\\n#      --sjdbGTFfile ${GTF_FILE} \\\n#      --sjdbOverhang 100 \\\n#      --runThreadN ${THREADS}\n\n# Align reads to the human genome (GRCh38)\nSTAR --genomeDir ${GENOME_DIR} \\\n     --readFilesIn ${READ1} ${READ2} \\\n     --readFilesCommand zcat \\\n     --runThreadN ${THREADS} \\\n     --outFileNamePrefix ${OUTPUT_PREFIX}_ \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes Standard \\\n     --outFilterType BySJout \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.04 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --sjdbGTFfile ${GTF_FILE} \\\n     --sjdbOverhang 100",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "align unmapped reads from above to 12X MS2 stem-loop reporter mRNA using STAR 2.7.6a",
+            "tool_name": "STAR",
+            "tool_version": "2.7.6a",
+            "code_example": "# Install STAR if not already installed\n# conda install -c bioconda star=2.7.6a\n\n# Placeholder for input unmapped reads (from a previous step)\n# This file would contain reads that did not map to a primary genome.\nUNMAPPED_READS=\"unmapped_reads.fastq.gz\"\n\n# Placeholder for STAR index directory for the 12X MS2 stem-loop reporter mRNA.\n# This index needs to be pre-built using STAR --runMode genomeGenerate with the MS2 reporter sequence.\nMS2_REPORTER_STAR_INDEX=\"ms2_reporter_star_index\"\n\n# Placeholder for output prefix\nOUTPUT_PREFIX=\"ms2_aligned_reads\"\n\n# Align unmapped reads to the 12X MS2 stem-loop reporter mRNA\nSTAR \\\n    --genomeDir \"${MS2_REPORTER_STAR_INDEX}\" \\\n    --readFilesIn \"${UNMAPPED_READS}\" \\\n    --readFilesCommand zcat \\\n    --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n    --outSAMtype BAM SortedByCoordinate \\\n    --outSAMattributes Standard \\\n    --outFilterMultimapNmax 1 \\\n    --outFilterMismatchNmax 3 \\\n    --runThreadN 8 # Adjust thread count as needed\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 4,
+            "description": "SAILOR analysis of data for C-to-U edits",
+            "tool_name": "SAILOR",
+            "tool_version": "1.0",
+            "code_example": "# Install SAILOR via conda\n# conda create -n sailor_env python=3.8\n# conda activate sailor_env\n# conda install -c bioconda sailor\n\n# Define input and output paths\nINPUT_BAM=\"input.bam\" # Replace with your input RNA-seq BAM file\nOUTPUT_PREFIX=\"sailor_output\" # Prefix for output files\nREFERENCE_FASTA=\"/path/to/GRCh38.primary_assembly.genome.fa\" # Placeholder: Path to GRCh38 reference FASTA\nGENE_ANNOTATION_GTF=\"/path/to/gencode.v38.annotation.gtf\" # Placeholder: Path to GENCODE v38 gene annotation GTF\n\n# Run SAILOR for C-to-U editing analysis\n# This command is a basic example. Refer to SAILOR documentation for more options.\nsailor -i \"${INPUT_BAM}\" \\\n       -o \"${OUTPUT_PREFIX}\" \\\n       -r \"${REFERENCE_FASTA}\" \\\n       -g \"${GENE_ANNOTATION_GTF}\" \\\n       --strand-specific # Example option: use if your RNA-seq library is strand-specific",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 5,
+            "description": "SAILOR analysis of data for A-to-I edits",
+            "tool_name": "SAILOR",
+            "tool_version": "v1.0",
+            "code_example": "# Clone the SAILOR repository\n# git clone https://github.com/gersteinlab/SAILOR.git\n# cd SAILOR\n\n# Create a conda environment and install dependencies (pysam, numpy, scipy, matplotlib)\n# conda create -n sailor_env python=3.8 -y\n# conda activate sailor_env\n# pip install pysam numpy scipy matplotlib\n\n# Define input/output files and reference data\n# Replace 'path/to/your_aligned_reads.bam' with the actual path to your input BAM file\nINPUT_BAM=\"path/to/your_aligned_reads.bam\"\nOUTPUT_PREFIX=\"sailor_output\"\n\n# Reference genome and gene annotation (using GRCh38 as the latest assembly placeholder)\n# Download from sources like GENCODE, Ensembl, or UCSC\nREFERENCE_FASTA=\"path/to/GRCh38.primary_assembly.genome.fa\"\nGENE_ANNOTATION_GTF=\"path/to/gencode.v38.annotation.gtf\"\n\n# Strand information: 0 for unstranded, 1 for first-strand, 2 for second-strand\n# Assuming first-strand for typical RNA-seq data, adjust if your data is different\nSTRAND_INFO=\"1\"\n\n# Run SAILOR analysis for A-to-I edits\n# Ensure you are in the directory where SAILOR.py is located or provide its full path\npython SAILOR.py -i \"${INPUT_BAM}\" -o \"${OUTPUT_PREFIX}\" -r \"${REFERENCE_FASTA}\" -g \"${GENE_ANNOTATION_GTF}\" -s \"${STRAND_INFO}\"",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "remove adapter with Cutadapt\nalign to human genome using STAR 2.7.6a\nalign unmapped reads from above to 12X MS2 stem-loop reporter mRNA using STAR 2.7.6a\nSAILOR analysis of data for C-to-U edits\nSAILOR analysis of data for A-to-I edits\nAssembly: GRCh38\nAssembly: 12X MS2 stem-loop reporter mRNA\nSupplementary files format and content: The processed data files are in .bed format. They contain SAILOR-identified C-to-U or A-to-I edit information for endogenous transcripts (*non.construct.bed) and the 12X stem-loop-bearing-bearing reporter mRNA (*reporter.construct.bed).",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

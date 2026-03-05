@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "After sequencing, raw reads were aligned to GRCh38 and analyzed following the detailed instructions in ENCODE eCLIP-seq Processing Pipeline v2.2 (https://www.encodeproject.org/pipelines/ENCPL357ADL/).",
-      "tool_name": "eCLIP",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Consistent with the ENCODE standard, reads aligning to artifact-enriched or repetitive genomic regions were removed.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "After sequencing, raw reads were aligned to GRCh38 and analyzed following the detailed instructions in ENCODE eCLIP-seq Processing Pipeline v2.2 (https://www.encodeproject.org/pipelines/ENCPL357ADL/).\nConsistent with the ENCODE standard, reads aligning to artifact-enriched or repetitive genomic regions were removed.\nGenome_build: GRCh38\nSupplementary_files_format_and_content: The processed file contains reproducible and significant peaks of aligned reads at IDR cutoff of 0.01, P \u00e2\u0089\u00a4 0.001, and fold enrichment \u00e2\u0089\u00a5 8. All peaks have annotated genic region based on overlap with GENCODE v26 transcripts.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "After sequencing, raw reads were aligned to GRCh38 and analyzed following the detailed instructions in ENCODE eCLIP-seq Processing Pipeline v2.2 (https://www.encodeproject.org/pipelines/ENCPL357ADL/).",
+            "tool_name": "eCLIP",
+            "tool_version": "2.2",
+            "code_example": "# Install STAR (example using conda)\n# conda install -c bioconda star\n\n# Define input files and reference genome index\nREADS_R1=\"raw_reads_R1.fastq.gz\"\nREADS_R2=\"raw_reads_R2.fastq.gz\"\nGENOME_DIR=\"/path/to/STAR_index/GRCh38\" # Placeholder for GRCh38 STAR index (e.g., from ENCODE or UCSC)\nOUTPUT_PREFIX=\"aligned_eCLIP_sample\"\n\n# Align raw reads to GRCh38 using STAR, following ENCODE eCLIP pipeline recommendations\nSTAR \\\n  --runThreadN 8 \\\n  --genomeDir \"${GENOME_DIR}\" \\\n  --readFilesIn \"${READS_R1}\" \"${READS_R2}\" \\\n  --readFilesCommand zcat \\\n  --outFileNamePrefix \"${OUTPUT_PREFIX}_\" \\\n  --outSAMtype BAM SortedByCoordinate \\\n  --outSAMattributes All \\\n  --outFilterMultimapNmax 20 \\\n  --outFilterMismatchNmax 999 \\\n  --outFilterMismatchNoverLmax 0.04 \\\n  --alignIntronMin 20 \\\n  --alignIntronMax 1000000 \\\n  --alignMatesGapMax 1000000 \\\n  --outFilterScoreMinOverLread 0.75 \\\n  --outFilterMatchNminOverLread 0.75 \\\n  --limitBAMsortRAM 30000000000\n\n# The ENCODE eCLIP-seq Processing Pipeline v2.2 continues with steps such as:\n# - Adapter trimming and deduplication (often handled by UMI-tools or custom scripts)\n# - Filtering and sorting of BAM files (e.g., using samtools and bedtools)\n# - Peak calling (e.g., using CLIPper: https://github.com/yeolab/clipper)\n# - Control peak calling (e.g., using MACS2 for input controls)\n# - IDR analysis for reproducible peaks (e.g., using merge_peaks: https://github.com/yeolab/merge_peaks)\n# - Generation of bigWig tracks for visualization\n",
+            "code_language": "bash",
+            "github_url": "https://www.encodeproject.org/pipelines/ENCPL357ADL/"
+        },
+        {
+            "step_order": 2,
+            "description": "Consistent with the ENCODE standard, reads aligning to artifact-enriched or repetitive genomic regions were removed.",
+            "tool_name": "bedtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.30.0",
+            "code_example": "# Install bedtools if not already installed\n# conda install -c bioconda bedtools=2.30.0\n\n# Define input and output file paths\nINPUT_BAM=\"aligned_reads.bam\"\nOUTPUT_BAM=\"filtered_reads.bam\"\nBLACKLIST_BED=\"GRCh38_unified_blacklist_V2.bed\"\n\n# Download ENCODE blacklist file for GRCh38 if not available\n# mkdir -p reference\n# wget -O \"${BLACKLIST_BED}.gz\" https://raw.githubusercontent.com/ENCODE-DCC/chip-seq-pipeline2/master/references/GRCh38_unified_blacklist_V2.bed.gz\n# gunzip -f \"${BLACKLIST_BED}.gz\"\n\n# Remove reads aligning to artifact-enriched or repetitive genomic regions using bedtools intersect -v\nbedtools intersect -v -a \"${INPUT_BAM}\" -b \"${BLACKLIST_BED}\" > \"${OUTPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/ENCODE-DCC/chip-seq-pipeline2"
+        }
+    ],
+    "raw_text": "After sequencing, raw reads were aligned to GRCh38 and analyzed following the detailed instructions in ENCODE eCLIP-seq Processing Pipeline v2.2 (https://www.encodeproject.org/pipelines/ENCPL357ADL/).\nConsistent with the ENCODE standard, reads aligning to artifact-enriched or repetitive genomic regions were removed.\nGenome_build: GRCh38\nSupplementary_files_format_and_content: The processed file contains reproducible and significant peaks of aligned reads at IDR cutoff of 0.01, P \u00e2\u0089\u00a4 0.001, and fold enrichment \u00e2\u0089\u00a5 8. All peaks have annotated genic region based on overlap with GENCODE v26 transcripts.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

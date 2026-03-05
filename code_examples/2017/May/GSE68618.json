@@ -1,106 +1,106 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Illumina Casava-1.8.2 software was used for basecalling.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "RNA-Seq: Low quality reads as well as ribosomal and other repeat sequences were filtered out before alignment.",
-      "tool_name": "RNA-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "RUM software was used for aligning reads to mouse genome mm9 and Refseq transcriptome and for transcript quantitation.",
-      "tool_name": "RefSeq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Differential expression analysis was carried out using a custom script implementing EdgeR software.",
-      "tool_name": "edgeR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "ChIP-Seq: Reads were aligned to mm9 genome using bowtie version 0.12.7 with parameters -v 3 -k 1 -m 1 --best --strata.",
-      "tool_name": "Bowtie",
-      "tool_version": "0.12.7",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Redundant reads were discarded before creating bedgraph profiles.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Peak calling was done using HOMER for H3K4me1 and H3K27Ac marks at FDR=0.01 with respect to corresponding Input.",
-      "tool_name": "HOMER",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "Peak calling using STAR was done for H3K27me3 marks at FDR=0.01.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "BIS-Seq: DNA sequencing data was aligned to mouse genome (mm9) with the BS Seeker program.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 10,
-      "description": "Data was reported as the fraction of reads that were methylated, calculated as the ratio of cytosine bases (indicating methylated CpGs) to total reads for each CpG coordinate.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 11,
-      "description": "Unmethylated cytosines are ultimately converted to thymine bases during the bisulfite conversion process.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Illumina Casava-1.8.2 software was used for basecalling.\nRNA-Seq: Low quality reads as well as ribosomal and other repeat sequences were filtered out before alignment. RUM software was used for aligning reads to mouse genome mm9 and Refseq transcriptome and for transcript quantitation. Differential expression analysis was carried out using a custom script implementing EdgeR software.\nChIP-Seq: Reads were aligned to mm9 genome using bowtie version 0.12.7 with parameters -v 3 -k 1 -m 1 --best --strata. Redundant reads were discarded before creating bedgraph profiles.\nPeak calling was done using HOMER for H3K4me1 and H3K27Ac marks at FDR=0.01 with respect to corresponding Input. Peak calling using STAR was done for H3K27me3 marks at FDR=0.01.\nBIS-Seq: DNA sequencing data was aligned to mouse genome (mm9) with the BS Seeker program. Data was reported as the fraction of reads that were methylated, calculated as the ratio of cytosine bases (indicating methylated CpGs) to total reads for each CpG coordinate.  Unmethylated cytosines are ultimately converted to thymine bases during the bisulfite conversion process.\nGenome_build: mm9\nSupplementary_files_format_and_content: Tab delimited file of transcript raw read counts.\nSupplementary_files_format_and_content: Tab delimited file of transcript FPKM counts.\nSupplementary_files_format_and_content: Peak files are tab-delimited listing genomic coordinates and their respective scores and p-values. Scores represent fold-change with respect to Input.\nSupplementary_files_format_and_content: Tab-delimited files of loci, fraction of methylated cytosines and total read count.\nSupplementary_files_format_and_content: RawReadCounts.txt: Raw transcript counts\nSupplementary_files_format_and_content: TrancriptFPKMCounts.txt: Transcript FPKM counts\nSupplementary_files_format_and_content: Old_H3K4me1.peaks.txt: peak\nSupplementary_files_format_and_content: Old_H3K27me3.peaks.txt: peak\nSupplementary_files_format_and_content: Young_H3K4me1.peaks.txt: peak\nSupplementary_files_format_and_content: Young_H3K27me3.peaks.txt: peak\nSupplementary_files_format_and_content: Young_H3K27Ac.peaks.txt: peak\nSupplementary_files_format_and_content: OldBeta_bs_seeker-CG.tab: Percent methylated cytosines\nSupplementary_files_format_and_content: YoungBeta_bs_seeker-CG.tab: Percent methylated cytosines",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Illumina Casava-1.8.2 software was used for basecalling.",
+            "tool_name": "Illumina Casava",
+            "tool_version": "1.8.2",
+            "code_example": "# Illumina Casava 1.8.2 is typically installed as part of the Illumina sequencing system software or as a standalone package.\n# Installation instructions are highly dependent on the specific Illumina system and OS.\n# Example (installation path may vary):\n# wget https://support.illumina.com/content/dam/illumina-support/documents/downloads/software/casava/casava_1_8_2_installer.run\n# chmod +x casava_1_8_2_installer.run\n# ./casava_1_8_2_installer.run\n\n# Assuming the run folder is named '123456_A00001_0001_AHXXXXXX' and output directory is 'fastq_output'\n# Replace with actual paths and SampleSheet.csv\nRUN_FOLDER=\"/path/to/your/Illumina/RunFolder\" # e.g., /data/runs/123456_A00001_0001_AHXXXXXX\nOUTPUT_DIR=\"fastq_output\"\nSAMPLE_SHEET=\"/path/to/SampleSheet.csv\" # Required for demultiplexing\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Step 1: Configure Bcl to Fastq conversion and demultiplexing\n# This command generates a Makefile in the OUTPUT_DIR based on the run folder and sample sheet.\n# Parameters like --fastq-cluster-count, --mismatches, --no-aligned-reads are common defaults.\nconfigureBclToFastq.pl \\\n    --input-dir \"${RUN_FOLDER}\" \\\n    --output-dir \"${OUTPUT_DIR}\" \\\n    --sample-sheet \"${SAMPLE_SHEET}\" \\\n    --fastq-cluster-count 0 \\\n    --mismatches 1 \\\n    --no-aligned-reads\n\n# Step 2: Execute the Makefile to perform basecalling and demultiplexing\n# This will run the actual conversion of BCL files to FASTQ files.\nmake -C \"${OUTPUT_DIR}\"",
+            "code_language": "bash",
+            "github_url": "https://support.illumina.com/"
+        },
+        {
+            "step_order": 2,
+            "description": "RNA-Seq: Low quality reads as well as ribosomal and other repeat sequences were filtered out before alignment.",
+            "tool_name": "RNA-seq",
+            "tool_version": "latest stable",
+            "code_example": "# Install BBMap suite (contains BBDuk)\n# conda install -c bioconda bbmap\n\n# Define input and output files\nINPUT_FASTQ=\"input_reads.fastq.gz\"\nOUTPUT_FASTQ=\"filtered_reads.fastq.gz\"\n\n# Define reference files for ribosomal and repeat sequences.\n# These files need to be prepared or downloaded. Examples:\n# - human_rRNA.fa: Can be obtained from NCBI RefSeq or specialized rRNA databases (e.g., SILVA).\n# - human_repeats.fa: Can be obtained from RepeatMasker database or UCSC Genome Browser.\n# For demonstration, we assume these files exist in the current directory or are specified by their full path.\n\n# Placeholder reference files (replace with actual paths to your rRNA and repeat FASTA files)\nRR_REFERENCE=\"path/to/human_rRNA.fa,path/to/human_repeats.fa\"\n\n# Run BBDuk to filter low quality reads and ribosomal/repeat sequences\nbbduk.sh \\\n  in=\"${INPUT_FASTQ}\" \\\n  out=\"${OUTPUT_FASTQ}\" \\\n  ref=\"${RR_REFERENCE}\" \\\n  k=31 hdist=1 \\\n  qtrim=rl trimq=20 \\\n  minlen=25 \\\n  stats=\"${OUTPUT_FASTQ%.fastq.gz}_bbduk_stats.txt\" \\\n  overwrite=true\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/BioInfoTools/BBMap"
+        },
+        {
+            "step_order": 3,
+            "description": "RUM software was used for aligning reads to mouse genome mm9 and Refseq transcriptome and for transcript quantitation.",
+            "tool_name": "RefSeq",
+            "tool_version": "Not specified",
+            "code_example": "# Install RUM (RNA-seq Unified Mapper) - Example, actual installation may vary.\n# RUM is typically downloaded as a tarball and run via Perl scripts.\n# Example:\n# wget http://cgr.wustl.edu/rum/RUM_v1.11.tar.gz\n# tar -xzf RUM_v1.11.tar.gz\n# export PATH=$PATH:$(pwd)/RUM_v1.11/bin\n\n# Define input and output paths\nREAD1=\"input_reads_R1.fastq.gz\"\nREAD2=\"input_reads_R2.fastq.gz\" # Assuming paired-end reads for typical RNA-seq\nOUTPUT_DIR=\"rum_output\"\nGENOME_FASTA=\"mm9.fa\"\nTRANSCRIPTOME_FASTA=\"RefSeq_mm9_transcripts.fa\" # RUM typically uses transcriptome FASTA for indexing\nRUM_INDEX_DIR=\"rum_index_mm9_refseq\"\n\n# Create dummy input files and directories for demonstration\nmkdir -p \"${OUTPUT_DIR}\"\nmkdir -p \"${RUM_INDEX_DIR}\"\n# touch \"${READ1}\" \"${READ2}\" # In a real scenario, these would be actual read files\n\n# Placeholder for reference genome and transcriptome files\n# Download mm9 genome from UCSC (example source)\n# wget -P . https://hgdownload.soe.ucsc.edu/goldenPath/mm9/bigZips/chromFa.tar.gz\n# tar -xzf chromFa.tar.gz\n# cat chr*.fa > \"${GENOME_FASTA}\"\n# rm chr*.fa chromFa.tar.gz\n\n# Download RefSeq transcriptome for mm9 (example source, actual file might need generation from annotations)\n# This is a placeholder; actual RefSeq transcriptome for mm9 might need to be generated\n# from RefSeq annotations (e.g., GTF/GFF) and the genome FASTA. RUM expects a FASTA file of transcript sequences.\n# Example (general mouse RefSeq mRNA, not specific to mm9 assembly):\n# wget -P . https://ftp.ncbi.nlm.nih.gov/refseq/M_musculus/mRNA_FASTA/mouse.1.rna.fna.gz\n# gunzip mouse.1.rna.fna.gz\n# mv mouse.1.rna.fna \"${TRANSCRIPTOME_FASTA}\"\n\n# Create a minimal RUM configuration file (rum_config.txt)\n# This file specifies paths to reference files and other parameters required by RUM.\ncat <<EOF > rum_config.txt\n# RUM Configuration File\n# General settings\nRUM_HOME=$(pwd)/RUM_v1.11 # Adjust if RUM is installed elsewhere\nOUTPUT_DIR=${OUTPUT_DIR}\nINDEX_DIR=${RUM_INDEX_DIR}\nGENOME_FASTA=${GENOME_FASTA}\nTRANSCRIPTOME_FASTA=${TRANSCRIPTOME_FASTA}\n# Other parameters can be added here, e.g., number of threads, mismatch limits, etc.\n# For example:\n# THREADS=8\n# MAX_MISMATCHES=2\nEOF\n\n# Step 1: Build RUM index for mm9 genome and Refseq transcriptome\n# This step needs to be run once for the given reference files.\n# rum_index_builder.pl -c rum_config.txt\n# Note: The above command assumes rum_index_builder.pl is in PATH or RUM_HOME/bin.\n# For demonstration, we'll assume the index is already built or the command is run separately.\n\n# Step 2: Run RUM for alignment and transcript quantitation\n# This command aligns reads to the mm9 genome and Refseq transcriptome,\n# and performs transcript quantitation.\nrum_runner.pl -c rum_config.txt -1 \"${READ1}\" -2 \"${READ2}\" -o \"${OUTPUT_DIR}\"\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "Differential expression analysis was carried out using a custom script implementing EdgeR software.",
+            "tool_name": "edgeR",
+            "tool_version": "3.42.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install R and Bioconductor if not already present\n# conda install -c conda-forge r-base\n# conda install -c bioconda bioconductor-edger\n\n# Create a placeholder R script for differential expression analysis using edgeR\n# This script assumes 'counts.tsv' contains raw gene counts and 'sample_info.tsv' contains sample metadata.\ncat << 'EOF' > custom_edgeR_script.R\n#!/usr/bin/env Rscript\n\n# Load necessary libraries\nlibrary(edgeR)\nlibrary(getopt) # For parsing command-line arguments\n\n# Define command-line arguments\nspec <- matrix(c(\n  'counts',    'c', 1, \"character\", \"Path to the count matrix (TSV)\",\n  'samples',   's', 1, \"character\", \"Path to the sample information file (TSV)\",\n  'output',    'o', 1, \"character\", \"Path for the output differential expression results (TSV)\",\n  'design_formula', 'd', 1, \"character\", \"R formula for the design matrix (e.g., '~ condition')\",\n  'contrast_coef', 't', 1, \"character\", \"Coefficient or contrast string for testing (e.g., 'conditiontreated' or 'conditiontreated - conditionuntreated')\",\n  'help',      'h', 0, \"logical\",   \"Show this help message\"\n), byrow=TRUE, ncol=5)\n\nopt <- getopt(spec)\n\n# If help was asked for, print a friendly message\nif ( !is.null(opt$help) ) {\n  cat(getopt(spec, usage=TRUE));\n  q(status=1);\n}\n\n# Check for required arguments\nif ( is.null(opt$counts) || is.null(opt$samples) || is.null(opt$output) || is.null(opt$design_formula) || is.null(opt$contrast_coef) ) {\n  cat(\"Missing required arguments.\\n\");\n  cat(getopt(spec, usage=TRUE));\n  q(status=1);\n}\n\ncounts_file <- opt$counts\nsamples_file <- opt$samples\noutput_file <- opt$output\ndesign_formula_str <- opt$design_formula\ncontrast_coef_str <- opt$contrast_coef\n\nmessage(paste(\"Loading counts from:\", counts_file))\nmessage(paste(\"Loading sample info from:\", samples_file))\nmessage(paste(\"Using design formula:\", design_formula_str))\nmessage(paste(\"Using contrast coefficient/string:\", contrast_coef_str))\n\n# Load count data\ncounts <- read.delim(counts_file, row.names = 1, check.names = FALSE)\n\n# Load sample information\nsample_info <- read.delim(samples_file, row.names = 1, check.names = FALSE)\n\n# Ensure sample order matches between counts and sample_info\nsample_info <- sample_info[colnames(counts), , drop = FALSE]\n\n# Create DGEList object\ndge <- DGEList(counts = counts)\n\n# Filter out lowly expressed genes (optional, but good practice)\n# Assuming 'condition' is a column in sample_info for filtering example\nif (\"condition\" %in% colnames(sample_info)) {\n  keep <- filterByExpr(dge, group = sample_info$condition)\n} else {\n  keep <- filterByExpr(dge)\n}\ndge <- dge[keep, , keep.lib.sizes = FALSE]\n\n# Normalize library sizes\ndge <- calcNormFactors(dge)\n\n# Create design matrix\ndesign <- model.matrix(as.formula(design_formula_str), data = sample_info)\n\n# Estimate dispersion\ndge <- estimateDisp(dge, design)\n\n# Fit GLM\nfit <- glmQLFit(dge, design)\n\n# Perform differential expression testing\n# Handle contrast: if it contains '-' or '+', treat as a contrast string for makeContrasts\n# otherwise, treat as a coefficient name.\nif (grepl(\"-\", contrast_coef_str) || grepl(\"\\\\+\", contrast_coef_str)) {\n  message(paste(\"Interpreting contrast as a comparison string:\", contrast_coef_str))\n  contrast_matrix <- makeContrasts(contrasts = contrast_coef_str, levels = design)\n  lrt <- glmQLFTest(fit, contrast = contrast_matrix)\n} else {\n  message(paste(\"Interpreting contrast as a single coefficient name:\", contrast_coef_str))\n  lrt <- glmQLFTest(fit, coef = contrast_coef_str)\n}\n\n# Get results\nresults <- topTags(lrt, n = Inf, sort.by = \"PValue\")$table\n\n# Add adjusted p-value\nresults$FDR <- p.adjust(results$PValue, method = \"BH\")\n\n# Write results to file\nwrite.table(results, file = output_file, sep = \"\\t\", quote = FALSE, row.names = TRUE)\n\nmessage(paste(\"Differential expression results written to:\", output_file))\n\nEOF\n\n# Create dummy input files for demonstration\n# Dummy counts.tsv\ncat << 'EOF' > counts.tsv\nGeneID  Sample1 Sample2 Sample3 Sample4 Sample5 Sample6\nGeneA   100     120     110     200     210     190\nGeneB   50      60      55      100     110     95\nGeneC   200     210     190     100     120     110\nGeneD   10      12      11      20      22      19\nGeneE   5       6       5       10      11      9\nEOF\n\n# Dummy sample_info.tsv\ncat << 'EOF' > sample_info.tsv\nSampleID        condition       batch\nSample1         untreated       batch1\nSample2         untreated       batch1\nSample3         untreated       batch2\nSample4         treated         batch2\nSample5         treated         batch3\nSample6         treated         batch3\nEOF\n\n# Execute the custom edgeR script\n# Example 1: Differential expression between 'treated' and 'untreated' conditions, adjusting for 'batch'\n# Here, 'conditiontreated' tests the effect of 'treated' vs the reference level of 'condition' (e.g., 'untreated')\nRscript custom_edgeR_script.R \\\n  --counts counts.tsv \\\n  --samples sample_info.tsv \\\n  --output differential_expression_results_1.tsv \\\n  --design_formula \"~batch + condition\" \\\n  --contrast_coef \"conditiontreated\"\n\n# Example 2: If using a design like '~0 + condition' to explicitly model each condition group,\n# you can specify a direct contrast between groups.\nRscript custom_edgeR_script.R \\\n  --counts counts.tsv \\\n  --samples sample_info.tsv \\\n  --output differential_expression_results_2.tsv \\\n  --design_formula \"~0 + condition + batch\" \\\n  --contrast_coef \"conditiontreated - conditionuntreated\"\n\n# Clean up dummy files (optional)\n# rm counts.tsv sample_info.tsv custom_edgeR_script.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/edgeR.html"
+        },
+        {
+            "step_order": 5,
+            "description": "ChIP-Seq: Reads were aligned to mm9 genome using bowtie version 0.12.7 with parameters -v 3 -k 1 -m 1 --best --strata.",
+            "tool_name": "Bowtie",
+            "tool_version": "0.12.7",
+            "code_example": "# Install Bowtie (example using conda)\n# conda install -c bioconda bowtie=0.12.7\n\n# Define reference genome index path (placeholder)\nMM9_INDEX=\"/path/to/mm9_index\" # Replace with actual path to mm9 Bowtie index files (e.g., mm9)\n\n# Define input reads file (placeholder)\nINPUT_READS=\"reads.fastq\" # Replace with actual input FASTQ file\n\n# Define output SAM file (placeholder)\nOUTPUT_SAM=\"output.sam\" # Replace with desired output SAM file name\n\n# Align reads to mm9 genome using bowtie\nbowtie -v 3 -k 1 -m 1 --best --strata \"${MM9_INDEX}\" \"${INPUT_READS}\" > \"${OUTPUT_SAM}\"",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/gb-2009-10-3-r25"
+        },
+        {
+            "step_order": 6,
+            "description": "Redundant reads were discarded before creating bedgraph profiles.",
+            "tool_name": "sambamba (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "0.8.2",
+            "code_example": "# Install sambamba if not already installed\n# conda install -c bioconda sambamba\n\n# Assuming 'aligned_reads.bam' is the input sorted BAM file after alignment.\n# The '-r' flag ensures that duplicate reads are removed, not just marked.\n# The '-p' flag specifies the number of threads to use for parallel processing.\n# Replace 'aligned_reads.bam' with your actual input file and 'deduplicated_reads.bam' with your desired output file name.\n# Adjust the number of threads (e.g., 8) based on your system's resources.\nsambamba markdup -r -p 8 aligned_reads.bam deduplicated_reads.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/biod/sambamba"
+        },
+        {
+            "step_order": 7,
+            "description": "Peak calling was done using HOMER for H3K4me1 and H3K27Ac marks at FDR=0.01 with respect to corresponding Input.",
+            "tool_name": "HOMER",
+            "tool_version": "Not explicitly inferable from description",
+            "code_example": "# Define input BAM files and output directories (placeholders)\n# Replace with actual paths to your aligned BAM files\nH3K4ME1_BAM=\"h3k4me1_rep1.bam\"\nH3K27AC_BAM=\"h3k27ac_rep1.bam\"\nINPUT_BAM=\"input_rep1.bam\"\n\n# Define output tag directories and peak files\nH3K4ME1_TAG_DIR=\"h3k4me1_tag_dir\"\nH3K27AC_TAG_DIR=\"h3k27ac_tag_dir\"\nINPUT_TAG_DIR=\"input_tag_dir\"\n\nH3K4ME1_PEAKS_OUTPUT=\"h3k4me1_peaks.txt\"\nH3K27AC_PEAKS_OUTPUT=\"h3k27ac_peaks.txt\"\n\n# Install HOMER (example using conda)\n# conda create -n homer_env homer\n# conda activate homer_env\n\n# Make tag directories for each sample\n# Note: HOMER's makeTagDirectory can take a genome for normalization, but it's not strictly required for basic tag directory creation.\n# If you have a specific genome, you might add -genome <genome_name> (e.g., -genome hg38)\nmakeTagDirectory \"${H3K4ME1_TAG_DIR}\" \"${H3K4ME1_BAM}\"\nmakeTagDirectory \"${H3K27AC_TAG_DIR}\" \"${H3K27AC_BAM}\"\nmakeTagDirectory \"${INPUT_TAG_DIR}\" \"${INPUT_BAM}\"\n\n# Perform peak calling for H3K4me1\n# -style histone is appropriate for histone marks\n# -FDR 0.01 is specified in the description\n# -i specifies the input/control tag directory\nfindPeaks \"${H3K4ME1_TAG_DIR}\" \\\n    -o \"${H3K4ME1_PEAKS_OUTPUT}\" \\\n    -i \"${INPUT_TAG_DIR}\" \\\n    -style histone \\\n    -FDR 0.01\n\n# Perform peak calling for H3K27Ac\nfindPeaks \"${H3K27AC_TAG_DIR}\" \\\n    -o \"${H3K27AC_PEAKS_OUTPUT}\" \\\n    -i \"${INPUT_TAG_DIR}\" \\\n    -style histone \\\n    -FDR 0.01",
+            "code_language": "bash",
+            "github_url": "http://homer.ucsd.edu/homer/"
+        },
+        {
+            "step_order": 8,
+            "description": "Peak calling using STAR was done for H3K27me3 marks at FDR=0.01.",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables\nGENOME_DIR=\"/path/to/STAR_genome_index/hg38\" # Placeholder for human genome hg38 index\nGENOME_FASTA=\"/path/to/hg38.fa\" # Placeholder for human genome hg38 fasta\nREADS_R1=\"sample_H3K27me3_R1.fastq.gz\"\nREADS_R2=\"sample_H3K27me3_R2.fastq.gz\" # Assuming paired-end reads; adjust if single-end\nOUTPUT_PREFIX=\"H3K27me3_aligned_STAR_\"\nFDR_THRESHOLD=\"0.01\"\n\n# 1. Build STAR genome index (if not already built)\n# This step is typically done once per genome. Replace paths with actual genome files.\n# mkdir -p \"${GENOME_DIR}\"\n# STAR --runMode genomeGenerate \\\n#      --genomeDir \"${GENOME_DIR}\" \\\n#      --genomeFastaFiles \"${GENOME_FASTA}\" \\\n#      --runThreadN 8 # Adjust thread count as needed\n\n# 2. Align reads using STAR\n# While STAR is primarily an RNA-seq aligner, it can be used for DNA-seq (like ChIP-seq) alignment.\n# This command performs the alignment step, which is a prerequisite for peak calling.\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${READS_R1}\" \"${READS_R2}\" \\\n     --runThreadN 8 \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outBAMcompression 6\n\n# 3. Peak calling using STAR output with FDR threshold\n# STAR itself does not perform peak calling. The description \"Peak calling using STAR\"\n# implies a custom script or a downstream tool that processes STAR's alignment output\n# (e.g., Aligned.sortedByCoord.out.bam) and applies peak calling logic with the specified FDR.\n# This is a conceptual placeholder for such a custom peak calling step, as STAR's primary function is alignment.\n\n# Example of a conceptual custom peak calling script using STAR's output:\n# Assuming 'custom_star_peak_caller.py' is a hypothetical script that takes STAR's BAM output\n# and performs peak calling with an FDR threshold.\n# python custom_star_peak_caller.py \\\n#        --input_bam \"${OUTPUT_PREFIX}Aligned.sortedByCoord.out.bam\" \\\n#        --fdr \"${FDR_THRESHOLD}\" \\\n#        --output_peaks \"H3K27me3_peaks_FDR${FDR_THRESHOLD}.bed\"\n\n# If a standard ChIP-seq peak caller like MACS2 were used on STAR's output (common practice):\n# macs2 callpeak -t \"${OUTPUT_PREFIX}Aligned.sortedByCoord.out.bam\" \\\n#                -f BAMPE \\\n#                -g hs \\\n#                -n H3K27me3_peaks \\\n#                --outdir . \\\n#                -q \"${FDR_THRESHOLD}\" # -q for FDR (q-value) threshold\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 9,
+            "description": "BIS-Seq: DNA sequencing data was aligned to mouse genome (mm9) with the BS Seeker program.",
+            "tool_name": "BS Seeker",
+            "tool_version": "Unknown",
+            "code_example": "# Install BS Seeker (original version, typically downloaded from SourceForge)\n# BS Seeker is a Python script and requires Python to be installed.\n# It also relies on an external aligner like Bowtie or Bowtie2, which must be installed and in your system's PATH.\n# Example manual installation:\n# wget https://sourceforge.net/projects/bsseeker/files/BS_Seeker_v1.0.5.tar.gz # Or the latest available version\n# tar -xzf BS_Seeker_v1.0.5.tar.gz\n# cd BS_Seeker_v1.0.5\n# Make sure 'BS_Seeker.py' is executable or run with 'python'\n\n# Define input and output files\ninput_fastq=\"dna_sequencing_data.fastq\" # Placeholder for input DNA sequencing data (e.g., FASTQ file)\noutput_bam=\"aligned_bisulfite_reads.bam\" # Placeholder for output aligned reads (BAM file)\n\n# Define reference genome (mm9)\n# Download the mouse genome (mm9) FASTA file if not already available.\n# A common source is UCSC Genome Browser.\n# Example download command:\n# wget -P /path/to/genomes/mm9/ http://hgdownload.soe.ucsc.edu/goldenPath/mm9/bigZips/mm9.fa.gz\n# gunzip /path/to/genomes/mm9/mm9.fa.gz\nmm9_genome_fasta=\"/path/to/genomes/mm9/mm9.fa\"\n\n# Align DNA sequencing data to the mouse genome (mm9) using BS Seeker\n# BS Seeker will automatically build a Bowtie/Bowtie2 index for the genome if it doesn't exist.\n# Ensure 'BS_Seeker.py' is in your PATH or specify its full path.\npython BS_Seeker.py \\\n    -i \"${input_fastq}\" \\\n    -g \"${mm9_genome_fasta}\" \\\n    -o \"${output_bam}\" \\\n    --aligner=bowtie # Specify the aligner to use (e.g., bowtie or bowtie2)\n    # Additional parameters can be added as needed, e.g., -p for number of threads, -m for maximum mismatches, etc.\n",
+            "code_language": "bash",
+            "github_url": "https://sourceforge.net/projects/bsseeker/"
+        },
+        {
+            "step_order": 10,
+            "description": "Data was reported as the fraction of reads that were methylated, calculated as the ratio of cytosine bases (indicating methylated CpGs) to total reads for each CpG coordinate.",
+            "tool_name": "methylDackel (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "v0.6.1 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install methylDackel (if not already installed)\n# conda install -c bioconda methyldackel\n\n# Define input and output files\n# Replace 'path/to/your/reference_genome.fa' with the actual path to your reference genome FASTA file (e.g., hg38.fa)\nREFERENCE_GENOME=\"path/to/your/reference_genome.fa\"\nINPUT_BAM=\"sample.bam\"\nOUTPUT_PREFIX=\"sample_methylation\"\n\n# Extract methylation information for CpG sites from a bisulfite-sequenced BAM file.\n# This command will generate two output files:\n# 1. ${OUTPUT_PREFIX}_CpG.bedGraph: A bedGraph file containing methylation percentages for each CpG site.\n# 2. ${OUTPUT_PREFIX}_CpG.tsv: A tab-separated file with detailed CpG methylation calls.\nmethylDackel extract \\\n    -g \"${REFERENCE_GENOME}\" \\\n    \"${INPUT_BAM}\" \\\n    -o \"${OUTPUT_PREFIX}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/dpryan79/MethylDackel"
+        },
+        {
+            "step_order": 11,
+            "description": "Unmethylated cytosines are ultimately converted to thymine bases during the bisulfite conversion process.",
+            "tool_name": "Bismark (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "(Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Bismark (example using conda)\n# conda install -c bioconda bismark\n\n# Define variables\n# Replace /path/to/bisulfite_indexed_genome/hg38 with the actual path to your Bismark-indexed reference genome directory.\n# To create a Bismark-indexed genome, run: bismark_genome_preparation --path_to_bowtie2 /path/to/bowtie2_exec /path/to/reference_fasta_dir\nREFERENCE_GENOME_DIR=\"/path/to/bisulfite_indexed_genome/hg38\"\nREAD1=\"sample_R1.fastq.gz\"\nREAD2=\"sample_R2.fastq.gz\"\nOUTPUT_DIR=\"bismark_alignment_output\"\nSAMPLE_NAME=\"sample_name\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Align bisulfite-converted paired-end reads using Bismark with Bowtie2\n# This command performs alignment and generates a BAM file.\n# Further steps would involve methylation extraction using bismark_methylation_extractor.\nbismark \\\n    --bowtie2 \\\n    --temp_dir \"${OUTPUT_DIR}/temp\" \\\n    --output_dir \"${OUTPUT_DIR}\" \\\n    --basename \"${SAMPLE_NAME}\" \\\n    \"${REFERENCE_GENOME_DIR}\" \\\n    -1 \"${READ1}\" \\\n    -2 \"${READ2}\"\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/FelixKrueger/Bismark"
+        }
+    ],
+    "raw_text": "Illumina Casava-1.8.2 software was used for basecalling.\nRNA-Seq: Low quality reads as well as ribosomal and other repeat sequences were filtered out before alignment. RUM software was used for aligning reads to mouse genome mm9 and Refseq transcriptome and for transcript quantitation. Differential expression analysis was carried out using a custom script implementing EdgeR software.\nChIP-Seq: Reads were aligned to mm9 genome using bowtie version 0.12.7 with parameters -v 3 -k 1 -m 1 --best --strata. Redundant reads were discarded before creating bedgraph profiles.\nPeak calling was done using HOMER for H3K4me1 and H3K27Ac marks at FDR=0.01 with respect to corresponding Input. Peak calling using STAR was done for H3K27me3 marks at FDR=0.01.\nBIS-Seq: DNA sequencing data was aligned to mouse genome (mm9) with the BS Seeker program. Data was reported as the fraction of reads that were methylated, calculated as the ratio of cytosine bases (indicating methylated CpGs) to total reads for each CpG coordinate.  Unmethylated cytosines are ultimately converted to thymine bases during the bisulfite conversion process.\nGenome_build: mm9\nSupplementary_files_format_and_content: Tab delimited file of transcript raw read counts.\nSupplementary_files_format_and_content: Tab delimited file of transcript FPKM counts.\nSupplementary_files_format_and_content: Peak files are tab-delimited listing genomic coordinates and their respective scores and p-values. Scores represent fold-change with respect to Input.\nSupplementary_files_format_and_content: Tab-delimited files of loci, fraction of methylated cytosines and total read count.\nSupplementary_files_format_and_content: RawReadCounts.txt: Raw transcript counts\nSupplementary_files_format_and_content: TrancriptFPKMCounts.txt: Transcript FPKM counts\nSupplementary_files_format_and_content: Old_H3K4me1.peaks.txt: peak\nSupplementary_files_format_and_content: Old_H3K27me3.peaks.txt: peak\nSupplementary_files_format_and_content: Young_H3K4me1.peaks.txt: peak\nSupplementary_files_format_and_content: Young_H3K27me3.peaks.txt: peak\nSupplementary_files_format_and_content: Young_H3K27Ac.peaks.txt: peak\nSupplementary_files_format_and_content: OldBeta_bs_seeker-CG.tab: Percent methylated cytosines\nSupplementary_files_format_and_content: YoungBeta_bs_seeker-CG.tab: Percent methylated cytosines",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

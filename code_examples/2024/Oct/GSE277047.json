@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Raw data provided is demultiplexed reads with adapters removed and only unique synthetic reads.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Library strategy: RBNS",
-      "tool_name": "RBNS",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Raw data provided is demultiplexed reads with adapters removed and only unique synthetic reads.\nAssembly: N/A\nSupplementary files format and content: Raw data provided is demultiplexed reads with adapters removed and only unique synthetic reads.\nLibrary strategy: RBNS",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Raw data provided is demultiplexed reads with adapters removed and only unique synthetic reads.",
+            "tool_name": "umi_tools (dedup subcommand) (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.1.2",
+            "code_example": "# Install umi_tools if not already installed\n# conda install -c bioconda umi_tools\n\n# This command assumes 'input.bam' is an aligned BAM file with Unique Molecular Identifiers (UMIs) \n# in the read names (e.g., after processing with umi_tools extract and alignment).\n# It performs UMI-based deduplication to retain only unique synthetic reads.\n# The input BAM is derived from demultiplexed, adapter-trimmed raw reads.\numi_tools dedup \\\n    --extract-method=string \\\n    --method=unique \\\n    --output-stats=deduplication_stats.tsv \\\n    --log=deduplication.log \\\n    --paired \\\n    --stdin=input.bam \\\n    --stdout=output_unique.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/CGATOxford/UMI-tools"
+        },
+        {
+            "step_order": 2,
+            "description": "Library strategy: RBNS",
+            "tool_name": "RBNS",
+            "tool_version": "N/A",
+            "code_example": "# RBNS (RNA Bind-n-Seq) is an experimental method to determine RNA-binding protein (RBP) binding specificities.\n# The computational analysis of RBNS data typically involves several steps:\n# 1. Alignment of sequencing reads to a defined RNA library (e.g., using Bowtie2 or BWA).\n# 2. Quantification of reads for each RNA sequence and identification of enriched sequences.\n# 3. Motif discovery on the identified enriched sequences to find the RBP's binding preferences.\n\n# This code block focuses on the motif discovery step, which is a key output of RBNS analysis.\n# It assumes that a FASTA file of enriched RNA sequences has already been generated from upstream processing.\n\n# Placeholder for input and output files\n# Replace with the actual FASTA file containing RNA sequences identified as enriched for RBP binding.\n# This file is typically generated after aligning RBNS reads to a synthetic RNA library and quantifying enrichment.\nENRICHED_SEQUENCES_FASTA=\"rbns_enriched_sequences.fasta\"\nOUTPUT_DIR=\"rbns_motif_discovery_output\"\n\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Execute MEME for motif discovery on enriched sequences\n# MEME (Multiple Em for Motif Elicitation) is a widely used tool for discovering novel, ungapped motifs.\n# Parameters:\n#   -dna: Specifies that the input sequences are DNA (or RNA, treated as DNA for motif finding).\n#   -mod zoops: Specifies the ZOOPS (Zero or One Occurrence Per Sequence) model, suitable for motifs that may appear once or not at all in each sequence.\n#   -nmotifs 3: Search for up to 3 motifs.\n#   -minw 6 -maxw 15: Specifies the minimum and maximum width of motifs to find.\n#   -o: Output directory.\n# conda install -c bioconda meme\nmeme \"${ENRICHED_SEQUENCES_FASTA}\" -o \"${OUTPUT_DIR}\" -dna -mod zoops -nmotifs 3 -minw 6 -maxw 15",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1038/nmeth.2902"
+        }
+    ],
+    "raw_text": "Raw data provided is demultiplexed reads with adapters removed and only unique synthetic reads.\nAssembly: N/A\nSupplementary files format and content: Raw data provided is demultiplexed reads with adapters removed and only unique synthetic reads.\nLibrary strategy: RBNS",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

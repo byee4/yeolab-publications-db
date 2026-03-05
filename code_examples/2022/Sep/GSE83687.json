@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Illumina Casava1.82 software used for basecalling.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Short reads in fastQ format are processed using RAPiD, which is a RNA-Seq analysis framework developed and maintained by the Technology Development group at Icahn Institute for Genomics and MultiScale Biology. .",
-      "tool_name": "RNA-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "RAPiD uses STAR to map the short reads to the [hg19 ] reference and resultant alignment map in BAM format is quantified for gene level expression using featureCounts of the subreads package.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Detailed QC metrics are generated using the RNASeQC package",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Illumina Casava1.82 software used for basecalling.\nShort reads in fastQ format are processed using RAPiD, which is a RNA-Seq analysis framework developed and maintained by the Technology Development group at Icahn Institute for Genomics and MultiScale Biology. .\nRAPiD uses STAR to map the short reads to the  [hg19 ] reference and resultant alignment map in BAM format is quantified for gene level expression using featureCounts of the subreads package. Detailed QC metrics are generated using the RNASeQC package\nGenome_build: hg19\nSupplementary_files_format_and_content: tab-delimited text files include fragment per kilobase per million (FPKM) for each gene",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Illumina Casava1.82 software used for basecalling.",
+            "tool_name": "Illumina Casava",
+            "tool_version": "1.82",
+            "code_example": "# The description states \"Illumina Casava1.82 software used for basecalling.\"\n# Casava was an integrated software suite for processing Illumina sequencing data,\n# including basecalling (converting BCL files to FASTQ).\n# The specific command-line execution for Casava 1.8.2 is not provided in the description.\n# Basecalling is the process of converting raw intensity data (BCL files) into base calls and quality scores, typically outputting FASTQ files.\n# Modern Illumina basecalling is typically performed using bcl2fastq or bcl-convert.\n# No specific parameters or reference datasets are mentioned in the description.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Short reads in fastQ format are processed using RAPiD, which is a RNA-Seq analysis framework developed and maintained by the Technology Development group at Icahn Institute for Genomics and MultiScale Biology. .",
+            "tool_name": "RNA-seq",
+            "tool_version": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# RAPiD is described as an RNA-Seq analysis framework developed and maintained by the Technology Development group at Icahn Institute for Genomics and MultiScale Biology.\n# As an internal framework, specific installation instructions and command-line interface details are not publicly available.\n# The following is a conceptual representation of how such a tool would be invoked, assuming standard RNA-Seq inputs.\n\n# Placeholder for input FASTQ files\n# For single-end reads:\n# INPUT_FASTQ=\"sample_reads.fastq.gz\"\n# For paired-end reads:\n# INPUT_FASTQ_R1=\"sample_R1.fastq.gz\"\n# INPUT_FASTQ_R2=\"sample_R2.fastq.gz\"\n\n# Placeholder for reference genome and annotation files (e.g., human hg38)\n# GENOME_FASTA=\"/path/to/reference/GRCh38.p14.genome.fa\"\n# GENE_ANNOTATION_GTF=\"/path/to/reference/gencode.v45.annotation.gtf\"\n\n# Placeholder for output directory\n# OUTPUT_DIR=\"rapid_analysis_output\"\n\n# Conceptual command for running RAPiD. The actual command would depend on the framework's design.\n# rapid_run --fastq $INPUT_FASTQ --genome $GENOME_FASTA --gtf $GENE_ANNOTATION_GTF --output $OUTPUT_DIR\n# rapid_run --fastq-r1 $INPUT_FASTQ_R1 --fastq-r2 $INPUT_FASTQ_R2 --genome $GENOME_FASTA --gtf $GENE_ANNOTATION_GTF --output $OUTPUT_DIR\n\necho \"RAPiD is an internal RNA-Seq analysis framework. Specific command-line usage and parameters are not publicly documented.\"\necho \"Please consult the Technology Development group at Icahn Institute for Genomics and MultiScale Biology for detailed instructions.\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "RAPiD uses STAR to map the short reads to the [hg19 ] reference and resultant alignment map in BAM format is quantified for gene level expression using featureCounts of the subreads package.",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables\n# Placeholder for hg19 STAR index. This directory should contain genome files (e.g., genome.fa, SA, SAindex, etc.)\nGENOME_DIR=\"/path/to/STAR_index/hg19\"\n# Placeholder for input R1 FASTQ file (e.g., sample_R1.fastq.gz)\nREADS_R1=\"input_reads_R1.fastq.gz\"\n# Placeholder for input R2 FASTQ file (e.g., sample_R2.fastq.gz). Remove if single-end.\nREADS_R2=\"input_reads_R2.fastq.gz\"\n# Prefix for output files (e.g., sample_aligned.bam)\nOUTPUT_PREFIX=\"sample_aligned\"\n# Number of threads to use for alignment\nTHREADS=8\n\n# Run STAR alignment\n# --genomeDir: Path to the STAR genome index directory\n# --readFilesIn: Input FASTQ files (space-separated for paired-end)\n# --runThreadN: Number of threads\n# --outFileNamePrefix: Prefix for all output files\n# --outSAMtype BAM SortedByCoordinate: Output sorted BAM file\n# --readFilesCommand zcat: Command to decompress gzipped FASTQ files\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${READS_R1}\" \"${READS_R2}\" \\\n     --runThreadN \"${THREADS}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --readFilesCommand zcat",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 4,
+            "description": "Detailed QC metrics are generated using the RNASeQC package",
+            "tool_name": "RNASeQC",
+            "tool_version": "v2.3.6 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install RNASeQC via conda\n# conda install -c bioconda rnaseqc\n\n# Define variables for input and output\nINPUT_BAM=\"sample_aligned.bam\" # Placeholder: Replace with actual path to input BAM file\nREFERENCE_FASTA=\"GRCh38.primary_assembly.genome.fa\" # Placeholder: Replace with actual path to reference genome FASTA (e.g., from GENCODE or Ensembl)\nGENE_MODEL_GTF=\"gencode.v45.annotation.gtf\" # Placeholder: Replace with actual path to gene model GTF (e.g., from GENCODE)\nOUTPUT_DIR=\"rnaseqc_output\"\nSAMPLE_ID=\"sample1\" # Identifier for the sample, used in reports\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Execute RNA-SeQC\n# The 'rnaseqc' command from bioconda is a wrapper that typically calls the Java JAR.\n# The arguments are consistent with the direct Java command.\nrnaseqc \\\n  -o \"${OUTPUT_DIR}\" \\\n  -r \"${REFERENCE_FASTA}\" \\\n  -g \"${GENE_MODEL_GTF}\" \\\n  -s \"${SAMPLE_ID}|${INPUT_BAM}|RNA\" # Format: SampleID|PathToBam|SampleType (e.g., RNA, DNA)",
+            "code_language": "bash",
+            "github_url": "https://github.com/getzlab/rnaseqc"
+        }
+    ],
+    "raw_text": "Illumina Casava1.82 software used for basecalling.\nShort reads in fastQ format are processed using RAPiD, which is a RNA-Seq analysis framework developed and maintained by the Technology Development group at Icahn Institute for Genomics and MultiScale Biology. .\nRAPiD uses STAR to map the short reads to the  [hg19 ] reference and resultant alignment map in BAM format is quantified for gene level expression using featureCounts of the subreads package. Detailed QC metrics are generated using the RNASeQC package\nGenome_build: hg19\nSupplementary_files_format_and_content: tab-delimited text files include fragment per kilobase per million (FPKM) for each gene",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "FASTQ sequencing reads were processed, aligned to the mouse genome (mm10) and converted to digital gene expression matrices using the Drop-seq tools (version 1.12, http://mccarrolllab.com/dropseq/) with settings as described in the Drop-seq Alignment Cookbook (version 1.2 Jan2016, http://mccarrolllab.com/dropseq/)",
-      "tool_name": "scRNA-seq",
-      "tool_version": "1.12",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "The number of cell barcodes per embryonic age was identified by calculating the cumulative fraction of reads attributable to each individual cell barcode and arranging these in decreasing order.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "2000 Barcodes were selected at E11.5, E13.5 and E17.5 and 5000 Barcodes at E15.5",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Two batches data collected from E15.5 embryos (Batch1 and Batch2) were combined together.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "FASTQ sequencing reads were processed, aligned to the mouse genome (mm10) and converted to digital gene expression matrices using the Drop-seq tools (version 1.12, http://mccarrolllab.com/dropseq/) with settings as described in the Drop-seq Alignment Cookbook (version 1.2 Jan2016, http://mccarrolllab.com/dropseq/)\nThe number of cell barcodes per embryonic age was identified by calculating the cumulative fraction of reads attributable to each individual cell barcode and arranging these in decreasing order.\n2000 Barcodes were selected at E11.5, E13.5 and E17.5 and 5000 Barcodes at E15.5\nTwo batches data collected from E15.5 embryos (Batch1 and Batch2) were combined together.\nGenome_build: mm10\nSupplementary_files_format_and_content: tab-delimited text files containing raw digital gene expression for each embryonic age. Two processed data files are included per age. One containing all data for all cells and one containing only cells predicted as cortical in origin.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "FASTQ sequencing reads were processed, aligned to the mouse genome (mm10) and converted to digital gene expression matrices using the Drop-seq tools (version 1.12, http://mccarrolllab.com/dropseq/) with settings as described in the Drop-seq Alignment Cookbook (version 1.2 Jan2016, http://mccarrolllab.com/dropseq/)",
+            "tool_name": "scRNA-seq",
+            "tool_version": "1.12",
+            "code_example": "# Install Drop-seq tools (example using git clone and build, or direct download)\n# git clone https://github.com/broadinstitute/Drop-seq.git\n# cd Drop-seq\n# ./gradlew build\n# export PATH=$PATH:$(pwd)/bin # Add Drop-seq bin directory to PATH\n\n# Define reference genome and annotation paths for mouse (mm10)\n# Replace with actual paths to your mm10 files.\n# These files are typically downloaded from Ensembl, UCSC, or NCBI.\n# For mm10 (GRCm38), common sources are Ensembl or GRC.\n# Example paths for GRCm38 (mm10)\nMM10_FASTA=\"/path/to/mm10/GRCm38.primary_assembly.genome.fa\"\nMM10_GTF=\"/path/to/mm10/gencode.vM25.annotation.gtf\" # Or Ensembl GTF for GRCm38\n# Drop-seq tools often require a refFlat file and ribosomal interval list,\n# which can be generated from the GTF using Picard tools.\n# Example generation (commented out):\n# java -jar picard.jar GtfToRefFlat I=${MM10_GTF} O=${MM10_REFFLAT}\n# java -jar picard.jar MakeRibosomalIntervals I=${MM10_GTF} O=${MM10_RIBOSOMAL_INTERVALS} S=Mus_musculus\n\nMM10_REFFLAT=\"/path/to/mm10/gencode.vM25.refFlat\"\nMM10_RIBOSOMAL_INTERVALS=\"/path/to/mm10/gencode.vM25.ribosomal.interval_list\"\n\n# Define input FASTQ files (assuming R1 for barcodes/UMI, R2 for cDNA)\nINPUT_FASTQ_R1=\"sample_R1.fastq.gz\"\nINPUT_FASTQ_R2=\"sample_R2.fastq.gz\"\n\n# Define output directory and prefix\nOUTPUT_DIR=\"dropseq_results\"\nOUTPUT_PREFIX=\"sample\"\nmkdir -p \"${OUTPUT_DIR}\"\nTMP_DIR=\"${OUTPUT_DIR}/tmp\"\nmkdir -p \"${TMP_DIR}\"\n\n# Define Drop-seq specific parameters as per Drop-seq Alignment Cookbook (v1.2 Jan2016)\n# These are common values for Drop-seq. Adjust if your library prep differs.\nCELL_BARCODE_LENGTH=12\nUMI_LENGTH=8\n# READ_STRUCTURE describes Read 1: 12bp Cell Barcode, 8bp UMI, then cDNA (T) after trimming 1bp.\n# This is a common structure for Drop-seq.\nREAD_STRUCTURE=\"12C8M(TRIM_START=1)T\"\n\n# Execute the Drop-seq alignment and Digital Gene Expression (DGE) matrix generation pipeline\n# The Drop-seq_alignment.sh script orchestrates multiple Drop-seq tools.\n# Ensure Drop-seq tools are in your PATH or specify the full path to the script.\nDrop-seq_alignment.sh \\\n    REFERENCE_FASTA=\"${MM10_FASTA}\" \\\n    GENE_MODEL_GTF=\"${MM10_GTF}\" \\\n    REF_FLAT=\"${MM10_REFFLAT}\" \\\n    RIBOSOMAL_INTERVALS=\"${MM10_RIBOSOMAL_INTERVALS}\" \\\n    OUTPUT_PREFIX=\"${OUTPUT_DIR}/${OUTPUT_PREFIX}\" \\\n    FASTQ_1=\"${INPUT_FASTQ_R1}\" \\\n    FASTQ_2=\"${INPUT_FASTQ_R2}\" \\\n    CELL_BARCODE_LENGTH=\"${CELL_BARCODE_LENGTH}\" \\\n    UMI_LENGTH=\"${UMI_LENGTH}\" \\\n    READ_STRUCTURE=\"${READ_STRUCTURE}\" \\\n    TMP_DIR=\"${TMP_DIR}\" \\\n    NUM_CORE=8 # Example: Use 8 cores for alignment and processing",
+            "code_language": "bash",
+            "github_url": "https://github.com/broadinstitute/Drop-seq"
+        },
+        {
+            "step_order": 2,
+            "description": "The number of cell barcodes per embryonic age was identified by calculating the cumulative fraction of reads attributable to each individual cell barcode and arranging these in decreasing order.",
+            "tool_name": "Python (with pandas) (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "3.x",
+            "code_example": "# Inferring a Python script using pandas for this data manipulation.\n# This script assumes an input file 'barcode_counts.tsv' with two columns: 'barcode' and 'read_count'.\n\n# Install pandas if not already installed\n# pip install pandas\n\n# Example: Create a dummy input file for demonstration purposes\n# echo -e \"barcode\\tread_count\\nCELL1\\t10000\\nCELL2\\t8000\\nCELL3\\t5000\\nCELL4\\t2000\\nCELL5\\t1000\\nCELL6\\t500\\nCELL7\\t100\" > barcode_counts.tsv\n\npython3 -c \"\nimport pandas as pd\n\n# Load the barcode counts data\n# Assuming the input file is tab-separated with headers 'barcode' and 'read_count'\ndf = pd.read_csv('barcode_counts.tsv', sep='\\t')\n\n# Sort by read_count in decreasing order\ndf_sorted = df.sort_values(by='read_count', ascending=False).reset_index(drop=True)\n\n# Calculate cumulative sum of read counts\ndf_sorted['cumulative_reads'] = df_sorted['read_count'].cumsum()\n\n# Calculate total reads\ntotal_reads = df_sorted['read_count'].sum()\n\n# Calculate cumulative fraction of reads\ndf_sorted['cumulative_fraction'] = df_sorted['cumulative_reads'] / total_reads\n\n# Print the results to standard output (or save to a new file)\nprint(df_sorted[['barcode', 'read_count', 'cumulative_fraction']].to_csv(index=False, sep='\\t'))\n\" > barcode_counts_cumulative_fraction.tsv",
+            "code_language": "bash",
+            "github_url": "https://github.com/pandas-dev/pandas"
+        },
+        {
+            "step_order": 3,
+            "description": "2000 Barcodes were selected at E11.5, E13.5 and E17.5 and 5000 Barcodes at E15.5",
+            "tool_name": "Custom Python script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# This script selects a specified number of barcodes for each embryonic stage.\n# It assumes an input TSV file where each row represents a barcode and includes its associated stage.\n#\n# Example input_barcodes_with_metadata.tsv:\n# barcode_id    stage   other_info\n# BC0001        E11.5   data1\n# BC0002        E13.5   data2\n# BC0003        E11.5   data3\n# BC0004        E15.5   data4\n# ... (ensure enough barcodes for each stage or handle warnings)\n#\n# Expected output: A file (e.g., selected_barcodes.tsv) containing one selected barcode ID per line.\n\n# Define input and output files\nINPUT_BARCODES_FILE=\"input_barcodes_with_metadata.tsv\"\nOUTPUT_SELECTED_BARCODES_FILE=\"selected_barcodes.tsv\"\n\n# Ensure pandas is installed\n# conda install -c anaconda pandas\n# pip install pandas\n\n# Execute the Python script for barcode selection\npython3 -c \"\nimport pandas as pd\nimport sys\nimport os\n\ninput_file = '$INPUT_BARCODES_FILE'\noutput_file = '$OUTPUT_SELECTED_BARCODES_FILE'\n\nselection_counts = {\n    'E11.5': 2000,\n    'E13.5': 2000,\n    'E17.5': 2000,\n    'E15.5': 5000\n}\n\nif not os.path.exists(input_file):\n    print(f\\\"Error: Input file '{input_file}' not found.\\\", file=sys.stderr)\n    sys.exit(1)\n\ntry:\n    df = pd.read_csv(input_file, sep='\\t')\nexcept Exception as e:\n    print(f\\\"Error reading input file '{input_file}': {e}\\\", file=sys.stderr)\n    sys.exit(1)\n\nif 'stage' not in df.columns or 'barcode_id' not in df.columns:\n    print(\\\"Error: Input file must contain 'stage' and 'barcode_id' columns.\\\", file=sys.stderr)\n    sys.exit(1)\n\nselected_barcodes_list = []\n\nfor stage, count in selection_counts.items():\n    stage_df = df[df['stage'] == stage]\n    if len(stage_df) < count:\n        print(f\\\"Warning: Not enough barcodes for stage {stage}. Requested {count}, found {len(stage_df)}. Selecting all available.\\\", file=sys.stderr)\n        selected_barcodes_list.append(stage_df['barcode_id'])\n    else:\n        # Use random_state for reproducibility of sampling\n        selected_barcodes_list.append(stage_df['barcode_id'].sample(n=count, random_state=42))\n\nif selected_barcodes_list:\n    final_selection = pd.concat(selected_barcodes_list).reset_index(drop=True)\n    final_selection.to_csv(output_file, index=False, header=False)\n    print(f\\\"Selected barcodes written to '{output_file}'\\\")\nelse:\n    print(\\\"No barcodes were selected.\\\", file=sys.stderr)\n\"\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "Two batches data collected from E15.5 embryos (Batch1 and Batch2) were combined together.",
+            "tool_name": "samtools merge (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.19",
+            "code_example": "# Install samtools if not already installed\n# conda install -c bioconda samtools\n\n# Assuming 'Batch1' and 'Batch2' refer to aligned BAM files from two different batches\n# and need to be combined into a single BAM file.\nsamtools merge -o combined_batches.bam batch1.bam batch2.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        }
+    ],
+    "raw_text": "FASTQ sequencing reads were processed, aligned to the mouse genome (mm10) and converted to digital gene expression matrices using the Drop-seq tools (version 1.12, http://mccarrolllab.com/dropseq/) with settings as described in the Drop-seq Alignment Cookbook (version 1.2 Jan2016, http://mccarrolllab.com/dropseq/)\nThe number of cell barcodes per embryonic age was identified by calculating the cumulative fraction of reads attributable to each individual cell barcode and arranging these in decreasing order.\n2000 Barcodes were selected at E11.5, E13.5 and E17.5 and 5000 Barcodes at E15.5\nTwo batches data collected from E15.5 embryos (Batch1 and Batch2) were combined together.\nGenome_build: mm10\nSupplementary_files_format_and_content: tab-delimited text files containing raw digital gene expression for each embryonic age. Two processed data files are included per age. One containing all data for all cells and one containing only cells predicted as cortical in origin.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

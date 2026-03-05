@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "*library strategy: eCLIP-seq",
-      "tool_name": "eCLIP",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "eCLIP data was analyzed using Skipper with default settings.",
-      "tool_name": "Skipper",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "The kDa of each ORF was matched to the closest input sample beginning at that range; for example, a 78 kDa ORF would be paired with the input sample covering the range of 75 to 150 kDa.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "*library strategy: eCLIP-seq\neCLIP data was analyzed using Skipper with default settings. The kDa of each ORF was matched to the closest input sample beginning at that range; for example, a 78 kDa ORF would be paired with the input sample covering the range of 75 to 150 kDa.\nAssembly: hg38\nSupplementary files format and content: Reproducible enriched peaks output by Skipper",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "*library strategy: eCLIP-seq",
+            "tool_name": "eCLIP",
+            "tool_version": "v1.0.0",
+            "code_example": "# This script demonstrates how to run the eCLIP CWL workflow.\n# It assumes 'cwltool' is installed and the 'yeolab/eclip' repository is cloned.\n\n# Install cwltool if not already installed\n# pip install cwltool\n\n# Clone the eCLIP CWL workflow repository if not already done\n# git clone https://github.com/yeolab/eclip.git\n# cd eclip\n\n# Define placeholder paths for input data and reference files.\n# Replace these with your actual data and reference genome paths.\n# For eCLIP, a comprehensive reference genome (e.g., hg38) typically requires:\n# - Genome FASTA file (e.g., hg38.fa)\n# - STAR index built from the genome FASTA\n# - GTF annotation file (e.g., gencode.v38.annotation.gtf)\n# - Blacklist regions BED file\n# - RepeatMasker BED file\n# - Chromosome sizes file\n# - Adapter sequences FASTA file\n\nOUTPUT_DIR=\"eclip_results\"\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Create a placeholder inputs.yaml file for the CWL workflow.\n# This file would contain paths to all input FASTQ files (replicates, controls),\n# reference genome components, and pipeline parameters (e.g., threads, memory).\n# A full inputs.yaml would be much more extensive, reflecting all parameters\n# defined in the 'yeolab/eclip' workflow's 'workflow.cwl' file.\ncat << EOF > eclip_inputs.yaml\n# Minimal example of an inputs.yaml for the eCLIP CWL workflow\n# Replace with actual file paths and parameters for your experiment.\n# Example for a single replicate and control, paired-end reads:\nfastq_r1_rep1: {class: File, path: \"path/to/replicate1_R1.fastq.gz\"}\nfastq_r2_rep1: {class: File, path: \"path/to/replicate1_R2.fastq.gz\"}\nfastq_r1_control: {class: File, path: \"path/to/control_R1.fastq.gz\"}\nfastq_r2_control: {class: File, path: \"path/to/control_R2.fastq.gz\"}\n\n# Reference genome components (using hg38 as a placeholder)\ngenome_fasta: {class: File, path: \"path/to/hg38.fa\"}\ngenome_star_index_dir: {class: Directory, path: \"path/to/hg38_star_index\"}\ngenome_gtf: {class: File, path: \"path/to/gencode.v38.annotation.gtf\"}\nblacklist_bed: {class: File, path: \"path/to/hg38_blacklist.bed\"}\nrepeatmasker_bed: {class: File, path: \"path/to/hg38_repeatmasker.bed\"}\nchrom_sizes: {class: File, path: \"path/to/hg38.chrom.sizes\"}\nadapter_fasta: {class: File, path: \"path/to/adapters.fa\"}\n\n# Pipeline parameters\noutput_prefix: \"my_eclip_experiment\"\nthreads: 8\nmemory: 32G\n# ... other parameters as required by the workflow\nEOF\n\n# Execute the eCLIP CWL workflow using cwltool.\n# The 'workflow.cwl' file is typically found in the root of the cloned 'eclip' repository.\ncwltool --outdir \"${OUTPUT_DIR}\" eclip/workflow.cwl eclip_inputs.yaml",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 2,
+            "description": "eCLIP data was analyzed using Skipper with default settings.",
+            "tool_name": "Skipper",
+            "tool_version": "0.1.0",
+            "code_example": "# Install Skipper (e.g., using pip or conda)\n# pip install skipper\n# conda install -c bioconda skipper\n\n# Create a configuration file (config.yaml) specifying samples, genome, and annotation.\n# Skipper will use its default settings for other parameters as per the description.\n# Example config.yaml content:\n# samples:\n#   sample1_rep1:\n#     R1: \"path/to/sample1_rep1_R1.fastq.gz\"\n#     R2: \"path/to/sample1_rep1_R2.fastq.gz\" # Optional, if paired-end\n#   sample1_rep2:\n#     R1: \"path/to/sample1_rep2_R1.fastq.gz\"\n#     R2: \"path/to/sample1_rep2_R2.fastq.gz\" # Optional, if paired-end\n#   input_rep1:\n#     R1: \"path/to/input_rep1_R1.fastq.gz\"\n#     R2: \"path/to/input_rep1_R2.fastq.gz\" # Optional, if paired-end\n#   input_rep2:\n#     R1: \"path/to/input_rep2_R1.fastq.gz\"\n#     R2: \"path/to/input_rep2_R2.fastq.gz\" # Optional, if paired-end\n#\n# genome: \"hg38\" # Placeholder: Human genome assembly (e.g., hg38, mm10)\n# annotation: \"gencode_v38\" # Placeholder: GENCODE annotation version (e.g., gencode_v38, gencode_m25)\n\n# Execute Skipper with the configuration file. Adjust --cores as needed.\nskipper run --config config.yaml --cores 8",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper/"
+        },
+        {
+            "step_order": 3,
+            "description": "The kDa of each ORF was matched to the closest input sample beginning at that range; for example, a 78 kDa ORF would be paired with the input sample covering the range of 75 to 150 kDa.",
+            "tool_name": "RangeMatcher (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.0",
+            "code_example": "# Assume input files:\n# orf_data.tsv: ORF_ID<tab>kDa\n# sample_ranges.tsv: Sample_ID<tab>Min_kDa<tab>Max_kDa\n\n# Example content for orf_data.tsv:\n# ORF1    78\n# ORF2    120\n# ORF3    50\n\n# Example content for sample_ranges.tsv:\n# SampleA 75      150\n# SampleB 50      100\n# SampleC 10      70\n# SampleD 100     200\n\n# Create dummy input files for demonstration\necho -e \"ORF1\\t78\\nORF2\\t120\\nORF3\\t50\" > orf_data.tsv\necho -e \"SampleA\\t75\\t150\\nSampleB\\t50\\t100\\nSampleC\\t10\\t70\\nSampleD\\t100\\t200\" > sample_ranges.tsv\n\n# Python script to perform the matching logic described:\n# For each ORF, find the sample range that contains its kDa value.\n# If multiple ranges contain it, select the one whose 'Min_kDa' is closest to (but not greater than) the ORF's kDa.\n# If there's a tie in closeness, the one with the smallest 'Min_kDa' among the tied ones is chosen as a tie-breaker.\npython3 -c \"\nimport sys\n\ndef parse_data(filename, delimiter='\\t'):\n    data = []\n    with open(filename, 'r') as f:\n        for line in f:\n            parts = line.strip().split(delimiter)\n            data.append(parts)\n    return data\n\ndef main():\n    orf_data_file = 'orf_data.tsv'\n    sample_ranges_file = 'sample_ranges.tsv'\n    output_file = 'orf_sample_matches.tsv'\n\n    orfs = parse_data(orf_data_file)\n    sample_ranges = parse_data(sample_ranges_file)\n\n    with open(output_file, 'w') as outfile:\n        outfile.write('ORF_ID\\tORF_kDa\\tMatched_Sample_ID\\tMatched_Min_kDa\\tMatched_Max_kDa\\n')\n        for orf_parts in orfs:\n            orf_id = orf_parts[0]\n            orf_kDa = float(orf_parts[1])\n            \n            best_match = None\n            min_diff = float('inf') # Stores abs(orf_kDa - min_kDa) for the best match\n            \n            for sample_parts in sample_ranges:\n                sample_id = sample_parts[0]\n                min_kDa = float(sample_parts[1])\n                max_kDa = float(sample_parts[2])\n\n                if min_kDa <= orf_kDa <= max_kDa:\n                    # This sample range contains the ORF's kDa\n                    current_diff = abs(orf_kDa - min_kDa)\n                    \n                    if best_match is None or current_diff < min_diff:\n                        best_match = (sample_id, min_kDa, max_kDa)\n                        min_diff = current_diff\n                    elif current_diff == min_diff:\n                        # If difference is the same, prefer the one with smaller min_kDa as a tie-breaker\n                        if min_kDa < best_match[1]:\n                            best_match = (sample_id, min_kDa, max_kDa)\n\n            if best_match:\n                outfile.write(f'{orf_id}\\t{orf_kDa}\\t{best_match[0]}\\t{best_match[1]}\\t{best_match[2]}\\n')\n            else:\n                outfile.write(f'{orf_id}\\t{orf_kDa}\\tNo_Match\\tN/A\\tN/A\\n')\n\nif __name__ == '__main__':\n    main()\n\"\n# Clean up dummy files (uncomment to enable cleanup after execution)\n# rm orf_data.tsv sample_ranges.tsv\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip"
+        }
+    ],
+    "raw_text": "*library strategy: eCLIP-seq\neCLIP data was analyzed using Skipper with default settings. The kDa of each ORF was matched to the closest input sample beginning at that range; for example, a 78 kDa ORF would be paired with the input sample covering the range of 75 to 150 kDa.\nAssembly: hg38\nSupplementary files format and content: Reproducible enriched peaks output by Skipper",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

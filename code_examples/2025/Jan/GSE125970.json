@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Quality control and preprocessing of high throughput sequencing data were using SOAPnuke with parameters -n 0.1 -l 10 -A 0.25 -Q 2 -G --seqType 1",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "16 bp 10xTM Barcodes and 10bp UMIs were encoded at the start of Read 1 (R1).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Reads alignment, filtering, barcode counting, and UMI counting were performed using cellranger 2.1 with default parameters",
-      "tool_name": "Cell Ranger",
-      "tool_version": "2.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Sample normalization and scaled gene expression data were calculated by Seurat2.3.2",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Quality control and preprocessing of high throughput sequencing data were using SOAPnuke with parameters -n 0.1 -l 10 -A 0.25 -Q 2 -G --seqType 1\n16 bp 10xTM Barcodes and 10bp UMIs were encoded at the start of Read 1 (R1).\nReads alignment, filtering, barcode counting, and UMI counting were performed using cellranger 2.1 with default parameters\nSample normalization and scaled gene expression data were calculated by Seurat2.3.2\nGenome_build: GRCh38_Human\nSupplementary_files_format_and_content: tab-delimited text files include raw UMIcounts and scaled data for each cell",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Quality control and preprocessing of high throughput sequencing data were using SOAPnuke with parameters -n 0.1 -l 10 -A 0.25 -Q 2 -G --seqType 1",
+            "tool_name": "SOAPnuke",
+            "tool_version": "Not specified",
+            "code_example": "# Install SOAPnuke (if not already installed)\n# conda install -c bioconda soapnuke\n\n# Create output directory\nmkdir -p filtered_data\n\n# Define input and output paths\nRAW_READS=\"raw_reads.fastq\"\nOUTPUT_DIR=\"filtered_data\"\nOUTPUT_PREFIX=\"sample_name\" # SOAPnuke will append .clean.fastq to this\n\n# Run SOAPnuke for quality control and preprocessing\nSOAPnuke filter \\\n    -f \"${RAW_READS}\" \\\n    -o \"${OUTPUT_DIR}\" \\\n    -D \"${OUTPUT_PREFIX}\" \\\n    -n 0.1 \\\n    -l 10 \\\n    -A 0.25 \\\n    -Q 2 \\\n    -G \\\n    --seqType 1",
+            "code_language": "bash",
+            "github_url": "https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-14-S5-S11"
+        },
+        {
+            "step_order": 2,
+            "description": "16 bp 10xTM Barcodes and 10bp UMIs were encoded at the start of Read 1 (R1).",
+            "tool_name": "umi_tools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.1.2",
+            "code_example": "# Install umi_tools if not already installed\n# conda install -c bioconda umi_tools\n\n# Placeholder for input and output files\n# Replace 'input_R1.fastq.gz' with your actual Read 1 file\n# Replace 'output_R1_umi_extracted.fastq.gz' with your desired output file name\n\numi_tools extract \\\n    --bc-pattern=C{16} \\\n    --umi-pattern=N{10} \\\n    -I input_R1.fastq.gz \\\n    -S output_R1_umi_extracted.fastq.gz",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper"
+        },
+        {
+            "step_order": 3,
+            "description": "Reads alignment, filtering, barcode counting, and UMI counting were performed using cellranger 2.1 with default parameters",
+            "tool_name": "Cell Ranger",
+            "tool_version": "2.1",
+            "code_example": "# Install Cell Ranger (example, adjust path as needed)\n# wget https://cf.10xgenomics.com/releases/cell-exp/cellranger-2.1.0.tar.gz\n# tar -xzf cellranger-2.1.0.tar.gz\n# export PATH=/path/to/cellranger-2.1.0:$PATH\n\n# Create output directory\nmkdir -p my_cellranger_output\n\n# Run cellranger count for reads alignment, filtering, barcode counting, and UMI counting\n# Replace 'path/to/fastqs' with the actual directory containing FASTQ files (e.g., /data/fastqs)\n# Replace 'path/to/transcriptome_reference' with the actual path to the Cell Ranger-compatible transcriptome reference (e.g., /ref/cellranger/refdata-cellranger-GRCh38-1.2.0)\n# Replace 'my_sample_name' with the actual sample name if your FASTQ files are not named according to 10x conventions\ncellranger count \\\n    --id=my_cellranger_output \\\n    --transcriptome=path/to/transcriptome_reference \\\n    --fastqs=path/to/fastqs \\\n    --sample=my_sample_name",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "Sample normalization and scaled gene expression data were calculated by Seurat2.3.2",
+            "tool_name": "Seurat",
+            "tool_version": "2.3.2",
+            "code_example": "# Install Seurat (version 2.3.2 might require specific R/package versions)\n# It's recommended to use a specific Bioconda environment for older versions.\n# For example, to install R 3.4.x and Seurat 2.3.2:\n# conda create -n seurat232 r=3.4.4 r-seurat=2.3.2 -c conda-forge -c bioconda\n# conda activate seurat232\n\n# Create an R script for normalization and scaling\ncat << 'EOF' > run_seurat_normalization.R\nlibrary(Seurat)\n\n# Load your raw count matrix (replace 'counts.tsv' with your actual file path)\n# The count matrix should have genes as rows and cells as columns.\n# Example: counts <- read.table(\"counts.tsv\", sep=\"\\t\", header=TRUE, row.names=1)\n# For demonstration, let's create a dummy matrix\nset.seed(123)\ncounts <- matrix(sample(0:100, 1000, replace = TRUE), ncol = 10)\nrownames(counts) <- paste0(\"gene\", 1:100)\ncolnames(counts) <- paste0(\"cell\", 1:10)\n\n# Create a Seurat object\n# For Seurat v2, the raw.data slot was used for the initial count matrix\nseurat_obj <- CreateSeuratObject(raw.data = counts)\n\n# Normalize the data\n# LogNormalize is a common method for scRNA-seq data\nseurat_obj <- NormalizeData(object = seurat_obj, normalization.method = \"LogNormalize\", scale.factor = 10000)\n\n# Scale the data\n# This scales and centers the data across cells for each gene\nseurat_obj <- ScaleData(object = seurat_obj)\n\n# Save the processed Seurat object\nsaveRDS(seurat_obj, \"normalized_scaled_seurat_object.rds\")\n\n# Optionally, print a summary or head of the scaled data\n# print(head(seurat_obj@scale.data[1:5, 1:5]))\nEOF\n\n# Execute the R script\nRscript run_seurat_normalization.R",
+            "code_language": "bash",
+            "github_url": "https://github.com/satijalab/seurat/releases/tag/v2.3.2"
+        }
+    ],
+    "raw_text": "Quality control and preprocessing of high throughput sequencing data were using SOAPnuke with parameters -n 0.1 -l 10 -A 0.25 -Q 2 -G --seqType 1\n16 bp 10xTM Barcodes and 10bp UMIs were encoded at the start of Read 1 (R1).\nReads alignment, filtering, barcode counting, and UMI counting were performed using cellranger 2.1 with default parameters\nSample normalization and scaled gene expression data were calculated by Seurat2.3.2\nGenome_build: GRCh38_Human\nSupplementary_files_format_and_content: tab-delimited text files include raw UMIcounts and scaled data for each cell",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

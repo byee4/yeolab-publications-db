@@ -1,16 +1,16 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Raw Reads were aligned using STAR against known GENCODE 32 transcripts",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Raw Reads were aligned using STAR against known GENCODE 32 transcripts\nGenome_build: hg38\nSupplementary_files_format_and_content: tab delimited read counts",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Raw Reads were aligned using STAR against known GENCODE 32 transcripts",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# --- Installation (example using Conda) ---\n# conda create -n star_env star=2.7.10a -y\n# conda activate star_env\n\n# --- Reference Data Setup (GENCODE 32 for GRCh38) ---\n# This section demonstrates how to prepare the STAR genome index for GENCODE 32.\n# The actual alignment command assumes this index is already built.\n\n# # Create a directory for the genome index\n# mkdir -p star_gencode32_index\n# cd star_gencode32_index\n\n# # Download GENCODE 32 human genome (GRCh38 primary assembly) FASTA and GTF files\n# wget -c ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_32/GRCh38.primary_assembly.genome.fa.gz\n# wget -c ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_32/gencode.v32.annotation.gtf.gz\n\n# # Unzip the downloaded files\n# gunzip GRCh38.primary_assembly.genome.fa.gz\n# gunzip gencode.v32.annotation.gtf.gz\n\n# # Build the STAR genome index\n# # Adjust --sjdbOverhang based on the maximum read length minus 1 (e.g., 74 for 75bp reads).\n# # For eCLIP, read lengths can vary, often 50-75bp. Using 74 as a common example.\n# STAR --runMode genomeGenerate \\\n#      --genomeDir . \\\n#      --genomeFastaFiles GRCh38.primary_assembly.genome.fa \\\n#      --sjdbGTFfile gencode.v32.annotation.gtf \\\n#      --sjdbOverhang 74 \\\n#      --runThreadN 8 # Adjust number of threads as needed\n# cd ..\n\n# --- Alignment Step ---\n# Define variables for input and output\nGENOME_DIR=\"star_gencode32_index\" # Path to your pre-built STAR genome index\nREADS_R1=\"raw_reads_R1.fastq.gz\" # Placeholder for input FASTQ file (Read 1)\nREADS_R2=\"raw_reads_R2.fastq.gz\" # Placeholder for input FASTQ file (Read 2, remove for single-end)\nOUTPUT_PREFIX=\"aligned_sample\" # Prefix for output files (e.g., aligned_sample.Log.out, aligned_sample.Aligned.sortedByCoordinate.out.bam)\nNUM_THREADS=8 # Adjust number of threads as needed\n\n# Execute STAR alignment\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${READS_R1}\" \"${READS_R2}\" \\\n     --readFilesCommand zcat \\\n     --runThreadN \"${NUM_THREADS}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}.\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes All \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.04 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --sjdbScore 1 \\\n     --quantMode GeneCounts # Optional: Output gene counts (ReadsPerGene.out.tab)",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Raw Reads were aligned using STAR against known GENCODE 32 transcripts\nGenome_build: hg38\nSupplementary_files_format_and_content: tab delimited read counts",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,16 +1,16 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Utilized R::beadarray package with the readIdatFiles and normaliseIllumina functions to extract raw and normalised (neqc, log2 transformed) values.",
-      "tool_name": "R",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Utilized R::beadarray package with the readIdatFiles and normaliseIllumina functions to extract raw and normalised (neqc, log2 transformed) values.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Utilized R::beadarray package with the readIdatFiles and normaliseIllumina functions to extract raw and normalised (neqc, log2 transformed) values.",
+            "tool_name": "R",
+            "tool_version": "Not specified",
+            "code_example": "# Install R and Bioconductor (if not already installed)\n# sudo apt update\n# sudo apt install -y r-base\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\", repos = \"https://cloud.r-project.org\"); BiocManager::install(\"beadarray\", update = FALSE, ask = FALSE)'\n\n# Create a directory for input IDAT files and a dummy sample sheet for demonstration\nmkdir -p input_idat_files\n# NOTE: Replace with actual IDAT files and SampleSheet.csv\n# For a real run, you would place your .idat files in input_idat_files/\n# and your SampleSheet.csv in the working directory or specified path.\n# Example dummy SampleSheet.csv (adjust columns as per your actual data)\ncat <<EOF > input_sample_sheet.csv\n[Header]\nInvestigator Name,John Doe\nProject Name,MyProject\nExperiment Name,IlluminaArrayExperiment\nDate,2023-10-27\n[Data]\nSample_ID,Array_ID,Sentrix_ID,Sentrix_Position,Sample_Group\nSample1,1,200000000001,R01C01,Control\nSample2,2,200000000002,R01C02,Treatment\nEOF\n\n# Create the R script\ncat << 'EOF' > process_illumina.R\n# Load the beadarray package\nlibrary(beadarray)\n\n# Define input/output paths using environment variables for flexibility\nidat_files_dir <- Sys.getenv(\"IDAT_FILES_DIR\", \"input_idat_files\")\nsample_sheet_path <- Sys.getenv(\"SAMPLE_SHEET_PATH\", \"input_sample_sheet.csv\")\n\noutput_raw_file <- Sys.getenv(\"OUTPUT_RAW_FILE\", \"raw_expression_values.csv\")\noutput_normalized_file <- Sys.getenv(\"OUTPUT_NORMALIZED_FILE\", \"normalized_expression_values.csv\")\n\n# Check if input directory and sample sheet exist\nif (!dir.exists(idat_files_dir)) {\n  stop(paste(\"Input IDAT files directory not found:\", idat_files_dir))\n}\nif (!file.exists(sample_sheet_path)) {\n  stop(paste(\"Sample sheet not found:\", sample_sheet_path))\n}\n\nmessage(paste(\"Reading IDAT files from:\", idat_files_dir))\nmessage(paste(\"Using sample sheet:\", sample_sheet_path))\n\n# Read raw data from IDAT files\n# This function returns an 'illuminaChannelList' object\nraw_data_obj <- readIdatFiles(path = idat_files_dir, sampleSheet = sample_sheet_path)\n\n# Extract and save raw expression values\n# For Illumina arrays, raw values are typically the intensities from the green (Grn) or red (Red) channel.\n# We'll extract the green channel intensities as a representative \"raw value\" matrix.\n# If the array is two-color, one might save both or a combined signal.\nmessage(\"Extracting and saving raw (green channel) expression values...\")\nraw_expression_matrix <- getBeadData(raw_data_obj, what = \"Grn\")\nwrite.csv(raw_expression_matrix, file = output_raw_file, row.names = TRUE)\nmessage(paste(\"Raw expression values saved to:\", output_raw_file))\n\n# Normalise data using neqc method\n# The neqc method inherently performs background correction and log2 transformation.\nmessage(\"Normalizing data using neqc method (log2 transformed)...\")\nnormalized_data_obj <- normaliseIllumina(raw_data_obj, method = \"neqc\")\n\n# Extract normalized expression matrix\nnormalized_expression_matrix <- exprs(normalized_data_obj)\n\n# Save normalized expression values\nwrite.csv(normalized_expression_matrix, file = output_normalized_file, row.names = TRUE)\nmessage(paste(\"Normalized (neqc, log2) expression values saved to:\", output_normalized_file))\nEOF\n\n# Set environment variables for input/output paths (optional, defaults are used if not set)\n# export IDAT_FILES_DIR=\"path/to/your/idat_files\"\n# export SAMPLE_SHEET_PATH=\"path/to/your/sample_sheet.csv\"\n# export OUTPUT_RAW_FILE=\"my_raw_expression.csv\"\n# export OUTPUT_NORMALIZED_FILE=\"my_normalized_expression.csv\"\n\n# Execute the R script\nRscript process_illumina.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/beadarray.html"
+        }
+    ],
+    "raw_text": "Utilized R::beadarray package with the readIdatFiles and normaliseIllumina functions to extract raw and normalised (neqc, log2 transformed) values.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

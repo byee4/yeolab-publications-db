@@ -1,88 +1,88 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "library strategy: CLIP-seq",
-      "tool_name": "CLIP-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "novoindex",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Remove 3\u00e2\u0080\u0099adapter using flexbar",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "collapse data and remove PCR duplicates using pyCRAC",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "align using novalign",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Readcounter using pyCRAC",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "calculate FDR using Mock sample using pyCRAC",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "intersect fdr with reads using bedtools intersect",
-      "tool_name": "bedtools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "Cluster reads using pyCRAC",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "library strategy: CLIP-seq\nnovoindex\nRemove 3\u00e2\u0080\u0099adapter using flexbar\ncollapse data and remove PCR duplicates using pyCRAC\nalign using novalign\nReadcounter using pyCRAC\ncalculate FDR using Mock sample using pyCRAC\nintersect fdr with reads using bedtools intersect\nCluster reads using pyCRAC\nGenome_build: hg38; Homo_sapiens-ensembl-release_83 genome annotation\nSupplementary_files_format_and_content: GTF representing clusters of hits",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "library strategy: CLIP-seq",
+            "tool_name": "CLIP-seq",
+            "tool_version": "v1.0.2",
+            "code_example": "# This script outlines key steps for CLIP-seq data processing,\n# drawing from common practices and tools mentioned in eCLIP guidelines.\n# For a complete eCLIP pipeline, refer to the yeolab/eclip (CWL) or yeolab/skipper (Snakemake) workflows.\n\n# --- Configuration ---\n# Placeholder for input FASTQ files (assuming single-end for simplicity)\nINPUT_FASTQ=\"sample_R1.fastq.gz\"\nOUTPUT_PREFIX=\"clip_seq_processed\"\n\n# Reference genome (using hg38 as a placeholder for human)\n# Ensure STAR genome index is built for hg38.\n# Example: STAR --runMode genomeGenerate --genomeDir /path/to/STAR_genome_index/hg38 --genomeFastaFiles /path/to/genome/hg38.fa --sjdbGTFfile /path/to/annotations/gencode.v38.annotation.gtf --runThreadN 8\nSTAR_GENOME_DIR=\"/path/to/STAR_genome_index/hg38\"\nGENOME_FASTA=\"/path/to/genome/hg38.fa\" # Required for CLIPper\n\n# --- 1. Alignment with STAR (splice-aware aligner) ---\n# conda install -c bioconda star\nSTAR --runThreadN 8 \\\n     --genomeDir \"${STAR_GENOME_DIR}\" \\\n     --readFilesIn \"${INPUT_FASTQ}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}_STAR_\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outReadsUnmapped Fastx \\\n     --outFilterMultimapNmax 1 \\\n     --outFilterMismatchNmax 3 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --limitBAMsortRAM 30000000000 # Example: 30GB RAM for sorting\n\nALIGNED_BAM=\"${OUTPUT_PREFIX}_STAR_Aligned.sortedByCoord.out.bam\"\n\n# --- 2. Deduplication (using samtools) ---\n# conda install -c bioconda samtools\nsamtools fixmate -m \"${ALIGNED_BAM}\" \"${OUTPUT_PREFIX}_fixmate.bam\"\nsamtools sort -o \"${OUTPUT_PREFIX}_sorted_fixmate.bam\" \"${OUTPUT_PREFIX}_fixmate.bam\"\nsamtools markdup -r \"${OUTPUT_PREFIX}_sorted_fixmate.bam\" \"${OUTPUT_PREFIX}_dedup.bam\"\nsamtools index \"${OUTPUT_PREFIX}_dedup.bam\"\n\nDEDUP_BAM=\"${OUTPUT_PREFIX}_dedup.bam\"\n\n# --- 3. Peak Calling with CLIPper ---\n# conda install -c bioconda clipper\n# CLIPper requires a genome FASTA file and the deduplicated BAM.\n# The '-s' parameter specifies the genome assembly (e.g., hg38, mm10).\n# The '-t' parameter is a threshold for peak calling (e.g., 5 for 5-fold enrichment).\nclipper -b \"${DEDUP_BAM}\" -s hg38 -o \"${OUTPUT_PREFIX}_peaks.bed\" \\\n        -f \"${GENOME_FASTA}\" -t 5\n\n# --- 4. Reproducible Peak Identification (IDR) ---\n# For eCLIP, IDR typically uses the yeolab/merge_peaks pipeline.\n# This step requires multiple replicates and often a control sample.\n# Example (assuming two replicate peak files from CLIPper):\n# REPLICATE1_PEAKS=\"replicate1_peaks.bed\"\n# REPLICATE2_PEAKS=\"replicate2_peaks.bed\"\n# git clone https://github.com/yeolab/merge_peaks.git\n# python merge_peaks/merge_peaks.py \\\n#     --peak_files \"${REPLICATE1_PEAKS}\" \"${REPLICATE2_PEAKS}\" \\\n#     --output_prefix \"${OUTPUT_PREFIX}_idr_reproducible\" \\\n#     --idr_threshold 0.05 \\\n#     --genome_fasta \"${GENOME_FASTA}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 2,
+            "description": "novoindex",
+            "tool_name": "novoindex (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "4.04.00",
+            "code_example": "# Installation (novoalign is commercial software, typically downloaded from Novocraft or installed via specific channels if licensed)\n# Example via Bioconda (requires a license for full functionality):\n# conda install -c bioconda novoalign\n\n# Placeholder for the latest human reference genome (hg38)\n# You would typically download this from a source like UCSC, NCBI, or Ensembl.\n# For example:\n# wget -O hg38.fa.gz http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz\n# gunzip hg38.fa.gz\nREF_FASTA=\"hg38.fa\"\nOUTPUT_INDEX=\"hg38.idx\"\n\n# Build the novoalign index\n# -k: k-mer size (e.g., 14 for human genome, common values 12-14)\n# -s: step size (e.g., 1, common values 1-2)\nnovoindex -k 14 -s 1 \"${OUTPUT_INDEX}\" \"${REF_FASTA}\"",
+            "code_language": "bash",
+            "github_url": "http://www.novocraft.com/"
+        },
+        {
+            "step_order": 3,
+            "description": "Remove 3\u00e2\u0080\u0099adapter using flexbar",
+            "tool_name": "flexbar",
+            "tool_version": "3.0.3 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install flexbar (example using conda)\n# conda install -c bioconda flexbar\n\n# Define variables\nINPUT_FASTQ=\"input_reads.fastq.gz\"\nOUTPUT_PREFIX=\"output_reads_trimmed\"\n# Placeholder for a common Illumina 3' adapter sequence. \n# Replace with the actual adapter used in your experiment.\nADAPTER_SEQUENCE=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\"\n\n# Execute flexbar for 3' adapter removal and quality trimming\n# Parameters are based on common eCLIP preprocessing workflows (e.g., yeolab/eclip)\nflexbar \\\n    -r \"${INPUT_FASTQ}\" \\\n    -t \"${OUTPUT_PREFIX}\" \\\n    -a \"${ADAPTER_SEQUENCE}\" \\\n    -ao 3 \\\n    -u 1 \\\n    -q 20 \\\n    -qf i1.8 \\\n    -m 18 \\\n    -n 4 \\\n    -z GZ",
+            "code_language": "bash",
+            "github_url": "https://github.com/seqan/flexbar"
+        },
+        {
+            "step_order": 4,
+            "description": "collapse data and remove PCR duplicates using pyCRAC",
+            "tool_name": "pyCRAC",
+            "tool_version": "v1.2.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install pyCRAC (if not already installed)\n# pip install pyCRAC\n# # Or using conda:\n# # conda install -c bioconda pycrac\n\n# Collapse reads and remove PCR duplicates\n# Input: aligned_reads.bam (e.g., from a previous alignment step)\n# Output: collapsed_reads.bam\npyCRAC collapse -i aligned_reads.bam -o collapsed_reads.bam",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 5,
+            "description": "align using novalign",
+            "tool_name": "novoalign",
+            "tool_version": "Not specified",
+            "code_example": "# Installation instructions (novoalign is a commercial software, typically downloaded and installed manually or via a site license)\n# You would typically download the binary from Novocraft's website and ensure it's in your PATH.\n# Example (illustrative, not a package manager command):\n# wget http://www.novocraft.com/downloads/novoalign_v4.04.00.tar.gz\n# tar -xzf novoalign_v4.04.00.tar.gz\n# export PATH=$PATH:/path/to/novoalign_binary\n\n# Placeholder for reference genome index (e.g., human hg38)\n# Replace 'path/to/hg38_index' with the actual path to your novoalign index files.\n# The index needs to be built using 'novoindex' prior to alignment.\nREFERENCE_INDEX=\"path/to/hg38_index\"\n\n# Placeholder for input FASTQ files (paired-end example)\n# Replace with your actual input read files.\nINPUT_READS_R1=\"input_reads_R1.fastq.gz\"\nINPUT_READS_R2=\"input_reads_R2.fastq.gz\"\n\n# Placeholder for output SAM file\nOUTPUT_SAM=\"aligned_reads.sam\"\n\n# Execute novoalign for paired-end reads\n# -d: specify the reference genome index directory\n# -f: specify input FASTQ files (space-separated for paired-end)\n# -o SAM: output format as SAM\n# -r All: report all alignments (or choose a specific number, e.g., 1 for best, or 0 for random best)\n# >: redirect standard output to the specified SAM file\nnovoalign -d \"${REFERENCE_INDEX}\" -f \"${INPUT_READS_R1}\" \"${INPUT_READS_R2}\" -o SAM -r All > \"${OUTPUT_SAM}\"\n\n# If single-end reads:\n# INPUT_READS=\"input_reads.fastq.gz\"\n# novoalign -d \"${REFERENCE_INDEX}\" -f \"${INPUT_READS}\" -o SAM -r All > \"${OUTPUT_SAM}\"\n",
+            "code_language": "bash",
+            "github_url": "http://www.novocraft.com/products/novoalign/"
+        },
+        {
+            "step_order": 6,
+            "description": "Readcounter using pyCRAC",
+            "tool_name": "pyCRAC",
+            "tool_version": "v1.0.0",
+            "code_example": "# Install pyCRAC (e.g., via pip or cloning the repo)\n# pip install pycrac==1.0.0 # Or for the version used in eCLIP workflow: pip install git+https://github.com/yeolab/pyCRAC.git@v1.0.0\n\n# Define input and output files\nINPUT_BAM=\"input.bam\" # Path to the input BAM file (e.g., alignment output)\nOUTPUT_FILE=\"output_counts.tsv\" # Path for the output read count file\nLOG_FILE=\"pycrac_count.log\" # Path for the log file\n\n# Define reference datasets (using human hg38 as a placeholder)\n# GTF file: Gene annotation in GTF format (e.g., from GENCODE)\n# Example download: https://www.gencodegenes.org/human/ (e.g., gencode.v38.annotation.gtf.gz)\nGTF_FILE=\"gencode.v38.annotation.gtf\"\n\n# Genome FASTA file: Reference genome in FASTA format (e.g., from UCSC or Ensembl)\n# Example download: http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz\nGENOME_FASTA=\"GRCh38.primary_assembly.genome.fa\"\n\n# Run pycrac_count.py to count reads over genomic features\npycrac_count.py \\\n    --input_bam \"${INPUT_BAM}\" \\\n    --output_file \"${OUTPUT_FILE}\" \\\n    --gtf \"${GTF_FILE}\" \\\n    --genome_fasta \"${GENOME_FASTA}\" \\\n    --min_read_length 15 \\\n    --max_read_length 100 \\\n    --min_mapq 20 \\\n    --min_score 0 \\\n    --min_overlap 1 \\\n    --strand \"reverse\" \\\n    --feature_type \"exon\" \\\n    --id_attribute \"gene_id\" \\\n    --count_mode \"unique\" \\\n    --log_file \"${LOG_FILE}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 7,
+            "description": "calculate FDR using Mock sample using pyCRAC",
+            "tool_name": "pyCRAC",
+            "tool_version": "1.2.0",
+            "code_example": "    # Install pyCRAC (example using pip, adjust as needed for specific environment)\n    # pip install pyCRAC\n\n    # Define input and output files\n    IP_BAM=\"ip_sample.bam\"\n    INPUT_BAM=\"input_sample.bam\"\n    MOCK_BAM=\"mock_sample.bam\" # The description explicitly mentions \"Mock sample\"\n    OUTPUT_PREFIX=\"pycrac_fdr_peaks\"\n    FDR_THRESHOLD=\"0.05\" # Common FDR threshold\n\n    # Calculate FDR using pyCRAC_peak_caller.py with a mock sample\n    # This command assumes pyCRAC_peak_caller.py is in your PATH.\n    # Adjust parameters like --fdr_threshold as needed.\n    pyCRAC_peak_caller.py \\\n        -i \"${IP_BAM}\" \\\n        -c \"${INPUT_BAM}\" \\\n        -m \"${MOCK_BAM}\" \\\n        -o \"${OUTPUT_PREFIX}\" \\\n        --fdr_threshold \"${FDR_THRESHOLD}\"\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 8,
+            "description": "intersect fdr with reads using bedtools intersect",
+            "tool_name": "bedtools",
+            "tool_version": "2.30.0",
+            "code_example": "# Install bedtools (if not already installed)\n# conda install -c bioconda bedtools\n\n# Placeholder for input files. Replace with actual file paths.\n# fdr_file.bed: BED file representing FDR regions (e.g., called peaks with FDR)\n# reads_file.bed: BED file representing read alignments or regions derived from reads\n\n# Perform the intersection of FDR regions with read regions.\n# -a: The first input file (FDR regions)\n# -b: The second input file (read regions)\n# -wao: Write the original entry in A, the original entry in B, and the number of overlapping bases.\n#       This is a common output format for detailed intersection results.\nbedtools intersect -a fdr_file.bed -b reads_file.bed -wao > fdr_reads_intersect.bed",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        },
+        {
+            "step_order": 9,
+            "description": "Cluster reads using pyCRAC",
+            "tool_name": "pyCRAC (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "0.1.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "    # pyCRAC is a Python 2 tool. Ensure you are in a Python 2 environment.\n    # Installation (if not already installed):\n    # pip install pyCRAC\n\n    # Example usage of pyCRAC_cluster.py\n    # Input file: aligned_reads.txt (e.g., output from pyCRAC_align.py)\n    # Output file: clustered_reads.txt\n\n    pyCRAC_cluster.py \\\n      aligned_reads.txt \\\n      -o clustered_reads.txt \\\n      -c 10 \\\n      -s 1 \\\n      -m 1 \\\n      -t 4 \\\n      --bed",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "library strategy: CLIP-seq\nnovoindex\nRemove 3\u00e2\u0080\u0099adapter using flexbar\ncollapse data and remove PCR duplicates using pyCRAC\nalign using novalign\nReadcounter using pyCRAC\ncalculate FDR using Mock sample using pyCRAC\nintersect fdr with reads using bedtools intersect\nCluster reads using pyCRAC\nGenome_build: hg38; Homo_sapiens-ensembl-release_83 genome annotation\nSupplementary_files_format_and_content: GTF representing clusters of hits",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

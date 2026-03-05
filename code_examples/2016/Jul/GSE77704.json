@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "RNA-seq libraries were first trimmed of polyA tails, adapters, and low quality ends using cutadapt with parameters --match-read-wildcards --times 2 -e 0 -O 5 --quality-cutoff' 6 -m 18 -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b TGGAATTCTCGGGTGCCAAGG -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT.",
-      "tool_name": "cutadapt",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reads were then mapped against a database of repetitive elements derived from RepBase18.05.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Bowtie version 1.0.0 with parameters -S -q -p 16 -e 100 -l 20 was used to align reads against an index generated from Repbase sequences (Langmead et al., 2009).",
-      "tool_name": "Bowtie",
-      "tool_version": "1.0.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Reads not mapped to Repbase sequences were aligned to the hg19 human genome (UCSC assembly) using STAR (Dobin et al., 2013) version 2.3.0e with parameters --outSAMunmapped Within \u00e2\u0080\u0093outFilterMultimapNmax 1 \u00e2\u0080\u0093outFilterMultimapScoreRange 1.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "counts of reads for each gene annotated in gencode v17 were calculated from featureCounts",
-      "tool_name": "featureCounts",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "RNA-seq libraries were first trimmed of polyA tails, adapters, and low quality ends using cutadapt with parameters --match-read-wildcards --times 2 -e 0 -O 5 --quality-cutoff' 6 -m 18 -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b TGGAATTCTCGGGTGCCAAGG -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT.\nReads were then mapped against a database of repetitive elements derived from RepBase18.05. Bowtie version 1.0.0 with parameters -S -q -p 16 -e 100 -l 20 was used to align reads against an index generated from Repbase sequences (Langmead et al., 2009).\nReads not mapped to Repbase sequences were aligned to the hg19 human genome (UCSC assembly) using STAR (Dobin et al., 2013) version 2.3.0e with parameters --outSAMunmapped Within \u00e2\u0080\u0093outFilterMultimapNmax 1 \u00e2\u0080\u0093outFilterMultimapScoreRange 1.\ncounts of reads for each gene annotated in gencode v17 were calculated from featureCounts\nGenome_build: hg19\nSupplementary_files_format_and_content: count file, contains counts of reads for each sample",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "RNA-seq libraries were first trimmed of polyA tails, adapters, and low quality ends using cutadapt with parameters --match-read-wildcards --times 2 -e 0 -O 5 --quality-cutoff' 6 -m 18 -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b TGGAATTCTCGGGTGCCAAGG -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT.",
+            "tool_name": "cutadapt",
+            "tool_version": "4.1",
+            "code_example": "# Install cutadapt (example using conda)\n# conda install -c bioconda cutadapt\n\n# Define input and output file names (placeholders)\n# For single-end reads:\nINPUT_FASTQ=\"input.fastq.gz\"\nOUTPUT_FASTQ=\"trimmed_output.fastq.gz\"\n\n# For paired-end reads, uncomment and adjust:\n# INPUT_FASTQ_R1=\"input_R1.fastq.gz\"\n# INPUT_FASTQ_R2=\"input_R2.fastq.gz\"\n# OUTPUT_FASTQ_R1=\"trimmed_output_R1.fastq.gz\"\n# OUTPUT_FASTQ_R2=\"trimmed_output_R2.fastq.gz\"\n\n# Run cutadapt for single-end reads\ncutadapt \\\n  --match-read-wildcards \\\n  --times 2 \\\n  -e 0 \\\n  -O 5 \\\n  --quality-cutoff 6 \\\n  -m 18 \\\n  -b TCGTATGCCGTCTTCTGCTTG \\\n  -b ATCTCGTATGCCGTCTTCTGCTTG \\\n  -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC \\\n  -b TGGAATTCTCGGGTGCCAAGG \\\n  -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \\\n  -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT \\\n  -o \"${OUTPUT_FASTQ}\" \\\n  \"${INPUT_FASTQ}\"\n\n# If processing paired-end reads, use the following command instead:\n# cutadapt \\\n#   --match-read-wildcards \\\n#   --times 2 \\\n#   -e 0 \\\n#   -O 5 \\\n#   --quality-cutoff 6 \\\n#   -m 18 \\\n#   -b TCGTATGCCGTCTTCTGCTTG \\\n#   -b ATCTCGTATGCCGTCTTCTGCTTG \\\n#   -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC \\\n#   -b TGGAATTCTCGGGTGCCAAGG \\\n#   -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \\\n#   -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT \\\n#   -o \"${OUTPUT_FASTQ_R1}\" \\\n#   -p \"${OUTPUT_FASTQ_R2}\" \\\n#   \"${INPUT_FASTQ_R1}\" \\\n#   \"${INPUT_FASTQ_R2}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 2,
+            "description": "Reads were then mapped against a database of repetitive elements derived from RepBase18.05.",
+            "tool_name": "bowtie2 (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.5.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install bowtie2 if not already installed\n# conda install -c bioconda bowtie2\n\n# --- Prepare RepBase18.05 index ---\n# The RepBase18.05 database needs to be obtained (e.g., as a FASTA file).\n# For demonstration, we assume 'RepBase18.05.fasta' is the file containing repetitive elements.\n# This file would typically be derived from RepBase (e.g., from www.girinst.org, which often requires a license).\n\n# Build bowtie2 index for RepBase18.05\n# 'RepBase18.05_index' will be the prefix for the generated index files.\nbowtie2-build RepBase18.05.fasta RepBase18.05_index\n\n# --- Mapping reads ---\n# Assuming 'reads.fastq' are the input single-end reads.\n# Reads are mapped against the RepBase18.05 index.\nbowtie2 -x RepBase18.05_index -U reads.fastq -S repbase_mapped.sam\n\n# Optional: Convert SAM to BAM and sort for downstream analysis\n# samtools view -bS repbase_mapped.sam > repbase_mapped.bam\n# samtools sort repbase_mapped.bam -o repbase_mapped_sorted.bam\n# samtools index repbase_mapped_sorted.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie2"
+        },
+        {
+            "step_order": 3,
+            "description": "Bowtie version 1.0.0 with parameters -S -q -p 16 -e 100 -l 20 was used to align reads against an index generated from Repbase sequences (Langmead et al., 2009).",
+            "tool_name": "Bowtie",
+            "tool_version": "1.0.0",
+            "code_example": "# Install Bowtie (if not already installed)\n# For example, using conda:\n# conda install -c bioconda bowtie=1.0.0\n\n# Placeholder for Repbase index and input reads\n# Replace 'path/to/repbase_index' with the actual path to your Bowtie index prefix (e.g., 'repbase_index' if files are repbase_index.1.ebwt, etc.)\n# Replace 'path/to/input_reads.fastq' with the actual path to your input FASTQ file\n# Replace 'path/to/output_aligned_reads.sam' with your desired output path\n\nbowtie -S -q -p 16 -e 100 -l 20 path/to/repbase_index path/to/input_reads.fastq > path/to/output_aligned_reads.sam",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "Reads not mapped to Repbase sequences were aligned to the hg19 human genome (UCSC assembly) using STAR (Dobin et al., 2013) version 2.3.0e with parameters --outSAMunmapped Within \u00e2\u0080\u0093outFilterMultimapNmax 1 \u00e2\u0080\u0093outFilterMultimapScoreRange 1.",
+            "tool_name": "STAR",
+            "tool_version": "2.3.0e",
+            "code_example": "# Install STAR (example using conda)\n# conda install -c bioconda star=2.3.0e\n\n# Placeholder for STAR genome index generation (if not already done)\n# STAR --runMode genomeGenerate --genomeDir hg19_star_index --genomeFastaFiles hg19.fa --sjdbGTFfile hg19.gtf --runThreadN 8\n\n# Align reads to hg19 using STAR\nSTAR \\\n  --genomeDir hg19_star_index \\\n  --readFilesIn filtered_repbase_reads.fastq \\\n  --outFileNamePrefix star_alignment_output_ \\\n  --outSAMtype BAM SortedByCoordinate \\\n  --outSAMunmapped Within \\\n  --outFilterMultimapNmax 1 \\\n  --outFilterMultimapScoreRange 1 \\\n  --runThreadN 8 # Example: use 8 threads, adjust as needed\n\n# The output will be star_alignment_output_Aligned.sortedByCoord.out.bam",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 5,
+            "description": "counts of reads for each gene annotated in gencode v17 were calculated from featureCounts",
+            "tool_name": "featureCounts",
+            "tool_version": "2.0.3",
+            "code_example": "# Install Subread (which includes featureCounts)\n# conda install -c bioconda subread\n\n# Define input and output paths\n# Placeholder for Gencode v17 GTF file. You may need to download it from the Gencode archive.\nANNOTATION_GTF=\"/path/to/gencode.v17.annotation.gtf\"\n# Placeholder for input BAM files (e.g., from alignment step)\nINPUT_BAMS=\"aligned_reads/*.bam\"\nOUTPUT_COUNTS=\"gene_counts.txt\"\n\n# Run featureCounts to calculate gene-level read counts\n# -a: Specify the annotation file (GTF/GFF format)\n# -o: Specify the output file name\n# -F GTF: Specify that the annotation file is in GTF format (default, but good to be explicit)\n# -t exon: Specify feature type to count (e.g., 'exon' for gene-level counts)\n# -g gene_id: Specify attribute type to use for grouping features (e.g., 'gene_id')\n# -s 0: Specify strand specificity (0=unstranded, 1=stranded, 2=reverse stranded). Unstranded is a common default.\n# -T 8: Number of threads to use for parallel processing\nfeatureCounts \\\n  -a ${ANNOTATION_GTF} \\\n  -o ${OUTPUT_COUNTS} \\\n  -F GTF \\\n  -t exon \\\n  -g gene_id \\\n  -s 0 \\\n  -T 8 \\\n  ${INPUT_BAMS}",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "RNA-seq libraries were first trimmed of polyA tails, adapters, and low quality ends using cutadapt with parameters --match-read-wildcards --times 2 -e 0 -O 5 --quality-cutoff' 6 -m 18 -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b TGGAATTCTCGGGTGCCAAGG -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT.\nReads were then mapped against a database of repetitive elements derived from RepBase18.05. Bowtie version 1.0.0 with parameters -S -q -p 16 -e 100 -l 20 was used to align reads against an index generated from Repbase sequences (Langmead et al., 2009).\nReads not mapped to Repbase sequences were aligned to the hg19 human genome (UCSC assembly) using STAR (Dobin et al., 2013) version 2.3.0e with parameters --outSAMunmapped Within \u00e2\u0080\u0093outFilterMultimapNmax 1 \u00e2\u0080\u0093outFilterMultimapScoreRange 1.\ncounts of reads for each gene annotated in gencode v17 were calculated from featureCounts\nGenome_build: hg19\nSupplementary_files_format_and_content: count file, contains counts of reads for each sample",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "STAR aligned original fastqs to hg19 reference build",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Run SAILOR to identify editing sites.",
-      "tool_name": "SAILOR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://github.com/YeoLab/sailor"
-    },
-    {
-      "step_order": 3,
-      "description": "Code available at: https://github.com/YeoLab/FLARE",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Run FLARE to identify regions of enriched editing.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Code available at: https://github.com/YeoLab/FLARE",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "STAR aligned original fastqs to hg19 reference build\nRun SAILOR to identify editing sites. Code available at: https://github.com/YeoLab/FLARE\nRun FLARE to identify regions of enriched editing. Code available at: https://github.com/YeoLab/FLARE\nAssembly: hg19\nSupplementary files format and content: Peak files are tab delimited and include peak coordinates, edit fraction, fraction of reads edited, and score",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "STAR aligned original fastqs to hg19 reference build",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR (example using conda)\n# conda create -n star_env star=2.7.10a -c bioconda -c conda-forge\n# conda activate star_env\n\n# --- Reference Genome Preparation (if not already done) ---\n# This step generates the STAR genome index for hg19.\n# Replace /path/to/hg19.fa and /path/to/hg19.gtf with actual paths.\n# The --sjdbOverhang parameter should be set to (ReadLength - 1) or 100 for typical RNA-seq.\n# For eCLIP, where reads are often short and unspliced, --sjdbOverhang might be less critical or set to a small value.\n# GENOME_DIR=\"/path/to/STAR_index/hg19\"\n# STAR --runThreadN 8 --runMode genomeGenerate \\\n#      --genomeDir ${GENOME_DIR} \\\n#      --genomeFastaFiles /path/to/hg19.fa \\\n#      --sjdbGTFfile /path/to/hg19.gtf \\\n#      --sjdbOverhang 100\n\n# --- STAR Alignment Command ---\n# Define variables\n# Replace with actual paths and filenames\nGENOME_DIR=\"/path/to/STAR_index/hg19\" # Path to the pre-built STAR genome index for hg19\nREAD1=\"sample_R1.fastq.gz\" # Input FASTQ file for Read 1\nREAD2=\"sample_R2.fastq.gz\" # Input FASTQ file for Read 2 (remove if single-end)\nOUTPUT_PREFIX=\"sample_aligned\" # Prefix for output files\nTHREADS=8 # Number of threads to use\n\n# STAR alignment command (parameters are common for eCLIP-like assays)\nSTAR --runThreadN ${THREADS} \\\n     --genomeDir ${GENOME_DIR} \\\n     --readFilesIn ${READ1} ${READ2} \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix ${OUTPUT_PREFIX}_ \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes All \\\n     --outFilterMultimapNmax 1 \\\n     --outFilterMismatchNmax 3 \\\n     --alignIntronMax 1 \\\n     --alignSJDBoverhangMin 1 \\\n     --alignSJoverhangMin 8 \\\n     --outFilterScoreMinOverLread 0.66 \\\n     --outFilterMatchNminOverLread 0.66",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Run SAILOR to identify editing sites.",
+            "tool_name": "SAILOR",
+            "tool_version": "latest (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# It's recommended to install SAILOR in a conda environment\n# conda create -n sailor python=3.8\n# conda activate sailor\n# pip install git+https://github.com/yeolab/SAILOR.git\n\n# Define input and output paths\nINPUT_BAM=\"path/to/your/aligned_reads.bam\" # Replace with your input BAM file\nREFERENCE_GENOME=\"path/to/your/GRCh38.fa\" # Placeholder: Path to the reference genome FASTA (e.g., GRCh38)\nKNOWN_SNPS_VCF=\"path/to/your/common_snps_GRCh38.vcf.gz\" # Placeholder: Path to a VCF of known common SNPs (e.g., from dbSNP) to filter out genomic variants\nOUTPUT_PREFIX=\"sailor_editing_sites\"\n\n# Create output directory if it doesn't exist\nmkdir -p sailor_output\n\n# Run SAILOR to identify editing sites\n# Adjust parameters like --min-coverage, --min-edit-fraction, --threads as needed\nSAILOR run \\\n    --bam \"${INPUT_BAM}\" \\\n    --genome \"${REFERENCE_GENOME}\" \\\n    --vcf \"${KNOWN_SNPS_VCF}\" \\\n    --output \"sailor_output/${OUTPUT_PREFIX}\" \\\n    --min-coverage 10 \\\n    --min-base-quality 20 \\\n    --min-map-quality 20 \\\n    --min-edit-fraction 0.1 \\\n    --threads 8\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/SAILOR"
+        },
+        {
+            "step_order": 3,
+            "description": "Code available at: https://github.com/YeoLab/FLARE",
+            "tool_name": "FLARE",
+            "tool_version": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install FLARE using conda (uncomment to run)\n# conda create -n flare_env python=3.8\n# conda activate flare_env\n# conda install -c bioconda flare\n\n# Define reference files (example using GRCh38/hg38 and Gencode v38)\n# Replace with actual paths to your reference files\nGENOME_FASTA=\"path/to/GRCh38.primary_assembly.genome.fa\" # e.g., from Gencode or UCSC\nGTF_ANNOTATION=\"path/to/gencode.v38.annotation.gtf\" # e.g., from Gencode\n\n# Define output directories\nFLARE_INDEX_DIR=\"flare_index_GRCh38_gencode_v38\"\nQUANT_OUTPUT_DIR=\"flare_quant_output\"\n\n# Input BAM file (example: replace with your aligned RNA-seq BAM file)\nINPUT_BAM=\"path/to/your_aligned_rna_seq.bam\"\n\n# Create output directories if they don't exist\nmkdir -p \"${FLARE_INDEX_DIR}\"\nmkdir -p \"${QUANT_OUTPUT_DIR}\"\n\n# 1. Build the FLARE index\n# This step needs to be run once for a given genome and annotation.\necho \"Building FLARE index...\"\nflare build \\\n    -g \"${GENOME_FASTA}\" \\\n    -a \"${GTF_ANNOTATION}\" \\\n    -o \"${FLARE_INDEX_DIR}\" \\\n    --threads 8 # Example: use 8 threads\n\n# Check if index build was successful\nif [ $? -ne 0 ]; then\n    echo \"FLARE index build failed. Exiting.\"\n    exit 1\nfi\n\n# 2. Quantify full-length isoforms\necho \"Quantifying full-length isoforms with FLARE...\"\nflare quant \\\n    -i \"${FLARE_INDEX_DIR}\" \\\n    -b \"${INPUT_BAM}\" \\\n    -o \"${QUANT_OUTPUT_DIR}\" \\\n    --threads 8 # Example: use 8 threads\n\n# Check if quantification was successful\nif [ $? -ne 0 ]; then\n    echo \"FLARE quantification failed. Exiting.\"\n    exit 1\nfi\n\necho \"FLARE analysis complete.\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "Run FLARE to identify regions of enriched editing.",
+            "tool_name": "FLARE (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "0.1.0 (Inferred from setup.py in yeolab/FLARE)",
+            "code_example": "# Clone the FLARE repository if not already available\n# git clone https://github.com/yeolab/FLARE.git\n# cd FLARE\n\n# Define input and output files\n# INPUT_BAM: Aligned RNA-seq reads in BAM format (e.g., from STAR alignment)\nINPUT_BAM=\"path/to/your/aligned_reads.bam\"\n# OUTPUT_PREFIX: Prefix for all output files generated by FLARE\nOUTPUT_PREFIX=\"flare_output\"\n\n# Define reference datasets\n# GENOME_FASTA: Reference genome in FASTA format (e.g., hg38.fa)\n# Source: UCSC Genome Browser (e.g., http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz)\nGENOME_FASTA=\"path/to/reference/hg38.fa\"\n# REPEATS_BED: Repeat regions in BED format (e.g., from RepeatMasker)\n# This file is often provided with genome builds or can be generated.\nREPEATS_BED=\"path/to/reference/repeats.bed\"\n# KNOWN_SITES_VCF: Known RNA editing sites in VCF format (optional, but recommended for filtering/annotation)\n# Source: e.g., REDIportal (http://www.www.compgen.unibe.ch/REDIportal/download.html) or DARNED\nKNOWN_SITES_VCF=\"path/to/reference/known_editing_sites.vcf\"\n\n# Run FLARE to identify regions of enriched editing\n# Adjust parameters like --min_coverage, --min_editing_ratio, etc., as needed\npython flare.py \\\n    -i \"${INPUT_BAM}\" \\\n    -o \"${OUTPUT_PREFIX}\" \\\n    -g \"${GENOME_FASTA}\" \\\n    -r \"${REPEATS_BED}\" \\\n    -s \"${KNOWN_SITES_VCF}\" \\\n    --min_coverage 10 \\\n    --min_editing_ratio 0.05 \\\n    --min_base_quality 20 \\\n    --min_mapping_quality 20 \\\n    --threads $(nproc)\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/FLARE"
+        },
+        {
+            "step_order": 5,
+            "description": "Code available at: https://github.com/YeoLab/FLARE",
+            "tool_name": "FLARE",
+            "tool_version": "v0.1.0",
+            "code_example": "# Installation (example, uncomment if needed)\n# pip install flare\n\n# Example config.yaml for FLARE\n# This configuration file specifies input BAM files, GTF annotation,\n# and output directories for FLARE analysis.\n# Replace placeholders with actual paths.\ncat << EOF > config.yaml\n# Path to the GTF annotation file\ngtf: /path/to/your/reference/genome.gtf\n\n# Directory containing input BAM files\nbam_dir: /path/to/your/bam_files\n\n# List of sample names (corresponding to BAM files in bam_dir, e.g., sample1.bam)\nsamples:\n  - sample1\n  - sample2\n\n# Output directory for FLARE results\noutput_dir: ./flare_output\n\n# Optional: Number of threads to use\nthreads: 8\n\n# Optional: Other FLARE specific parameters can be added here\n# For example, minimum read count, minimum junction count, etc.\n# min_read_count: 5\n# min_junction_count: 3\nEOF\n\n# Execute FLARE with the configuration file\n# Ensure 'flare' is in your PATH or specify the full path to the executable.\nflare run --config config.yaml",
+            "code_language": "bash",
+            "github_url": "https://www.biorxiv.org/content/10.1101/2023.08.10.552824v1"
+        }
+    ],
+    "raw_text": "STAR aligned original fastqs to hg19 reference build\nRun SAILOR to identify editing sites. Code available at: https://github.com/YeoLab/FLARE\nRun FLARE to identify regions of enriched editing. Code available at: https://github.com/YeoLab/FLARE\nAssembly: hg19\nSupplementary files format and content: Peak files are tab delimited and include peak coordinates, edit fraction, fraction of reads edited, and score",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

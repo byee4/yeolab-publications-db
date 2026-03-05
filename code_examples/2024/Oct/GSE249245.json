@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "*library strategy: Cut&Run",
-      "tool_name": "ChIP-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Data analysis was performed using a modified version of CUT&RUNTools 2.0.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Adapters were trimmed using Trimmomatic (v0.36), followed by a second round of trimming to remove any remaining adapter overhang sequences not removed due to fragment read-through.",
-      "tool_name": "Trimmomatic",
-      "tool_version": "0.36",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Reads were aligned to hg38 using bowtie2 (v2.3.5.1) using preset \u00e2\u0080\u009c--very-sensitive-local,\u00e2\u0080\u009d minimum fragment length 10, and maximum fragment length 700.",
-      "tool_name": "Bowtie2",
-      "tool_version": "2.3.5",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "After removing PCR duplicates with Picard (v0.1.8), peaks were called using MACS2 (v2.2.7.1) on the default narrowPeak setting using the same-batch V5 mock IP sample as a normalization control.",
-      "tool_name": "MACS2",
-      "tool_version": "2.2.7",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "*library strategy: Cut&Run\nData analysis was performed using a modified version of CUT&RUNTools 2.0. Adapters were trimmed using Trimmomatic (v0.36), followed by a second round of trimming to remove any remaining adapter overhang sequences not removed due to fragment read-through. Reads were aligned to hg38 using bowtie2 (v2.3.5.1) using preset \u00e2\u0080\u009c--very-sensitive-local,\u00e2\u0080\u009d minimum fragment length 10, and maximum fragment length 700. After removing PCR duplicates with Picard (v0.1.8), peaks were called using MACS2 (v2.2.7.1) on the default narrowPeak setting using the same-batch V5 mock IP sample as a normalization control.\nAssembly: hg38\nSupplementary files format and content: narrowPeak files (q<0.05) output by MACS2",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "*library strategy: Cut&Run",
+            "tool_name": "ChIP-seq",
+            "tool_version": "latest (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Cromwell (if not already installed)\n# Download the latest Cromwell JAR from https://github.com/broadinstitute/cromwell/releases\n# Example: wget https://github.com/broadinstitute/cromwell/releases/download/85/cromwell-85.jar\n# Make sure Java is installed (e.g., sudo apt install openjdk-11-jre)\n\n# Clone the ENCODE ChIP-seq pipeline repository\n# git clone https://github.com/ENCODE-DCC/chip-seq-pipeline2.git\n# cd chip-seq-pipeline2\n\n# Define input FASTQ files (replace with actual paths to your Cut&Run data)\n# Assuming paired-end reads for a single replicate\nFASTQ_REP1_R1=\"path/to/your/sample_rep1_R1.fastq.gz\"\nFASTQ_REP1_R2=\"path/to/your/sample_rep1_R2.fastq.gz\"\n\n# Define output directory\nOUTPUT_DIR=\"cut_run_analysis_output\"\nmkdir -p \"$OUTPUT_DIR\"\n\n# Define reference genome and associated files for hg38 (human)\n# The ENCODE pipeline requires a 'genome_tsv' file that points to various reference files\n# (e.g., genome FASTA, Bowtie2 index, chromosome sizes, blacklist regions).\n# You can find pre-built ENCODE reference files or create your own.\n# For hg38, you would typically download these from the ENCODE portal or prepare them.\n# Placeholder paths: Replace with actual paths to your reference files.\nGENOME_TSV=\"path/to/your/hg38_encode_genome.tsv\"\nBLACKLIST_BED=\"path/to/your/hg38_blacklist.bed\" # e.g., from ENCODE: https://github.com/Boyle-Lab/Blacklist/blob/master/lists/hg38-blacklist.v2.bed.gz\nCHRSZ_FILE=\"path/to/your/hg38.chrom.sizes\" # e.g., from UCSC: http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes\n\n# Create an inputs JSON file for the ENCODE ChIP-seq pipeline\n# This configuration is tailored for a Cut&Run experiment (often single replicate, no explicit input control)\ncat << EOF > inputs.json\n{\n  \"chip.fastqs_rep1_R1\": [\"${FASTQ_REP1_R1}\"],\n  \"chip.fastqs_rep1_R2\": [\"${FASTQ_REP1_R2}\"],\n  \"chip.paired_end\": true,\n  \"chip.pipeline_type\": \"chip\",\n  \"chip.peak_caller\": \"macs2\",\n  \"chip.genome_tsv\": \"${GENOME_TSV}\",\n  \"chip.output_prefix\": \"cut_run_sample\",\n  \"chip.auto_detect_adapter\": true,\n  \"chip.enable_idr\": false, # IDR requires multiple replicates for reproducibility assessment\n  \"chip.blacklist_bed\": \"${BLACKLIST_BED}\",\n  \"chip.chrsz\": \"${CHRSZ_FILE}\",\n  \"chip.aligner\": \"bowtie2\", # Default for ENCODE ChIP-seq pipeline\n  \"chip.macs2_qval\": 0.01 # Common q-value threshold for MACS2\n}\nEOF\n\n# Execute the ENCODE ChIP-seq pipeline using Cromwell\n# Ensure 'cromwell.jar' is accessible (e.g., in the current directory or specified with full path)\n# The main WDL file for the pipeline is typically 'chip.wdl' or 'chip_seq.wdl'\n# Assuming 'chip.wdl' is in the current directory (e.g., after 'cd chip-seq-pipeline2')\njava -jar /path/to/cromwell-*.jar run chip.wdl -i inputs.json -o \"$OUTPUT_DIR\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/ENCODE-DCC/chip-seq-pipeline2"
+        },
+        {
+            "step_order": 2,
+            "description": "Data analysis was performed using a modified version of CUT&RUNTools 2.0.",
+            "tool_name": "CUT&RUNTools",
+            "tool_version": "2.0",
+            "code_example": "# Example installation (if not already installed via conda or pip)\n# conda create -n cutruntools python=3.8\n# conda activate cutruntools\n# pip install cutruntools\n\n# Example usage of CUT&RUNTools 2.0 with placeholder inputs.\n# The description mentions a 'modified version', which might involve custom scripts or parameters not reflected here.\n# This command assumes paired-end sequencing for both sample and control, and uses hg38 as a placeholder genome.\n\n# Define input and output paths\nSAMPLE_FASTQ_R1=\"path/to/sample_R1.fastq.gz\"\nSAMPLE_FASTQ_R2=\"path/to/sample_R2.fastq.gz\"\nCONTROL_FASTQ_R1=\"path/to/control_R1.fastq.gz\"\nCONTROL_FASTQ_R2=\"path/to/control_R2.fastq.gz\"\nOUTPUT_DIR=\"./cutrun_analysis_output\"\nREFERENCE_GENOME=\"hg38\" # Placeholder for human genome assembly\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Execute CUT&RUNTools 2.0\npython cutruntools.py run \\\n    --fastq1 \"${SAMPLE_FASTQ_R1}\" \\\n    --fastq2 \"${SAMPLE_FASTQ_R2}\" \\\n    --control_fastq1 \"${CONTROL_FASTQ_R1}\" \\\n    --control_fastq2 \"${CONTROL_FASTQ_R2}\" \\\n    --genome \"${REFERENCE_GENOME}\" \\\n    --output_dir \"${OUTPUT_DIR}\" \\\n    --threads 8 # Example: use 8 threads\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "Adapters were trimmed using Trimmomatic (v0.36), followed by a second round of trimming to remove any remaining adapter overhang sequences not removed due to fragment read-through.",
+            "tool_name": "Trimmomatic",
+            "tool_version": "0.36",
+            "code_example": "# Install Trimmomatic (if not already installed)\n# For example, using conda:\n# conda install -c bioconda trimmomatic=0.36\n\n# Define input and output file paths\nINPUT_R1=\"input_R1.fastq.gz\"\nINPUT_R2=\"input_R2.fastq.gz\"\n\n# Intermediate files for the first trimming round\nTEMP_R1_PAIRED=\"temp_R1_paired.fastq.gz\"\nTEMP_R1_UNPAIRED=\"temp_R1_unpaired.fastq.gz\"\nTEMP_R2_PAIRED=\"temp_R2_paired.fastq.gz\"\nTEMP_R2_UNPAIRED=\"temp_R2_unpaired.fastq.gz\"\n\n# Final output files after the second trimming round\nOUTPUT_R1_PAIRED=\"output_R1_paired.fastq.gz\"\nOUTPUT_R1_UNPAIRED=\"output_R1_unpaired.fastq.gz\"\nOUTPUT_R2_PAIRED=\"output_R2_paired.fastq.gz\"\nOUTPUT_R2_UNPAIRED=\"output_R2_unpaired.fastq.gz\"\n\nADAPTER_FILE=\"TruSeq3-PE.fa\" # Placeholder: Replace with the actual adapter file used (e.g., from Trimmomatic's adapters directory)\n\n# Ensure the adapter file exists. This is a common adapter file distributed with Trimmomatic.\n# You might need to locate it, e.g., in the Trimmomatic installation directory.\n# Example: cp /path/to/trimmomatic/adapters/TruSeq3-PE.fa .\n\n# First round of trimming: Standard adapter removal and quality filtering\n# ILLUMINACLIP:2:30:10 - 2 seed mismatches, 30 for palindrome clip threshold, 10 for simple clip threshold\n# LEADING:3 - Remove leading low quality bases (below quality 3)\n# TRAILING:3 - Remove trailing low quality bases (below quality 3)\n# SLIDINGWINDOW:4:15 - Scan the read with a 4-base wide window, cutting when the average quality per base drops below 15\n# MINLEN:36 - Drop reads shorter than 36 bases after trimming\njava -jar /path/to/trimmomatic-0.36.jar PE \\\n    -phred33 \\\n    \"${INPUT_R1}\" \"${INPUT_R2}\" \\\n    \"${TEMP_R1_PAIRED}\" \"${TEMP_R1_UNPAIRED}\" \\\n    \"${TEMP_R2_PAIRED}\" \"${TEMP_R2_UNPAIRED}\" \\\n    ILLUMINACLIP:\"${ADAPTER_FILE}\":2:30:10 \\\n    LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36\n\n# Second round of trimming: To remove any remaining adapter overhang sequences not removed due to fragment read-through.\n# This round uses slightly more aggressive ILLUMINACLIP parameters (e.g., lower simple clip threshold of 5) \n# to catch very short remaining adapter fragments.\njava -jar /path/to/trimmomatic-0.36.jar PE \\\n    -phred33 \\\n    \"${TEMP_R1_PAIRED}\" \"${TEMP_R2_PAIRED}\" \\\n    \"${OUTPUT_R1_PAIRED}\" \"${OUTPUT_R1_UNPAIRED}\" \\\n    \"${OUTPUT_R2_PAIRED}\" \"${OUTPUT_R2_UNPAIRED}\" \\\n    ILLUMINACLIP:\"${ADAPTER_FILE}\":1:20:5 \\\n    LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36\n\n# Clean up intermediate files (optional)\n# rm \"${TEMP_R1_PAIRED}\" \"${TEMP_R1_UNPAIRED}\" \"${TEMP_R2_PAIRED}\" \"${TEMP_R2_UNPAIRED}\"",
+            "code_language": "bash",
+            "github_url": "http://www.usadellab.org/cms/?page=trimmomatic"
+        },
+        {
+            "step_order": 4,
+            "description": "Reads were aligned to hg38 using bowtie2 (v2.3.5.1) using preset \u00e2\u0080\u009c--very-sensitive-local,\u00e2\u0080\u009d minimum fragment length 10, and maximum fragment length 700.",
+            "tool_name": "Bowtie2",
+            "tool_version": "2.3.5",
+            "code_example": "# Install bowtie2 if not already installed\n# conda install -c bioconda bowtie2=2.3.5.1\n\n# Assume hg38 index is available at /path/to/hg38_index/hg38\n# Replace reads_1.fastq and reads_2.fastq with your actual input files (paired-end)\n# Replace aligned.sam with your desired output file\n\nbowtie2 --very-sensitive-local -I 10 -X 700 -x /path/to/hg38_index/hg38 -1 reads_1.fastq -2 reads_2.fastq -S aligned.sam",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie2"
+        },
+        {
+            "step_order": 5,
+            "description": "After removing PCR duplicates with Picard (v0.1.8), peaks were called using MACS2 (v2.2.7.1) on the default narrowPeak setting using the same-batch V5 mock IP sample as a normalization control.",
+            "tool_name": "MACS2",
+            "tool_version": "2.2.7",
+            "code_example": "# Install MACS2 if not already installed\n# conda install -c bioconda macs2=2.2.7\n\n# Define input files and parameters\nTREATMENT_BAM=\"path/to/deduplicated_treatment.bam\"\nCONTROL_BAM=\"path/to/deduplicated_V5_mock_IP.bam\" # \"same-batch V5 mock IP sample as a normalization control\"\nOUTPUT_PREFIX=\"sample_name_macs2_peaks\"\nOUTPUT_DIR=\"macs2_output\"\nGENOME_SIZE=\"hs\" # Placeholder for human genome size (e.g., hs for human, mm for mouse)\n\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run MACS2 callpeak with default narrowPeak settings\n# MACS2 will attempt to build a model for fragment size and shifting.\n# Input BAMs are assumed to be deduplicated by Picard.\n# MACS2 will automatically detect the input file format (e.g., BAM, BAMPE).\nmacs2 callpeak \\\n    -t \"${TREATMENT_BAM}\" \\\n    -c \"${CONTROL_BAM}\" \\\n    -g \"${GENOME_SIZE}\" \\\n    -n \"${OUTPUT_PREFIX}\" \\\n    --outdir \"${OUTPUT_DIR}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/macs3-project/MACS"
+        }
+    ],
+    "raw_text": "*library strategy: Cut&Run\nData analysis was performed using a modified version of CUT&RUNTools 2.0. Adapters were trimmed using Trimmomatic (v0.36), followed by a second round of trimming to remove any remaining adapter overhang sequences not removed due to fragment read-through. Reads were aligned to hg38 using bowtie2 (v2.3.5.1) using preset \u00e2\u0080\u009c--very-sensitive-local,\u00e2\u0080\u009d minimum fragment length 10, and maximum fragment length 700. After removing PCR duplicates with Picard (v0.1.8), peaks were called using MACS2 (v2.2.7.1) on the default narrowPeak setting using the same-batch V5 mock IP sample as a normalization control.\nAssembly: hg38\nSupplementary files format and content: narrowPeak files (q<0.05) output by MACS2",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

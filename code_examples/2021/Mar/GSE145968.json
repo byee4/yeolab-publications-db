@@ -1,61 +1,61 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Library strategy: Amplicon-seq",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "CRISPR screening data were aligned and processed using the published MAGeCK-VISPR pipeline (Li et al.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Genome Biology 2015).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "For 3'READS data, reads were trimmed using Cutadapt then aligned to hg19 using bowtie2.",
-      "tool_name": "Bowtie2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Following alignment, bigwig files were generated to visualize the peaks surrounding the gene-of-interest in the study.",
-      "tool_name": "UCSC tools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Reads from the four peaks in this single gene were quantified using multiBigwigSummary from DeepTools2.0",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Library strategy: Amplicon-seq\nCRISPR screening data were aligned and processed using the published MAGeCK-VISPR pipeline (Li et al. Genome Biology 2015).\nFor 3'READS data, reads were trimmed using Cutadapt then aligned to hg19 using bowtie2.\nFollowing alignment, bigwig files were generated to visualize the peaks surrounding the gene-of-interest in the study. Reads from the four peaks in this single gene were quantified using multiBigwigSummary from DeepTools2.0\nGenome_build: hg19\nSupplementary_files_format_and_content: count' text file includes sgRNA counts per sample\nSupplementary_files_format_and_content: summary' text file contains beta scores of enrichment in GFP high and low populations\nSupplementary_files_format_and_content: countsummary' text file contains QC metrics\nSupplementary_files_format_and_content: bigwig files show visualization of 3'READS peaks across the genome",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Library strategy: Amplicon-seq",
+            "tool_name": "QIIME2 (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2023.9",
+            "code_example": "# Install QIIME2 (example, uncomment if needed)\n# conda create -n qiime2-2023.9 --file https://data.qiime2.org/dist/qiime2/2023.9/qiime2-2023.9-py38-linux-conda.yml\n# conda activate qiime2-2023.9\n\n# Placeholder for input data (e.g., demultiplexed fastq files in 'raw_data' directory)\n# Example: raw_data/sample1_R1.fastq.gz, raw_data/sample1_R2.fastq.gz\n\n# 1. Import data into QIIME2 artifact\n# This example assumes Casava 1.8 paired-end demultiplexed fastq files\nqiime tools import \\\n  --type 'SampleData[PairedEndSequencesWithQuality]' \\\n  --input-path raw_data \\\n  --input-format CasavaOneEightSingleLanePerSampleDirFmt \\\n  --output-path demux-paired-end.qza\n\n# 2. Quality control and DADA2 denoising\n# Adjust --p-trunc-len-f and --p-trunc-len-r based on quality plots (e.g., from qiime demux summarize)\n# --p-trim-left-f and --p-trim-left-r remove primer sequences from the start of reads\nqiime dada2 denoise-paired \\\n  --i-demultiplexed-seqs demux-paired-end.qza \\\n  --p-trunc-len-f 250 \\\n  --p-trunc-len-r 200 \\\n  --p-trim-left-f 17 \\\n  --p-trim-left-r 21 \\\n  --o-table table.qza \\\n  --o-representative-sequences rep-seqs.qza \\\n  --o-denoising-stats denoising-stats.qza\n\n# 3. Taxonomic classification\n# Reference database: SILVA 138 SSURef NR99 (V4 region 515F/806R primers used for classifier training)\n# Download pre-trained classifier for QIIME2 2023.9:\n# wget -O silva-138-99-515-806-nb-classifier.qza \"https://data.qiime2.org/2023.9/common/silva-138-99-515-806-nb-classifier.qza\"\nqiime feature-classifier classify-sklearn \\\n  --i-classifier silva-138-99-515-806-nb-classifier.qza \\\n  --i-reads rep-seqs.qza \\\n  --o-classification taxonomy.qza\n\n# 4. Export results (optional)\nqiime tools export \\\n  --input-path table.qza \\\n  --output-path exported_table\nqiime tools export \\\n  --input-path rep-seqs.qza \\\n  --output-path exported_rep_seqs\nqiime tools export \\\n  --input-path taxonomy.qza \\\n  --output-path exported_taxonomy",
+            "code_language": "bash",
+            "github_url": "https://qiime2.org/"
+        },
+        {
+            "step_order": 2,
+            "description": "CRISPR screening data were aligned and processed using the published MAGeCK-VISPR pipeline (Li et al.",
+            "tool_name": "MAGeCK",
+            "tool_version": "v0.5.5 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install MAGeCK (if not already installed)\n# conda install -c bioconda mageck\n\n# Define variables (replace with actual paths and names)\nSGRNA_LIBRARY=\"sgrna_library.txt\" # Path to your sgRNA library file (e.g., containing sgRNA sequences and gene assignments)\nCONTROL_FASTQ_FILES=\"control_sample_1.fastq.gz,control_sample_2.fastq.gz\" # Comma-separated FASTQ files for control samples\nTREATMENT_FASTQ_FILES=\"treatment_sample_1.fastq.gz,treatment_sample_2.fastq.gz\" # Comma-separated FASTQ files for treatment samples\nALL_FASTQ_FILES=\"${CONTROL_FASTQ_FILES},${TREATMENT_FASTQ_FILES}\"\n\nCONTROL_SAMPLE_LABELS=\"control1,control2\" # Comma-separated labels for control samples\nTREATMENT_SAMPLE_LABELS=\"treat1,treat2\" # Comma-separated labels for treatment samples\nALL_SAMPLE_LABELS=\"${CONTROL_SAMPLE_LABELS},${TREATMENT_SAMPLE_LABELS}\"\n\nOUTPUT_COUNT_PREFIX=\"crispr_screen_counts\"\nOUTPUT_TEST_PREFIX=\"crispr_screen_results\"\n\n# Step 1: Count sgRNA reads from FASTQ files. This step performs the \"alignment\" (matching reads to sgRNAs) and counting.\n# The output is a count table (e.g., crispr_screen_counts.count.txt).\nmageck count \\\n  -l ${SGRNA_LIBRARY} \\\n  -i ${ALL_FASTQ_FILES} \\\n  -n ${OUTPUT_COUNT_PREFIX} \\\n  --sample-label ${ALL_SAMPLE_LABELS}\n\n# Step 2: Perform statistical testing for gene enrichment/depletion using the generated count table.\nmageck test \\\n  -k ${OUTPUT_COUNT_PREFIX}.count.txt \\\n  -l ${SGRNA_LIBRARY} \\\n  -n ${OUTPUT_TEST_PREFIX} \\\n  --control-samples ${CONTROL_SAMPLE_LABELS} \\\n  --treatment-samples ${TREATMENT_SAMPLE_LABELS}\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "Genome Biology 2015).",
+            "tool_name": "Unknown (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Unknown",
+            "code_example": "# No specific tool or command could be inferred from the description: \"Genome Biology 2015)\".\n# The description appears to be a citation rather than a step description.\n# Please provide more context (e.g., assay type, specific action like alignment or peak calling)\n# to infer a relevant bioinformatics tool and command.",
+            "code_language": "bash",
+            "github_url": "https://genomebiology.biomedcentral.com/"
+        },
+        {
+            "step_order": 4,
+            "description": "For 3'READS data, reads were trimmed using Cutadapt then aligned to hg19 using bowtie2.",
+            "tool_name": "Bowtie2",
+            "tool_version": "2.5.1 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Bowtie2 (if not already installed)\n# conda install -c bioconda bowtie2\n\n# Placeholder for reference genome index and input files\n# Ensure the hg19 index is built or downloaded. For example:\n# bowtie2-build hg19.fa hg19_index\n\nREF_GENOME_INDEX=\"/path/to/hg19_index\"\nTRIMMED_READS=\"trimmed_reads.fastq.gz\"\nOUTPUT_SAM=\"aligned_reads.sam\"\n\n# Align trimmed reads to hg19 using Bowtie2\nbowtie2 -x \"${REF_GENOME_INDEX}\" -U \"${TRIMMED_READS}\" -S \"${OUTPUT_SAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie2"
+        },
+        {
+            "step_order": 5,
+            "description": "Following alignment, bigwig files were generated to visualize the peaks surrounding the gene-of-interest in the study.",
+            "tool_name": "UCSC tools",
+            "tool_version": "v377",
+            "code_example": "# Install UCSC tools and bedtools if not already installed\n# conda install -c bioconda ucsc-bedgraphtobigwig bedtools samtools\n\n# Define input and output files\n# Assuming 'aligned.bam' is the output from the alignment step.\nINPUT_BAM=\"aligned.bam\"\nOUTPUT_BIGWIG=\"coverage.bw\"\n\n# Define the path to the chromosome sizes file for the reference genome.\n# Replace 'hg38.chrom.sizes' with the actual path to your genome's chrom.sizes file.\n# Example for hg38:\n# wget -O hg38.chrom.sizes http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes\nCHROM_SIZES=\"hg38.chrom.sizes\"\n\n# 1. Generate bedGraph from BAM using bedtools genomeCoverageBed.\n# The -bg option outputs a bedGraph file.\n# The -ibam option specifies the input BAM file.\n# The -g option specifies the genome file (chrom.sizes) for calculating coverage across the entire genome.\nbedtools genomeCoverageBed -ibam \"${INPUT_BAM}\" -bg -g \"${CHROM_SIZES}\" > \"${INPUT_BAM%.bam}.bedGraph\"\n\n# 2. Sort the bedGraph file by chromosome and then by start position.\n# This sorting is a strict requirement for bedGraphToBigWig.\nsort -k1,1 -k2,2n \"${INPUT_BAM%.bam}.bedGraph\" > \"${INPUT_BAM%.bam}.sorted.bedGraph\"\n\n# 3. Convert the sorted bedGraph to bigWig using ucsc-bedgraphtobigwig.\n# The first argument is the sorted bedGraph file.\n# The second argument is the chrom.sizes file.\n# The third argument is the output bigWig file.\nbedGraphToBigWig \"${INPUT_BAM%.bam}.sorted.bedGraph\" \"${CHROM_SIZES}\" \"${OUTPUT_BIGWIG}\"\n\n# Clean up intermediate files (optional)\n# rm \"${INPUT_BAM%.bam}.bedGraph\" \"${INPUT_BAM%.bam}.sorted.bedGraph\"",
+            "code_language": "bash",
+            "github_url": "http://hgdownload.soe.ucsc.edu/admin/exe/"
+        },
+        {
+            "step_order": 6,
+            "description": "Reads from the four peaks in this single gene were quantified using multiBigwigSummary from DeepTools2.0",
+            "tool_name": "multiBigwigSummary (deepTools)",
+            "tool_version": "2.0",
+            "code_example": "# Install deepTools if not already installed\n# conda install -c bioconda deeptools\n\n# Define input bigWig files representing the signal from the four peaks/samples.\n# These files would typically be generated upstream from aligned reads (e.g., using bamCoverage).\nBIGWIG_FILE_1=\"sample_peak1_signal.bw\"\nBIGWIG_FILE_2=\"sample_peak2_signal.bw\"\nBIGWIG_FILE_3=\"sample_peak3_signal.bw\"\nBIGWIG_FILE_4=\"sample_peak4_signal.bw\"\n\n# Define the BED file containing the genomic regions for the \"four peaks in this single gene\".\n# This file specifies the exact coordinates to quantify.\nGENE_PEAKS_BED=\"gene_of_interest_peaks.bed\"\n\n# Define output file names\nOUTPUT_NPZ=\"quantified_peak_data.npz\"\nOUTPUT_RAW_COUNTS=\"quantified_peak_raw_counts.tsv\"\n\n# Quantify reads from the specified bigWig files over the regions defined in the BED file.\n# The --outRawCounts option is used to output the actual quantified values in a tab-separated file.\nmultiBigwigSummary regions \\\n    --bigwigs \"${BIGWIG_FILE_1}\" \"${BIGWIG_FILE_2}\" \"${BIGWIG_FILE_3}\" \"${BIGWIG_FILE_4}\" \\\n    --labels \"Peak1\" \"Peak2\" \"Peak3\" \"Peak4\" \\\n    --BED \"${GENE_PEAKS_BED}\" \\\n    --outFileName \"${OUTPUT_NPZ}\" \\\n    --outRawCounts \"${OUTPUT_RAW_COUNTS}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/deeptools/deepTools"
+        }
+    ],
+    "raw_text": "Library strategy: Amplicon-seq\nCRISPR screening data were aligned and processed using the published MAGeCK-VISPR pipeline (Li et al. Genome Biology 2015).\nFor 3'READS data, reads were trimmed using Cutadapt then aligned to hg19 using bowtie2.\nFollowing alignment, bigwig files were generated to visualize the peaks surrounding the gene-of-interest in the study. Reads from the four peaks in this single gene were quantified using multiBigwigSummary from DeepTools2.0\nGenome_build: hg19\nSupplementary_files_format_and_content: count' text file includes sgRNA counts per sample\nSupplementary_files_format_and_content: summary' text file contains beta scores of enrichment in GFP high and low populations\nSupplementary_files_format_and_content: countsummary' text file contains QC metrics\nSupplementary_files_format_and_content: bigwig files show visualization of 3'READS peaks across the genome",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

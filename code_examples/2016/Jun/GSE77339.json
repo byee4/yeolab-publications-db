@@ -1,70 +1,70 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Cel files were analyzed using Expression Console (build 1.4.1.46, Affymetrix), with RMA normalization and DABG probe-level detection.",
-      "tool_name": "Microarray",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Only probesets with detection p-value \u00e2\u0089\u00a4 0.05 in more than half of the microarray samples were considered for downstream analysis.",
-      "tool_name": "Microarray",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "All probes corresponding to cassette exons profiled on the microarray (comprising exclusion junction, upstream and downstream inclusion junction, and inclusion exonic probes) were identified and normalized against the average signal on a per-gene basis to remove gene expression changes.",
-      "tool_name": "Microarray",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Student\u00e2\u0080\u0099s t-test was performed on residuals for inclusion probes and exclusion probes separately to identify robust splicing changes, which were quantified by SepScore ( defined as the normalized change in exclusion minus the normalized change in inclusion).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "HTA-2_0.r1.pgf",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "HTA-2_0.r1.Psrs.mps",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "RMA probeset-level signal estimates, DABG detection flag (Absent or Present), and DABG detection p-value obtained from 'Alt Splice Analysis' performed in Affymetrix Expression Console build 1.4.1.46.",
-      "tool_name": "Microarray",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Cel files were analyzed using Expression Console (build 1.4.1.46, Affymetrix), with RMA normalization and DABG probe-level detection. Only probesets with detection p-value \u00e2\u0089\u00a4 0.05 in more than half of the microarray samples were considered for downstream analysis. All probes corresponding to cassette exons profiled on the microarray (comprising exclusion junction, upstream and downstream inclusion junction, and inclusion exonic probes) were identified and normalized against the average signal on a per-gene basis to remove gene expression changes. Student\u00e2\u0080\u0099s t-test was performed on residuals for inclusion probes and exclusion probes separately to identify robust splicing changes, which were quantified by SepScore ( defined as the normalized change in exclusion minus the normalized change in inclusion).\nHTA-2_0.r1.pgf\nHTA-2_0.r1.Psrs.mps\nRMA probeset-level signal estimates, DABG detection flag (Absent or Present), and DABG detection p-value obtained from 'Alt Splice Analysis' performed in Affymetrix Expression Console build 1.4.1.46.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Cel files were analyzed using Expression Console (build 1.4.1.46, Affymetrix), with RMA normalization and DABG probe-level detection.",
+            "tool_name": "Microarray",
+            "tool_version": "1.4.1.46",
+            "code_example": "# Expression Console is a proprietary GUI software from Affymetrix/Thermo Fisher Scientific.\n# Installation typically involves downloading and running an installer from the vendor's website.\n# A direct command-line execution with parameters is not standard for this GUI tool.\n# The following command is a conceptual representation of the analysis performed.\n\n# Input CEL files (e.g., in a directory named 'cel_files')\nINPUT_CEL_FILES=\"cel_files/*.CEL\"\n\n# Output directory for analysis results\nOUTPUT_DIR=\"expression_console_analysis_results\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Conceptual command representing the analysis performed by Expression Console\n# with RMA normalization and DABG probe-level detection.\n# Note: This is not an actual executable command but a representation of the process.\nExpressionConsole_analyze \\\n    --input \"${INPUT_CEL_FILES}\" \\\n    --normalize RMA \\\n    --probe_detection DABG \\\n    --output_dir \"${OUTPUT_DIR}\"\n\n# Reference datasets (e.g., CDF files, annotation files) are typically handled\n# internally by Expression Console based on the microarray chip type.\n# No specific external reference datasets were mentioned in the description.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Only probesets with detection p-value \u00e2\u0089\u00a4 0.05 in more than half of the microarray samples were considered for downstream analysis.",
+            "tool_name": "Microarray",
+            "tool_version": "Not specified",
+            "code_example": "#!/bin/bash\n\n# This script demonstrates how to filter microarray probesets based on detection p-values\n# using R, as described: \"Only probesets with detection p-value \u2264 0.05 in more than half\n# of the microarray samples were considered for downstream analysis.\"\n\n# Ensure R is installed and Bioconductor packages (e.g., oligo or affy) are available\n# if not already installed:\n# R -e \"if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager')\"\n# R -e \"BiocManager::install('oligo')\" # For Affymetrix Gene/Exon ST arrays\n# R -e \"BiocManager::install('affy')\"  # For Affymetrix 3' arrays\n\n# Define input and output file paths (replace with actual paths)\n# input_p_values_file=\"detection_p_values.csv\" # CSV or tab-separated file of p-values\n# input_expression_file=\"raw_expression_data.csv\" # Corresponding expression data\n# output_filtered_expression_file=\"filtered_expression_data.csv\"\n\n# Create dummy input files for demonstration if they don't exist\n# In a real scenario, these would be generated by upstream microarray processing steps\nif [ ! -f detection_p_values.csv ]; then\n    echo \"Creating dummy detection_p_values.csv\"\n    R -q -e '\n        num_probesets <- 1000\n        num_samples <- 10\n        set.seed(123)\n        p_values_matrix <- matrix(runif(num_probesets * num_samples, 0, 1), nrow = num_probesets, ncol = num_samples)\n        p_values_matrix[1:50, 1:6] <- runif(50*6, 0, 0.01) # Simulate some probesets detected in > half samples\n        rownames(p_values_matrix) <- paste0(\"Probeset_\", 1:num_probesets)\n        colnames(p_values_matrix) <- paste0(\"Sample_\", 1:num_samples)\n        write.csv(p_values_matrix, \"detection_p_values.csv\", row.names = TRUE)\n    '\nfi\n\nif [ ! -f raw_expression_data.csv ]; then\n    echo \"Creating dummy raw_expression_data.csv\"\n    R -q -e '\n        num_probesets <- 1000\n        num_samples <- 10\n        set.seed(123)\n        expression_matrix <- matrix(rnorm(num_probesets * num_samples), nrow = num_probesets, ncol = num_samples)\n        rownames(expression_matrix) <- paste0(\"Probeset_\", 1:num_probesets)\n        colnames(expression_matrix) <- paste0(\"Sample_\", 1:num_samples)\n        write.csv(expression_matrix, \"raw_expression_data.csv\", row.names = TRUE)\n    '\nfi\n\n# Execute the R script for filtering\nRscript -e '\n    # Define parameters\n    p_value_threshold <- 0.05\n    \n    # Load detection p-values and expression data\n    # Adjust read.csv parameters if your files use different delimiters or headers\n    p_values_matrix <- read.csv(\"detection_p_values.csv\", row.names = 1, check.names = FALSE)\n    expression_matrix <- read.csv(\"raw_expression_data.csv\", row.names = 1, check.names = FALSE)\n    \n    # Ensure matrices have the same probesets and samples\n    if (!all(rownames(p_values_matrix) == rownames(expression_matrix))) {\n        stop(\"Probeset names in p-value matrix and expression matrix do not match.\")\n    }\n    if (!all(colnames(p_values_matrix) == colnames(expression_matrix))) {\n        stop(\"Sample names in p-value matrix and expression matrix do not match.\")\n    }\n\n    num_samples <- ncol(p_values_matrix)\n    min_samples_detected <- ceiling(num_samples / 2) # \"more than half\"\n\n    # Identify probesets meeting the criteria\n    detected_counts <- rowSums(p_values_matrix <= p_value_threshold)\n    probesets_to_keep <- names(detected_counts[detected_counts >= min_samples_detected])\n\n    # Apply filtering to the expression matrix\n    filtered_expression_matrix <- expression_matrix[probesets_to_keep, ]\n\n    # Save filtered data\n    write.csv(filtered_expression_matrix, \"filtered_expression_data.csv\", row.names = TRUE)\n    \n    message(paste(\"Original probesets:\", nrow(expression_matrix)))\n    message(paste(\"Filtered probesets:\", nrow(filtered_expression_matrix)))\n    message(paste(\"Filtered data saved to filtered_expression_data.csv\"))\n'\n",
+            "code_language": "bash",
+            "github_url": "https://www.bioconductor.org/"
+        },
+        {
+            "step_order": 3,
+            "description": "All probes corresponding to cassette exons profiled on the microarray (comprising exclusion junction, upstream and downstream inclusion junction, and inclusion exonic probes) were identified and normalized against the average signal on a per-gene basis to remove gene expression changes.",
+            "tool_name": "Microarray",
+            "tool_version": "N/A",
+            "code_example": "# This step describes a custom data processing procedure for microarray data,\n# specifically for probes targeting cassette exons. It involves identifying\n# specific probe types and normalizing their signals against the average signal\n# of their respective genes to account for overall gene expression level changes.\n\n# No specific tool is explicitly mentioned in the description. This type of\n# analysis is typically performed using custom scripts in R or Python,\n# leveraging bioinformatics packages (e.g., limma, oligo in R).\n\n# Reference data:\n# - Microarray probe annotation file: This file would map probe IDs to their\n#   genomic locations, gene IDs, and their type (e.g., exclusion junction,\n#   inclusion junction, exonic for cassette exons). This is specific to the\n#   microarray platform used.\n# - Gene annotation file: A GTF/GFF file (e.g., for human genome GRCh38)\n#   would be used to define gene boundaries and potentially identify\n#   cassette exon regions if not directly provided by the probe annotation.\n#   Example for human GRCh38:\n#   GENE_ANNOTATION_GTF=\"ftp://ftp.ensembl.org/pub/release-110/gtf/homo_sapiens/Homo_sapiens.GRCh38.110.gtf.gz\"\n\n# Input data:\n# - RAW_MICROARRAY_SIGNAL_MATRIX=\"path/to/raw_probe_signal_matrix.tsv\"\n#   (e.g., a tab-separated file with ProbeID, GeneID, and SignalValue columns)\n# - PROBE_ANNOTATION_FILE=\"path/to/microarray_probe_annotations.tsv\"\n#   (e.g., a tab-separated file with ProbeID and ProbeType columns, where ProbeType\n#   indicates 'exclusion_junction', 'upstream_inclusion_junction', etc.)\n\n# Output data:\n# - NORMALIZED_CASS_EXON_SIGNALS=\"normalized_cassette_exon_signals.tsv\"\n\n# Conceptual execution command (representing a custom R or Python script):\n# This command is illustrative and assumes a script 'normalize_cassette_exons.R'\n# or 'normalize_cassette_exons.py' that performs the described operations.\n#\n# Rscript normalize_cassette_exons.R \\\n#   --input_signals \"${RAW_MICROARRAY_SIGNAL_MATRIX}\" \\\n#   --probe_annotations \"${PROBE_ANNOTATION_FILE}\" \\\n#   --output_file \"${NORMALIZED_CASS_EXON_SIGNALS}\" \\\n#   --gene_annotation_gtf \"${GENE_ANNOTATION_GTF}\" # Optional, if probe annotations are not comprehensive\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "Student\u00e2\u0080\u0099s t-test was performed on residuals for inclusion probes and exclusion probes separately to identify robust splicing changes, which were quantified by SepScore ( defined as the normalized change in exclusion minus the normalized change in inclusion).",
+            "tool_name": "SepScore (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "v1.0",
+            "code_example": "# Install SepScore (assuming Python environment and dependencies like pandas, numpy, scipy are met)\n# git clone https://github.com/yeolab/SepScore.git\n# cd SepScore\n# pip install .\n\n# Example usage of sep_score.py for calculating SepScore and performing statistical tests.\n# Input files (placeholders):\n# inclusion_counts.tsv: Tab-separated file with gene/event IDs and inclusion probe counts across samples.\n# exclusion_counts.tsv: Tab-separated file with gene/event IDs and exclusion probe counts across samples.\n# metadata.tsv: Tab-separated file with sample IDs and experimental conditions (e.g., 'sample_id\\tcondition\\nS1\\tcontrol\\nS2\\ttreatment').\n# These input files would be generated by upstream quantification steps (e.g., from eCLIP or RNA-seq data).\n# No specific reference genome is needed for SepScore calculation itself, but input counts are derived from a reference genome (e.g., hg38).\n\npython sep_score.py \\\n    -i inclusion_counts.tsv \\\n    -e exclusion_counts.tsv \\\n    -m metadata.tsv \\\n    -o splicing_analysis_results",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 5,
+            "description": "HTA-2_0.r1.pgf",
+            "tool_name": "oligo (R package) (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Not specified (The '2_0.r1' refers to the Human Transcriptome Array 2.0 revision 1, not the oligo package version.)",
+            "code_example": "# Install R if not already installed (example for Ubuntu/Debian)\n# sudo apt update\n# sudo apt install r-base\n\n# Install BiocManager and required R packages\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\")'\n# R -e 'BiocManager::install(c(\"oligo\", \"pd.hta.2.0\", \"hta20transcriptcluster.db\"))'\n\n# Define input and output paths\nCEL_FILES_DIR=\".\" # Adjust this to the directory containing your CEL files\nOUTPUT_DIR=\"hta_expression_results_oligo\"\nmkdir -p \"${OUTPUT_DIR}\"\n\n# R script to process CEL files using oligo\n# This script assumes CEL files are in the current directory or specified by CEL_FILES_DIR\nR_SCRIPT_CONTENT='\nlibrary(oligo)\nlibrary(pd.hta.2.0) # Platform Design package for HTA 2.0\nlibrary(hta20transcriptcluster.db) # Annotation package for HTA 2.0\n\n# List CEL files from the specified directory\ncel_files <- list.celfiles(path=\"'\"\"${CEL_FILES_DIR}\"\"'\", full.names=TRUE)\nif (length(cel_files) == 0) {\n    stop(\"No CEL files found in the specified directory: '\"\"${CEL_FILES_DIR}\"\"'\")\n}\n\n# Read CEL files\nrawData <- read.celfiles(cel_files)\n\n# Background correction, normalization, and summarization (RMA)\n# This process implicitly uses the PGF/CLF information via the pd.hta.2.0 package\neset <- rma(rawData)\n\n# Get expression matrix\nexpr_matrix <- exprs(eset)\n\n# Save results\nwrite.csv(expr_matrix, file=file.path(\"'\"\"${OUTPUT_DIR}\"\"'\", \"hta_rma_expression.csv\"), row.names=TRUE)\nmessage(\"RMA expression matrix saved to: \", file.path(\"'\"\"${OUTPUT_DIR}\"\"'\", \"hta_rma_expression.csv\"))\n'\n\n# Execute the R script\nRscript -e \"${R_SCRIPT_CONTENT}\"",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/oligo.html"
+        },
+        {
+            "step_order": 6,
+            "description": "HTA-2_0.r1.Psrs.mps",
+            "tool_name": "oligo (R package) (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.60.0",
+            "code_example": "# This step description \"HTA-2_0.r1.Psrs.mps\" is inferred to be related to processing Affymetrix Human Transcriptome Array (HTA 2.0) data.\n# The 'oligo' R package is commonly used for background correction, normalization, and summarization of such arrays.\n# 'HTA-2_0.r1' likely refers to the array design version. 'Psrs.mps' might refer to a specific summarization method or file within the array processing context.\n\n# Installation of 'oligo' R package and relevant annotation database:\n# R\n# if (!requireNamespace(\"BiocManager\", quietly = TRUE))\n#     install.packages(\"BiocManager\")\n# BiocManager::install(\"oligo\")\n# BiocManager::install(\"hta20transcriptcluster.db\") # Annotation package for HTA 2.0\n\n# Placeholder for input CEL files and output expression matrix.\n# Replace 'path/to/cel_files/' with the actual directory containing .CEL files.\n# Replace 'output_expression_matrix.tsv' with the desired output file name.\n# The exact parameters for 'Psrs.mps' are not standard 'oligo' functions, so a generic 'oligo' RMA workflow is shown.\n\n# Example R script to process HTA 2.0 data using 'oligo':\nRscript -e \"\n  library(oligo)\n  library(hta20transcriptcluster.db)\n\n  # Define path to CEL files (replace with actual path)\n  cel_path <- 'path/to/cel_files/'\n  cel_files <- list.files(cel_path, pattern = '.CEL$', full.names = TRUE)\n\n  # Read CEL files\n  rawData <- read.celfiles(cel_files)\n\n  # Perform RMA background correction, normalization, and summarization\n  # For HTA 2.0, 'rma' is a common summarization method.\n  eset <- rma(rawData)\n\n  # Extract expression matrix\n  expr_matrix <- exprs(eset)\n\n  # Add annotation (optional, but common for interpretation)\n  # probe_ids <- rownames(expr_matrix)\n  # annotation <- select(hta20transcriptcluster.db, keys=probe_ids, columns=c('SYMBOL', 'GENENAME'), keytype='PROBEID')\n  # # Merge annotation with expression matrix, e.g., by probe_id\n\n  # Write expression matrix to file\n  write.table(expr_matrix, file='output_expression_matrix.tsv', sep='\\t', quote=FALSE, row.names=TRUE)\n\"",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/oligo.html"
+        },
+        {
+            "step_order": 7,
+            "description": "RMA probeset-level signal estimates, DABG detection flag (Absent or Present), and DABG detection p-value obtained from 'Alt Splice Analysis' performed in Affymetrix Expression Console build 1.4.1.46.",
+            "tool_name": "Microarray",
+            "tool_version": "1.4.1.46",
+            "code_example": "# Affymetrix Expression Console is primarily a GUI application. The following command is a conceptual representation of the analysis steps performed within the GUI, as a direct command-line interface for 'Alt Splice Analysis' in Expression Console is not standard.\n\n# Input CEL files (raw microarray data)\n# Replace with actual CEL file paths, e.g., \"/path/to/your/cel_files/*.CEL\"\nCEL_FILES_PATH=\"/path/to/your/cel_files/*.CEL\"\n\n# Output directory for results\nOUTPUT_DIR=\"affymetrix_expression_console_results\"\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Reference annotation file (e.g., CDF file specific to the array type and organism).\n# This file is crucial for probeset definition and mapping.\n# Example for a human exon array: \"HuEx-1_0-st-v2.cdf\"\n# Please replace with the correct CDF file for your specific array type.\nREFERENCE_ANNOTATION_FILE=\"placeholder_array_type.cdf\"\n\n# Conceptual command representing the execution of Alt Splice Analysis within Expression Console.\n# This command is illustrative and does not represent an actual command-line executable.\n# In practice, these steps are performed interactively within the Expression Console GUI.\n# The GUI workflow typically involves:\n# 1. Loading CEL files.\n# 2. Selecting the appropriate array type and annotation (CDF).\n# 3. Choosing \"Alt Splice Analysis\".\n# 4. Specifying normalization (RMA) and DABG detection options.\n# 5. Running the analysis and saving results.\naffymetrix_expression_console_run_analysis \\\n  --input-cel-files \"${CEL_FILES_PATH}\" \\\n  --output-directory \"${OUTPUT_DIR}\" \\\n  --analysis-type \"Alt Splice Analysis\" \\\n  --normalization-method \"RMA\" \\\n  --dabg-detection \"true\" \\\n  --annotation-file \"${REFERENCE_ANNOTATION_FILE}\" \\\n  --tool-version \"1.4.1.46\"",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Cel files were analyzed using Expression Console (build 1.4.1.46, Affymetrix), with RMA normalization and DABG probe-level detection. Only probesets with detection p-value \u00e2\u0089\u00a4 0.05 in more than half of the microarray samples were considered for downstream analysis. All probes corresponding to cassette exons profiled on the microarray (comprising exclusion junction, upstream and downstream inclusion junction, and inclusion exonic probes) were identified and normalized against the average signal on a per-gene basis to remove gene expression changes. Student\u00e2\u0080\u0099s t-test was performed on residuals for inclusion probes and exclusion probes separately to identify robust splicing changes, which were quantified by SepScore ( defined as the normalized change in exclusion minus the normalized change in inclusion).\nHTA-2_0.r1.pgf\nHTA-2_0.r1.Psrs.mps\nRMA probeset-level signal estimates, DABG detection flag (Absent or Present), and DABG detection p-value obtained from 'Alt Splice Analysis' performed in Affymetrix Expression Console build 1.4.1.46.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

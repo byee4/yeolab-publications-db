@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "The Partek Genomics Suite was used to normalize (by GC RMA) and then analyse the microarray data following Affymetrix guidelines.",
-      "tool_name": "Microarray",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Core probesets only were used.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "The Partek Genomics Suite was used to normalize (by GC RMA) and then analyse the microarray data following Affymetrix guidelines. Core probesets only were used.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "The Partek Genomics Suite was used to normalize (by GC RMA) and then analyse the microarray data following Affymetrix guidelines.",
+            "tool_name": "Microarray",
+            "tool_version": "Not specified",
+            "code_example": "bash\n# Partek Genomics Suite is commercial, GUI-based software. \n# The following represents the conceptual steps performed within the software, \n# as a direct command-line execution is not typically available.\n\n# Input: Raw Affymetrix .CEL files\n# Output: Normalized expression data, analysis results\n\n# 1. Import raw microarray data (e.g., .CEL files) into Partek Genomics Suite.\n#    This step typically involves selecting the raw data files from a directory \n#    within the graphical user interface.\n\n# 2. Perform normalization using the GC RMA method.\n#    Within the software, navigate to the normalization options and select \"GC RMA\".\n#    Ensure Affymetrix guidelines are followed for probe set definition and background correction.\n#    (Conceptual representation of the action, not an actual CLI command):\n#    partek_genomics_suite --action normalize --method GC_RMA --input_files /path/to/affymetrix_cel_files/ --output_normalized_data /path/to/output_normalized_data.txt\n\n# 3. Analyze the normalized microarray data following Affymetrix guidelines.\n#    This step involves various statistical analyses (e.g., ANOVA, t-tests, clustering, PCA)\n#    to identify differentially expressed genes or patterns, using the software's built-in tools.\n#    (Conceptual representation of the action, not an actual CLI command):\n#    partek_genomics_suite --action analyze --input_normalized_data /path/to/output_normalized_data.txt --output_analysis_results /path/to/analysis_results/\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Core probesets only were used.",
+            "tool_name": "R (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Not specified",
+            "code_example": "# Install R and Bioconductor packages if not already present\n# sudo apt-get update\n# sudo apt-get install r-base\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\")'\n# R -e 'BiocManager::install(c(\"oligo\", \"AnnotationDbi\", \"hgu133plus2.db\"))' # Example for Affymetrix Human Genome U133 Plus 2.0 Array\n\n# This is a conceptual R script to filter an expression matrix to include only core probesets.\n# Replace 'your_expression_matrix.tsv' with the actual path to your pre-processed expression data.\n# The specific method for identifying \"core\" probesets depends on the array and annotation source.\n# This example assumes using an Affymetrix chip annotation package (e.g., hgu133plus2.db for Human Genome U133 Plus 2.0 Array).\n# \"Core probesets\" are typically defined as those with high-confidence annotation, often mapping to a known gene identifier.\n\nRscript -e '\nlibrary(oligo) # Or affy, depending on raw data format (CEL files) and upstream processing\nlibrary(AnnotationDbi)\nlibrary(hgu133plus2.db) # Placeholder: Example annotation package for Affymetrix Human Genome U133 Plus 2.0 Array\n\n# --- Placeholder: Load your expression data (e.g., already normalized and summarized) ---\n# If starting from CEL files, you would use read.celfiles() and then rma() or gcrma() to get an expression matrix.\n# For this step, let\\'s assume you have a matrix of probeset IDs and expression values.\n# Example: expr_data <- read.delim(\"your_expression_matrix.tsv\", row.names = 1)\n# For demonstration, let\\'s create a dummy matrix with probeset IDs from the example annotation package.\ndummy_probesets <- head(keys(hgu133plus2.db, keytype=\"PROBEID\"), 100)\nset.seed(123)\nexpr_data <- matrix(rnorm(length(dummy_probesets) * 3, mean=7, sd=1), ncol=3)\nrownames(expr_data) <- dummy_probesets\ncolnames(expr_data) <- paste0(\"Sample\", 1:3)\nmessage(\"Original expression matrix dimensions: \", paste(dim(expr_data), collapse=\"x\"))\n\n# --- Identify core probesets ---\n# The definition of \"core\" probesets can vary. Often it refers to probesets\n# with a high confidence level of annotation, or those mapping to well-defined genes.\n# For Affymetrix, this information is often in the annotation package.\n# We\\'ll use the \"ENTREZID\" as a proxy for well-annotated probesets, filtering out probesets\n# that do not map to an Entrez Gene ID. This is a common interpretation of \"core\".\n\n# Get all probeset IDs from the expression data\nall_probes <- rownames(expr_data)\n\n# Map probeset IDs to Entrez Gene IDs\n# This will return a list where each element is a vector of Entrez IDs for a probeset\nprobe_to_entrez <- AnnotationDbi::mget(all_probes, hgu133plus2.db::hgu133plus2ENTREZID, ifnotfound=NA)\n\n# Identify probesets that successfully map to at least one Entrez ID (i.e., are \"core\" in this context)\n# Filter out probesets that return NA or an empty vector\ncore_probes <- names(probe_to_entrez)[!sapply(probe_to_entrez, function(x) all(is.na(x)) || length(x) == 0)]\n\nmessage(\"Number of core probesets identified: \", length(core_probes))\n\n# --- Filter the expression matrix ---\nfiltered_expr_data <- expr_data[core_probes, , drop = FALSE]\nmessage(\"Filtered expression matrix dimensions: \", paste(dim(filtered_expr_data), collapse=\"x\"))\n\n# --- Save the filtered data ---\n# write.table(filtered_expr_data, \"filtered_core_probesets_expression.tsv\", sep=\"\\t\", quote=FALSE, col.names=NA)\n'\n",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/"
+        }
+    ],
+    "raw_text": "The Partek Genomics Suite was used to normalize (by GC RMA) and then analyse the microarray data following Affymetrix guidelines. Core probesets only were used.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

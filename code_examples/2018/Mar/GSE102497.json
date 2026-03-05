@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Sequencing reads from small RNA-seq libraries were first trimmed of adapters using cutadapt",
-      "tool_name": "cutadapt",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reads were then mapped against a database of repetitive elements derived from RepBase18.05.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Bowtie version 1.0.0 with parameters -S -q -p 16 -e 100 -l 20 was used to align reads against an index generated from Repbase sequences (Langmead et al., 2009).",
-      "tool_name": "Bowtie",
-      "tool_version": "1.0.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Reads not mapped to Repbase sequences were aligned to the hg19 genome (UCSC assembly) using bowtie version 1.1.1 with parameters -p 8 -k 1 -m 10 -l 25 --best --chunkmbs 128",
-      "tool_name": "Bowtie",
-      "tool_version": "1.1.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "counts of reads for each miRNA were calculated from featureCounts using miRBase annotations",
-      "tool_name": "featureCounts",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Sequencing reads from small RNA-seq libraries were first trimmed of adapters using cutadapt\nReads were then mapped against a database of repetitive elements derived from RepBase18.05. Bowtie version 1.0.0 with parameters -S -q -p 16 -e 100 -l 20 was used to align reads against an index generated from Repbase sequences (Langmead et al., 2009).\nReads not mapped to Repbase sequences were aligned to the hg19 genome (UCSC assembly) using bowtie version 1.1.1 with parameters -p 8 -k 1 -m 10 -l 25 --best --chunkmbs 128\ncounts of reads for each miRNA were calculated from featureCounts using miRBase annotations\nGenome_build: hg19\nSupplementary_files_format_and_content: count file, txt",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Sequencing reads from small RNA-seq libraries were first trimmed of adapters using cutadapt",
+            "tool_name": "cutadapt",
+            "tool_version": "(Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install cutadapt if not already installed\n# conda install -c bioconda cutadapt\n\n# Define input and output file names\nINPUT_READS=\"small_rna_seq_raw.fastq.gz\"\nOUTPUT_READS=\"small_rna_seq_trimmed.fastq.gz\"\n\n# Define the 3' adapter sequence (e.g., Illumina TruSeq Small RNA 3' adapter)\n# This adapter sequence might need to be adjusted based on the specific library preparation kit used.\nADAPTER_SEQUENCE=\"TGGAATTCTCGGGTGCCAAGGAACTCCAG\"\n\n# Trim adapters, filter for minimum length, and perform quality trimming\n# -a: 3' adapter sequence\n# -m: Minimum read length after trimming (e.g., 18 bp for small RNA)\n# -q: Quality cutoff for trimming (e.g., 20)\n# -o: Output file for trimmed reads\ncutadapt \\\n  -a \"${ADAPTER_SEQUENCE}\" \\\n  -m 18 \\\n  -q 20 \\\n  -o \"${OUTPUT_READS}\" \\\n  \"${INPUT_READS}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 2,
+            "description": "Reads were then mapped against a database of repetitive elements derived from RepBase18.05.",
+            "tool_name": "bowtie2 (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.5.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install bowtie2 (if not already installed)\n# conda install -c bioconda bowtie2\n\n# Download or prepare RepBase18.05.fasta\n# RepBase requires a license for access. This file would contain the sequences of repetitive elements from RepBase 18.05.\n# Example: wget -O RepBase18.05.fasta \"https://www.girinst.org/repbase/update/RepBase18.05.fasta.gz\" # (Hypothetical URL, actual access requires license)\n# gunzip RepBase18.05.fasta.gz\n\n# Build Bowtie2 index for repetitive elements\nbowtie2-build RepBase18.05.fasta RepBase18.05_index\n\n# Align reads to repetitive elements\n# Assuming single-end reads and 8 threads. Adjust -U for single-end or -1 -2 for paired-end reads.\nbowtie2 -x RepBase18.05_index -U input_reads.fastq.gz -S aligned_to_repeats.sam -p 8\n\n# Optional: Convert SAM to BAM, sort, and index for further processing or filtering\n# samtools view -bS aligned_to_repeats.sam | samtools sort -o aligned_to_repeats.bam\n# samtools index aligned_to_repeats.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie2"
+        },
+        {
+            "step_order": 3,
+            "description": "Bowtie version 1.0.0 with parameters -S -q -p 16 -e 100 -l 20 was used to align reads against an index generated from Repbase sequences (Langmead et al., 2009).",
+            "tool_name": "Bowtie",
+            "tool_version": "1.0.0",
+            "code_example": "bash\n# Install Bowtie (if not already installed)\n# conda install -c bioconda bowtie=1.0.0\n\n# Align reads using Bowtie\n# Assuming 'repbase_index' is the base name for the Bowtie index generated from Repbase sequences\n# Assuming 'reads.fastq' is the input FASTQ file\n# Output will be in SAM format due to -S\nbowtie -S -q -p 16 -e 100 -l 20 repbase_index reads.fastq > alignment.sam\n",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/gb-2009-10-3-r25"
+        },
+        {
+            "step_order": 4,
+            "description": "Reads not mapped to Repbase sequences were aligned to the hg19 genome (UCSC assembly) using bowtie version 1.1.1 with parameters -p 8 -k 1 -m 10 -l 25 --best --chunkmbs 128",
+            "tool_name": "Bowtie",
+            "tool_version": "1.1.1",
+            "code_example": "# Install Bowtie (if not already installed)\n# conda install -c bioconda bowtie=1.1.1\n\n# Define input and output files\n# INPUT_FASTQ represents 'Reads not mapped to Repbase sequences'\nINPUT_FASTQ=\"unmapped_reads.fastq\"\nOUTPUT_SAM=\"aligned_to_hg19.sam\"\n\n# Define the path to the hg19 Bowtie index\n# Replace /path/to/hg19 with the actual path to your Bowtie index files (e.g., if your index files are hg19.1.ebwt, hg19.2.ebwt, etc., then the prefix is hg19).\nBOWTIE_INDEX_PREFIX=\"/path/to/hg19\"\n\n# Align reads to the hg19 genome using Bowtie\nbowtie -p 8 -k 1 -m 10 -l 25 --best --chunkmbs 128 \"${BOWTIE_INDEX_PREFIX}\" \"${INPUT_FASTQ}\" > \"${OUTPUT_SAM}\"",
+            "code_language": "bash",
+            "github_url": "http://bowtie-bio.sourceforge.net/index.shtml"
+        },
+        {
+            "step_order": 5,
+            "description": "counts of reads for each miRNA were calculated from featureCounts using miRBase annotations",
+            "tool_name": "featureCounts",
+            "tool_version": "2.0.6 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install subread (which includes featureCounts)\n# conda install -c bioconda subread=2.0.6\n\n# Download miRBase annotations for Homo sapiens (v22, example)\n# wget ftp://mirbase.org/pub/mirbase/CURRENT/genomes/hsa.gff3 -O miRBase_hsa.gff3\n\n# Example input BAM files (replace with actual paths)\n# Assuming aligned reads are in 'aligned_bams/' directory\nINPUT_BAMS=\"aligned_bams/sample1.bam aligned_bams/sample2.bam\"\nMIRBASE_GFF=\"miRBase_hsa.gff3\"\nOUTPUT_COUNTS=\"miRNA_counts.txt\"\n\n# Calculate counts of reads for each miRNA using featureCounts\n# -a: Annotation file\n# -F GFF3: Specify GFF3 format\n# -t miRNA: Feature type to count (assuming 'miRNA' is the feature type in the GFF3)\n# -g ID: Attribute used to group features into genes (e.g., miRNA ID)\n# -s 0: Unstranded (0), use 1 for stranded, 2 for reverse stranded if known\n# -T 8: Use 8 threads\n# -o: Output file\nfeatureCounts -a \"${MIRBASE_GFF}\" -F GFF3 -t miRNA -g ID -s 0 -T 8 -o \"${OUTPUT_COUNTS}\" ${INPUT_BAMS}",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Sequencing reads from small RNA-seq libraries were first trimmed of adapters using cutadapt\nReads were then mapped against a database of repetitive elements derived from RepBase18.05. Bowtie version 1.0.0 with parameters -S -q -p 16 -e 100 -l 20 was used to align reads against an index generated from Repbase sequences (Langmead et al., 2009).\nReads not mapped to Repbase sequences were aligned to the hg19 genome (UCSC assembly) using bowtie version 1.1.1 with parameters -p 8 -k 1 -m 10 -l 25 --best --chunkmbs 128\ncounts of reads for each miRNA were calculated from featureCounts using miRBase annotations\nGenome_build: hg19\nSupplementary_files_format_and_content: count file, txt",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

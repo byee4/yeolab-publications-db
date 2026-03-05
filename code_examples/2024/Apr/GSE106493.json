@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Reads were mapped to human genome using TopHat v2.1.1 with the flags, \"--no-coverage-search\" and \"--GTF gencode.v19.annotation.gtf\".",
-      "tool_name": "TopHat",
-      "tool_version": "2.1.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Gene expression was quantified against the Gencode v19 reference transcriptome (gencode.v19.annotation.gtf, genecodegenes.org) with Cufflinks v2.2.1.",
-      "tool_name": "Cufflinks",
-      "tool_version": "2.2.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "The statistical significance of differential expression was assessed using CuffDiff2, with the flags, \"--dispersion-method per-condition\" and \"--seed 42\".",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "ROC analysis was perfomed in Microsoft Excel, using true positive and false positive gene lists culled from the literature.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Reads were mapped to human genome using TopHat v2.1.1 with the flags, \"--no-coverage-search\" and \"--GTF gencode.v19.annotation.gtf\".\nGene expression was quantified against the Gencode v19 reference transcriptome (gencode.v19.annotation.gtf, genecodegenes.org) with Cufflinks v2.2.1.\nThe statistical significance of differential expression was assessed using CuffDiff2, with the flags, \"--dispersion-method per-condition\" and \"--seed 42\".\nROC analysis was perfomed in Microsoft Excel, using true positive and false positive gene lists culled from the literature.\nGenome_build: hg19",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Reads were mapped to human genome using TopHat v2.1.1 with the flags, \"--no-coverage-search\" and \"--GTF gencode.v19.annotation.gtf\".",
+            "tool_name": "TopHat",
+            "tool_version": "2.1.1",
+            "code_example": "# Install TopHat (example using conda)\n# conda install -c bioconda tophat=2.1.1\n\n# Define variables for reference files and input/output\n# Replace with actual paths to your reference genome index and GTF file\nGENOME_INDEX=\"/path/to/human_genome/hg19/bowtie2_index/hg19\" # TopHat uses Bowtie2 index\nGTF_FILE=\"/path/to/gencode.v19.annotation.gtf\"\nREADS_FILE=\"reads.fastq\" # Replace with your input FASTQ file(s)\nOUTPUT_DIR=\"tophat_output\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run TopHat mapping\ntophat2 \\\n  --no-coverage-search \\\n  --GTF \"${GTF_FILE}\" \\\n  -o \"${OUTPUT_DIR}\" \\\n  \"${GENOME_INDEX}\" \\\n  \"${READS_FILE}\"",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/gb-2013-14-4-r36"
+        },
+        {
+            "step_order": 2,
+            "description": "Gene expression was quantified against the Gencode v19 reference transcriptome (gencode.v19.annotation.gtf, genecodegenes.org) with Cufflinks v2.2.1.",
+            "tool_name": "Cufflinks",
+            "tool_version": "2.2.1",
+            "code_example": "# Install Cufflinks (example using conda)\n# conda install -c bioconda cufflinks=2.2.1\n\n# Define reference transcriptome\nGENCODE_GTF=\"gencode.v19.annotation.gtf\" # Source: genecodegenes.org\n\n# Assume input BAM file and output directory\nINPUT_BAM=\"aligned_reads.bam\" # Placeholder for your aligned RNA-seq reads\nOUTPUT_DIR=\"cufflinks_output\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run Cufflinks for gene expression quantification\n# -o: output directory\n# -g: reference annotation GTF file\ncufflinks -o \"${OUTPUT_DIR}\" -g \"${GENCODE_GTF}\" \"${INPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": "http://cole-trapnell-lab.github.io/cufflinks/"
+        },
+        {
+            "step_order": 3,
+            "description": "The statistical significance of differential expression was assessed using CuffDiff2, with the flags, \"--dispersion-method per-condition\" and \"--seed 42\".",
+            "tool_name": "CuffDiff2",
+            "tool_version": "2.2.1",
+            "code_example": "# Install Cufflinks (which includes cuffdiff2)\n# conda install -c bioconda cufflinks=2.2.1\n\n# Define input files and output directory\nGTF_FILE=\"path/to/annotation.gtf\" # Placeholder: e.g., Gencode, Ensembl GTF file\nCONDITION_A_BAMS=\"path/to/conditionA_rep1.bam,path/to/conditionA_rep2.bam\" # Placeholder: Comma-separated BAM files for condition A replicates\nCONDITION_B_BAMS=\"path/to/conditionB_rep1.bam,path/to/conditionB_rep2.bam\" # Placeholder: Comma-separated BAM files for condition B replicates\nOUTPUT_DIR=\"cuffdiff_output\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run CuffDiff2 for differential expression analysis\ncuffdiff2 \\\n  --dispersion-method per-condition \\\n  --seed 42 \\\n  -o \"${OUTPUT_DIR}\" \\\n  \"${GTF_FILE}\" \\\n  \"${CONDITION_A_BAMS}\" \\\n  \"${CONDITION_B_BAMS}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/cole-trapnell-lab/cufflinks"
+        },
+        {
+            "step_order": 4,
+            "description": "ROC analysis was perfomed in Microsoft Excel, using true positive and false positive gene lists culled from the literature.",
+            "tool_name": "Microsoft Excel",
+            "tool_version": "",
+            "code_example": "",
+            "code_language": "bash",
+            "github_url": "https://www.microsoft.com/en-us/microsoft-365/excel"
+        }
+    ],
+    "raw_text": "Reads were mapped to human genome using TopHat v2.1.1 with the flags, \"--no-coverage-search\" and \"--GTF gencode.v19.annotation.gtf\".\nGene expression was quantified against the Gencode v19 reference transcriptome (gencode.v19.annotation.gtf, genecodegenes.org) with Cufflinks v2.2.1.\nThe statistical significance of differential expression was assessed using CuffDiff2, with the flags, \"--dispersion-method per-condition\" and \"--seed 42\".\nROC analysis was perfomed in Microsoft Excel, using true positive and false positive gene lists culled from the literature.\nGenome_build: hg19",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

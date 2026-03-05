@@ -1,124 +1,124 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Library strategy: Cut&Run",
-      "tool_name": "ChIP-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "For Cut&Run:",
-      "tool_name": "ChIP-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Adaptor trimming with Trimmomatic-0.32.",
-      "tool_name": "Trimmomatic",
-      "tool_version": "0.32",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Alignment to hg19+scer genome with bowtie2.",
-      "tool_name": "Bowtie2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "High quality reads (F4q10) were filtered using samtools.",
-      "tool_name": "samtools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Peaks called with MACS2 (narrowPeak, q=0.001).",
-      "tool_name": "MACS2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "For HA Cut&Run +/-dTAG, differential peaks were identified by Diffbind/DESeq2 using yeast spike-in for normalization.",
-      "tool_name": "DESeq2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "bigWig files were generated using deepTools and bedGraph files were generated using Homer.",
-      "tool_name": "HOMER",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "For ChIP-seq:",
-      "tool_name": "ChIP-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 10,
-      "description": "Adaptor trimming with Trimmomatic-0.32.",
-      "tool_name": "Trimmomatic",
-      "tool_version": "0.32",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 11,
-      "description": "Alignment to hg19+dm3 genome with bowtie2.",
-      "tool_name": "Bowtie2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 12,
-      "description": "High quality reads (F4q10) were filtered using samtools.",
-      "tool_name": "samtools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 13,
-      "description": "Normalized bigWig files were generated with deepTools.",
-      "tool_name": "deepTools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Library strategy: Cut&Run\nFor Cut&Run:\nAdaptor trimming with Trimmomatic-0.32.\nAlignment to hg19+scer genome with bowtie2.\nHigh quality reads (F4q10) were filtered using samtools.\nPeaks called with MACS2 (narrowPeak, q=0.001).\nFor HA Cut&Run +/-dTAG, differential peaks were identified by Diffbind/DESeq2 using yeast spike-in for normalization.\nbigWig files were generated using deepTools and bedGraph files were generated using Homer.\nFor ChIP-seq:\nAdaptor trimming with Trimmomatic-0.32.\nAlignment to hg19+dm3 genome with bowtie2.\nHigh quality reads (F4q10) were filtered using samtools.\nNormalized bigWig files were generated with deepTools.\nGenome_build: hg19 (GRCh37)\nSupplementary_files_format_and_content: bigWig, bedGraph files\nSupplementary_files_format_and_content: 042420_HA_AE_Diffbind-peakinfo_q0.001.csv: Diffbind peak info\nSupplementary_files_format_and_content: 042420_HA-AE_cutandrun_diffbind-deseq2_q0.001.csv: Differential peak DESeq2\nSupplementary_files_format_and_content: New_ZnF_q0.001_peaks.txt: MACS2 peaks\nSupplementary_files_format_and_content: CD34_HA_merged_noNeg_nomodel_extsize300_q0.001_peaks.txt: MACS2 peaks",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Library strategy: Cut&Run",
+            "tool_name": "ChIP-seq",
+            "tool_version": "v2.0.0",
+            "code_example": "# Install Cromwell (Java-based workflow engine) if not already installed.\n# Download the latest stable release from https://github.com/broadinstitute/cromwell/releases\n# For example:\n# wget https://github.com/broadinstitute/cromwell/releases/download/86/cromwell-86.jar\n\n# Clone the ENCODE ChIP-seq pipeline repository if not already cloned.\n# git clone https://github.com/ENCODE-DCC/chip-seq-pipeline2.git\n# cd chip-seq-pipeline2\n\n# Create a placeholder input JSON file for Cut&Run analysis.\n# Replace 'your_sample_R1.fastq.gz', 'your_sample_R2.fastq.gz' with actual paths to your FASTQ files.\n# Replace 'your_output_directory' with your desired output location.\n# The reference genome (hg38) and associated files are placeholders using ENCODE's GCS paths.\n# For actual analysis, ensure these files are accessible or provide local paths.\ncat << EOF > inputs.json\n{\n  \"chip.fastq_replicates\": [\n    [\n      \"your_sample_R1.fastq.gz\",\n      \"your_sample_R2.fastq.gz\"\n    ]\n  ],\n  \"chip.genome_tsv\": \"gs://encode-pipeline-genome-data/vERCC/GRCh38_vERCC/GRCh38_vERCC.tsv\",\n  \"chip.chrom_sizes\": \"gs://encode-pipeline-genome-data/vERCC/GRCh38_vERCC/GRCh38_vERCC.chrom.sizes\",\n  \"chip.blacklist\": \"gs://encode-pipeline-genome-data/vERCC/GRCh38_vERCC/GRCh38_vERCC.blacklist.bed\",\n  \"chip.paired_end\": true,\n  \"chip.pipeline_type\": \"cutnrun\",\n  \"chip.aligner\": \"bwa\",\n  \"chip.peak_caller\": \"macs2\",\n  \"chip.output_directory\": \"your_output_directory\"\n}\nEOF\n\n# Execute the ENCODE ChIP-seq pipeline for Cut&Run using Cromwell.\n# Ensure you have the 'chip_seq.wdl' file from the cloned repository in the current directory\n# and 'cromwell-X.Y.Z.jar' (e.g., cromwell-86.jar) is accessible.\njava -jar cromwell-86.jar run chip_seq.wdl -i inputs.json",
+            "code_language": "bash",
+            "github_url": "https://github.com/ENCODE-DCC/chip-seq-pipeline2"
+        },
+        {
+            "step_order": 2,
+            "description": "For Cut&Run:",
+            "tool_name": "ChIP-seq",
+            "tool_version": "v2.0.0",
+            "code_example": "# This pipeline is designed for ChIP-seq but is adaptable for Cut&Run data analysis.\n\n# Install Cromwell (Java-based workflow management system) if not already installed.\n# Ensure you have Java 8 or higher installed.\n# For example, download the latest stable release from Cromwell's GitHub releases page:\n# wget https://github.com/broadinstitute/cromwell/releases/download/X.Y.Z/cromwell-X.Y.Z.jar\n# mv cromwell-X.Y.Z.jar /usr/local/bin/cromwell.jar\n\n# Clone the ENCODE ChIP-seq pipeline repository\ngit clone https://github.com/ENCODE-DCC/chip-seq-pipeline2.git\ncd chip-seq-pipeline2\n\n# (Optional) Checkout a specific version of the pipeline, e.g., v2.0.0\n# git checkout v2.0.0\n\n# --- Prepare input.json for Cut&Run data --- \n# The ENCODE ChIP-seq pipeline uses WDL (Workflow Description Language) and requires an input JSON file.\n# Replace placeholders with actual paths to your data and reference files.\n# For human (hg38) reference, you would need a genome_tsv file containing paths to:\n#   - Reference FASTA\n#   - Chromosome sizes file\n#   - Blacklist BED file\n#   - Bowtie2 index\n#   - BWA index\n#   - MACS2 genome size parameter (e.g., \"hs\" for human)\n# Example hg38.tsv can be found in the pipeline's 'genome_data' directory or generated using provided scripts.\n\ncat << EOF > cutnrun_input.json\n{\n  \"chip.fastqs_rep1_R1\": [\"/path/to/your/cutnrun_experiment_rep1_R1.fastq.gz\"],\n  \"chip.fastqs_rep1_R2\": [\"/path/to/your/cutnrun_experiment_rep1_R2.fastq.gz\"],\n  \"chip.fastqs_ctl_rep1_R1\": [\"/path/to/your/cutnrun_control_rep1_R1.fastq.gz\"],\n  \"chip.fastqs_ctl_rep1_R2\": [\"/path/to/your/cutnrun_control_rep1_R2.fastq.gz\"],\n  \"chip.paired_end\": true,\n  \"chip.genome_tsv\": \"/path/to/your/genome_data/hg38.tsv\",\n  \"chip.output_prefix\": \"cutnrun_hg38_experiment\",\n  \"chip.aligner\": \"bowtie2\",\n  \"chip.peak_caller\": \"macs2\",\n  \"chip.macs2_gsize\": \"hs\",\n  \"chip.blacklist_bed\": \"/path/to/your/blacklist/hg38-blacklist.bed\",\n  \"chip.enable_idr\": false, # Set to true if you have multiple replicates for IDR analysis\n  \"chip.fraglen_range\": \"0 1000\" # Typical fragment size range for Cut&Run\n}\nEOF\n\n# --- Execute the pipeline using Cromwell --- \n# Replace '/path/to/cromwell.jar' with the actual path to your Cromwell JAR file.\n# You might need to configure Cromwell for a specific backend (e.g., local, SGE, SLURM) \n# via a Cromwell configuration file (e.g., cromwell.conf).\njava -jar /path/to/cromwell.jar run chip.wdl -i cutnrun_input.json",
+            "code_language": "bash",
+            "github_url": "https://github.com/ENCODE-DCC/chip-seq-pipeline2"
+        },
+        {
+            "step_order": 3,
+            "description": "Adaptor trimming with Trimmomatic-0.32.",
+            "tool_name": "Trimmomatic",
+            "tool_version": "0.32",
+            "code_example": "bash\n# Install Trimmomatic if not already installed\n# conda install -c bioconda trimmomatic=0.32\n\n# Define input and output file names\nINPUT_R1=\"input_R1.fastq.gz\"\nINPUT_R2=\"input_R2.fastq.gz\"\nOUTPUT_R1_PAIRED=\"output_R1_paired.fastq.gz\"\nOUTPUT_R1_UNPAIRED=\"output_R1_unpaired.fastq.gz\"\nOUTPUT_R2_PAIRED=\"output_R2_paired.fastq.gz\"\nOUTPUT_R2_UNPAIRED=\"output_R2_unpaired.fastq.gz\"\n\n# Define adaptor file path (adjust path as necessary for your Trimmomatic installation)\n# A common adaptor file for Illumina paired-end data is TruSeq3-PE.fa, often found in the 'adapters' directory of Trimmomatic.\n# For Trimmomatic 0.32, this file would typically be located within the Trimmomatic installation directory.\nADAPTOR_FILE=\"/path/to/Trimmomatic-0.32/adapters/TruSeq3-PE.fa\"\n\n# Run Trimmomatic for paired-end adaptor trimming\n# Adjust '/path/to/Trimmomatic-0.32/trimmomatic-0.32.jar' to the actual location of your Trimmomatic JAR file.\njava -jar /path/to/Trimmomatic-0.32/trimmomatic-0.32.jar PE \\\n    -phred33 \\\n    \"${INPUT_R1}\" \"${INPUT_R2}\" \\\n    \"${OUTPUT_R1_PAIRED}\" \"${OUTPUT_R1_UNPAIRED}\" \\\n    \"${OUTPUT_R2_PAIRED}\" \"${OUTPUT_R2_UNPAIRED}\" \\\n    ILLUMINACLIP:\"${ADAPTOR_FILE}\":2:30:10 \\\n    LEADING:3 \\\n    TRAILING:3 \\\n    SLIDINGWINDOW:4:15 \\\n    MINLEN:36\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/usadellab/Trimmomatic"
+        },
+        {
+            "step_order": 4,
+            "description": "Alignment to hg19+scer genome with bowtie2.",
+            "tool_name": "Bowtie2",
+            "tool_version": "2.3.4.3",
+            "code_example": "# Install Bowtie2 (if not already installed)\n# conda install -c bioconda bowtie2=2.3.4.3\n\n# Define variables\nINPUT_FASTQ=\"input.fastq.gz\" # Placeholder for your input FASTQ file\nOUTPUT_SAM=\"output.sam\"\nOUTPUT_BAM=\"output.bam\"\nOUTPUT_SORTED_BAM=\"output.sorted.bam\"\n\n# Reference genome index: hg19+scer (Saccharomyces cerevisiae) combined index\n# This is a custom index that needs to be pre-built using bowtie2-build from a combined FASTA file\n# containing both human hg19 and S. cerevisiae reference sequences.\n# Example path for the index prefix (replace with your actual path):\nGENOME_INDEX_PREFIX=\"/path/to/genome_indices/hg19_scer\"\n\n# Perform alignment using Bowtie2\n# --local: local alignment mode (soft-clipping allowed, common for eCLIP)\n# -p 8: use 8 threads for parallel processing\n# -x: specify the index prefix for the reference genome\n# -U: specify single-end FASTQ input file\n# -S: specify SAM output file\nbowtie2 --local -p 8 -x \"${GENOME_INDEX_PREFIX}\" -U \"${INPUT_FASTQ}\" -S \"${OUTPUT_SAM}\"\n\n# Convert SAM to BAM, sort, and index (common post-alignment steps in eCLIP pipelines)\n# Install Samtools (if not already installed)\n# conda install -c bioconda samtools\n\nsamtools view -bS \"${OUTPUT_SAM}\" > \"${OUTPUT_BAM}\"\nsamtools sort \"${OUTPUT_BAM}\" -o \"${OUTPUT_SORTED_BAM}\"\nsamtools index \"${OUTPUT_SORTED_BAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie2"
+        },
+        {
+            "step_order": 5,
+            "description": "High quality reads (F4q10) were filtered using samtools.",
+            "tool_name": "samtools",
+            "tool_version": "1.10 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install samtools if not already installed\n# conda install -c bioconda samtools=1.10\n\n# Filter high quality reads (F4q10)\n# -b: output BAM format\n# -F 4: exclude reads where the FLAG bit 4 is set (unmapped reads)\n# -q 10: include reads with mapping quality >= 10\nsamtools view -b -F 4 -q 10 -o filtered.bam input.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 6,
+            "description": "Peaks called with MACS2 (narrowPeak, q=0.001).",
+            "tool_name": "MACS2",
+            "tool_version": "2.2.7.1 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install MACS2 (if not already installed)\n# conda install -c bioconda macs2=2.2.7.1\n\n# Define input files and parameters\nTREATMENT_BAM=\"treatment.bam\" # Replace with your actual treatment BAM file\nCONTROL_BAM=\"control.bam\"     # Replace with your actual control BAM file (optional but recommended for ChIP-seq)\nGENOME_SIZE=\"hs\"              # Genome size (e.g., hs for human, mm for mouse, dm for drosophila, ce for C. elegans). Adjust as needed.\nQ_VALUE=\"0.001\"\nOUTPUT_PREFIX=\"my_experiment_peaks\"\nOUTPUT_DIR=\"macs2_output\"\nINPUT_FORMAT=\"BAMPE\"          # Input format: BAM, BED, BAMPE (for paired-end BAM). Adjust based on your data.\n\nmkdir -p \"${OUTPUT_DIR}\"\n\nmacs2 callpeak \\\n    -t \"${TREATMENT_BAM}\" \\\n    -c \"${CONTROL_BAM}\" \\\n    -f \"${INPUT_FORMAT}\" \\\n    -g \"${GENOME_SIZE}\" \\\n    -q \"${Q_VALUE}\" \\\n    --outdir \"${OUTPUT_DIR}\" \\\n    -n \"${OUTPUT_PREFIX}\" \\\n    --keep-dup all \\\n    --call-summits # Ensures narrowPeak output and identifies peak summits",
+            "code_language": "bash",
+            "github_url": "https://github.com/macs3-project/MACS"
+        },
+        {
+            "step_order": 7,
+            "description": "For HA Cut&Run +/-dTAG, differential peaks were identified by Diffbind/DESeq2 using yeast spike-in for normalization.",
+            "tool_name": "DESeq2",
+            "tool_version": "1.40.2",
+            "code_example": "# Install R and DESeq2 (if not already installed)\n# sudo apt-get update\n# sudo apt-get install r-base\n# R -e \"install.packages('BiocManager', repos='https://cloud.r-project.org')\"\n# R -e \"BiocManager::install('DESeq2')\"\n\n# --- Placeholder for input files ---\n# These files would typically be generated by upstream steps (e.g., DiffBind for peak counts).\n# primary_counts.tsv: Tab-separated file with peak IDs as rows and sample names as columns, containing raw counts for the primary organism (e.g., human hg38).\n# yeast_counts.tsv: Tab-separated file with yeast feature IDs as rows and sample names as columns, containing raw counts for the yeast spike-in (e.g., sacCer3).\n# sample_metadata.tsv: Tab-separated file with sample names, condition, and any other relevant metadata.\n# Example content for sample_metadata.tsv:\n# sample_id\\tcondition\n# sample1\\tHA_CutRun_dTAG_pos\n# sample2\\tHA_CutRun_dTAG_pos\n# sample3\\tHA_CutRun_dTAG_neg\n# sample4\\tHA_CutRun_dTAG_neg\n\n# Create an R script for DESeq2 analysis with spike-in normalization\ncat << 'EOF' > run_deseq2_spikein.R\nlibrary(DESeq2)\n\n# Load primary organism counts (e.g., from DiffBind output)\nprimary_counts <- read.csv(\"primary_counts.tsv\", sep=\"\\t\", row.names=1)\nprimary_counts <- as.matrix(primary_counts)\n\n# Load yeast spike-in counts\nyeast_counts <- read.csv(\"yeast_counts.tsv\", sep=\"\\t\", row.names=1)\nyeast_counts <- as.matrix(yeast_counts)\n\n# Load sample metadata\nsample_metadata <- read.csv(\"sample_metadata.tsv\", sep=\"\\t\", row.names=1)\n\n# Ensure sample order matches between counts and metadata\nsample_metadata <- sample_metadata[colnames(primary_counts), , drop=FALSE]\nyeast_counts <- yeast_counts[, colnames(primary_counts)] # Ensure yeast counts match primary samples\n\n# Calculate spike-in normalization factors\n# Sum counts for each sample from the yeast spike-in\nspikein_sums <- colSums(yeast_counts)\n# Calculate size factors based on spike-in sums\n# A common approach is to use the median ratio method on spike-in counts\n# Or simply scale by total spike-in counts\nspikein_sf <- spikein_sums / exp(mean(log(spikein_sums)))\n\n# Create DESeqDataSet object\ndds <- DESeqDataSetFromMatrix(countData = primary_counts,\n                              colData = sample_metadata,\n                              design = ~ condition)\n\n# Assign custom size factors based on spike-in\nsizeFactors(dds) <- spikein_sf\n\n# Run DESeq2 analysis\ndds <- DESeq(dds)\n\n# Get results for the comparison of interest (e.g., HA_CutRun_dTAG_pos vs HA_CutRun_dTAG_neg)\nres <- results(dds, contrast=c(\"condition\", \"HA_CutRun_dTAG_pos\", \"HA_CutRun_dTAG_neg\"))\n\n# Order results by adjusted p-value\nres <- res[order(res$padj),]\n\n# Save results\nwrite.csv(as.data.frame(res), \"differential_peaks_deseq2.csv\")\n\n# Optional: Save normalized counts\nnorm_counts <- counts(dds, normalized=TRUE)\nwrite.csv(as.data.frame(norm_counts), \"normalized_peak_counts_deseq2.csv\")\n\n# Session info for reproducibility\nsessionInfo()\nEOF\n\n# Execute the R script\nRscript run_deseq2_spikein.R",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/s13059-014-0550-8"
+        },
+        {
+            "step_order": 8,
+            "description": "bigWig files were generated using deepTools and bedGraph files were generated using Homer.",
+            "tool_name": "HOMER",
+            "tool_version": "v4.11.1 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install HOMER (if not already installed)\n# git clone https://github.com/homer-tools/homer.git\n# cd homer\n# perl configureHomer.pl -install\n\n# Define input and output paths\nINPUT_BAM=\"input.bam\" # Replace with your actual input BAM file\nOUTPUT_TAG_DIR=\"homer_tags\"\nOUTPUT_BEDGRAPH=\"output.bedGraph\"\nFRAGMENT_SIZE=\"150\" # Adjust fragment size as appropriate for your assay (e.g., 150 for ChIP-seq, or estimated from cross-correlation analysis)\n\n# 1. Create a HOMER tag directory from the BAM file\n# This step processes the BAM file to create a directory of tag files, which HOMER uses for downstream analysis.\nmakeTagDirectory \"${OUTPUT_TAG_DIR}\" \"${INPUT_BAM}\"\n\n# 2. Generate bedGraph file from the tag directory\n# -o: Specify the output bedGraph file name\n# -fsize: Fragment size (e.g., 150bp for ChIP-seq). This parameter extends reads to the estimated fragment length.\n# -norm 1e7: Normalize read counts to 10 million total reads (a common practice for comparing samples).\n# -res 1: Set the resolution to 1bp, meaning each base pair will have a coverage value.\n# -tbp 1: Output tags per base pair.\n# -bedGraph: Specify that the output format should be bedGraph.\nmakeUCSCfile \"${OUTPUT_TAG_DIR}\" -o \"${OUTPUT_BEDGRAPH}\" -fsize \"${FRAGMENT_SIZE}\" -norm 1e7 -res 1 -tbp 1 -bedGraph",
+            "code_language": "bash",
+            "github_url": "http://homer.ucsd.edu/homer/index.html"
+        },
+        {
+            "step_order": 9,
+            "description": "For ChIP-seq:",
+            "tool_name": "ChIP-seq",
+            "tool_version": "v1.8.0",
+            "code_example": "# This script demonstrates how to run the ENCODE ChIP-seq pipeline locally using Cromwell.\n# Ensure Java (JRE 8 or higher) and Cromwell are installed and accessible.\n# Download Cromwell JAR from https://github.com/broadinstitute/cromwell/releases\n# Example: wget https://github.com/broadinstitute/cromwell/releases/download/85/cromwell-85.jar\n\n# 1. Clone the ENCODE ChIP-seq pipeline repository\n# git clone https://github.com/ENCODE-DCC/chip-seq-pipeline2.git\n# cd chip-seq-pipeline2\n# PIPELINE_DIR=$(pwd)\n\n# 2. Prepare input files and reference genome data\n# Replace these with your actual data paths and chosen reference genome (e.g., hg38, mm10).\n# For reference data, you can download pre-built ENCODE reference bundles or create your own.\n# As a placeholder, we use hg38. You would need to download the actual files.\n# Example for hg38 reference files (these are placeholders, actual download needed):\n# REF_GENOME_DIR=\"/path/to/your/reference_genome/hg38\"\n# mkdir -p $REF_GENOME_DIR\n# Download hg38.tsv, hg38.blacklist.bed.gz, hg38.chrom.sizes, hg38.fa, bowtie2_indexes/hg38.*, bwa_indexes/hg38.* \n# from ENCODE DCC or similar sources into $REF_GENOME_DIR.\n\n# Example input FASTQ files (replace with your actual data)\n# FASTQ_REP1_R1=\"/path/to/your/data/sample_rep1_R1.fastq.gz\"\n# FASTQ_REP1_R2=\"/path/to/your/data/sample_rep1_R2.fastq.gz\" # Use an empty array [] if single-end\n# FASTQ_CTL_REP1_R1=\"/path/to/your/data/control_rep1_R1.fastq.gz\"\n# FASTQ_CTL_REP1_R2=\"/path/to/your/data/control_rep1_R2.fastq.gz\" # Use an empty array [] if single-end\n\n# 3. Create an input JSON file for the WDL workflow\n# This is a minimal example. Adjust parameters based on your experiment (e.g., paired_end, pipeline_type, peak_caller).\n# Refer to the pipeline's documentation for all available parameters:\n# https://github.com/ENCODE-DCC/chip-seq-pipeline2/blob/master/chip.wdl\n# https://github.com/ENCODE-DCC/chip-seq-pipeline2/blob/master/docs/inputs.md\ncat << EOF > chip_inputs.json\n{\n  \"chip.genome_tsv\": \"${REF_GENOME_DIR}/hg38.tsv\",\n  \"chip.fastqs_rep1_R1\": [\"${FASTQ_REP1_R1}\"],\n  \"chip.fastqs_rep1_R2\": [\"${FASTQ_REP1_R2}\"],\n  \"chip.fastqs_ctl_rep1_R1\": [\"${FASTQ_CTL_REP1_R1}\"],\n  \"chip.fastqs_ctl_rep1_R2\": [\"${FASTQ_CTL_REP1_R2}\"],\n  \"chip.paired_end\": true,\n  \"chip.pipeline_type\": \"histone\", # or \"tf\" for transcription factor\n  \"chip.peak_caller\": \"macs2\", # or \"spp\"\n  \"chip.blacklist_bed\": \"${REF_GENOME_DIR}/hg38.blacklist.bed.gz\",\n  \"chip.chrsz\": \"${REF_GENOME_DIR}/hg38.chrom.sizes\",\n  \"chip.ref_fasta\": \"${REF_GENOME_DIR}/hg38.fa\",\n  \"chip.bowtie2_idx\": \"${REF_GENOME_DIR}/bowtie2_indexes/hg38\",\n  \"chip.bwa_idx\": \"${REF_GENOME_DIR}/bwa_indexes/hg38\",\n  \"chip.output_prefix\": \"my_chipseq_experiment\"\n}\nEOF\n\n# 4. Run the ChIP-seq pipeline using Cromwell\n# Replace /path/to/cromwell-*.jar with the actual path to your Cromwell JAR file.\n# Replace /path/to/chip-seq-pipeline2/chip.wdl with the actual path to the WDL file.\njava -jar /path/to/cromwell-*.jar run /path/to/chip-seq-pipeline2/chip.wdl -i chip_inputs.json",
+            "code_language": "bash",
+            "github_url": "https://github.com/ENCODE-DCC/chip-seq-pipeline2"
+        },
+        {
+            "step_order": 10,
+            "description": "Adaptor trimming with Trimmomatic-0.32.",
+            "tool_name": "Trimmomatic",
+            "tool_version": "0.32",
+            "code_example": "# Install Trimmomatic (if not already installed)\n# For example, using conda:\n# conda install -c bioconda trimmomatic\n\n# Define input and output file names (placeholders)\nINPUT_R1=\"sample_R1.fastq.gz\"\nINPUT_R2=\"sample_R2.fastq.gz\"\nOUTPUT_R1_PAIRED=\"sample_R1_trimmed_paired.fastq.gz\"\nOUTPUT_R1_UNPAIRED=\"sample_R1_trimmed_unpaired.fastq.gz\"\nOUTPUT_R2_PAIRED=\"sample_R2_trimmed_paired.fastq.gz\"\nOUTPUT_R2_UNPAIRED=\"sample_R2_trimmed_unpaired.fastq.gz\"\n\n# Define the path to Trimmomatic JAR and adaptor files\n# If installed via conda, you might find them like this:\n# TRIMMOMATIC_JAR=$(find \"$(conda env list | grep '*' | awk '{print $NF}')\" -name \"trimmomatic-*.jar\" | head -n 1)\n# ADAPTOR_FILE=\"$(dirname \"${TRIMMOMATIC_JAR}\")/adapters/TruSeq3-PE.fa\"\n# Or, manually specify if not using conda or if paths differ:\nTRIMMOMATIC_JAR=\"/path/to/trimmomatic-0.32.jar\" # Adjust this path to your Trimmomatic JAR file\nADAPTOR_FILE=\"/path/to/adapters/TruSeq3-PE.fa\" # Adjust this path to the appropriate adaptor file (e.g., TruSeq3-PE.fa, NexteraPE-PE.fa, etc.)\n\n# Execute Trimmomatic for paired-end adaptor trimming and quality filtering\n# Parameters:\n# PE: Paired-end mode\n# -phred33: Phred score encoding (common for Illumina data)\n# ILLUMINACLIP: Adaptor trimming (adaptor_file:seed_mismatches:palindrome_clip_threshold:simple_clip_threshold)\n#   - 2: Maximum mismatch count that will be tolerated when aligning the adapter to a read.\n#   - 30: Specifies the 'palindrome clip threshold'. A score of 30 is a good default.\n#   - 10: Specifies the 'simple clip threshold'. A score of 10 is a good default.\n# LEADING: Remove leading low quality bases (below quality 3)\n# TRAILING: Remove trailing low quality bases (below quality 3)\n# SLIDINGWINDOW: Scan with a 4-base window, cut if average quality below 15\n# MINLEN: Drop reads shorter than 36 bases\njava -jar \"${TRIMMOMATIC_JAR}\" PE \\\n    -phred33 \\\n    \"${INPUT_R1}\" \"${INPUT_R2}\" \\\n    \"${OUTPUT_R1_PAIRED}\" \"${OUTPUT_R1_UNPAIRED}\" \\\n    \"${OUTPUT_R2_PAIRED}\" \"${OUTPUT_R2_UNPAIRED}\" \\\n    ILLUMINACLIP:\"${ADAPTOR_FILE}\":2:30:10 \\\n    LEADING:3 \\\n    TRAILING:3 \\\n    SLIDINGWINDOW:4:15 \\\n    MINLEN:36",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 11,
+            "description": "Alignment to hg19+dm3 genome with bowtie2.",
+            "tool_name": "Bowtie2",
+            "tool_version": "2.3.4.3",
+            "code_example": "# Install Bowtie2 and Samtools if not already installed\n# conda install -c bioconda bowtie2 samtools\n\n# Define variables (replace with actual paths and filenames)\nREAD1=\"input_R1.fastq.gz\"\nREAD2=\"input_R2.fastq.gz\"\nOUTPUT_BAM=\"aligned_to_hg19_dm3.bam\"\nBOWTIE2_INDEX_PREFIX=\"/path/to/your/hg19_dm3_index/hg19_dm3\" # This prefix points to the Bowtie2 index files (e.g., hg19_dm3.1.bt2, hg19_dm3.2.bt2, etc.)\nNUM_THREADS=8 # Adjust based on available CPU cores\n\n# Perform alignment with Bowtie2 using parameters common for eCLIP (very-sensitive-local)\n# and pipe the SAM output to Samtools for conversion to BAM format.\nbowtie2 \\\n  --very-sensitive-local \\\n  -p ${NUM_THREADS} \\\n  -x ${BOWTIE2_INDEX_PREFIX} \\\n  -1 ${READ1} \\\n  -2 ${READ2} \\\n  | samtools view -bS - \\\n  > ${OUTPUT_BAM}\n\n# Optional: Sort and index the resulting BAM file\n# samtools sort -o ${OUTPUT_BAM%.bam}.sorted.bam ${OUTPUT_BAM}\n# samtools index ${OUTPUT_BAM%.bam}.sorted.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie2"
+        },
+        {
+            "step_order": 12,
+            "description": "High quality reads (F4q10) were filtered using samtools.",
+            "tool_name": "samtools",
+            "tool_version": "1.19",
+            "code_example": "# Install samtools (if not already installed)\n# conda install -c bioconda samtools\n\n# Filter high quality reads (F4q10) using samtools view\n# -F 4: Exclude reads where the 0x4 flag is set (i.e., exclude unmapped reads)\n# -q 10: Include only reads with a mapping quality of 10 or higher\n# -b: Output in BAM format\nsamtools view -F 4 -q 10 -b input.bam > filtered.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 13,
+            "description": "Normalized bigWig files were generated with deepTools.",
+            "tool_name": "deepTools",
+            "tool_version": "3.5.1 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install deepTools (if not already installed)\n# conda create -n deeptools_env deeptools=3.5.1\n# conda activate deeptools_env\n\n# Placeholder variables\nINPUT_BAM=\"sample.bam\"\nOUTPUT_BIGWIG=\"sample_normalized.bw\"\nBIN_SIZE=10 # Bin size in base pairs\nNUMBER_OF_PROCESSORS=\"auto\" # Use all available processors\n\n# Generate normalized bigWig file using CPM (Counts Per Million mapped reads) normalization\nbamCoverage \\\n    --bam \"${INPUT_BAM}\" \\\n    --outFileName \"${OUTPUT_BIGWIG}\" \\\n    --normalizeUsing CPM \\\n    --binSize \"${BIN_SIZE}\" \\\n    --numberOfProcessors \"${NUMBER_OF_PROCESSORS}\" \\\n    --verbose",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Library strategy: Cut&Run\nFor Cut&Run:\nAdaptor trimming with Trimmomatic-0.32.\nAlignment to hg19+scer genome with bowtie2.\nHigh quality reads (F4q10) were filtered using samtools.\nPeaks called with MACS2 (narrowPeak, q=0.001).\nFor HA Cut&Run +/-dTAG, differential peaks were identified by Diffbind/DESeq2 using yeast spike-in for normalization.\nbigWig files were generated using deepTools and bedGraph files were generated using Homer.\nFor ChIP-seq:\nAdaptor trimming with Trimmomatic-0.32.\nAlignment to hg19+dm3 genome with bowtie2.\nHigh quality reads (F4q10) were filtered using samtools.\nNormalized bigWig files were generated with deepTools.\nGenome_build: hg19 (GRCh37)\nSupplementary_files_format_and_content: bigWig, bedGraph files\nSupplementary_files_format_and_content: 042420_HA_AE_Diffbind-peakinfo_q0.001.csv: Diffbind peak info\nSupplementary_files_format_and_content: 042420_HA-AE_cutandrun_diffbind-deseq2_q0.001.csv: Differential peak DESeq2\nSupplementary_files_format_and_content: New_ZnF_q0.001_peaks.txt: MACS2 peaks\nSupplementary_files_format_and_content: CD34_HA_merged_noNeg_nomodel_extsize300_q0.001_peaks.txt: MACS2 peaks",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

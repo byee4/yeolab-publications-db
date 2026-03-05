@@ -1,88 +1,88 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Base calling was performed with CASAVA 1.8.2",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Sequences were trimmed then aligned to the mm9 mouse genome using TOPHAT",
-      "tool_name": "TopHat",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Probabilities of isoform abundances were computed using MISO",
-      "tool_name": "MISO",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Data was filtered based on a Bayes factor of at least 1",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Additional details are included in Verma, S.K., Deshmukh, V., Liu, P., Nutter, C.A., Espejo, R., Hung, M.L., Wang, G.S., Yeo, G.W., and Kuyumcu-Martinez, M.N. (2013).",
-      "tool_name": "R",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Reactivation of fetal splicing programs in diabetic hearts is mediated by protein kinase C signaling.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "r",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "The Journal of biological chemistry 288, 35372-35386.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "processed data files format and content: Proccessed data is MISO analysis of skipped exons in comparisions between control and diabetic samples.",
-      "tool_name": "MISO",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "The proccessed data format is tab deliniated .txt files.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Base calling was performed with CASAVA 1.8.2\nSequences were trimmed then aligned to the mm9 mouse genome using TOPHAT\nProbabilities of isoform abundances were computed using MISO\nData was filtered based on a Bayes factor of at least 1\nAdditional details are included in Verma, S.K., Deshmukh, V., Liu, P., Nutter, C.A., Espejo, R., Hung, M.L., Wang, G.S., Yeo, G.W., and Kuyumcu-Martinez, M.N. (2013). Reactivation of fetal splicing programs in diabetic hearts is mediated by protein kinase C signaling. The Journal of biological chemistry 288, 35372-35386.\ngenome build: mm9\nprocessed data files format and content: Proccessed data is MISO analysis of skipped exons in comparisions between control and diabetic samples. The proccessed data format is tab deliniated .txt files.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Base calling was performed with CASAVA 1.8.2",
+            "tool_name": "CASAVA",
+            "tool_version": "1.8.2",
+            "code_example": "# Install CASAVA 1.8.2 (typically part of Illumina's instrument software)\n# This is a conceptual command for base calling and demultiplexing with CASAVA 1.8.2.\n# Replace /path/to/illumina/run_directory with the actual path to your Illumina run folder.\n# Replace /path/to/output_directory with the desired output location for FASTQ files.\n# Replace /path/to/SampleSheet.csv with the actual path to your sample sheet.\n\n# Step 1: Configure the base calling and demultiplexing\n# This command generates a Makefile in the output directory.\nconfigureBclToFastq.pl --input-dir /path/to/illumina/run_directory/Data/Intensities/BaseCalls \\\n                           --output-dir /path/to/output_directory \\\n                           --sample-sheet /path/to/SampleSheet.csv \\\n                           --no-eamss # Optional: disable EAMSS (Error-Aware Multi-Sample Splitting)\n\n# Step 2: Execute the base calling and demultiplexing using the generated Makefile\n# Navigate to the output directory where the Makefile was created\n# cd /path/to/output_directory\nmake -j 8 # Use an appropriate number of parallel jobs (e.g., number of CPU cores)",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Sequences were trimmed then aligned to the mm9 mouse genome using TOPHAT",
+            "tool_name": "TopHat",
+            "tool_version": "2.1.1 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install TopHat (example using Conda)\n# TopHat requires Bowtie2 and Samtools as dependencies.\n# conda install -c bioconda tophat bowtie2 samtools\n\n# --- Prepare Reference Genome and Annotation ---\n# 1. Download the mm9 reference genome FASTA file (e.g., from UCSC).\n#    Example: wget -P /path/to/genome/ http://hgdownload.soe.ucsc.edu/goldenPath/mm9/bigZips/mm9.fa.gz\n#    gunzip /path/to/genome/mm9.fa.gz\n\n# 2. Build the Bowtie2 index for mm9.\n#    bowtie2-build /path/to/genome/mm9.fa /path/to/bowtie_indexes/mm9\n\n# 3. Download a GTF annotation file for mm9 (e.g., from UCSC or Ensembl).\n#    Example: wget -P /path/to/annotations/ http://hgdownload.soe.ucsc.edu/goldenPath/mm9/bigZips/genes/mm9.ncbiRefSeq.gtf.gz\n#    gunzip /path/to/annotations/mm9.ncbiRefSeq.gtf.gz\n\n# --- Define Variables ---\n# Replace with actual paths to your files\nBOWTIE_INDEX=\"/path/to/bowtie_indexes/mm9\" # Path to the Bowtie2 index prefix for mm9\nGTF_FILE=\"/path/to/annotations/mm9.gtf\"   # Path to the mm9 GTF annotation file\nTRIMMED_READS_R1=\"trimmed_reads_R1.fastq\" # Path to the trimmed forward reads (FASTQ)\nTRIMMED_READS_R2=\"trimmed_reads_R2.fastq\" # Path to the trimmed reverse reads (FASTQ) - omit if single-end\nOUTPUT_DIR=\"tophat_alignment_mm9\"         # Directory for TopHat output\nNUM_THREADS=8                              # Number of CPU threads to use\n\n# --- Run TopHat Alignment ---\n# -p: Number of threads\n# -G: GTF annotation file (essential for splice junction discovery in RNA-seq)\n# -o: Output directory\n# The Bowtie2 index prefix and input FASTQ files are positional arguments.\n# For paired-end reads, provide both R1 and R2 files.\n# For single-end reads, provide only the R1 file.\ntophat -p \"${NUM_THREADS}\" -G \"${GTF_FILE}\" -o \"${OUTPUT_DIR}\" \"${BOWTIE_INDEX}\" \"${TRIMMED_READS_R1}\" \"${TRIMMED_READS_R2}\"\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/infphilo/tophat"
+        },
+        {
+            "step_order": 3,
+            "description": "Probabilities of isoform abundances were computed using MISO",
+            "tool_name": "MISO",
+            "tool_version": "0.5.3 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install MISO (if not already installed)\n# conda install -c bioconda miso\n\n# Placeholder for MISO events index directory (e.g., pre-built for a specific genome like hg38)\n# This directory contains the indexed alternative splicing events (e.g., from UCSC knownGene, Ensembl)\n# Example: MISO_EVENTS_INDEX_DIR=\"/path/to/miso_events/hg38_v2\"\nMISO_EVENTS_INDEX_DIR=\"/path/to/miso_events_index\"\n\n# Placeholder for input RNA-Seq alignment file (BAM format)\nINPUT_BAM=\"sample_aligned.bam\"\n\n# Placeholder for output directory where MISO results will be stored\nOUTPUT_DIR=\"miso_output\"\n\n# Create the output directory if it does not exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run MISO to compute probabilities of isoform abundances\n# This command will generate various output files, including posterior distributions\n# and summary statistics for isoform usage, from which probabilities can be derived.\nmiso --run \"${MISO_EVENTS_INDEX_DIR}\" \"${INPUT_BAM}\" --output-dir \"${OUTPUT_DIR}\"\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "Data was filtered based on a Bayes factor of at least 1",
+            "tool_name": "awk (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# Assuming 'input.tsv' is a tab-separated file where the Bayes factor is in the 5th column.\n# Adjust the column number ($5) and delimiter (-F'\\t') as per your input file format.\n# If your file has a header and you want to preserve it, use:\n# (head -n 1 input.tsv && awk -F'\\t' 'NR > 1 && $5 >= 1' input.tsv) > filtered_output.tsv\nawk -F'\\t' '$5 >= 1' input.tsv > filtered_output.tsv",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 5,
+            "description": "Additional details are included in Verma, S.K., Deshmukh, V., Liu, P., Nutter, C.A., Espejo, R., Hung, M.L., Wang, G.S., Yeo, G.W., and Kuyumcu-Martinez, M.N. (2013).",
+            "tool_name": "R",
+            "tool_version": "3.x",
+            "code_example": "# Install R (if not already available)\n# conda install -c r r-base\n\n# This is a placeholder command as the specific R script and parameters\n# are not detailed in the description, which only references a publication.\n# The publication describes a novel role for RBM3 in translation regulation,\n# which would likely involve various bioinformatics analyses in R.\n# Replace 'my_analysis_script.R', 'input_data.txt', and 'output_results.txt'\n# with actual script and file names relevant to the specific analysis.\nRscript my_analysis_script.R input_data.txt output_results.txt",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 6,
+            "description": "Reactivation of fetal splicing programs in diabetic hearts is mediated by protein kinase C signaling.",
+            "tool_name": "rMATS (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "4.1.2",
+            "code_example": "# Install rMATS (example using conda)\n# conda create -n rmats_env python=3.8\n# conda activate rmats_env\n# pip install rmats-turbo\n\n# Define input files and reference\n# Placeholder for human genome (GRCh38) and GENCODE annotation\nGENOME_FASTA=\"/path/to/human_genome/GRCh38.p14.genome.fa\"\nGTF_ANNOTATION=\"/path/to/human_genome/gencode.v44.annotation.gtf\"\n\n# Files listing paths to BAM files for each group\n# In a real scenario, these files would be populated with actual paths to aligned RNA-seq BAMs.\nBAM_LIST_DIABETIC=\"diabetic_bams.txt\"\nBAM_LIST_CONTROL=\"control_bams.txt\"\nOUTPUT_DIR=\"rmats_output_diabetic_vs_control\"\n\n# Create placeholder BAM list files for demonstration\necho \"/path/to/aligned_reads/diabetic_sample1.bam\" > $BAM_LIST_DIABETIC\necho \"/path/to/aligned_reads/diabetic_sample2.bam\" >> $BAM_LIST_DIABETIC\necho \"/path/to/aligned_reads/control_sample1.bam\" > $BAM_LIST_CONTROL\necho \"/path/to/aligned_reads/control_sample2.bam\" >> $BAM_LIST_CONTROL\n\n# Run rMATS for differential splicing analysis\n# This command compares splicing events between diabetic and control heart samples.\n# Parameters like readLength and libType should be adjusted based on actual experimental data.\nrmats.py --b1 $BAM_LIST_DIABETIC \\\n         --b2 $BAM_LIST_CONTROL \\\n         --gtf $GTF_ANNOTATION \\\n         --readLength 100 \\\n         --nthread 8 \\\n         --tmp rmats_tmp \\\n         --od $OUTPUT_DIR \\\n         --task diff \\\n         --libType fr-firststrand\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/Xinglab/rmats-turbo"
+        },
+        {
+            "step_order": 7,
+            "description": "The Journal of biological chemistry 288, 35372-35386.",
+            "tool_name": "Unknown (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Unknown",
+            "code_example": "# No specific bioinformatics tool or command could be inferred from the provided publication reference.\n# The description refers to a scientific publication, not a bioinformatics step or tool.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 8,
+            "description": "processed data files format and content: Proccessed data is MISO analysis of skipped exons in comparisions between control and diabetic samples.",
+            "tool_name": "MISO",
+            "tool_version": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install MISO (if not already installed)\n# pip install miso\n\n# Define variables\n# MISO annotations for skipped exons (e.g., derived from a GFF3 file for a specific genome assembly like hg38).\n# This file needs to be pre-built using the 'index_gff' script from MISO.\nMISO_ANNOTATIONS=\"path/to/miso_annotations_se.gff3\"\n\n# Input BAM files directories for control and diabetic samples.\n# These directories should contain the aligned RNA-Seq BAM files for each group.\nCONTROL_BAM_DIR=\"path/to/control_bams\"\nDIABETIC_BAM_DIR=\"path/to/diabetic_bams\"\n\n# Output directories for MISO quantification results for each sample group\nOUTPUT_DIR_CONTROL_QUANT=\"miso_quant_control\"\nOUTPUT_DIR_DIABETIC_QUANT=\"miso_quant_diabetic\"\n\n# Output directory for the MISO comparison results\nOUTPUT_DIR_COMPARISON=\"miso_comparison_output\"\n\n# Create output directories if they don't exist\nmkdir -p \"${OUTPUT_DIR_CONTROL_QUANT}\"\nmkdir -p \"${OUTPUT_DIR_DIABETIC_QUANT}\"\nmkdir -p \"${OUTPUT_DIR_COMPARISON}\"\n\n# --- MISO Quantification for Control Samples ---\n# Iterate through control BAM files and run MISO for each sample to quantify isoform usage (PSI values).\nfor bam_file in \"${CONTROL_BAM_DIR}\"/*.bam; do\n    sample_name=$(basename \"${bam_file}\" .bam)\n    echo \"Running MISO quantification for control sample: ${sample_name}\"\n    # The --read-len parameter should match the actual read length of your RNA-Seq data.\n    # Adjust other parameters like --num-reads-per-group if needed.\n    miso --run \"${MISO_ANNOTATIONS}\" \"${bam_file}\" --output-dir \"${OUTPUT_DIR_CONTROL_QUANT}/${sample_name}\" --read-len 50\ndone\n\n# --- MISO Quantification for Diabetic Samples ---\n# Iterate through diabetic BAM files and run MISO for each sample.\nfor bam_file in \"${DIABETIC_BAM_DIR}\"/*.bam; do\n    sample_name=$(basename \"${bam_file}\" .bam)\n    echo \"Running MISO quantification for diabetic sample: ${sample_name}\"\n    # The --read-len parameter should match the actual read length of your RNA-Seq data.\n    miso --run \"${MISO_ANNOTATIONS}\" \"${bam_file}\" --output-dir \"${OUTPUT_DIR_DIABETIC_QUANT}/${sample_name}\" --read-len 50\ndone\n\n# --- MISO Comparison between Control and Diabetic Samples ---\n# This step compares the MISO output directories from the two groups\n# to identify differential splicing events (e.g., changes in skipped exon usage).\n# It computes Bayes factors and delta PSI values.\necho \"Running MISO comparison between control and diabetic samples\"\ncompare_miso \"${OUTPUT_DIR_CONTROL_QUANT}\" \"${OUTPUT_DIR_DIABETIC_QUANT}\" \"${OUTPUT_DIR_COMPARISON}\"\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 9,
+            "description": "The proccessed data format is tab deliniated .txt files.",
+            "tool_name": "N/A (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# The step description \"The proccessed data format is tab deliniated .txt files\" describes the expected output format of a previous processing step, rather than a processing step itself.\n# As no specific tool, process, or parameters are mentioned, a concrete bash command for a bioinformatics tool cannot be generated.\n# This description typically serves as metadata for the output of a preceding step (e.g., peak calling, quantification, differential expression results).\n#\n# Example of how one might inspect such a file (not a processing command):\n# head -n 5 processed_data.txt\n# # To check the number of columns (assuming tab-delimited):\n# # head -n 1 processed_data.txt | awk -F'\\t' '{print NF}'\n",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Base calling was performed with CASAVA 1.8.2\nSequences were trimmed then aligned to the mm9 mouse genome using TOPHAT\nProbabilities of isoform abundances were computed using MISO\nData was filtered based on a Bayes factor of at least 1\nAdditional details are included in Verma, S.K., Deshmukh, V., Liu, P., Nutter, C.A., Espejo, R., Hung, M.L., Wang, G.S., Yeo, G.W., and Kuyumcu-Martinez, M.N. (2013). Reactivation of fetal splicing programs in diabetic hearts is mediated by protein kinase C signaling. The Journal of biological chemistry 288, 35372-35386.\ngenome build: mm9\nprocessed data files format and content: Proccessed data is MISO analysis of skipped exons in comparisions between control and diabetic samples. The proccessed data format is tab deliniated .txt files.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "RNA-Seq Read Alignment: TopHat 2.0 with default options using UCSC known genes from hg19 or mm9 as reference transcriptome",
-      "tool_name": "TopHat",
-      "tool_version": "2.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "RNA-Seq Differential Expression: Cuffdiff 2.1 with default options using UCSC known genes from hg19 or mm9 as reference transcriptome",
-      "tool_name": "Cufflinks",
-      "tool_version": "2.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "ChIP-Seq Read Alignment: Bowtie 2.0 with default options using hg19 or mm9 as reference genome",
-      "tool_name": "Bowtie",
-      "tool_version": "2.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "ChIP-Seq general peak calling: Scripture using hg19 or mm9 as reference genome",
-      "tool_name": "ChIP-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "ChIP-Seq significant peak calling: Cuffdiff 2.0 using Scripture output as peak reference",
-      "tool_name": "Cufflinks",
-      "tool_version": "2.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "RNA-Seq Read Alignment: TopHat 2.0 with default options using UCSC known genes from hg19 or mm9 as reference transcriptome\nRNA-Seq Differential Expression: Cuffdiff 2.1 with default options using UCSC known genes from hg19 or mm9 as reference transcriptome\nChIP-Seq Read Alignment: Bowtie 2.0 with default options using hg19 or mm9 as reference genome\nChIP-Seq general peak calling: Scripture using hg19 or mm9 as reference genome\nChIP-Seq significant peak calling: Cuffdiff 2.0 using Scripture output as peak reference\nGenome_build: hg19 / mm9\nSupplementary_files_format_and_content: TXT files are expression matrices with FPKM values for each sample / BED files are p53 ChIP-Seq peak coordinates",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "RNA-Seq Read Alignment: TopHat 2.0 with default options using UCSC known genes from hg19 or mm9 as reference transcriptome",
+            "tool_name": "TopHat",
+            "tool_version": "2.0",
+            "code_example": "# Install TopHat 2.0 (and Bowtie2, which TopHat depends on)\n# conda install -c bioconda tophat=2.0 bowtie2\n\n# --- Reference Preparation (hg19 example) ---\n# Create a directory for reference files\n# mkdir -p references/hg19\n# cd references/hg19\n\n# Download hg19 genome FASTA\n# wget http://hgdownload.cse.ucsc.edu/goldenPath/hg19/bigZips/hg19.fa.gz\n# gunzip hg19.fa.gz\n\n# Build Bowtie2 index for hg19 genome\n# bowtie2-build hg19.fa hg19_index\n\n# Download a GTF file representing UCSC known genes for hg19.\n# Gencode v19 is a comprehensive annotation for hg19 and often used as a proxy for \"known genes\".\n# wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19/gencode.v19.annotation.gtf.gz\n# gunzip gencode.v19.annotation.gtf.gz\n# mv gencode.v19.annotation.gtf genes.gtf\n# cd ../../ # Go back to the main working directory\n\n# --- RNA-Seq Read Alignment with TopHat 2.0 ---\n# Define variables\nGENOME_INDEX=\"references/hg19/hg19_index\" # Path to the Bowtie2 index for hg19\nGTF_FILE=\"references/hg19/genes.gtf\"     # Path to the GTF file (e.g., Gencode v19 for hg19 known genes)\nREADS_R1=\"input_reads_R1.fastq.gz\"        # Placeholder for input forward reads\nREADS_R2=\"input_reads_R2.fastq.gz\"        # Placeholder for input reverse reads (remove if single-end)\nOUTPUT_DIR=\"tophat_alignment_output\"      # Output directory for TopHat results\n\n# Execute TopHat 2.0 with default options and specified GTF\n# TopHat 2.0 uses 'tophat2' command.\ntophat2 -o \"${OUTPUT_DIR}\" \\\n        --GTF \"${GTF_FILE}\" \\\n        \"${GENOME_INDEX}\" \\\n        \"${READS_R1}\" \"${READS_R2}\"",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/gb-2013-14-4-r36"
+        },
+        {
+            "step_order": 2,
+            "description": "RNA-Seq Differential Expression: Cuffdiff 2.1 with default options using UCSC known genes from hg19 or mm9 as reference transcriptome",
+            "tool_name": "Cufflinks",
+            "tool_version": "2.1",
+            "code_example": "# Install Cufflinks (which includes Cuffdiff)\n# conda install -c bioconda cufflinks=2.1\n\n# Placeholder for reference transcriptome (UCSC known genes from hg19 or mm9)\n# This GTF file would contain the gene and transcript annotations.\n# You would typically download this from UCSC's Table Browser or a similar resource.\n# For example, a GTF derived from UCSC known genes for hg19:\nREFERENCE_GTF=\"hg19_UCSC_known_genes.gtf\" # Or mm9_UCSC_known_genes.gtf\n\n# Placeholder for input BAM files (aligned RNA-Seq reads for different conditions/replicates)\n# Replace with your actual BAM files. Cuffdiff expects comma-separated BAMs for replicates within a condition.\nCONDITION_A_REPS=\"conditionA_rep1.bam,conditionA_rep2.bam\"\nCONDITION_B_REPS=\"conditionB_rep1.bam,conditionB_rep2.bam\"\n\n# Output directory for Cuffdiff results\nOUTPUT_DIR=\"cuffdiff_results\"\n\n# Run Cuffdiff with default options\n# The command requires the reference GTF, followed by comma-separated BAM files for each condition.\ncuffdiff -o \"${OUTPUT_DIR}\" \"${REFERENCE_GTF}\" \"${CONDITION_A_REPS}\" \"${CONDITION_B_REPS}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/cole-trapnell-lab/cufflinks"
+        },
+        {
+            "step_order": 3,
+            "description": "ChIP-Seq Read Alignment: Bowtie 2.0 with default options using hg19 or mm9 as reference genome",
+            "tool_name": "Bowtie",
+            "tool_version": "2.0",
+            "code_example": "# Install Bowtie 2 (if not already installed)\n# conda install -c bioconda bowtie2\n\n# Define variables\n# REFERENCE_INDEX: Path to the Bowtie2 index prefix (e.g., /path/to/bowtie2_indexes/hg19/hg19)\n# Pre-built indices for hg19 and mm9 can be downloaded from sources like the Bowtie 2 website (http://bowtie-bio.sourceforge.net/bowtie2/index.shtml)\n# or UCSC Genome Browser (e.g., for hg19: http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.fa.gz, then build index with bowtie2-build)\nREFERENCE_INDEX=\"/path/to/bowtie2_indexes/hg19/hg19\" # Example for hg19. Replace with mm9 for mouse.\nREADS_R1=\"sample_R1.fastq.gz\" # Replace with your actual R1 FASTQ file\nREADS_R2=\"sample_R2.fastq.gz\" # Replace with your actual R2 FASTQ file (remove if single-end)\nOUTPUT_SAM=\"sample_aligned.sam\"\n\n# Perform paired-end alignment with Bowtie 2 using default options\n# -x: reference index basename\n# -1: reads file 1\n# -2: reads file 2\n# -S: output SAM file\n# Default options for Bowtie 2 are generally suitable for ChIP-Seq.\n# For single-end reads, use -U instead of -1 and -2: bowtie2 -x \"${REFERENCE_INDEX}\" -U \"${READS_R1}\" -S \"${OUTPUT_SAM}\"\nbowtie2 -x \"${REFERENCE_INDEX}\" -1 \"${READS_R1}\" -2 \"${READS_R2}\" -S \"${OUTPUT_SAM}\"\n\n# Common post-alignment steps (e.g., convert SAM to BAM, sort, and index)\n# OUTPUT_BAM=\"sample_aligned.bam\"\n# OUTPUT_SORTED_BAM=\"sample_aligned.sorted.bam\"\n# samtools view -bS \"${OUTPUT_SAM}\" > \"${OUTPUT_BAM}\"\n# samtools sort \"${OUTPUT_BAM}\" -o \"${OUTPUT_SORTED_BAM}\"\n# samtools index \"${OUTPUT_SORTED_BAM}\"",
+            "code_language": "bash",
+            "github_url": "http://bowtie-bio.sourceforge.net/bowtie2/index.shtml"
+        },
+        {
+            "step_order": 4,
+            "description": "ChIP-Seq general peak calling: Scripture using hg19 or mm9 as reference genome",
+            "tool_name": "ChIP-seq",
+            "tool_version": "1.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Scripture (requires Java)\n# Download Scripture from the Broad Institute website (e.g., https://www.broadinstitute.org/cancer/cga/scripture_download)\n# Ensure Java is installed and in your PATH\n# For example, if you downloaded scripture.jar to your current directory:\n\n# Define variables for input files, genome, and output\nCHIP_BAM=\"chip_sample.bam\" # Aligned ChIP-seq reads (BAM format)\nCONTROL_BAM=\"control_sample.bam\" # Aligned control/input reads (BAM format)\nGENOME_FASTA=\"/path/to/reference/hg19.fa\" # Reference genome FASTA (hg19 or mm9)\nGENOME_SIZE_FILE=\"/path/to/reference/hg19.chrom.sizes\" # Chromosome sizes file (e.g., from UCSC)\nOUTPUT_DIR=\"scripture_output\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run Scripture for peak calling\n# Note: Scripture requires specific input formats (e.g., .bed or .wig for reads, .fasta for genome, .chrom.sizes for genome sizes).\n# If your input is BAM, you might need to convert it to BED or WIG first.\n# Example conversion from BAM to BED (adjust for paired-end if necessary):\n# samtools view -b -F 0x04 \"${CHIP_BAM}\" | bedtools bamtobed -i - > \"${OUTPUT_DIR}/chip_sample.bed\"\n# samtools view -b -F 0x04 \"${CONTROL_BAM}\" | bedtools bamtobed -i - > \"${OUTPUT_DIR}/control_sample.bed\"\n\n# Assuming input BED files are available:\nCHIP_BED=\"${OUTPUT_DIR}/chip_sample.bed\"\nCONTROL_BED=\"${OUTPUT_DIR}/control_sample.bed\"\n\n# Example command for Scripture (parameters may need adjustment based on specific data and desired sensitivity/specificity)\n# This is a general example, actual parameters might vary.\n# -r: ChIP-seq read file (BED format)\n# -c: Control read file (BED format)\n# -g: Reference genome FASTA file\n# -s: Genome sizes file\n# -o: Output directory\n# -p: P-value threshold (e.g., 0.05)\n# -f: FDR threshold (e.g., 0.05)\n# -w: Window size (e.g., 100 bp)\n# -e: Extension size (e.g., 150 bp for typical fragment length)\n\njava -Xmx4g -jar scripture.jar \\\n  -r \"${CHIP_BED}\" \\\n  -c \"${CONTROL_BED}\" \\\n  -g \"${GENOME_FASTA}\" \\\n  -s \"${GENOME_SIZE_FILE}\" \\\n  -o \"${OUTPUT_DIR}\" \\\n  -p 0.05 \\\n  -f 0.05 \\\n  -w 100 \\\n  -e 150\n\necho \"Scripture peak calling completed. Results are in ${OUTPUT_DIR}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 5,
+            "description": "ChIP-Seq significant peak calling: Cuffdiff 2.0 using Scripture output as peak reference",
+            "tool_name": "Cufflinks",
+            "tool_version": "2.0",
+            "code_example": "# Install Cufflinks suite (includes Cuffdiff)\n# conda install -c bioconda cufflinks=2.0\n\n# Placeholder for Scripture output converted to GTF format.\n# Scripture typically outputs BED files of transcribed regions.\n# Cuffdiff requires a GTF file of transcripts for quantification.\n# This step assumes a conversion from Scripture BED to GTF has been performed.\n# Replace 'scripture_output.gtf' with the actual path to your converted Scripture output.\nSCRIPTURE_GTF=\"scripture_output.gtf\"\n\n# Placeholder for ChIP-Seq alignment BAM files for two conditions/samples.\n# Replace with actual paths to your aligned ChIP-Seq data for each replicate.\nCHIP_BAM_SAMPLE1_REP1=\"chip_sample1_conditionA_replicate1.bam\"\nCHIP_BAM_SAMPLE1_REP2=\"chip_sample1_conditionA_replicate2.bam\"\nCHIP_BAM_SAMPLE2_REP1=\"chip_sample2_conditionB_replicate1.bam\"\nCHIP_BAM_SAMPLE2_REP2=\"chip_sample2_conditionB_replicate2.bam\"\n\n# Output directory for Cuffdiff results\nOUTPUT_DIR=\"cuffdiff_chipseq_results\"\n\n# Run Cuffdiff for differential expression analysis.\n# Note: Cuffdiff is primarily designed for RNA-Seq differential expression analysis,\n# not direct ChIP-Seq peak calling. Its application here for \"ChIP-Seq significant peak calling\"\n# using \"Scripture output as peak reference\" is highly unconventional.\n# This command will perform differential quantification of features\n# defined in the SCRIPTURE_GTF across the provided ChIP-Seq BAM files,\n# treating them as expression data. The output will be differential abundance\n# of these features, not traditional ChIP-Seq peaks.\ncuffdiff \\\n    -o \"${OUTPUT_DIR}\" \\\n    -L \"ConditionA,ConditionB\" \\\n    \"${SCRIPTURE_GTF}\" \\\n    \"${CHIP_BAM_SAMPLE1_REP1},${CHIP_BAM_SAMPLE1_REP2}\" \\\n    \"${CHIP_BAM_SAMPLE2_REP1},${CHIP_BAM_SAMPLE2_REP2}\"\n",
+            "code_language": "bash",
+            "github_url": "https://www.nature.com/articles/nprot.2012.041"
+        }
+    ],
+    "raw_text": "RNA-Seq Read Alignment: TopHat 2.0 with default options using UCSC known genes from hg19 or mm9 as reference transcriptome\nRNA-Seq Differential Expression: Cuffdiff 2.1 with default options using UCSC known genes from hg19 or mm9 as reference transcriptome\nChIP-Seq Read Alignment: Bowtie 2.0 with default options using hg19 or mm9 as reference genome\nChIP-Seq general peak calling: Scripture using hg19 or mm9 as reference genome\nChIP-Seq significant peak calling: Cuffdiff 2.0 using Scripture output as peak reference\nGenome_build: hg19 / mm9\nSupplementary_files_format_and_content: TXT files are expression matrices with FPKM values for each sample / BED files are p53 ChIP-Seq peak coordinates",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }
