@@ -1,16 +1,16 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "C. elegans GeneChip arrays were analyzed by using affymetrix power tools (command line arguments apt-probeset-summarize -a rma-sketch -a plier-mm-sketch -d Celegans.CDF)",
-      "tool_name": "Microarray",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "C. elegans GeneChip arrays were analyzed by using affymetrix power tools (command line arguments apt-probeset-summarize -a rma-sketch -a plier-mm-sketch -d Celegans.CDF)",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "C. elegans GeneChip arrays were analyzed by using affymetrix power tools (command line arguments apt-probeset-summarize -a rma-sketch -a plier-mm-sketch -d Celegans.CDF)",
+            "tool_name": "Microarray",
+            "tool_version": "Not specified",
+            "code_example": "# Install Affymetrix Power Tools (APT) if not already installed.\n# APT is proprietary software from Thermo Fisher Scientific (formerly Affymetrix).\n# Installation typically involves downloading from their official website and following their instructions.\n# For example, on Linux, it might involve a package manager or direct download and installation.\n# There isn't a simple 'conda install affymetrix-power-tools' command that works for the full suite.\n# Ensure the Celegans.CDF file is available in the current directory or specified path.\n# This file defines the probe sets for the C. elegans GeneChip array and is typically obtained from Affymetrix/Thermo Fisher Scientific.\n\n# Run apt-probeset-summarize with RMA-sketch and PLIER-MM-sketch algorithms\napt-probeset-summarize -a rma-sketch -a plier-mm-sketch -d Celegans.CDF",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "C. elegans GeneChip arrays were analyzed by using affymetrix power tools (command line arguments apt-probeset-summarize -a rma-sketch -a plier-mm-sketch -d Celegans.CDF)",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

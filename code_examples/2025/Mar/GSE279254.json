@@ -1,16 +1,16 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "cellranger was used to process the raw sequencing files to generate count matrices per cell",
-      "tool_name": "Cell Ranger",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "cellranger was used to process the raw sequencing files to generate count matrices per cell\nAssembly: mm10\nSupplementary files format and content: \"h5ad\" file containing combined total nuclei profiled from all mice and regions of the gastrointestinal tract",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "cellranger was used to process the raw sequencing files to generate count matrices per cell",
+            "tool_name": "Cell Ranger",
+            "tool_version": "Not specified",
+            "code_example": "# Install Cell Ranger (example for version 7.1.0)\n# wget https://cf.10xgenomics.com/releases/cell-ranger/cellranger-7.1.0.tar.gz\n# tar -xzf cellranger-7.1.0.tar.gz\n# export PATH=/path/to/cellranger-7.1.0:$PATH\n\n# Example: Download a human transcriptome reference (e.g., GRCh38-2020-A)\n# mkdir -p /path/to/references\n# wget -O /path/to/references/refdata-gex-GRCh38-2020-A.tar.gz https://cf.10xgenomics.com/releases/cell-ranger/refdata-gex-GRCh38-2020-A.tar.gz\n# tar -xzf /path/to/references/refdata-gex-GRCh38-2020-A.tar.gz -C /path/to/references\n\n# Define variables\nSAMPLE_ID=\"my_sample\"\nFASTQ_DIR=\"/path/to/raw_fastqs\"\nTRANSCRIPTOME_REF=\"/path/to/references/refdata-gex-GRCh38-2020-A\"\n\n# Run cellranger count to generate count matrices\ncellranger count \\\n  --id=${SAMPLE_ID} \\\n  --transcriptome=${TRANSCRIPTOME_REF} \\\n  --fastqs=${FASTQ_DIR} \\\n  --sample=${SAMPLE_ID}\n",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "cellranger was used to process the raw sequencing files to generate count matrices per cell\nAssembly: mm10\nSupplementary files format and content: \"h5ad\" file containing combined total nuclei profiled from all mice and regions of the gastrointestinal tract",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

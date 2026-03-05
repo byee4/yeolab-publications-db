@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Illumina software used for basecalling.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reads were mapped to human genome build hg19 using STAR (https://code.google.com/p/rna-star/) with the \"outFilterMultimapNmax 20\" option, then PCR duplicates were removed using unique nmers in the barcode sequence.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Peak calling was performed using pyicoclip (http://regulatorygenomics.upf.edu/Software/Pyicoteo/pyicoclip.html) using RefSeq genes as the region file.",
-      "tool_name": "RefSeq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Illumina software used for basecalling.\nReads were mapped to human genome build hg19 using STAR (https://code.google.com/p/rna-star/) with the \"outFilterMultimapNmax 20\" option, then PCR duplicates were removed using unique nmers in the barcode sequence. Peak calling was performed using pyicoclip (http://regulatorygenomics.upf.edu/Software/Pyicoteo/pyicoclip.html) using RefSeq genes as the region file.\nGenome_build: GRCh37 (hg19)\nSupplementary_files_format_and_content: Bed files include peaks.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Illumina software used for basecalling.",
+            "tool_name": "bcl2fastq (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.20 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install bcl2fastq (example using conda)\n# conda install -c bioconda bcl2fastq2\n\n# Define input and output directories\nRUN_FOLDER_DIR=\"/path/to/illumina/run/folder\"\nOUTPUT_DIR=\"/path/to/output/fastq\"\nSAMPLE_SHEET=\"/path/to/sample_sheet.csv\" # Optional, but highly recommended for demultiplexing\n\n# Execute bcl2fastq for basecalling and demultiplexing\nbcl2fastq --runfolder-dir \"${RUN_FOLDER_DIR}\" \\\n                  --output-dir \"${OUTPUT_DIR}\" \\\n                  --sample-sheet \"${SAMPLE_SHEET}\" \\\n                  --no-lane-splitting # Example common parameter, adjust as needed",
+            "code_language": "bash",
+            "github_url": "https://support.illumina.com/sequencing/sequencing_software/bcl2fastq-conversion-software.html"
+        },
+        {
+            "step_order": 2,
+            "description": "Reads were mapped to human genome build hg19 using STAR (https://code.google.com/p/rna-star/) with the \"outFilterMultimapNmax 20\" option, then PCR duplicates were removed using unique nmers in the barcode sequence.",
+            "tool_name": "STAR",
+            "tool_version": "2.4.x (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables\nGENOME_DIR=\"/path/to/STAR_index/hg19\" # Path to the STAR genome index for hg19\nREADS=\"input.fastq.gz\" # Input FASTQ file (assuming single-end for this example)\nOUTPUT_PREFIX=\"mapped_reads\" # Prefix for output files\n\n# 1. Map reads to human genome build hg19 using STAR\n#    Parameters: \"outFilterMultimapNmax 20\"\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${READS}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}.\" \\\n     --outFilterMultimapNmax 20 \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --runThreadN 8 # Adjust number of threads as needed\n\n# 2. Remove PCR duplicates using unique nmers in the barcode sequence\n#    This step typically involves UMI (Unique Molecular Identifier) based deduplication.\n#    The exact command depends on how the barcode sequence is incorporated into the reads\n#    (e.g., in the read header, or at the start of the read sequence).\n#    A common tool for this is `umi_tools dedup`.\n\n# Install umi_tools (if not already installed)\n# conda install -c bioconda umi_tools\n\n# Example using umi_tools dedup (assuming UMI is in the read name after a previous extraction step):\n# umi_tools dedup \\\n#     --input \"${OUTPUT_PREFIX}.Aligned.sortedByCoord.out.bam\" \\\n#     --output \"${OUTPUT_PREFIX}.deduplicated.bam\" \\\n#     --extract-method=read_id \\\n#     --umi-separator=\":\" \\\n#     --log \"${OUTPUT_PREFIX}.deduplication.log\"\n# If reads are paired-end, add --paired. If UMI needs to be extracted from the read sequence first, use `umi_tools extract` prior to STAR.",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "Peak calling was performed using pyicoclip (http://regulatorygenomics.upf.edu/Software/Pyicoteo/pyicoclip.html) using RefSeq genes as the region file.",
+            "tool_name": "RefSeq",
+            "tool_version": "v0.1.1",
+            "code_example": "# Install pyicoteo (which includes pyicoclip)\n# pip install pyicoteo\n\n# Placeholder for input BAM file (aligned reads)\n# Replace with your actual input BAM file\nINPUT_BAM=\"input.bam\"\n\n# Placeholder for RefSeq genes region file (e.g., BED format)\n# This file defines the regions where peaks will be called.\n# Example: Download RefSeq genes for your specific genome assembly (e.g., hg38) \n# from resources like UCSC Table Browser, Ensembl, or NCBI.\nREFSEQ_GENES_BED=\"refseq_genes.bed\"\n\n# Placeholder for genome FASTA file\n# Replace with your actual genome FASTA file (e.g., hg38.fa)\nGENOME_FASTA=\"genome.fa\"\n\n# Output prefix for peak files\nOUTPUT_PREFIX=\"pyicoclip_peaks\"\n\n# Execute pyicoclip (part of the pyicoteo package)\npyicoteo clip -i \"${INPUT_BAM}\" -o \"${OUTPUT_PREFIX}\" -r \"${REFSEQ_GENES_BED}\" -g \"${GENOME_FASTA}\"",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Illumina software used for basecalling.\nReads were mapped to human genome build hg19 using STAR (https://code.google.com/p/rna-star/) with the \"outFilterMultimapNmax 20\" option, then PCR duplicates were removed using unique nmers in the barcode sequence. Peak calling was performed using pyicoclip (http://regulatorygenomics.upf.edu/Software/Pyicoteo/pyicoclip.html) using RefSeq genes as the region file.\nGenome_build: GRCh37 (hg19)\nSupplementary_files_format_and_content: Bed files include peaks.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

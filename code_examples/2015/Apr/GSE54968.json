@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Illumina Casava1.7 software used for basecalling.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reads were aligned to the human genome (hg19) with STAR (v2.2.0c) with default parameters.",
-      "tool_name": "STAR",
-      "tool_version": "2.2.0c",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Only uniquely alignable reads were used for downstream analysis",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Reads Per Kilobase of exon per milion mapped reads were calculated using HOMER (http://homer.salk.edu/homer/) across the entire gene (both introns and exons)",
-      "tool_name": "HOMER",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Illumina Casava1.7 software used for basecalling.\nReads were aligned to the human genome (hg19) with STAR (v2.2.0c) with default parameters.  Only uniquely alignable reads were used for downstream analysis\nReads Per Kilobase of exon per milion mapped reads were calculated using HOMER (http://homer.salk.edu/homer/) across the entire gene (both introns and exons)\nGenome_build: hg19\nSupplementary_files_format_and_content: Tab delimited text file, Column Def: 1-ensembl ID, 2-chr, 3-gene start, 4-gene end, 5-strand, 6-gene length, 7-copies in genome, 8-gene name, 9-chr band, 10-gene type, 11-status, 12-aliases, 13-18: RPKM values",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Illumina Casava1.7 software used for basecalling.",
+            "tool_name": "Illumina Casava",
+            "tool_version": "1.7",
+            "code_example": "# Illumina Casava 1.7 is proprietary software typically integrated with Illumina sequencing instruments.\n# Basecalling is performed by the instrument's control software, which utilizes Casava components.\n# The output of this step is BCL (base call) files.\n# No direct command-line execution is typically performed by users for the basecalling itself,\n# as it's part of the real-time data acquisition on the sequencer.\n# Subsequent steps like demultiplexing and BCL-to-FASTQ conversion would use other Casava tools\n# (e.g., configureBclToFastq.pl and make, or later bcl2fastq).",
+            "code_language": "bash",
+            "github_url": "https://www.illumina.com/"
+        },
+        {
+            "step_order": 2,
+            "description": "Reads were aligned to the human genome (hg19) with STAR (v2.2.0c) with default parameters.",
+            "tool_name": "STAR",
+            "tool_version": "2.2.0c",
+            "code_example": "# Install STAR if not already installed\n# conda install -c bioconda star=2.2.0c\n\n# Define variables\n# Replace /path/to/your/hg19/STAR_index with the actual path to your STAR genome index for hg19.\n# This index needs to be built once using STAR --runMode genomeGenerate.\nGENOME_DIR=\"/path/to/your/hg19/STAR_index\"\nREADS_FILE=\"reads.fastq.gz\" # Replace with your input FASTQ file (e.g., R1.fastq.gz or R2.fastq.gz for single-end, or R1.fastq.gz R2.fastq.gz for paired-end)\nOUTPUT_PREFIX=\"star_output/\" # Output files will be prefixed with this path\nTHREADS=8 # Number of threads to use, adjust based on available CPU cores\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_PREFIX}\"\n\n# Run STAR alignment with default parameters\n# The --outSAMtype BAM SortedByCoordinate is a common and practical default for downstream analysis.\nSTAR \\\n  --genomeDir \"${GENOME_DIR}\" \\\n  --readFilesIn \"${READS_FILE}\" \\\n  --runThreadN \"${THREADS}\" \\\n  --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n  --outSAMtype BAM SortedByCoordinate \\\n  --outSAMattributes Standard\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "Only uniquely alignable reads were used for downstream analysis",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR if not already installed\n# conda install -c bioconda star\n\n# Create a directory for STAR output\nmkdir -p star_output\n\n# Align reads and filter for uniquely mapping reads\n# Replace /path/to/STAR_genome_index with the actual path to your STAR genome index\n# Replace reads_R1.fastq.gz and reads_R2.fastq.gz with your input FASTQ files\n# Adjust --runThreadN based on available CPU cores\n# Adjust --limitBAMsortRAM based on available RAM (e.g., 30GB for 30000000000 bytes)\nSTAR \\\n  --runThreadN 8 \\\n  --genomeDir /path/to/STAR_genome_index \\\n  --readFilesIn reads_R1.fastq.gz reads_R2.fastq.gz \\\n  --readFilesCommand zcat \\\n  --outFileNamePrefix star_output/aligned_unique_reads_ \\\n  --outSAMtype BAM SortedByCoordinate \\\n  --outFilterMultimapNmax 1 \\\n  --outFilterType BySJout \\\n  --outFilterMismatchNmax 10 \\\n  --outFilterMismatchNoverLmax 0.04 \\\n  --alignIntronMin 20 \\\n  --alignIntronMax 1000000 \\\n  --alignMatesGapMax 1000000 \\\n  --limitBAMsortRAM 30000000000",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 4,
+            "description": "Reads Per Kilobase of exon per milion mapped reads were calculated using HOMER (http://homer.salk.edu/homer/) across the entire gene (both introns and exons)",
+            "tool_name": "HOMER",
+            "tool_version": "v4.11",
+            "code_example": "# Install HOMER (if not already installed)\n# Download from http://homer.salk.edu/homer/software/install.html\n# Or, if available via a package manager (less common for HOMER's full suite):\n# conda install -c bioconda homer\n\n# Define input and output paths\nINPUT_BAM=\"path/to/your/aligned_reads.bam\"\nOUTPUT_TAG_DIR=\"homer_tag_directory\"\nGENOME_BUILD=\"hg38\" # Example: hg38 for human, mm10 for mouse. Ensure HOMER has this genome installed.\nOUTPUT_RPKM_FILE=\"gene_rpkm_quantification.txt\"\n\n# Step 1: Create a HOMER Tag Directory from the BAM file\n# This step processes the aligned reads into a format HOMER can use efficiently.\n# -format sam: Specifies input format (BAM is compatible with SAM format)\nmakeTagDirectory \"${OUTPUT_TAG_DIR}\" \"${INPUT_BAM}\" -format sam\n\n# Step 2: Calculate RPKM across genes using annotatePeaks.pl\n# \"genes\": Tells HOMER to use its internal gene database for annotation.\n# \"${GENOME_BUILD}\": Specifies the genome build for the gene database.\n# \"${OUTPUT_TAG_DIR}\": The tag directory created in Step 1.\n# -gene: Annotate with gene information.\n# -rpkm: Calculate RPKM (Reads Per Kilobase of exon per Million mapped reads).\n#        HOMER's -rpkm option calculates the length of the gene from the total length of exons.\n#        Reads mapping within the gene body (introns and exons) are counted for the numerator.\nannotatePeaks.pl \"genes\" \"${GENOME_BUILD}\" \"${OUTPUT_TAG_DIR}\" -gene -rpkm > \"${OUTPUT_RPKM_FILE}\"",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Illumina Casava1.7 software used for basecalling.\nReads were aligned to the human genome (hg19) with STAR (v2.2.0c) with default parameters.  Only uniquely alignable reads were used for downstream analysis\nReads Per Kilobase of exon per milion mapped reads were calculated using HOMER (http://homer.salk.edu/homer/) across the entire gene (both introns and exons)\nGenome_build: hg19\nSupplementary_files_format_and_content: Tab delimited text file, Column Def: 1-ensembl ID, 2-chr, 3-gene start, 4-gene end, 5-strand, 6-gene length, 7-copies in genome, 8-gene name, 9-chr band, 10-gene type, 11-status, 12-aliases, 13-18: RPKM values",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

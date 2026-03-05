@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "The output of the assay was analyzed by nSolver 4.0 where the mean of the negative spike-in control was used as the threshold of microRNA detection.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "With the expression profile table generated, patients were then stratified by miR-130a expression using a median split and a Kaplan-Meier curve was drawn by GraphPad Prism 7.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "All counted reads are provided in the count matrix.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Data normalization was conducted within the Ncounter software that used a median cut-off of the negative detection probes",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "The output of the assay was analyzed by nSolver 4.0 where the mean of the negative spike-in control was used as the threshold of microRNA detection. With the expression profile table generated, patients were then stratified by miR-130a expression using a median split and a Kaplan-Meier curve was drawn by GraphPad Prism 7.\nAll counted reads are provided in the count matrix. Data normalization was conducted within the Ncounter software that used a median cut-off of the negative detection probes",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "The output of the assay was analyzed by nSolver 4.0 where the mean of the negative spike-in control was used as the threshold of microRNA detection.",
+            "tool_name": "nSolver",
+            "tool_version": "4.0",
+            "code_example": "# nSolver is primarily a GUI-based software for NanoString data analysis.\n# The following command is conceptual and represents the analysis step\n# and the specific parameter setting described.\n# Actual execution would involve using the nSolver 4.0 GUI to load the assay output\n# and configure the detection threshold method.\n\n# Assuming an input file from the NanoString instrument (e.g., RCC file)\nINPUT_ASSAY_OUTPUT=\"assay_output.RCC\"\nOUTPUT_ANALYSIS_DIR=\"nSolver_analysis_results\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_ANALYSIS_DIR}\"\n\n# Conceptual representation of the analysis process within nSolver 4.0\n# The user would typically open nSolver 4.0, import the ${INPUT_ASSAY_OUTPUT},\n# navigate to the analysis settings, and select 'Mean of Negative Spike-in Control'\n# as the threshold for microRNA detection.\n\necho \"--- nSolver 4.0 Analysis Configuration ---\"\necho \"Input Assay File: ${INPUT_ASSAY_OUTPUT}\"\necho \"Detection Threshold Method: Mean of Negative Spike-in Control\"\necho \"Output Directory for Results: ${OUTPUT_ANALYSIS_DIR}\"\necho \"\n# Please perform the analysis manually using the nSolver 4.0 GUI with the specified settings.\"\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "With the expression profile table generated, patients were then stratified by miR-130a expression using a median split and a Kaplan-Meier curve was drawn by GraphPad Prism 7.",
+            "tool_name": "GraphPad Prism",
+            "tool_version": "7",
+            "code_example": "# GraphPad Prism 7 is a GUI-based software for statistical analysis and graphing.\n# The following R script demonstrates the analytical steps (median split and Kaplan-Meier) that would typically be performed in a command-line environment, which GraphPad Prism would then visualize.\n\n# Install necessary R packages if not already installed\n# R -e 'if (!requireNamespace(\"survival\", quietly = TRUE)) install.packages(\"survival\")'\n# R -e 'if (!requireNamespace(\"survminer\", quietly = TRUE)) install.packages(\"survminer\")'\n\n# Assume input file 'expression_data.tsv' contains columns:\n# PatientID, miR-130a_Expression, Survival_Time, Event (0=alive, 1=dead)\n\nRscript -e '\n  library(survival)\n  library(survminer)\n\n  # Load the expression data\n  # Replace \"expression_data.tsv\" with the actual path to your expression profile table\n  data <- read.delim(\"expression_data.tsv\", sep=\"\\t\", header=TRUE)\n\n  # Stratify patients by miR-130a expression using a median split\n  median_expr <- median(data$miR.130a_Expression, na.rm = TRUE)\n  data$miR_130a_Group <- ifelse(data$miR.130a_Expression > median_expr, \"High\", \"Low\")\n\n  # Create a survival object\n  surv_object <- Surv(time = data$Survival_Time, event = data$Event)\n\n  # Fit Kaplan-Meier survival curve\n  fit <- surv_fit(surv_object ~ miR_130a_Group, data = data)\n\n  # Draw Kaplan-Meier curve and save to a PDF file (GraphPad Prism would do this interactively)\n  pdf(\"kaplan_meier_miR130a.pdf\")\n  ggsurvplot(fit,\n             data = data,\n             pval = TRUE,\n             risk.table = TRUE,\n             legend.title = \"miR-130a Expression\",\n             legend.labs = c(\"High\", \"Low\"),\n             title = \"Kaplan-Meier Curve for miR-130a Expression Stratification\")\n  dev.off()\n\n  # Optionally, print summary statistics\n  print(fit)\n'",
+            "code_language": "bash",
+            "github_url": "https://www.graphpad.com/scientific-software/prism/"
+        },
+        {
+            "step_order": 3,
+            "description": "All counted reads are provided in the count matrix.",
+            "tool_name": "RSEM (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.3.3",
+            "code_example": "# Install RSEM (example using conda)\n# conda install -c bioconda rsem\n\n# --- RSEM quantification command ---\n# This command quantifies gene and isoform expression from aligned reads (BAM format)\n# and generates a count matrix (sample_name.genes.results).\n# Replace '/path/to/aligned_reads.bam' with your input BAM file (e.g., from STAR alignment).\n# Replace '/path/to/RSEM_index' with the path to your RSEM reference index.\n# (The RSEM index is typically built once per reference genome/annotation using 'rsem-prepare-reference').\n# Replace 'sample_name' with a unique identifier for your sample.\n\nrsem-calculate-expression --bam \\\n                          --paired-end \\\n                          --num-threads 8 \\\n                          /path/to/aligned_reads.bam \\\n                          /path/to/RSEM_index \\\n                          sample_name\n\n# The gene count matrix will be found in 'sample_name.genes.results'\n# The isoform count matrix will be found in 'sample_name.isoforms.results'",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "Data normalization was conducted within the Ncounter software that used a median cut-off of the negative detection probes",
+            "tool_name": "Ncounter",
+            "tool_version": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Ncounter software is a proprietary platform for NanoString nCounter data analysis, typically operated via a graphical user interface (GUI).\n# Direct command-line execution with bash is not standard for this software.\n#\n# The described normalization process involves:\n# 1. Importing raw nCounter data into the Ncounter Analysis Software.\n# 2. Configuring normalization settings within the GUI.\n# 3. Specifying the use of negative detection probes for background subtraction.\n# 4. Applying a median cut-off method for these negative probes to perform normalization.\n#\n# Example conceptual steps within the Ncounter Analysis Software GUI:\n# - Load data files (e.g., RCC files).\n# - Navigate to 'Normalization' or 'Analysis Settings'.\n# - Select 'Negative Controls' for background correction.\n# - Choose 'Median' as the statistical method for negative control background subtraction.\n# - Apply normalization and generate normalized expression data.",
+            "code_language": "bash",
+            "github_url": "https://www.nanostring.com/products/ncounter-analysis-system/"
+        }
+    ],
+    "raw_text": "The output of the assay was analyzed by nSolver 4.0 where the mean of the negative spike-in control was used as the threshold of microRNA detection. With the expression profile table generated, patients were then stratified by miR-130a expression using a median split and a Kaplan-Meier curve was drawn by GraphPad Prism 7.\nAll counted reads are provided in the count matrix. Data normalization was conducted within the Ncounter software that used a median cut-off of the negative detection probes",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

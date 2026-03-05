@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "FASTQ files were first trimmed using Trim_galore (v0.6.4) to remove sequencing adapters and low quality (Q<15) reads.",
-      "tool_name": "Trim Galore",
-      "tool_version": "0.6.4",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Trimmed sequencing reads were aligned to the human Hg19 reference genome (GENCODE, GRCh37.p13) using STAR (v2.7.5).",
-      "tool_name": "STAR",
-      "tool_version": "2.7.5",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "SAM files were subsequently converted to BAM files, sorted, and indexed using samtools (v1.9).",
-      "tool_name": "samtools",
-      "tool_version": "1.9",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "BAM files were used to generate bigwig files using bamCoverage (part of the Deeptools package; v3.3.1).",
-      "tool_name": "deepTools",
-      "tool_version": "3.3.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "FASTQ files were first trimmed using Trim_galore (v0.6.4) to remove sequencing adapters and low quality (Q<15) reads.\nTrimmed sequencing reads were aligned to the human Hg19 reference genome (GENCODE, GRCh37.p13) using STAR (v2.7.5).\nSAM files were subsequently converted to BAM files, sorted, and indexed using samtools (v1.9).\nBAM files were used to generate bigwig files using bamCoverage (part of the Deeptools package; v3.3.1).\nGenome_build: HG19\nSupplementary_files_format_and_content: bigWig",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "FASTQ files were first trimmed using Trim_galore (v0.6.4) to remove sequencing adapters and low quality (Q<15) reads.",
+            "tool_name": "Trim Galore",
+            "tool_version": "0.6.4",
+            "code_example": "# Install Trim Galore (and its dependencies like Cutadapt and FastQC)\n# conda install -c bioconda trim-galore\n\n# Define input and output paths\nINPUT_FASTQ=\"input.fastq.gz\" # Placeholder for your input FASTQ file\nOUTPUT_DIR=\"trimmed_fastq\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run Trim Galore to remove sequencing adapters and low quality (Q<15) reads\n# --quality 15: Trims reads from the 3' end until the average quality in a window is above 15\n# --output_dir: Specifies the directory for output files\n# Trim Galore automatically detects and removes common sequencing adapters.\n# For paired-end data, use: trim_galore --paired --quality 15 --output_dir \"${OUTPUT_DIR}\" input_R1.fastq.gz input_R2.fastq.gz\ntrim_galore --quality 15 --output_dir \"${OUTPUT_DIR}\" \"${INPUT_FASTQ}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/FelixKrueger/TrimGalore"
+        },
+        {
+            "step_order": 2,
+            "description": "Trimmed sequencing reads were aligned to the human Hg19 reference genome (GENCODE, GRCh37.p13) using STAR (v2.7.5).",
+            "tool_name": "STAR",
+            "tool_version": "2.7.5",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star=2.7.5\n\n# Define variables\nSTAR_VERSION=\"2.7.5\"\n# Placeholder for the STAR genome index for human Hg19 (GRCh37.p13) with GENCODE annotations.\n# This index would typically be pre-built using a command like:\n# STAR --runThreadN <threads> --runMode genomeGenerate \\\n#      --genomeDir /path/to/STAR_index_hg19_gencode \\\n#      --genomeFastaFiles /path/to/GRCh37.p13.genome.fa \\\n#      --sjdbGTFfile /path/to/gencode.v19.annotation.gtf \\\n#      --sjdbOverhang 100 # Adjust based on read length\nGENOME_DIR=\"/path/to/STAR_index_hg19_gencode_GRCh37.p13\"\nREADS_FILE=\"trimmed_reads.fastq.gz\" # Placeholder for input trimmed reads\nOUTPUT_PREFIX=\"aligned_reads\"\nTHREADS=8 # A common default for --runThreadN\n\n# Align reads using STAR\nSTAR --runThreadN ${THREADS} \\\n     --genomeDir ${GENOME_DIR} \\\n     --readFilesIn ${READS_FILE} \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix ${OUTPUT_PREFIX}_ \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outSAMattributes All",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "SAM files were subsequently converted to BAM files, sorted, and indexed using samtools (v1.9).",
+            "tool_name": "samtools",
+            "tool_version": "1.9",
+            "code_example": "# Install samtools if not already installed\n# conda install -c bioconda samtools=1.9\n\n# Placeholder for input SAM file\nINPUT_SAM=\"input.sam\"\n# Placeholder for output sorted BAM file\nOUTPUT_BAM_SORTED=\"output_sorted.bam\"\n\n# Convert SAM to BAM and sort in one step\n# samtools sort can take SAM as input and output a sorted BAM file\nsamtools sort \"${INPUT_SAM}\" -o \"${OUTPUT_BAM_SORTED}\"\n\n# Index the sorted BAM file\nsamtools index \"${OUTPUT_BAM_SORTED}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 4,
+            "description": "BAM files were used to generate bigwig files using bamCoverage (part of the Deeptools package; v3.3.1).",
+            "tool_name": "deepTools",
+            "tool_version": "3.3.1",
+            "code_example": "# Install deepTools (if not already installed)\n# conda install -c bioconda deeptools=3.3.1\n\n# Example usage: Generate a bigwig file from a BAM file\n# Replace 'input.bam' with your actual BAM file path\n# Replace 'output.bw' with your desired output bigwig file path\nbamCoverage -b input.bam -o output.bw --binSize 10 --numberOfProcessors auto",
+            "code_language": "bash",
+            "github_url": "https://github.com/deeptools/deepTools"
+        }
+    ],
+    "raw_text": "FASTQ files were first trimmed using Trim_galore (v0.6.4) to remove sequencing adapters and low quality (Q<15) reads.\nTrimmed sequencing reads were aligned to the human Hg19 reference genome (GENCODE, GRCh37.p13) using STAR (v2.7.5).\nSAM files were subsequently converted to BAM files, sorted, and indexed using samtools (v1.9).\nBAM files were used to generate bigwig files using bamCoverage (part of the Deeptools package; v3.3.1).\nGenome_build: HG19\nSupplementary_files_format_and_content: bigWig",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

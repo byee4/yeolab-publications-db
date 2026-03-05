@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "CEL files were processed in the R (v.",
-      "tool_name": "R",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "2.10.0)/Bioconductor (v 2.5) environment.",
-      "tool_name": "R",
-      "tool_version": "2.5",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Pre-processing steps (background adjustment, normalization and summarization) were performed with the GCRMA package (v.2.18.1)",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "CEL files were processed in the R (v. 2.10.0)/Bioconductor (v 2.5) environment. Pre-processing steps (background adjustment, normalization and summarization) were performed with the GCRMA package (v.2.18.1)",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "CEL files were processed in the R (v.",
+            "tool_name": "R",
+            "tool_version": "Unknown",
+            "code_example": "# Install R (if not already installed)\n# conda install -c conda-forge r-base\n\n# Install Bioconductor packages for CEL file processing (e.g., 'affy' for RMA normalization)\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\")'\n# R -e 'BiocManager::install(\"affy\")'\n\n# Create a placeholder R script for processing CEL files\ncat << 'EOF' > process_cel_files.R\n# Load necessary libraries\nlibrary(affy)\n\n# Define the directory containing CEL files\n# Replace \".\" with the actual path to your CEL files if they are not in the current directory\ncel_dir <- \".\"\n\n# List all CEL files in the specified directory\ncel_files <- list.celfiles(path = cel_dir, full.names = TRUE)\n\n# Check if any CEL files were found\nif (length(cel_files) == 0) {\n  stop(\"No CEL files found in the specified directory: \", cel_dir)\n}\n\nmessage(paste(\"Found\", length(cel_files), \"CEL files.\"))\n\n# Read CEL files into an AffyBatch object\n# This step can be memory intensive depending on the number and size of CEL files\nraw_data <- ReadAffy(filenames = cel_files)\n\n# Perform Robust Multi-array Average (RMA) normalization\n# RMA is a common method for background correction, normalization, and summarization of Affymetrix data\nnormalized_data <- rma(raw_data)\n\n# Extract the expression matrix (log2 transformed and normalized intensities)\nexpression_matrix <- exprs(normalized_data)\n\n# Save the processed expression matrix to a CSV file\noutput_csv_file <- \"processed_cel_expression.csv\"\nwrite.csv(expression_matrix, file = output_csv_file, row.names = TRUE)\nmessage(paste(\"Processed expression matrix saved to:\", output_csv_file))\n\n# Optionally, save the entire ExpressionSet object for further analysis in R\noutput_rdata_file <- \"processed_cel_eset.RData\"\nsave(normalized_data, file = output_rdata_file)\nmessage(paste(\"Normalized ExpressionSet object saved to:\", output_rdata_file))\nEOF\n\n# Execute the R script to process CEL files\n# Ensure that your CEL files are in the directory specified by 'cel_dir' in the R script\nRscript process_cel_files.R",
+            "code_language": "bash",
+            "github_url": "https://www.r-project.org/"
+        },
+        {
+            "step_order": 2,
+            "description": "2.10.0)/Bioconductor (v 2.5) environment.",
+            "tool_name": "R",
+            "tool_version": "2.5",
+            "code_example": "# This step describes the R/Bioconductor environment used, not a specific execution command.\n# The description indicates that the analysis was performed within an R (v 2.10.0, though the prompt specifies 2.5) and Bioconductor (v 2.5) environment.\n# No specific R script or command is provided in the description.\n\n# To use R version 2.5 with Bioconductor 2.5, you would typically need to have it installed.\n# Installation of such old R/Bioconductor versions can be complex and might require specific system configurations or virtual environments.\n# For modern systems, using tools like `conda` or `renv` for environment management is recommended, but finding R 2.5 and Bioconductor 2.5 via conda might be challenging due to their age.\n\n# Example of how one might launch R, assuming it's in the PATH and the correct version is active:\n# R --version # To check the R version\n# Rscript -e \"packageVersion('Biobase')\" # To check a core Bioconductor package version, indicating Bioconductor environment\n\n# If a specific R script were provided, the command would typically look like:\n# Rscript your_analysis_script.R arg1 arg2\n# Or for interactive use:\n# R",
+            "code_language": "bash",
+            "github_url": "https://www.bioconductor.org/"
+        },
+        {
+            "step_order": 3,
+            "description": "Pre-processing steps (background adjustment, normalization and summarization) were performed with the GCRMA package (v.2.18.1)",
+            "tool_name": "GCRMA",
+            "tool_version": "2.18.1",
+            "code_example": "# Install R and Bioconductor packages if not already installed (uncomment and run if needed)\n# R -e \"install.packages('BiocManager')\"\n# R -e \"BiocManager::install('gcrma')\"\n# R -e \"BiocManager::install('affy')\"\n# R -e \"BiocManager::install('hgu133plus2.db')\" # Example: Replace with the appropriate chip annotation package for your data (e.g., hgu133plus2.db, hgu95av2.db, etc.)\n\n# Create a dummy R script to perform GCRMA pre-processing\ncat << 'EOF' > run_gcrma_preprocessing.R\n# Load necessary libraries\nlibrary(affy)\nlibrary(gcrma)\n\n# --- Configuration --- #\n# Define the directory containing your raw Affymetrix .CEL files\ncel_files_directory <- \"./path/to/your/cel_files\"\n\n# Define the output file name for the normalized expression matrix\noutput_expression_file <- \"gcrma_normalized_expression.txt\"\n# --- End Configuration --- #\n\n# Check if the CEL files directory exists\nif (!dir.exists(cel_files_directory)) {\n    stop(paste(\"Error: CEL files directory not found at\", cel_files_directory))\n}\n\n# List all .CEL files in the specified directory\ncel_files <- list.files(path = cel_files_directory, pattern = \"\\\\.CEL$\", full.names = TRUE, ignore.case = TRUE)\n\nif (length(cel_files) == 0) {\n    stop(paste(\"No .CEL files found in\", cel_files_directory, \". Please ensure files are present and have a .CEL extension.\"))\n}\n\nmessage(paste(\"Found\", length(cel_files), \".CEL files.\"))\n\n# Read CEL files into an AffyBatch object\n# This step requires that all CEL files are from the same chip type\n# and that the corresponding chip annotation package is installed.\nraw_data <- ReadAffy(filenames = cel_files)\n\nmessage(\"Performing GCRMA pre-processing (background adjustment, normalization, summarization)...\")\n\n# Perform GCRMA pre-processing\n# The gcrma function performs background adjustment, normalization, and summarization\n# by default, as described in the pipeline step.\neset <- gcrma(raw_data)\n\n# Extract the normalized expression matrix\nexpression_matrix <- exprs(eset)\n\n# Write the normalized expression matrix to a tab-separated file\nwrite.table(expression_matrix, file = output_expression_file, sep = \"\\t\", quote = FALSE, row.names = TRUE)\n\nmessage(paste(\"GCRMA pre-processing complete. Normalized expression matrix saved to:\", output_expression_file))\nEOF\n\n# Execute the R script\nRscript run_gcrma_preprocessing.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/gcrma.html"
+        }
+    ],
+    "raw_text": "CEL files were processed in the R (v. 2.10.0)/Bioconductor (v 2.5) environment. Pre-processing steps (background adjustment, normalization and summarization) were performed with the GCRMA package (v.2.18.1)",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

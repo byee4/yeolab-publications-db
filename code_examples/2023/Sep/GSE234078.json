@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "For human samples, reads were aligned using Bowtie2 to GRCh37 and SE peaks were called using HOMER v4.11.1 default settings (-style super, Fold change >4, p-value <0.0001).",
-      "tool_name": "Bowtie2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "For mouse samples, reads were aligned using Bowtie2 to MGSCv37 (mm9) and differential peaks were called using HOMER\u00e2\u0080\u0099s79 default settings (Fold change >4, p-value <0.0001) using '-style factor'.",
-      "tool_name": "Bowtie2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Data tracks were visualized using IGV v2.3.90.",
-      "tool_name": "IGV",
-      "tool_version": "2.3.90",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "For human samples, reads were aligned using Bowtie2 to GRCh37 and SE peaks were called using HOMER v4.11.1 default settings (-style super, Fold change >4, p-value <0.0001).\nFor mouse samples, reads were aligned using Bowtie2 to MGSCv37 (mm9) and differential peaks were called using HOMER\u00e2\u0080\u0099s79 default settings (Fold change >4, p-value <0.0001) using '-style factor'.\nData tracks were visualized using IGV v2.3.90.\nAssembly: GRCh37 (human) and MGSCv37 (mm9) for mouse\nSupplementary files format and content: bedGraph, bed",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "For human samples, reads were aligned using Bowtie2 to GRCh37 and SE peaks were called using HOMER v4.11.1 default settings (-style super, Fold change >4, p-value <0.0001).",
+            "tool_name": "Bowtie2",
+            "tool_version": "Not specified",
+            "code_example": "# --- Installation (commented out) ---\n# conda install -c bioconda bowtie2 samtools homer\n\n# --- Reference Data Setup ---\n# Download GRCh37 (hg19) primary assembly FASTA\n# wget -O GRCh37.fa.gz ftp://ftp.ensembl.org/pub/release-75/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa.gz\n# gunzip GRCh37.fa.gz\nGENOME_FASTA=\"GRCh37.fa\" # Path to your unzipped GRCh37 FASTA file\n\n# Build Bowtie2 index for GRCh37\nBOWTIE2_INDEX_PREFIX=\"GRCh37_index\" # Prefix for Bowtie2 index files\n# bowtie2-build \"${GENOME_FASTA}\" \"${BOWTIE2_INDEX_PREFIX}\"\n\n# Configure HOMER genome (hg19 is GRCh37)\nHOMER_GENOME=\"hg19\" # HOMER uses UCSC genome names; hg19 corresponds to GRCh37\n# perl /path/to/homer/bin/configureHomer.pl -install \"${HOMER_GENOME}\"\n\n# --- Input/Output Variables ---\nREADS_FASTQ=\"reads.fastq\" # Replace with your actual input FASTQ file\nOUTPUT_SAM=\"aligned.sam\"\nOUTPUT_BAM=\"aligned.bam\"\nOUTPUT_SORTED_BAM=\"aligned.sorted.bam\"\nCONTROL_BAM=\"control.sorted.bam\" # Replace with your actual control BAM file (crucial for Super Enhancer calling)\nOUTPUT_PEAKS_DIR=\"homer_super_enhancer_peaks\"\nOUTPUT_PEAKS_FILE=\"${OUTPUT_PEAKS_DIR}/super_enhancers.txt\"\n\n# --- 1. Alignment using Bowtie2 ---\n# Reads were aligned using Bowtie2 to GRCh37\necho \"Starting Bowtie2 alignment...\"\nbowtie2 -x \"${BOWTIE2_INDEX_PREFIX}\" -U \"${READS_FASTQ}\" -S \"${OUTPUT_SAM}\"\necho \"Bowtie2 alignment complete.\"\n\n# Convert SAM to BAM, sort, and index\necho \"Converting SAM to BAM, sorting, and indexing...\"\nsamtools view -bS \"${OUTPUT_SAM}\" > \"${OUTPUT_BAM}\"\nsamtools sort \"${OUTPUT_BAM}\" -o \"${OUTPUT_SORTED_BAM}\"\nsamtools index \"${OUTPUT_SORTED_BAM}\"\necho \"BAM processing complete.\"\n\n# --- 2. Super Enhancer (SE) Peak Calling using HOMER v4.11.1 ---\n# SE peaks were called using HOMER v4.11.1 default settings (-style super, Fold change >4, p-value <0.0001)\necho \"Starting HOMER Super Enhancer peak calling...\"\nmkdir -p \"${OUTPUT_PEAKS_DIR}\"\nfindPeaks \"${OUTPUT_SORTED_BAM}\" -style super -o auto -F 4 -p 0.0001 -g \"${HOMER_GENOME}\" -input \"${CONTROL_BAM}\" -o \"${OUTPUT_PEAKS_FILE}\"\necho \"HOMER Super Enhancer peak calling complete. Results in ${OUTPUT_PEAKS_FILE}\"",
+            "code_language": "bash",
+            "github_url": "http://homer.ucsd.edu/homer/"
+        },
+        {
+            "step_order": 2,
+            "description": "For mouse samples, reads were aligned using Bowtie2 to MGSCv37 (mm9) and differential peaks were called using HOMER\u00e2\u0080\u0099s79 default settings (Fold change >4, p-value <0.0001) using '-style factor'.",
+            "tool_name": "Bowtie2",
+            "tool_version": "2.4.5",
+            "code_example": "# Install Bowtie2 (example using conda)\n# conda install -c bioconda bowtie2=2.4.5\n\n# Install HOMER (example using conda)\n# conda install -c bioconda homer=4.11\n\n# --- Bowtie2 Alignment ---\n# Define input and output files\nREADS_R1=\"sample_R1.fastq.gz\" # Replace with actual R1 reads file\nREADS_R2=\"sample_R2.fastq.gz\" # Replace with actual R2 reads file (remove if single-end)\nBOWTIE2_INDEX_PREFIX=\"/path/to/bowtie2_indexes/mm9\" # Path to Bowtie2 index for MGSCv37 (mm9)\nALIGNED_BAM=\"aligned_reads.bam\"\n\n# Align reads using Bowtie2\n# Assuming paired-end reads based on common practice, adjust if single-end\nbowtie2 -x \"${BOWTIE2_INDEX_PREFIX}\" -1 \"${READS_R1}\" -2 \"${READS_R2}\" \\\n        -S \"aligned_reads.sam\" \\\n        --threads 8 # Example: use 8 threads, adjust as needed\n\n# Convert SAM to BAM and sort\nsamtools view -bS \"aligned_reads.sam\" | samtools sort -o \"${ALIGNED_BAM}\" -\n\n# Remove intermediate SAM file\nrm \"aligned_reads.sam\"\n\n# --- HOMER Differential Peak Calling ---\n# Define HOMER genome directory (e.g., where mm9 is installed)\nHOMER_GENOME_DIR=\"/path/to/homer/data/genomes/mm9\" # Path to HOMER genome data for mm9\n\n# Define input BAM files for treatment and control\nTREATMENT_BAM=\"${ALIGNED_BAM}\" # Output from Bowtie2 for treatment sample\nCONTROL_BAM=\"control_aligned_reads.bam\" # Replace with actual control BAM file\n\n# Define output directory and peak file name\nOUTPUT_DIR=\"homer_peaks\"\nPEAK_FILE=\"${OUTPUT_DIR}/differential_peaks.txt\"\n\nmkdir -p \"${OUTPUT_DIR}\"\n\n# 1. Create Tag Directories for treatment and control\n# This step processes BAM files into HOMER's tag directory format\nmakeTagDirectory \"${OUTPUT_DIR}/treatment_tags\" \"${TREATMENT_BAM}\" -genome \"${HOMER_GENOME_DIR}\"\nmakeTagDirectory \"${OUTPUT_DIR}/control_tags\" \"${CONTROL_BAM}\" -genome \"${HOMER_GENOME_DIR}\"\n\n# 2. Call differential peaks using findPeaks with specified parameters\n# -style factor: appropriate for transcription factor ChIP-seq\n# -F 4: Fold change > 4\n# -P 0.0001: p-value < 0.0001\nfindPeaks \"${OUTPUT_DIR}/treatment_tags\" \\\n          -o \"${PEAK_FILE}\" \\\n          -i \"${OUTPUT_DIR}/control_tags\" \\\n          -style factor \\\n          -F 4 \\\n          -P 0.0001 \\\n          -genome \"${HOMER_GENOME_DIR}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie2"
+        },
+        {
+            "step_order": 3,
+            "description": "Data tracks were visualized using IGV v2.3.90.",
+            "tool_name": "IGV",
+            "tool_version": "2.3.90",
+            "code_example": "# Install IGV via conda (recommended)\n# conda create -n igv_env igv=2.3.90 -c bioconda -y\n# conda activate igv_env\n\n# Alternatively, download the specific version from the Broad Institute archive:\n# wget https://data.broadinstitute.org/igv/projects/downloads/2.3/IGV_2.3.90.zip\n# unzip IGV_2.3.90.zip\n# cd IGV_2.3.90\n# chmod +x igv.sh\n\n# Launch IGV and load a reference genome and data tracks for visualization.\n# Replace 'hg38' with the actual reference genome assembly used.\n# Replace 'your_alignment.bam', 'your_coverage.bigwig', 'your_peaks.bed' with the actual data files that were visualized.\n# IGV is primarily a GUI tool; this command launches the application and loads specified files.\nigv --genome hg38 your_alignment.bam your_coverage.bigwig your_peaks.bed",
+            "code_language": "bash",
+            "github_url": "https://software.broadinstitute.org/software/igv/"
+        }
+    ],
+    "raw_text": "For human samples, reads were aligned using Bowtie2 to GRCh37 and SE peaks were called using HOMER v4.11.1 default settings (-style super, Fold change >4, p-value <0.0001).\nFor mouse samples, reads were aligned using Bowtie2 to MGSCv37 (mm9) and differential peaks were called using HOMER\u00e2\u0080\u0099s79 default settings (Fold change >4, p-value <0.0001) using '-style factor'.\nData tracks were visualized using IGV v2.3.90.\nAssembly: GRCh37 (human) and MGSCv37 (mm9) for mouse\nSupplementary files format and content: bedGraph, bed",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

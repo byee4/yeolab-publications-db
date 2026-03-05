@@ -1,61 +1,61 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Read processing was performed as described (Islam et al., Nat Methods.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "2014 Feb;11(2):163-6), except that we removed any RNA molecule (i.e.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Unique Molecular Identifier) supported only by a single read (\"singleton molecules\").",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "This removed a large number of false positive molecules, artefacts that can arise by sequencing error, PCR-induced mutations or translocations and cross-contamination.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "The first 6 bases of each read represent the random Unique Molecular Identifier used for molecule counting.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "After follows three or more Gs, stemming from the template switching at the mRNA 5' end during first strand cDNA sythesis.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Read processing was performed as described (Islam et al., Nat Methods. 2014 Feb;11(2):163-6), except that we removed any RNA molecule (i.e. Unique Molecular Identifier) supported only by a single read (\"singleton molecules\"). This removed a large number of false positive molecules, artefacts that can arise by sequencing error, PCR-induced mutations or translocations and cross-contamination.\nThe first 6 bases of each read represent the random Unique Molecular Identifier used for molecule counting. After follows three or more Gs, stemming from the template switching at the mRNA 5' end during first strand cDNA sythesis.\nGenome_build: UCSC mm10\nSupplementary_files_format_and_content: Tab-delimited file of mRNA molecule counts for each gene and cell. Cells with less than 1500 molecules have been removed from this file.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Read processing was performed as described (Islam et al., Nat Methods.",
+            "tool_name": "fastp (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "0.23.2",
+            "code_example": "# Install fastp if not already installed\n# conda create -n fastp_env fastp=0.23.2 -y\n# conda activate fastp_env\n\n# Define input and output file paths\nREAD1=\"input_R1.fastq.gz\"\nREAD2=\"input_R2.fastq.gz\"\nOUTPUT_READ1=\"processed_R1.fastq.gz\"\nOUTPUT_READ2=\"processed_R2.fastq.gz\"\nOUTPUT_JSON=\"fastp_report.json\"\nOUTPUT_HTML=\"fastp_report.html\"\nTHREADS=8 # Adjust as needed\n\n# Run fastp for read processing (adapter trimming, quality filtering) as per Skipper workflow defaults\nfastp \\\n    --in1 \"${READ1}\" \\\n    --in2 \"${READ2}\" \\\n    --out1 \"${OUTPUT_READ1}\" \\\n    --out2 \"${OUTPUT_READ2}\" \\\n    --json \"${OUTPUT_JSON}\" \\\n    --html \"${OUTPUT_HTML}\" \\\n    --thread \"${THREADS}\" \\\n    --detect_adapter_for_pe \\\n    --qualified_quality_phred 15 \\\n    --unqualified_percent_limit 40 \\\n    --length_required 18 \\\n    --low_complexity_filter \\\n    --complexity_threshold 30 \\\n    --trim_poly_g \\\n    --poly_g_min_len 10 \\\n    --trim_poly_x \\\n    --poly_x_min_len 10 \\\n    --cut_front \\\n    --cut_tail \\\n    --cut_window_size 4 \\\n    --cut_mean_quality 20",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper/"
+        },
+        {
+            "step_order": 2,
+            "description": "2014 Feb;11(2):163-6), except that we removed any RNA molecule (i.e.",
+            "tool_name": "bbduk (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "38.90 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# This step describes a wet-lab procedure for removing RNA molecules. \n# In a bioinformatics pipeline, this would typically be represented by a computational step to filter reads mapping to common RNA species (e.g., rRNA, tRNA).\n# A common tool for this is bbduk from the BBMap suite.\n# Reference genome for rRNA/tRNA sequences would be required.\n\n# Example using bbduk to remove rRNA reads (assuming 'rRNA_references.fa' contains rRNA sequences)\n# conda install -c bioconda bbmap\n\n# Placeholder for input FASTQ files\nINPUT_FASTQ_R1=\"input_R1.fastq.gz\"\nINPUT_FASTQ_R2=\"input_R2.fastq.gz\"\n\n# Placeholder for rRNA reference file (e.g., from NCBI, Ensembl, or custom)\n# You would need to create or download a FASTA file containing known rRNA sequences for your organism.\n# Example: Download rRNA sequences for human (hg38) or mouse (mm10) from UCSC or NCBI.\n# For example, a common approach is to use the 'ribo-fwd.fa' and 'ribo-rev.fa' files often provided with bbduk or similar tools, or create a custom one.\n# For demonstration, let's assume a generic 'rRNA_references.fa' is available.\n# You might need to build an index for bbduk if using a large custom reference, but for small rRNA sets, direct filtering is often sufficient.\n\nrRNA_REFERENCE=\"rRNA_references.fa\"\n\n# Output filtered FASTQ files\nOUTPUT_FILTERED_R1=\"filtered_R1.fastq.gz\"\nOUTPUT_FILTERED_R2=\"filtered_R2.fastq.gz\"\nOUTPUT_DISCARDED_R1=\"discarded_rRNA_R1.fastq.gz\"\nOUTPUT_DISCARDED_R2=\"discarded_rRNA_R2.fastq.gz\"\n\n# Run bbduk to remove reads matching rRNA sequences\nbbduk.sh in=\"${INPUT_FASTQ_R1}\" in2=\"${INPUT_FASTQ_R2}\" \n         out=\"${OUTPUT_FILTERED_R1}\" out2=\"${OUTPUT_FILTERED_R2}\" \n         outm=\"${OUTPUT_DISCARDED_R1}\" outm2=\"${OUTPUT_DISCARDED_R2}\" \n         ref=\"${rRNA_REFERENCE}\" \n         k=31 hdist=1 stats=stats.txt \n         -Xmx4g t=8\n\n# Explanation of parameters:\n# in, in2: Input paired-end FASTQ files.\n# out, out2: Output paired-end FASTQ files with rRNA reads removed.\n# outm, outm2: Output paired-end FASTQ files containing the discarded rRNA reads (optional, useful for QC).\n# ref: Path to the rRNA reference FASTA file.\n# k=31: Kmer length for matching (default is often 31 for adapter trimming, can be adjusted for rRNA).\n# hdist=1: Hamming distance for matching (allows 1 mismatch).\n# stats=stats.txt: Output statistics about the filtering process.\n# -Xmx4g: Allocate 4GB of memory (adjust based on available RAM and dataset size).\n# t=8: Use 8 threads (adjust based on available CPU cores).\n\n# Note: The specific rRNA reference file and parameters might vary based on the organism and specific experimental design.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "Unique Molecular Identifier) supported only by a single read (\"singleton molecules\").",
+            "tool_name": "umi_tools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.1.2",
+            "code_example": "# conda install -c bioconda umi_tools=1.1.2\n\n# Example input: Aligned BAM file with UMIs in read IDs (e.g., from STAR alignment)\n# Example output: Deduplicated BAM file and a log file containing statistics including singleton molecules.\n\n# Placeholder variables for input/output files\nINPUT_BAM=\"aligned_reads.bam\"\nOUTPUT_DEDUP_BAM=\"deduplicated_reads.bam\"\nSTATS_LOG=\"umi_dedup_stats.log\"\n\n# Run umi_tools dedup to remove PCR duplicates and report statistics, including singletons.\n# This command assumes UMIs are extracted from the read ID after a colon separator.\n# Adjust --umi-separator and --extract-umi-method based on your UMI tagging strategy.\n# --paired is used for paired-end reads.\n# --output-stats will generate a log file with detailed deduplication statistics, including singleton counts.\numi_tools dedup \\\n    --input \"${INPUT_BAM}\" \\\n    --output \"${OUTPUT_DEDUP_BAM}\" \\\n    --umi-separator \":\" \\\n    --extract-umi-method \"read_id\" \\\n    --paired \\\n    --output-stats \"${STATS_LOG}\"\n\n# To specifically identify or count singleton molecules, you would parse the ${STATS_LOG} file.\n# For example, to find the line reporting singletons:\n# grep \"Number of reads with singletons\" \"${STATS_LOG}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "This removed a large number of false positive molecules, artefacts that can arise by sequencing error, PCR-induced mutations or translocations and cross-contamination.",
+            "tool_name": "samtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.9 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install samtools (if not already installed)\n# conda install -c bioconda samtools=1.9\n\n# This command filters a BAM file to remove various artifacts:\n# - Reads with mapping quality less than 10 (-q 10), addressing sequencing errors.\n# - PCR or optical duplicates (-F 1024), addressing PCR-induced mutations.\n# - Secondary alignments (-F 256).\n# - Unmapped reads (-F 4).\n# The input BAM file is typically one that has already been marked for duplicates (e.g., by Picard MarkDuplicates).\n# Replace 'input.mkdup.bam' with your actual input file and 'output.filtered.bam' with your desired output file name.\nsamtools view -q 10 -F 1024 -F 256 -F 4 -b -h -o output.filtered.bam input.mkdup.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 5,
+            "description": "The first 6 bases of each read represent the random Unique Molecular Identifier used for molecule counting.",
+            "tool_name": "umi_tools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.1.2",
+            "code_example": "# Install umi_tools if not already installed\n# conda install -c bioconda umi_tools\n\n# Extract the first 6 bases as UMI and append to read name\numi_tools extract \\\n    --extract-method=regex \\\n    --bc-pattern=\"^(.{6})\" \\\n    -I input.fastq.gz \\\n    -S output_umi_extracted.fastq.gz \\\n    --log umi_extract.log",
+            "code_language": "bash",
+            "github_url": "https://github.com/CGATOxford/UMI-tools"
+        },
+        {
+            "step_order": 6,
+            "description": "After follows three or more Gs, stemming from the template switching at the mRNA 5' end during first strand cDNA sythesis.",
+            "tool_name": "cutadapt (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "4.1",
+            "code_example": "# Install cutadapt (if not already installed)\n# conda install -c bioconda cutadapt\n\n# Define input and output file paths\n# Replace with actual input/output FASTQ file names\nINPUT_FASTQ=\"input_read1.fastq.gz\"\nOUTPUT_FASTQ=\"output_read1_trimmed.fastq.gz\"\n\n# Trim three or more Gs from the 5' end of reads, stemming from template switching.\n# -g GGG: Specifies a 5' adapter sequence of GGG. Cutadapt will find and remove this\n#         sequence and any subsequent matching bases from the 5' end of the reads.\n#         This effectively targets the poly-G artifact at the start of the cDNA.\n# -q 20,20: Trims low-quality bases (quality score < 20) from both 5' and 3' ends.\n# --minimum-length 20: Discards reads shorter than 20 bp after trimming.\ncutadapt -g GGG \\\n         -q 20,20 \\\n         --minimum-length 20 \\\n         -o \"${OUTPUT_FASTQ}\" \\\n         \"${INPUT_FASTQ}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        }
+    ],
+    "raw_text": "Read processing was performed as described (Islam et al., Nat Methods. 2014 Feb;11(2):163-6), except that we removed any RNA molecule (i.e. Unique Molecular Identifier) supported only by a single read (\"singleton molecules\"). This removed a large number of false positive molecules, artefacts that can arise by sequencing error, PCR-induced mutations or translocations and cross-contamination.\nThe first 6 bases of each read represent the random Unique Molecular Identifier used for molecule counting. After follows three or more Gs, stemming from the template switching at the mRNA 5' end during first strand cDNA sythesis.\nGenome_build: UCSC mm10\nSupplementary_files_format_and_content: Tab-delimited file of mRNA molecule counts for each gene and cell. Cells with less than 1500 molecules have been removed from this file.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

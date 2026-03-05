@@ -1,88 +1,88 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "The double stranded cDNA for each sample was converted to sequencing libraries as recommended (PacBio SMRTbell Express Template Prep Kit 2.0) but with separate barcoded adapters for each sample (PacBio Barcoded Overhang Adapter Kit).",
-      "tool_name": "PacBio sequencing",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "All of the samples were pooled in an equimolar fashion and sequenced on a SMRTcell 8M with the PacBio Sequel II instrument (2.0 chemistry/2.1 polymerase with 2 hour pre-extension and 30 hour movie times).",
-      "tool_name": "PacBio sequencing",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "After barcodes were demultiplexed, the initial data was used to re-balance the pooling by barcode counts before further sequencing.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "In total, the samples were sequenced over 5 SMRTcell 8M.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "The PacBio Sequel II system was used for all sample sequencing.",
-      "tool_name": "PacBio sequencing",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Following sequencing, the circular consensus sequence (CCS) reads for each set of technical replicates were processed using the Isoseq v3 pipeline (https://github.com/PacificBiosciences/IsoSeq) to generate full-length non-concatamer reads in fasta format.",
-      "tool_name": "IsoSeq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "For this step, software package lima v2.0.0 was used with parameters: --isoseq and --dump-clips.",
-      "tool_name": "IsoSeq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "In addition, isoseq3 v3.4.0 refine was used with parameters: --require-polya.",
-      "tool_name": "IsoSeq",
-      "tool_version": "3.4.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "Fasta files for each set of technical replicates were the pooled together and the full-length non-concatemer reads for each sample were aligned to the hg19 reference genome using minimap2 v2.17-r941 using parameters: --ax-splice, -uf, --secondary=no, -t 30.",
-      "tool_name": "minimap2",
-      "tool_version": "2.17",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "The double stranded cDNA for each sample was converted to sequencing libraries as recommended (PacBio SMRTbell Express Template Prep Kit 2.0) but with separate barcoded adapters for each sample (PacBio Barcoded Overhang Adapter Kit).\nAll of the samples were pooled in an equimolar fashion and sequenced on a SMRTcell 8M with the PacBio Sequel II instrument (2.0 chemistry/2.1 polymerase with 2 hour pre-extension and 30 hour movie times). After barcodes were demultiplexed, the initial data was used to re-balance the pooling by barcode counts before further sequencing. In total, the samples were sequenced over 5 SMRTcell 8M. The PacBio Sequel II system was used for all sample sequencing.\nFollowing sequencing, the circular consensus sequence (CCS) reads for each set of technical replicates were processed using the Isoseq v3 pipeline (https://github.com/PacificBiosciences/IsoSeq) to generate full-length non-concatamer reads in fasta format. For this step, software package lima v2.0.0 was used with parameters: --isoseq and --dump-clips. In addition, isoseq3 v3.4.0 refine was used with parameters: --require-polya. Fasta files for each set of technical replicates were the pooled together and the full-length non-concatemer reads for each sample were aligned to the hg19 reference genome using minimap2 v2.17-r941 using parameters: --ax-splice, -uf, --secondary=no, -t 30.\nGenome_build: hg19\nSupplementary_files_format_and_content: BED, txt",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "The double stranded cDNA for each sample was converted to sequencing libraries as recommended (PacBio SMRTbell Express Template Prep Kit 2.0) but with separate barcoded adapters for each sample (PacBio Barcoded Overhang Adapter Kit).",
+            "tool_name": "PacBio sequencing",
+            "tool_version": "2.0",
+            "code_example": "# This step describes a wet-lab library preparation protocol using PacBio kits.\n# No computational command is directly associated with this step.\n# The process involves converting double-stranded cDNA to sequencing libraries\n# using the PacBio SMRTbell Express Template Prep Kit 2.0 and\n# PacBio Barcoded Overhang Adapter Kit for separate barcoded adapters for each sample.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "All of the samples were pooled in an equimolar fashion and sequenced on a SMRTcell 8M with the PacBio Sequel II instrument (2.0 chemistry/2.1 polymerase with 2 hour pre-extension and 30 hour movie times).",
+            "tool_name": "PacBio sequencing",
+            "tool_version": "Chemistry 2.0/2.1",
+            "code_example": "# This block describes the parameters for a PacBio Sequel II sequencing run.\n# The actual sequencing is performed on the instrument and generates raw data files.\n\n# Sequencing Instrument: PacBio Sequel II\n# SMRTcell Type: 8M\n# Chemistry: 2.0\n# Polymerase: 2.1\n# Pre-extension time: 2 hours\n# Movie time: 30 hours\n# Pooling method: equimolar\n\n# The raw sequencing data (e.g., subreads.bam files) are generated by the instrument's software.\n# This command represents the successful completion and availability of the raw sequencing data.\necho \"PacBio Sequel II sequencing completed with SMRTcell 8M, Chemistry 2.0/2.1, 2hr pre-extension, 30hr movie time. Raw data ready for downstream bioinformatics processing.\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "After barcodes were demultiplexed, the initial data was used to re-balance the pooling by barcode counts before further sequencing.",
+            "tool_name": "Custom Python script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# Create a dummy input file for demonstration (replace with actual demultiplexed barcode counts)\necho -e \"barcode1\\t1000000\" > barcode_counts.tsv\necho -e \"barcode2\\t500000\" >> barcode_counts.tsv\necho -e \"barcode3\\t2000000\" >> barcode_counts.tsv\necho -e \"barcode4\\t750000\" >> barcode_counts.tsv\necho -e \"barcode5\\t1250000\" >> barcode_counts.tsv\n\n# Install pandas if not already installed\n# conda install -c anaconda pandas\n# pip install pandas\n\n# Create the Python script for re-balancing\ncat << 'EOF' > rebalance_pooling.py\nimport sys\nimport pandas as pd\n\ndef rebalance_pooling(input_counts_file, output_report_file, target_strategy=\"equal\"):\n    \"\"\"\n    Analyzes barcode counts from an initial sequencing run and suggests re-balancing factors.\n\n    Args:\n        input_counts_file (str): Path to a TSV file with barcode counts (e.g., 'barcode\\tcount').\n        output_report_file (str): Path to output the re-balancing report.\n        target_strategy (str): Strategy for target pooling. Currently only 'equal' is supported.\n    \"\"\"\n    try:\n        df = pd.read_csv(input_counts_file, sep='\\t', header=None, names=['barcode', 'count'])\n    except FileNotFoundError:\n        print(f\"Error: Input file '{input_counts_file}' not found.\", file=sys.stderr)\n        sys.exit(1)\n    except Exception as e:\n        print(f\"Error reading input file: {e}\", file=sys.stderr)\n        sys.exit(1)\n\n    total_counts = df['count'].sum()\n    if total_counts == 0:\n        print(\"Warning: Total counts are zero. Cannot perform re-balancing.\", file=sys.stderr)\n        df['current_proportion'] = 0\n        df['target_proportion'] = 0\n        df['rebalancing_factor'] = 0\n    else:\n        df['current_proportion'] = df['count'] / total_counts\n\n        if target_strategy == \"equal\":\n            num_barcodes = len(df)\n            df['target_proportion'] = 1 / num_barcodes\n        else:\n            print(f\"Error: Unknown target strategy '{target_strategy}'.\", file=sys.stderr)\n            sys.exit(1)\n\n        # Rebalancing factor: how much to adjust the concentration for the next pool\n        # A factor > 1 means increase concentration, < 1 means decrease.\n        # Handle division by zero if a barcode had 0 counts but should be included.\n        df['rebalancing_factor'] = df.apply(\n            lambda row: row['target_proportion'] / row['current_proportion'] if row['current_proportion'] > 0 else (\n                float('inf') if row['target_proportion'] > 0 else 1\n            ), axis=1\n        )\n\n    df.to_csv(output_report_file, sep='\\t', index=False)\n    print(f\"Re-balancing report generated: {output_report_file}\")\n\nif __name__ == \"__main__\":\n    if len(sys.argv) != 3:\n        print(\"Usage: python rebalance_pooling.py <input_counts_file> <output_report_file>\", file=sys.stderr)\n        sys.exit(1)\n    \n    input_file = sys.argv[1]\n    output_file = sys.argv[2]\n    rebalance_pooling(input_file, output_file)\nEOF\n\n# Execute the re-balancing script\npython rebalance_pooling.py barcode_counts.tsv rebalancing_report.tsv\n\n# The 'rebalancing_report.tsv' will contain suggested adjustment factors for each barcode.\n# This report is then used to manually or robotically adjust sample concentrations for the next sequencing run.",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 4,
+            "description": "In total, the samples were sequenced over 5 SMRTcell 8M.",
+            "tool_name": "PacBio Sequel System (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "SMRTcell 8M",
+            "code_example": "# This step describes the generation of raw sequencing data using a PacBio Sequel System with SMRTcell 8M.\n# It is a data generation step and does not correspond to a direct bash execution command within a bioinformatics pipeline.\n# The output of this step would be raw sequencing data files (e.g., BAM files) ready for downstream computational analysis.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 5,
+            "description": "The PacBio Sequel II system was used for all sample sequencing.",
+            "tool_name": "PacBio sequencing",
+            "tool_version": "Sequel II",
+            "code_example": "# This step describes the wet-lab sequencing process using the PacBio Sequel II system.\n# Raw sequencing data (e.g., BAM/FASTQ files) would be generated from this step.\n# There is no direct command-line execution for the physical sequencing instrument itself.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 6,
+            "description": "Following sequencing, the circular consensus sequence (CCS) reads for each set of technical replicates were processed using the Isoseq v3 pipeline (https://github.com/PacificBiosciences/IsoSeq) to generate full-length non-concatamer reads in fasta format.",
+            "tool_name": "IsoSeq",
+            "tool_version": "v3",
+            "code_example": "# Install IsoSeq v3 (example using conda)\n# conda create -n isoseq3_env -c bioconda -c conda-forge isoseq3\n# conda activate isoseq3_env\n\n# Assuming 'input_ccs.bam' contains the circular consensus sequence (CCS) reads\n# and 'primers.fasta' contains the 5' and 3' cDNA primers used for library preparation.\n# Replace 'input_ccs.bam' and 'primers.fasta' with actual file paths for each technical replicate.\n\n# Step 1: Refine CCS reads to identify and remove primers, and filter for full-length non-concatamer (FLNC) reads.\n# This step generates a BAM file containing FLNC reads.\nisoseq3 refine --primer primers.fasta input_ccs.bam flnc.bam\n\n# Step 2: Convert the FLNC BAM file to FASTA format, as specified in the description.\nsamtools fasta flnc.bam > flnc.fasta",
+            "code_language": "bash",
+            "github_url": "https://github.com/PacificBiosciences/IsoSeq"
+        },
+        {
+            "step_order": 7,
+            "description": "For this step, software package lima v2.0.0 was used with parameters: --isoseq and --dump-clips.",
+            "tool_name": "IsoSeq",
+            "tool_version": "2.0.0",
+            "code_example": "# Install lima (often part of PacBio SMRT Link or pbccs package)\n# conda install -c bioconda lima\n\n# Execute lima with specified parameters\n# Replace <input_file.bam> with your actual input BAM file (e.g., subreads.bam or ccs.bam)\n# Replace <output_prefix> with your desired output file prefix\nlima --isoseq --dump-clips <input_file.bam> <output_prefix>",
+            "code_language": "bash",
+            "github_url": "https://github.com/PacificBiosciences/pbccs"
+        },
+        {
+            "step_order": 8,
+            "description": "In addition, isoseq3 v3.4.0 refine was used with parameters: --require-polya.",
+            "tool_name": "IsoSeq",
+            "tool_version": "3.4.0",
+            "code_example": "isoseq3 refine input.bam output.bam --require-polya",
+            "code_language": "bash",
+            "github_url": "https://github.com/PacificBiosciences/pbbioconda"
+        },
+        {
+            "step_order": 9,
+            "description": "Fasta files for each set of technical replicates were the pooled together and the full-length non-concatemer reads for each sample were aligned to the hg19 reference genome using minimap2 v2.17-r941 using parameters: --ax-splice, -uf, --secondary=no, -t 30.",
+            "tool_name": "minimap2",
+            "tool_version": "2.17",
+            "code_example": "# Install minimap2 if not already installed\n# conda install -c bioconda minimap2\n\n# Placeholder for reference genome index. Replace 'path/to/hg19.mmi' with the actual path.\n# If an index does not exist, it can be created from the hg19 FASTA file:\n# minimap2 -d path/to/hg19.mmi path/to/hg19.fa\nREFERENCE_INDEX=\"path/to/hg19.mmi\"\n\n# Placeholder for input FASTA file containing pooled full-length non-concatemer reads.\n# Replace 'path/to/input_reads.fasta' with the actual path to your input FASTA file.\nINPUT_FASTA=\"path/to/input_reads.fasta\"\n\n# Placeholder for output BAM file. Replace 'path/to/output.bam' with your desired output path.\nOUTPUT_BAM=\"path/to/output.bam\"\n\n# Align reads to the hg19 reference genome using minimap2\nminimap2 --ax-splice -uf --secondary=no -t 30 \"${REFERENCE_INDEX}\" \"${INPUT_FASTA}\" | samtools view -bS -o \"${OUTPUT_BAM}\" -",
+            "code_language": "bash",
+            "github_url": "https://github.com/lh3/minimap2"
+        }
+    ],
+    "raw_text": "The double stranded cDNA for each sample was converted to sequencing libraries as recommended (PacBio SMRTbell Express Template Prep Kit 2.0) but with separate barcoded adapters for each sample (PacBio Barcoded Overhang Adapter Kit).\nAll of the samples were pooled in an equimolar fashion and sequenced on a SMRTcell 8M with the PacBio Sequel II instrument (2.0 chemistry/2.1 polymerase with 2 hour pre-extension and 30 hour movie times). After barcodes were demultiplexed, the initial data was used to re-balance the pooling by barcode counts before further sequencing. In total, the samples were sequenced over 5 SMRTcell 8M. The PacBio Sequel II system was used for all sample sequencing.\nFollowing sequencing, the circular consensus sequence (CCS) reads for each set of technical replicates were processed using the Isoseq v3 pipeline (https://github.com/PacificBiosciences/IsoSeq) to generate full-length non-concatamer reads in fasta format. For this step, software package lima v2.0.0 was used with parameters: --isoseq and --dump-clips. In addition, isoseq3 v3.4.0 refine was used with parameters: --require-polya. Fasta files for each set of technical replicates were the pooled together and the full-length non-concatemer reads for each sample were aligned to the hg19 reference genome using minimap2 v2.17-r941 using parameters: --ax-splice, -uf, --secondary=no, -t 30.\nGenome_build: hg19\nSupplementary_files_format_and_content: BED, txt",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

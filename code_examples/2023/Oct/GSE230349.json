@@ -1,79 +1,79 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Ribosomal footprints were analyzed as described by Ingolia et al. with these modifications: Trimgalore was used to trim off adapters and clip the first nucleotide off the 5\u00e2\u0080\u0099 end.",
-      "tool_name": "Trim Galore",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reads were then mapped to ribosomal RNA using bowtie2 (39) and unmapped reads were further mapped to the human transcriptome (v19) with STAR aligner (33).",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://github.com/alexdobin/STAR"
-    },
-    {
-      "step_order": 3,
-      "description": "Expected read length distribution was tested with the R package RiboProfiling.",
-      "tool_name": "R",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "To center ribosomes and obtain a list of genes with P-sites in their 3\u00e2\u0080\u0099 UTR, we used functionalities within Ribowaltz (40) and a custom python script by Scott Adamson, UConn, and Jax Laboratories.",
-      "tool_name": "Python",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Observed/expected ratios were calculated using a custom script by Scott Adamson.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Obs/exp indicates the number of observed codons in the A-site of the ribosome vs the calculated hypothetical expected number of observations.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "If ribosome pausing occurs, obs/exp > 1.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "Library strategy: Ribo-Seq",
-      "tool_name": "Ribo-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Ribosomal footprints were analyzed as described by Ingolia et al. with these modifications: Trimgalore was used to trim off adapters and clip the first nucleotide off the 5\u00e2\u0080\u0099 end. Reads were then mapped to ribosomal RNA using bowtie2 (39) and unmapped reads were further mapped to the human transcriptome (v19) with STAR aligner (33).\nExpected read length distribution was tested with the R package RiboProfiling. To center ribosomes and obtain a list of genes with P-sites in their 3\u00e2\u0080\u0099 UTR, we used functionalities within Ribowaltz (40) and a custom python script by Scott Adamson, UConn, and Jax Laboratories.\nObserved/expected ratios were calculated using a custom script by Scott Adamson. Obs/exp indicates the number of observed codons in the A-site of the ribosome vs the calculated hypothetical expected number of observations. If ribosome pausing occurs, obs/exp > 1.\nAssembly: hg19\nSupplementary files format and content: Excel file\nLibrary strategy: Ribo-Seq",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Ribosomal footprints were analyzed as described by Ingolia et al. with these modifications: Trimgalore was used to trim off adapters and clip the first nucleotide off the 5\u00e2\u0080\u0099 end.",
+            "tool_name": "Trim Galore",
+            "tool_version": "0.6.10 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Trim Galore (requires Cutadapt and FastQC)\n# conda install -c bioconda trim-galore\n\n# Define input and output file names\nINPUT_FASTQ=\"ribo_footprints.fastq.gz\"\nOUTPUT_DIR=\".\"\n\n# Trim adapters and clip the first nucleotide from the 5' end\n# --illumina: Trims standard Illumina adapters\n# --clip_r1 1: Clips 1 bp from the 5' end of Read 1 (assuming single-end reads or primary read in paired-end)\n# --output_dir: Specifies the output directory\n# Trim Galore automatically appends '_trimmed.fq.gz' to the output file name.\ntrim_galore --illumina --clip_r1 1 --output_dir \"${OUTPUT_DIR}\" \"${INPUT_FASTQ}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/FelixKrueger/TrimGalore"
+        },
+        {
+            "step_order": 2,
+            "description": "Reads were then mapped to ribosomal RNA using bowtie2 (39) and unmapped reads were further mapped to the human transcriptome (v19) with STAR aligner (33).",
+            "tool_name": "STAR",
+            "tool_version": "Not specified",
+            "code_example": "# Install STAR (e.g., using Bioconda)\n# conda install -c bioconda star\n\n# --- Reference Data Setup ---\n# The description mentions \"human transcriptome (v19)\". This typically refers to\n# the GRCh37/hg19 genome assembly and GENCODE v19 annotation.\n# A STAR genome index needs to be pre-built using the genome FASTA and GTF files.\n\n# Placeholder for STAR genome index directory\nSTAR_INDEX_DIR=\"/path/to/STAR_human_GRCh37_gencode_v19_index\"\n\n# Example commands to build the STAR index (uncomment and modify if needed):\n# GENOME_FASTA=\"/path/to/Homo_sapiens.GRCh37.dna.primary_assembly.fa\" # e.g., from Ensembl\n# GTF_FILE=\"/path/to/gencode.v19.annotation.gtf\" # e.g., from GENCODE\n# \n# mkdir -p ${STAR_INDEX_DIR}\n# STAR --runMode genomeGenerate \\\n#      --genomeDir ${STAR_INDEX_DIR} \\\n#      --genomeFastaFiles ${GENOME_FASTA} \\\n#      --sjdbGTFfile ${GTF_FILE} \\\n#      --sjdbOverhang 100 # Recommended: read_length - 1\n\n# --- Input and Output Setup ---\n# The input is \"unmapped reads\" from a previous bowtie2 step. Assuming these are in FASTQ format.\n# If the input is a BAM file of unmapped reads, it would first need to be converted to FASTQ.\nINPUT_FASTQ=\"unmapped_reads_from_rRNA_mapping.fastq.gz\" # Placeholder for input FASTQ file\nOUTPUT_DIR=\"star_human_transcriptome_alignment\"\nOUTPUT_PREFIX=\"${OUTPUT_DIR}/human_transcriptome_aligned\"\n\n# Create output directory\nmkdir -p ${OUTPUT_DIR}\n\n# --- STAR Alignment Command ---\n# Maps unmapped reads to the human transcriptome (genome + GTF) using STAR.\n# The `quantMode TranscriptomeSAM` option outputs alignments in transcriptome coordinates,\n# which is useful for downstream quantification tools.\nSTAR --genomeDir ${STAR_INDEX_DIR} \\\n     --readFilesIn ${INPUT_FASTQ} \\\n     --runThreadN 8 \\\n     --outFileNamePrefix ${OUTPUT_PREFIX} \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes Standard \\\n     --outFilterType BySJout \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.05 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --quantMode TranscriptomeSAM\n\n# The output will include:\n# - ${OUTPUT_PREFIX}Aligned.sortedByCoord.out.bam: Genome-aligned reads, sorted by coordinate.\n# - ${OUTPUT_PREFIX}ReadsPerGene.out.tab: Gene counts (if quantMode GeneCounts was also used).\n# - ${OUTPUT_PREFIX}Log.final.out: Summary of the alignment run.\n# - ${OUTPUT_PREFIX}Transcriptome.out.bam: Reads aligned to transcriptome coordinates (due to quantMode TranscriptomeSAM).",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "Expected read length distribution was tested with the R package RiboProfiling.",
+            "tool_name": "R",
+            "tool_version": "Not specified",
+            "code_example": "# Install R and RiboProfiling if not already present\n# conda install -c conda-forge r-base\n# R -e \"install.packages('BiocManager')\"\n# R -e \"BiocManager::install('RiboProfiling')\"\n\n# Define input and output files\nINPUT_BAM=\"input.bam\" # Placeholder for the input BAM file\nGENOME_GTF=\"genome.gtf\" # Placeholder: RiboProfiling's read_bam typically requires a GTF annotation file\nGENOME_FASTA=\"genome.fasta\" # Placeholder: RiboProfiling's read_bam typically requires a FASTA genome file\nOUTPUT_PLOT=\"read_length_distribution.pdf\" # Output PDF file for the plot\n\n# Create an R script to analyze read length distribution using RiboProfiling\ncat <<EOF > analyze_read_lengths.R\nlibrary(RiboProfiling)\nlibrary(ggplot2) # Used for flexible plotting of general read length distribution\n\n# Create a Ribo object from the BAM file, GTF, and FASTA.\n# This step is central to RiboProfiling analysis. Parameters like min/max read length\n# are often specified for ribosome profiling data, using typical values here.\nribo_obj <- read_bam(\n  bam_file = \"${INPUT_BAM}\",\n  gtf_file = \"${GENOME_GTF}\",\n  fasta_file = \"${GENOME_FASTA}\",\n  min_read_length = 15, # Typical minimum read length for ribosome profiling\n  max_read_length = 40  # Typical maximum read length for ribosome profiling\n)\n\n# Get read lengths from the Ribo object.\n# The `get_read_lengths` function extracts lengths, which can be P-site lengths\n# or raw read lengths depending on the object's processing. For a general\n# distribution, we combine all extracted lengths.\nread_lengths_data <- get_read_lengths(ribo_obj)\n\n# The result is a list of numeric vectors (lengths per transcript/region).\n# Unlist to get a single vector of all read lengths for global distribution.\nall_read_lengths <- unlist(read_lengths_data)\n\n# Plot the distribution using ggplot2.\n# While RiboProfiling has `plot_read_lengths`, it's often tailored for P-site offsets.\n# For a general histogram of all read lengths, ggplot2 offers more flexibility\n# and is a standard R plotting package commonly used in such workflows.\npdf(\"${OUTPUT_PLOT}\")\nggplot(data.frame(Length = all_read_lengths), aes(x = Length)) +\n  geom_histogram(binwidth = 1, fill = \"steelblue\", color = \"black\") +\n  labs(title = \"Read Length Distribution (from RiboProfiling object)\", x = \"Read Length (bp)\", y = \"Frequency\") +\n  theme_minimal()\ndev.off()\nEOF\n\n# Execute the R script\nRscript analyze_read_lengths.R",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "To center ribosomes and obtain a list of genes with P-sites in their 3\u00e2\u0080\u0099 UTR, we used functionalities within Ribowaltz (40) and a custom python script by Scott Adamson, UConn, and Jax Laboratories.",
+            "tool_name": "Python",
+            "tool_version": "Not specified (likely Python 3.x)",
+            "code_example": "# Installation instructions for Python and potential dependencies (if known).\n# As this is a custom script, specific dependencies are not mentioned.\n# A general Python environment is assumed.\n# conda create -n ribo_env python=3.x\n# conda activate ribo_env\n# pip install pandas numpy # Common data handling libraries, might be used\n\n# Execution of the custom Python script.\n# This script was developed by Scott Adamson, UConn, and Jax Laboratories.\n# Replace 'path/to/custom_script.py' with the actual path to this script.\n#\n# Input files:\n#   - 'input_ribo_seq.bam': Aligned ribosome profiling reads (e.g., output from STAR aligner).\n#   - 'genome_annotation.gtf': Genome annotation file (e.g., from Ensembl or UCSC, for the latest assembly like hg38 or mm10).\n#\n# Output file:\n#   - 'output_psites_3UTR.tsv': A list of genes with P-sites in their 3' UTR.\n#\n# The exact parameters will depend on the custom script's implementation.\n# These are illustrative placeholders based on the description's goals.\n\npython path/to/custom_script.py \\\n    --ribo_bam input_ribo_seq.bam \\\n    --annotation genome_annotation.gtf \\\n    --output_file output_psites_3UTR.tsv \\\n    --center_ribosomes_method \"ribowaltz_like_method\" \\\n    --psite_3UTR_threshold 10 # Example parameter for 3' UTR P-site identification",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 5,
+            "description": "Observed/expected ratios were calculated using a custom script by Scott Adamson.",
+            "tool_name": "custom script by Scott Adamson",
+            "tool_version": "N/A",
+            "code_example": "# This step uses a custom script by Scott Adamson to calculate observed/expected ratios.\n# The exact script name, parameters, and dependencies are not specified in the description.\n# Placeholder for custom script execution:\n# python /path/to/scott_adamson_script.py --input_observed_counts observed.txt --output_ratios ratios.txt",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 6,
+            "description": "Obs/exp indicates the number of observed codons in the A-site of the ribosome vs the calculated hypothetical expected number of observations.",
+            "tool_name": "riboWaltz (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Not specified",
+            "code_example": "# Install R and Bioconductor if not already present\n# sudo apt-get update && sudo apt-get install -y r-base\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\")'\n# R -e 'BiocManager::install(\"riboWaltz\")'\n# R -e 'BiocManager::install(\"GenomicFeatures\")'\n# R -e 'BiocManager::install(\"Biostrings\")'\n# R -e 'install.packages(\"data.table\")'\n\n# Define input files (placeholders - replace with actual paths)\n# ALIGNED_BAM: Path to the aligned Ribo-seq BAM file.\n# REFERENCE_GTF: Path to the gene annotation file (GTF/GFF format).\n# REFERENCE_FASTA: Path to the reference genome or transcriptome FASTA file.\n# For example, for human GRCh38:\n# ALIGNED_BAM=\"/path/to/your/aligned_riboseq_reads.bam\"\n# REFERENCE_GTF=\"/path/to/Homo_sapiens.GRCh38.109.gtf\"\n# REFERENCE_FASTA=\"/path/to/Homo_sapiens.GRCh38.dna.primary_assembly.fa\"\n\nALIGNED_BAM=\"aligned_riboseq_reads.bam\"\nREFERENCE_GTF=\"reference.gtf\"\nREFERENCE_FASTA=\"reference.fasta\"\n\n# Define output file\nOUTPUT_FILE=\"codon_occupancy_obs_exp.tsv\"\n\n# Set environment variables for the R script\nexport ALIGNED_BAM\nexport REFERENCE_GTF\nexport REFERENCE_FASTA\nexport OUTPUT_FILE\n\n# Create an R script to perform the Obs/Exp calculation\ncat << 'EOF' > analyze_ribo_occupancy.R\nlibrary(riboWaltz)\nlibrary(GenomicFeatures)\nlibrary(Biostrings)\nlibrary(data.table) # For faster data manipulation\n\n# --- Configuration --- \naligned_bam_file <- Sys.getenv(\"ALIGNED_BAM\")\nreference_gtf_file <- Sys.getenv(\"REFERENCE_GTF\")\nreference_fasta_file <- Sys.getenv(\"REFERENCE_FASTA\")\noutput_file <- Sys.getenv(\"OUTPUT_FILE\")\n\n# --- Load Annotation and Sequences ---\nmessage(\"Loading GTF annotation...\")\ntxdb <- makeTxDbFromGFF(reference_gtf_file)\nmessage(\"Loading FASTA sequences...\")\nfasta_seq <- readDNAStringSet(reference_fasta_file)\nnames(fasta_seq) <- sub(\" .*\", \"\", names(fasta_seq)) # Clean names\n\n# --- Process Ribo-seq Data ---\nmessage(\"Reading BAM file and inferring P-sites...\")\n# Define read length range for Ribo-seq (adjust as per your data)\nmin_read_length <- 25\nmax_read_length <- 35\n\n# Read BAM file into a list of data frames (one per sample)\n# `read_bam` processes the BAM file and infers P-site offsets if not provided.\n# This step can be computationally intensive for large files.\ndf_list <- read_bam(file = aligned_bam_file,\n                    annotation = txdb,\n                    fasta_sequences = fasta_seq,\n                    min_read_length = min_read_length,\n                    max_read_length = max_read_length)\n\n# Infer P-site offsets (if `read_bam` didn't fully infer or for refinement)\nmessage(\"Inferring P-site offsets...\")\npsite_mapping_list <- psite_mapping(df_list)\n\n# Get P-site and A-site information for each read\nmessage(\"Extracting P-site and A-site information...\")\npsite_info_list <- psite_info(df_list,\n                              annotation = txdb,\n                              fasta_sequences = fasta_seq,\n                              p_shift = psite_mapping_list)\n\n# --- Calculate Observed A-site Codon Counts ---\nmessage(\"Calculating observed A-site codon counts...\")\n# `codon_usage_asite` calculates observed codon usage at the A-site.\n# It returns a list of data frames, one per sample.\nobserved_codon_usage <- codon_usage_asite(psite_info_list,\n                                          fasta_sequences = fasta_seq)\n\n# For a single sample, extract the data frame\nsample_name <- names(observed_codon_usage)[1]\nobserved_df <- observed_codon_usage[[sample_name]]\n\n# --- Calculate Expected Codon Frequencies from Transcriptome ---\nmessage(\"Calculating expected codon frequencies from transcriptome...\")\n# This involves extracting CDS sequences and calculating overall codon frequencies.\ncds_seqs <- getCDS(txdb, fasta_seq)\n# Concatenate all CDS sequences into a single string for overall codon frequency\nall_cds_string <- paste(as.character(cds_seqs), collapse = \"\")\n\n# Calculate codon frequencies from the entire CDS pool\ncodon_table <- oligonucleotideFrequency(DNAString(all_cds_string), width = 3, step = 3)\nexpected_codon_df <- data.frame(\n  codon = names(codon_table),\n  expected_count = as.numeric(codon_table),\n  expected_frequency = as.numeric(codon_table) / sum(codon_table)\n)\n\n# Ensure all 64 codons are present, filling with 0 if not observed in CDS\nall_possible_codons <- c(\n  \"AAA\", \"AAG\", \"AAC\", \"AAT\", \"ACA\", \"ACG\", \"ACC\", \"ACT\", \"AGA\", \"AGG\", \"AGC\", \"AGT\",\n  \"ATA\", \"ATG\", \"ATC\", \"ATT\", \"CAA\", \"CAG\", \"CAC\", \"CAT\", \"CCA\", \"CCG\", \"CCC\", \"CCT\",\n  \"CGA\", \"CGG\", \"CGC\", \"CGT\", \"CTA\", \"CTG\", \"CTC\", \"CTT\", \"GAA\", \"GAG\", \"GAC\", \"GAT\",\n  \"GCA\", \"GCG\", \"GCC\", \"GCT\", \"GGA\", \"GGG\", \"GGC\", \"GGT\", \"GTA\", \"GTG\", \"GTC\", \"GTT\",\n  \"TAA\", \"TAG\", \"TAC\", \"TAT\", \"TCA\", \"TCG\", \"TCC\", \"TCT\", \"TGA\", \"TGG\", \"TGC\", \"TGT\",\n  \"TTA\", \"TTG\", \"TTC\", \"TTT\"\n)\nexpected_codon_df_full <- data.frame(codon = all_possible_codons)\nexpected_codon_df_full <- merge(expected_codon_df_full, expected_codon_df, by = \"codon\", all.x = TRUE)\nexpected_codon_df_full[is.na(expected_codon_df_full)] <- 0\nexpected_codon_df_full$expected_frequency <- expected_codon_df_full$expected_count / sum(expected_codon_df_full$expected_count)\n\n# --- Combine Observed and Expected and Calculate Obs/Exp Ratio ---\nmessage(\"Calculating Obs/Exp ratios...\")\nresult_df <- merge(observed_df, expected_codon_df_full, by = \"codon\", all.x = TRUE)\n\n# Rename columns for clarity\ncolnames(result_df)[colnames(result_df) == \"count\"] <- \"observed_asite_count\"\ncolnames(result_df)[colnames(result_df) == \"frequency\"] <- \"observed_asite_frequency\"\n\n# Calculate Obs/Exp ratio\n# Handle division by zero for codons with zero expected frequency\nresult_df$obs_exp_ratio <- ifelse(result_df$expected_frequency > 0,\n                                  result_df$observed_asite_frequency / result_df$expected_frequency,\n                                  NA) # Set to NA if expected frequency is zero\n\n# Select and reorder columns for output\nfinal_output <- result_df[, c(\"codon\", \"observed_asite_count\", \"observed_asite_frequency\",\n                              \"expected_count\", \"expected_frequency\", \"obs_exp_ratio\")]\n\n# --- Write Output ---\nmessage(paste(\"Writing results to\", output_file))\nfwrite(final_output, file = output_file, sep = \"\\t\", quote = FALSE)\nmessage(\"Analysis complete.\")\nEOF\n\nRscript analyze_ribo_occupancy.R",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 7,
+            "description": "If ribosome pausing occurs, obs/exp > 1.",
+            "tool_name": "(Inferred with models/gemini-2.5-flash)",
+            "tool_version": "",
+            "code_example": "# This step describes a condition for identifying ribosome pausing, not a specific tool execution.\n# Assuming an upstream process has generated a file (e.g., 'ribosome_pausing_data.tsv')\n# containing observed (obs) and expected (exp) ribosome occupancy counts, along with other data.\n# This example uses 'awk' to filter for sites where obs/exp > 1.\n# Replace 'ribosome_pausing_data.tsv' with your actual input file and adjust column numbers ($3, $4) as needed.\n# Assuming column 3 contains observed counts and column 4 contains expected counts.\n\nawk 'BEGIN {OFS=\"\\t\"} NR==1 {print; next} $3/$4 > 1 {print}' ribosome_pausing_data.tsv > pausing_sites.tsv",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 8,
+            "description": "Library strategy: Ribo-Seq",
+            "tool_name": "Ribo-seq",
+            "tool_version": "N/A",
+            "code_example": "# --- Ribo-seq Data Processing Workflow ---\n# This script outlines a typical workflow for Ribo-seq (Ribosome Profiling) data analysis.\n# \"Ribo-seq\" refers to the sequencing strategy itself, and this workflow uses common\n# bioinformatics tools for its processing, rather than a single software package named \"Ribo-seq\".\n\n# --- Configuration ---\n# Placeholder paths for reference genome and annotation. Replace with actual paths.\nGENOME_FASTA=\"/path/to/your/reference/genome.fa\" # e.g., /path/to/hg38.fa\nGENOME_GTF=\"/path/to/your/reference/annotation.gtf\" # e.g., /path/to/gencode.v38.annotation.gtf\nSTAR_INDEX_DIR=\"/path/to/your/star_index\" # Directory for STAR genome index\n\n# Common Illumina adapter sequence for Ribo-seq. Verify with your library prep protocol.\nADAPTER_SEQUENCE=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\"\n\n# Sample-specific identifiers and input files.\nSAMPLE_ID=\"sample_name\"\nINPUT_FASTQ_R1=\"${SAMPLE_ID}_R1.fastq.gz\"\n# Ribo-seq is typically single-end. If paired-end, adjust INPUT_FASTQ_R2 and Trim Galore! command.\n# INPUT_FASTQ_R2=\"${SAMPLE_ID}_R2.fastq.gz\"\nOUTPUT_DIR=\"${SAMPLE_ID}_riboseq_analysis\"\n\nmkdir -p \"${OUTPUT_DIR}\"\ncd \"${OUTPUT_DIR}\"\n\n# --- 1. Quality Control (FastQC) ---\n# FastQC provides a general overview of read quality before and after trimming.\n# conda install -c bioconda fastqc\nfastqc \"${INPUT_FASTQ_R1}\" -o .\n# If paired-end: fastqc \"${INPUT_FASTQ_R1}\" \"${INPUT_FASTQ_R2}\" -o .\n\n# --- 2. Adapter Trimming and Quality Filtering (Trim Galore!) ---\n# Trim Galore! is a wrapper around Cutadapt. It removes adapter sequences and performs quality trimming.\n# Ribo-seq reads are typically short (e.g., 28-30 nt), so length filtering is crucial.\n# Reads shorter than 25 nt are often discarded as they are unlikely to be ribosome footprints.\n# conda install -c bioconda trim-galore\ntrim_galore --fastqc --output_dir . \\\n            --adapter \"${ADAPTER_SEQUENCE}\" \\\n            --length 25 \\\n            \"${INPUT_FASTQ_R1}\"\n# If paired-end:\n# trim_galore --fastqc --output_dir . \\\n#             --adapter \"${ADAPTER_SEQUENCE}\" \\\n#             --length 25 \\\n#             --paired \"${INPUT_FASTQ_R1}\" \"${INPUT_FASTQ_R2}\"\n\nTRIMMED_FASTQ=\"${SAMPLE_ID}_R1_trimmed.fq.gz\" # Adjust name if paired-end\n\n# --- 3. Genome Indexing (STAR) ---\n# This step is performed once per reference genome and annotation.\n# conda install -c bioconda star\n# STAR --runMode genomeGenerate \\\n#      --genomeDir \"${STAR_INDEX_DIR}\" \\\n#      --genomeFastaFiles \"${GENOME_FASTA}\" \\\n#      --sjdbGTFfile \"${GENOME_GTF}\" \\\n#      --sjdbOverhang 100 # Recommended for RNA-seq, adjust for Ribo-seq if needed (e.g., read length - 1)\n\n# --- 4. Alignment to Reference Genome (STAR) ---\n# Align trimmed reads to the reference genome. Ribo-seq reads are typically short and expected to map uniquely.\n# Key parameters for Ribo-seq: --outFilterMultimapNmax 1 (unique mapping), --alignIntronMax 1 (no splicing).\nSTAR --genomeDir \"${STAR_INDEX_DIR}\" \\\n     --readFilesIn \"${TRIMMED_FASTQ}\" \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix \"${SAMPLE_ID}_\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outFilterMultimapNmax 1 \\\n     --outFilterMismatchNmax 2 \\\n     --outFilterMatchNmin 25 \\\n     --outFilterScoreMinOverLread 0 \\\n     --outFilterMatchNminOverLread 0 \\\n     --alignIntronMax 1 \\\n     --runThreadN 8\n\n# Index the BAM file for downstream processing.\n# conda install -c bioconda samtools\nsamtools index \"${SAMPLE_ID}_Aligned.sortedByCoord.out.bam\"\n\n# --- 5. Ribosome Footprint Counting (featureCounts or custom script) ---\n# Count reads mapping to coding sequences (CDS) or specific regions.\n# For detailed Ribo-seq analysis, custom scripts are often used to precisely define\n# ribosome P-site positions, assign reads to frames, and calculate translation efficiency.\n# Tools like riboviz, Ribo-seq-tools, or RiboPro provide more specialized functionalities.\n# For a simplified example, we'll use featureCounts to count reads over CDS regions.\n# conda install -c bioconda subread\nfeatureCounts -a \"${GENOME_GTF}\" \\\n              -o \"${SAMPLE_ID}_featureCounts.txt\" \\\n              -F GTF \\\n              -t CDS \\\n              -g gene_id \\\n              -M \\\n              -p \\\n              \"${SAMPLE_ID}_Aligned.sortedByCoord.out.bam\"\n\n# Note: Further analysis typically involves identifying P-site offsets, \n# calculating read periodicity, and quantifying translation efficiency.\n# These steps often require specialized R or Python scripts and packages.\n",
+            "code_language": "bash",
+            "github_url": "https://www.nature.com/articles/nprot.2012.039"
+        }
+    ],
+    "raw_text": "Ribosomal footprints were analyzed as described by Ingolia et al. with these modifications: Trimgalore was used to trim off adapters and clip the first nucleotide off the 5\u00e2\u0080\u0099 end. Reads were then mapped to ribosomal RNA using bowtie2 (39) and unmapped reads were further mapped to the human transcriptome (v19) with STAR aligner (33).\nExpected read length distribution was tested with the R package RiboProfiling. To center ribosomes and obtain a list of genes with P-sites in their 3\u00e2\u0080\u0099 UTR, we used functionalities within Ribowaltz (40) and a custom python script by Scott Adamson, UConn, and Jax Laboratories.\nObserved/expected ratios were calculated using a custom script by Scott Adamson. Obs/exp indicates the number of observed codons in the A-site of the ribosome vs the calculated hypothetical expected number of observations. If ribosome pausing occurs, obs/exp > 1.\nAssembly: hg19\nSupplementary files format and content: Excel file\nLibrary strategy: Ribo-Seq",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

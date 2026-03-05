@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize.",
-      "tool_name": "Microarray",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Iter-plier algorithm used to quantify probesets.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize. Iter-plier algorithm used to quantify probesets.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize.",
+            "tool_name": "Microarray",
+            "tool_version": "Inferred with models/gemini-2.5-flash",
+            "code_example": "# Affymetrix Power Tools (APT) is typically downloaded from the Thermo Fisher Scientific website or installed via a package manager like Bioconda.\n# conda install -c bioconda affymetrix-power-tools\n\n# Example usage of apt-probeset-summarize. \n# Replace 'input_cel_file_1.cel', 'input_cel_file_2.cel' with actual CEL file paths.\n# Replace 'annotation.cdf' with the appropriate CDF file for your array type.\n# Replace 'output_summaries' with your desired output directory.\n\napt-probeset-summarize \\\n    --cel-files input_cel_file_1.cel,input_cel_file_2.cel \\\n    --cdf-file annotation.cdf \\\n    --output-dir output_summaries \\\n    --log-file output_summaries/apt_summarize.log",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Iter-plier algorithm used to quantify probesets.",
+            "tool_name": "iterplieR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.20.0",
+            "code_example": "# Install R and Bioconductor if not already installed\n# For example, on Ubuntu:\n# sudo apt-get update\n# sudo apt-get install r-base\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\"); BiocManager::install(\"iterplieR\")'\n# R -e 'if (!requireNamespace(\"affy\", quietly = TRUE)) BiocManager::install(\"affy\")'\n\n# Example R script to quantify probesets using iterplieR\n# Save this content to a file, e.g., quantify_probesets.R\ncat << 'EOF' > quantify_probesets.R\n# Load the iterplieR package and affy for reading CEL files\nlibrary(iterplieR)\nlibrary(affy)\n\n# --- Configuration ---\n# Define the path to your CEL files\n# IMPORTANT: Replace './cel_files' with the actual path to your Affymetrix .CEL files\ncel_files_dir <- \"./cel_files\"\n# Define the output directory\noutput_dir <- \"./quantified_data\"\ndir.create(output_dir, showWarnings = FALSE)\n\n# --- Main Workflow ---\n# 1. Read CEL files\n# This assumes you have .CEL files in the 'cel_files_dir'\n# You might need to adjust this based on your specific data structure or chip type.\n# For example, if you have a specific CDF package installed (e.g., hgu133plus2cdf):\n# library(hgu133plus2cdf)\n# affy_batch <- ReadAffy(filenames = cel_files, cdfname = \"hgu133plus2cdf\")\n\ncel_files <- list.files(path = cel_files_dir, pattern = \"\\\\.CEL$\", full.names = TRUE, ignore.case = TRUE)\nif (length(cel_files) == 0) {\n  stop(\"No .CEL files found in the specified directory: \", cel_files_dir)\n}\nmessage(paste(\"Found\", length(cel_files), \".CEL files.\"))\naffy_batch <- ReadAffy(filenames = cel_files)\n\n# 2. Apply Iter-plier algorithm\n# The iterplieR function takes an AffyBatch object\n# and returns a matrix of probeset intensities.\nmessage(\"Applying Iter-plier algorithm...\")\niterplier_results <- iterplieR(affy_batch)\n\n# 3. Extract and save quantified probeset data\n# The result is a matrix where rows are probesets and columns are samples.\noutput_file <- file.path(output_dir, \"iterplier_quantified_probesets.tsv\")\nwrite.table(iterplier_results, file = output_file, sep = \"\\t\", quote = FALSE, row.names = TRUE)\n\nmessage(paste(\"Quantification complete. Results saved to:\", output_file))\nEOF\n\n# Execute the R script\nRscript quantify_probesets.R",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize. Iter-plier algorithm used to quantify probesets.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

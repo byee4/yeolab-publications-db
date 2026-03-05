@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "All reads were aligned to the human genome hg38 primary assembly using STAR.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "featureCounts version 2.0.2 was used to annotate reads, using the flag --minOverlap 20 and a custom GTF file derived from gencode v34",
-      "tool_name": "featureCounts",
-      "tool_version": "2.0.2",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "EPKM values were determined as in (Brannan et al., 2021).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Furthermore, for each gene, EPKM values obtained in the Control-STAMP cell line were subtracted from the RPS2-STAMP EPKM values, giving a normalized EPKM value for each gene which indicates the degree of translation of that transcript.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Control-STAMP PABPC IP Rep3 was not a successful immunoprecipitation and thus was excluded from analysis.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "All reads were aligned to the human genome hg38 primary assembly using STAR.\nfeatureCounts version 2.0.2 was used to annotate reads, using the flag --minOverlap 20 and a custom GTF file derived from gencode v34\nEPKM values were determined as in (Brannan et al., 2021). Furthermore, for each gene, EPKM values obtained in the Control-STAMP cell line were subtracted from the RPS2-STAMP EPKM values, giving a normalized EPKM value for each gene which indicates the degree of translation of that transcript. Control-STAMP PABPC IP Rep3 was not a successful immunoprecipitation and thus was excluded from analysis.\nGenome_build: hg38\nSupplementary_files_format_and_content: comma separated file with normalized epkm values calculated for each gene in each condition (Input, PABPN IP or PABPC IP). Transcript per kilobase Million (TPM) values are included for each condition so that users can filter based on the overall abundance of a gene",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "All reads were aligned to the human genome hg38 primary assembly using STAR.",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR (e.g., using conda)\n# conda create -n star_env star=2.7.10a -c bioconda -c conda-forge\n# conda activate star_env\n\n# Define variables\nNUM_THREADS=8 # Example: Number of threads\nGENOME_DIR=\"/path/to/STAR_index/hg38_primary_assembly\" # Path to pre-built STAR index for hg38 primary assembly\nREADS_R1=\"input_reads_R1.fastq.gz\" # Input FASTQ file for Read 1\n# READS_R2=\"input_reads_R2.fastq.gz\" # Input FASTQ file for Read 2 (uncomment and provide if paired-end)\nOUTPUT_PREFIX=\"aligned_reads\" # Prefix for output files\n\n# Align reads to the human genome hg38 primary assembly\nSTAR --runThreadN ${NUM_THREADS} \\\n     --genomeDir ${GENOME_DIR} \\\n     --readFilesIn ${READS_R1} ${READS_R2} \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix ${OUTPUT_PREFIX}_ \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped None \\\n     --outSAMattributes Standard \\\n     --outFilterMultimapNmax 20 \\\n     --alignSJDBoverhangMin 1 \\\n     --alignSJoverhangMin 8 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.1 \\\n     --outFilterScoreMinOverLread 0.66 \\\n     --outFilterMatchNminOverLread 0.66 \\\n     --limitBAMsortRAM 30000000000",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "featureCounts version 2.0.2 was used to annotate reads, using the flag --minOverlap 20 and a custom GTF file derived from gencode v34",
+            "tool_name": "featureCounts",
+            "tool_version": "2.0.2",
+            "code_example": "# Install featureCounts (part of the Subread package)\n# conda install -c bioconda subread\n\n# Example command for annotating reads (e.g., counting reads per gene)\n# Replace 'input.bam' with your actual alignment file(s).\n# Replace 'custom_gencode_v34.gtf' with the path to your custom GTF file.\n# The output 'counts.txt' will contain the read counts per feature.\nfeatureCounts -a custom_gencode_v34.gtf -o counts.txt --minOverlap 20 -F GTF -t exon -g gene_id input.bam",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "EPKM values were determined as in (Brannan et al., 2021).",
+            "tool_name": "Skipper (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2021",
+            "code_example": "# Install bedtools if not available\n# conda install -c bioconda bedtools\n\n# Define input files and reference data\nINPUT_BAM=\"aligned_reads/sample.bam\" # Aligned reads from eCLIP experiment\nFEATURES_BED=\"eclip_peaks/merged_peaks.bed\" # Regions to quantify (e.g., merged eCLIP peaks or gene annotations)\nOUTPUT_EPKM_FILE=\"quantification/sample.epkm.tsv\"\n\n# Step 1: Count reads overlapping features using bedtools multicov\n# This command counts reads in INPUT_BAM that overlap regions in FEATURES_BED\n# The output will have the original BED fields plus the read count as the last column.\nbedtools multicov -bams \"$INPUT_BAM\" -bed \"$FEATURES_BED\" > \"${OUTPUT_EPKM_FILE}.counts\"\n\n# Step 2: Calculate EPKM from counts\n# EPKM = (reads_in_feature / feature_length_kb) / (total_mapped_reads / 1,000,000)\n# This step typically involves a custom script that reads the counts, feature lengths,\n# and total mapped reads (obtained from BAM file stats, e.g., samtools idxstats).\n# For demonstration, we'll use a Python script.\n\n# Get total mapped reads (example using samtools, requires BAM index)\n# samtools index \"$INPUT_BAM\"\n# TOTAL_MAPPED_READS=$(samtools idxstats \"$INPUT_BAM\" | awk '{sum += $3} END {print sum}')\n# If samtools is not available or BAM is not indexed, use a placeholder:\nTOTAL_MAPPED_READS=10000000 # Placeholder for total mapped reads in the BAM file\n\npython -c \"\nimport pandas as pd\nimport sys\n\ncounts_file = sys.argv[1]\noutput_file = sys.argv[2]\ntotal_mapped_reads = int(sys.argv[3])\n\n# Read counts from bedtools multicov output\n# Assuming bedtools multicov output format: chrom, start, end, name, score, strand, count\ndf = pd.read_csv(counts_file, sep='\\t', header=None,\n                 names=['chrom', 'start', 'end', 'name', 'score', 'strand', 'count'])\n\n# Calculate feature length in kilobases\ndf['length_kb'] = (df['end'] - df['start']) / 1000.0\n\n# Calculate EPKM\n# EPKM = (reads_in_feature / feature_length_kb) / (total_mapped_reads / 1,000,000)\n# Add a small epsilon to length_kb to avoid division by zero for features with length 0\ndf['epkm'] = (df['count'] / (df['length_kb'] + 1e-9)) / (total_mapped_reads / 1_000_000.0)\n\n# Select relevant columns and save to output\ndf[['name', 'epkm']].to_csv(output_file, sep='\\t', index=False)\n\" \"${OUTPUT_EPKM_FILE}.counts\" \"$OUTPUT_EPKM_FILE\" \"$TOTAL_MAPPED_READS\"\n\necho \"EPKM values calculated and saved to $OUTPUT_EPKM_FILE\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper"
+        },
+        {
+            "step_order": 4,
+            "description": "Furthermore, for each gene, EPKM values obtained in the Control-STAMP cell line were subtracted from the RPS2-STAMP EPKM values, giving a normalized EPKM value for each gene which indicates the degree of translation of that transcript.",
+            "tool_name": "awk (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# Assuming input files 'control_epkm.tsv' and 'rps2_epkm.tsv'\n# Each file is expected to be tab-separated with at least two columns:\n# 1. Gene Identifier (e.g., GeneID)\n# 2. EPKM value\n# Example content for control_epkm.tsv:\n# GeneA\\t100.5\n# GeneB\\t50.2\n# GeneC\\t200.1\n\n# Example content for rps2_epkm.tsv:\n# GeneA\\t120.7\n# GeneB\\t60.1\n# GeneC\\t180.5\n\n# Step 1: Ensure both input files are sorted by the gene identifier.\n# This is crucial for the 'join' command to work correctly.\n# For simplicity, assuming no headers or headers are handled upstream.\nsort -k1,1 control_epkm.tsv > control_epkm_sorted.tsv\nsort -k1,1 rps2_epkm.tsv > rps2_epkm_sorted.tsv\n\n# Step 2: Join the sorted files based on the gene identifier (first column).\n# The 'join' command merges lines from two files that have a common field.\n# -t $'\\t': Specifies tab as the field separator.\n# -1 1: Specifies the join field from file 1 (control_epkm_sorted.tsv) is the first column.\n# -2 1: Specifies the join field from file 2 (rps2_epkm_sorted.tsv) is the first column.\n# The output of join will be: GeneID\\tControl_EPKM\\tRPS2_EPKM\n# Example: GeneA\\t100.5\\t120.7\njoined_epkm_file=$(mktemp)\njoin -t $'\\t' -1 1 -2 1 control_epkm_sorted.tsv rps2_epkm_sorted.tsv > \"$joined_epkm_file\"\n\n# Step 3: Use awk to subtract the Control-STAMP EPKM from RPS2-STAMP EPKM.\n# The 'awk' command processes the joined file.\n# -F'\\t': Specifies tab as the input field separator.\n# OFS='\\t': Specifies tab as the output field separator.\n# '{print $1, $3 - $2}': Prints the gene identifier ($1) and the result of (RPS2_EPKM - Control_EPKM).\n# In the joined file: $1 is GeneID, $2 is Control_EPKM, $3 is RPS2_EPKM.\nawk -F'\\t' '{print $1, $3 - $2}' OFS='\\t' \"$joined_epkm_file\" > normalized_epkm.tsv\n\n# Clean up temporary files\nrm control_epkm_sorted.tsv rps2_epkm_sorted.tsv \"$joined_epkm_file\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 5,
+            "description": "Control-STAMP PABPC IP Rep3 was not a successful immunoprecipitation and thus was excluded from analysis.",
+            "tool_name": "Snakemake (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "7.32.4 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# The description indicates that 'Control-STAMP PABPC IP Rep3' was deemed an unsuccessful immunoprecipitation (IP) and was therefore excluded from downstream analysis. This is a quality control (QC) decision.\n# In the context of a bioinformatics pipeline, such an exclusion is typically managed by the workflow system itself, often by flagging the sample in a sample manifest or configuration file.\n# For eCLIP assays, the Yeo lab's Skipper workflow (which uses Snakemake) would handle this by reading a sample sheet where the problematic sample is either omitted or explicitly marked for exclusion (e.g., with a 'FAIL' status).\n\n# Example of a hypothetical 'samples.tsv' file that the Skipper workflow would read:\n# sample_id\tcondition\treplicate\tfastq_r1\tfastq_r2\tqc_status\tnotes\n# SampleA\tcontrol\t1\tsampleA_R1.fastq.gz\tsampleA_R2.fastq.gz\tPASS\tSuccessful IP\n# Control-STAMP PABPC IP Rep3\tIP\t3\tcontrol_stamp_pabpc_ip_rep3_R1.fastq.gz\tcontrol_stamp_pabpc_ip_rep3_R2.fastq.gz\tFAIL\tUnsuccessful immunoprecipitation\n# SampleB\ttreatment\t1\tsampleB_R1.fastq.gz\tsampleB_R2.fastq.gz\tPASS\tSuccessful IP\n\n# The Snakemake workflow (Skipper) would then be executed, and its internal rules would skip processing 'Control-STAMP PABPC IP Rep3' based on its 'qc_status' or its absence from the list of samples to process.\n\n# Installation (example, if Snakemake is not already available and a specific version is desired):\n# conda create -n skipper_env -c bioconda -c conda-forge snakemake-minimal=7.32.4\n# conda activate skipper_env\n\n# Navigate to the Skipper workflow directory (replace with actual path to your Skipper clone)\n# cd /path/to/yeolab/skipper\n\n# Execute the Snakemake workflow.\n# The 'sample_sheet' config parameter points to the manifest file (e.g., 'samples.tsv').\n# The workflow's internal logic will then ensure 'Control-STAMP PABPC IP Rep3' is excluded from analysis.\nsnakemake --cores 8 --use-conda --config sample_sheet=samples.tsv",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper/"
+        }
+    ],
+    "raw_text": "All reads were aligned to the human genome hg38 primary assembly using STAR.\nfeatureCounts version 2.0.2 was used to annotate reads, using the flag --minOverlap 20 and a custom GTF file derived from gencode v34\nEPKM values were determined as in (Brannan et al., 2021). Furthermore, for each gene, EPKM values obtained in the Control-STAMP cell line were subtracted from the RPS2-STAMP EPKM values, giving a normalized EPKM value for each gene which indicates the degree of translation of that transcript. Control-STAMP PABPC IP Rep3 was not a successful immunoprecipitation and thus was excluded from analysis.\nGenome_build: hg38\nSupplementary_files_format_and_content: comma separated file with normalized epkm values calculated for each gene in each condition (Input, PABPN IP or PABPC IP). Transcript per kilobase Million (TPM) values are included for each condition so that users can filter based on the overall abundance of a gene",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

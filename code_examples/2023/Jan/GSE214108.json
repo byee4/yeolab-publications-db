@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "RNAseq reads were adapter-trimmed using Cutadapt (v1.14) and mapped to human-specific repetitive elements from RepBase (version 18.05) by STAR (v2.4.0i) (Dobin et al., 2013).",
-      "tool_name": "STAR",
-      "tool_version": "2.4.0i",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Repeat-mapping reads were removed, and remaining reads were mapped to the human genome assembly (hg19) with STAR",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Read counts for all genes annotated in GENCODE (hg19) were calculated using the read summarization program featureCounts (Liao et al., 2014).",
-      "tool_name": "featureCounts",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "RNAseq reads were adapter-trimmed using Cutadapt (v1.14) and mapped to human-specific repetitive elements from RepBase (version 18.05) by STAR (v2.4.0i) (Dobin et al., 2013).\nRepeat-mapping reads were removed, and remaining reads were mapped to the human genome assembly (hg19) with STAR\nRead counts for all genes annotated in GENCODE (hg19) were calculated using the read summarization program featureCounts (Liao et al., 2014).\nAssembly: hg19\nSupplementary files format and content: FeatureCounts.txt contains counts across CDS regions taken from Gencode v29 annotations",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "RNAseq reads were adapter-trimmed using Cutadapt (v1.14) and mapped to human-specific repetitive elements from RepBase (version 18.05) by STAR (v2.4.0i) (Dobin et al., 2013).",
+            "tool_name": "STAR",
+            "tool_version": "2.4.0i",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables\nNUM_THREADS=8 # Example number of threads\nINPUT_READS=\"trimmed_rnaseq_reads.fastq.gz\" # Placeholder for adapter-trimmed RNAseq reads\nOUTPUT_DIR=\"star_repbase_alignment\"\nREPBASE_STAR_INDEX=\"repbase_18.05_star_index\" # Placeholder for the STAR genome index built from RepBase v18.05\n\n# Create output directory\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run STAR to map RNAseq reads to human-specific repetitive elements from RepBase\nSTAR \\\n  --runThreadN \"${NUM_THREADS}\" \\\n  --genomeDir \"${REPBASE_STAR_INDEX}\" \\\n  --readFilesIn \"${INPUT_READS}\" \\\n  --outFileNamePrefix \"${OUTPUT_DIR}/\" \\\n  --outSAMtype BAM SortedByCoordinate \\\n  --outReadsUnmapped Fastx # Optional: to output unmapped reads\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "Repeat-mapping reads were removed, and remaining reads were mapped to the human genome assembly (hg19) with STAR",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star=2.7.10a\n\n# --- Reference Data Setup (Example Paths) ---\n# Download human genome assembly hg19 FASTA\n# wget -P /path/to/genome/hg19/ ftp://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.fa.gz\n# gunzip /path/to/genome/hg19/hg19.fa.gz\n\n# Download Gencode v19 GTF annotation for hg19 (recommended for RNA-seq)\n# wget -P /path/to/genome/hg19/ ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19/gencode.v19.annotation.gtf.gz\n# gunzip /path/to/genome/hg19/gencode.v19.annotation.gtf.gz\n\n# Create STAR genome index (if not already created)\n# Replace /path/to/star_index/hg19 with your desired index directory\n# Replace /path/to/genome/hg19/hg19.fa with your FASTA file path\n# Replace /path/to/genome/hg19/gencode.v19.annotation.gtf with your GTF file path\n# --sjdbOverhang 100 is a common value for read lengths around 100bp. Adjust if your reads are different.\n# STAR --runMode genomeGenerate \\\n#      --genomeDir /path/to/star_index/hg19 \\\n#      --genomeFastaFiles /path/to/genome/hg19/hg19.fa \\\n#      --sjdbGTFfile /path/to/genome/hg19/gencode.v19.annotation.gtf \\\n#      --sjdbOverhang 100 \\\n#      --runThreadN 8\n\n# --- Alignment Command ---\n# Assumes input_reads_R1.fastq.gz and input_reads_R2.fastq.gz are the paired-end reads\n# after repeat-mapping reads have been removed (or STAR will filter them with --outFilterMultimapNmax 1).\n# Replace /path/to/star_index/hg19 with the actual path to your STAR genome index.\n# Adjust --runThreadN based on available CPU cores.\n# Adjust --limitBAMsortRAM based on available RAM (e.g., 30GB for 30000000000 bytes).\nSTAR --genomeDir /path/to/star_index/hg19 \\\n     --readFilesIn input_reads_R1.fastq.gz input_reads_R2.fastq.gz \\\n     --readFilesCommand zcat \\\n     --runThreadN 8 \\\n     --outFileNamePrefix aligned_reads_ \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes Standard \\\n     --outFilterMultimapNmax 1 \\\n     --outFilterType BySJout \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.04 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --limitBAMsortRAM 30000000000",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "Read counts for all genes annotated in GENCODE (hg19) were calculated using the read summarization program featureCounts (Liao et al., 2014).",
+            "tool_name": "featureCounts",
+            "tool_version": "1.14.0 (Inferred from publication year)",
+            "code_example": "# Install featureCounts (part of Rsubread package)\n# conda install -c bioconda rsubread\n\n# Download GENCODE hg19 annotation GTF file (release 19 corresponds to hg19)\n# Note: This is a large file and may take some time to download.\n# wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19/gencode.v19.annotation.gtf.gz\n# gunzip gencode.v19.annotation.gtf.gz\n\n# Placeholder for input BAM file (replace with your actual aligned BAM file)\nINPUT_BAM=\"aligned_reads.bam\"\n\n# Output file for gene counts\nOUTPUT_COUNTS=\"gene_counts.txt\"\n\n# GENCODE hg19 annotation file\nGENCODE_GTF=\"gencode.v19.annotation.gtf\"\n\n# Run featureCounts to calculate read counts for all genes\n# -a: Annotation file (GTF/GFF format)\n# -o: Output file for read counts\n# -F GTF: Specify annotation file format as GTF\n# -t exon: Summarize reads mapping to 'exon' features (default for gene counting)\n# -g gene_id: Group features by 'gene_id' attribute to count reads per gene (default)\n# -s 0: Unstranded library (default, assuming no strandedness specified in description)\n#       Use -s 1 for stranded forward, -s 2 for stranded reverse\nfeatureCounts \\\n  -a \"${GENCODE_GTF}\" \\\n  -o \"${OUTPUT_COUNTS}\" \\\n  -F GTF \\\n  -t exon \\\n  -g gene_id \\\n  -s 0 \\\n  \"${INPUT_BAM}\"\n",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "RNAseq reads were adapter-trimmed using Cutadapt (v1.14) and mapped to human-specific repetitive elements from RepBase (version 18.05) by STAR (v2.4.0i) (Dobin et al., 2013).\nRepeat-mapping reads were removed, and remaining reads were mapped to the human genome assembly (hg19) with STAR\nRead counts for all genes annotated in GENCODE (hg19) were calculated using the read summarization program featureCounts (Liao et al., 2014).\nAssembly: hg19\nSupplementary files format and content: FeatureCounts.txt contains counts across CDS regions taken from Gencode v29 annotations",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

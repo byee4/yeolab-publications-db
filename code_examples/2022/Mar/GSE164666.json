@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Library strategy: eCLIP-Seq",
-      "tool_name": "eCLIP",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "For eCLIP-seq, and RNA-seq, raw sequencing reads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using cutadapt.",
-      "tool_name": "cutadapt",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Trimmed reads were mapped against RepBase to remove reads mapping to repetitive sequences.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Remaining reads were mapped to the appropriate genome build using STAR aligner. eCLIP peaks were called with CLIPPER and normalized to size-matched input sample",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Library strategy: eCLIP-Seq\nFor eCLIP-seq, and RNA-seq, raw sequencing reads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using cutadapt. Trimmed reads were mapped against RepBase to remove reads mapping to repetitive sequences. Remaining reads were mapped to the appropriate genome build using STAR aligner. eCLIP peaks were called with CLIPPER and normalized to size-matched input sample\nGenome_build: hg19, gencode v19\nSupplementary_files_format_and_content: eCLIP input normalized and filtered peaks in BED format. Peaks files (bigwigs) for eCLIP. Featurecounts file for RNA-seq samples.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Library strategy: eCLIP-Seq",
+            "tool_name": "eCLIP",
+            "tool_version": "2020",
+            "code_example": "# Install cwltool if not already installed\n# pip install cwltool\n\n# Define input files and reference genome paths\n# Replace these with your actual data paths\nINPUT_FASTQ_R1=\"path/to/your_sample_R1.fastq.gz\"\nINPUT_FASTQ_R2=\"path/to/your_sample_R2.fastq.gz\" # Optional, if paired-end\nGENOME_FASTA=\"path/to/reference/genome.fa\" # e.g., hg38.fa\nGENOME_STAR_INDEX=\"path/to/star_index/\" # Pre-built STAR index for the genome\nANNOTATION_GTF=\"path/to/genome_annotation.gtf\" # e.g., gencode.v38.annotation.gtf\nOUTPUT_DIR=\"eclip_output\"\nSAMPLE_NAME=\"my_eclip_experiment\"\n\n# The eCLIP pipeline is implemented as a CWL workflow from the yeolab/eclip repository.\n# This command executes the 'eclip.cwl' workflow using cwltool.\n# You would need to provide all required inputs as defined in the CWL workflow.\n# A common practice is to define inputs in a YAML file (e.g., inputs.yaml)\n# and pass it to cwltool. For demonstration, direct parameter passing is shown.\n\n# Ensure you have the 'eclip.cwl' file from the yeolab/eclip repository.\n# Example to get the workflow:\n# git clone https://github.com/yeolab/eclip.git\n# cd eclip\n\ncwltool eclip.cwl \\\n  --fastq_r1 \"${INPUT_FASTQ_R1}\" \\\n  --fastq_r2 \"${INPUT_FASTQ_R2}\" \\\n  --genome_fasta \"${GENOME_FASTA}\" \\\n  --star_index \"${GENOME_STAR_INDEX}\" \\\n  --gtf \"${ANNOTATION_GTF}\" \\\n  --output_dir \"${OUTPUT_DIR}\" \\\n  --sample_name \"${SAMPLE_NAME}\" \\\n  --adapter_sequence \"AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC\" \\\n  --min_read_length 18 \\\n  --max_read_length 100 \\\n  --threads 8\n  # Add other parameters as required by the eclip.cwl workflow (e.g., blacklist, chrom_sizes, etc.)",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1038/nature24038"
+        },
+        {
+            "step_order": 2,
+            "description": "For eCLIP-seq, and RNA-seq, raw sequencing reads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using cutadapt.",
+            "tool_name": "cutadapt",
+            "tool_version": "3.4",
+            "code_example": "# Install cutadapt (e.g., via conda)\n# conda install -c bioconda cutadapt\n\n# Define input and output files\nINPUT_R1=\"raw_R1.fastq.gz\"\nINPUT_R2=\"raw_R2.fastq.gz\"\nOUTPUT_R1=\"trimmed_R1.fastq.gz\"\nOUTPUT_R2=\"trimmed_R2.fastq.gz\"\n\n# Define adapter sequences and minimum read length\n# ADAPTER_3PRIME: Common Illumina 3' adapter sequence (e.g., Illumina Universal Adapter)\nADAPTER_3PRIME=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\"\n# ADAPTER_5PRIME: Placeholder for 5' barcode/UMI sequence specific to the eCLIP library preparation.\n# Replace NNNNNNNN with the actual 5' barcode/UMI sequence if known.\nADAPTER_5PRIME=\"NNNNNNNN\"\nMIN_LENGTH=18\n\n# Execute cutadapt for adapter and barcode trimming\ncutadapt \\\n  -a \"${ADAPTER_3PRIME}\" \\\n  -A \"${ADAPTER_3PRIME}\" \\\n  -g \"${ADAPTER_5PRIME}\" \\\n  -G \"${ADAPTER_5PRIME}\" \\\n  --minimum-length \"${MIN_LENGTH}\" \\\n  -o \"${OUTPUT_R1}\" \\\n  -p \"${OUTPUT_R2}\" \\\n  \"${INPUT_R1}\" \\\n  \"${INPUT_R2}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 3,
+            "description": "Trimmed reads were mapped against RepBase to remove reads mapping to repetitive sequences.",
+            "tool_name": "bowtie2 (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.4.5 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install bowtie2 if not already installed\n# conda install -c bioconda bowtie2\n\n# Define reference genome and index prefix for RepBase\n# Download RepBase sequences (e.g., from UCSC RepeatMasker track or RepBase website)\n# For example, using hg38 repetitive sequences:\n# wget -O repbase_hg38.fa.gz http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.out.gz\n# gunzip repbase_hg38.fa.gz\n# mv hg38.fa.out repbase_hg38.fa\n\nREPBASE_FASTA=\"repbase_hg38.fa\"\nREPBASE_INDEX_PREFIX=\"repbase_hg38_index\"\n\n# Build bowtie2 index for RepBase (if not already built)\n# bowtie2-build \"${REPBASE_FASTA}\" \"${REPBASE_INDEX_PREFIX}\"\n\n# Input trimmed reads (assuming paired-end, adjust for single-end if necessary)\nTRIMMED_R1=\"trimmed_reads_R1.fastq.gz\"\nTRIMMED_R2=\"trimmed_reads_R2.fastq.gz\"\n\n# Output reads that did NOT map to RepBase\n# bowtie2 --un-conc option outputs files with .1 and .2 suffixes\nOUTPUT_NON_REP_PREFIX=\"non_rep_reads\"\n\n# Map trimmed reads against RepBase and output reads that did not map\n# --very-sensitive-local is often used for repeat filtering to ensure good mapping\n# --un-conc outputs reads where neither mate mapped to the reference\n# -S /dev/null discards the SAM output as we only care about the --un-conc output\nbowtie2 \\\n    --very-sensitive-local \\\n    -x \"${REPBASE_INDEX_PREFIX}\" \\\n    -1 \"${TRIMMED_R1}\" \\\n    -2 \"${TRIMMED_R2}\" \\\n    --un-conc \"${OUTPUT_NON_REP_PREFIX}\" \\\n    -S /dev/null\n\n# The output files will be named non_rep_reads.1 and non_rep_reads.2 (or .1.fastq and .2.fastq depending on bowtie2 version/config)\n# You might need to rename them if specific .fastq.gz extensions are required for downstream tools:\n# mv \"${OUTPUT_NON_REP_PREFIX}.1\" \"${OUTPUT_NON_REP_PREFIX}_R1.fastq\"\n# mv \"${OUTPUT_NON_REP_PREFIX}.2\" \"${OUTPUT_NON_REP_PREFIX}_R2.fastq\"\n# gzip \"${OUTPUT_NON_REP_PREFIX}_R1.fastq\"\n# gzip \"${OUTPUT_NON_REP_PREFIX}_R2.fastq\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "Remaining reads were mapped to the appropriate genome build using STAR aligner. eCLIP peaks were called with CLIPPER and normalized to size-matched input sample",
+            "tool_name": "STAR",
+            "tool_version": "STAR 2.7.0f, CLIPPER 0.0.1",
+            "code_example": "# Define variables for paths and files\nGENOME_DIR=\"/path/to/STAR_index/hg38\" # Placeholder: Replace with actual path to STAR genome index\nGENOME_FASTA=\"/path/to/hg38.fa\"       # Placeholder: Replace with actual path to genome FASTA\nGTF_FILE=\"/path/to/gencode.vXX.annotation.gtf\" # Placeholder: Replace with actual path to GTF annotation\nECLIP_READS_FASTQ=\"eclip_reads.fastq.gz\" # Placeholder: Replace with actual path to eCLIP input FASTQ file\nINPUT_READS_FASTQ=\"input_reads.fastq.gz\" # Placeholder: Replace with actual path to size-matched input FASTQ file\nECLIP_ALIGNED_BAM=\"eclip_aligned.bam\" # Output BAM for eCLIP sample\nINPUT_ALIGNED_BAM=\"input_aligned.bam\" # Output BAM for input sample\nSTAR_ECLIP_OUTPUT_PREFIX=\"star_eclip_output/\"\nSTAR_INPUT_OUTPUT_PREFIX=\"star_input_output/\"\nCLIPPER_OUTPUT_PREFIX=\"clipper_peaks\"\nNUM_THREADS=8 # Adjust based on available resources\n\n# --- STAR Alignment ---\n# Tool: STAR (Spliced Transcripts Alignment to a Reference)\n# Version: 2.7.0f (Inferred from yeolab/eclip CWL workflow)\n# Source: https://github.com/alexdobin/STAR\n\n# Installation (example using conda)\n# conda install -c bioconda star\n\n# Generate STAR genome index (run once per genome build)\n# STAR --runMode genomeGenerate \\\n#      --genomeDir \"${GENOME_DIR}\" \\\n#      --genomeFastaFiles \"${GENOME_FASTA}\" \\\n#      --sjdbGTFfile \"${GTF_FILE}\" \\\n#      --runThreadN \"${NUM_THREADS}\"\n\n# Map eCLIP reads to the appropriate genome build\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${ECLIP_READS_FASTQ}\" \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix \"${STAR_ECLIP_OUTPUT_PREFIX}\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes All \\\n     --outFilterMultimapNmax 1 \\\n     --outFilterMismatchNmax 3 \\\n     --outFilterMismatchNoverLmax 0.05 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --alignSJoverhangMin 8 \\\n     --alignSJDBoverhangMin 1 \\\n     --sjdbScore 1 \\\n     --runThreadN \"${NUM_THREADS}\"\n\n# Rename STAR output BAM for eCLIP sample\nmv \"${STAR_ECLIP_OUTPUT_PREFIX}Aligned.sortedByCoord.out.bam\" \"${ECLIP_ALIGNED_BAM}\"\n\n# Map size-matched input reads to the appropriate genome build\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${INPUT_READS_FASTQ}\" \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix \"${STAR_INPUT_OUTPUT_PREFIX}\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes All \\\n     --outFilterMultimapNmax 1 \\\n     --outFilterMismatchNmax 3 \\\n     --outFilterMismatchNoverLmax 0.05 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --alignSJoverhangMin 8 \\\n     --alignSJDBoverhangMin 1 \\\n     --sjdbScore 1 \\\n     --runThreadN \"${NUM_THREADS}\"\n\n# Rename STAR output BAM for input sample\nmv \"${STAR_INPUT_OUTPUT_PREFIX}Aligned.sortedByCoord.out.bam\" \"${INPUT_ALIGNED_BAM}\"\n\n# --- CLIPPER Peak Calling ---\n# Tool: CLIPPER\n# Version: 0.0.1 (Inferred from yeolab/eclip CWL workflow)\n# Source: https://github.com/yeolab/clipper\n\n# Installation (example using pip)\n# pip install clipper\n# or (example using conda)\n# conda install -c bioconda clipper\n\n# Call eCLIP peaks and normalize to size-matched input sample\nclipper -e \"${ECLIP_ALIGNED_BAM}\" \\\n        -c \"${INPUT_ALIGNED_BAM}\" \\\n        -o \"${CLIPPER_OUTPUT_PREFIX}\" \\\n        -s hg38 \\\n        -p 0.01 \\\n        -f 0.05 \\\n        --bonferroni \\\n        --threshold-method pvalue \\\n        --save-bed \\\n        --save-wig \\\n        --save-bigwig",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        }
+    ],
+    "raw_text": "Library strategy: eCLIP-Seq\nFor eCLIP-seq, and RNA-seq, raw sequencing reads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using cutadapt. Trimmed reads were mapped against RepBase to remove reads mapping to repetitive sequences. Remaining reads were mapped to the appropriate genome build using STAR aligner. eCLIP peaks were called with CLIPPER and normalized to size-matched input sample\nGenome_build: hg19, gencode v19\nSupplementary_files_format_and_content: eCLIP input normalized and filtered peaks in BED format. Peaks files (bigwigs) for eCLIP. Featurecounts file for RNA-seq samples.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

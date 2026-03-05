@@ -1,79 +1,79 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "We aligned reads to the human genome version GRCh38 with annotation version Gencode v40 using STAR (v2.7.1a).",
-      "tool_name": "STAR",
-      "tool_version": "2.7.1a",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Gene expression levels were quantified using RSEM (v1.3.0), in which the TPM values were used to calculate Pearson correlation coefficient between replicates.",
-      "tool_name": "RSEM",
-      "tool_version": "1.3.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Samples meeting specific criteria were selected for further analysis: only those with unique aligned reads greater than 10M and a Pearson correlation coefficient between replicates of 0.9 or higher were considered.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Samples with fewer reads were re-sequenced to ensure an adequate count, while those with lower correlation were repeated.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Plus and minus strand bigwig files were generated using bedGraphToBigWig (v2.9).",
-      "tool_name": "UCSC tools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Transcript abundance was quantified using Salmon (v1.9.0) with the \u00e2\u0080\u0093gcBias option.",
-      "tool_name": "Salmon",
-      "tool_version": "1.9.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "CQN (v1.40.0) was employed to normalize gene-level GC content and length biases.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "Transcript merging to genes was performed using Tximport (v1.22.0).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "We aligned reads to the human genome version GRCh38 with annotation version Gencode v40 using STAR (v2.7.1a). Gene expression levels were quantified using RSEM (v1.3.0), in which the TPM values were used to calculate Pearson correlation coefficient between replicates. Samples meeting specific criteria were selected for further analysis: only those with unique aligned reads greater than 10M and a Pearson correlation coefficient between replicates of 0.9 or higher were considered. Samples with fewer reads were re-sequenced to ensure an adequate count, while those with lower correlation were repeated. Plus and minus strand bigwig files were generated using bedGraphToBigWig (v2.9). Transcript abundance was quantified using Salmon (v1.9.0) with the \u00e2\u0080\u0093gcBias option. CQN (v1.40.0) was employed to normalize gene-level GC content and length biases. Transcript merging to genes was performed using Tximport (v1.22.0).\nAssembly: GRCh38\nSupplementary files format and content: Bam files and salmon quant files",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "We aligned reads to the human genome version GRCh38 with annotation version Gencode v40 using STAR (v2.7.1a).",
+            "tool_name": "STAR",
+            "tool_version": "2.7.1a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star=2.7.1a\n\n# Define paths and variables\n# Replace with actual paths to your STAR index and FASTQ files\nGENOME_DIR=\"/path/to/STAR_index/GRCh38_Gencode_v40\" # Pre-built STAR index for GRCh38 and Gencode v40\nREAD1_FASTQ=\"sample_R1.fastq.gz\" # Input FASTQ file (read 1)\nREAD2_FASTQ=\"sample_R2.fastq.gz\" # Input FASTQ file (read 2), remove if single-end\nOUTPUT_PREFIX=\"sample_aligned_\" # Prefix for output files\nNUM_THREADS=8 # Number of threads to use, adjust as needed\n\n# Align reads to the human genome GRCh38 with Gencode v40 annotation\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${READ1_FASTQ}\" \"${READ2_FASTQ}\" \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes Standard \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.05 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --runThreadN \"${NUM_THREADS}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "Gene expression levels were quantified using RSEM (v1.3.0), in which the TPM values were used to calculate Pearson correlation coefficient between replicates.",
+            "tool_name": "RSEM",
+            "tool_version": "1.3.0",
+            "code_example": "# Install RSEM (if not already installed)\n# For example, using conda:\n# conda install -c bioconda rsem=1.3.0\n\n# --- IMPORTANT: RSEM requires a pre-built reference index. ---\n# Example command to build a reference (replace with actual paths and genome/transcriptome files):\n# rsem-prepare-reference --gtf genome.gtf --bowtie2 genome.fa rsem_reference_index_name\n\n# Define variables for reference and input files\nRSEM_REFERENCE_INDEX=\"path/to/rsem_indexed_reference/hg38_rsem_index\" # Replace with actual path to RSEM indexed reference (e.g., built from GRCh38)\nREAD1_FASTQ=\"sample_R1.fastq.gz\" # Replace with actual path to R1 FASTQ file\nREAD2_FASTQ=\"sample_R2.fastq.gz\" # Replace with actual path to R2 FASTQ file\nOUTPUT_SAMPLE_NAME=\"sample_output\" # Prefix for output files (e.g., sample_output.genes.results)\n\n# Quantify gene expression levels using RSEM\n# This command assumes paired-end, gzipped FASTQ files and uses RSEM's default aligner (often Bowtie2).\n# For single-end reads, remove --paired-end and provide only one FASTQ file.\n# For using STAR as the aligner, add --star option and ensure STAR is in your PATH\n# and the reference was built with the --star option.\nrsem-calculate-expression \\\n  --paired-end \\\n  --gzip-compressed \\\n  \"${READ1_FASTQ}\" \\\n  \"${READ2_FASTQ}\" \\\n  \"${RSEM_REFERENCE_INDEX}\" \\\n  \"${OUTPUT_SAMPLE_NAME}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/deweylab/RSEM"
+        },
+        {
+            "step_order": 3,
+            "description": "Samples meeting specific criteria were selected for further analysis: only those with unique aligned reads greater than 10M and a Pearson correlation coefficient between replicates of 0.9 or higher were considered.",
+            "tool_name": "QC filtering script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "",
+            "code_example": "# This script filters samples based on pre-computed Quality Control (QC) metrics.\n# It assumes an input file (e.g., 'qc_metrics.tsv') containing sample-specific\n# metrics, including unique aligned reads and replicate correlation.\n\n# Define filtering thresholds\nMIN_UNIQUE_ALIGNED_READS=10000000 # 10 million unique aligned reads\nMIN_PEARSON_CORRELATION=0.9      # Pearson correlation coefficient of 0.9 or higher\n\n# Placeholder for the actual input QC metrics file.\n# In a real bioinformatics pipeline, this file would be generated by\n# previous steps (e.g., alignment, QC metric calculation).\nINPUT_QC_FILE=\"qc_metrics.tsv\"\n\n# Output file to store the selected sample IDs or their full QC rows\nOUTPUT_SELECTED_SAMPLES=\"selected_samples.tsv\"\n\n# Filter samples using awk.\n# This example assumes the 'unique_aligned_reads' metric is in the 2nd column ($2)\n# and the 'replicate_correlation' metric is in the 3rd column ($3) of the\n# tab-separated INPUT_QC_FILE.\n# Adjust column numbers ($2, $3) based on the actual format of your 'qc_metrics.tsv'.\n# The first line (header) is printed without filtering.\nawk -v min_reads=\"$MIN_UNIQUE_ALIGNED_READS\" -v min_corr=\"$MIN_PEARSON_CORRELATION\" '\nBEGIN { FS=\"\\t\"; OFS=\"\\t\" }\nNR==1 { print; next } # Print header line\n$2 >= min_reads && $3 >= min_corr { print }\n' \"$INPUT_QC_FILE\" > \"$OUTPUT_SELECTED_SAMPLES\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper"
+        },
+        {
+            "step_order": 4,
+            "description": "Samples with fewer reads were re-sequenced to ensure an adequate count, while those with lower correlation were repeated.",
+            "tool_name": "Custom Quality Control Script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# This step describes an experimental decision-making process based on quality control metrics (read counts and correlation), rather than a specific, universally recognized computational tool. Re-sequencing and repeating experiments are wet-lab actions.\n# A hypothetical custom script or pipeline module would typically perform checks like:\n\n# Example: Check read count (hypothetical threshold)\n# READ_COUNT=$(samtools flagstat input.bam | grep \"total\" | awk '{print $1}')\n# if [ \"$READ_COUNT\" -lt 10000000 ]; then\n#     echo \"Sample has fewer reads ($READ_COUNT), flagged for re-sequencing.\"\n# fi\n\n# Example: Check replicate correlation (hypothetical threshold, assuming deepTools or similar was used to generate metrics)\n# # CORRELATION_VALUE=$(python -c \"import numpy as np; matrix=np.load('correlation_matrix.npz')['correlations']; print(matrix[0,1])\") # Simplified\n# # if (( $(echo \"$CORRELATION_VALUE < 0.8\" | bc -l) )); then\n# #     echo \"Sample has lower correlation, flagged for repeating.\"\n# # fi\n\n# No direct execution command for the described 're-sequencing' or 'repeating' actions, as these are experimental decisions.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 5,
+            "description": "Plus and minus strand bigwig files were generated using bedGraphToBigWig (v2.9).",
+            "tool_name": "UCSC tools",
+            "tool_version": "v2.9",
+            "code_example": "# Install UCSC tools (bedGraphToBigWig is part of this suite)\n# conda install -c bioconda ucsc-bedgraphtobigwig\n# conda install -c bioconda ucsc-fetchchromsizes\n\n# Placeholder for reference genome assembly (e.g., hg38)\nREFERENCE_GENOME=\"hg38\"\n\n# Generate chrom.sizes file for the reference genome\nfetchChromSizes ${REFERENCE_GENOME} > ${REFERENCE_GENOME}.chrom.sizes\n\n# Generate plus strand bigWig file\nbedGraphToBigWig plus_strand.bedGraph ${REFERENCE_GENOME}.chrom.sizes plus_strand.bigWig\n\n# Generate minus strand bigWig file\nbedGraphToBigWig minus_strand.bedGraph ${REFERENCE_GENOME}.chrom.sizes minus_strand.bigWig",
+            "code_language": "bash",
+            "github_url": "https://genome.ucsc.edu/goldenPath/help/bigWig.html"
+        },
+        {
+            "step_order": 6,
+            "description": "Transcript abundance was quantified using Salmon (v1.9.0) with the \u00e2\u0080\u0093gcBias option.",
+            "tool_name": "Salmon",
+            "tool_version": "1.9.0",
+            "code_example": "# Install Salmon (if not already installed)\n# conda install -c bioconda salmon\n\n# --- Placeholder for reference data ---\n# Salmon requires a transcriptome index. \n# Replace <TRANSCRIPTOME_FASTA> with the path to your transcriptome FASTA file (e.g., from GENCODE, Ensembl).\n# Replace <INDEX_DIR> with your desired output directory for the index.\n# Example for human GRCh38:\n# salmon index -t /path/to/human_grch38_transcriptome.fasta.gz -i /path/to/salmon_index/human_grch38\n\n# --- Quantification command ---\n# Replace <INDEX_DIR> with the actual path to your Salmon index.\n# Replace <READ1_FASTQ> and <READ2_FASTQ> with your input FASTQ files. \n# If single-end reads, use -r <READS_FASTQ> instead of -1 and -2.\n# Replace <OUTPUT_DIR> with your desired output directory for quantification results.\n# -l A: Auto-detect library type (common default for RNA-seq). Adjust if a specific library type is known (e.g., -l ISR for paired-end stranded).\n# -p: Number of threads to use (adjust based on available resources).\n\nsalmon quant \\\n  -i /path/to/salmon_index/human_grch38 \\\n  -l A \\\n  -1 /path/to/reads/sample_R1.fastq.gz \\\n  -2 /path/to/reads/sample_R2.fastq.gz \\\n  --gcBias \\\n  -o /path/to/output/sample_quant \\\n  -p 8",
+            "code_language": "bash",
+            "github_url": "https://github.com/COMBINE-lab/salmon"
+        },
+        {
+            "step_order": 7,
+            "description": "CQN (v1.40.0) was employed to normalize gene-level GC content and length biases.",
+            "tool_name": "CQN",
+            "tool_version": "1.40.0",
+            "code_example": "# Install R and Bioconductor packages if not already installed\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\")'\n# R -e 'BiocManager::install(\"cqn\")'\n\n# Placeholder for input files. Replace with actual paths.\n# gene_counts.tsv: Tab-separated file with gene IDs as row names and sample counts as columns.\n#   Example:\n#   GeneID  Sample1 Sample2\n#   GeneA   100     150\n#   GeneB   200     220\n#   ...\n#\n# gene_features.tsv: Tab-separated file with gene IDs, GC_content, and Length columns.\n#   These features are typically derived from a reference genome (e.g., hg38)\n#   and a gene annotation file (e.g., GENCODE GTF).\n#   Example:\n#   GeneID  GC_content  Length\n#   GeneA   0.45        1500\n#   GeneB   0.52        2000\n#   ...\n\n# Create an R script for CQN normalization\ncat << 'EOF' > run_cqn_normalization.R\nlibrary(cqn)\n\n# --- Configuration ---\ncounts_file <- \"gene_counts.tsv\" # Path to your raw gene counts matrix\nfeatures_file <- \"gene_features.tsv\" # Path to your gene features (GC content, length)\noutput_file <- \"cqn_normalized_counts.tsv\" # Output file for normalized counts\n\n# --- Load Data ---\nmessage(paste(\"Loading counts from:\", counts_file))\ncounts_matrix <- read.delim(counts_file, row.names = 1, check.names = FALSE)\nmessage(paste(\"Loading features from:\", features_file))\nfeatures_df <- read.delim(features_file, row.names = 1, check.names = FALSE)\n\n# Ensure gene IDs match and are in the same order\ncommon_genes <- intersect(rownames(counts_matrix), rownames(features_df))\nif (length(common_genes) == 0) {\n  stop(\"No common genes found between counts and features files. Please check gene IDs.\")\n}\ncounts_matrix <- counts_matrix[common_genes, ]\nfeatures_df <- features_df[common_genes, ]\nmessage(paste(\"Found\", length(common_genes), \"common genes for normalization.\"))\n\n# Extract GC content and lengths\ngc_content_vector <- features_df$GC_content\ngene_length_vector <- features_df$Length\n\n# Basic validation\nif (any(is.na(gc_content_vector)) || any(is.na(gene_length_vector))) {\n  stop(\"NA values found in GC content or gene lengths. Please check your features file.\")\n}\nif (any(gene_length_vector <= 0)) {\n  stop(\"Gene lengths must be positive. Please check your features file.\")\n}\nif (any(counts_matrix < 0)) {\n  warning(\"Negative counts found in the matrix. CQN expects non-negative counts.\")\n}\n\n# --- Perform CQN Normalization ---\nmessage(\"Performing CQN normalization...\")\n# Using total counts as size factors. For more advanced normalization,\n# size factors from DESeq2/edgeR could be used for better library size adjustment.\nsize_factors <- colSums(counts_matrix)\n\n# CQN function expects counts to be non-negative integers.\n# If your counts are already normalized or transformed, adjust accordingly.\ncqn_res <- cqn(counts = counts_matrix,\n               x = gc_content_vector,\n               lengths = gene_length_vector,\n               sizeFactors = size_factors)\n\n# Get normalized counts (log2 scale)\n# The 'y' component is the log2(normalized_counts / sizeFactors)\n# The 'offset' component accounts for GC content and length biases.\n# Adding the offset to y gives the log2-transformed normalized expression values.\nnormalized_log2_counts <- cqn_res$y + cqn_res$offset\n\n# Save results\nmessage(paste(\"Saving normalized counts to:\", output_file))\nwrite.table(normalized_log2_counts, output_file, sep = \"\\t\", quote = FALSE, col.names = NA)\n\nmessage(\"CQN normalization complete.\")\nEOF\n\n# Execute the R script\nRscript run_cqn_normalization.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/cqn.html"
+        },
+        {
+            "step_order": 8,
+            "description": "Transcript merging to genes was performed using Tximport (v1.22.0).",
+            "tool_name": "Tximport",
+            "tool_version": "1.22.0",
+            "code_example": "# --- Installation (commented out) ---\n# Install R if not already installed\n# sudo apt-get update && sudo apt-get install -y r-base\n\n# Install BiocManager and tximport within R\n# R -q -e 'install.packages(\"BiocManager\", repos=\"https://cloud.r-project.org\")'\n# R -q -e 'BiocManager::install(\"tximport\")'\n# R -q -e 'install.packages(\"readr\", repos=\"https://cloud.r-project.org\")' # For write_tsv\n\n# --- Placeholder Data Generation (for demonstration) ---\n# In a real pipeline, these would be actual output from quantification tools (e.g., Salmon)\n# and a pre-generated tx2gene mapping.\n\n# Create dummy Salmon quantification files\nmkdir -p sample1 sample2 sample3\necho -e \"Name\\tLength\\tEffectiveLength\\tTPM\\tNumReads\" > sample1/quant.sf\necho -e \"ENST00000000001.1\\t1000\\t900\\t10.5\\t100\" >> sample1/quant.sf\necho -e \"ENST00000000002.1\\t1200\\t1100\\t20.3\\t250\" >> sample1/quant.sf\necho -e \"ENST00000000003.1\\t800\\t700\\t5.1\\t50\" >> sample1/quant.sf\n\necho -e \"Name\\tLength\\tEffectiveLength\\tTPM\\tNumReads\" > sample2/quant.sf\necho -e \"ENST00000000001.1\\t1000\\t900\\t12.1\\t120\" >> sample2/quant.sf\necho -e \"ENST00000000002.1\\t1200\\t1100\\t18.7\\t230\" >> sample2/quant.sf\necho -e \"ENST00000000003.1\\t800\\t700\\t6.2\\t60\" >> sample2/quant.sf\n\necho -e \"Name\\tLength\\tEffectiveLength\\tTPM\\tNumReads\" > sample3/quant.sf\necho -e \"ENST00000000001.1\\t1000\\t900\\t9.8\\t95\" >> sample3/quant.sf\necho -e \"ENST00000000002.1\\t1200\\t1100\\t22.5\\t270\" >> sample3/quant.sf\necho -e \"ENST00000000003.1\\t800\\t700\\t4.9\\t45\" >> sample3/quant.sf\n\n# Create a dummy tx2gene mapping file\n# In a real scenario, this would be generated from a GTF/GFF annotation file\n# (e.g., using GenomicFeatures::makeTx2gene() in R).\n# Reference annotation source: Ensembl, GENCODE, UCSC (e.g., Homo_sapiens.GRCh38.109.gtf)\necho -e \"transcript_id\\tgene_id\" > tx2gene.tsv\necho -e \"ENST00000000001.1\\tENSG00000000001.1\" >> tx2gene.tsv\necho -e \"ENST00000000002.1\\tENSG00000000001.1\" >> tx2gene.tsv # Two transcripts map to one gene\necho -e \"ENST00000000003.1\\tENSG00000000002.1\" >> tx2gene.tsv\n\n# --- R script for Tximport ---\n# This script performs the transcript merging to genes\ncat << 'EOF' > run_tximport.R\nlibrary(tximport)\nlibrary(readr) # For write_tsv\n\n# --- Configuration ---\n# List of paths to transcript quantification files (e.g., Salmon quant.sf files)\nquant_files <- c(\n  \"sample1/quant.sf\",\n  \"sample2/quant.sf\",\n  \"sample3/quant.sf\"\n)\nnames(quant_files) <- c(\"sample1\", \"sample2\", \"sample3\")\n\n# Path to the transcript-to-gene mapping file\n# This file is typically generated from a reference genome annotation (e.g., GTF/GFF)\n# Example reference: Homo_sapiens.GRCh38.109.gtf from Ensembl\ntx2gene_file <- \"tx2gene.tsv\"\n\n# Output file for gene-level counts\noutput_gene_counts_file <- \"gene_level_counts.tsv\"\n\n# --- Load tx2gene mapping ---\ntx2gene <- read.delim(tx2gene_file, header = TRUE, stringsAsFactors = FALSE)\n\n# --- Perform transcript merging to genes ---\n# 'type' should match the quantification tool used (e.g., \"salmon\", \"kallisto\", \"rsem\")\n# 'countsFromAbundance' specifies how to get gene-level counts from transcript abundances.\n# \"lengthScaledTPM\" is often recommended for differential expression analysis.\ntxi <- tximport(\n  files = quant_files,\n  type = \"salmon\", # Assuming Salmon was used for quantification\n  tx2gene = tx2gene,\n  countsFromAbundance = \"lengthScaledTPM\",\n  ignoreTxVersion = TRUE # Useful if transcript IDs in quant files have versions (e.g., ENST... .1)\n)\n\n# Extract gene-level counts\ngene_counts <- as.data.frame(txi$counts)\n\n# Write gene-level counts to a TSV file\nwrite_tsv(gene_counts, output_gene_counts_file)\n\nmessage(paste(\"Gene-level counts saved to:\", output_gene_counts_file))\nEOF\n\n# --- Execution Command ---\nRscript run_tximport.R\n\n# --- Clean up dummy data (optional) ---\n# rm -rf sample1 sample2 sample3 tx2gene.tsv run_tximport.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/tximport.html"
+        }
+    ],
+    "raw_text": "We aligned reads to the human genome version GRCh38 with annotation version Gencode v40 using STAR (v2.7.1a). Gene expression levels were quantified using RSEM (v1.3.0), in which the TPM values were used to calculate Pearson correlation coefficient between replicates. Samples meeting specific criteria were selected for further analysis: only those with unique aligned reads greater than 10M and a Pearson correlation coefficient between replicates of 0.9 or higher were considered. Samples with fewer reads were re-sequenced to ensure an adequate count, while those with lower correlation were repeated. Plus and minus strand bigwig files were generated using bedGraphToBigWig (v2.9). Transcript abundance was quantified using Salmon (v1.9.0) with the \u00e2\u0080\u0093gcBias option. CQN (v1.40.0) was employed to normalize gene-level GC content and length biases. Transcript merging to genes was performed using Tximport (v1.22.0).\nAssembly: GRCh38\nSupplementary files format and content: Bam files and salmon quant files",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize.",
-      "tool_name": "Microarray",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Iter-plier algorithm used to quantify probesets.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "HTA-2_0.r3.pgf",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize. Iter-plier algorithm used to quantify probesets.\nHTA-2_0.r3.pgf",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize.",
+            "tool_name": "Microarray",
+            "tool_version": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Affymetrix Power Tools (APT) via Bioconda\n# conda install -c bioconda affy-power-tools\n\n# Example usage of apt-probeset-summarize\n# This command processes raw Affymetrix CEL files to generate probe set summaries.\n# Replace <array_type_library_file>, <output_directory>, <probeset_file>, and <cel_file(s)> with actual paths.\n# The array type library file (.pgf, .clf, .qcc) and probeset file (.mps) are specific to the Affymetrix array used.\n# Common summarization algorithms include RMA (Robust Multi-array Average), MAS5, PLIER.\n# The specific algorithm can be chosen using options like --rma, --mas5, --plier.\n# For example, using RMA:\napt-probeset-summarize --log-file apt_summarize.log --cel-files <path/to/cel_file1.CEL> <path/to/cel_file2.CEL> --out-dir <output_directory> --analysis-files-path <path/to/library_files_directory> --set-analysis-algorithm rma\n# Or, if using a list of CEL files:\n# apt-probeset-summarize --log-file apt_summarize.log --cel-file-list <path/to/cel_file_list.txt> --out-dir <output_directory> --analysis-files-path <path/to/library_files_directory> --set-analysis-algorithm rma\n# Note: <path/to/library_files_directory> should contain the .pgf, .clf, .qcc, .mps files for your array type.\n# The output will typically be a .chp file and a text file with expression values.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Iter-plier algorithm used to quantify probesets.",
+            "tool_name": "affy (R package) (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.80.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install R and Bioconductor if not already installed\n# For Bioconductor 3.19 (R 4.4):\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\")'\n# R -e 'BiocManager::install(\"affy\")'\n\n# Define input directory containing .CEL files\nCEL_DIR=\"path/to/your/cel_files\"\nOUTPUT_FILE=\"probeset_quantification.txt\"\n\n# Create an R script to perform PLIER quantification\ncat <<EOF > run_plier.R\nlibrary(affy)\n\n# Get list of CEL files\ncel_files <- list.files(\"${CEL_DIR}\", pattern = \"\\\\.CEL$\", full.names = TRUE)\n\nif (length(cel_files) == 0) {\n  stop(\"No .CEL files found in ${CEL_DIR}\")\n}\n\n# Read CEL files\nraw_data <- ReadAffy(filenames = cel_files)\n\n# Perform PLIER summarization\n# The 'just.plier' function performs background correction, normalization, and summarization\neset_plier <- just.plier(raw_data)\n\n# Extract expression matrix\nexpression_matrix <- exprs(eset_plier)\n\n# Write the expression matrix to a tab-separated file\nwrite.table(expression_matrix, file = \"${OUTPUT_FILE}\", sep = \"\\t\", quote = FALSE, col.names = NA)\n\nmessage(paste0(\"Probeset quantification completed and saved to ${OUTPUT_FILE}\"))\nEOF\n\n# Execute the R script\nRscript run_plier.R\n\n# Clean up the R script\nrm run_plier.R",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "HTA-2_0.r3.pgf",
+            "tool_name": "Affymetrix Power Tools (APT) (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Not explicitly stated.",
+            "code_example": "# Install Affymetrix Power Tools (APT) if not already installed.\n# APT binaries can be downloaded from the Thermo Fisher Scientific website.\n# Example installation (conceptual, as exact steps vary by OS and APT version):\n# wget https://assets.thermofisher.com/TFS-Assets/LSG/software/APT_2.11.2_Linux_x86_64.zip\n# unzip APT_2.11.2_Linux_x86_64.zip\n# export PATH=$PATH:/path/to/APT_binaries\n\n# Define input and output files/directories\nPGF_FILE=\"HTA-2_0.r3.pgf\" # Probe Group File for Human Transcriptome Array 2.0\nCDF_FILE=\"HTA-2_0.r3.cdf\" # Chip Description File, often accompanies the PGF file\nCEL_FILES=\"sample1.CEL sample2.CEL sample3.CEL\" # Placeholder for input raw CEL files from the array\nOUTPUT_DIR=\"summarized_hta_data\"\nANALYSIS_PROTOCOL=\"rma\" # Robust Multi-array Average is a common summarization method\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Execute the probeset summarization using APT's apt-probeset-summarize command.\n# This command performs background correction, normalization, and summarization\n# of probe-level data from CEL files into expression values.\napt-probeset-summarize \\\n  --pgf-file \"${PGF_FILE}\" \\\n  --cdf-file \"${CDF_FILE}\" \\\n  --cel-files \"${CEL_FILES}\" \\\n  --output-dir \"${OUTPUT_DIR}\" \\\n  --analysis-protocol \"${ANALYSIS_PROTOCOL}\" \\\n  --log-file \"${OUTPUT_DIR}/apt_summarize.log\"\n",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize. Iter-plier algorithm used to quantify probesets.\nHTA-2_0.r3.pgf",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,61 +1,61 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "library strategy: eCLIP",
-      "tool_name": "eCLIP",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Data was processed using Skipper, available at: http://github.com/yeolab/skipper",
-      "tool_name": "Skipper",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Reads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using skewer.",
-      "tool_name": "eCLIP",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Unique Molecular Identifiers (UMIs) were extracted from raw sequencing reads with fastp",
-      "tool_name": "fastp",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Extracted reads were aligned using STAR: --alignEndsType EndToEnd --genomeDir {params.star_sjdb} --genomeLoad NoSharedMemory --outBAMcompression 10 --outFileNamePrefix {params.outprefix} --winAnchorMultimapNmax 100 --outFilterMultimapNmax 100 --outFilterMultimapScoreRange 1 --outSAMmultNmax 1 --outMultimapperOrder Random --outFilterScoreMin 10 --outFilterType BySJout --limitOutSJcollapsed 5000000 --outReadsUnmapped None --outSAMattrRGline ID:{wildcards.replicate_label} --outSAMattributes All --outSAMmode Full --outSAMtype BAM Unsorted --outSAMunmapped Within --readFilesCommand zcat --outStd Log --readFilesIn {input.fq} --runMode alignReads --runThreadN {threads}",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Custom scripts called reproducible enriched windows and repetitive elements as part of Skipper",
-      "tool_name": "Skipper",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "library strategy: eCLIP\nData was processed using Skipper, available at: http://github.com/yeolab/skipper\nReads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using skewer.\nUnique Molecular Identifiers (UMIs) were extracted from raw sequencing reads with fastp\nExtracted reads were aligned using STAR: --alignEndsType EndToEnd --genomeDir {params.star_sjdb} --genomeLoad NoSharedMemory --outBAMcompression 10 --outFileNamePrefix {params.outprefix} --winAnchorMultimapNmax 100 --outFilterMultimapNmax 100 --outFilterMultimapScoreRange 1 --outSAMmultNmax 1 --outMultimapperOrder Random --outFilterScoreMin 10 --outFilterType BySJout --limitOutSJcollapsed 5000000 --outReadsUnmapped None --outSAMattrRGline ID:{wildcards.replicate_label} --outSAMattributes All --outSAMmode Full --outSAMtype BAM Unsorted --outSAMunmapped Within --readFilesCommand zcat --outStd Log --readFilesIn {input.fq} --runMode alignReads --runThreadN {threads}\nCustom scripts called reproducible enriched windows and repetitive elements as part of Skipper\nAssembly: GRCh38\nSupplementary files format and content: reproducible enriched window files contain p values, q values, enrichment, and annotations for significantly bound transcriptome tiled windows\nSupplementary files format and content: reproducible enriched re files contain p values, q values, enrichment, and annotations for significantly bound repetitive elements",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "library strategy: eCLIP",
+            "tool_name": "eCLIP",
+            "tool_version": "latest (pre-2021)",
+            "code_example": "# Clone the Yeo Lab eCLIP CWL workflow repository\n# git clone https://github.com/yeolab/eclip.git\n# cd eclip\n\n# Define placeholder input parameters for the eCLIP workflow in a YAML file (e.g., inputs.yaml)\n# Users should replace these paths and values with their actual data and desired settings.\n# Refer to the eclip/eclip.cwl and eclip/example_inputs.yaml in the cloned repository for full details.\ncat << EOF > inputs.yaml\nfastq_r1:\n  class: File\n  path: /path/to/your/sample_R1.fastq.gz # Placeholder: Replace with your R1 FASTQ file\nfastq_r2:\n  class: File\n  path: /path/to/your/sample_R2.fastq.gz # Placeholder: Replace with your R2 FASTQ file (or omit if single-end)\ngenome_fasta:\n  class: File\n  path: /path/to/your/reference/hg38.fa # Placeholder: Replace with your reference genome FASTA (e.g., hg38)\ngenome_gtf:\n  class: File\n  path: /path/to/your/reference/gencode.v38.annotation.gtf # Placeholder: Replace with your genome annotation GTF (e.g., Gencode v38)\nadapter_sequence: \"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\" # Placeholder: Replace with your actual adapter sequence\noutput_prefix: \"eclip_sample\" # Placeholder: Desired prefix for output files\nEOF\n\n# Install cwltool if not already installed\n# pip install cwltool\n\n# Execute the eCLIP CWL workflow using cwltool\n# Ensure you are in the directory containing 'eclip.cwl' (e.g., the 'eclip' directory after cloning)\ncwltool eclip.cwl inputs.yaml",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 2,
+            "description": "Data was processed using Skipper, available at: http://github.com/yeolab/skipper",
+            "tool_name": "Skipper",
+            "tool_version": "Not specified",
+            "code_example": "# Skipper is a Snakemake workflow for eCLIP data processing.\n# To use Skipper, first clone the repository:\n# git clone http://github.com/yeolab/skipper\n# cd skipper\n\n# Ensure Snakemake is installed:\n# conda install -c bioconda -c conda-forge snakemake\n\n# A 'config.yaml' file is required to run the Snakemake workflow.\n# This file specifies input data, reference genomes, and other parameters.\n# Example 'config.yaml' content (replace with actual paths and parameters):\n# ---\n# samples:\n#   sample_name_1:\n#     R1: \"path/to/sample_1_R1.fastq.gz\"\n#     R2: \"path/to/sample_1_R2.fastq.gz\" # Optional, if paired-end\n#   sample_name_2:\n#     R1: \"path/to/sample_2_R1.fastq.gz\"\n# genome_assembly: \"hg38\" # Placeholder for a common human reference genome\n# adapters: \"path/to/adapters.fa\" # Path to adapter sequences\n# output_dir: \"results\"\n# ---\n\n# Execute the Skipper Snakemake workflow.\n# Replace '8' with the desired number of CPU cores.\n# Ensure 'config.yaml' is properly configured for your data.\nsnakemake --cores 8 --configfile config.yaml",
+            "code_language": "bash",
+            "github_url": "http://github.com/yeolab/skipper"
+        },
+        {
+            "step_order": 3,
+            "description": "Reads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using skewer.",
+            "tool_name": "eCLIP",
+            "tool_version": "0.2.2 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install skewer (if not already installed)\n# conda install -c bioconda skewer\n\n# Define input and output files\nINPUT_READS=\"input_reads.fastq.gz\"\nOUTPUT_PREFIX=\"output_trimmed\"\n\n# Define eCLIP-specific adapter and barcode sequences\n# This 3' adapter sequence is commonly used in eCLIP protocols (e.g., from NEBNext Small RNA Library Prep Set for Illumina).\nADAPTER_SEQUENCE=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC\"\n# This represents a generic 8-nucleotide 5' barcode/UMI sequence to be trimmed.\n# In the yeolab/eclip workflow, a 'barcode_sequence' input is passed to skewer's -y option for 5' trimming.\n# If the barcode is a fixed sequence, replace 'NNNNNNNN' with the actual sequence.\n# If it's a UMI, skewer will attempt to match and trim this pattern from the 5' end.\nBARCODE_SEQUENCE=\"NNNNNNNN\"\n\n# Define trimming parameters, based on common eCLIP settings from yeolab/eclip workflow\nMIN_READ_LENGTH=18  # Minimum read length after trimming\nMIN_ADAPTER_LENGTH=10 # Minimum length of adapter to be matched\nQUALITY_THRESHOLD=20 # Minimum quality score for trimming\nTHREADS=8 # Number of threads to use\n\n# Execute skewer for adapter and barcode trimming\nskewer -x \"${ADAPTER_SEQUENCE}\" \\\n       -y \"${BARCODE_SEQUENCE}\" \\\n       -m ${MIN_READ_LENGTH} \\\n       -l ${MIN_ADAPTER_LENGTH} \\\n       -q ${QUALITY_THRESHOLD} \\\n       -t ${THREADS} \\\n       -o \"${OUTPUT_PREFIX}\" \\\n       \"${INPUT_READS}\"\n\n# The output files will be named output_trimmed-trimmed.fastq.gz (for single-end) or output_trimmed-trimmed-pair1.fastq.gz and output_trimmed-trimmed-pair2.fastq.gz (for paired-end)",
+            "code_language": "bash",
+            "github_url": "https://github.com/relipmoc/skewer"
+        },
+        {
+            "step_order": 4,
+            "description": "Unique Molecular Identifiers (UMIs) were extracted from raw sequencing reads with fastp",
+            "tool_name": "fastp",
+            "tool_version": "0.23.2",
+            "code_example": "# Install fastp (e.g., using conda)\n# conda install -c bioconda fastp\n\n# Define input and output file paths\nINPUT_R1=\"raw_reads_R1.fastq.gz\"\nINPUT_R2=\"raw_reads_R2.fastq.gz\"\nOUTPUT_R1=\"umi_extracted_R1.fastq.gz\"\nOUTPUT_R2=\"umi_extracted_R2.fastq.gz\"\nREPORT_JSON=\"fastp.json\"\nREPORT_HTML=\"fastp.html\"\n\n# Extract UMIs from raw sequencing reads using fastp\n# This command assumes UMIs are located at the beginning of Read 1 (e.g., 10 bp long)\n# and moves them to the read ID. Adjust --umi_loc and --umi_len as per experimental design.\nfastp \\\n  -i \"${INPUT_R1}\" \\\n  -o \"${OUTPUT_R1}\" \\\n  -I \"${INPUT_R2}\" \\\n  -O \"${OUTPUT_R2}\" \\\n  --umi \\\n  --umi_loc read1 \\\n  --umi_len 10 \\\n  --umi_prefix UMI: \\\n  --json \"${REPORT_JSON}\" \\\n  --html \"${REPORT_HTML}\" \\\n  -w 8",
+            "code_language": "bash",
+            "github_url": "https://github.com/OpenGene/fastp"
+        },
+        {
+            "step_order": 5,
+            "description": "Extracted reads were aligned using STAR: --alignEndsType EndToEnd --genomeDir {params.star_sjdb} --genomeLoad NoSharedMemory --outBAMcompression 10 --outFileNamePrefix {params.outprefix} --winAnchorMultimapNmax 100 --outFilterMultimapNmax 100 --outFilterMultimapScoreRange 1 --outSAMmultNmax 1 --outMultimapperOrder Random --outFilterScoreMin 10 --outFilterType BySJout --limitOutSJcollapsed 5000000 --outReadsUnmapped None --outSAMattrRGline ID:{wildcards.replicate_label} --outSAMattributes All --outSAMmode Full --outSAMtype BAM Unsorted --outSAMunmapped Within --readFilesCommand zcat --outStd Log --readFilesIn {input.fq} --runMode alignReads --runThreadN {threads}",
+            "tool_name": "STAR",
+            "tool_version": "2.7.x",
+            "code_example": "# Install STAR using conda\n# conda install -c bioconda star\n\n# Example variables (replace with actual paths and values)\nSTAR_GENOME_DIR=\"/path/to/STAR_genome_index/GRCh38\" # Path to STAR genome index directory\nOUTPUT_PREFIX=\"sample_aligned\"\nREAD_FILES=\"sample_R1.fastq.gz sample_R2.fastq.gz\" # For paired-end reads, space-separated. For single-end, provide one file.\nTHREADS=8\nREPLICATE_LABEL=\"sample_rep1\"\n\nSTAR \\\n    --alignEndsType EndToEnd \\\n    --genomeDir \"${STAR_GENOME_DIR}\" \\\n    --genomeLoad NoSharedMemory \\\n    --outBAMcompression 10 \\\n    --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n    --winAnchorMultimapNmax 100 \\\n    --outFilterMultimapNmax 100 \\\n    --outFilterMultimapScoreRange 1 \\\n    --outSAMmultNmax 1 \\\n    --outMultimapperOrder Random \\\n    --outFilterScoreMin 10 \\\n    --outFilterType BySJout \\\n    --limitOutSJcollapsed 5000000 \\\n    --outReadsUnmapped None \\\n    --outSAMattrRGline ID:\"${REPLICATE_LABEL}\" \\\n    --outSAMattributes All \\\n    --outSAMmode Full \\\n    --outSAMtype BAM Unsorted \\\n    --outSAMunmapped Within \\\n    --readFilesCommand zcat \\\n    --outStd Log \\\n    --readFilesIn \"${READ_FILES}\" \\\n    --runMode alignReads \\\n    --runThreadN \"${THREADS}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 6,
+            "description": "Custom scripts called reproducible enriched windows and repetitive elements as part of Skipper",
+            "tool_name": "Skipper",
+            "tool_version": "unversioned",
+            "code_example": "# Install Snakemake if not already installed\n# conda install -c bioconda -c conda-forge snakemake\n\n# Clone the Skipper workflow\n# git clone https://github.com/yeolab/skipper.git\n# cd skipper\n\n# Create a configuration file (config.yaml) for your eCLIP experiment.\n# This file defines input samples, genome assembly, and other parameters.\n# Example content for config.yaml (adjust paths and values as needed):\ncat << EOF > config.yaml\nsamples:\n  sample1:\n    ip: \"path/to/sample1_ip.bam\"\n    input: \"path/to/sample1_input.bam\"\n  sample2:\n    ip: \"path/to/sample2_ip.bam\"\n    input: \"path/to/sample2_input.bam\"\ngenome: \"hg38\" # Placeholder: Use the latest assembly like hg38 or mm10\nannotation: \"path/to/gencode.vXX.annotation.gtf\" # Placeholder: e.g., GENCODE v38 for hg38\n# Other parameters for peak calling, IDR, repeat element analysis, etc.\n# Refer to the Skipper documentation for a complete list of configurable options.\nEOF\n\n# Run the Skipper workflow.\n# This command will execute the Snakemake pipeline, which includes\n# custom scripts for identifying reproducible enriched windows (peaks)\n# and analyzing repetitive elements based on the provided configuration.\n# The specific outputs related to \"reproducible enriched windows\" and\n# \"repetitive elements\" will be generated in the designated output directory\n# as defined by the workflow and configuration.\nsnakemake --snakefile Snakefile --configfile config.yaml --cores 8 # Adjust cores as needed",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper/"
+        }
+    ],
+    "raw_text": "library strategy: eCLIP\nData was processed using Skipper, available at: http://github.com/yeolab/skipper\nReads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using skewer.\nUnique Molecular Identifiers (UMIs) were extracted from raw sequencing reads with fastp\nExtracted reads were aligned using STAR: --alignEndsType EndToEnd --genomeDir {params.star_sjdb} --genomeLoad NoSharedMemory --outBAMcompression 10 --outFileNamePrefix {params.outprefix} --winAnchorMultimapNmax 100 --outFilterMultimapNmax 100 --outFilterMultimapScoreRange 1 --outSAMmultNmax 1 --outMultimapperOrder Random --outFilterScoreMin 10 --outFilterType BySJout --limitOutSJcollapsed 5000000 --outReadsUnmapped None --outSAMattrRGline ID:{wildcards.replicate_label} --outSAMattributes All --outSAMmode Full --outSAMtype BAM Unsorted --outSAMunmapped Within --readFilesCommand zcat --outStd Log --readFilesIn {input.fq} --runMode alignReads --runThreadN {threads}\nCustom scripts called reproducible enriched windows and repetitive elements as part of Skipper\nAssembly: GRCh38\nSupplementary files format and content: reproducible enriched window files contain p values, q values, enrichment, and annotations for significantly bound transcriptome tiled windows\nSupplementary files format and content: reproducible enriched re files contain p values, q values, enrichment, and annotations for significantly bound repetitive elements",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "The simpleaffy package in R/Bioconductor was used to calculate MAS5.0 calls.",
-      "tool_name": "R",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "These values are not normalized.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Normalization was performed by quantile normalization with respect to a defined reference set.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "The simpleaffy package in R/Bioconductor was used to calculate MAS5.0 calls. These values are not normalized. Normalization was performed by quantile normalization with respect to a defined reference set.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "The simpleaffy package in R/Bioconductor was used to calculate MAS5.0 calls.",
+            "tool_name": "R",
+            "tool_version": "Inferred with models/gemini-2.5-flash",
+            "code_example": "# Install R and Bioconductor (if not already installed)\n# For example, using conda:\n# conda create -n r_simpleaffy r-base bioconductor-simpleaffy bioconductor-affy -y\n# conda activate r_simpleaffy\n\n# Or, within R:\n# if (!requireNamespace(\"BiocManager\", quietly = TRUE))\n#     install.packages(\"BiocManager\")\n# BiocManager::install(c(\"simpleaffy\", \"affy\"))\n\n# Create an R script to calculate MAS5.0 calls\ncat << 'EOF' > calculate_mas5_calls.R\n# Load necessary libraries\nlibrary(simpleaffy)\nlibrary(affy) # Often used to read CEL files\n\n# Define the path to your CEL files\n# Replace with the actual path to your Affymetrix .CEL files\ncel_file_directory <- \".\" # Example: current directory, or specify e.g., \"/data/affymetrix_cels\"\n\n# List all .CEL files in the specified directory\n# The pattern uses double backslashes for escaping the dot in R regex\ncel_files <- list.files(path = cel_file_directory, pattern = \".*\\\\.CEL$\", full.names = TRUE)\n\nif (length(cel_files) == 0) {\n    stop(\"No .CEL files found in the specified directory: \", cel_file_directory, \". Please provide Affymetrix .CEL files.\")\n}\n\n# Read the .CEL files into an AffyBatch object\n# This step requires the 'affy' package\nraw_data <- ReadAffy(filenames = cel_files)\n\n# Calculate MAS5.0 calls\n# This function returns a data frame with probe set IDs, detection p-values, and call (P/M/A)\nmas5_calls_results <- mas5calls(raw_data)\n\n# Define the output file path\noutput_file <- \"mas5_calls_output.csv\"\n\n# Save the results to a CSV file\nwrite.csv(mas5_calls_results, output_file, row.names = FALSE)\n\nmessage(paste(\"MAS5.0 calls successfully calculated and saved to:\", output_file))\nEOF\n\nRscript calculate_mas5_calls.R",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "These values are not normalized.",
+            "tool_name": "Raw Data (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# This step indicates that the data values are in their raw, unnormalized state.\n# No specific command is executed for this descriptive step itself.\n# Normalization would typically be performed by a subsequent tool.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "Normalization was performed by quantile normalization with respect to a defined reference set.",
+            "tool_name": "R (preprocessCore) (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "R 4.3.2, preprocessCore 1.64.0",
+            "code_example": "# Install R and preprocessCore package if not already installed\n# conda install -c conda-forge r-base=4.3.2\n# conda install -c bioconda r-preprocesscore=1.64.0\n\n# Create dummy input files for demonstration (replace with actual paths and data)\n# input_data.tsv: Tab-separated matrix with gene/feature names as row names and samples as columns\n# reference_distribution.tsv: Single-column file containing the sorted values of the target distribution\n\n# Example dummy input_data.tsv (replace with your actual data file)\n# echo -e \"gene\\tsample1\\tsample2\\tsample3\" > input_data.tsv\n# echo -e \"geneA\\t100\\t120\\t90\" >> input_data.tsv\n# echo -e \"geneB\\t50\\t60\\t45\" >> input_data.tsv\n# echo -e \"geneC\\t200\\t210\\t180\" >> input_data.tsv\n# echo -e \"geneD\\t10\\t15\\t8\" >> input_data.tsv\n\n# Example dummy reference_distribution.tsv (replace with your actual reference distribution file)\n# This file should contain a single column of sorted values representing the target distribution.\n# echo -e \"10\\n50\\n100\\n200\" > reference_distribution.tsv\n\n# R script for quantile normalization with a defined reference set\ncat << 'EOF' > normalize_script.R\nlibrary(preprocessCore)\n\n# Load input data matrix\n# Assumes the first column contains row names (e.g., gene IDs) and subsequent columns are sample data.\n# Adjust 'sep', 'header', and 'row.names' based on your actual input file format.\ninput_data <- read.table(\"input_data.tsv\", sep=\"\\t\", header=TRUE, row.names=1)\ndata_matrix <- as.matrix(input_data)\n\n# Load the defined reference distribution\n# Assumes it's a single-column file without a header.\nreference_dist <- as.vector(read.table(\"reference_distribution.tsv\", header=FALSE)[,1])\n\n# Perform quantile normalization with respect to the defined reference distribution\n# The 'target.distribution' argument ensures normalization to a specific reference.\nnormalized_matrix <- normalize.quantiles.use.target(data_matrix, target.distribution=reference_dist)\n\n# Restore column and row names to the normalized matrix\ncolnames(normalized_matrix) <- colnames(data_matrix)\nrownames(normalized_matrix) <- rownames(data_matrix)\n\n# Save the normalized data to an output file\n# 'col.names=NA' is used to prevent writing a blank column name for the row names column.\nwrite.table(normalized_matrix, \"normalized_counts.tsv\", sep=\"\\t\", quote=FALSE, col.names=NA)\nEOF\n\n# Execute the R script\nRscript normalize_script.R",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "The simpleaffy package in R/Bioconductor was used to calculate MAS5.0 calls. These values are not normalized. Normalization was performed by quantile normalization with respect to a defined reference set.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

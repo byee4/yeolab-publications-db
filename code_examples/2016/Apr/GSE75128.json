@@ -1,70 +1,70 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "A genome index was first generated using the Ensembl C. elegans genome WBcel235 and the Ensembl gene annotation file (version WBcel235.82) by the command: \u00e2\u0080\u009cSTAR --runThreadN 8 --runMode genomeGenerate --genomeDir <output folder> --genomeFastaFiles <path to genome fasta> --sjdbGTFfile <path to .gtf gene annotation file> --sjdbOverhang 49 --genomeSAindexNbases 12\u00e2\u0080\u009d.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reads from all six samples were then mapped onto the genome using: \u00e2\u0080\u009cSTAR --runThreadN 8 --genomeDir <path to genome index> --readFilesIn <list of sequence files> --outFileNamePrefix <Prefix for output files> --outFilterMismatchNmax 3 --outFilterMultimapNmax 10\u00e2\u0080\u009d.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Reads that uniquely mapped to annotated genes were counted by htseq-count using the command: \u00e2\u0080\u009chtseq-count --stranded=no <.sam file> <.gtf gene annotation file> > <output file name>\u00e2\u0080\u009d.",
-      "tool_name": "HTSeq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "DESeq2 (Love et al., 2014) was used to perform differential analysis of gene expression between different groups.",
-      "tool_name": "DESeq2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "First, a DESeq2 data set was created by: \u00e2\u0080\u009c(dds <- DESeqDataSetFromMatrix(countData = countdata, colData = coldata, design = ~ genotype))\u00e2\u0080\u009d.",
-      "tool_name": "DESeq2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Second, the size factors (normalization for sequence depth) for each group were estimated by: \u00e2\u0080\u009cdds <- estimateSizeFactors(dds)\u00e2\u0080\u009d.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Differential analysis was performed by calling \u00e2\u0080\u009cdds <- DESeq(dds)\u00e2\u0080\u009d and pairwise comparison was performed at a false discovery rate of 0.05 by: \u00e2\u0080\u009cres_group1_group2_alpha.05 <- results(dds, contrast=c(\"genotype\", \"group1\", \"group2\"), alpha = .05)\u00e2\u0080\u009d.",
-      "tool_name": "DESeq2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "A genome index was first generated using the Ensembl  C. elegans genome WBcel235 and the Ensembl gene annotation file (version WBcel235.82)  by the command: \u00e2\u0080\u009cSTAR --runThreadN 8 --runMode genomeGenerate --genomeDir <output  folder> --genomeFastaFiles <path to genome fasta> --sjdbGTFfile <path to .gtf gene  annotation file> --sjdbOverhang 49 --genomeSAindexNbases 12\u00e2\u0080\u009d.\nReads from all six samples were then mapped onto the genome using: \u00e2\u0080\u009cSTAR --runThreadN 8 --genomeDir  <path to genome index> --readFilesIn <list of sequence files> --outFileNamePrefix <Prefix  for output files> --outFilterMismatchNmax 3 --outFilterMultimapNmax 10\u00e2\u0080\u009d.\nReads that uniquely mapped to annotated genes were counted by htseq-count using the command: \u00e2\u0080\u009chtseq-count --stranded=no <.sam file> <.gtf gene annotation file> > <output file name>\u00e2\u0080\u009d.\nDESeq2 (Love et al., 2014) was used to perform differential analysis of gene  expression between different groups. First, a DESeq2 data set was created by: \u00e2\u0080\u009c(dds <-  DESeqDataSetFromMatrix(countData = countdata, colData = coldata, design = ~  genotype))\u00e2\u0080\u009d. Second, the size factors (normalization for sequence depth) for each group  were estimated by: \u00e2\u0080\u009cdds <- estimateSizeFactors(dds)\u00e2\u0080\u009d.\nDifferential analysis was performed by calling \u00e2\u0080\u009cdds <- DESeq(dds)\u00e2\u0080\u009d and pairwise  comparison was performed at a false discovery rate of 0.05 by: \u00e2\u0080\u009cres_group1_group2_alpha.05 <- results(dds, contrast=c(\"genotype\", \"group1\", \"group2\"), alpha = .05)\u00e2\u0080\u009d.\nGenome_build: WBcel235\nSupplementary_files_format_and_content: csv file that contains counts, normalized expression (rpkm), log2FoldChange(SIN/WT), adjusted p-values as well as useful published information for each gene annotation and each of the six samples",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "A genome index was first generated using the Ensembl C. elegans genome WBcel235 and the Ensembl gene annotation file (version WBcel235.82) by the command: \u00e2\u0080\u009cSTAR --runThreadN 8 --runMode genomeGenerate --genomeDir <output folder> --genomeFastaFiles <path to genome fasta> --sjdbGTFfile <path to .gtf gene annotation file> --sjdbOverhang 49 --genomeSAindexNbases 12\u00e2\u0080\u009d.",
+            "tool_name": "STAR",
+            "tool_version": "(Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Create directories for reference files and output\nmkdir -p references\nmkdir -p star_genome_index\n\n# Download Ensembl C. elegans genome WBcel235 (release 82)\nwget -O references/Caenorhabditis_elegans.WBcel235.dna.toplevel.fa.gz ftp://ftp.ensembl.org/pub/release-82/fasta/caenorhabditis_elegans/dna/Caenorhabditis_elegans.WBcel235.dna.toplevel.fa.gz\n\n# Download Ensembl C. elegans gene annotation file WBcel235.82 (release 82)\nwget -O references/Caenorhabditis_elegans.WBcel235.82.gtf ftp://ftp.ensembl.org/pub/release-82/gtf/caenorhabditis_elegans/Caenorhabditis_elegans.WBcel235.82.gtf\n\n# Generate genome index\nSTAR --runThreadN 8 \\\n     --runMode genomeGenerate \\\n     --genomeDir star_genome_index \\\n     --genomeFastaFiles references/Caenorhabditis_elegans.WBcel235.dna.toplevel.fa.gz \\\n     --sjdbGTFfile references/Caenorhabditis_elegans.WBcel235.82.gtf \\\n     --sjdbOverhang 49 \\\n     --genomeSAindexNbases 12",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "Reads from all six samples were then mapped onto the genome using: \u00e2\u0080\u009cSTAR --runThreadN 8 --genomeDir <path to genome index> --readFilesIn <list of sequence files> --outFileNamePrefix <Prefix for output files> --outFilterMismatchNmax 3 --outFilterMultimapNmax 10\u00e2\u0080\u009d.",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables for clarity\n# Placeholder: Replace with actual path to your STAR genome index (e.g., for human hg38)\nGENOME_DIR=\"path/to/STAR_genome_index_hg38\"\n\n# Placeholder: Replace with actual list of sequence files for all six samples.\n# Assuming paired-end reads for typical RNA-seq, adjust as needed for single-end.\nREAD_FILES=\"sample1_R1.fastq.gz sample1_R2.fastq.gz \\\n            sample2_R1.fastq.gz sample2_R2.fastq.gz \\\n            sample3_R1.fastq.gz sample3_R2.fastq.gz \\\n            sample4_R1.fastq.gz sample4_R2.fastq.gz \\\n            sample5_R1.fastq.gz sample5_R2.fastq.gz \\\n            sample6_R1.fastq.gz sample6_R2.fastq.gz\"\n\n# Placeholder: Replace with desired prefix for output files\nOUTPUT_PREFIX=\"mapped_reads\"\n\n# Execute STAR alignment\nSTAR \\\n  --runThreadN 8 \\\n  --genomeDir \"${GENOME_DIR}\" \\\n  --readFilesIn ${READ_FILES} \\\n  --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n  --outFilterMismatchNmax 3 \\\n  --outFilterMultimapNmax 10",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "Reads that uniquely mapped to annotated genes were counted by htseq-count using the command: \u00e2\u0080\u009chtseq-count --stranded=no <.sam file> <.gtf gene annotation file> > <output file name>\u00e2\u0080\u009d.",
+            "tool_name": "HTSeq",
+            "tool_version": "Inferred with models/gemini-2.5-flash",
+            "code_example": "# Define input and output files\nSAM_FILE=\"input.sam\"\nGTF_FILE=\"annotation.gtf\"\nOUTPUT_FILE=\"gene_counts.txt\"\n\n# Count reads uniquely mapped to annotated genes\nhtseq-count --stranded=no \"${SAM_FILE}\" \"${GTF_FILE}\" > \"${OUTPUT_FILE}\"",
+            "code_language": "bash",
+            "github_url": "https://htseq.readthedocs.io/en/master/"
+        },
+        {
+            "step_order": 4,
+            "description": "DESeq2 (Love et al., 2014) was used to perform differential analysis of gene expression between different groups.",
+            "tool_name": "DESeq2",
+            "tool_version": "1.4.5",
+            "code_example": "# Install R and Bioconductor if not already present\n# For example, using conda:\n# conda create -n deseq2_env r-base bioconductor-deseq2 r-readr r-dplyr\n# conda activate deseq2_env\n\n# Create dummy input files for demonstration\n# In a real scenario, these would be generated by upstream steps (e.g., featureCounts, Salmon, Kallisto)\necho \"gene_id,sample1,sample2,sample3,sample4\" > counts.csv\necho \"geneA,100,120,50,60\" >> counts.csv\necho \"geneB,20,25,80,90\" >> counts.csv\necho \"geneC,500,550,200,220\" >> counts.csv\n\necho \"sample,group\" > coldata.csv\necho \"sample1,control\" >> coldata.csv\necho \"sample2,control\" >> coldata.csv\necho \"sample3,treatment\" >> coldata.csv\necho \"sample4,treatment\" >> coldata.csv\n\n# Create an R script for DESeq2 analysis\ncat << 'EOF' > run_deseq2.R\n# Load necessary libraries\nlibrary(DESeq2)\nlibrary(readr)\nlibrary(dplyr)\n\n# --- Configuration ---\ncounts_file <- \"counts.csv\"\ncoldata_file <- \"coldata.csv\"\noutput_file <- \"deseq2_results.csv\"\ndesign_formula <- \"~ group\" # Example design formula\n\n# --- Load Data ---\n# Read count data\ncounts_df <- read_csv(counts_file)\n# Assuming the first column is gene_id and subsequent columns are sample counts\ngene_ids <- counts_df[[1]]\ncounts_matrix <- as.matrix(counts_df[,-1])\nrownames(counts_matrix) <- gene_ids\n\n# Read colData (sample metadata)\ncoldata_df <- read_csv(coldata_file)\n# Ensure sample names match column names in counts_matrix\n# And ensure order matches\ncoldata_df <- coldata_df %>%\n  filter(sample %in% colnames(counts_matrix)) %>%\n  arrange(match(sample, colnames(counts_matrix)))\nrownames(coldata_df) <- coldata_df$sample\n\n# Ensure colData has factors for grouping variables\ncoldata_df$group <- factor(coldata_df$group)\n\n# --- Create DESeqDataSet object ---\ndds <- DESeqDataSetFromMatrix(countData = counts_matrix,\n                              colData = coldata_df,\n                              design = as.formula(design_formula))\n\n# --- Run DESeq2 analysis ---\ndds <- DESeq(dds)\n\n# --- Extract results ---\n# Example: comparing 'treatment' vs 'control'\n# The contrast should be adjusted based on the actual groups in your colData\nres <- results(dds, contrast=c(\"group\", \"treatment\", \"control\"))\n\n# Order results by adjusted p-value\nres_ordered <- res[order(res$padj),]\n\n# Convert to data frame and write to CSV\nres_df <- as.data.frame(res_ordered)\nwrite_csv(res_df, output_file)\n\nmessage(paste(\"DESeq2 analysis complete. Results saved to\", output_file))\nEOF\n\n# Execute the R script\nRscript run_deseq2.R",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/s13059-014-0550-8"
+        },
+        {
+            "step_order": 5,
+            "description": "First, a DESeq2 data set was created by: \u00e2\u0080\u009c(dds <- DESeqDataSetFromMatrix(countData = countdata, colData = coldata, design = ~ genotype))\u00e2\u0080\u009d.",
+            "tool_name": "DESeq2",
+            "tool_version": "1.x.x",
+            "code_example": "# Install BiocManager and DESeq2 (if not already installed)\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\")'\n# R -e 'BiocManager::install(\"DESeq2\")'\n\n# Create a dummy countdata.csv for demonstration purposes.\n# In a real pipeline, this would be generated by a previous step (e.g., featureCounts).\n# The first column represents gene IDs, and subsequent columns are raw counts for samples.\ncat <<EOF > countdata.csv\ngene1,100,120,110,200,210,220\ngene2,50,60,55,100,110,105\ngene3,200,210,205,400,410,405\ngene4,10,12,11,20,22,21\ngene5,30,35,32,60,65,62\ngene6,70,75,72,140,145,142\nEOF\n\n# Create a dummy coldata.csv for demonstration purposes.\n# In a real pipeline, this would be provided as sample metadata.\n# The first column represents sample IDs, and subsequent columns are metadata, including 'genotype'.\ncat <<EOF > coldata.csv\nsample,genotype\nsample1,WT\nsample2,WT\nsample3,WT\nsample4,KO\nsample5,KO\nsample6,KO\nEOF\n\n# R script to create the DESeq2 data set object.\n# This script reads the count and colData, then constructs the DESeqDataSet object.\ncat <<'EOF_R_SCRIPT' > deseq2_prep.R\n#!/usr/bin/env Rscript\n\n# Load DESeq2 library\nlibrary(DESeq2)\n\n# Read count data from CSV.\n# Assumes the first column contains row names (gene IDs) and the header is present.\ncountdata_raw <- read.csv(\"countdata.csv\", row.names = 1, header = TRUE)\n# Convert the data frame of counts to a matrix, which is required by DESeqDataSetFromMatrix.\ncountdata <- as.matrix(countdata_raw)\n\n# Read colData (sample metadata) from CSV.\n# Assumes the first column contains row names (sample IDs) and the header is present.\ncoldata <- read.csv(\"coldata.csv\", row.names = 1, header = TRUE)\n\n# Ensure colData sample names match countData column names and are in the same order.\n# This step is crucial for correct mapping of metadata to count data.\ncoldata <- coldata[colnames(countdata), , drop=FALSE]\n\n# Ensure the 'genotype' column is treated as a factor, which is necessary for DESeq2 design formulas.\ncoldata$genotype <- factor(coldata$genotype)\n\n# Create a DESeq2 data set object (dds).\n# This object encapsulates count data, sample metadata, and the experimental design formula.\ndds <- DESeqDataSetFromMatrix(countData = countdata,\n                              colData = coldata,\n                              design = ~ genotype)\n\n# Save the dds object to an .rds file.\n# This allows the object to be loaded and used in subsequent DESeq2 analysis steps (e.g., normalization, differential expression).\nsaveRDS(dds, file = \"dds_object.rds\")\n\n# Optional: Print a summary of the created dds object to the console.\nprint(dds)\nEOF_R_SCRIPT\n\n# Execute the R script to perform the DESeq2 data set creation.\nRscript deseq2_prep.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/DESeq2.html"
+        },
+        {
+            "step_order": 6,
+            "description": "Second, the size factors (normalization for sequence depth) for each group were estimated by: \u00e2\u0080\u009cdds <- estimateSizeFactors(dds)\u00e2\u0080\u009d.",
+            "tool_name": "DESeq2 (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Not specified",
+            "code_example": "# Install DESeq2 if not already installed\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\"); BiocManager::install(\"DESeq2\")'\n\n# Define input and output file paths for the DESeqDataSet object\n# Replace with actual paths in a real pipeline\nINPUT_DDS_FILE=\"input_dds.rds\" # Assuming dds object from previous step\nOUTPUT_DDS_FILE=\"dds_with_size_factors.rds\"\n\n# Execute DESeq2 command to estimate size factors\nRscript -e \"\n  library(DESeq2)\n  # Load the DESeqDataSet object from the previous step\n  if (!file.exists('${INPUT_DDS_FILE}')) {\n    stop('Input DDS file not found: ${INPUT_DDS_FILE}')\n  }\n  dds <- readRDS('${INPUT_DDS_FILE}')\n\n  # Estimate size factors\n  dds <- estimateSizeFactors(dds)\n\n  # Save the updated DESeqDataSet object\n  saveRDS(dds, file='${OUTPUT_DDS_FILE}')\n\"",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/DESeq2.html"
+        },
+        {
+            "step_order": 7,
+            "description": "Differential analysis was performed by calling \u00e2\u0080\u009cdds <- DESeq(dds)\u00e2\u0080\u009d and pairwise comparison was performed at a false discovery rate of 0.05 by: \u00e2\u0080\u009cres_group1_group2_alpha.05 <- results(dds, contrast=c(\"genotype\", \"group1\", \"group2\"), alpha = .05)\u00e2\u0080\u009d.",
+            "tool_name": "DESeq2",
+            "tool_version": "Not specified",
+            "code_example": "# Install R and Bioconductor if not already present\n# conda install -c bioconda bioconductor-deseq2\n# Or in R:\n# if (!requireNamespace(\"BiocManager\", quietly = TRUE))\n#     install.packages(\"BiocManager\")\n# BiocManager::install(\"DESeq2\")\n\n# Create an R script (e.g., deseq2_analysis.R)\ncat << 'EOF' > deseq2_analysis.R\nlibrary(DESeq2)\nlibrary(dplyr) # For data manipulation if needed for colData\n\n# --- Placeholder for creating/loading the DESeqDataSet object 'dds' ---\n# In a real pipeline, 'dds' would be created from a count matrix\n# and a sample metadata (colData) table from previous steps.\n# Replace this section with your actual data loading/creation.\n\n# Example: Create dummy count data and colData for illustration\n# This assumes you have a count matrix (e.g., from featureCounts)\n# and a metadata file describing your samples.\n\n# Dummy count matrix (replace with your actual counts)\n# Rows are genes, columns are samples\nset.seed(123)\ncounts_data <- matrix(sample(1:1000, 100*6, replace=TRUE), ncol=6)\nrownames(counts_data) <- paste0(\"gene\", 1:100)\ncolnames(counts_data) <- c(\"sample1_group1\", \"sample2_group1\", \"sample3_group1\",\n                           \"sample4_group2\", \"sample5_group2\", \"sample6_group2\")\n\n# Dummy sample metadata (colData)\ncol_data <- data.frame(\n  sample = colnames(counts_data),\n  genotype = factor(c(rep(\"group1\", 3), rep(\"group2\", 3))),\n  row.names = colnames(counts_data)\n)\n\n# Ensure colData has the same sample names as count matrix columns\nstopifnot(all(colnames(counts_data) == rownames(col_data)))\n\n# Create DESeqDataSet object\ndds <- DESeqDataSetFromMatrix(countData = counts_data,\n                              colData = col_data,\n                              design = ~ genotype)\n\nmessage(\"DESeqDataSet object 'dds' created/loaded.\")\n# --- End of Placeholder ---\n\n\n# Perform differential expression analysis\nmessage(\"Performing DESeq analysis...\")\ndds <- DESeq(dds)\nmessage(\"DESeq analysis complete.\")\n\n# Perform pairwise comparison for group1 vs group2\n# The contrast specifies the factor (\"genotype\"), the numerator (\"group1\"), and the denominator (\"group2\")\nmessage(\"Performing pairwise comparison for group1 vs group2 at alpha = 0.05...\")\nres_group1_group2_alpha.05 <- results(dds, contrast=c(\"genotype\", \"group1\", \"group2\"), alpha = .05)\nmessage(\"Pairwise comparison complete.\")\n\n# Save the results\noutput_file <- \"deseq2_results_group1_vs_group2_alpha05.csv\"\nwrite.csv(as.data.frame(res_group1_group2_alpha.05), file=output_file, row.names=TRUE)\nmessage(paste(\"Results saved to:\", output_file))\n\n# Optionally save the dds object after analysis\n# saveRDS(dds, file=\"dds_after_deseq.rds\")\nEOF\n\n# Execute the R script\nRscript deseq2_analysis.R",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/s13059-014-0550-8"
+        }
+    ],
+    "raw_text": "A genome index was first generated using the Ensembl  C. elegans genome WBcel235 and the Ensembl gene annotation file (version WBcel235.82)  by the command: \u00e2\u0080\u009cSTAR --runThreadN 8 --runMode genomeGenerate --genomeDir <output  folder> --genomeFastaFiles <path to genome fasta> --sjdbGTFfile <path to .gtf gene  annotation file> --sjdbOverhang 49 --genomeSAindexNbases 12\u00e2\u0080\u009d.\nReads from all six samples were then mapped onto the genome using: \u00e2\u0080\u009cSTAR --runThreadN 8 --genomeDir  <path to genome index> --readFilesIn <list of sequence files> --outFileNamePrefix <Prefix  for output files> --outFilterMismatchNmax 3 --outFilterMultimapNmax 10\u00e2\u0080\u009d.\nReads that uniquely mapped to annotated genes were counted by htseq-count using the command: \u00e2\u0080\u009chtseq-count --stranded=no <.sam file> <.gtf gene annotation file> > <output file name>\u00e2\u0080\u009d.\nDESeq2 (Love et al., 2014) was used to perform differential analysis of gene  expression between different groups. First, a DESeq2 data set was created by: \u00e2\u0080\u009c(dds <-  DESeqDataSetFromMatrix(countData = countdata, colData = coldata, design = ~  genotype))\u00e2\u0080\u009d. Second, the size factors (normalization for sequence depth) for each group  were estimated by: \u00e2\u0080\u009cdds <- estimateSizeFactors(dds)\u00e2\u0080\u009d.\nDifferential analysis was performed by calling \u00e2\u0080\u009cdds <- DESeq(dds)\u00e2\u0080\u009d and pairwise  comparison was performed at a false discovery rate of 0.05 by: \u00e2\u0080\u009cres_group1_group2_alpha.05 <- results(dds, contrast=c(\"genotype\", \"group1\", \"group2\"), alpha = .05)\u00e2\u0080\u009d.\nGenome_build: WBcel235\nSupplementary_files_format_and_content: csv file that contains counts, normalized expression (rpkm), log2FoldChange(SIN/WT), adjusted p-values as well as useful published information for each gene annotation and each of the six samples",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

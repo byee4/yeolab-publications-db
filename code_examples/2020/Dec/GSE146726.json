@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Fastq files demultiplexed using Illumina\u00e2\u0080\u0099s bcl2fastq v2.20.0.422",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Adapters removed using Trim Galore v0.4.1",
-      "tool_name": "Trim Galore",
-      "tool_version": "0.4.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Reads mapped using TopHat2 and Bowtie2 (version 2.1.1)",
-      "tool_name": "Bowtie2",
-      "tool_version": "2.1.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Read counts were estimated using HTSeq (v0.6.1p1)",
-      "tool_name": "HTSeq",
-      "tool_version": "0.6.1p",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Fastq files demultiplexed using Illumina\u00e2\u0080\u0099s bcl2fastq v2.20.0.422\nAdapters removed using Trim Galore v0.4.1\nReads mapped using TopHat2 and Bowtie2 (version 2.1.1)\nRead counts were estimated using HTSeq (v0.6.1p1)\nGenome_build: hg19\nSupplementary_files_format_and_content: tab-delimited text files include DESeq2 normalized abundance measuments",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Fastq files demultiplexed using Illumina\u00e2\u0080\u0099s bcl2fastq v2.20.0.422",
+            "tool_name": "bcl2fastq",
+            "tool_version": "2.20.0.422",
+            "code_example": "# Install bcl2fastq (example, actual installation might vary based on system and Illumina's distribution)\n# This tool is typically provided by Illumina and may require specific licensing or access.\n# For example, it might be available via a system package manager or direct download from Illumina.\n\n# Example command for demultiplexing:\n# Replace /path/to/illumina/run/folder with the actual path to your Illumina run directory (containing BCL files).\n# Replace /path/to/output/fastq with the desired directory for the output FASTQ files.\n# Replace /path/to/SampleSheet.csv with the actual path to your SampleSheet.csv file.\nbcl2fastq --runfolder-dir /path/to/illumina/run/folder \\\n          --output-dir /path/to/output/fastq \\\n          --sample-sheet /path/to/SampleSheet.csv \\\n          --no-lane-splitting # Optional: Prevents splitting output by lane if not desired",
+            "code_language": "bash",
+            "github_url": "https://support.illumina.com/sequencing/sequencing_software/bcl2fastq-conversion-software.html"
+        },
+        {
+            "step_order": 2,
+            "description": "Adapters removed using Trim Galore v0.4.1",
+            "tool_name": "Trim Galore",
+            "tool_version": "0.4.1",
+            "code_example": "# Install Trim Galore (requires Cutadapt and FastQC)\n# conda install -c bioconda trim-galore\n\n# Define input files (replace with actual file paths)\n# Assuming paired-end reads, which is common for many assays.\n# If single-end, remove the second input file and the --paired flag.\nINPUT_READ1=\"input_read1.fastq.gz\"\nINPUT_READ2=\"input_read2.fastq.gz\"\n\n# Define output directory\nOUTPUT_DIR=\"trimmed_reads\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run Trim Galore to remove adapters and perform quality trimming\n# --paired: Process paired-end reads\n# --illumina: Detect and remove Illumina adapters (common default)\n# -o: Specify output directory\n# --fastqc: Run FastQC on the trimmed files (often enabled by default or explicitly added)\ntrim_galore --version\ntrim_galore \\\n  --paired \\\n  --illumina \\\n  --output_dir \"${OUTPUT_DIR}\" \\\n  \"${INPUT_READ1}\" \\\n  \"${INPUT_READ2}\"\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/FelixKrueger/TrimGalore"
+        },
+        {
+            "step_order": 3,
+            "description": "Reads mapped using TopHat2 and Bowtie2 (version 2.1.1)",
+            "tool_name": "Bowtie2",
+            "tool_version": "2.1.1",
+            "code_example": "# Install TopHat2 and Bowtie2 (if not already installed)\n# conda install -c bioconda tophat2 bowtie2=2.1.1\n\n# Define variables\n# Reference genome and GTF file are placeholders. For eCLIP, hg19 is often used.\nREFERENCE_GENOME_DIR=\"/path/to/bowtie2_index/hg19\" # Directory containing hg19.1.bt2, hg19.2.bt2, etc.\nREFERENCE_GENOME_PREFIX=\"hg19\" # Prefix for the Bowtie2 index files\nGTF_FILE=\"/path/to/annotation/hg19.gtf\" # GTF file for known transcripts (e.g., from UCSC or Ensembl)\nREADS_R1=\"reads_R1.fastq.gz\" # Placeholder for forward reads\nREADS_R2=\"reads_R2.fastq.gz\" # Placeholder for reverse reads (if paired-end)\nOUTPUT_DIR=\"tophat_output\"\nTHREADS=8 # Number of CPU threads\n\n# Create output directory\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run TopHat2 for splice-aware alignment using Bowtie2\n# TopHat2 version 2.0.x or later uses Bowtie2 by default.\n# Parameters are based on common eCLIP workflows (e.g., yeolab/eclip).\n#   -o: Output directory\n#   -p: Number of threads\n#   --library-type fr-firststrand: Specify library type as first-strand (common for eCLIP/RNA-seq)\n#   -G: GTF file for known transcripts (improves alignment accuracy for known junctions)\n#   <bowtie2_index_prefix>: The prefix for the Bowtie2 index files\n#   <reads_R1> [<reads_R2>]: Input FASTQ files\ntophat2 \\\n  -o \"${OUTPUT_DIR}\" \\\n  -p \"${THREADS}\" \\\n  --library-type fr-firststrand \\\n  -G \"${GTF_FILE}\" \\\n  \"${REFERENCE_GENOME_DIR}/${REFERENCE_GENOME_PREFIX}\" \\\n  \"${READS_R1}\" \"${READS_R2}\"\n\n# The output will be in the 'tophat_output' directory, including 'accepted_hits.bam'\n# which is the aligned BAM file.",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1038/nmeth.1923"
+        },
+        {
+            "step_order": 4,
+            "description": "Read counts were estimated using HTSeq (v0.6.1p1)",
+            "tool_name": "HTSeq",
+            "tool_version": "0.6.1p",
+            "code_example": "# Install HTSeq (if not already installed)\n# conda install -c bioconda htseq\n\n# Define input and output files\nINPUT_BAM=\"aligned_reads.bam\" # Replace with your input alignment file (BAM format)\nGENE_ANNOTATION_GTF=\"Homo_sapiens.GRCh38.109.gtf\" # Replace with your gene annotation file (GTF format, e.g., from Ensembl or GENCODE)\nOUTPUT_COUNTS_FILE=\"gene_read_counts.txt\"\n\n# Estimate read counts using htseq-count\n# -f bam: Input file format is BAM\n# -r pos: Input alignment file is sorted by position\n# -s reverse: Strandedness of the library (can be 'no', 'yes', or 'reverse' - adjust as per your library prep)\n# -a 10: Minimum alignment quality score (default is 10)\n# -m union: Mode to handle reads overlapping multiple features (default is 'union')\nhtseq-count \\\n  -f bam \\\n  -r pos \\\n  -s reverse \\\n  -a 10 \\\n  -m union \\\n  \"${INPUT_BAM}\" \\\n  \"${GENE_ANNOTATION_GTF}\" \\\n  > \"${OUTPUT_COUNTS_FILE}\"",
+            "code_language": "bash",
+            "github_url": "https://htseq.readthedocs.io/en/master/"
+        }
+    ],
+    "raw_text": "Fastq files demultiplexed using Illumina\u00e2\u0080\u0099s bcl2fastq v2.20.0.422\nAdapters removed using Trim Galore v0.4.1\nReads mapped using TopHat2 and Bowtie2 (version 2.1.1)\nRead counts were estimated using HTSeq (v0.6.1p1)\nGenome_build: hg19\nSupplementary_files_format_and_content: tab-delimited text files include DESeq2 normalized abundance measuments",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

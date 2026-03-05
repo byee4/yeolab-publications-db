@@ -1,79 +1,79 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "fastq Illumina RNASeq paired-end reads were aligned using STAR (2.5.2a).",
-      "tool_name": "STAR",
-      "tool_version": "2.5.2a",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://github.com/alexdobin/STAR"
-    },
-    {
-      "step_order": 2,
-      "description": "We used Leafcutter (0.2.6) to perform differential splicing analyses of each of four defined groups of ALS cases (ALSlow, ALShigh, C9, FTD grouped samples for a total of 54 samples referred to as the training set) against the Control group (all groups are described in: link to manuscript here).",
-      "tool_name": "Leafcutter",
-      "tool_version": "0.2.6",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "In each differential splicing analysis, Leafcutter outputs a file listing the set of cluster padj values, and a second file listing the splice junctions that reside within those clusters and their delta PSIs as a result of the differential analysis.",
-      "tool_name": "Leafcutter",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Clusters with a padj value <0.1 were selected for further analysis; we aggregated splice junctions and their corresponding delta PSIs across the 4 analyses into a single matrix.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Differentially spliced events are ordered by the max delta PSI across the 4 analyses (file: sig.junctions.padj01.sorted_by_max_deltapsi_Conlon_et_al_2018.txt).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://combine-lab.github.io/salmon"
-    },
-    {
-      "step_order": 6,
-      "description": "Splice junction coordinates are intersected with Gencode release 25 annotations.",
-      "tool_name": "GENCODE",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://www.gencodegenes.org"
-    },
-    {
-      "step_order": 7,
-      "description": "PSI ratios across all samples in Conlon et al.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "2018 (77 training and test samples, see link to manuscript here) were computed using the leafcutter_quantify_psi.R script starting from the splice junction counts (see https://github.com/davidaknowles/leafcutter/issues/34)",
-      "tool_name": "Leafcutter",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "fastq Illumina RNASeq paired-end reads were aligned using STAR (2.5.2a).\nWe used Leafcutter (0.2.6) to perform differential splicing analyses of each of four defined groups of ALS cases (ALSlow, ALShigh, C9, FTD grouped samples for a total of 54 samples referred to as the training set) against the Control group (all groups are described in: link to manuscript here). In each differential splicing analysis, Leafcutter outputs a file listing the set of cluster padj values, and a second file listing the splice junctions that reside within those clusters and their delta PSIs as a result of the differential analysis.\nClusters with a padj value <0.1 were selected for further analysis; we aggregated splice junctions and their corresponding delta PSIs across the 4 analyses into a single matrix. Differentially spliced events are ordered by the max delta PSI across the 4 analyses (file: sig.junctions.padj01.sorted_by_max_deltapsi_Conlon_et_al_2018.txt).\nSplice junction coordinates are intersected with Gencode release 25 annotations.\nPSI ratios across all samples in Conlon et al. 2018 (77 training and test samples, see link to manuscript here) were computed using the leafcutter_quantify_psi.R  script starting from the splice junction counts (see https://github.com/davidaknowles/leafcutter/issues/34)\nGenome_build: GRCh38\nSupplementary_files_format_and_content: sig.junctions.padj01.sorted_by_max_deltapsi_Conlon_et_al_2018.txt : Differentially spliced events, coordinates and gene names are ordered by the max delta PSI across the 4 analyses of 54 ALS and Control samples.\nSupplementary_files_format_and_content: DS_leafcutter.ratios_Conlon_et_al_2018.txt : PSI ratios across all samples (77 training and test samples in Conlon et al. 2018, link to manuscript here) were computed using the leafcutter_quantify_psi.R  script starting from the splice junction counts (see https://github.com/davidaknowles/leafcutter/issues/34)",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "fastq Illumina RNASeq paired-end reads were aligned using STAR (2.5.2a).",
+            "tool_name": "STAR",
+            "tool_version": "2.5.2a",
+            "code_example": "# Install STAR (example using conda)\n# conda create -n star_env star=2.5.2a -c bioconda -c conda-forge\n# conda activate star_env\n\n# Build STAR index (example for human hg38 genome and Gencode annotation)\n# mkdir -p /path/to/STAR_index_hg38\n# STAR --runMode genomeGenerate \\\n#      --genomeDir /path/to/STAR_index_hg38 \\\n#      --genomeFastaFiles /path/to/hg38.fa \\\n#      --sjdbGTFfile /path/to/gencode.vXX.annotation.gtf \\\n#      --runThreadN 8 # Adjust number of threads as needed\n\n# Align paired-end RNA-Seq reads using STAR\n# Reference genome: hg38 (GRCh38) - placeholder, replace with actual path\n# Input files: sample_R1.fastq.gz, sample_R2.fastq.gz - placeholder, replace with actual file names\n# Output prefix: sample_aligned_ - placeholder, replace with desired prefix\n\nSTAR --genomeDir /path/to/STAR_index_hg38 \\\n     --readFilesIn sample_R1.fastq.gz sample_R2.fastq.gz \\\n     --readFilesCommand zcat \\\n     --runThreadN 8 \\\n     --outFileNamePrefix sample_aligned_ \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes All \\\n     --outFilterType BySJout \\\n     --outFilterMultimapNmax 20 \\\n     --alignSJDBoverhangMin 1 \\\n     --alignSJoverhangMin 8 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --sjdbScore 1 \\\n     --quantMode GeneCounts \\\n     --limitBAMsortRAM 30000000000 # Adjust RAM limit (e.g., 30GB) as needed\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "We used Leafcutter (0.2.6) to perform differential splicing analyses of each of four defined groups of ALS cases (ALSlow, ALShigh, C9, FTD grouped samples for a total of 54 samples referred to as the training set) against the Control group (all groups are described in: link to manuscript here).",
+            "tool_name": "Leafcutter",
+            "tool_version": "0.2.6",
+            "code_example": "# Install Leafcutter (example using conda)\n# conda create -n leafcutter_env python=3 r-base r-devtools\n# conda activate leafcutter_env\n# conda install -c bioconda leafcutter\n\n# --- Prepare input files (conceptual, replace with actual paths and sample names) ---\n\n# Create a dummy directory for junction files\nmkdir -p junctions\n\n# Define sample counts for each group based on the description (54 ALS cases + Control group)\nNUM_ALS_LOW=15\nNUM_ALS_HIGH=15\nNUM_C9=12\nNUM_FTD=12\nNUM_CONTROL=20 # Placeholder for the Control group size\n\n# Create juncfiles.txt and groups_all.txt\n# In a real scenario, these files would be generated from your experimental data.\n# juncfiles.txt lists paths to junction files (e.g., from STAR aligner).\n# groups_all.txt maps sample IDs to their respective groups.\n\n> juncfiles.txt\n> groups_all.txt # A master groups file for initial processing\n\n# Generate dummy ALS samples (total 54)\nfor i in $(seq 1 $NUM_ALS_LOW); do\n    SAMPLE_ID=\"ALSlow_sample${i}\"\n    echo \"junctions/${SAMPLE_ID}.junc\" >> juncfiles.txt\n    echo -e \"${SAMPLE_ID}\\tALSlow\" >> groups_all.txt\ndone\n\nfor i in $(seq 1 $NUM_ALS_HIGH); do\n    SAMPLE_ID=\"ALShigh_sample${i}\"\n    echo \"junctions/${SAMPLE_ID}.junc\" >> juncfiles.txt\n    echo -e \"${SAMPLE_ID}\\tALShigh\" >> groups_all.txt\ndone\n\nfor i in $(seq 1 $NUM_C9); do\n    SAMPLE_ID=\"C9_sample${i}\"\n    echo \"junctions/${SAMPLE_ID}.junc\" >> juncfiles.txt\n    echo -e \"${SAMPLE_ID}\\tC9\" >> groups_all.txt\ndone\n\nfor i in $(seq 1 $NUM_FTD); do\n    SAMPLE_ID=\"FTD_sample${i}\"\n    echo \"junctions/${SAMPLE_ID}.junc\" >> juncfiles.txt\n    echo -e \"${SAMPLE_ID}\\tFTD\" >> groups_all.txt\ndone\n\n# Generate dummy Control samples\nfor i in $(seq 1 $NUM_CONTROL); do\n    SAMPLE_ID=\"Control_sample${i}\"\n    echo \"junctions/${SAMPLE_ID}.junc\" >> juncfiles.txt\n    echo -e \"${SAMPLE_ID}\\tControl\" >> groups_all.txt\ndone\n\n# --- Leafcutter analysis ---\n\n# Reference genome (e.g., hg38) is implicitly used by the upstream alignment step that generates .junc files.\n# Leafcutter itself does not directly use a FASTA file.\n\n# 1. Extract junctions and convert to counts\n# This step takes the list of junction files and aggregates them into a counts matrix.\n# It also performs filtering based on minimum reads and samples. Default parameters are often used.\nleafcutter_junc2counts.py -j juncfiles.txt -o leafcutter_counts\n\n# The output will be leafcutter_counts_perind.counts.gz and leafcutter_counts_perind.clusters.gz\n\n# 2. Perform differential splicing analysis for each ALS group against the Control group\n\n# Define the output directory\nmkdir -p leafcutter_results\n\n# Comparison 1: ALSlow vs Control\necho \"Running differential splicing for ALSlow vs Control...\"\ngrep -E \"ALSlow|Control\" groups_all.txt > groups_ALSlow_vs_Control.txt\nleafcutter_ds.R \\\n    --counts leafcutter_counts_perind.counts.gz \\\n    --groups groups_ALSlow_vs_Control.txt \\\n    --output_prefix leafcutter_results/ALSlow_vs_Control \\\n    --num_threads 8 \\\n    # --exon_file <path_to_exon_file.txt.gz> # Optional: provide an exon file for annotation (e.g., from gencode)\n\n# Comparison 2: ALShigh vs Control\necho \"Running differential splicing for ALShigh vs Control...\"\ngrep -E \"ALShigh|Control\" groups_all.txt > groups_ALShigh_vs_Control.txt\nleafcutter_ds.R \\\n    --counts leafcutter_counts_perind.counts.gz \\\n    --groups groups_ALShigh_vs_Control.txt \\\n    --output_prefix leafcutter_results/ALShigh_vs_Control \\\n    --num_threads 8 \\\n    # --exon_file <path_to_exon_file.txt.gz>\n\n# Comparison 3: C9 vs Control\necho \"Running differential splicing for C9 vs Control...\"\ngrep -E \"C9|Control\" groups_all.txt > groups_C9_vs_Control.txt\nleafcutter_ds.R \\\n    --counts leafcutter_counts_perind.counts.gz \\\n    --groups groups_C9_vs_Control.txt \\\n    --output_prefix leafcutter_results/C9_vs_Control \\\n    --num_threads 8 \\\n    # --exon_file <path_to_exon_file.txt.gz>\n\n# Comparison 4: FTD vs Control\necho \"Running differential splicing for FTD vs Control...\"\ngrep -E \"FTD|Control\" groups_all.txt > groups_FTD_vs_Control.txt\nleafcutter_ds.R \\\n    --counts leafcutter_counts_perind.counts.gz \\\n    --groups groups_FTD_vs_Control.txt \\\n    --output_prefix leafcutter_results/FTD_vs_Control \\\n    --num_threads 8 \\\n    # --exon_file <path_to_exon_file.txt.gz>\n\n# Clean up temporary groups files\nrm groups_ALSlow_vs_Control.txt groups_ALShigh_vs_Control.txt groups_C9_vs_Control.txt groups_FTD_vs_Control.txt\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/davidaknowles/leafcutter"
+        },
+        {
+            "step_order": 3,
+            "description": "In each differential splicing analysis, Leafcutter outputs a file listing the set of cluster padj values, and a second file listing the splice junctions that reside within those clusters and their delta PSIs as a result of the differential analysis.",
+            "tool_name": "Leafcutter",
+            "tool_version": "0.2.9",
+            "code_example": "# Install Leafcutter (example using conda)\n# conda create -n leafcutter_env python=3.8\n# conda activate leafcutter_env\n# pip install leafcutter\n\n# Example input files (placeholders):\n# junctions.counts.gz: This file would typically be generated by leafcutter_cluster.py\n# from aligned RNA-seq data. It contains junction counts for each sample.\n# The first column is the junction ID (e.g., chr:start:end:strand:cluster_id), \n# and subsequent columns are counts for each sample, with sample IDs in the header.\n#\n# phenotype_file.txt: A tab-separated file mapping sample IDs to their experimental groups.\n# The first column is the sample ID, and the second column is the group.\n# Example content:\n# sample1\\tcontrol\n# sample2\\tcontrol\n# sample3\\ttreatment\n# sample4\\ttreatment\n\n# Create dummy input files for demonstration purposes.\n# In a real pipeline, these would be actual data files generated from upstream steps.\n\n# Create dummy junctions.counts.gz\necho -e \"junction_id\\tsample1\\tsample2\\tsample3\\tsample4\" > junctions.counts.gz\necho -e \"chr1:1000:1100:+\\:clu_1\\t100\\t120\\t50\\t60\" >> junctions.counts.gz\necho -e \"chr1:1050:1150:+\\:clu_1\\t50\\t60\\t100\\t110\" >> junctions.counts.gz\necho -e \"chr2:2000:2100:-\\:clu_2\\t200\\t210\\t180\\t190\" >> junctions.counts.gz\necho -e \"chr2:2050:2150:-\\:clu_2\\t80\\t90\\t120\\t130\" >> junctions.counts.gz\n\n# Create dummy phenotype_file.txt\necho -e \"sample1\\tcontrol\" > phenotype_file.txt\necho -e \"sample2\\tcontrol\" >> phenotype_file.txt\necho -e \"sample3\\ttreatment\" >> phenotype_file.txt\necho -e \"sample4\\ttreatment\" >> phenotype_file.txt\n\n# Run Leafcutter differential splicing analysis\n# -j: Path to the junction counts file (e.g., output from leafcutter_cluster.py)\n# -m: Path to the metadata/phenotype file\n# -o: Output prefix for the results files\n# The description mentions \"cluster padj values\" and \"splice junctions that reside within those clusters and their delta PSIs\".\n# Leafcutter's `leafcutter_ds.py` script outputs these directly:\n#   - <output_prefix>_ds_clusters.txt.gz: Contains differential splicing results per cluster, including padj values.\n#   - <output_prefix>_ds_junctions.txt.gz: Contains delta PSI values for individual junctions within differentially spliced clusters.\n\npython leafcutter_ds.py -j junctions.counts.gz -m phenotype_file.txt -o differential_splicing_results",
+            "code_language": "bash",
+            "github_url": "https://github.com/davidaknowles/leafcutter"
+        },
+        {
+            "step_order": 4,
+            "description": "Clusters with a padj value <0.1 were selected for further analysis; we aggregated splice junctions and their corresponding delta PSIs across the 4 analyses into a single matrix.",
+            "tool_name": "Custom Script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# This script filters input files based on a padj threshold and then aggregates\n# the delta PSI values for selected splice junctions across multiple analyses\n# into a single matrix.\n\n# Assume input files are named 'analysis1_results.tsv', 'analysis2_results.tsv', etc.\n# Each file is expected to be tab-separated and contain at least 'JunctionID', 'DeltaPSI', and 'padj' columns.\n\n# Example dummy data creation (for demonstration purposes)\n# These files would typically be outputs from a differential splicing analysis tool like rMATS or LeafCutter.\necho -e \"JunctionID\\tDeltaPSI\\tPValue\\tpadj\\tOther\" > analysis1_results.tsv\necho -e \"J1\\t0.1\\t0.001\\t0.005\\tdata_a1\" >> analysis1_results.tsv\necho -e \"J2\\t0.2\\t0.05\\t0.08\\tdata_a1\" >> analysis1_results.tsv\necho -e \"J3\\t0.05\\t0.1\\t0.15\\tdata_a1\" >> analysis1_results.tsv\necho -e \"J4\\t0.3\\t0.002\\t0.003\\tdata_a1\" >> analysis1_results.tsv\n\necho -e \"JunctionID\\tDeltaPSI\\tPValue\\tpadj\\tOther\" > analysis2_results.tsv\necho -e \"J1\\t0.15\\t0.002\\t0.008\\tdata_a2\" >> analysis2_results.tsv\necho -e \"J4\\t0.35\\t0.01\\t0.02\\tdata_a2\" >> analysis2_results.tsv\necho -e \"J5\\t0.08\\t0.08\\t0.12\\tdata_a2\" >> analysis2_results.tsv\necho -e \"J6\\t0.25\\t0.005\\t0.007\\tdata_a2\" >> analysis2_results.tsv\n\necho -e \"JunctionID\\tDeltaPSI\\tPValue\\tpadj\\tOther\" > analysis3_results.tsv\necho -e \"J1\\t0.12\\t0.003\\t0.006\\tdata_a3\" >> analysis3_results.tsv\necho -e \"J2\\t0.18\\t0.04\\t0.07\\tdata_a3\" >> analysis3_results.tsv\necho -e \"J7\\t0.4\\t0.001\\t0.002\\tdata_a3\" >> analysis3_results.tsv\n\necho -e \"JunctionID\\tDeltaPSI\\tPValue\\tpadj\\tOther\" > analysis4_results.tsv\necho -e \"J1\\t0.11\\t0.004\\t0.009\\tdata_a4\" >> analysis4_results.tsv\necho -e \"J4\\t0.32\\t0.008\\t0.015\\tdata_a4\" >> analysis4_results.tsv\necho -e \"J8\\t0.28\\t0.003\\t0.004\\tdata_a4\" >> analysis4_results.tsv\n\n# Python script for filtering and aggregation\n# This script uses the pandas library for data manipulation.\n# conda install -c conda-forge pandas\npython3 -c \"\nimport pandas as pd\nimport glob\n\ninput_files = sorted(glob.glob('analysis*_results.tsv'))\npadj_threshold = 0.1\noutput_matrix_file = 'aggregated_delta_psis.tsv'\n\nall_filtered_data = []\nfor i, file_path in enumerate(input_files):\n    df = pd.read_csv(file_path, sep='\\t')\n    # Filter for padj < threshold\n    filtered_df = df[df['padj'] < padj_threshold]\n    # Select JunctionID and DeltaPSI, rename DeltaPSI column for aggregation\n    filtered_df = filtered_df[['JunctionID', 'DeltaPSI']].rename(columns={'DeltaPSI': f'DeltaPSI_analysis{i+1}'})\n    all_filtered_data.append(filtered_df)\n\n# Merge all filtered dataframes on JunctionID\nif all_filtered_data:\n    # Start with the first dataframe\n    merged_df = all_filtered_data[0]\n    # Merge subsequent dataframes using an outer join to keep all junctions present in at least one filtered analysis\n    for i in range(1, len(all_filtered_data)):\n        merged_df = pd.merge(merged_df, all_filtered_data[i], on='JunctionID', how='outer')\n    \n    # Fill NaN values (where a junction was not significant in a particular analysis) with 0\n    merged_df = merged_df.fillna(0)\n    \n    merged_df.to_csv(output_matrix_file, sep='\\t', index=False)\n    print(f'Aggregated matrix saved to {output_matrix_file}')\nelse:\n    print('No data found after filtering.')\n\"\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip"
+        },
+        {
+            "step_order": 5,
+            "description": "Differentially spliced events are ordered by the max delta PSI across the 4 analyses (file: sig.junctions.padj01.sorted_by_max_deltapsi_Conlon_et_al_2018.txt).",
+            "tool_name": "rMATS (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "v3.2.5",
+            "code_example": "# rMATS installation (example using conda)\n# conda create -n rmats python=3.7\n# conda activate rmats\n# conda install -c bioconda rmats\n\n# --- rMATS Execution (to generate differentially spliced events and delta PSI values) ---\n# This command is an example for rMATS v3.2.5, which was used in Conlon et al. 2018.\n# Replace 'b1.txt' and 'b2.txt' with actual paths to files listing BAM files for your two conditions.\n# Each line in b1.txt/b2.txt should be a path to a BAM file.\n# Example for b1.txt:\n# /path/to/condition1_replicate1.bam\n# /path/to/condition1_replicate2.bam\n\n# Reference GTF annotation file (e.g., GENCODE v38)\n# Download example: wget -P /path/to/references/ ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_38/gencode.v38.annotation.gtf.gz\n# gunzip /path/to/references/gencode.v38.annotation.gtf.gz\nGTF_FILE=\"/path/to/references/gencode.v38.annotation.gtf\"\n\n# Output directory for rMATS results\nOUTPUT_DIR=\"rmats_output\"\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Execute rMATS\n# python /path/to/rMATS.py \\\n#    --b1 b1.txt \\\n#    --b2 b2.txt \\\n#    --gtf \"${GTF_FILE}\" \\\n#    --od \"${OUTPUT_DIR}\" \\\n#    --tmp \"${OUTPUT_DIR}/tmp\" \\\n#    -t paired \\\n#    --readLength 100 \\\n#    --nthread 8 \\\n#    --libType fr-firststrand \\\n#    --task junction\n\n# --- Post-processing and Sorting ---\n# The description implies that differentially spliced events have been identified,\n# filtered by adjusted p-value (padj < 0.01), and a 'max delta PSI' value has been calculated\n# across 4 analyses (which might involve combining results from multiple rMATS runs or comparisons).\n# This typically involves custom scripting (e.g., Python or R) to:\n# 1. Parse rMATS output files (e.g., SE.MATS.JunctionCountOnly.txt, MXE.MATS.JunctionCountOnly.txt).\n# 2. Combine different event types into a single file.\n# 3. Filter events by FDR (adjusted p-value) < 0.01.\n# 4. If multiple rMATS runs (e.g., 4 analyses) were performed, combine results and\n#    calculate the maximum delta PSI for each event across these runs.\n# 5. Generate an intermediate file, e.g., 'sig.junctions.padj01.txt',\n#    which contains the events and their 'max_delta_psi' values.\n\n# For demonstration, let's assume 'sig.junctions.padj01.txt' is the input file\n# and the 'max_delta_psi' is in a specific column (e.g., column 17, common for IncLevelDifference).\nINPUT_FILE=\"sig.junctions.padj01.txt\"\nOUTPUT_FILE=\"sig.junctions.padj01.sorted_by_max_deltapsi_Conlon_et_al_2018.txt\"\nDELTA_PSI_COLUMN=17 # Adjust this column index based on your actual file format\n\n# Preserve the header and sort the rest of the file by the 'max_delta_psi' column\n# in numerical, reverse (descending) order.\nhead -n 1 \"${INPUT_FILE}\" > \"${OUTPUT_FILE}\"\ntail -n +2 \"${INPUT_FILE}\" | sort -k\"${DELTA_PSI_COLUMN}\",\"${DELTA_PSI_COLUMN}\"nr >> \"${OUTPUT_FILE}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 6,
+            "description": "Splice junction coordinates are intersected with Gencode release 25 annotations.",
+            "tool_name": "GENCODE",
+            "tool_version": "2.30.0",
+            "code_example": "# Define input and output files\n# Replace 'splice_junctions.bed' with the actual path to your splice junction coordinates file.\nSPLICE_JUNCTIONS_BED=\"splice_junctions.bed\"\n# Replace 'gencode.v25.annotation.bed' with the actual path to your Gencode release 25 annotations in BED format.\n# If starting from GTF, you would first need to download and convert it:\n# # Download Gencode v25 GTF:\n# # wget -O gencode.v25.annotation.gtf.gz ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_25/gencode.v25.annotation.gtf.gz\n# # gunzip gencode.v25.annotation.gtf.gz\n# # Convert GTF to BED (e.g., using bedops gtf2bed or a custom script):\n# # gtf2bed < gencode.v25.annotation.gtf > gencode.v25.annotation.bed\nGENCODE_ANNOTATIONS_BED=\"gencode.v25.annotation.bed\"\nINTERSECTED_OUTPUT=\"intersected_junctions.bed\"\n\n# Ensure bedtools is installed (e.g., via conda)\n# conda install -c bioconda bedtools\n\n# Intersect splice junction coordinates with Gencode release 25 annotations\n# It is good practice to sort both input BED files before intersection for optimal performance.\n# Example: sort -k1,1 -k2,2n \"$SPLICE_JUNCTIONS_BED\" > \"${SPLICE_JUNCTIONS_BED}.sorted\"\n# Example: sort -k1,1 -k2,2n \"$GENCODE_ANNOTATIONS_BED\" > \"${GENCODE_ANNOTATIONS_BED}.sorted\"\n# Then use the sorted files in the command below.\nbedtools intersect -a \"$SPLICE_JUNCTIONS_BED\" -b \"$GENCODE_ANNOTATIONS_BED\" > \"$INTERSECTED_OUTPUT\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        },
+        {
+            "step_order": 7,
+            "description": "PSI ratios across all samples in Conlon et al.",
+            "tool_name": "MISO (Mixture of Isoforms) (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "0.5.3 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install MISO (if not already installed)\n# pip install MISO\n\n# Define variables\nMISO_ANNOTATIONS_DIR=\"/path/to/miso_annotations/hg38_events\" # Placeholder: Path to pre-built MISO alternative event annotations (e.g., from UCSC hg38 GTF)\nREAD_LENGTH=75 # Placeholder: Adjust based on your sequencing data read length\n\n# Placeholder: List of all input BAM files (aligned reads)\n# Replace with actual sample BAM files, e.g., \"sample1.bam sample2.bam control1.bam control2.bam\"\nSAMPLE_BAM_FILES=\"/path/to/sample1.bam /path/to/sample2.bam /path/to/control1.bam\"\n\nOUTPUT_BASE_DIR=\"./miso_output\"\nmkdir -p \"$OUTPUT_BASE_DIR\"\n\nMISO_OUTPUT_DIRS=\"\"\n\n# 1. Calculate PSI values for each individual sample\n# This step generates .miso output files for each sample.\nfor bam_file in $SAMPLE_BAM_FILES; do\n    sample_name=$(basename \"$bam_file\" .bam)\n    sample_output_dir=\"$OUTPUT_BASE_DIR/$sample_name\"\n    mkdir -p \"$sample_output_dir\"\n    echo \"Running MISO for $sample_name...\"\n    python -m miso.run_miso --run \"$MISO_ANNOTATIONS_DIR\" \"$bam_file\" --output-dir \"$sample_output_dir\" --read-len \"$READ_LENGTH\"\n    MISO_OUTPUT_DIRS+=\" $sample_output_dir\"\ndone\n\n# 2. Summarize MISO output (optional, but useful for an overview of PSIs across samples)\nSUMMARY_OUTPUT_DIR=\"$OUTPUT_BASE_DIR/summary\"\nmkdir -p \"$SUMMARY_OUTPUT_DIR\"\necho \"Summarizing MISO output...\"\npython -m miso.summarize_miso --summarize-samples $MISO_OUTPUT_DIRS --output-dir \"$SUMMARY_OUTPUT_DIR\"\n\n# 3. Calculate PSI ratios (differential PSI) between samples\n# The description \"PSI ratios across all samples\" implies comparisons.\n# This example shows a pairwise comparison. For a comprehensive analysis across all samples,\n# you might perform multiple pairwise comparisons or use custom scripts to parse the summarized data.\n\n# Placeholder: Select two sample output directories for comparison\n# Replace with actual sample directories, e.g., \"$OUTPUT_BASE_DIR/sample1\" and \"$OUTPUT_BASE_DIR/control1\"\nSAMPLE_A_MISO_DIR=\"$(echo $MISO_OUTPUT_DIRS | awk '{print $1}')\" # First sample in the list\nSAMPLE_B_MISO_DIR=\"$(echo $MISO_OUTPUT_DIRS | awk '{print $2}')\" # Second sample in the list\n\nif [ -n \"$SAMPLE_A_MISO_DIR\" ] && [ -n \"$SAMPLE_B_MISO_DIR\" ]; then\n    COMPARISON_OUTPUT_DIR=\"$OUTPUT_BASE_DIR/$(basename $SAMPLE_A_MISO_DIR)_vs_$(basename $SAMPLE_B_MISO_DIR)_comparison\"\n    mkdir -p \"$COMPARISON_OUTPUT_DIR\"\n    echo \"Comparing $(basename $SAMPLE_A_MISO_DIR) vs $(basename $SAMPLE_B_MISO_DIR)...\"\n    python -m miso.compare_miso --compare-samples \"$SAMPLE_A_MISO_DIR\" \"$SAMPLE_B_MISO_DIR\" --output-dir \"$COMPARISON_OUTPUT_DIR\"\nelse\n    echo \"Not enough samples to perform a comparison. Please provide at least two BAM files.\"\nfi",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 8,
+            "description": "2018 (77 training and test samples, see link to manuscript here) were computed using the leafcutter_quantify_psi.R script starting from the splice junction counts (see https://github.com/davidaknowles/leafcutter/issues/34)",
+            "tool_name": "Leafcutter",
+            "tool_version": "2018",
+            "code_example": "# Install Leafcutter (if not already installed)\n# Note: Leafcutter requires R and several R packages. It's often installed via Bioconda or directly from GitHub.\n# conda install -c bioconda leafcutter\n\n# Create dummy input files/directories for demonstration\n# In a real scenario, 'junction_files_dir' would contain multiple .junc files (e.g., from STAR alignment output)\n# and 'clusters.txt' would be generated by leafcutter_cluster.py.\nmkdir -p junction_files_dir\necho \"chr1:1000:1050:+\\t10\\t20\\t30\" > junction_files_dir/sample1.junc\necho \"chr1:1000:1050:+\\t15\\t25\\t35\" > junction_files_dir/sample2.junc\necho \"chr1:1000:1050:+\\tcluster_1\" > clusters.txt\n\n# Run leafcutter_quantify_psi.R script\n# This script quantifies PSI (Percent Spliced In) values for each cluster.\n# It takes a directory of splice junction count files and a clusters file as input.\n# The '--output_dir' parameter specifies where the results will be saved.\n# The '--num_threads' parameter can be used for parallel processing.\n\nRscript leafcutter_quantify_psi.R \\\n  --output_dir psi_output \\\n  --num_threads 8 \\\n  junction_files_dir \\\n  clusters.txt\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/davidaknowles/leafcutter"
+        }
+    ],
+    "raw_text": "fastq Illumina RNASeq paired-end reads were aligned using STAR (2.5.2a).\nWe used Leafcutter (0.2.6) to perform differential splicing analyses of each of four defined groups of ALS cases (ALSlow, ALShigh, C9, FTD grouped samples for a total of 54 samples referred to as the training set) against the Control group (all groups are described in: link to manuscript here). In each differential splicing analysis, Leafcutter outputs a file listing the set of cluster padj values, and a second file listing the splice junctions that reside within those clusters and their delta PSIs as a result of the differential analysis.\nClusters with a padj value <0.1 were selected for further analysis; we aggregated splice junctions and their corresponding delta PSIs across the 4 analyses into a single matrix. Differentially spliced events are ordered by the max delta PSI across the 4 analyses (file: sig.junctions.padj01.sorted_by_max_deltapsi_Conlon_et_al_2018.txt).\nSplice junction coordinates are intersected with Gencode release 25 annotations.\nPSI ratios across all samples in Conlon et al. 2018 (77 training and test samples, see link to manuscript here) were computed using the leafcutter_quantify_psi.R  script starting from the splice junction counts (see https://github.com/davidaknowles/leafcutter/issues/34)\nGenome_build: GRCh38\nSupplementary_files_format_and_content: sig.junctions.padj01.sorted_by_max_deltapsi_Conlon_et_al_2018.txt : Differentially spliced events, coordinates and gene names are ordered by the max delta PSI across the 4 analyses of 54 ALS and Control samples.\nSupplementary_files_format_and_content: DS_leafcutter.ratios_Conlon_et_al_2018.txt : PSI ratios across all samples (77 training and test samples in Conlon et al. 2018, link to manuscript here) were computed using the leafcutter_quantify_psi.R  script starting from the splice junction counts (see https://github.com/davidaknowles/leafcutter/issues/34)",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

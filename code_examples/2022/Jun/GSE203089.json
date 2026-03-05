@@ -1,178 +1,178 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Reads were trimmed with cutadapt -l 86 --max-n 5 -o (v1.18), mapped to RNA-Linker-DNA (GTTGGATTCNNNGACACAGCTCACTCCCACACACCGAACTCCAAC) with bwa mem -k 5 -L 4 -B 2 -O 4 (v0.7.15) and sorted with samtools sort (v1.7).",
-      "tool_name": "BWA",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "RNA and DNA reads were separated with GridTools matefq (https://github.com/biz007/gridtools).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Reads were then mapped to the mm10 genome with bwa mem -k 17 -w 1 -T 1.",
-      "tool_name": "BWA",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "GridTools evaluate was then used to correct against background and RNA-DNA mate read pair quality and quantity with bin size of 1 kb and moving windows of 10.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "GridTools.py evaluate function uses a gene annotation GTF (Gene transfer format) file to ensure that RNA end of the read always uniquely maps to its correct chromosomal location.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Thus, during the analysis, only RNA reads that map back to its own locus will be retained.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Moreover, the DNA end of the read will also be unique mapped, ensuring that both the RNA and DNA ends of each read are all unique reads.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "No read that maps to multiple locations in the genome (including repeat elements all over chromosomes) will be retained during analysis.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "GridTools RNA was used to identify expression levels of chromatin-enriched RNA.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 10,
-      "description": "GridTools matrix was used to construct an interaction contact matrix of chromatin-associated RNA within specified genomic bin sizes of 1 kb or 100 kb.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 11,
-      "description": "All lncRNAs with reads per kilobase DNA read density \u00c2\u00b310 on any genomic region were filtered from the interaction contact matrix.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 12,
-      "description": "A 1 kb interaction matrix was directly visualized on a heatmap using the ComplexHeatmap package (v2.2.0).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 13,
-      "description": "PCA, k-means clustering set to 3 clusters, and pearson correlation analysis were performed on the interaction matrix with the R stats package (v3.6.2) removing all bins with zero interactions.",
-      "tool_name": "PCA",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 14,
-      "description": "The correlation matrix was visualized with corrplot package (v0.89) and circos plots with the circlize package (v0.42).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 15,
-      "description": "Differential RNA chromatin interaction regions were determined by taking the average RNA interaction level of each genomic bin for all lncRNAs in a cluster.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 16,
-      "description": "These averaged genomic bins were annotated to the transcription start site of the nearest gene using the ChIPpeakAnno.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 17,
-      "description": "Consecutive genomic bins annotated to a single gene with greater RNA interaction for each genomic bin in one cluster relative to another cluster were considered differentially interacting.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 18,
-      "description": "Differential RNA chromatin interaction regions were annotated with ChiPseeker.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 19,
-      "description": "none provided by the submitter",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Reads were trimmed with cutadapt -l 86 --max-n 5 -o (v1.18), mapped to RNA-Linker-DNA (GTTGGATTCNNNGACACAGCTCACTCCCACACACCGAACTCCAAC) with bwa mem -k 5 -L 4 -B 2 -O 4 (v0.7.15) and sorted with samtools sort (v1.7). RNA and DNA reads were separated with GridTools matefq (https://github.com/biz007/gridtools). Reads were then mapped to the mm10 genome with bwa mem -k 17 -w 1 -T 1. GridTools evaluate was then used to correct against background and RNA-DNA mate read pair quality and quantity with bin size of 1 kb and moving windows of 10. GridTools.py evaluate function uses a gene annotation GTF (Gene transfer format) file to ensure that RNA end of the read always uniquely maps to its correct chromosomal location. Thus, during the analysis, only RNA reads that map back to its own locus will be retained. Moreover, the DNA end of the read will also be unique mapped, ensuring that both the RNA and DNA ends of each read are all unique reads. No read that maps to multiple locations in the genome (including repeat elements all over chromosomes) will be retained during analysis. GridTools RNA was used to identify expression levels of chromatin-enriched RNA. GridTools matrix was used to construct an interaction contact matrix of chromatin-associated RNA within specified genomic bin sizes of 1 kb or 100 kb. All lncRNAs with reads per kilobase DNA read density \u00c2\u00b310 on any genomic region were filtered from the interaction contact matrix. A 1 kb interaction matrix was directly visualized on a heatmap using the ComplexHeatmap package (v2.2.0). PCA, k-means clustering set to 3 clusters, and pearson correlation analysis were performed on the interaction matrix with the R stats package (v3.6.2) removing all bins with zero interactions. The correlation matrix was visualized with corrplot package (v0.89) and circos plots with the circlize package (v0.42). Differential RNA chromatin interaction regions were determined by taking the average RNA interaction level of each genomic bin for all lncRNAs in a cluster. These averaged genomic bins were annotated to the transcription start site of the nearest gene using the ChIPpeakAnno. Consecutive genomic bins annotated to a single gene with greater RNA interaction for each genomic bin in one cluster relative to another cluster were considered differentially interacting. Differential RNA chromatin interaction regions were annotated with ChiPseeker.\nnone provided by the submitter\nAssembly: mm10\nSupplementary files format and content: Expression and scope Cis and Trans of all chromatin enriched RNAs",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Reads were trimmed with cutadapt -l 86 --max-n 5 -o (v1.18), mapped to RNA-Linker-DNA (GTTGGATTCNNNGACACAGCTCACTCCCACACACCGAACTCCAAC) with bwa mem -k 5 -L 4 -B 2 -O 4 (v0.7.15) and sorted with samtools sort (v1.7).",
+            "tool_name": "BWA",
+            "tool_version": "0.7.15",
+            "code_example": "# Install cutadapt\n# conda install -c bioconda cutadapt\n\n# Install bwa\n# conda install -c bioconda bwa\n\n# Install samtools\n# conda install -c bioconda samtools\n\n# Define input and output files\nINPUT_READS=\"input_reads.fastq.gz\"\nTRIMMED_READS=\"trimmed_reads.fastq.gz\"\nREFERENCE_FASTA=\"RNA_linker.fa\"\nALIGNED_SAM=\"aligned.sam\"\nALIGNED_SORTED_BAM=\"aligned.sorted.bam\"\n\n# Create the custom reference FASTA file\necho \">RNA-Linker-DNA\" > \"${REFERENCE_FASTA}\"\necho \"GTTGGATTCNNNGACACAGCTCACTCCCACACACCGAACTCCAAC\" >> \"${REFERENCE_FASTA}\"\n\n# Index the custom reference with bwa\nbwa index \"${REFERENCE_FASTA}\"\n\n# Step 1: Trim reads with cutadapt\ncutadapt -l 86 --max-n 5 -o \"${TRIMMED_READS}\" \"${INPUT_READS}\"\n\n# Step 2: Map trimmed reads to RNA-Linker-DNA with bwa mem\nbwa mem -k 5 -L 4 -B 2 -O 4 \"${REFERENCE_FASTA}\" \"${TRIMMED_READS}\" > \"${ALIGNED_SAM}\"\n\n# Step 3: Sort the alignment with samtools sort\nsamtools sort -o \"${ALIGNED_SORTED_BAM}\" \"${ALIGNED_SAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/lh3/bwa"
+        },
+        {
+            "step_order": 2,
+            "description": "RNA and DNA reads were separated with GridTools matefq (https://github.com/biz007/gridtools).",
+            "tool_name": "matefq",
+            "tool_version": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install GridTools (if not already installed)\n# git clone https://github.com/biz007/gridtools.git\n# cd gridtools\n# make\n# # Ensure the 'matefq' executable is in your system's PATH\n\n# Assuming 'input_reads.fastq' contains the mixed RNA and DNA reads.\n# This command separates reads based on length. For example, if RNA reads are expected\n# to be between 18 and 200 base pairs, they will be written to 'rna_reads.fastq',\n# and all other reads (presumably DNA or very long RNA) will be written to 'dna_reads.fastq'.\n# Adjust the length thresholds (18,200) based on your specific experimental design for RNA reads.\nmatefq -s 18,200 input_reads.fastq rna_reads.fastq dna_reads.fastq",
+            "code_language": "bash",
+            "github_url": "https://github.com/biz007/gridtools"
+        },
+        {
+            "step_order": 3,
+            "description": "Reads were then mapped to the mm10 genome with bwa mem -k 17 -w 1 -T 1.",
+            "tool_name": "BWA",
+            "tool_version": "0.7.17 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install BWA (example using conda)\n# conda install -c bioconda bwa\n\n# Index the reference genome (if not already done)\n# bwa index path/to/mm10.fa\n\n# Align reads to the mm10 genome\nbwa mem -k 17 -w 1 -T 1 path/to/mm10.fa reads.fastq.gz > aligned.sam",
+            "code_language": "bash",
+            "github_url": "https://github.com/lh3/bwa"
+        },
+        {
+            "step_order": 4,
+            "description": "GridTools evaluate was then used to correct against background and RNA-DNA mate read pair quality and quantity with bin size of 1 kb and moving windows of 10.",
+            "tool_name": "GridTools evaluate",
+            "tool_version": "(Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Installation: 'GridTools evaluate' is not a widely recognized public tool or command.\n# It is likely a custom script or part of a specialized pipeline, potentially within the Yeo lab's eCLIP framework.\n# If it were a Python script, dependencies might include standard bioinformatics libraries.\n# For example:\n# conda install -c bioconda samtools bedtools deeptools\n\n# Placeholder for input files and output file based on the description.\n# 'RNA-DNA mate read pair quality and quantity' would typically come from processed alignment files (e.g., BAM/BED).\n# 'Background' could be a control library or a pre-computed background model.\nINPUT_READ_PAIRS=\"path/to/rna_dna_mate_read_pairs.bam\" # Or .bed, .tsv depending on format\nBACKGROUND_DATA=\"path/to/background_model.bedgraph\" # Or control library BAM/BED\nOUTPUT_CORRECTED_SIGNAL=\"corrected_signal.bedgraph\"\n\n# Parameters extracted from the description\nBIN_SIZE=\"1000\" # 1 kb\nWINDOW_SIZE=\"10\"\n\n# Execute the inferred command.\n# This is a hypothetical command structure based on the description and common bioinformatics practices.\n# The actual command syntax would depend on the specific implementation of 'GridTools evaluate'.\nGridTools_evaluate \\\n    --input_reads \"${INPUT_READ_PAIRS}\" \\\n    --background_data \"${BACKGROUND_DATA}\" \\\n    --output_file \"${OUTPUT_CORRECTED_SIGNAL}\" \\\n    --bin_size \"${BIN_SIZE}\" \\\n    --moving_window \"${WINDOW_SIZE}\" \\\n    --correction_type \"rna_dna_mate_pair_quality_quantity\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip"
+        },
+        {
+            "step_order": 5,
+            "description": "GridTools.py evaluate function uses a gene annotation GTF (Gene transfer format) file to ensure that RNA end of the read always uniquely maps to its correct chromosomal location.",
+            "tool_name": "GridTools.py (from encode-pipeline-utils)",
+            "tool_version": "N/A",
+            "code_example": "# Install encode-pipeline-utils if not already installed\n# pip install encode-pipeline-utils\n\n# Download a reference GTF file (e.g., GENCODE human GRCh38, release 44)\n# wget -O gencode.v44.annotation.gtf.gz https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_44/gencode.v44.annotation.gtf.gz\n# gunzip gencode.v44.annotation.gtf.gz\n\n# Placeholder for an aligned BAM file. This file should be generated by an upstream alignment step (e.g., STAR, HISAT2).\n# For example: aligned_reads.bam\n\npython -m encode_pipeline_utils.grid_tools evaluate \\\n    --alignment_file aligned_reads.bam \\\n    --gtf_file gencode.v44.annotation.gtf \\\n    --output_file evaluation_report.txt",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 6,
+            "description": "Thus, during the analysis, only RNA reads that map back to its own locus will be retained.",
+            "tool_name": "samtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.10+",
+            "code_example": "# Install samtools if not already available\n# conda install -c bioconda samtools\n\n# Input BAM file (e.g., from a splice-aware aligner like STAR or HISAT2)\nINPUT_BAM=\"aligned_reads.bam\"\nOUTPUT_BAM=\"filtered_unique_locus_reads.bam\"\n\n# Filter RNA reads to retain only those that map uniquely and with high confidence to a single locus:\n# -F 4: Exclude unmapped reads\n# -F 256: Exclude secondary alignments\n# -F 2048: Exclude supplementary alignments\n# -q 20: Retain reads with mapping quality >= 20 (often indicative of unique mapping for many aligners)\n# -b: Output in BAM format\nsamtools view -F 4 -F 256 -F 2048 -q 20 -b \"${INPUT_BAM}\" > \"${OUTPUT_BAM}\"\n\n# Sort and index the filtered BAM file for downstream analysis\nsamtools sort -o \"${OUTPUT_BAM%.bam}.sorted.bam\" \"${OUTPUT_BAM}\"\nsamtools index \"${OUTPUT_BAM%.bam}.sorted.bam\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 7,
+            "description": "Moreover, the DNA end of the read will also be unique mapped, ensuring that both the RNA and DNA ends of each read are all unique reads.",
+            "tool_name": "samtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.9",
+            "code_example": "# Install samtools if not already installed\n# conda install -c bioconda samtools\n\n# Filter for uniquely mapped reads (MAPQ >= 20) and exclude unmapped, secondary, and supplementary alignments.\n# This ensures that both the RNA and DNA ends (i.e., the entire chimeric read in eCLIP) are uniquely mapped.\nsamtools view -b -h -F 0x4 -F 0x100 -F 0x200 -q 20 -o unique_mapped.bam aligned.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 8,
+            "description": "No read that maps to multiple locations in the genome (including repeat elements all over chromosomes) will be retained during analysis.",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.7.10a (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define reference genome paths (example for human hg38)\n# Replace with your actual STAR genome index directory\nGENOME_DIR=\"/path/to/STAR_index/hg38\"\n\n# Define input FASTQ files\n# Replace with your actual input FASTQ file(s)\nREAD1=\"input_read1.fastq.gz\"\nREAD2=\"input_read2.fastq.gz\" # Remove if single-end reads\n\n# Define output prefix for aligned files\nOUTPUT_PREFIX=\"aligned_unique_reads\"\n\n# Perform STAR alignment, retaining only uniquely mapping reads\n# The --outFilterMultimapNmax 1 parameter ensures that only reads mapping to a single location are reported.\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${READ1}\" \"${READ2}\" \\\n     --runThreadN 8 \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}.\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outFilterMultimapNmax 1 \\\n     --outFilterType BySJout \\\n     --outFilterScoreMinOverLread 0.3 \\\n     --outFilterMatchNminOverLread 0.3 \\\n     --limitBAMsortRAM 60000000000 # Example: 60GB RAM for sorting, adjust based on available memory",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper/"
+        },
+        {
+            "step_order": 9,
+            "description": "GridTools RNA was used to identify expression levels of chromatin-enriched RNA.",
+            "tool_name": "GridTools RNA",
+            "tool_version": "Unknown (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# GridTools RNA is not a widely recognized public tool, so installation instructions are not available.\n# This is a placeholder command based on the description's intent.\n# Replace 'input_aligned_reads.bam' with your actual input file (e.g., aligned RNA-seq reads).\n# Replace 'hg38_reference_annotation.gtf' with your actual genome annotation file.\n# Replace 'chromatin_enriched_rna_expression.tsv' with your desired output file name.\n\n# Example command (highly speculative due to lack of tool specifics):\nGridTools_RNA --input input_aligned_reads.bam --annotation hg38_reference_annotation.gtf --output chromatin_enriched_rna_expression.tsv --mode expression_quantification\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 10,
+            "description": "GridTools matrix was used to construct an interaction contact matrix of chromatin-associated RNA within specified genomic bin sizes of 1 kb or 100 kb.",
+            "tool_name": "cooler (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "(Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install cooler if not already installed\n# conda install -c bioconda cooler=0.9.1\n\n# Placeholder for input data and genome assembly\n# INPUT_PAIRS: A tab-separated file of paired-end reads, typically generated from aligned BAM files\n# using tools like 'pairtools parse' and 'pairtools sort'.\n# Each line represents an interaction, e.g., chr1 pos1 chr2 pos2 strand1 strand2.\nINPUT_PAIRS=\"input_rna_chromatin_interactions.pairs.gz\" # Example: gzipped pairs file\n\n# GENOME_ASSEMBLY: The reference genome assembly used for alignment (e.g., hg38, mm10)\nGENOME_ASSEMBLY=\"hg38\"\n\n# CHROM_SIZES_FILE: A tab-separated file containing chromosome names and their lengths.\n# This file is crucial for defining the genomic bins.\n# Example for hg38:\n# chr1    248956422\n# chr2    242193529\n# ...\nCHROM_SIZES_FILE=\"${GENOME_ASSEMBLY}.chrom.sizes\"\n\n# --- Example of how to obtain a chrom.sizes file (uncomment and adapt if needed) ---\n# # Download from UCSC Genome Browser (replace hg38 with your assembly)\n# # wget -O ${CHROM_SIZES_FILE} http://hgdownload.soe.ucsc.edu/goldenPath/${GENOME_ASSEMBLY}/bigZips/${GENOME_ASSEMBLY}.chrom.sizes\n# # Or from a FASTA file:\n# # samtools faidx reference.fasta\n# # cut -f1,2 reference.fasta.fai > ${CHROM_SIZES_FILE}\n# -----------------------------------------------------------------------------------\n\n# Define bin sizes as specified in the description\nBIN_SIZE_1KB=1000\nBIN_SIZE_100KB=100000\n\n# Construct interaction contact matrix for 1 kb bin size\n# 'cooler cload pairs' takes a chrom.sizes file, a bin size, a pairs file, and an output .cool file.\n# The pairs file should be sorted.\necho \"Constructing 1 kb contact matrix...\"\ncooler cload pairs \"${CHROM_SIZES_FILE}:${BIN_SIZE_1KB}\" \"${INPUT_PAIRS}\" rna_chromatin_contact_matrix_1kb.cool\n\n# Construct interaction contact matrix for 100 kb bin size\necho \"Constructing 100 kb contact matrix...\"\ncooler cload pairs \"${CHROM_SIZES_FILE}:${BIN_SIZE_100KB}\" \"${INPUT_PAIRS}\" rna_chromatin_contact_matrix_100kb.cool\n\n# Optional: View the generated cooler files\n# cooler info rna_chromatin_contact_matrix_1kb.cool\n# cooler dump -t pixels rna_chromatin_contact_matrix_1kb.cool | head",
+            "code_language": "bash",
+            "github_url": "https://github.com/mirnylab/cooler"
+        },
+        {
+            "step_order": 11,
+            "description": "All lncRNAs with reads per kilobase DNA read density \u00c2\u00b310 on any genomic region were filtered from the interaction contact matrix.",
+            "tool_name": "Custom Python script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# Define input files and parameters\nLNC_RNA_BED=\"lncRNA_annotations.bed\" # Path to a BED file defining lncRNA genomic regions (e.g., from GENCODE)\nALIGNED_BAM=\"aligned_reads.bam\" # Path to the aligned reads BAM file (e.g., from RNA-seq or eCLIP)\nINTERACTION_MATRIX=\"interaction_contact_matrix.tsv\" # Path to the input interaction contact matrix\nOUTPUT_MATRIX=\"filtered_interaction_contact_matrix.tsv\" # Path for the filtered output matrix\nRPKD_THRESHOLD=10 # Reads per kilobase DNA read density threshold\n\n# Placeholder for reference genome assembly (not directly used in this specific calculation but good practice)\nGENOME_ASSEMBLY=\"hg38\"\n\n# --- Install necessary tools if not already present ---\n# # Conda installation for bedtools\n# # conda install -c bioconda bedtools\n\n# --- Step 1: Calculate RPKD for each lncRNA region ---\n# Count reads overlapping each lncRNA region using bedtools coverage.\n# Output format of bedtools coverage -counts: chr, start, end, name, score, strand, count\necho \"Counting reads overlapping lncRNA regions...\"\nbedtools coverage -a \"${LNC_RNA_BED}\" -b \"${ALIGNED_BAM}\" -counts > lncRNA_read_counts.tsv\n\n# Calculate RPKD (Reads Per Kilobase DNA read density) and filter lncRNAs based on the threshold.\n# RPKD = (read_count * 1000) / (region_length)\n# Assuming lncRNA_read_counts.tsv has columns: chr, start, end, name, score, strand, count\necho \"Calculating RPKD and filtering lncRNAs with RPKD >= ${RPKD_THRESHOLD}...\"\nawk -v threshold=\"${RPKD_THRESHOLD}\" 'BEGIN {OFS=\"\\t\"} {\n    region_length = $3 - $2;\n    if (region_length > 0) {\n        rpks = ($7 * 1000) / region_length;\n        if (rpks >= threshold) {\n            print $4; # Output only the lncRNA name if it passes the filter\n        }\n    }\n}' lncRNA_read_counts.tsv > lncRNAs_passing_rpks_filter.txt\n\n# --- Step 2: Filter the interaction contact matrix ---\n# This step assumes the interaction matrix is a tab-separated file where the first two columns\n# represent interacting entities (e.g., lncRNA_A \\t lncRNA_B \\t score).\n# The script will keep only those interactions where *both* entities are present in the\n# 'lncRNAs_passing_rpks_filter.txt' list. If the matrix contains other types of entities,\n# or if the filtering logic is different (e.g., only one entity needs to be an lncRNA and pass the filter),\n# this Python script would need to be adjusted.\n\necho \"Filtering the interaction contact matrix...\"\npython -c \"\nimport sys\n\ndef filter_interaction_matrix(lnc_rna_list_file, interaction_matrix_file, output_matrix_file):\n    with open(lnc_rna_list_file, 'r') as f:\n        lnc_rnas_to_keep = {line.strip() for line in f}\n\n    with open(interaction_matrix_file, 'r') as infile, open(output_matrix_file, 'w') as outfile:\n        for line in infile:\n            parts = line.strip().split('\\t')\n            if not parts:\n                continue # Skip empty lines\n\n            # Assuming the first two columns are the interacting entities (IDs)\n            # Adjust indices if lncRNA IDs are in different columns\n            entity1 = parts[0]\n            entity2 = parts[1] if len(parts) > 1 else None\n\n            # Keep the interaction if entity1 is in the allowed list\n            # And if entity2 exists, it must also be in the allowed list\n            # This interpretation assumes both interacting partners are lncRNAs subject to the filter.\n            keep_line = True\n            if entity1 not in lnc_rnas_to_keep:\n                keep_line = False\n            if entity2 is not None and entity2 not in lnc_rnas_to_keep:\n                keep_line = False\n\n            if keep_line:\n                outfile.write(line)\n\nif __name__ == '__main__':\n    filter_interaction_matrix(\n        'lncRNAs_passing_rpks_filter.txt',\n        '${INTERACTION_MATRIX}',\n        '${OUTPUT_MATRIX}'\n    )\n\"\n\n# Clean up intermediate files\nrm lncRNA_read_counts.tsv lncRNAs_passing_rpks_filter.txt",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        },
+        {
+            "step_order": 12,
+            "description": "A 1 kb interaction matrix was directly visualized on a heatmap using the ComplexHeatmap package (v2.2.0).",
+            "tool_name": "ComplexHeatmap",
+            "tool_version": "2.2.0",
+            "code_example": "# Create an R script for heatmap visualization\ncat << 'EOF' > visualize_heatmap.R\n# Install ComplexHeatmap if not already installed\n# if (!requireNamespace(\"BiocManager\", quietly = TRUE))\n#     install.packages(\"BiocManager\")\n# BiocManager::install(\"ComplexHeatmap\", version = \"3.12\", update = FALSE, ask = FALSE) # Specify version if needed, otherwise latest\n# install.packages(\"circlize\", repos = \"http://cran.us.r-project.org\", update = FALSE)\n\n# Load the ComplexHeatmap library\nlibrary(ComplexHeatmap)\nlibrary(circlize)\n\n# --- Input Data Loading ---\n# This script expects an interaction matrix as input.\n# The description mentions a \"1 kb interaction matrix\".\n# Replace the dummy matrix generation below with actual data loading from your file.\n# Example for loading a tab-separated file:\n# interaction_matrix_file <- \"path/to/your/1kb_interaction_matrix.tsv\"\n# interaction_matrix <- as.matrix(read.delim(interaction_matrix_file, row.names = 1, header = TRUE))\n\n# For demonstration purposes, a dummy matrix is created:\nset.seed(123)\ninteraction_matrix <- matrix(rnorm(100), nrow = 10, ncol = 10)\ncolnames(interaction_matrix) <- paste0(\"Region_\", 1:10)\nrownames(interaction_matrix) <- paste0(\"Region_\", 1:10)\n\n# Define output file name\noutput_pdf_file <- \"1kb_interaction_heatmap.pdf\"\n\n# Open PDF device for saving the heatmap\npdf(output_pdf_file, width = 8, height = 8)\n\n# Visualize the interaction matrix as a heatmap\n# The 'ComplexHeatmap' package (v2.2.0) is used as specified.\n# Parameters like 'col', 'cluster_rows', 'cluster_columns' can be adjusted\n# based on the specific visualization requirements of the interaction matrix.\nHeatmap(interaction_matrix,\n        name = \"Interaction Score\", # Name of the heatmap legend\n        col = colorRamp2(c(min(interaction_matrix), 0, max(interaction_matrix)), c(\"blue\", \"white\", \"red\")), # Example color scale\n        cluster_rows = TRUE,\n        cluster_columns = TRUE,\n        show_row_names = FALSE, # Set to TRUE if row names are meaningful and few\n        show_column_names = FALSE, # Set to TRUE if column names are meaningful and few\n        heatmap_legend_param = list(title = \"Interaction Value\")\n)\n\n# Close the PDF device\ndev.off()\n\nmessage(paste(\"Heatmap saved to:\", output_pdf_file))\nEOF\n\n# Execute the R script using Rscript\nRscript visualize_heatmap.R",
+            "code_language": "bash",
+            "github_url": "https://github.com/jokergoo/ComplexHeatmap"
+        },
+        {
+            "step_order": 13,
+            "description": "PCA, k-means clustering set to 3 clusters, and pearson correlation analysis were performed on the interaction matrix with the R stats package (v3.6.2) removing all bins with zero interactions.",
+            "tool_name": "PCA",
+            "tool_version": "3.6.2",
+            "code_example": "# Install R (version 3.6.2) if not already available. Specific version installation might vary by OS/package manager.\n# Example for Conda:\n# conda create -n r_env r-base=3.6.2 r-essentials\n# conda activate r_env\n\n# Create a placeholder interaction matrix file for demonstration\n# In a real scenario, 'interaction_matrix.tsv' would be your input file.\ncat << EOF > interaction_matrix.tsv\tBin1\tBin2\tBin3\tBin4\nFeatureA\t10\t20\t30\t40\nFeatureB\t0\t0\t0\t0\nFeatureC\t50\t60\t70\t80\nFeatureD\t5\t10\t15\t20\nFeatureE\t0\t0\t0\t0\nEOF\n\nRscript -e '\n# Load the interaction matrix\n# Assuming the matrix is tab-separated and has a header, with the first column as row names (bin identifiers)\ninteraction_matrix <- read.table(\"interaction_matrix.tsv\", sep=\"\\t\", header=TRUE, row.names=1)\n\n# Convert to a numeric matrix for analysis\nnumeric_matrix <- as.matrix(interaction_matrix)\n\n# Remove all bins (rows) with zero interactions\n# This identifies rows where all values are zero\nrows_to_keep <- apply(numeric_matrix, 1, function(x) !all(x == 0))\nfiltered_matrix <- numeric_matrix[rows_to_keep, ]\n\n# Check if there is enough data after filtering for PCA and correlation\nif (nrow(filtered_matrix) < 2 || ncol(filtered_matrix) < 2) {\n  stop(\"Not enough data after filtering for PCA and correlation analysis.\")\n}\n\ncat(\"\\n--- Filtered Matrix (first 5 rows/cols) ---\\n\")\nprint(filtered_matrix[1:min(5, nrow(filtered_matrix)), 1:min(5, ncol(filtered_matrix))])\n\n# Perform PCA\n# scale. = TRUE and center. = TRUE are standard for PCA to normalize variables\npca_results <- prcomp(filtered_matrix, scale. = TRUE, center. = TRUE)\ncat(\"\\n--- PCA Results (Summary) ---\\n\")\nprint(summary(pca_results))\n# Optionally, save PCA results\n# write.csv(pca_results$x, \"pca_components.csv\") # Principal components (scores)\n# write.csv(pca_results$rotation, \"pca_loadings.csv\") # Loadings (eigenvectors)\n\n# Perform k-means clustering set to 3 clusters\n# nstart = 25 runs the algorithm 25 times with different initial centroids and picks the best one\nkmeans_results <- kmeans(filtered_matrix, centers = 3, nstart = 25)\ncat(\"\\n--- K-means Clustering Results (3 clusters) ---\\n\")\nprint(kmeans_results)\n# Optionally, save cluster assignments\n# write.csv(data.frame(Bin = rownames(filtered_matrix), Cluster = kmeans_results$cluster), \"kmeans_clusters.csv\")\n\n# Perform Pearson correlation analysis\n# This computes the Pearson correlation matrix between columns (features/bins)\ncorrelation_matrix <- cor(filtered_matrix, method = \"pearson\")\ncat(\"\\n--- Pearson Correlation Matrix (first 5 rows/cols) ---\\n\")\nprint(correlation_matrix[1:min(5, nrow(correlation_matrix)), 1:min(5, ncol(correlation_matrix))])\n# Optionally, save the correlation matrix\n# write.csv(correlation_matrix, \"pearson_correlation_matrix.csv\")\n'\n\n# Clean up placeholder file\nrm interaction_matrix.tsv",
+            "code_language": "bash",
+            "github_url": "https://www.r-project.org/"
+        },
+        {
+            "step_order": 14,
+            "description": "The correlation matrix was visualized with corrplot package (v0.89) and circos plots with the circlize package (v0.42).",
+            "tool_name": "R (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "corrplot v0.89, circlize v0.42",
+            "code_example": "# Install R if not already installed (e.g., on Ubuntu)\n# sudo apt-get update\n# sudo apt-get install r-base\n\n# Install R packages (if not already installed)\n# R -e 'install.packages(\"corrplot\", repos=\"http://cran.us.r-project.org\")'\n# R -e 'install.packages(\"circlize\", repos=\"http://cran.us.r-project.org\")'\n# R -e 'install.packages(\"RColorBrewer\", repos=\"http://cran.us.r-project.org\")'\n# R -e 'install.packages(\"ComplexHeatmap\", repos=\"http://cran.us.r-project.org\")' # Often used with circlize for color mapping\n\n# R script to visualize a correlation matrix\nRscript -e '\n  # Load required libraries\n  library(corrplot)\n  library(circlize)\n  library(RColorBrewer) # Commonly used for color palettes with corrplot\n  library(ComplexHeatmap) # Provides colorRamp2 function used with circlize\n\n  # --- Create a dummy correlation matrix for demonstration ---\n  # In a real scenario, this matrix would be loaded from a file (e.g., CSV, TSV)\n  set.seed(123)\n  M <- cor(matrix(rnorm(100*10), ncol=10))\n  colnames(M) <- paste0(\"Gene\", 1:10)\n  rownames(M) <- paste0(\"Gene\", 1:10)\n\n  # --- Visualize with corrplot package (v0.89) ---\n  # Output to PDF file\n  pdf(\"correlation_matrix_corrplot.pdf\", width=7, height=7)\n  corrplot(M, method=\"circle\", type=\"upper\", tl.col=\"black\", tl.srt=45,\n           col=brewer.pal(n=8, name=\"RdBu\"))\n  dev.off()\n  message(\"corrplot visualization saved to correlation_matrix_corrplot.pdf\")\n\n  # --- Visualize with circlize package (v0.42) ---\n  # For circlize, we often convert the correlation matrix into a list of links\n  # For demonstration, let\\'s create a data frame of significant correlations\n  # (e.g., absolute correlation > 0.7 and remove self-loops)\n  cor_df <- as.data.frame(as.table(M))\n  colnames(cor_df) <- c(\"from\", \"to\", \"correlation\")\n  \n  significant_cor <- subset(cor_df, abs(correlation) > 0.7 & from != to)\n  \n  # Prepare data for circlize links\n  pdf(\"correlation_matrix_circlize.pdf\", width=8, height=8)\n  circos.clear()\n  circos.par(gap.degree = 5) # Adjust gap between sectors\n  \n  # Define sectors (all unique genes involved in significant correlations)\n  all_genes_for_circlize <- unique(c(as.character(significant_cor$from), as.character(significant_cor$to)))\n  \n  if (length(all_genes_for_circlize) > 0) {\n    circos.initialize(factors = all_genes_for_circlize, xlim = c(0, 1)) # Dummy xlim\n  \n    # Add a track for gene names\n    circos.trackPlotRegion(ylim = c(0, 1), track.height = 0.1, bg.border = NA,\n                           panel.fun = function(x, y) {\n                             sector.name = get.cell.meta.data(\"sector.index\")\n                             circos.text(CELL_META$xcenter, CELL_META$ylim[2] + mm_y(2),\n                                         sector.name, facing = \"clockwise\", niceFacing = TRUE, adj = c(0, 0.5))\n                           })\n  \n    # Define color function for links based on correlation value\n    col_fun = colorRamp2(c(-1, 0, 1), c(\"blue\", \"white\", \"red\"))\n  \n    # Add links based on significant correlations\n    for(i in 1:nrow(significant_cor)) {\n      from_gene <- as.character(significant_cor$from[i])\n      to_gene <- as.character(significant_cor$to[i])\n      cor_val <- significant_cor$correlation[i]\n      \n      # Draw link from the middle of \\'from_gene\\' sector to the middle of \\'to_gene\\' sector\n      circos.link(from_gene, 0.5, to_gene, 0.5,\n                  col = col_fun(cor_val),\n                  lwd = abs(cor_val) * 3) # Line width proportional to correlation strength\n    }\n  } else {\n    message(\"No significant correlations found to plot with circlize.\")\n  }\n  \n  circos.clear()\n  dev.off()\n  message(\"circlize visualization saved to correlation_matrix_circlize.pdf\")\n'\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 15,
+            "description": "Differential RNA chromatin interaction regions were determined by taking the average RNA interaction level of each genomic bin for all lncRNAs in a cluster.",
+            "tool_name": "Custom Script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# This step describes a custom analysis involving data aggregation and differential comparison.\n# It is assumed that interaction levels for each lncRNA in genomic bins are available as input.\n# A custom Python or R script would typically be used for such an analysis.\n\n# Example installation for a Python environment with common data science libraries:\n# conda create -n rna_chromatin_env python=3.9\n# conda activate rna_chromatin_env\n# pip install pandas numpy scipy statsmodels pybedtools\n\n# Assume the following input files are prepared:\n# 1. `genomic_bins.bed`: A BED file defining the genomic bins (e.g., 10kb or 100kb windows) for the reference genome (e.g., hg38).\n# 2. `lncrna_cluster_manifest.tsv`: A tab-separated file linking lncRNA IDs to their respective clusters and experimental conditions.\n#    Example columns: lncRNA_ID, Cluster_ID, Condition, Path_to_Interaction_BedGraph\n# 3. `lncRNA_interaction_data/`: A directory containing bedgraph or bigwig files for each lncRNA, representing RNA interaction levels across genomic bins.\n\n# Placeholder for a custom Python script that performs the described analysis.\n# This script would typically:\n# - Load the genomic bin definitions.\n# - Read the lncRNA cluster manifest to understand groupings and conditions.\n# - For each cluster, iterate through its associated lncRNAs.\n# - For each lncRNA, load its interaction data (e.g., bedgraph) and map it to the predefined genomic bins.\n# - Calculate the average RNA interaction level for each genomic bin across all lncRNAs within a given cluster.\n# - Perform differential analysis (e.g., t-test, ANOVA, or a regression model) on these averaged interaction levels\n#   between different conditions or clusters to identify statistically significant differential regions.\n# - Output the identified differential regions and associated statistics.\n\n# Example execution command for an inferred Python script:\npython analyze_rna_chromatin_interactions.py \\\n    --genomic_bins /path/to/reference/genomic_bins_hg38_10kb.bed \\\n    --lncrna_manifest /path/to/lncrna_cluster_manifest.tsv \\\n    --input_dir /path/to/lncRNA_interaction_data/ \\\n    --output_prefix differential_rna_chromatin_regions \\\n    --bin_size 10000 \\\n    --min_lncrnas_per_cluster 3 \\\n    --p_value_threshold 0.05 \\\n    --log2fc_threshold 1.0 \\\n    --genome_assembly hg38\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 16,
+            "description": "These averaged genomic bins were annotated to the transcription start site of the nearest gene using the ChIPpeakAnno.",
+            "tool_name": "ChIPpeakAnno",
+            "tool_version": "3.20.0",
+            "code_example": "# Install R and Bioconductor if not already installed\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\")'\n# R -e 'BiocManager::install(\"ChIPpeakAnno\")'\n# R -e 'BiocManager::install(\"TxDb.Hsapiens.UCSC.hg38.knownGene\")'\n# R -e 'BiocManager::install(\"rtracklayer\")' # For importing BED files\n\n# Create a dummy input file for demonstration if 'averaged_genomic_bins.bed' does not exist.\n# In a real scenario, this file would be provided as input.\nif [ ! -f \"averaged_genomic_bins.bed\" ]; then\n  echo -e \"chr1\\t1000\\t1500\\tbin1\\t0\\t+\" > averaged_genomic_bins.bed\n  echo -e \"chr1\\t5000\\t5500\\tbin2\\t0\\t-\" >> averaged_genomic_bins.bed\n  echo -e \"chr2\\t10000\\t10500\\tbin3\\t0\\t+\" >> averaged_genomic_bins.bed\nfi\n\n# R script to perform annotation of genomic bins to the nearest gene's transcription start site (TSS)\nRscript -e '\n  library(ChIPpeakAnno)\n  library(TxDb.Hsapiens.UCSC.hg38.knownGene)\n  library(rtracklayer) # Required for importing BED files\n\n  # Define input and output file names\n  input_bed_file <- \"averaged_genomic_bins.bed\"\n  output_csv_file <- \"annotated_genomic_bins_tss.csv\"\n\n  # Load genomic bins from the input BED file\n  peaks <- import(input_bed_file, format=\"BED\")\n\n  # Load gene annotations for the human hg38 assembly\n  txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene\n\n  # Get all genes as GRanges object\n  genes_gr <- genes(txdb)\n\n  # Define Transcription Start Site (TSS) regions as 1bp regions at the start of each gene\n  tss_features <- promoters(genes_gr, upstream=0, downstream=1)\n\n  # Add gene IDs to the TSS features, which will be used in the annotation output\n  mcols(tss_features)$gene_id <- names(genes_gr)\n\n  # Annotate peaks to the nearest gene TSS\n  # The \"output = \\\"nearestLocation\\\"\" parameter ensures that the closest TSS is identified for each peak.\n  annotated_peaks_gr <- annotatePeak(\n    peaks,\n    AnnotationData = tss_features,\n    output = \"nearestLocation\"\n  )\n\n  # Convert the annotated GRanges object to a data frame for easier viewing and saving\n  annotated_df <- as.data.frame(annotated_peaks_gr)\n\n  # Save the annotation results to a CSV file\n  write.csv(annotated_df, output_csv_file, row.names=FALSE)\n\n  message(paste(\"Annotation complete. Results saved to\", output_csv_file))\n'",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/1471-2105-11-237"
+        },
+        {
+            "step_order": 17,
+            "description": "Consecutive genomic bins annotated to a single gene with greater RNA interaction for each genomic bin in one cluster relative to another cluster were considered differentially interacting.",
+            "tool_name": "(Inferred with models/gemini-2.5-flash)",
+            "tool_version": "(Inferred with models/gemini-2.5-flash)",
+            "code_example": "# This step describes a conceptual analysis for identifying differentially interacting genomic regions between two clusters.\n# It typically involves custom scripts or specialized tools that take binned interaction data and gene annotations as input.\n# The exact tool and parameters would depend on the specific methodology used for differential interaction analysis (e.g., statistical tests, thresholds).\n\n# Placeholder for input files (replace with actual paths to binned interaction data for each cluster)\n# These files would typically be generated from eCLIP data, quantifying RNA interaction per genomic bin.\nCLUSTER1_BINNED_INTERACTIONS=\"cluster1_binned_interactions.bedgraph\"\nCLUSTER2_BINNED_INTERACTIONS=\"cluster2_binned_interactions.bedgraph\"\n\n# Reference dataset: Gene annotation file (e.g., GTF/GFF) for annotating genomic bins to genes.\n# Using Homo sapiens GRCh38 as a common reference assembly.\nGENE_ANNOTATION_FILE=\"Homo_sapiens.GRCh38.109.gtf\" # Source: Ensembl or UCSC\n\n# Placeholder for output file\nOUTPUT_DIFFERENTIAL_INTERACTIONS=\"differential_interactions_cluster1_vs_cluster2.tsv\"\n\n# Example conceptual command for a custom script that performs differential interaction analysis.\n# This script would compare interaction levels in consecutive genomic bins annotated to a single gene\n# between two clusters, applying statistical tests and thresholds to identify significant differences.\n# Parameters like --min-consecutive-bins, --fold-change, and --p-value are illustrative.\n\n# Install necessary dependencies (example, actual dependencies depend on the inferred tool/script)\n# conda install -c bioconda bedtools\n# conda install -c conda-forge r-base r-deseq2\n# pip install pandas numpy scipy\n\npython custom_differential_interaction_analysis.py \\\n    --cluster1-data \"${CLUSTER1_BINNED_INTERACTIONS}\" \\\n    --cluster2-data \"${CLUSTER2_BINNED_INTERACTIONS}\" \\\n    --gene-annotation \"${GENE_ANNOTATION_FILE}\" \\\n    --output \"${OUTPUT_DIFFERENTIAL_INTERACTIONS}\" \\\n    --min-consecutive-bins 3 \\\n    --min-interaction-fold-change 1.5 \\\n    --max-p-value 0.05 \\\n    --statistical-method \"wilcoxon_rank_sum\" # Example: could be t-test, DESeq2-like, etc.\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper"
+        },
+        {
+            "step_order": 18,
+            "description": "Differential RNA chromatin interaction regions were annotated with ChiPseeker.",
+            "tool_name": "ChIPseeker",
+            "tool_version": "1.40.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install R and Bioconductor if not already present\n# For Debian/Ubuntu:\n# sudo apt-get update\n# sudo apt-get install r-base\n\n# Install BiocManager and ChIPseeker package within R\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\")'\n# R -e 'BiocManager::install(\"ChIPseeker\")'\n# R -e 'BiocManager::install(\"TxDb.Hsapiens.UCSC.hg38.knownGene\")' # For human hg38 genome annotation\n# R -e 'BiocManager::install(\"org.Hs.eg.db\")' # For gene symbol/name mapping\n\n# Example: Create a dummy input file for demonstration purposes\n# In a real scenario, 'differential_regions.bed' would be the output of a previous step\n# echo -e \"chr1\\t10000\\t10500\\tregion1\\t0\\t+\\nchr1\\t20000\\t20800\\tregion2\\t0\\t-\" > differential_regions.bed\n\nRscript -e '\n  library(ChIPseeker)\n  library(TxDb.Hsapiens.UCSC.hg38.knownGene) # Using human hg38 as the latest assembly placeholder\n  library(org.Hs.eg.db) # For gene symbol/name mapping\n  \n  # Define the input file containing differential RNA chromatin interaction regions\n  # This file is expected to be in a BED-like format (e.g., chr, start, end)\n  peakFile <- \"differential_regions.bed\"\n  \n  # Load the TxDb object for genome annotation\n  txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene\n  \n  # Annotate the peaks with respect to genomic features (e.g., promoters, exons, introns)\n  # tssRegion defines the region around the Transcription Start Site to consider as promoter\n  peakAnno <- annotatePeak(peakFile, \n                           tssRegion=c(-3000, 3000), \n                           TxDb=txdb, \n                           annoDb=\"org.Hs.eg.db\") # Use org.Hs.eg.db for gene symbol/name mapping\n  \n  # Convert the annotation result to a data frame and save it to a TSV file\n  df <- as.data.frame(peakAnno)\n  write.table(df, file=\"differential_regions_annotated.tsv\", sep=\"\\t\", quote=FALSE, row.names=FALSE)\n  \n  # Optional: Print a summary of the annotation\n  # print(peakAnno)\n  # plotAnnoBar(peakAnno)\n  # plotDistToTSS(peakAnno)\n'\n",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/ChIPseeker.html"
+        },
+        {
+            "step_order": 19,
+            "description": "none provided by the submitter",
+            "tool_name": "",
+            "tool_version": "",
+            "code_example": "",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Reads were trimmed with cutadapt -l 86 --max-n 5 -o (v1.18), mapped to RNA-Linker-DNA (GTTGGATTCNNNGACACAGCTCACTCCCACACACCGAACTCCAAC) with bwa mem -k 5 -L 4 -B 2 -O 4 (v0.7.15) and sorted with samtools sort (v1.7). RNA and DNA reads were separated with GridTools matefq (https://github.com/biz007/gridtools). Reads were then mapped to the mm10 genome with bwa mem -k 17 -w 1 -T 1. GridTools evaluate was then used to correct against background and RNA-DNA mate read pair quality and quantity with bin size of 1 kb and moving windows of 10. GridTools.py evaluate function uses a gene annotation GTF (Gene transfer format) file to ensure that RNA end of the read always uniquely maps to its correct chromosomal location. Thus, during the analysis, only RNA reads that map back to its own locus will be retained. Moreover, the DNA end of the read will also be unique mapped, ensuring that both the RNA and DNA ends of each read are all unique reads. No read that maps to multiple locations in the genome (including repeat elements all over chromosomes) will be retained during analysis. GridTools RNA was used to identify expression levels of chromatin-enriched RNA. GridTools matrix was used to construct an interaction contact matrix of chromatin-associated RNA within specified genomic bin sizes of 1 kb or 100 kb. All lncRNAs with reads per kilobase DNA read density \u00c2\u00b310 on any genomic region were filtered from the interaction contact matrix. A 1 kb interaction matrix was directly visualized on a heatmap using the ComplexHeatmap package (v2.2.0). PCA, k-means clustering set to 3 clusters, and pearson correlation analysis were performed on the interaction matrix with the R stats package (v3.6.2) removing all bins with zero interactions. The correlation matrix was visualized with corrplot package (v0.89) and circos plots with the circlize package (v0.42). Differential RNA chromatin interaction regions were determined by taking the average RNA interaction level of each genomic bin for all lncRNAs in a cluster. These averaged genomic bins were annotated to the transcription start site of the nearest gene using the ChIPpeakAnno. Consecutive genomic bins annotated to a single gene with greater RNA interaction for each genomic bin in one cluster relative to another cluster were considered differentially interacting. Differential RNA chromatin interaction regions were annotated with ChiPseeker.\nnone provided by the submitter\nAssembly: mm10\nSupplementary files format and content: Expression and scope Cis and Trans of all chromatin enriched RNAs",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

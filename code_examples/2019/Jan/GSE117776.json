@@ -1,133 +1,133 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Map fastq reads with HISAT2 hisat2 -q --phred64 -x grch37_tran/genome_tran --no-unal --reorder --no-mixed",
-      "tool_name": "HISAT2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Extract uniquely mapped reads from SAM files",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Remap unmapped reads with hyperediting pipeline.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "In brief, convert all adenosines to guanosines and align to modified hg19 genome where adenosines are also substituted by guanosines.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Obtain uniquely mapped reads pairs from hyperediting pipeline and combine with uniquely mapped reads from first round of read mapping",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Identify RNA-DNA differences between mapped reads and hg19 reference genome.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "r",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Apply log-likelihood test to determine whether RDD is likely resulted from sequencing error (Bahn et. al.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "PMID: 21960545)",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "Apply posterior filters to remove RDD sites that are likely caused by technical artifats (Bahn et. al.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 10,
-      "description": "PMID: 21960545 and Lee et. al.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 11,
-      "description": "PMID: 23598527)",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 12,
-      "description": "Retain only highly prevalent editing sites.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 13,
-      "description": "In particular, filter for editing sites where both pooled fragile X and pooled controls have at least 10 reads each and where pooled fragile X or pooled controls have editing ratio at least 0.1",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 14,
-      "description": "Also quantify gene expression as RPKM values over the exon union of ENSEMBL transcripts in hg19.",
-      "tool_name": "Ensembl",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Map fastq reads with HISAT2 hisat2 -q --phred64 -x grch37_tran/genome_tran  --no-unal --reorder --no-mixed\nExtract uniquely mapped reads from SAM files\nRemap unmapped reads with hyperediting pipeline. In brief, convert all adenosines to guanosines and align to modified hg19 genome where adenosines are also substituted by guanosines.\nObtain uniquely mapped reads pairs from hyperediting pipeline and combine with uniquely mapped reads from first round of read mapping\nIdentify RNA-DNA differences between mapped reads and hg19 reference genome.\nApply log-likelihood test to determine whether RDD is likely resulted from sequencing error (Bahn et. al. PMID: 21960545)\nApply posterior filters to remove RDD sites that are likely caused by technical artifats (Bahn et. al. PMID: 21960545 and Lee et. al. PMID: 23598527)\nRetain only highly prevalent editing sites. In particular, filter for editing sites where both pooled fragile X and pooled controls have at least 10 reads each and where pooled fragile X or pooled controls have editing ratio at least 0.1\nAlso quantify gene expression as RPKM values over the exon union of ENSEMBL transcripts in hg19.\nGenome_build: hg19\nSupplementary_files_format_and_content: gene expression (RPKM)",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Map fastq reads with HISAT2 hisat2 -q --phred64 -x grch37_tran/genome_tran --no-unal --reorder --no-mixed",
+            "tool_name": "HISAT2",
+            "tool_version": "2.2.1",
+            "code_example": "# Install HISAT2 (if not already installed)\n# conda install -c bioconda hisat2\n\n# Define input FASTQ files (assuming paired-end reads based on --no-mixed flag)\n# Replace with your actual input file paths\nREAD1=\"your_read1.fastq.gz\"\nREAD2=\"your_read2.fastq.gz\"\n\n# Define output SAM file path\nOUTPUT_SAM=\"aligned_reads.sam\"\n\n# Define HISAT2 index path\n# The description specifies 'grch37_tran/genome_tran', indicating a GRCh37 (hg19) human genome index\n# with transcriptome information. Ensure this path points to your HISAT2 index files.\nHISAT2_INDEX=\"grch37_tran/genome_tran\"\n\n# Run HISAT2 to map fastq reads\nhisat2 -q --phred64 \\\n       -x \"${HISAT2_INDEX}\" \\\n       -1 \"${READ1}\" \\\n       -2 \"${READ2}\" \\\n       --no-unal \\\n       --reorder \\\n       --no-mixed \\\n       -S \"${OUTPUT_SAM}\"\n\n# Optional: Convert SAM to BAM and sort (common post-alignment steps)\n# samtools view -bS \"${OUTPUT_SAM}\" | samtools sort -o \"aligned_reads.bam\"\n# samtools index \"aligned_reads.bam\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/DaehwanKimLab/hisat2"
+        },
+        {
+            "step_order": 2,
+            "description": "Extract uniquely mapped reads from SAM files",
+            "tool_name": "samtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.19",
+            "code_example": "# Install samtools (if not already installed)\n# conda install -c bioconda samtools\n\n# Define input and output file paths\nINPUT_SAM=\"input.sam\" # Replace with your actual input SAM file\nOUTPUT_BAM=\"output_unique.bam\" # Desired output BAM file for uniquely mapped reads\n\n# Extract uniquely mapped reads from SAM file\n# -F 4: Exclude unmapped reads\n# -F 256: Exclude secondary alignments\n# -F 2048: Exclude supplementary alignments\n# -q 30: Filter reads with mapping quality less than 30 (a common threshold for uniquely mapped, high-quality reads)\n# -b: Output in BAM format\n# -S: Input is SAM format (optional, samtools can often infer)\n# -o: Output file\nsamtools view -F 4 -F 256 -F 2048 -q 30 -bS \"${INPUT_SAM}\" -o \"${OUTPUT_BAM}\"\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 3,
+            "description": "Remap unmapped reads with hyperediting pipeline.",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.7.10a (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables\n# Placeholder for STAR genome index directory (e.g., built from GRCh38)\nGENOME_DIR=\"/path/to/STAR_genome_index/GRCh38\"\n# Placeholder for input unmapped reads (FASTQ format, can be gzipped)\n# For paired-end reads, use --readFilesIn R1.fastq.gz R2.fastq.gz\nINPUT_FASTQ=\"unmapped_reads.fastq.gz\"\n# Prefix for output files\nOUTPUT_PREFIX=\"remapped_hyperediting\"\n# Number of threads to use\nNUM_THREADS=8\n# RAM limit for sorting BAM (e.g., 30GB), adjust based on system resources\nLIMIT_BAM_SORT_RAM=30000000000\n\n# Ensure the genome index exists. Example command to build a genome index for GRCh38:\n# STAR --runMode genomeGenerate \\\n#      --genomeDir ${GENOME_DIR} \\\n#      --genomeFastaFiles /path/to/GRCh38.primary_assembly.fa \\\n#      --sjdbGTFfile /path/to/gencode.vXX.annotation.gtf \\\n#      --runThreadN ${NUM_THREADS}\n\n# Run STAR alignment to remap unmapped reads.\n# Parameters are adjusted to be permissive for RNA editing detection (e.g., relaxed mismatch filtering)\nSTAR --genomeDir ${GENOME_DIR} \\\n     --readFilesIn ${INPUT_FASTQ} \\\n     --runThreadN ${NUM_THREADS} \\\n     --outFileNamePrefix ${OUTPUT_PREFIX}_ \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outReadsUnmapped Fastx \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.1 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --limitBAMsortRAM ${LIMIT_BAM_SORT_RAM}\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 4,
+            "description": "In brief, convert all adenosines to guanosines and align to modified hg19 genome where adenosines are also substituted by guanosines.",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# --- Reference Genome Preparation ---\n# Download hg19 reference genome (if not already present)\n# wget -c http://hgdownload.cse.ucsc.edu/goldenPath/hg19/bigZips/hg19.fa.gz\n# gunzip hg19.fa.gz\n\n# Convert adenosines to guanosines in the reference genome\n# This creates a new FASTA file with all 'A's replaced by 'G's\nsed 's/A/G/g' hg19.fa > hg19_AG_modified.fa\n\n# Create a directory for the STAR index\nmkdir -p hg19_AG_STAR_index\n\n# Build STAR index for the A->G modified genome\n# Adjust --runThreadN based on available CPU cores\nSTAR --runMode genomeGenerate \\\n     --genomeDir hg19_AG_STAR_index \\\n     --genomeFastaFiles hg19_AG_modified.fa \\\n     --runThreadN 8\n\n# --- Read Preparation and Alignment ---\n# Define input FASTQ file(s)\n# For single-end reads, set INPUT_READS=\"input_reads.fastq.gz\"\n# For paired-end reads:\nINPUT_READS_R1=\"input_reads_R1.fastq.gz\"\nINPUT_READS_R2=\"input_reads_R2.fastq.gz\"\n\n# Convert adenosines to guanosines in the input reads (assuming FASTQ format)\n# This awk command processes FASTQ files, replacing 'A' with 'G' only in sequence lines.\n# Note: This simple substitution might affect quality scores if 'A' appears in the quality string,\n# though this is rare for standard Phred scores. For more robust handling of FASTQ, consider specialized tools or custom scripts.\n# For paired-end reads, apply to both R1 and R2.\n\n# Process R1 reads\ngunzip -c \"${INPUT_READS_R1}\" | \\\nawk '{\n    if (NR%4 == 2) {\n        gsub(/A/, \"G\", $0);\n    }\n    print $0;\n}' | gzip > input_reads_R1_AG_modified.fastq.gz\n\n# Process R2 reads\ngunzip -c \"${INPUT_READS_R2}\" | \\\nawk '{\n    if (NR%4 == 2) {\n        gsub(/A/, \"G\", $0);\n    }\n    print $0;\n}' | gzip > input_reads_R2_AG_modified.fastq.gz\n\n# Align the A->G modified reads to the A->G modified genome using STAR\n# Adjust --runThreadN based on available CPU cores\n# For paired-end reads:\nSTAR --genomeDir hg19_AG_STAR_index \\\n     --readFilesIn input_reads_R1_AG_modified.fastq.gz input_reads_R2_AG_modified.fastq.gz \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix alignment_AG_ \\\n     --runThreadN 8 \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outBAMcompression 6 \\\n     --outFilterMultimapNmax 20 \\\n     --alignSJDBoverhangMin 1 \\\n     --alignSJoverhangMin 8 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --limitBAMsortRAM 30000000000 # Example: 30GB RAM for sorting",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 5,
+            "description": "Obtain uniquely mapped reads pairs from hyperediting pipeline and combine with uniquely mapped reads from first round of read mapping",
+            "tool_name": "samtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "(Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Assume input BAM files are:\n# hyperediting_pipeline_output.bam (e.g., coordinate-sorted)\n# first_round_mapping_output.bam (e.g., coordinate-sorted)\n\n# Filter uniquely mapped primary read pairs (MAPQ >= 20, properly paired, not secondary, not supplementary)\n# -b: output BAM\n# -h: include header\n# -f 0x2: read is properly paired\n# -F 0x100: exclude secondary alignment\n# -F 0x800: exclude supplementary alignment\n# -q 20: mapping quality >= 20 (common threshold for unique mapping)\nsamtools view -b -h -f 0x2 -F 0x100 -F 0x800 -q 20 hyperediting_pipeline_output.bam > hyperediting_uniquely_mapped.bam\n\n# Filter uniquely mapped primary read pairs from first round mapping output\nsamtools view -b -h -f 0x2 -F 0x100 -F 0x800 -q 20 first_round_mapping_output.bam > first_round_uniquely_mapped.bam\n\n# Combine the two sets of uniquely mapped reads into a single BAM file.\n# Assuming input BAMs are coordinate-sorted, samtools merge will produce a coordinate-sorted output.\nsamtools merge combined_uniquely_mapped.bam hyperediting_uniquely_mapped.bam first_round_uniquely_mapped.bam\n\n# Clean up intermediate files (optional)\n# rm hyperediting_uniquely_mapped.bam first_round_uniquely_mapped.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 6,
+            "description": "Identify RNA-DNA differences between mapped reads and hg19 reference genome.",
+            "tool_name": "REDItools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.0",
+            "code_example": "# Install REDItools (if not already installed)\n# conda install -c bioconda reditools\n\n# Define input and reference files\nINPUT_BAM=\"mapped_reads.bam\" # Placeholder for mapped reads BAM file\nREFERENCE_FASTA=\"/path/to/hg19.fa\" # Placeholder for hg19 reference genome FASTA file\nOUTPUT_FILE=\"rna_dna_differences.txt\"\n\n# Execute REDItools to identify RNA-DNA differences\n# -i: Input BAM file\n# -f: Reference FASTA file\n# -o: Output file\n# -t: Number of threads (example: 10)\n# -p: Print progress\nREDItools.py -i \"${INPUT_BAM}\" -f \"${REFERENCE_FASTA}\" -o \"${OUTPUT_FILE}\" -t 10 -p",
+            "code_language": "bash",
+            "github_url": "https://github.com/BioinfoUNIBA/REDItools"
+        },
+        {
+            "step_order": 7,
+            "description": "Apply log-likelihood test to determine whether RDD is likely resulted from sequencing error (Bahn et. al.",
+            "tool_name": "RDD (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.0",
+            "code_example": "# Installation (assuming Perl is already installed):\n# git clone https://github.com/m-bahn/RDD.git\n# cd RDD\n# chmod +x RDD.pl\n\n# Example usage of RDD.pl\n# The 'reference_file' (-r) is a pre-computed file representing expected read distribution,\n# often derived from a control sample or pooled samples, NOT a genome assembly.\n# Replace placeholders with actual file paths and desired p-value.\n# Input file (-i) is typically a BAM file of aligned reads.\nperl RDD.pl \\\n    -i input.bam \\\n    -o rdd_output.txt \\\n    -r control_sample_rdd_reference.txt \\\n    -p 0.05",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 8,
+            "description": "PMID: 21960545)",
+            "tool_name": "CLIPper (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "v1.0",
+            "code_example": "# Install CLIPper (if not already installed)\n# conda install -c bioconda clipper\n\n# Example execution command for CLIPper v1.0\n# This command performs peak calling on a BAM file using parameters\n# commonly found in the yeolab/eclip workflow for eCLIP assays.\n# Replace 'input.bam', 'output.peaks.bed', and 'hg19' if different.\n# The 'species' parameter can be 'hg19', 'mm10', or a path to a custom genome size file.\nclipper \\\n    --bam_file input.bam \\\n    --species hg19 \\\n    --output_file output.peaks.bed \\\n    --threshold 0.01 \\\n    --window_size 25 \\\n    --step_size 1 \\\n    --min_peak_length 10 \\\n    --max_peak_length 250 \\\n    --pad 0 \\\n    --bonferroni",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/clipper"
+        },
+        {
+            "step_order": 9,
+            "description": "Apply posterior filters to remove RDD sites that are likely caused by technical artifats (Bahn et. al.",
+            "tool_name": "filter_rdd_sites.py (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Not explicitly versioned, part of yeolab/eclip pipeline",
+            "code_example": "# Install dependencies if needed (e.g., pysam)\n# conda install -c bioconda pysam\n\n# Replace input.bam with your actual input BAM file.\n# Replace hg38_rdd_sites.bed with the path to your RDD sites BED file (e.g., from ENCODE or Yeo lab resources).\n# Replace filtered.bam with your desired output BAM file name.\n\npython filter_rdd_sites.py \\\n    --input_bam input.bam \\\n    --rdd_sites_bed hg38_rdd_sites.bed \\\n    --output_bam_name filtered.bam",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 10,
+            "description": "PMID: 21960545 and Lee et. al.",
+            "tool_name": "CLIPper",
+            "tool_version": "Not explicitly versioned, associated with PMID 21960545 (2011 publication)",
+            "code_example": "# Install CLIPper (example using conda)\n# conda install -c bioconda clipper\n\n# Define input and output files (placeholders)\nINPUT_BAM=\"sample_aligned.bam\"\nOUTPUT_BED=\"sample_peaks.bed\"\n\n# Define reference genome files (placeholders for hg38)\n# Replace with actual paths to your genome size file (e.g., from UCSC goldenPath)\n# Example for hg38: wget -qO- http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes > hg38.chrom.sizes\nGENOME_SIZE_FILE=\"/path/to/hg38.chrom.sizes\"\n\n# Execute CLIPper for peak calling\n# -i: Input BAM file containing aligned reads\n# -o: Output BED file for identified peaks\n# -s: Path to a file containing chromosome sizes (e.g., hg38.chrom.sizes)\nclipper -i \"${INPUT_BAM}\" -o \"${OUTPUT_BED}\" -s \"${GENOME_SIZE_FILE}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 11,
+            "description": "PMID: 23598527)",
+            "tool_name": "clipper (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Not explicitly versioned",
+            "code_example": "# Install clipper (assuming Python environment)\n# pip install git+https://github.com/yeolab/clipper.git\n\n# Example usage of clipper for peak calling on CLIP-seq data.\n# Reference datasets:\n# - Genome assembly: hg38 (GRCh38) is used as a placeholder.\n# - Gene annotation: GENCODE v44 (or latest) GTF for hg38 is used as a placeholder.\n\n# Define input and output files\nEXPERIMENT_BAM=\"experiment.bam\" # Placeholder for aligned experiment BAM file\nCONTROL_BAM=\"control.bam\"       # Placeholder for aligned control BAM file\nOUTPUT_PREFIX=\"clipper_peaks\"\nSPECIES=\"hg38\"\nANNOTATION_FILE=\"/path/to/gencode.v44.annotation.gtf\" # Placeholder for GTF annotation file\n\n# Run clipper with example parameters\npython clipper.py \\\n  -s \"${SPECIES}\" \\\n  -o \"${OUTPUT_PREFIX}\" \\\n  -e \"${EXPERIMENT_BAM}\" \\\n  -c \"${CONTROL_BAM}\" \\\n  -a \"${ANNOTATION_FILE}\" \\\n  -p 0.01 \\\n  -f 0.05",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/clipper"
+        },
+        {
+            "step_order": 12,
+            "description": "Retain only highly prevalent editing sites.",
+            "tool_name": "bcftools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.18",
+            "code_example": "# Install bcftools (if not already installed)\n# conda install -c bioconda bcftools\n\n# Retain only highly prevalent editing sites.\n# This command assumes the input is a VCF file (input.vcf) containing RNA editing calls.\n# It filters for sites with an Allele Frequency (AF) greater than 0.1 (10% editing frequency)\n# and a minimum Depth (DP) of 20 reads. These thresholds are common for defining 'highly prevalent'\n# and can be adjusted based on specific experimental design and desired stringency.\nbcftools filter -i 'AF > 0.1 && DP > 20' input.vcf -o highly_prevalent_editing_sites.vcf",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/bcftools"
+        },
+        {
+            "step_order": 13,
+            "description": "In particular, filter for editing sites where both pooled fragile X and pooled controls have at least 10 reads each and where pooled fragile X or pooled controls have editing ratio at least 0.1",
+            "tool_name": "bcftools filter (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "latest (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Input VCF file containing editing sites for pooled fragile X and pooled controls\nINPUT_VCF=\"editing_sites.vcf\"\nOUTPUT_VCF=\"filtered_editing_sites.vcf\"\n\n# Filter for editing sites based on read depth and editing ratio\n# Conditions:\n# 1. Both 'pooled fragile X' and 'pooled controls' samples have at least 10 reads (DP >= 10)\n# 2. At least one of the samples ('pooled fragile X' OR 'pooled controls') has an editing ratio (ALT_AD / DP) of at least 0.1\n# Note: Replace 'FRAGILE_X_POOL' and 'CONTROL_POOL' with actual sample names from your VCF header.\n# If sample names are not available, you might use sample indices (e.g., [0] and [1]) if their order is consistent.\nbcftools filter \\\n    --samples FRAGILE_X_POOL,CONTROL_POOL \\\n    --include 'FORMAT/DP[FRAGILE_X_POOL] >= 10 && FORMAT/DP[CONTROL_POOL] >= 10 && ((FORMAT/AD[FRAGILE_X_POOL][1] / FORMAT/DP[FRAGILE_X_POOL]) >= 0.1 || (FORMAT/AD[CONTROL_POOL][1] / FORMAT/DP[CONTROL_POOL]) >= 0.1)' \\\n    --output-type v \\\n    --output \"${OUTPUT_VCF}\" \\\n    \"${INPUT_VCF}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/bcftools"
+        },
+        {
+            "step_order": 14,
+            "description": "Also quantify gene expression as RPKM values over the exon union of ENSEMBL transcripts in hg19.",
+            "tool_name": "Ensembl",
+            "tool_version": "1.3.3",
+            "code_example": "# Define variables\nFASTQ_R1=\"sample_R1.fastq.gz\"\nFASTQ_R2=\"sample_R2.fastq.gz\" # Optional, if paired-end\nSAMPLE_NAME=\"sample_name\"\nTHREADS=8\n\n# Reference files for hg19 ENSEMBL (e.g., Ensembl release 75 for GRCh37)\n# Download ENSEMBL hg19 GTF and FASTA files if not available.\n# Example download commands for Ensembl release 75 (GRCh37):\n# wget ftp://ftp.ensembl.org/pub/release-75/gtf/homo_sapiens/Homo_sapiens.GRCh37.75.gtf.gz\n# gunzip Homo_sapiens.GRCh37.75.gtf.gz\n# wget ftp://ftp.ensembl.org/pub/release-75/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz\n# gunzip Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz\n\nGTF_FILE=\"Homo_sapiens.GRCh37.75.gtf\"\nFASTA_FILE=\"Homo_sapiens.GRCh37.dna.primary_assembly.fa\"\nRSEM_REFERENCE_DIR=\"rsem_ensembl_hg19_ref\"\nRSEM_REFERENCE_NAME=\"ensembl_hg19\"\n\n# --- RSEM and STAR Installation (commented out) ---\n# It is recommended to install RSEM and STAR via Conda:\n# conda create -n rsem_env rsem star -y\n# conda activate rsem_env\n\n# 1. Prepare RSEM reference (if not already done)\n# This step builds the STAR index and RSEM transcript models.\n# It needs to be run only once per reference genome/annotation combination.\n# The --star option tells RSEM to use STAR for alignment during quantification.\nif [ ! -d \"${RSEM_REFERENCE_DIR}\" ]; then\n    mkdir -p \"${RSEM_REFERENCE_DIR}\"\n    rsem-prepare-reference \\\n        --gtf \"${GTF_FILE}\" \\\n        --star \\\n        --num-threads \"${THREADS}\" \\\n        \"${FASTA_FILE}\" \\\n        \"${RSEM_REFERENCE_DIR}/${RSEM_REFERENCE_NAME}\"\nfi\n\n# 2. Quantify gene expression using RSEM\n# This command performs alignment (using STAR internally) and quantification.\n# For paired-end reads (assuming FASTQ_R1 and FASTQ_R2 are defined):\nrsem-calculate-expression \\\n    --star \\\n    --num-threads \"${THREADS}\" \\\n    --paired-end \\\n    \"${FASTQ_R1}\" \\\n    \"${FASTQ_R2}\" \\\n    \"${RSEM_REFERENCE_DIR}/${RSEM_REFERENCE_NAME}\" \\\n    \"${SAMPLE_NAME}\"\n\n# For single-end reads, use the following command instead:\n# rsem-calculate-expression \\\n#     --star \\\n#     --num-threads \"${THREADS}\" \\\n#     \"${FASTQ_R1}\" \\\n#     \"${RSEM_REFERENCE_DIR}/${RSEM_REFERENCE_NAME}\" \\\n#     \"${SAMPLE_NAME}\"\n\n# The output file \"${SAMPLE_NAME}.genes.results\" will contain FPKM values.\n# FPKM (Fragments Per Kilobase of transcript per Million mapped fragments) is the standard metric for paired-end RNA-seq and is equivalent to RPKM for single-end data.\n# The relevant column for gene-level quantification is 'FPKM' in the .genes.results file.",
+            "code_language": "bash",
+            "github_url": "https://github.com/deweylab/RSEM"
+        }
+    ],
+    "raw_text": "Map fastq reads with HISAT2 hisat2 -q --phred64 -x grch37_tran/genome_tran  --no-unal --reorder --no-mixed\nExtract uniquely mapped reads from SAM files\nRemap unmapped reads with hyperediting pipeline. In brief, convert all adenosines to guanosines and align to modified hg19 genome where adenosines are also substituted by guanosines.\nObtain uniquely mapped reads pairs from hyperediting pipeline and combine with uniquely mapped reads from first round of read mapping\nIdentify RNA-DNA differences between mapped reads and hg19 reference genome.\nApply log-likelihood test to determine whether RDD is likely resulted from sequencing error (Bahn et. al. PMID: 21960545)\nApply posterior filters to remove RDD sites that are likely caused by technical artifats (Bahn et. al. PMID: 21960545 and Lee et. al. PMID: 23598527)\nRetain only highly prevalent editing sites. In particular, filter for editing sites where both pooled fragile X and pooled controls have at least 10 reads each and where pooled fragile X or pooled controls have editing ratio at least 0.1\nAlso quantify gene expression as RPKM values over the exon union of ENSEMBL transcripts in hg19.\nGenome_build: hg19\nSupplementary_files_format_and_content: gene expression (RPKM)",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

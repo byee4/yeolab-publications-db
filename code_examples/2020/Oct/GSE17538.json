@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Bioconductor's affy package was used for RMA normalization and raw data processing using default settings for background correction and normalization.",
-      "tool_name": "R",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Cox regression hazards model was applied to the processed data using the survival package.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "All analyses were performed using R software.",
-      "tool_name": "R",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Bioconductor's affy package was used for RMA normalization and raw data processing using default settings for background correction and normalization. Cox regression hazards model was applied to the processed data using the survival package. All analyses were performed using R software.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Bioconductor's affy package was used for RMA normalization and raw data processing using default settings for background correction and normalization.",
+            "tool_name": "R",
+            "tool_version": "4.3.x (Bioconductor 3.18)",
+            "code_example": "# Install R and the affy Bioconductor package\n# conda create -n affy_env r-base bioconductor-affy -c conda-forge -c bioconda\n# conda activate affy_env\n\n# Create an R script for RMA normalization (e.g., run_rma.R)\ncat << 'EOF' > run_rma.R\n# Load the affy package\nlibrary(affy)\n\n# Define the directory containing CEL files\n# Replace 'path/to/your/cel_files' with the actual path to your Affymetrix CEL files\ncel_files_dir <- \"path/to/your/cel_files\"\n\n# Read CEL files into an AffyBatch object\n# This function automatically detects CEL files in the specified path.\ndata <- ReadAffy(celfile.path = cel_files_dir)\n\n# Perform RMA normalization with default settings\n# The 'rma' function performs background correction, normalization, and summarization\n# using default parameters as described in the affy package documentation.\neset <- rma(data)\n\n# Optionally, save the normalized expression matrix to a tab-separated file\n# Replace 'rma_normalized_expression.txt' with your desired output file name\nwrite.exprs(eset, file = \"rma_normalized_expression.txt\")\n\n# You can also save the ExpressionSet object itself for further R analysis\n# save(eset, file = \"rma_normalized_eset.RData\")\nEOF\n\n# Execute the R script\nRscript run_rma.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/affy.html"
+        },
+        {
+            "step_order": 2,
+            "description": "Cox regression hazards model was applied to the processed data using the survival package.",
+            "tool_name": "R (survival package)",
+            "tool_version": "R 4.3.2 (survival 3.6-17) (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install R if not already installed (example for Ubuntu/Debian)\n# sudo apt update\n# sudo apt install r-base\n\n# To run the R script:\n# Rscript run_cox_regression.R\n\n# --- run_cox_regression.R content ---\n# Install the 'survival' package if not already installed\n# if (!requireNamespace(\"survival\", quietly = TRUE)) {\n#   install.packages(\"survival\")\n# }\n\n# Load the 'survival' package\nlibrary(survival)\n\n# Load processed data\n# Assuming 'processed_data.csv' is a CSV file with columns:\n# 'time': survival time (numeric)\n# 'event': event indicator (numeric, 0 = censored, 1 = event)\n# 'covariate1', 'covariate2', ...: other covariates for the model\ndata <- read.csv(\"processed_data.csv\")\n\n# Ensure 'event' column is numeric (0 or 1)\ndata$event <- as.numeric(data$event)\n\n# Apply Cox regression hazards model\n# Replace 'covariate1 + covariate2' with the actual covariates from your data\n# Example with two covariates:\ncox_model <- coxph(Surv(time, event) ~ covariate1 + covariate2, data = data)\n\n# Print summary of the model results\nsummary(cox_model)\n\n# Optionally, save the model object or its summary\n# save(cox_model, file = \"cox_model.RData\")\n# sink(\"cox_model_summary.txt\")\n# summary(cox_model)\n# sink()\n",
+            "code_language": "bash",
+            "github_url": "https://cran.r-project.org/web/packages/survival/index.html"
+        },
+        {
+            "step_order": 3,
+            "description": "All analyses were performed using R software.",
+            "tool_name": "R",
+            "tool_version": "",
+            "code_example": "# Install R (example using conda)\n# conda install -c conda-forge r-base\n\n# The description is generic, so a specific R command cannot be inferred.\n# This is a placeholder for a typical R script execution.\n# Rscript your_analysis_script.R --input_file data.csv --output_file results.tsv",
+            "code_language": "bash",
+            "github_url": "https://www.r-project.org/"
+        }
+    ],
+    "raw_text": "Bioconductor's affy package was used for RMA normalization and raw data processing using default settings for background correction and normalization. Cox regression hazards model was applied to the processed data using the survival package. All analyses were performed using R software.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

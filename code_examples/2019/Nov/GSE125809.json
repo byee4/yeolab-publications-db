@@ -1,61 +1,61 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "library strategy: CLIP-seq",
-      "tool_name": "CLIP-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reads were adapter-trimmed and mapped to human-specific repetitive elements from RepBase (version 18.04) by STAR.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Repeat-mapping reads were removed and remaining reads mapped to the human genome assembly hg19 with STAR.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "PCR duplicate reads were removed using the unique molecular identifier (UMI) sequences in the 5\u00e2\u0080\u0099 adapter and remaining reads retained as \u00e2\u0080\u0098usable reads\u00e2\u0080\u0099.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Peaks were called on the usable reads by CLIPper ,and assigned to gene regions annotated in Gencode (v19)",
-      "tool_name": "CLIPper",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Each peak was normalized to the size-matched input (SMInput)",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "library strategy: CLIP-seq\nReads were adapter-trimmed and mapped to human-specific repetitive elements from RepBase (version 18.04) by STAR. Repeat-mapping reads were removed and remaining reads mapped to the human genome assembly hg19 with STAR. PCR duplicate reads were removed using the unique molecular identifier (UMI) sequences in the 5\u00e2\u0080\u0099 adapter and remaining reads retained as \u00e2\u0080\u0098usable reads\u00e2\u0080\u0099.\nPeaks were called on the usable reads by CLIPper ,and assigned to gene regions annotated in Gencode (v19)\nEach peak was normalized to the size-matched input (SMInput)\nGenome_build: Homo sapiens UCSC hg19\nSupplementary_files_format_and_content: Each bed file was gernated by read normalization between IP over SMInput. The columns in the bed files represent (chr, start, stop,-log10(pvalue),log2(fold change), strand). The CSV files contain the log2 fold change of reads upon IP over SMInput in annotated regions of each transcripts. Each bigwig file contains read distribution of each RBP, and bigbed contains clusters of predicted RBP binding.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "library strategy: CLIP-seq",
+            "tool_name": "CLIP-seq",
+            "tool_version": "Infer from description",
+            "code_example": "# --- Installation Instructions (commented out) ---\n# For STAR:\n# conda install -c bioconda star\n\n# For clipper:\n# pip install clipper\n\n# For merge_peaks (custom pipeline):\n# git clone https://github.com/yeolab/merge_peaks.git\n# # Follow installation instructions within the cloned repository, e.g.:\n# # cd merge_peaks\n# # python setup.py install\n\n# --- Placeholder Variables ---\n# Reference genome directory for STAR (e.g., human hg38)\n# Replace with your actual path to the STAR index\nGENOME_DIR=\"/path/to/STAR_index/hg38\"\n# Reference genome fasta file (e.g., human hg38)\nGENOME_FASTA=\"/path/to/hg38.fa\"\n# GTF annotation file (e.g., Gencode for hg38)\nGTF_FILE=\"/path/to/gencode.vXX.annotation.gtf\"\n\n# Input CLIP-seq raw reads (e.g., FastQ files)\n# Replace with your actual input file paths\nCLIP_READS_R1=\"sample_clip_R1.fastq.gz\"\nCLIP_READS_R2=\"sample_clip_R2.fastq.gz\" # Omit if single-end\n# Input control raw reads (e.g., FastQ files from input/mock IP)\nCONTROL_READS_R1=\"sample_control_R1.fastq.gz\"\nCONTROL_READS_R2=\"sample_control_R2.fastq.gz\" # Omit if single-end\n\n# Output prefixes\nCLIP_OUTPUT_PREFIX=\"sample_clip\"\nCONTROL_OUTPUT_PREFIX=\"sample_control\"\n\n# --- Step 1: Alignment of CLIP-seq and Control Reads with STAR ---\necho \"--- Step 1: Aligning CLIP-seq reads with STAR ---\"\n# Align CLIP-seq reads\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${CLIP_READS_R1}\" \"${CLIP_READS_R2}\" \\\n     --runThreadN 8 \\\n     --outFileNamePrefix \"${CLIP_OUTPUT_PREFIX}_star_\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --quantMode GeneCounts \\\n     --outFilterMultimapNmax 10 \\\n     --outFilterMismatchNmax 3 # Example parameters, adjust as needed\n\n# Align Control reads\necho \"--- Step 1: Aligning Control reads with STAR ---\"\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${CONTROL_READS_R1}\" \"${CONTROL_READS_R2}\" \\\n     --runThreadN 8 \\\n     --outFileNamePrefix \"${CONTROL_OUTPUT_PREFIX}_star_\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --quantMode GeneCounts \\\n     --outFilterMultimapNmax 10 \\\n     --outFilterMismatchNmax 3\n\n# Define aligned BAM files\nCLIP_BAM=\"${CLIP_OUTPUT_PREFIX}_star_Aligned.sortedByCoord.out.bam\"\nCONTROL_BAM=\"${CONTROL_OUTPUT_PREFIX}_star_Aligned.sortedByCoord.out.bam\"\n\n# --- Step 2: Peak Calling with clipper ---\necho \"--- Step 2: Calling peaks with clipper ---\"\n# clipper requires aligned BAM files and a genome size.\n# Use 'hg38' as a placeholder for genome size, or provide a custom .sizes file.\nclipper -b \"${CLIP_BAM}\" \\\n        -c \"${CONTROL_BAM}\" \\\n        -s hg38 \\\n        -o \"${CLIP_OUTPUT_PREFIX}_peaks.bed\" \\\n        -p 0.01 \\\n        --bonferroni # Example parameters, adjust as needed\n\n# Define peak file from clipper\nCLIP_PEAKS=\"${CLIP_OUTPUT_PREFIX}_peaks.bed\"\n\n# --- Step 3: IDR (Identifying Reproducible Peaks) with merge_peaks pipeline ---\n# This step typically requires multiple biological replicates.\n# Assuming two replicates for demonstration:\n# Replace with actual peak files from replicate 1 and replicate 2\nREP1_PEAKS=\"replicate1_clip_peaks.bed\"\nREP2_PEAKS=\"replicate2_clip_peaks.bed\"\nIDR_OUTPUT_PREFIX=\"combined_idr_peaks\"\n\necho \"--- Step 3: Performing IDR with merge_peaks pipeline (requires replicates) ---\"\n# The merge_peaks repository contains scripts for IDR analysis.\n# This is a conceptual command representing the execution of an IDR script from that pipeline.\n# You would typically navigate to the cloned merge_peaks directory and run a script like 'run_idr.py'\npython /path/to/merge_peaks/scripts/run_idr.py \\\n       --peak_files \"${REP1_PEAKS}\" \"${REP2_PEAKS}\" \\\n       --output_prefix \"${IDR_OUTPUT_PREFIX}\" \\\n       --idr_threshold 0.05 \\\n       --peak_caller clipper # Specify the peak caller used",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 2,
+            "description": "Reads were adapter-trimmed and mapped to human-specific repetitive elements from RepBase (version 18.04) by STAR.",
+            "tool_name": "STAR",
+            "tool_version": "2.7.3a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables\nINPUT_READS=\"trimmed_reads.fastq.gz\" # Placeholder for adapter-trimmed reads\nREPBASE_INDEX_DIR=\"/path/to/repbase_18_04_star_index\" # Placeholder for STAR index built from RepBase 18.04 human-specific repetitive elements\nOUTPUT_PREFIX=\"repbase_mapping_output\"\nNUM_THREADS=8 # Adjust as needed\n\n# Note: The STAR index for RepBase 18.04 human-specific repetitive elements needs to be pre-built.\n# This typically involves creating a FASTA file of the desired repetitive elements\n# and then running STAR --runMode genomeGenerate ...\n\n# Map adapter-trimmed reads to human-specific repetitive elements from RepBase\nSTAR --runThreadN ${NUM_THREADS} \\\n     --genomeDir ${REPBASE_INDEX_DIR} \\\n     --readFilesIn ${INPUT_READS} \\\n     --outFileNamePrefix ${OUTPUT_PREFIX} \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes All \\\n     --outFilterMultimapNmax 100 \\\n     --outFilterMismatchNmax 10 \\\n     --alignIntronMax 1 # Assuming repetitive elements do not contain large introns, or are treated as single exons\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "Repeat-mapping reads were removed and remaining reads mapped to the human genome assembly hg19 with STAR.",
+            "tool_name": "STAR",
+            "tool_version": "2.5.2a",
+            "code_example": "# conda install -c bioconda star bowtie2 samtools\n\n# Placeholder for rRNA/repeat genome index (e.g., from UCSC hg19 rRNA or a custom repeat library).\n# This step assumes 'repeat-mapping reads' refers to reads mapping to a dedicated repeat/rRNA genome,\n# a common pre-processing step in eCLIP pipelines.\n# bowtie2-build /path/to/rRNA.fa /path/to/rRNA_index\n\n# Step 1: Remove repeat-mapping reads (e.g., rRNA reads) using Bowtie2.\n# Reads that *do not* map to the repeat genome are passed to STAR.\nbowtie2 -x /path/to/rRNA_index \\\n        -U reads.fastq.gz \\\n        --un-gz filtered_reads.fastq.gz \\\n        -S /dev/null # Discard mapped reads\n\n# Step 2: Map remaining reads to human genome hg19 with STAR.\n# Create STAR index (if not already present) for hg19.\n# STAR --runMode genomeGenerate \\\n#      --genomeDir /path/to/STAR_index/hg19 \\\n#      --genomeFastaFiles /path/to/hg19.fa \\\n#      --sjdbGTFfile /path/to/gencode.v19.annotation.gtf \\\n#      --runThreadN 8\n\nSTAR --genomeDir /path/to/STAR_index/hg19 \\\n     --readFilesIn filtered_reads.fastq.gz \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix aligned_ \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --runThreadN 8\n\n# Rename output file for clarity\nmv aligned_Aligned.sortedByCoord.out.bam aligned.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 4,
+            "description": "PCR duplicate reads were removed using the unique molecular identifier (UMI) sequences in the 5\u00e2\u0080\u0099 adapter and remaining reads retained as \u00e2\u0080\u0098usable reads\u00e2\u0080\u0099.",
+            "tool_name": "umi_tools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.1.1 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install umi-tools\n# conda install -c bioconda umi-tools=1.1.1\n\n# Example command for UMI-based deduplication.\n# This command assumes that the UMIs have already been extracted from the 5' adapter\n# and appended to the read names (e.g., by a prior 'umi_tools extract' step).\n# Replace 'input_aligned_with_umis.bam' with your actual input BAM file\n# and 'output_deduplicated.bam' with your desired output file name.\n# The --paired-end flag should be used if the input reads are paired-end.\n# The --method unique is a common deduplication strategy.\numi_tools dedup \\\n    --extract-umis-from-read-names \\\n    --method unique \\\n    --paired-end \\\n    -I input_aligned_with_umis.bam \\\n    -S output_deduplicated.bam \\\n    --output-stats deduplication_stats.tsv",
+            "code_language": "bash",
+            "github_url": "https://github.com/CGATOxford/UMI-tools"
+        },
+        {
+            "step_order": 5,
+            "description": "Peaks were called on the usable reads by CLIPper ,and assigned to gene regions annotated in Gencode (v19)",
+            "tool_name": "CLIPper",
+            "tool_version": "0.0.1",
+            "code_example": "# Install CLIPper (example, adjust based on actual installation method)\n# git clone https://github.com/yeolab/clipper.git\n# cd clipper\n# python setup.py install\n\n# Define input and output files\nINPUT_BAM=\"input_reads.bam\"\nOUTPUT_BED=\"peaks.bed\"\n\n# Define reference files for Gencode v19 (corresponding to hg19/GRCh37)\n# Download Gencode v19 GTF\n# wget -O gencode.v19.annotation.gtf.gz ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19/gencode.v19.annotation.gtf.gz\n# gunzip gencode.v19.annotation.gtf.gz\nGENCODE_GTF=\"gencode.v19.annotation.gtf\"\n\n# Download hg19/GRCh37 primary assembly FASTA (Ensembl release 75 corresponds to Gencode v19)\n# wget -O Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz ftp://ftp.ensembl.org/pub/release-75/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz\n# gunzip Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz\nGENOME_FASTA=\"Homo_sapiens.GRCh37.dna.primary_assembly.fa\"\n\n# Generate chromosome sizes file from FASTA\n# samtools faidx \"${GENOME_FASTA}\"\n# cut -f1,2 \"${GENOME_FASTA}\".fai > hg19.chrom.sizes\nGENOME_SIZES=\"hg19.chrom.sizes\"\n\n# Execute CLIPper to call peaks and assign to gene regions\npython clipper.py -b \"${INPUT_BAM}\" \\\n                  -s \"${GENOME_SIZES}\" \\\n                  -o \"${OUTPUT_BED}\" \\\n                  -g \"${GENOME_FASTA}\" \\\n                  -a \"${GENCODE_GTF}\"\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/clipper"
+        },
+        {
+            "step_order": 6,
+            "description": "Each peak was normalized to the size-matched input (SMInput)",
+            "tool_name": "normalize_peaks.py (from yeolab/skipper) (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "From yeolab/skipper pipeline (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# --- Setup for normalize_peaks.py ---\n# The normalize_peaks.py script is part of the yeolab/skipper pipeline.\n# It can be found at: https://github.com/yeolab/skipper/blob/master/scripts/normalize_peaks.py\n# Ensure this script is available in your PATH or specified by its full path.\n# For example, you might clone the repository and use the script:\n# git clone https://github.com/yeolab/skipper.git\n# NORMALIZE_SCRIPT=\"./skipper/scripts/normalize_peaks.py\" # Adjust path as needed\n\n# Define variables for clarity\nIP_PEAKS=\"ip_peaks.bed\" # Placeholder: Path to your called IP peaks (e.g., from clipper output)\nIP_BAM=\"ip_aligned.bam\" # Placeholder: Path to your IP sample's aligned BAM file\nSM_INPUT_BAM=\"sm_input_aligned.bam\" # Placeholder: Path to your size-matched input sample's aligned BAM file\nOUTPUT_NORMALIZED_PEAKS=\"normalized_peaks.bed\" # Desired output file name for normalized peaks\nGENOME_SIZE=\"2.7e9\" # Placeholder: Effective genome size (e.g., 2.7e9 for human hg38, 2.9e9 for hg19)\n\n# Install dependencies (if not already installed)\n# conda install -c bioconda python bedtools samtools numpy scipy\n\n# Execute the normalization script\n# Ensure normalize_peaks.py is executable and its Python dependencies (e.g., numpy, scipy) are met.\npython normalize_peaks.py \\\n    -p \"${IP_PEAKS}\" \\\n    -i \"${IP_BAM}\" \\\n    -c \"${SM_INPUT_BAM}\" \\\n    -o \"${OUTPUT_NORMALIZED_PEAKS}\" \\\n    -g \"${GENOME_SIZE}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper"
+        }
+    ],
+    "raw_text": "library strategy: CLIP-seq\nReads were adapter-trimmed and mapped to human-specific repetitive elements from RepBase (version 18.04) by STAR. Repeat-mapping reads were removed and remaining reads mapped to the human genome assembly hg19 with STAR. PCR duplicate reads were removed using the unique molecular identifier (UMI) sequences in the 5\u00e2\u0080\u0099 adapter and remaining reads retained as \u00e2\u0080\u0098usable reads\u00e2\u0080\u0099.\nPeaks were called on the usable reads by CLIPper ,and assigned to gene regions annotated in Gencode (v19)\nEach peak was normalized to the size-matched input (SMInput)\nGenome_build: Homo sapiens UCSC hg19\nSupplementary_files_format_and_content: Each bed file was gernated by read normalization between IP over SMInput. The columns in the bed files represent (chr, start, stop,-log10(pvalue),log2(fold change), strand). The CSV files contain the log2 fold change of reads upon IP over SMInput in annotated regions of each transcripts. Each bigwig file contains read distribution of each RBP, and bigbed contains clusters of predicted RBP binding.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

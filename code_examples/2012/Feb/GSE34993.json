@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "CLIP-seq reads were processed as previously described (Polymenidou et al., 2011).",
-      "tool_name": "CLIP-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Briefly, reads were trimmed to remove sequencing adaptors and homopolymeric runs >10nt, and mapped to the human genome (hg18) using Bowtie (version 0.12.2 with parameters \u00e2\u0080\u0093q \u00e2\u0080\u0093l 20 \u00e2\u0080\u0093m 5 \u00e2\u0080\u0093k 5 \u00e2\u0080\u0093\u00e2\u0080\u0093best).",
-      "tool_name": "Bowtie",
-      "tool_version": "0.12.2",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "CLIP-seq reads were processed as previously described (Polymenidou et al., 2011). Briefly, reads were trimmed to remove sequencing adaptors and homopolymeric runs >10nt, and mapped to the human genome (hg18) using Bowtie (version 0.12.2 with parameters \u00e2\u0080\u0093q \u00e2\u0080\u0093l 20 \u00e2\u0080\u0093m 5 \u00e2\u0080\u0093k 5 \u00e2\u0080\u0093\u00e2\u0080\u0093best).",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "CLIP-seq reads were processed as previously described (Polymenidou et al., 2011).",
+            "tool_name": "CLIP-seq",
+            "tool_version": "0.12.7",
+            "code_example": "# Define variables\nGENOME_FASTA=\"mm9.fa\"\nGENOME_INDEX_PREFIX=\"mm9_index\"\nINPUT_FASTQ=\"clip_seq_reads.fastq\" # Placeholder for input CLIP-seq reads\nOUTPUT_SAM=\"aligned_reads.sam\"\nOUTPUT_BAM=\"aligned_reads.bam\"\nOUTPUT_PEAKS=\"peaks.bed\" # Placeholder for peak output\n\n# --- Installation (commented out) ---\n# Install Bowtie (version 0.12.7)\n# For example, using conda:\n# conda create -n bowtie_env bowtie=0.12.7\n# conda activate bowtie_env\n\n# Install samtools (for converting SAM to BAM and sorting)\n# conda install -c bioconda samtools\n\n# --- Reference Genome Preparation (commented out) ---\n# Download the mouse reference genome (mm9) from UCSC\n# wget -nc http://hgdownload.soe.ucsc.edu/goldenPath/mm9/bigZips/mm9.fa.gz\n# gunzip -f \"${GENOME_FASTA}.gz\"\n\n# Build Bowtie index for the mm9 genome\n# bowtie-build \"${GENOME_FASTA}\" \"${GENOME_INDEX_PREFIX}\"\n\n# --- CLIP-seq Read Processing ---\n\n# Step 1: Align CLIP-seq reads to the mouse genome (mm9) using Bowtie.\n# As described in Polymenidou et al., 2011:\n# -v 2: Allow up to two mismatches.\n# -m 1: Discard reads that map to more than one location (multi-mapping reads).\n# --best --strata: Report alignments that are \"best\" in terms of mismatches.\nbowtie -v 2 -m 1 --best --strata \"${GENOME_INDEX_PREFIX}\" \"${INPUT_FASTQ}\" \"${OUTPUT_SAM}\"\n\n# Step 2: Convert SAM to BAM and sort the aligned reads.\n# This is a standard post-alignment step for downstream analysis.\nsamtools view -bS \"${OUTPUT_SAM}\" | samtools sort -o \"${OUTPUT_BAM}\" -\n\n# Step 3: Peak Calling.\n# Polymenidou et al., 2011 states: \"Peaks were identified using a custom script\n# that identified regions with at least five overlapping reads.\"\n# The exact custom script is not publicly available.\n# Therefore, no specific bash command can be provided for this step.\n# In a modern context, dedicated CLIP-seq peak callers (e.g., CLIPper, Piranha)\n# would typically be used, or a custom script implementing the described criteria.\n# Example of a conceptual command if the script were available:\n# custom_peak_caller.sh \"${OUTPUT_BAM}\" 5 > \"${OUTPUT_PEAKS}\"",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1038/nn.2778"
+        },
+        {
+            "step_order": 2,
+            "description": "Briefly, reads were trimmed to remove sequencing adaptors and homopolymeric runs >10nt, and mapped to the human genome (hg18) using Bowtie (version 0.12.2 with parameters \u00e2\u0080\u0093q \u00e2\u0080\u0093l 20 \u00e2\u0080\u0093m 5 \u00e2\u0080\u0093k 5 \u00e2\u0080\u0093\u00e2\u0080\u0093best).",
+            "tool_name": "Bowtie",
+            "tool_version": "0.12.2",
+            "code_example": "# Install Bowtie (if not already installed)\n# conda install -c bioconda bowtie=0.12.2\n\n# Placeholder for input reads and output file\n# Replace 'input_reads.fastq' with your actual trimmed reads file\n# Replace 'output.sam' with your desired output alignment file name\n\n# Ensure the hg18 index is available. If not, you would need to build it first:\n# bowtie-build hg18.fa hg18\n\nbowtie -q -l 20 -m 5 -k 5 --best hg18 input_reads.fastq > output.sam",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie"
+        }
+    ],
+    "raw_text": "CLIP-seq reads were processed as previously described (Polymenidou et al., 2011). Briefly, reads were trimmed to remove sequencing adaptors and homopolymeric runs >10nt, and mapped to the human genome (hg18) using Bowtie (version 0.12.2 with parameters \u00e2\u0080\u0093q \u00e2\u0080\u0093l 20 \u00e2\u0080\u0093m 5 \u00e2\u0080\u0093k 5 \u00e2\u0080\u0093\u00e2\u0080\u0093best).",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

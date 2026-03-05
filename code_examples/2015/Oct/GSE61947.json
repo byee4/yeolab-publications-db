@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Fastq files were mapped to hg18 genome using Bowtie2 version 2.1.0",
-      "tool_name": "Bowtie2",
-      "tool_version": "2.1.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "SAM files were processed using HOMER into Tag directories",
-      "tool_name": "HOMER",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "http://homer.ucsd.edu"
-    },
-    {
-      "step_order": 3,
-      "description": "Peaks were called using HOMER tag directories and normalized using the input file",
-      "tool_name": "HOMER",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "http://homer.ucsd.edu"
-    }
-  ],
-  "raw_text": "Fastq files were mapped to hg18 genome using Bowtie2 version 2.1.0\nSAM files were processed using HOMER into Tag directories\nPeaks were called using HOMER tag directories and normalized using the input file\nGenome_build: hg18\nSupplementary_files_format_and_content: peak calls using HOMER",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Fastq files were mapped to hg18 genome using Bowtie2 version 2.1.0",
+            "tool_name": "Bowtie2",
+            "tool_version": "2.1.0",
+            "code_example": "# Install Bowtie2\n# conda install -c bioconda bowtie2=2.1.0\n\n# Define variables\nFASTQ_R1=\"input_R1.fastq.gz\" # Placeholder for forward reads\nFASTQ_R2=\"input_R2.fastq.gz\" # Placeholder for reverse reads\nGENOME_INDEX=\"/path/to/bowtie2_indexes/hg18\" # Placeholder for hg18 Bowtie2 index\nOUTPUT_BAM=\"mapped_reads.bam\"\nTHREADS=8 # Number of threads to use\n\n# Ensure samtools is available for BAM conversion and sorting\n# conda install -c bioconda samtools\n\n# Map reads to hg18 genome using Bowtie2\n# -x: specify the Bowtie2 index\n# -1, -2: specify paired-end FASTQ files\n# -p: specify number of threads\n# --very-sensitive: a common preset for good sensitivity (optional, but good for mapping)\n# | samtools view -bS - : pipe SAM output to samtools to convert to BAM\n# | samtools sort -o ${OUTPUT_BAM} : sort the BAM file and save to output\nbowtie2 -x \"${GENOME_INDEX}\" -1 \"${FASTQ_R1}\" -2 \"${FASTQ_R2}\" \\\n        -p \"${THREADS}\" \\\n        --very-sensitive \\\n        | samtools view -bS - \\\n        | samtools sort -o \"${OUTPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie2"
+        },
+        {
+            "step_order": 2,
+            "description": "SAM files were processed using HOMER into Tag directories",
+            "tool_name": "HOMER",
+            "tool_version": "4.11.1",
+            "code_example": "# Install HOMER (if not already installed)\n# conda install -c bioconda homer\n\n# Example: Process a SAM file into a HOMER Tag Directory\n# Replace 'input.sam' with your actual SAM file path.\n# Replace 'output_tag_directory' with your desired output directory name.\n# The '-tbp 1' option is often used for single-end reads to count tags per base pair.\n# For ChIP-seq, you might also include '-fragLength <estimated_fragment_length>' (e.g., 150-200).\nmakeTagDirectory output_tag_directory input.sam -format sam -tbp 1",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/1471-2105-11-59"
+        },
+        {
+            "step_order": 3,
+            "description": "Peaks were called using HOMER tag directories and normalized using the input file",
+            "tool_name": "HOMER",
+            "tool_version": "4.11.1",
+            "code_example": "# Install HOMER (if not already installed)\n# conda install -c bioconda homer\n\n# Create tag directories from BAM files (example commands, assuming 'sample.bam' and 'input.bam' exist)\n# makeTagDirectory sample_tag_dir sample.bam\n# makeTagDirectory input_tag_dir input.bam\n\n# Call peaks using HOMER findPeaks\n# -i input_tag_dir: Specifies the control/input tag directory for normalization.\n# -style factor: Sets the peak calling style, 'factor' is suitable for general transcription factor or binding site analysis.\n# -size 200: Sets the fragment size for peak detection (adjust based on library preparation).\n# -FDR 0.001: Sets the False Discovery Rate threshold for peak calling.\n# -L 2: Sets the log2 fold change threshold for peak calling.\n# -tbp 1: Total background peaks for normalization (often used with -i).\nfindPeaks sample_tag_dir -o sample_peaks.txt -i input_tag_dir -style factor -size 200 -FDR 0.001 -L 2 -tbp 1\n\n# Reference genome (not directly used by findPeaks, but for context/downstream annotation)\n# Placeholder: hg38",
+            "code_language": "bash",
+            "github_url": "http://homer.ucsd.edu/homer/"
+        }
+    ],
+    "raw_text": "Fastq files were mapped to hg18 genome using Bowtie2 version 2.1.0\nSAM files were processed using HOMER into Tag directories\nPeaks were called using HOMER tag directories and normalized using the input file\nGenome_build: hg18\nSupplementary_files_format_and_content: peak calls using HOMER",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

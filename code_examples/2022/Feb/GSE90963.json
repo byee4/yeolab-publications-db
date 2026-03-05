@@ -1,322 +1,322 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Reference genome: Novoindex (2.8) (http://www.novocraft.com) was used to create a standard and bisulfite reference index on a combination of hg19 chromosome, scaffold and splice junction sequences.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Splice junction sequences were generated with USeq (v8.8.8) 1 MakeTranscriptome using Ensembl transcript annotations (build 74).",
-      "tool_name": "Ensembl",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Alignment parameters: BS and NBS samples were aligned to the transcriptome indexes described above using Novoalign (v2.08.01) (http://www.novocraft.com) allowing up to 50 alignments and trimming adaptor sequences (TGGAATTCTCGGGTGCCAAGGAACTCCAGTCAC GATCGTCGGACTGTAGAACTCTGAAC).",
-      "tool_name": "Novoalign",
-      "tool_version": "2.08.01",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Alignment processing : The alignment files were processed with USeq SamTranscriptomeParser, which reports the best alignment location for each read in bam format and converts the coordinates of splice junction alignments to genomic space.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "One alignment location is selected at random if a read aligned to multiple locations in the genome with equal confidence.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Alignments were reordered using Picard (v1.87) (http://picard.sourceforge.net) ReorderBam and all alignments were set as primary using the set_sam_primary.py (https://github.com/HuntsmanCancerInstitute/RBSSeqTools).",
-      "tool_name": "Picard",
-      "tool_version": "1.87",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "The alignments were then processed with GATK (v3.4-0) 2 SplitNCigarReads, which splits spliced alignments into multiple alignment segments without N cigar elements.",
-      "tool_name": "GATK",
-      "tool_version": "3.4",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "Reads containing deletions four base pairs or longer were removed using remove_deletions.py (https://github.com/HuntsmanCancerInstitute/RBSSeqTools).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "m5C analysis pipeline: BS and NBS sample reads were aligned and processed as outlined above.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 10,
-      "description": "Alignments were further processed using CreateMethTable (https://github.com/HuntsmanCancerInstitute/RBSSeqTools), which iterates over the alignment file and reports forward alignment base counts at all reference \u00c3\u0092C\u00c3\u0093 positions and in reverse alignment base counts at all reference \u00c3\u0092G\u00c3\u0093 positions.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 11,
-      "description": "A Fisher's exact test p-value was calculated for each position by comparing the observed count of unconverted and converted bases to the expected count, which was calculated assuming an error rate of 0.001.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 12,
-      "description": "The table was filtered to create a final list of candidates by selecting only those sites which had a read depth \u00c2\u00b310 in both BS and NBS datasets, a non-conversion rate of \u00c2\u00b320% in the BS dataset and a Fisher exact p-value \u00c2\u00b20.05.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 13,
-      "description": "These sites were further screened manually for evidence of mis-mapping due to loss of complexity, or nonconversion arising from nondenatured secondary structure.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 14,
-      "description": "m1A analysis pipeline: BS and NBS sample reads were aligned and processed as listed above.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 15,
-      "description": "CreateMethTable was used to report forward alignment base counts at all reference \u00c3\u0092A\u00c3\u0093 positions with at least 100x coverage and in reverse alignment base counts at all reference \u00c3\u0092T\u00c3\u0093 positions with at least 100x coverage.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 16,
-      "description": "A one-tailed Fisher's exact test, corrected for multiple comparisons using the Benjamini-Hochberg (BH) procedure, was used to test if the mismatch rate in the NBS sample was greater than the BS sample.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 17,
-      "description": "One-tailed binomial tests, corrected using BH, were used to test if the number of C, G or T bases were greater than expected given error rate (0.001).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 18,
-      "description": "Positions where 1) the mismatch rate of the NBS sample was significantly higher than the BS sample, 2) two of C, G or T were significantly higher than the error rate and 3) the FDR or C was not lower than both G and T were reported as m1A sites.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 19,
-      "description": "Pseudouridine analysis pipeline: BS and NBS samples were aligned to the transcriptome indexes described above.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 20,
-      "description": "Pseudouridine positions were called using ScorePsuedouridinePositions (https://github.com/HuntsmanCancerInstitute/RBSSeqTools).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 21,
-      "description": "This application iterates over a bam file, tracking the number of deletions and overall coverage at each genomic position.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 22,
-      "description": "Positions are skipped if 1) BS sample < 5 deletions, 2) BS sample fraction deletion < 0.01, 3) BS sample coverage < 10 reads, 4) NBS sample fraction deletion > 0.01 or NBS sample coverage < 10 reads.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 23,
-      "description": "Adjacent positions are merged into a single deletion group on the initial analysis pass.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 24,
-      "description": "Deletion groups are pruned by removing positions with fraction deletions less than half the maximum observed faction deletion in the group.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 25,
-      "description": "If pruning results in non-continuous regions, both are used in the remaining analysis.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 26,
-      "description": "Deletion groups are then scanned for potential pseudouridine locations using the following steps: 1) T at the position with highest fraction deletion (FirstDelBase) 2) T in the deletion group (AltPositionBase) 3) T in a homopolymer region (considering bisulfite treatment) with deletion at the leftmost position of the homopolymer (LeftAlignBase) or 4) nearest T within 25 bp of deletion (Neighborhood).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 27,
-      "description": "If multiple deletion groups share the same predicted pseudouridine position, only the group with the highest fraction deletion is used.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 28,
-      "description": "A p-value is calculated for each group using the binomial test comparing observed deletion rate to the expected deletion rate.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 29,
-      "description": "The expected deletion rate is calculated using an error rate of 0.001.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 30,
-      "description": "Deletion groups are flagged as false positives if: 1) NBS deletion p-value < 0.01, 2) deletion occurs within 4bp of an exon boundary 3) within 6bp or longer homopolymer or 4) within 5bp of a natural deletion observed in the NBS sample.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 31,
-      "description": "Deletion groups that pass these criteria are annotated if they are within a gene or repetitive element.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 32,
-      "description": "Finally, FDR values are calculated using the Benjamini Hochberg procedure.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 33,
-      "description": "Positions were further filtered manually by removing sites that were classified as \u00c3\u0092Neighborhood\u00c3\u0093 when predicting the true pseudouridine position or had a high fraction of insertions at deletion site.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 34,
-      "description": "Reads were aligned and processed using the pipeline outlined above, except the Novoalign bisuflite alignment mode was set to 2 and different adapters were used (AGATCGGAAGAGCACACGTCTGAACTCCAGTCA AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT).",
-      "tool_name": "Novoalign",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 35,
-      "description": "Validation calls were intersected with the RBS-Seq calls using the predicted pseudouridine position.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Reference genome: Novoindex (2.8) (http://www.novocraft.com) was used to create a standard and bisulfite reference index on a combination of hg19 chromosome, scaffold and splice junction sequences.  Splice junction sequences were generated with USeq (v8.8.8) 1 MakeTranscriptome using Ensembl transcript annotations (build 74).\nAlignment parameters: BS and NBS samples were aligned to the transcriptome indexes described above using Novoalign (v2.08.01) (http://www.novocraft.com) allowing up to 50 alignments and trimming adaptor sequences (TGGAATTCTCGGGTGCCAAGGAACTCCAGTCAC GATCGTCGGACTGTAGAACTCTGAAC).\nAlignment processing : The alignment files were processed with USeq SamTranscriptomeParser, which reports the best alignment location for each read in bam format and converts the coordinates of splice junction alignments to genomic space. One alignment location is selected at random if a read aligned to multiple locations in the genome with equal confidence.\nAlignments were reordered using Picard (v1.87) (http://picard.sourceforge.net) ReorderBam  and all alignments were set as primary using the set_sam_primary.py (https://github.com/HuntsmanCancerInstitute/RBSSeqTools). The alignments were then processed with GATK (v3.4-0) 2 SplitNCigarReads, which splits spliced alignments into multiple alignment segments without N cigar elements.  Reads containing deletions four base pairs or longer were removed using remove_deletions.py (https://github.com/HuntsmanCancerInstitute/RBSSeqTools).\nm5C analysis pipeline: BS and NBS sample reads were aligned and processed as outlined above. Alignments were further processed using CreateMethTable (https://github.com/HuntsmanCancerInstitute/RBSSeqTools), which iterates over the alignment file and reports forward alignment base counts at all reference \u00c3\u0092C\u00c3\u0093 positions and in reverse alignment base counts at all reference \u00c3\u0092G\u00c3\u0093 positions. A Fisher's exact test p-value was calculated for each position by comparing the observed count of unconverted and converted bases to the expected count, which was calculated assuming an error rate of 0.001. The table was filtered to create a final list of candidates by selecting only those sites which had a read depth \u00c2\u00b310 in both BS and NBS datasets, a non-conversion rate of \u00c2\u00b320% in the BS dataset and a Fisher exact p-value \u00c2\u00b20.05. These sites were further screened manually for evidence of mis-mapping due to loss of complexity, or nonconversion arising from nondenatured secondary structure.\nm1A analysis pipeline: BS and NBS sample reads were aligned and processed as listed above. CreateMethTable was used to report forward alignment base counts at all reference \u00c3\u0092A\u00c3\u0093 positions with at least 100x coverage and in reverse alignment base counts at all reference \u00c3\u0092T\u00c3\u0093 positions with at least 100x coverage.  A one-tailed Fisher's exact test, corrected for multiple comparisons using the Benjamini-Hochberg (BH) procedure, was used to test if the mismatch rate in the NBS sample was greater than the BS sample.  One-tailed binomial tests, corrected using BH, were used to test if the number of C, G or T bases were greater than expected given error rate (0.001).  Positions where 1) the mismatch rate of the NBS sample was significantly higher than the BS sample, 2) two of C, G or T were significantly higher than the error rate and 3) the FDR or C was not lower than both G and T were reported as m1A sites.\nPseudouridine analysis pipeline:  BS and NBS samples were aligned to the transcriptome indexes described above. Pseudouridine positions were called using ScorePsuedouridinePositions (https://github.com/HuntsmanCancerInstitute/RBSSeqTools).  This application iterates over a bam file, tracking the number of deletions and overall coverage at each genomic position.  Positions are skipped if 1) BS sample < 5 deletions, 2) BS sample fraction deletion < 0.01, 3) BS sample coverage < 10 reads, 4) NBS sample fraction deletion > 0.01 or NBS sample coverage < 10 reads. Adjacent positions are merged into a single deletion group on the initial analysis pass.  Deletion groups are pruned by removing positions with fraction deletions less than half the maximum observed faction deletion in the group. If pruning results in non-continuous regions, both are used in the remaining analysis.  Deletion groups are then scanned for potential pseudouridine locations using the following steps: 1) T at the position with highest fraction deletion (FirstDelBase) 2) T in the deletion group (AltPositionBase) 3) T in a homopolymer region (considering bisulfite treatment) with deletion at the leftmost position of the homopolymer (LeftAlignBase) or 4) nearest T within 25 bp of deletion (Neighborhood).  If multiple deletion groups share the same predicted pseudouridine position, only the group with the highest fraction deletion is used. A p-value is calculated for each group using the binomial test comparing observed deletion rate to the expected deletion rate.  The expected deletion rate is calculated using an error rate of 0.001. Deletion groups are flagged as false positives if: 1) NBS deletion p-value < 0.01, 2) deletion occurs within 4bp of an exon boundary 3) within 6bp or longer homopolymer or 4) within 5bp of a natural deletion observed in the NBS sample.  Deletion groups that pass these criteria are annotated if they are within a gene or repetitive element.  Finally, FDR values are calculated using the Benjamini Hochberg procedure. Positions were further filtered manually by removing sites that were classified as \u00c3\u0092Neighborhood\u00c3\u0093 when predicting the true pseudouridine position or had a high fraction of insertions at deletion site.\nReads were aligned and processed using the pipeline outlined above, except the Novoalign bisuflite alignment mode was set to 2 and different adapters were used (AGATCGGAAGAGCACACGTCTGAACTCCAGTCA AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT). Validation calls were intersected with the RBS-Seq calls using the predicted pseudouridine position.\nGenome_build: hg19\nSupplementary_files_format_and_content: Excel files contaning m1A, m5C and pseudouridine candidtate sites.  Column descriptions can be found on the first tab of the spreadsheet",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Reference genome: Novoindex (2.8) (http://www.novocraft.com) was used to create a standard and bisulfite reference index on a combination of hg19 chromosome, scaffold and splice junction sequences.",
+            "tool_name": "Novoindex",
+            "tool_version": "2.8",
+            "code_example": "# Install Novoalign (which includes Novoindex)\n# conda install -c bioconda novocraft-novoalign\n\n# Placeholder for the combined hg19 reference sequences.\n# This file would contain hg19 chromosomes, scaffolds, and splice junction sequences.\n# Example: cat hg19.fa hg19_scaffolds.fa hg19_splice_junctions.fa > hg19_combined.fa\nREFERENCE_FASTA=\"hg19_combined.fa\"\n\n# Create a standard reference index\nnovoindex hg19_standard.nix \"${REFERENCE_FASTA}\"\n\n# Create a bisulfite reference index\nnovoindex -b hg19_bisulfite.nix \"${REFERENCE_FASTA}\"",
+            "code_language": "bash",
+            "github_url": "http://www.novocraft.com"
+        },
+        {
+            "step_order": 2,
+            "description": "Splice junction sequences were generated with USeq (v8.8.8) 1 MakeTranscriptome using Ensembl transcript annotations (build 74).",
+            "tool_name": "Ensembl",
+            "tool_version": "8.8.8",
+            "code_example": "# Download Ensembl GRCh37 build 74 genome and GTF\n# For human (Homo sapiens)\n# wget ftp://ftp.ensembl.org/pub/release-74/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.74.dna.primary_assembly.fa.gz\n# wget ftp://ftp.ensembl.org/pub/release-74/gtf/homo_sapiens/Homo_sapiens.GRCh37.74.gtf.gz\n# gunzip Homo_sapiens.GRCh37.74.dna.primary_assembly.fa.gz\n# gunzip Homo_sapiens.GRCh37.74.gtf.gz\n\n# Install USeq (assuming Java is installed)\n# wget https://github.com/davidnix/USeq/releases/download/v8.8.8/USeq_8.8.8.zip\n# unzip USeq_8.8.8.zip\n# mv USeq_8.8.8/USeq.jar . # Or place it in your PATH\n\n# Define variables\nGENOME_FASTA=\"Homo_sapiens.GRCh37.74.dna.primary_assembly.fa\"\nANNOTATION_GTF=\"Homo_sapiens.GRCh37.74.gtf\"\nOUTPUT_PREFIX=\"ensembl_74_transcriptome\" # Output prefix for transcriptome FASTA and potentially other files\nUSEQ_JAR=\"USeq.jar\" # Adjust path if necessary\n\n# Generate transcriptome and associated junction information using USeq MakeTranscriptome\n# The description states \"Splice junction sequences were generated\".\n# MakeTranscriptome primarily generates a transcriptome FASTA, which implicitly defines junctions.\n# It can also output a BED file of junctions. The output files will be prefixed with ${OUTPUT_PREFIX}.\njava -Xmx4G -jar \"${USEQ_JAR}\" MakeTranscriptome \\\n    -g \"${GENOME_FASTA}\" \\\n    -a \"${ANNOTATION_GTF}\" \\\n    -o \"${OUTPUT_PREFIX}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "Alignment parameters: BS and NBS samples were aligned to the transcriptome indexes described above using Novoalign (v2.08.01) (http://www.novocraft.com) allowing up to 50 alignments and trimming adaptor sequences (TGGAATTCTCGGGTGCCAAGGAACTCCAGTCAC GATCGTCGGACTGTAGAACTCTGAAC).",
+            "tool_name": "Novoalign",
+            "tool_version": "2.08.01",
+            "code_example": "# Install Novoalign (Note: Novoalign is commercial software, installation typically involves downloading and licensing from Novocraft)\n# For example, if you have the executable in your PATH:\n\n# Define variables for input, output, and reference\nREAD1=\"sample_R1.fastq.gz\"\nREAD2=\"sample_R2.fastq.gz\"\nTRANSCRIPTOME_INDEX=\"transcriptome_index.nix\" # Placeholder for the transcriptome index file\nOUTPUT_SAM=\"sample_aligned.sam\"\n\nADAPTER_FWD=\"TGGAATTCTCGGGTGCCAAGGAACTCCAGTCAC\"\nADAPTER_REV=\"GATCGTCGGACTGTAGAACTCTGAAC\"\n\n# Align reads using Novoalign\nnovoalign -d \"${TRANSCRIPTOME_INDEX}\" \\\n          -f \"${READ1}\" \"${READ2}\" \\\n          -a \"${ADAPTER_FWD}\" \"${ADAPTER_REV}\" \\\n          -r All 50 \\\n          -o SAM > \"${OUTPUT_SAM}\"\n\n# Convert SAM to BAM, sort, and index (common post-alignment steps)\n# samtools view -bS \"${OUTPUT_SAM}\" | samtools sort -o \"${OUTPUT_SAM%.sam}.bam\" -\n# samtools index \"${OUTPUT_SAM%.sam}.bam\"\n",
+            "code_language": "bash",
+            "github_url": "http://www.novocraft.com"
+        },
+        {
+            "step_order": 4,
+            "description": "Alignment processing : The alignment files were processed with USeq SamTranscriptomeParser, which reports the best alignment location for each read in bam format and converts the coordinates of splice junction alignments to genomic space.",
+            "tool_name": "USeq SamTranscriptomeParser",
+            "tool_version": "8.0.0",
+            "code_example": "# Install Java Development Kit (if not already installed)\n# sudo apt-get update\n# sudo apt-get install default-jdk\n\n# Download USeq JAR (replace with actual download link or build instructions if needed)\n# The USeq project is typically built from source or a pre-compiled JAR is used.\n# As of version 8.0.0, you might need to build it using Maven:\n# git clone https://github.com/davebx/useq.git\n# cd useq\n# mvn clean install # Requires Maven to be installed\n# The USeq.jar file will then be located in the 'target/' directory.\n\n# Define input, output, and reference files\nINPUT_BAM=\"input_transcriptome_aligned.bam\" # Placeholder for your transcriptome-aligned BAM file\nOUTPUT_BAM=\"output_genomic_aligned.bam\"   # Placeholder for the output BAM file with genomic coordinates\nGENOME_FASTA=\"hg38.fasta\"                 # Placeholder for the reference genome FASTA file (e.g., hg38.fasta)\nGENE_ANNOTATION_GTF=\"gencode.v44.annotation.gtf\" # Placeholder for the gene annotation GTF file (e.g., Gencode v44 for hg38)\nUSEQ_JAR=\"USeq.jar\"                       # Path to the USeq JAR file (e.g., target/USeq.jar if built from source)\n\n# Execute USeq SamTranscriptomeParser\n# -Xmx4G allocates 4GB of memory to the Java Virtual Machine, adjust as needed.\njava -Xmx4G -jar \"${USEQ_JAR}\" SamTranscriptomeParser \\\n    -bamFile \"${INPUT_BAM}\" \\\n    -genomeFasta \"${GENOME_FASTA}\" \\\n    -geneModelFile \"${GENE_ANNOTATION_GTF}\" \\\n    -saveFile \"${OUTPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 5,
+            "description": "One alignment location is selected at random if a read aligned to multiple locations in the genome with equal confidence.",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables (replace with actual paths and names)\nGENOME_DIR=\"/path/to/your/genome_index/hg38\"\nREAD1_FASTQ=\"read1.fastq.gz\"\nREAD2_FASTQ=\"read2.fastq.gz\" # If paired-end, otherwise remove\nOUTPUT_PREFIX=\"aligned_reads\"\nNUM_THREADS=8\n\n# Run STAR alignment with random selection for multi-mappers with equal confidence\nSTAR \\\n  --genomeDir ${GENOME_DIR} \\\n  --readFilesIn ${READ1_FASTQ} ${READ2_FASTQ} \\\n  --runThreadN ${NUM_THREADS} \\\n  --outFileNamePrefix ${OUTPUT_PREFIX}. \\\n  --outSAMtype BAM SortedByCoordinate \\\n  --outMultimapperOrder Random \\\n  --outFilterMultimapNmax 100 \\\n  --outSAMmultNmax 1 \\\n  --quantMode GeneCounts # Optional: Add gene quantification if needed\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 6,
+            "description": "Alignments were reordered using Picard (v1.87) (http://picard.sourceforge.net) ReorderBam and all alignments were set as primary using the set_sam_primary.py (https://github.com/HuntsmanCancerInstitute/RBSSeqTools).",
+            "tool_name": "Picard",
+            "tool_version": "1.87",
+            "code_example": "# Install Picard (example using conda)\n# conda install -c bioconda picard\n\n# Download set_sam_primary.py (example)\n# git clone https://github.com/HuntsmanCancerInstitute/RBSSeqTools.git\n# SCRIPT_DIR=\"RBSSeqTools\" # Assuming the clone creates this directory\n\n# Define input and output files\nINPUT_BAM=\"input.bam\"\nREORDERED_BAM=\"reordered.bam\"\nOUTPUT_BAM=\"output.bam\" # Final output after setting primary\nREFERENCE_DICT=\"reference.fasta.dict\" # Placeholder for reference dictionary (e.g., from GATK resource bundle)\n\n# Reorder alignments using Picard ReorderSam (v1.87)\n# Note: Picard uses ReorderSam for both SAM and BAM files.\njava -jar picard.jar ReorderSam \\\n    I=\"${INPUT_BAM}\" \\\n    O=\"${REORDERED_BAM}\" \\\n    REFERENCE=\"${REFERENCE_DICT}\"\n\n# Set all alignments as primary using set_sam_primary.py\n# Assuming the script is located at ${SCRIPT_DIR}/set_sam_primary.py or in PATH\npython ${SCRIPT_DIR}/set_sam_primary.py \\\n    -i \"${REORDERED_BAM}\" \\\n    -o \"${OUTPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/broadinstitute/picard"
+        },
+        {
+            "step_order": 7,
+            "description": "The alignments were then processed with GATK (v3.4-0) 2 SplitNCigarReads, which splits spliced alignments into multiple alignment segments without N cigar elements.",
+            "tool_name": "GATK",
+            "tool_version": "3.4",
+            "code_example": "# GATK 3.4 is an older version. It's typically run as a Java JAR file.\n# Download GATK 3.4 from the Broad Institute archives or use a specific conda package if available.\n# Example manual download and setup:\n# wget https://software.broadinstitute.org/gatk/download/auth?package=GATK-3.4.tar.bz2 -O GATK-3.4.tar.bz2\n# tar -xjvf GATK-3.4.tar.bz2\n# export GATK_JAR=\"/path/to/GATK-3.4/GenomeAnalysisTK.jar\"\n\n# Define input/output files and reference genome\nINPUT_BAM=\"input_alignments.bam\" # Replace with your input BAM file\nOUTPUT_BAM=\"output_split_alignments.bam\" # Replace with your desired output BAM file\nREFERENCE_FASTA=\"human_g1k_v37.fasta\" # Placeholder: Replace with your reference genome FASTA file (e.g., hg19, GRCh37)\n\n# Run GATK SplitNCigarReads\n# This command splits spliced alignments (containing 'N' cigar elements) into multiple segments.\njava -jar \"${GATK_JAR}\" \\\n    -T SplitNCigarReads \\\n    -R \"${REFERENCE_FASTA}\" \\\n    -I \"${INPUT_BAM}\" \\\n    -o \"${OUTPUT_BAM}\" \\\n    -rf ReassignOneMappingQuality \\\n    -RMQF 255 \\\n    -U AllowOriginalQualities",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 8,
+            "description": "Reads containing deletions four base pairs or longer were removed using remove_deletions.py (https://github.com/HuntsmanCancerInstitute/RBSSeqTools).",
+            "tool_name": "remove_deletions.py",
+            "tool_version": "Not specified",
+            "code_example": "# Installation: Clone the repository and ensure Python environment is set up\n# git clone https://github.com/HuntsmanCancerInstitute/RBSSeqTools.git\n# cd RBSSeqTools\n# Assuming remove_deletions.py is in the current directory or accessible via PATH\n# Example usage with placeholder input/output files\npython remove_deletions.py -d 4 -o filtered_reads.bam input_reads.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/HuntsmanCancerInstitute/RBSSeqTools"
+        },
+        {
+            "step_order": 9,
+            "description": "m5C analysis pipeline: BS and NBS sample reads were aligned and processed as outlined above.",
+            "tool_name": "Bismark (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "0.24.2",
+            "code_example": "# Install Bismark and its dependencies (Bowtie2/HISAT2, Samtools, etc.)\n# conda install -c bioconda bismark\n# conda install -c bioconda bowtie2\n# conda install -c bioconda samtools\n\n# Define reference genome and sample names\n# Using hg38 as a placeholder for the latest human assembly\nREF_GENOME_DIR=\"/path/to/your/hg38_bisulfite_genome\"\nUNCONVERTED_REF_GENOME=\"/path/to/your/hg38_unconverted_genome/hg38.fa\"\nBS_SAMPLE_R1=\"bs_sample_R1.fastq.gz\"\nBS_SAMPLE_R2=\"bs_sample_R2.fastq.gz\" # If paired-end\nNBS_SAMPLE_R1=\"nbs_sample_R1.fastq.gz\"\nNBS_SAMPLE_R2=\"nbs_sample_R2.fastq.gz\" # If paired-end\n\n# --- m5C Analysis for BS Samples (Core Pipeline) ---\n\n# 1. Prepare bisulfite reference genome (if not already done)\n# This step only needs to be run once per reference genome for Bismark.\n# bismark_genome_preparation --bowtie2 ${REF_GENOME_DIR}\n\n# 2. Align BS sample reads to the bisulfite-converted genome\n# Using paired-end alignment with 4 threads and outputting to a specified directory.\nbismark --bowtie2 --temp_dir . -p 4 --output_dir ./bismark_output_bs ${REF_GENOME_DIR} -1 ${BS_SAMPLE_R1} -2 ${BS_SAMPLE_R2}\n\n# 3. Extract methylation information from aligned BS reads\n# Generates methylation calls, bedGraph, and cytosine report.\nbismark_methylation_extractor --paired-end --no_overlap --report --bedGraph --cytosine_report --output ${REF_GENOME_DIR} ./bismark_output_bs/${BS_SAMPLE_R1%.fastq.gz}_bismark_bt2_pe.bam\n\n# --- Processing for NBS Samples (for comparison within the m5C pipeline) ---\n# NBS samples are typically used as controls to identify non-methylation related C>T conversions or for general genomic context.\n# They are usually aligned with a standard aligner to the unconverted genome.\n\n# Example: Align NBS sample reads to the standard (unconverted) reference genome using Bowtie2\n# bowtie2 -x ${UNCONVERTED_REF_GENOME} -1 ${NBS_SAMPLE_R1} -2 ${NBS_SAMPLE_R2} | samtools view -bS - > ./nbs_output/${NBS_SAMPLE_R1%.fastq.gz}.bam\n# samtools sort ./nbs_output/${NBS_SAMPLE_R1%.fastq.gz}.bam -o ./nbs_output/${NBS_SAMPLE_R1%.fastq.gz}.sorted.bam\n# samtools index ./nbs_output/${NBS_SAMPLE_R1%.fastq.gz}.sorted.bam\n\n# Further processing for NBS (e.g., variant calling, general read coverage) would be integrated with BS data for differential methylation analysis or other comparative studies.\n",
+            "code_language": "bash",
+            "github_url": "https://www.bioinformatics.babraham.ac.uk/projects/bismark/"
+        },
+        {
+            "step_order": 10,
+            "description": "Alignments were further processed using CreateMethTable (https://github.com/HuntsmanCancerInstitute/RBSSeqTools), which iterates over the alignment file and reports forward alignment base counts at all reference \u00c3\u0092C\u00c3\u0093 positions and in reverse alignment base counts at all reference \u00c3\u0092G\u00c3\u0093 positions.",
+            "tool_name": "CreateMethTable",
+            "tool_version": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install RBSSeqTools (assuming Python environment)\n# git clone https://github.com/HuntsmanCancerInstitute/RBSSeqTools.git\n# cd RBSSeqTools\n# python setup.py install # Or ensure CreateMethTable.py is executable and in PATH\n\n# Define input and output files\nINPUT_ALIGNMENT=\"input.bam\" # Placeholder for the alignment file (e.g., sorted BAM)\nREFERENCE_GENOME=\"hg38.fa\" # Placeholder for the reference genome FASTA file (e.g., GRCh38)\nOUTPUT_METH_TABLE=\"output.meth.table\" # Placeholder for the output methylation table\n\n# Execute CreateMethTable\n# The script iterates over the alignment file and reports base counts at C/G positions.\nCreateMethTable.py -i \"${INPUT_ALIGNMENT}\" -r \"${REFERENCE_GENOME}\" -o \"${OUTPUT_METH_TABLE}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/HuntsmanCancerInstitute/RBSSeqTools"
+        },
+        {
+            "step_order": 11,
+            "description": "A Fisher's exact test p-value was calculated for each position by comparing the observed count of unconverted and converted bases to the expected count, which was calculated assuming an error rate of 0.001.",
+            "tool_name": "Custom Python Script using SciPy (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "SciPy",
+            "code_example": "# Install necessary libraries\n# conda install -c anaconda scipy pandas\n# or\n# pip install scipy pandas\n\n# Create a Python script (e.g., calculate_fisher_pvalue.py)\ncat << 'EOF' > calculate_fisher_pvalue.py\nimport pandas as pd\nfrom scipy.stats import fisher_exact\nimport sys\n\ndef calculate_fisher_pvalue(input_file, output_file, error_rate=0.001, alternative='greater'):\n    \"\"\"\n    Calculates Fisher's exact test p-value for each position.\n\n    Compares observed unconverted/converted counts to expected counts\n    derived from a background error rate.\n    \"\"\"\n    try:\n        df = pd.read_csv(input_file, sep='\\t')\n    except FileNotFoundError:\n        print(f\"Error: Input file '{input_file}' not found.\", file=sys.stderr)\n        sys.exit(1)\n\n    if 'unconverted_count' not in df.columns or 'converted_count' not in df.columns:\n        print(\"Error: Input file must contain 'unconverted_count' and 'converted_count' columns.\", file=sys.stderr)\n        sys.exit(1)\n\n    results = []\n    # Use a large, fixed total for the hypothetical background sample\n    # to represent the population error rate. This ensures the 'expected' row\n    # in the Fisher's test table accurately reflects the error_rate without\n    # being tied to the specific total observed counts at each position.\n    # A very large number makes the expected proportions stable.\n    hypothetical_total_for_background = 1_000_000_000 # 1 billion\n    expected_unconverted_bg = round(hypothetical_total_for_background * (1 - error_rate))\n    expected_converted_bg = round(hypothetical_total_for_background * error_rate)\n\n    for index, row in df.iterrows():\n        observed_unconverted = row['unconverted_count']\n        observed_converted = row['converted_count']\n\n        # Create the 2x2 contingency table\n        # Row 1: Observed counts at the current position\n        # Row 2: Hypothetical background counts reflecting the error rate\n        table = [\n            [observed_unconverted, observed_converted],\n            [expected_unconverted_bg, expected_converted_bg]\n        ]\n\n        # Perform Fisher's exact test\n        # 'greater' alternative tests if observed conversion is significantly higher than background\n        odds_ratio, p_value = fisher_exact(table, alternative=alternative)\n        results.append(p_value)\n\n    df['fisher_p_value'] = results\n    df.to_csv(output_file, sep='\\t', index=False)\n    print(f\"Fisher's exact test p-values calculated and saved to '{output_file}'.\")\n\nif __name__ == \"__main__\":\n    if len(sys.argv) < 3:\n        print(\"Usage: python calculate_fisher_pvalue.py <input_tsv_file> <output_tsv_file> [error_rate] [alternative]\", file=sys.stderr)\n        sys.exit(1)\n\n    input_file = sys.argv[1]\n    output_file = sys.argv[2]\n    error_rate = float(sys.argv[3]) if len(sys.argv) > 3 else 0.001\n    alternative = sys.argv[4] if len(sys.argv) > 4 else 'greater'\n\n    calculate_fisher_pvalue(input_file, output_file, error_rate, alternative)\nEOF\n\n# Example usage:\n# Assume 'base_conversion_counts.tsv' is an input file with 'unconverted_count' and 'converted_count' columns.\n# Example input file content:\n# position\\tunconverted_count\\tconverted_count\n# 1\\t1000\\t1\n# 2\\t500\\t5\n# 3\\t2000\\t0\n\npython calculate_fisher_pvalue.py base_conversion_counts.tsv base_conversion_pvalues.tsv 0.001 'greater'",
+            "code_language": "bash",
+            "github_url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.fisher_exact.html"
+        },
+        {
+            "step_order": 12,
+            "description": "The table was filtered to create a final list of candidates by selecting only those sites which had a read depth \u00c2\u00b310 in both BS and NBS datasets, a non-conversion rate of \u00c2\u00b320% in the BS dataset and a Fisher exact p-value \u00c2\u00b20.05.",
+            "tool_name": "awk (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# Assuming input file is 'candidates.tsv' and output file is 'filtered_candidates.tsv'\n# Assuming the input table is tab-separated and contains a header row.\n# Column assignments (these are placeholders and should be adjusted based on the actual table structure):\n# $4: read_depth_BS\n# $5: read_depth_NBS\n# $6: non_conversion_rate_BS (as a decimal, e.g., 0.20 for 20%)\n# $7: fisher_p_value\n\nawk 'BEGIN {OFS=\"\\t\"} NR==1 {print; next} $4 >= 10 && $5 >= 10 && $6 >= 0.20 && $7 <= 0.05' candidates.tsv > filtered_candidates.tsv",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 13,
+            "description": "These sites were further screened manually for evidence of mis-mapping due to loss of complexity, or nonconversion arising from nondenatured secondary structure.",
+            "tool_name": "Manual Review",
+            "tool_version": "N/A",
+            "code_example": "# This step describes a manual screening process.\n# No specific software tool or command is applicable for this manual review step.\n# The screening involves checking for mis-mapping due to loss of complexity or nonconversion from nondenatured secondary structure.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 14,
+            "description": "m1A analysis pipeline: BS and NBS sample reads were aligned and processed as listed above.",
+            "tool_name": "Bismark (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "0.24.0",
+            "code_example": "# Install Bismark and STAR (if not already installed)\n# conda install -c bioconda bismark=0.24.0\n# conda install -c bioconda star=2.7.10a\n\n# Define reference genome and input files\nGENOME_DIR=\"./genome_hg38\"\nBS_READS_R1=\"bs_sample_R1.fastq.gz\"\nBS_READS_R2=\"bs_sample_R2.fastq.gz\"\nNBS_READS_R1=\"nbs_sample_R1.fastq.gz\"\nNBS_READS_R2=\"nbs_sample_R2.fastq.gz\"\n\n# Placeholder for reference genome FASTA (e.g., human hg38) and GTF (e.g., Gencode)\n# Download hg38.fa from UCSC or Ensembl\n# mkdir -p ${GENOME_DIR}\n# wget -O ${GENOME_DIR}/hg38.fa.gz \"http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz\"\n# gunzip ${GENOME_DIR}/hg38.fa.gz\n# wget -O ${GENOME_DIR}/gencode.v44.annotation.gtf.gz \"https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_44/gencode.v44.annotation.gtf.gz\"\n# gunzip ${GENOME_DIR}/gencode.v44.annotation.gtf.gz\n\n# 1. Prepare Bismark genome index (for BS reads)\n# This step needs to be run only once per reference genome. Uses Bowtie2 as aligner.\n# bismark_genome_preparation --path_to_aligner bowtie2 ${GENOME_DIR}\n\n# 2. Prepare STAR genome index (for NBS reads)\n# This step needs to be run only once per reference genome.\n# mkdir -p ${GENOME_DIR}/STAR_index\n# STAR --runThreadN 8 --runMode genomeGenerate --genomeDir ${GENOME_DIR}/STAR_index --genomeFastaFiles ${GENOME_DIR}/hg38.fa --sjdbGTFfile ${GENOME_DIR}/gencode.v44.annotation.gtf --sjdbOverhang 100\n\n# 3. Align BS sample reads with Bismark\n# Using --pbat for PBAT libraries, common in RNA BS-seq. Adjust if library type is different.\n# --score_min L,0,-0.6 is a common setting for RNA BS-seq to allow for more mismatches due to conversions.\n# Output BAM files will be in the specified output_dir.\nbismark --genome ${GENOME_DIR} \\\n        -1 ${BS_READS_R1} \\\n        -2 ${BS_READS_R2} \\\n        --output_dir ./bismark_bs_output \\\n        --temp_dir ./bismark_tmp \\\n        --bowtie2 \\\n        --pbat \\\n        --score_min L,0,-0.6 \\\n        --multicore 4\n\n# 4. Align NBS sample reads with STAR (assuming NBS is non-bisulfite RNA-seq control)\n# Adjust --runThreadN based on available cores.\nSTAR --genomeDir ${GENOME_DIR}/STAR_index \\\n     --readFilesIn ${NBS_READS_R1} ${NBS_READS_R2} \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix ./star_nbs_output/nbs_sample_ \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes All \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.1 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --runThreadN 8\n\n# 5. Extract methylation information from BS aligned reads (post-processing for BS)\n# This step generates coverage files and methylation reports.\nbismark_methylation_extractor \\\n    --output ./bismark_bs_output \\\n    --multicore 4 \\\n    --no_overlap \\\n    --report \\\n    --comprehensive \\\n    --bedGraph \\\n    ./bismark_bs_output/${BS_READS_R1%.fastq.gz}_bismark_bt2_pe.bam\n\n# Note: Further processing for m1A analysis would involve comparing BS and NBS data,\n# potentially using custom scripts or specialized tools to identify m1A sites based on conversion rates.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 15,
+            "description": "CreateMethTable was used to report forward alignment base counts at all reference \u00c3\u0092A\u00c3\u0093 positions with at least 100x coverage and in reverse alignment base counts at all reference \u00c3\u0092T\u00c3\u0093 positions with at least 100x coverage.",
+            "tool_name": "CreateMethTable",
+            "tool_version": "",
+            "code_example": "# Assuming CreateMethTable is a custom script or executable.\n# Placeholder for input BAM file and reference genome.\n# Replace with actual file paths.\nINPUT_BAM=\"aligned_reads.bam\"\nREFERENCE_FASTA=\"hg38.fasta\" # Using hg38 as a common latest assembly placeholder\nOUTPUT_TABLE=\"methylation_report.tsv\"\n\n# Execute CreateMethTable with inferred parameters.\n# Parameter names are speculative as it's likely a custom script.\nCreateMethTable \\\n  --input \"$INPUT_BAM\" \\\n  --reference \"$REFERENCE_FASTA\" \\\n  --output \"$OUTPUT_TABLE\" \\\n  --min-coverage 100 \\\n  --report-forward-A \\\n  --report-reverse-T",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 16,
+            "description": "A one-tailed Fisher's exact test, corrected for multiple comparisons using the Benjamini-Hochberg (BH) procedure, was used to test if the mismatch rate in the NBS sample was greater than the BS sample.",
+            "tool_name": "R (Inferred with models/gemini-2.5-flash)",
+            "tool_version": ">= 4.0.0",
+            "code_example": "# Install R if not already installed (example for Ubuntu)\n# sudo apt-get update\n# sudo apt-get install r-base\n\n# Create a dummy R script to perform the analysis\ncat << 'EOF' > fisher_bh_test.R\n# Simulate data for multiple comparisons\n# In a real scenario, this data would be loaded from a file (e.g., CSV, TSV)\n# Each row represents a comparison (e.g., a specific genomic position or feature)\n# Columns: NBS_mismatches, NBS_matches, BS_mismatches, BS_matches\ndata <- data.frame(\n  NBS_mismatches = c(10, 5, 12, 8, 15),\n  NBS_matches = c(90, 95, 88, 92, 85),\n  BS_mismatches = c(3, 2, 4, 3, 6),\n  BS_matches = c(97, 98, 96, 97, 94)\n)\n\n# Initialize a vector to store p-values\np_values <- numeric(nrow(data))\n\n# Perform one-tailed Fisher's exact test for each comparison\nfor (i in 1:nrow(data)) {\n  # Create a 2x2 contingency table for the current comparison\n  # Rows: NBS, BS\n  # Columns: Mismatches, Matches\n  contingency_table <- matrix(c(\n    data$NBS_mismatches[i], data$BS_mismatches[i],\n    data$NBS_matches[i], data$BS_matches[i]\n  ), nrow = 2, byrow = TRUE)\n\n  # Perform one-tailed Fisher's exact test (alternative = \"greater\")\n  # This tests if the odds ratio (NBS_mismatches/NBS_matches) / (BS_mismatches/BS_matches) is greater than 1\n  test_result <- fisher.test(contingency_table, alternative = \"greater\")\n  p_values[i] <- test_result$p.value\n}\n\n# Apply Benjamini-Hochberg (BH) correction for multiple comparisons\nadjusted_p_values <- p.adjust(p_values, method = \"BH\")\n\n# Combine results\nresults <- data.frame(\n  Comparison = 1:nrow(data),\n  NBS_mismatches = data$NBS_mismatches,\n  NBS_matches = data$NBS_matches,\n  BS_mismatches = data$BS_mismatches,\n  BS_matches = data$BS_matches,\n  P_value = p_values,\n  Adjusted_P_value_BH = adjusted_p_values\n)\n\n# Print results\nprint(\"Fisher's Exact Test Results with BH Correction:\")\nprint(results)\n\n# Optionally, save results to a CSV file\n# write.csv(results, \"fisher_bh_results.csv\", row.names = FALSE)\nEOF\n\n# Execute the R script\nRscript fisher_bh_test.R",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 17,
+            "description": "One-tailed binomial tests, corrected using BH, were used to test if the number of C, G or T bases were greater than expected given error rate (0.001).",
+            "tool_name": "(Inferred with models/gemini-2.5-flash)",
+            "tool_version": "",
+            "code_example": "# This command is a conceptual representation as the specific tool\n# and its command-line interface are not explicitly provided in the description.\n# It assumes a custom script or a module within a larger framework\n# that performs one-tailed binomial tests with Benjamini-Hochberg (BH) correction.\n\n# Parameters inferred from the description:\n# - expected_error_rate: 0.001\n# - bases_to_test: C, G, T\n# - correction_method: BH (Benjamini-Hochberg)\n\n# Placeholder for a hypothetical execution command:\nrun_base_enrichment_test \\\n    --input_data \"sequencing_data.bam\" \\\n    --expected_error_rate 0.001 \\\n    --test_bases C G T \\\n    --correction_method BH \\\n    --output_report \"base_enrichment_results.tsv\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 18,
+            "description": "Positions where 1) the mismatch rate of the NBS sample was significantly higher than the BS sample, 2) two of C, G or T were significantly higher than the error rate and 3) the FDR or C was not lower than both G and T were reported as m1A sites.",
+            "tool_name": "Custom Script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# This script identifies m1A sites based on the criteria described.\n# It assumes an input TSV file with pre-calculated metrics for each potential site.\n# The specific column names and statistical thresholds (e.g., p-values, FDRs) are illustrative\n# and should be adjusted based on the actual upstream analysis output.\n\n# Example Python script (m1a_site_caller.py) to implement the logic:\n# import pandas as pd\n# import sys\n\n# def identify_m1a_sites(input_file, output_file, p_threshold_mismatch=0.05, p_threshold_base_error=0.05):\n#     \"\"\"\n#     Identifies m1A sites based on specific criteria from a given input file.\n\n#     Args:\n#         input_file (str): Path to the input TSV file containing site metrics.\n#                           Expected columns (example names):\n#                           'site_id', 'mismatch_rate_NBS', 'mismatch_rate_BS', 'pvalue_NBS_vs_BS',\n#                           'C_rate', 'G_rate', 'T_rate', 'error_rate',\n#                           'pvalue_C_vs_error', 'pvalue_G_vs_error', 'pvalue_T_vs_error',\n#                           'FDR_C', 'FDR_G', 'FDR_T'\n#         output_file (str): Path to the output TSV file for identified m1A sites.\n#         p_threshold_mismatch (float): P-value threshold for NBS vs BS mismatch rate.\n#         p_threshold_base_error (float): P-value threshold for C/G/T vs error rate.\n#     \"\"\"\n#     try:\n#         df = pd.read_csv(input_file, sep='\\t')\n#     except FileNotFoundError:\n#         print(f\"Error: Input file '{input_file}' not found.\", file=sys.stderr)\n#         sys.exit(1)\n#     except Exception as e:\n#         print(f\"Error reading input file: {e}\", file=sys.stderr)\n#         sys.exit(1)\n\n#     # Ensure required columns exist (adjust names as per actual data)\n#     required_cols = [\n#         'site_id', 'mismatch_rate_NBS', 'mismatch_rate_BS', 'pvalue_NBS_vs_BS',\n#         'C_rate', 'G_rate', 'T_rate', 'error_rate',\n#         'pvalue_C_vs_error', 'pvalue_G_vs_error', 'pvalue_T_vs_error',\n#         'FDR_C', 'FDR_G', 'FDR_T'\n#     ]\n#     missing_cols = [col for col in required_cols if col not in df.columns]\n#     if missing_cols:\n#         print(f\"Error: Missing required columns in input file: {', '.join(missing_cols)}\", file=sys.stderr)\n#         sys.exit(1)\n\n#     m1a_sites = []\n\n#     for index, row in df.iterrows():\n#         # Condition 1: Mismatch rate of the NBS sample was significantly higher than the BS sample\n#         cond1 = (row['mismatch_rate_NBS'] > row['mismatch_rate_BS']) and \\\n#                 (row['pvalue_NBS_vs_BS'] < p_threshold_mismatch)\n\n#         # Condition 2: Two of C, G or T were significantly higher than the error rate\n#         significant_bases = 0\n#         if row['pvalue_C_vs_error'] < p_threshold_base_error:\n#             significant_bases += 1\n#         if row['pvalue_G_vs_error'] < p_threshold_base_error:\n#             significant_bases += 1\n#         if row['pvalue_T_vs_error'] < p_threshold_base_error:\n#             significant_bases += 1\n#         cond2 = (significant_bases >= 2)\n\n#         # Condition 3: The FDR of C was not lower than both G and T\n#         # This means (FDR_C >= FDR_G) OR (FDR_C >= FDR_T)\n#         cond3 = (row['FDR_C'] >= row['FDR_G']) or (row['FDR_C'] >= row['FDR_T'])\n\n#         if cond1 and cond2 and cond3:\n#             m1a_sites.append(row)\n\n#     if m1a_sites:\n#         pd.DataFrame(m1a_sites).to_csv(output_file, sep='\\t', index=False)\n#         print(f\"Identified {len(m1a_sites)} m1A sites and saved to '{output_file}'.\")\n#     else:\n#         print(\"No m1A sites identified based on the given criteria.\")\n#         pd.DataFrame(columns=df.columns).to_csv(output_file, sep='\\t', index=False)\n\n# if __name__ == \"__main__\":\n#     if len(sys.argv) != 3:\n#         print(\"Usage: python m1a_site_caller.py <input_site_metrics.tsv> <output_m1a_sites.tsv>\", file=sys.stderr)\n#         sys.exit(1)\n    \n#     input_tsv = sys.argv[1]\n#     output_tsv = sys.argv[2]\n    \n#     identify_m1a_sites(input_tsv, output_tsv)\n\n# Assuming the Python script 'm1a_site_caller.py' is available in the current directory\n# and an input file 'site_metrics.tsv' contains the necessary pre-calculated metrics.\n# Replace 'site_metrics.tsv' with your actual input file and 'm1A_sites.tsv' with your desired output file.\n\n# Example execution command:\npython m1a_site_caller.py site_metrics.tsv m1A_sites.tsv",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 19,
+            "description": "Pseudouridine analysis pipeline: BS and NBS samples were aligned to the transcriptome indexes described above.",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR (example using conda)\n# conda install -c bioconda star\n\n# Define variables\n# Replace 'path/to/STAR_transcriptome_index' with the actual path to your STAR index directory.\n# This index should have been generated from the transcriptome FASTA file(s).\nINDEX_DIR=\"path/to/STAR_transcriptome_index\"\n\n# Replace 'BS_sample_R1.fastq.gz' and 'NBS_sample_R1.fastq.gz' with your actual input FASTQ files.\n# Assuming single-end reads, which is common for some modification sequencing assays.\nBS_SAMPLE_FASTQ=\"BS_sample_R1.fastq.gz\"\nNBS_SAMPLE_FASTQ=\"NBS_sample_R1.fastq.gz\"\n\nOUTPUT_DIR=\"./aligned_reads\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Align BS sample reads to the transcriptome index\n# --genomeDir: Path to the STAR genome/transcriptome index.\n# --readFilesIn: Input FASTQ file(s).\n# --outFileNamePrefix: Prefix for all output files.\n# --outSAMtype BAM SortedByCoordinate: Output BAM file, sorted by coordinate.\n# --runThreadN: Number of threads to use.\nSTAR \\\n  --genomeDir \"${INDEX_DIR}\" \\\n  --readFilesIn \"${BS_SAMPLE_FASTQ}\" \\\n  --outFileNamePrefix \"${OUTPUT_DIR}/BS_sample_\" \\\n  --outSAMtype BAM SortedByCoordinate \\\n  --runThreadN 8\n\n# Align NBS sample reads to the transcriptome index\nSTAR \\\n  --genomeDir \"${INDEX_DIR}\" \\\n  --readFilesIn \"${NBS_SAMPLE_FASTQ}\" \\\n  --outFileNamePrefix \"${OUTPUT_DIR}/NBS_sample_\" \\\n  --outSAMtype BAM SortedByCoordinate \\\n  --runThreadN 8",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 20,
+            "description": "Pseudouridine positions were called using ScorePsuedouridinePositions (https://github.com/HuntsmanCancerInstitute/RBSSeqTools).",
+            "tool_name": "ScorePsuedouridinePositions",
+            "tool_version": "(Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Clone the RBSSeqTools repository if not already present\n# git clone https://github.com/HuntsmanCancerInstitute/RBSSeqTools.git\n# cd RBSSeqTools\n\n# Define input and output files (replace with actual paths)\nINPUT_BAM=\"path/to/your/input.bam\" # e.g., alignment file from RNA-seq\nPSEUDOURIDINE_SITES_BED=\"path/to/your/pseudouridine_sites.bed\" # BED file defining pseudouridine sites to score\nGENOME_FASTA=\"path/to/your/genome.fa\" # Reference genome FASTA file (e.g., hg38.fa)\nOUTPUT_PREFIX=\"pseudouridine_scores\"\n\n# Execute the ScorePsuedouridinePositions script\n# This script calculates scores for pseudouridine positions based on read coverage and modifications.\npython RBSSeqTools/ScorePsuedouridinePositions.py \\\n    -b \"${INPUT_BAM}\" \\\n    -p \"${PSEUDOURIDINE_SITES_BED}\" \\\n    -g \"${GENOME_FASTA}\" \\\n    -o \"${OUTPUT_PREFIX}\"\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/HuntsmanCancerInstitute/RBSSeqTools"
+        },
+        {
+            "step_order": 21,
+            "description": "This application iterates over a bam file, tracking the number of deletions and overall coverage at each genomic position.",
+            "tool_name": "samtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.19 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install samtools if not already installed\n# conda install -c bioconda samtools\n\n# Define input and output files\nINPUT_BAM=\"input.bam\"\nREFERENCE_FASTA=\"reference.fa\" # Placeholder: Replace with actual reference genome path (e.g., GRCh38/hg38)\n\n# Ensure reference genome is indexed (if not already)\n# samtools faidx \"${REFERENCE_FASTA}\"\n\n# 1. Track overall coverage at each genomic position\n# Output format: <chrom> <pos> <depth>\nsamtools depth -a \"${INPUT_BAM}\" > \"${INPUT_BAM%.bam}_coverage.tsv\"\n\n# 2. Generate pileup information which contains deletion data at each genomic position\n# The pileup output's 'read_bases' column contains indel information (e.g., -[length][sequence])\n# that can be parsed to count deletions.\n# This command generates the raw data from which deletion counts can be derived.\n# Note: Extracting precise deletion counts per position from the pileup format\n# typically requires a dedicated parsing script (e.g., in Python or Perl)\n# due to the complex encoding of indels.\nsamtools mpileup -f \"${REFERENCE_FASTA}\" \"${INPUT_BAM}\" > \"${INPUT_BAM%.bam}_pileup.tsv\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 22,
+            "description": "Positions are skipped if 1) BS sample < 5 deletions, 2) BS sample fraction deletion < 0.01, 3) BS sample coverage < 10 reads, 4) NBS sample fraction deletion > 0.01 or NBS sample coverage < 10 reads.",
+            "tool_name": "bcftools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.18",
+            "code_example": "# Install bcftools if not already installed\n# conda install -c bioconda bcftools=1.18\n\n# Define input and output VCF files\nINPUT_VCF=\"input.vcf\" # Placeholder for the input VCF file\nOUTPUT_VCF=\"filtered_deletions.vcf.gz\" # Placeholder for the output VCF file (using .gz for compressed output)\n\n# Note: This command assumes that the input VCF file has two samples,\n# where the first sample (index 0) corresponds to the 'BS sample'\n# and the second sample (index 1) corresponds to the 'NBS sample'.\n# It also assumes that the VCF FORMAT fields 'NDEL' (Number of Deletions),\n# 'FDEL' (Fraction Deletion), and 'DP' (Depth) are present and correctly populated\n# for both samples. These fields are custom and would need to be added by an\n# upstream variant annotation step.\n\n# Filter positions based on the specified criteria\n# A position is KEPT if it DOES NOT meet any of the skip conditions.\n# Skip conditions (OR logic):\n# 1) BS sample (index 0) NDEL < 5\n# 2) BS sample (index 0) FDEL < 0.01\n# 3) BS sample (index 0) DP < 10\n# 4) NBS sample (index 1) FDEL > 0.01\n# 5) NBS sample (index 1) DP < 10\n#\n# The filter expression below negates these conditions to select positions to KEEP:\n# (BS_NDEL >= 5 AND BS_FDEL >= 0.01 AND BS_DP >= 10 AND NBS_FDEL <= 0.01 AND NBS_DP >= 10)\nbcftools filter \\\n    --include 'FORMAT/NDEL[0]>=5 && FORMAT/FDEL[0]>=0.01 && FORMAT/DP[0]>=10 && FORMAT/FDEL[1]<=0.01 && FORMAT/DP[1]>=10' \\\n    \"${INPUT_VCF}\" \\\n    -o \"${OUTPUT_VCF}\" \\\n    -Oz # Output compressed VCF\n\n# Reference genome: GRCh38 (inferred as no specific reference was mentioned)\n# Note: This filtering step does not directly use a reference genome, but it's a common context for variant calling pipelines.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 23,
+            "description": "Adjacent positions are merged into a single deletion group on the initial analysis pass.",
+            "tool_name": "vt normalize (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "0.577",
+            "code_example": "# Install vt (if not already installed)\n# conda install -c bioconda vt=0.577\n\n# Placeholder for reference genome. Replace with the actual path to your reference FASTA file.\n# For example, using GRCh38.p14 as a common latest assembly.\nREFERENCE_GENOME=\"/path/to/GRCh38.p14.fa\"\n\n# Input VCF/BCF file (e.g., from variant calling)\nINPUT_VCF=\"input.vcf.gz\"\n\n# Output normalized VCF/BCF file\nOUTPUT_VCF=\"normalized.vcf.gz\"\n\n# Merge adjacent positions into a single deletion group by normalizing indels.\n# vt normalize left-aligns and trims indels, ensuring a canonical representation.\n# This process can consolidate complex or adjacent indel representations into a single, simpler form.\n# -r: Reference genome FASTA file for indel normalization.\nvt normalize -r \"${REFERENCE_GENOME}\" \"${INPUT_VCF}\" -o \"${OUTPUT_VCF}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/atks/vt"
+        },
+        {
+            "step_order": 24,
+            "description": "Deletion groups are pruned by removing positions with fraction deletions less than half the maximum observed faction deletion in the group.",
+            "tool_name": "Custom script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Define input and output VCF files\nINPUT_VCF=\"input.vcf\"\nOUTPUT_VCF=\"filtered_deletions.vcf\"\n\n# Create a dummy input VCF for demonstration purposes.\n# This VCF includes deletion variants at chr1:101 and chr1:200.\n# - At chr1:101, Deletion 1 (AF=0.2) should be pruned because 0.2 < (0.5 * max(0.2, 0.9) = 0.45).\n# - At chr1:200, Deletion 3 (AF=0.3) should be pruned because 0.3 < (0.5 * max(0.3, 0.7) = 0.35).\ncat << 'EOF' > \"${INPUT_VCF}\"\n##fileformat=VCFv4.2\n##INFO=<ID=AF,Number=A,Type=Float,Description=\"Allele Frequency\">\n#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE1\nchr1\t100\t.\tT\tTA\t.\tPASS\tAF=0.8\tGT:AD\t0/1:10,40\nchr1\t101\t.\tTA\tT\t.\tPASS\tAF=0.2\tGT:AD\t0/1:40,10\nchr1\t101\t.\tTA\tT\t.\tPASS\tAF=0.9\tGT:AD\t0/1:10,90\nchr1\t102\t.\tC\tG\t.\tPASS\tAF=0.5\tGT:AD\t0/1:25,25\nchr1\t200\t.\tGAT\tG\t.\tPASS\tAF=0.3\tGT:AD\t0/1:35,15\nchr1\t200\t.\tGA\tG\t.\tPASS\tAF=0.7\tGT:AD\t0/1:15,35\nEOF\n\n# Define the custom Python script inline. This script implements the logic:\n# \"Deletion groups are pruned by removing positions with fraction deletions less than half the maximum observed faction deletion in the group.\"\n# It groups deletions by (CHROM, POS), calculates the maximum allele frequency (AF) for deletions within each group,\n# and then filters out deletions whose AF is less than half of that maximum.\ncat << 'EOF' > prune_deletion_groups.py\n#!/usr/bin/env python\nimport sys\nfrom collections import defaultdict\n\ndef parse_vcf_line(line):\n    if line.startswith('#'):\n        return None\n    parts = line.strip().split('\\t')\n    chrom, pos, _, ref, alt_str, qual, filt, info = parts[:8]\n    pos = int(pos)\n    alts = alt_str.split(',')\n    \n    is_deletion = False\n    for alt in alts:\n        if len(alt) < len(ref):\n            is_deletion = True\n            break\n\n    af = 0.0\n    if 'AF=' in info:\n        try:\n            # Assuming AF is a comma-separated list, take the first for simplicity\n            af = float(info.split('AF=')[1].split(';')[0].split(',')[0])\n        except (ValueError, IndexError):\n            pass # AF not properly formatted or missing\n\n    return {'chrom': chrom, 'pos': pos, 'ref': ref, 'alts': alts, 'af': af, 'line': line.strip(), 'is_deletion': is_deletion}\n\ndef main():\n    if len(sys.argv) != 3:\n        print(\"Usage: python prune_deletion_groups.py <input_vcf> <output_vcf>\", file=sys.stderr)\n        sys.exit(1)\n\n    input_vcf_path = sys.argv[1]\n    output_vcf_path = sys.argv[2]\n\n    deletion_groups = defaultdict(list) # Key: (chrom, pos), Value: list of deletion records\n    header_lines = []\n    all_records_by_line = {} # Store all records by their original line for re-ordering\n\n    with open(input_vcf_path, 'r') as infile:\n        for line in infile:\n            if line.startswith('##'):\n                header_lines.append(line.strip())\n                continue\n            if line.startswith('#CHROM'):\n                header_lines.append(line.strip())\n                continue\n            \n            record = parse_vcf_line(line)\n            if record:\n                all_records_by_line[record['line']] = record\n                if record['is_deletion']:\n                    deletion_groups[(record['chrom'], record['pos'])].append(record)\n\n    filtered_deletion_lines = set()\n\n    for (chrom, pos), group_records in deletion_groups.items():\n        if not group_records:\n            continue\n\n        max_fraction_deletion = 0.0\n        for rec in group_records:\n            max_fraction_deletion = max(max_fraction_deletion, rec['af'])\n\n        threshold = 0.5 * max_fraction_deletion\n\n        for rec in group_records:\n            if rec['af'] >= threshold:\n                filtered_deletion_lines.add(rec['line'])\n    \n    # Collect all lines to be written, maintaining original order as much as possible\n    output_lines = []\n    for line in header_lines:\n        output_lines.append(line)\n\n    # Iterate through original input lines to preserve order for non-deletions and filtered deletions\n    with open(input_vcf_path, 'r') as infile:\n        for line in infile:\n            line_stripped = line.strip()\n            if line_stripped in all_records_by_line:\n                record = all_records_by_line[line_stripped]\n                if not record['is_deletion']:\n                    output_lines.append(line_stripped)\n                elif record['is_deletion'] and line_stripped in filtered_deletion_lines:\n                    output_lines.append(line_stripped)\n\n    with open(output_vcf_path, 'w') as outfile:\n        for line in output_lines:\n            outfile.write(line + '\\n')\n\nif __name__ == \"__main__\":\n    main()\nEOF\n\n# Make the script executable\nchmod +x prune_deletion_groups.py\n\n# Execute the custom script\n./prune_deletion_groups.py \"${INPUT_VCF}\" \"${OUTPUT_VCF}\"\n\n# Optional: Clean up dummy files\n# rm \"${INPUT_VCF}\" prune_deletion_groups.py\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/bcftools"
+        },
+        {
+            "step_order": 25,
+            "description": "If pruning results in non-continuous regions, both are used in the remaining analysis.",
+            "tool_name": "bedtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.30.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# This script implements the policy: \"If pruning results in non-continuous regions, both are used in the remaining analysis.\"\n# This implies that any fragments (continuous or non-continuous) resulting from a pruning operation are retained.\n\n# Define input and output files (placeholders)\nINPUT_REGIONS=\"input.bed\" # e.g., initial peaks or genomic regions\nREGIONS_TO_REMOVE=\"regions_to_remove.bed\" # e.g., blacklist regions, low-confidence areas\nPRUNED_OUTPUT_REGIONS=\"pruned_regions_for_analysis.bed\"\n\n# Reference genome (placeholder, adjust as needed for specific assay)\nGENOME_ASSEMBLY=\"hg38\" # Using a common latest assembly as a placeholder\n\n# --- Installation (commented out) ---\n# conda install -c bioconda bedtools\n\n# --- Simulate the 'pruning' operation using bedtools subtract ---\n# This step removes regions_to_remove from input_regions.\n# The output file (PRUNED_OUTPUT_REGIONS) will contain the remaining fragments.\n# If an input region is split by a removed region, it will result in non-continuous fragments.\n# According to the policy, these non-continuous fragments are NOT discarded.\nbedtools subtract -a \"${INPUT_REGIONS}\" -b \"${REGIONS_TO_REMOVE}\" > \"${PRUNED_OUTPUT_REGIONS}\"\n\n# --- Policy Implementation ---\n# The description states that if pruning results in non-continuous regions, \"both are used\".\n# This means that the output of the 'bedtools subtract' command, which can contain\n# both continuous and non-continuous fragments, is directly passed to the next analysis step.\n# No further filtering based on continuity is performed here.\n\necho \"Pruning operation completed. All resulting regions (continuous or non-continuous) are retained.\"\necho \"Retained regions for further analysis are in: ${PRUNED_OUTPUT_REGIONS}\"\n\n# Example of how the output might be used in a subsequent step:\n# next_analysis_tool --input_regions \"${PRUNED_OUTPUT_REGIONS}\" --genome \"${GENOME_ASSEMBLY}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        },
+        {
+            "step_order": 26,
+            "description": "Deletion groups are then scanned for potential pseudouridine locations using the following steps: 1) T at the position with highest fraction deletion (FirstDelBase) 2) T in the deletion group (AltPositionBase) 3) T in a homopolymer region (considering bisulfite treatment) with deletion at the leftmost position of the homopolymer (LeftAlignBase) or 4) nearest T within 25 bp of deletion (Neighborhood).",
+            "tool_name": "Pseudouridine Deletion Scanner (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# This step describes a custom algorithm for identifying pseudouridine locations\n# based on deletion patterns in sequencing data, likely after bisulfite treatment.\n# No specific tool is named in the description, so the command below is conceptual\n# and represents the execution of a hypothetical script or program implementing\n# the described logic.\n\n# Input: A file containing processed deletion information (e.g., from aligned RNA-seq data).\n# This file would typically contain coordinates, deletion counts, and possibly base identities.\nINPUT_DELETION_DATA=\"processed_deletion_data.tsv\" # Placeholder for input data\nOUTPUT_PSEUDOURIDINE_SITES=\"potential_pseudouridine_sites.bed\" # Placeholder for output\n\n# Reference genome (e.g., for identifying homopolymer regions).\n# Using hg38 as a common human reference genome placeholder.\nREFERENCE_GENOME_FASTA=\"/path/to/human_genome/hg38.fa\"\n\n# Conceptual command to execute the pseudouridine deletion scanning.\n# The parameters are illustrative, reflecting the rules described:\n# 1) T at the position with highest fraction deletion (FirstDelBase)\n# 2) T in the deletion group (AltPositionBase)\n# 3) T in a homopolymer region (considering bisulfite treatment) with deletion at the leftmost position (LeftAlignBase)\n# 4) nearest T within 25 bp of deletion (Neighborhood)\n# The actual implementation would be a custom script or a specialized tool.\n\n# Example installation (conceptual, as no specific tool is named)\n# # conda create -n pseudouridine_env python=3.9\n# # conda activate pseudouridine_env\n# # pip install pandas biopython # if a custom script uses these libraries\n\n# This command represents the execution of the described pseudouridine detection logic.\n# The parameters are inferred from the description's rules.\nrun_pseudouridine_deletion_scanner.sh \\\n  --input_deletions \"$INPUT_DELETION_DATA\" \\\n  --output_sites \"$OUTPUT_PSEUDOURIDINE_SITES\" \\\n  --genome_fasta \"$REFERENCE_GENOME_FASTA\" \\\n  --enable_first_del_base_check \\\n  --enable_alt_position_base_check \\\n  --enable_left_align_base_check \\\n  --neighborhood_distance 25 \\\n  --bisulfite_mode true",
+            "code_language": "bash",
+            "github_url": "https://www.nature.com/articles/nmeth.3338"
+        },
+        {
+            "step_order": 27,
+            "description": "If multiple deletion groups share the same predicted pseudouridine position, only the group with the highest fraction deletion is used.",
+            "tool_name": "Custom Script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# This step filters predicted pseudouridine positions.\n# If multiple deletion groups share the same predicted pseudouridine position,\n# only the group with the highest fraction deletion is retained.\n\n# Input: A tab-separated file containing predicted pseudouridine positions,\n#        including chromosome, position, strand, deletion group identifier,\n#        and fraction deletion. (e.g., predicted_pseudouridines.tsv)\n# Output: A filtered tab-separated file with unique pseudouridine positions\n#         based on the highest fraction deletion. (e.g., filtered_pseudouridines.tsv)\n\n# This command assumes a custom Python script 'filter_pseudouridine_deletions.py'\n# is available in the PATH or current directory. The script is expected to take\n# an input file and an output file as arguments.\n\npython filter_pseudouridine_deletions.py \\\n  --input predicted_pseudouridines.tsv \\\n  --output filtered_pseudouridines.tsv",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 28,
+            "description": "A p-value is calculated for each group using the binomial test comparing observed deletion rate to the expected deletion rate.",
+            "tool_name": "Python (scipy.stats.binomtest) (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "scipy >= 1.7.0",
+            "code_example": "# Install Python and scipy if not already available\n# conda install -c conda-forge python scipy pandas\n\n# Create a dummy input file for demonstration purposes.\n# In a real pipeline, this file would be generated by a previous step\n# and contain columns like 'group_id', 'observed_deletions', 'total_observations', 'expected_rate'.\necho -e \"group_id\\tobserved_deletions\\ttotal_observations\\texpected_rate\" > deletion_data.tsv\necho -e \"GroupA\\t5\\t100\\t0.03\" >> deletion_data.tsv\necho -e \"GroupB\\t12\\t150\\t0.05\" >> deletion_data.tsv\necho -e \"GroupC\\t3\\t80\\t0.02\" >> deletion_data.tsv\n\n# Execute the Python script to calculate p-values using the binomial test\npython -c \"\nimport pandas as pd\nfrom scipy.stats import binomtest\n\ninput_file = 'deletion_data.tsv'\noutput_file = 'deletion_pvalues.tsv'\n\n# Read the input data\ndf = pd.read_csv(input_file, sep='\\t')\n\np_values = []\n# Iterate through each group to calculate the p-value\nfor index, row in df.iterrows():\n    k = row['observed_deletions']\n    n = row['total_observations']\n    p_expected = row['expected_rate']\n\n    # Perform the binomial test. By default, binomtest performs a two-sided test.\n    # For a one-sided test (e.g., observed rate > expected rate), use alternative='greater'.\n    result = binomtest(k, n, p_expected)\n    p_values.append(result.pvalue)\n\n# Add the calculated p-values to the DataFrame and save to an output file\ndf['p_value'] = p_values\ndf.to_csv(output_file, sep='\\t', index=False)\nprint(f'P-values saved to {output_file}')\n\"\n",
+            "code_language": "bash",
+            "github_url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.binomtest.html"
+        },
+        {
+            "step_order": 29,
+            "description": "The expected deletion rate is calculated using an error rate of 0.001.",
+            "tool_name": "Custom Script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# The expected deletion rate is calculated using an error rate of 0.001.\n# This value is typically used as a parameter for downstream analysis or simulation tools.\nERROR_RATE=\"0.001\"\necho \"Using an error rate of: $ERROR_RATE\"\n# The specific calculation or tool that derives the 'expected deletion rate'\n# from this error rate is not specified in the description.\n# This value might be directly used as an input for a model or simulation.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 30,
+            "description": "Deletion groups are flagged as false positives if: 1) NBS deletion p-value < 0.01, 2) deletion occurs within 4bp of an exon boundary 3) within 6bp or longer homopolymer or 4) within 5bp of a natural deletion observed in the NBS sample.",
+            "tool_name": "Custom Script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# Define input and output files (placeholders)\nINPUT_DELETIONS=\"input_deletion_calls.vcf\" # Assuming VCF for variant calls\nOUTPUT_FILTERED_DELETIONS=\"filtered_deletion_calls.vcf\"\nOUTPUT_FALSE_POSITIVES=\"false_positive_deletions.vcf\"\n\n# Define reference datasets (placeholders - use latest assembly as a placeholder if not specified)\n# For human, GRCh38 (hg38) is a commonly used latest assembly.\nGENOME_FASTA=\"path/to/reference/genome/GRCh38.fa\"\nGENE_ANNOTATION_BED=\"path/to/reference/annotations/GRCh38_exons.bed\" # e.g., derived from Ensembl/GENCODE GTF\nNBS_NATURAL_DELETIONS=\"path/to/reference/nbs_natural_deletions.vcf\" # Custom dataset of known natural deletions in NBS samples\n\n# Define filtering parameters based on the description\nP_VALUE_THRESHOLD=0.01\nEXON_BOUNDARY_DISTANCE=4\nHOMOPOLYMER_LENGTH=6\nNATURAL_DELETION_DISTANCE=5\n\n# This step involves custom logic to flag deletion groups as false positives.\n# It would typically be implemented in a custom script (e.g., Python, R, Perl).\n# The script would read deletion calls, evaluate each against the defined criteria,\n# and output filtered calls and flagged false positives.\n\n# Conceptual Python script (filter_deletions.py) execution:\n# This script would:\n# 1. Parse input deletion calls (e.g., VCF records).\n# 2. For each deletion:\n#    a. Check if NBS deletion p-value < P_VALUE_THRESHOLD.\n#    b. Check proximity to exon boundaries using GENE_ANNOTATION_BED.\n#    c. Check if it overlaps with a homopolymer of length >= HOMOPOLYMER_LENGTH using GENOME_FASTA.\n#    d. Check proximity to known natural deletions in NBS_NATURAL_DELETIONS.\n# 3. If any of the conditions (a, b, c, or d) are met, flag as false positive.\n# 4. Write true positives to OUTPUT_FILTERED_DELETIONS and false positives to OUTPUT_FALSE_POSITIVES.\n\n# Example command for executing a hypothetical custom Python script:\npython3 filter_deletions.py \\\n    --input \"$INPUT_DELETIONS\" \\\n    --output \"$OUTPUT_FILTERED_DELETIONS\" \\\n    --false-positives \"$OUTPUT_FALSE_POSITIVES\" \\\n    --p-value-threshold \"$P_VALUE_THRESHOLD\" \\\n    --exon-boundary-distance \"$EXON_BOUNDARY_DISTANCE\" \\\n    --homopolymer-length \"$HOMOPOLYMER_LENGTH\" \\\n    --natural-deletion-distance \"$NATURAL_DELETION_DISTANCE\" \\\n    --genome-fasta \"$GENOME_FASTA\" \\\n    --gene-annotation-bed \"$GENE_ANNOTATION_BED\" \\\n    --nbs-natural-deletions \"$NBS_NATURAL_DELETIONS\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 31,
+            "description": "Deletion groups that pass these criteria are annotated if they are within a gene or repetitive element.",
+            "tool_name": "bedtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.31.0",
+            "code_example": "# Install bedtools if not already installed\n# conda install -c bioconda bedtools\n\n# --- Reference Data Preparation (example for hg38) ---\n# These steps are illustrative for obtaining gene and repetitive element annotations.\n# Replace with actual paths to your reference files.\n\n# Download gene annotations (e.g., RefSeq genes from UCSC Table Browser)\n# wget -O refGene.txt.gz \"http://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/refGene.txt.gz\"\n# gunzip refGene.txt.gz\n# awk 'BEGIN{OFS=\"\\t\"}{print $3, $5, $6, $2}' refGene.txt | sort -k1,1 -k2,2n > hg38.genes.bed\n\n# Download repetitive element annotations (e.g., RepeatMasker from UCSC Table Browser)\n# wget -O rmsk.txt.gz \"http://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/rmsk.txt.gz\"\n# gunzip rmsk.txt.gz\n# awk 'BEGIN{OFS=\"\\t\"}{print $6, $7, $8, $11, $12}' rmsk.txt | sort -k1,1 -k2,2n > hg38.repeats.bed\n\n# Combine gene and repetitive element annotations into a single sorted BED file.\n# This creates a comprehensive annotation file for genomic features.\n# cat hg38.genes.bed hg38.repeats.bed | sort -k1,1 -k2,2n > hg38.gene_repeat_elements.bed\n# --- End Reference Data Preparation ---\n\n# Input file: deletion_groups.bed (assumed to be a BED file with deletion coordinates)\n# Reference annotation file: hg38.gene_repeat_elements.bed (a BED file containing combined gene and repetitive element annotations)\n# Output file: annotated_deletion_groups.bed (input file with an additional column for overlap count)\n\n# Annotate deletion groups by adding a column indicating if they overlap with any gene or repetitive element.\n# The new column will contain the count of overlapping features from hg38.gene_repeat_elements.bed.\n# A count > 0 indicates that the deletion group is \"within\" a gene or repetitive element.\nbedtools map -a deletion_groups.bed -b hg38.gene_repeat_elements.bed -c 1 -o count > annotated_deletion_groups.bed",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        },
+        {
+            "step_order": 32,
+            "description": "Finally, FDR values are calculated using the Benjamini Hochberg procedure.",
+            "tool_name": "R (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "latest stable",
+            "code_example": "# Assume 'p_values.txt' is a tab-separated file with at least a 'p_value' column.\n# For demonstration, we create a dummy file.\n\n# Install R if not already installed\n# conda install -c r r-base\n\n# Create a dummy p_values.txt for demonstration purposes\necho \"gene_id\\tp_value\" > p_values.txt\necho \"geneA\\t0.001\" >> p_values.txt\necho \"geneB\\t0.01\" >> p_values.txt\necho \"geneC\\t0.05\" >> p_values.txt\necho \"geneD\\t0.1\" >> p_values.txt\necho \"geneE\\t0.0005\" >> p_values.txt\n\n# R script to calculate Benjamini-Hochberg False Discovery Rate (FDR)\nRscript -e '\n  # Read the input file containing p-values\n  data <- read.table(\"p_values.txt\", header=TRUE, sep=\"\\t\")\n  \n  # Calculate FDR using Benjamini-Hochberg procedure\n  # The \"BH\" method corresponds to Benjamini-Hochberg\n  data$fdr <- p.adjust(data$p_value, method=\"BH\")\n  \n  # Write the output with original data and new FDR column\n  write.table(data, \"output_fdr.txt\", sep=\"\\t\", quote=FALSE, row.names=FALSE)\n'",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 33,
+            "description": "Positions were further filtered manually by removing sites that were classified as \u00c3\u0092Neighborhood\u00c3\u0093 when predicting the true pseudouridine position or had a high fraction of insertions at deletion site.",
+            "tool_name": "Custom Script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# This step describes manual filtering based on specific criteria.\n# Assuming an input file 'pseudouridine_predictions.tsv' that contains predicted pseudouridine positions\n# with columns including 'classification' and 'insertion_fraction_at_deletion_site'.\n# For this example, let's assume 'classification' is the 5th column and 'insertion_fraction_at_deletion_site' is the 6th column.\n# A 'high' fraction of insertions is arbitrarily defined as > 0.2 for this example.\n\n# Filter out sites classified as 'Neighborhood' OR sites with an insertion fraction > 0.2.\n# This awk command keeps only sites where the classification is NOT 'Neighborhood' AND the insertion fraction is <= 0.2.\nawk -F'\\t' '($5 != \"Neighborhood\" && $6 <= 0.2)' pseudouridine_predictions.tsv > filtered_pseudouridine_positions.tsv",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 34,
+            "description": "Reads were aligned and processed using the pipeline outlined above, except the Novoalign bisuflite alignment mode was set to 2 and different adapters were used (AGATCGGAAGAGCACACGTCTGAACTCCAGTCA AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT).",
+            "tool_name": "Novoalign",
+            "tool_version": "4.04.00 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Novoalign is commercial software. Installation typically involves downloading and licensing from Novocraft.\n# Example:\n# wget http://www.novocraft.com/downloads/novoalign/novoalignV4.04.00.zip\n# unzip novoalignV4.04.00.zip\n# cd novoalignV4.04.00\n# export PATH=$PWD:$PATH\n\n# Reference genome (e.g., hg38) and index preparation\n# Download hg38 reference genome:\n# wget http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz\n# gunzip hg38.fa.gz\n# Build Novoalign index (this can take a long time and requires significant memory):\n# novoindex -k 14 -s 2 hg38.nix hg38.fa\n\n# Placeholder for input FASTQ files\nREAD1=\"input_R1.fastq.gz\"\nREAD2=\"input_R2.fastq.gz\"\nOUTPUT_BAM=\"output.bam\"\nREFERENCE_INDEX=\"hg38.nix\" # Path to your Novoalign index file\n\n# Adapters specified in the description\nADAPTER1=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\"\nADAPTER2=\"AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT\"\n\n# Number of threads to use\nTHREADS=8\n\nnovoalign -d \"${REFERENCE_INDEX}\" \\\n          -f \"${READ1}\" \"${READ2}\" \\\n          -o BAM \\\n          -b 2 \\\n          -a \"${ADAPTER1}\" \"${ADAPTER2}\" \\\n          -S 1 \\\n          -r All \\\n          -k \\\n          -t \"${THREADS}\" \\\n          -Q 30 \\\n          -R '@RG\\tID:sample\\tSM:sample\\tLB:library\\tPL:ILLUMINA' \\\n          > \"${OUTPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": "http://www.novocraft.com/products/novoalign/"
+        },
+        {
+            "step_order": 35,
+            "description": "Validation calls were intersected with the RBS-Seq calls using the predicted pseudouridine position.",
+            "tool_name": "bedtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.30.0",
+            "code_example": "# Install bedtools if not already installed\n# conda install -c bioconda bedtools\n\n# Assuming 'validation_calls.bed' and 'rbs_seq_calls.bed' are the input files\n# and contain predicted pseudouridine positions as genomic intervals.\n# The output will contain the overlapping regions from validation_calls.bed that intersect with rbs_seq_calls.bed.\nbedtools intersect -a validation_calls.bed -b rbs_seq_calls.bed > intersected_pseudouridine_positions.bed",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        }
+    ],
+    "raw_text": "Reference genome: Novoindex (2.8) (http://www.novocraft.com) was used to create a standard and bisulfite reference index on a combination of hg19 chromosome, scaffold and splice junction sequences.  Splice junction sequences were generated with USeq (v8.8.8) 1 MakeTranscriptome using Ensembl transcript annotations (build 74).\nAlignment parameters: BS and NBS samples were aligned to the transcriptome indexes described above using Novoalign (v2.08.01) (http://www.novocraft.com) allowing up to 50 alignments and trimming adaptor sequences (TGGAATTCTCGGGTGCCAAGGAACTCCAGTCAC GATCGTCGGACTGTAGAACTCTGAAC).\nAlignment processing : The alignment files were processed with USeq SamTranscriptomeParser, which reports the best alignment location for each read in bam format and converts the coordinates of splice junction alignments to genomic space. One alignment location is selected at random if a read aligned to multiple locations in the genome with equal confidence.\nAlignments were reordered using Picard (v1.87) (http://picard.sourceforge.net) ReorderBam  and all alignments were set as primary using the set_sam_primary.py (https://github.com/HuntsmanCancerInstitute/RBSSeqTools). The alignments were then processed with GATK (v3.4-0) 2 SplitNCigarReads, which splits spliced alignments into multiple alignment segments without N cigar elements.  Reads containing deletions four base pairs or longer were removed using remove_deletions.py (https://github.com/HuntsmanCancerInstitute/RBSSeqTools).\nm5C analysis pipeline: BS and NBS sample reads were aligned and processed as outlined above. Alignments were further processed using CreateMethTable (https://github.com/HuntsmanCancerInstitute/RBSSeqTools), which iterates over the alignment file and reports forward alignment base counts at all reference \u00c3\u0092C\u00c3\u0093 positions and in reverse alignment base counts at all reference \u00c3\u0092G\u00c3\u0093 positions. A Fisher's exact test p-value was calculated for each position by comparing the observed count of unconverted and converted bases to the expected count, which was calculated assuming an error rate of 0.001. The table was filtered to create a final list of candidates by selecting only those sites which had a read depth \u00c2\u00b310 in both BS and NBS datasets, a non-conversion rate of \u00c2\u00b320% in the BS dataset and a Fisher exact p-value \u00c2\u00b20.05. These sites were further screened manually for evidence of mis-mapping due to loss of complexity, or nonconversion arising from nondenatured secondary structure.\nm1A analysis pipeline: BS and NBS sample reads were aligned and processed as listed above. CreateMethTable was used to report forward alignment base counts at all reference \u00c3\u0092A\u00c3\u0093 positions with at least 100x coverage and in reverse alignment base counts at all reference \u00c3\u0092T\u00c3\u0093 positions with at least 100x coverage.  A one-tailed Fisher's exact test, corrected for multiple comparisons using the Benjamini-Hochberg (BH) procedure, was used to test if the mismatch rate in the NBS sample was greater than the BS sample.  One-tailed binomial tests, corrected using BH, were used to test if the number of C, G or T bases were greater than expected given error rate (0.001).  Positions where 1) the mismatch rate of the NBS sample was significantly higher than the BS sample, 2) two of C, G or T were significantly higher than the error rate and 3) the FDR or C was not lower than both G and T were reported as m1A sites.\nPseudouridine analysis pipeline:  BS and NBS samples were aligned to the transcriptome indexes described above. Pseudouridine positions were called using ScorePsuedouridinePositions (https://github.com/HuntsmanCancerInstitute/RBSSeqTools).  This application iterates over a bam file, tracking the number of deletions and overall coverage at each genomic position.  Positions are skipped if 1) BS sample < 5 deletions, 2) BS sample fraction deletion < 0.01, 3) BS sample coverage < 10 reads, 4) NBS sample fraction deletion > 0.01 or NBS sample coverage < 10 reads. Adjacent positions are merged into a single deletion group on the initial analysis pass.  Deletion groups are pruned by removing positions with fraction deletions less than half the maximum observed faction deletion in the group. If pruning results in non-continuous regions, both are used in the remaining analysis.  Deletion groups are then scanned for potential pseudouridine locations using the following steps: 1) T at the position with highest fraction deletion (FirstDelBase) 2) T in the deletion group (AltPositionBase) 3) T in a homopolymer region (considering bisulfite treatment) with deletion at the leftmost position of the homopolymer (LeftAlignBase) or 4) nearest T within 25 bp of deletion (Neighborhood).  If multiple deletion groups share the same predicted pseudouridine position, only the group with the highest fraction deletion is used. A p-value is calculated for each group using the binomial test comparing observed deletion rate to the expected deletion rate.  The expected deletion rate is calculated using an error rate of 0.001. Deletion groups are flagged as false positives if: 1) NBS deletion p-value < 0.01, 2) deletion occurs within 4bp of an exon boundary 3) within 6bp or longer homopolymer or 4) within 5bp of a natural deletion observed in the NBS sample.  Deletion groups that pass these criteria are annotated if they are within a gene or repetitive element.  Finally, FDR values are calculated using the Benjamini Hochberg procedure. Positions were further filtered manually by removing sites that were classified as \u00c3\u0092Neighborhood\u00c3\u0093 when predicting the true pseudouridine position or had a high fraction of insertions at deletion site.\nReads were aligned and processed using the pipeline outlined above, except the Novoalign bisuflite alignment mode was set to 2 and different adapters were used (AGATCGGAAGAGCACACGTCTGAACTCCAGTCA AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT). Validation calls were intersected with the RBS-Seq calls using the predicted pseudouridine position.\nGenome_build: hg19\nSupplementary_files_format_and_content: Excel files contaning m1A, m5C and pseudouridine candidtate sites.  Column descriptions can be found on the first tab of the spreadsheet",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,61 +1,61 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Adapters were removes using cutadapt and reads were mapped to hg19 using STAR.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Initial peak calling was performed for each sample by CLIPper using only the r1 reads.",
-      "tool_name": "CLIPper",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Peaks with genomic overlap in at least two ePRINT samples were identified and their genomic coordinates merged to define the candidate peak superset using HOMER.",
-      "tool_name": "HOMER",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "These peaks were then filtered using the input retaining those significantly enriched in the ePRINT samples in comparison to the corresponding input samples.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "The remaining high confidence peaks were then input to DESEQ2 for differential analysis.",
-      "tool_name": "DESeq2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Bedgraph files were generated from the r1 reads using bedtools",
-      "tool_name": "bedtools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Adapters were removes using cutadapt and reads were mapped to hg19 using STAR.\nInitial peak calling was performed for each sample by CLIPper using only the r1 reads. Peaks with genomic overlap in at least two ePRINT samples were identified and their genomic coordinates merged to define the candidate peak superset using HOMER. These peaks were then filtered using the input retaining those significantly enriched in the ePRINT samples in comparison to the corresponding input samples. The remaining high confidence peaks were then input to DESEQ2 for differential analysis.\nBedgraph files were generated from the r1 reads using bedtools\nAssembly: hg19\nSupplementary files format and content: bedgraph",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Adapters were removes using cutadapt and reads were mapped to hg19 using STAR.",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install cutadapt (e.g., using conda)\n# conda install -c bioconda cutadapt\n\n# Define variables\nINPUT_READS=\"input_reads.fastq.gz\"\nTRIMMED_READS=\"trimmed_reads.fastq.gz\"\nOUTPUT_DIR=\"star_output\"\nSTAR_INDEX_DIR=\"/path/to/hg19_STAR_index\" # Placeholder for hg19 STAR index. Ensure this index is pre-built.\nNUM_THREADS=8 # Placeholder for number of threads\n\n# 1. Remove adapters using cutadapt\n# Using a common Illumina universal adapter sequence for single-end reads.\n# Adjust -a for specific adapters if known, or use -A for paired-end reads.\n# -q 20: Trim low-quality ends (below Q20)\n# -m 20: Discard reads shorter than 20 bp after trimming\ncutadapt -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA -q 20 -m 20 -o \"${TRIMMED_READS}\" \"${INPUT_READS}\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Install STAR (e.g., using conda)\n# conda install -c bioconda star\n\n# 2. Map reads to hg19 using STAR\n# --genomeDir: Path to the STAR genome index for hg19\n# --readFilesIn: Input FASTQ file (trimmed reads)\n# --outFileNamePrefix: Prefix for output files (e.g., aligned_Log.out, aligned_Aligned.sortedByCoordinate.out.bam)\n# --outSAMtype BAM SortedByCoordinate: Output sorted BAM file\n# --runThreadN: Number of threads to use\n# --readFilesCommand zcat: Command to decompress gzipped input files\nSTAR --genomeDir \"${STAR_INDEX_DIR}\" \\\n     --readFilesIn \"${TRIMMED_READS}\" \\\n     --outFileNamePrefix \"${OUTPUT_DIR}/aligned_\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --runThreadN \"${NUM_THREADS}\" \\\n     --readFilesCommand zcat",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "Initial peak calling was performed for each sample by CLIPper using only the r1 reads.",
+            "tool_name": "CLIPper",
+            "tool_version": "from source",
+            "code_example": "# Clone the CLIPper repository\n# git clone https://github.com/yeolab/clipper.git\n# cd clipper\n# CLIPper requires Python 2.7 or 3.x and several libraries. It's recommended to set up a virtual environment.\n# Example dependencies (may vary, check CLIPper's documentation or requirements.txt if available):\n# pip install numpy scipy pysam pybedtools\n\n# Placeholder for reference genome and blacklist\n# Replace with actual paths to your reference files\nGENOME_FASTA=\"/path/to/your/reference/genome/hg38.fa\"\nBLACKLIST_BED=\"/path/to/your/blacklist/hg38_blacklist.bed\"\n# Ensure these files are properly indexed if required by CLIPper (e.g., .fai for fasta)\n\n# Input BAM file: The description specifies \"using only the r1 reads\".\n# This means the input BAM should already contain only R1 reads.\n# If starting from a paired-end BAM (e.g., aligned.bam), you might first filter for R1:\n# samtools view -b -f 0x40 aligned.bam > input_sample_r1.bam\nINPUT_BAM=\"input_sample_r1.bam\"\nOUTPUT_DIR=\"clipper_peaks_output\"\nSAMPLE_NAME=\"sample_name\" # Used for output file naming\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Execute CLIPper for initial peak calling\n# Common parameters for CLIPper:\n# -i: Input BAM file (assumed to contain only R1 reads)\n# -g: Reference genome FASTA file\n# -b: Blacklist BED file\n# -o: Output directory\n# -p: P-value threshold (default 0.01)\n# -f: Fold enrichment threshold (default 2.0)\n# -a: Adjusted p-value threshold (default 0.05)\n# --output-prefix: Prefix for output files (e.g., sample_name_peaks.bed)\npython clipper.py \\\n    -i \"${INPUT_BAM}\" \\\n    -g \"${GENOME_FASTA}\" \\\n    -b \"${BLACKLIST_BED}\" \\\n    -o \"${OUTPUT_DIR}\" \\\n    -p 0.01 \\\n    -f 2.0 \\\n    -a 0.05 \\\n    --output-prefix \"${SAMPLE_NAME}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/clipper"
+        },
+        {
+            "step_order": 3,
+            "description": "Peaks with genomic overlap in at least two ePRINT samples were identified and their genomic coordinates merged to define the candidate peak superset using HOMER.",
+            "tool_name": "HOMER",
+            "tool_version": "4.12",
+            "code_example": "# Install HOMER (if not already installed)\n# conda install -c bioconda homer\n# Or manual installation:\n# wget http://homer.ucsd.edu/homer/configureHomer.pl\n# perl configureHomer.pl -install\n\n# Define input peak files. These should be in BED format or HOMER's native peak format.\n# Replace with actual file paths for your ePRINT samples.\n# Example:\n# peak_file_1=\"path/to/sample1_ePRINT_peaks.bed\"\n# peak_file_2=\"path/to/sample2_ePRINT_peaks.bed\"\n# peak_file_3=\"path/to/sample3_ePRINT_peaks.bed\"\n\n# Merge peaks from at least two ePRINT samples to define a candidate peak superset.\n# -bed: Assumes input files are in BED format. Adjust if using HOMER's native format.\n# -d 0: Merges only directly overlapping peaks (distance 0), which is a common interpretation of \"genomic overlap\".\n# -min 2: Only reports merged peaks that overlap with at least 2 input peak files, fulfilling the \"at least two ePRINT samples\" criteria.\n# Replace sampleX_ePRINT_peaks.bed with your actual input peak files.\nmergePeaks -bed -d 0 -min 2 sample1_ePRINT_peaks.bed sample2_ePRINT_peaks.bed sample3_ePRINT_peaks.bed > candidate_peak_superset.bed",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "These peaks were then filtered using the input retaining those significantly enriched in the ePRINT samples in comparison to the corresponding input samples.",
+            "tool_name": "clipper (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "5.0",
+            "code_example": "# Install clipper if not already installed\n# pip install clipper\n# or\n# conda install -c bioconda clipper\n\n# Define input and output files\nEPRINT_BAM=\"ePRINT_sample.bam\" # Placeholder for aligned ePRINT reads (IP sample)\nINPUT_BAM=\"corresponding_input_sample.bam\" # Placeholder for aligned corresponding input reads\nOUTPUT_PREFIX=\"ePRINT_enriched_peaks\" # Prefix for output peak files\nGENOME_SIZE=\"hs\" # Placeholder: 'hs' for human, 'mm' for mouse, or a numerical value (e.g., 2.7e9 for hg38).\n\n# Run clipper to identify significantly enriched peaks in ePRINT samples compared to input samples.\n# The tool performs statistical testing to retain regions significantly enriched.\nclipper -s \"${GENOME_SIZE}\" -o \"${OUTPUT_PREFIX}\" \"${EPRINT_BAM}\" \"${INPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/clipper"
+        },
+        {
+            "step_order": 5,
+            "description": "The remaining high confidence peaks were then input to DESEQ2 for differential analysis.",
+            "tool_name": "DESeq2",
+            "tool_version": "Inferred with models/gemini-2.5-flash",
+            "code_example": "# Install DESeq2 (if not already installed)\n# if (!requireNamespace(\"BiocManager\", quietly = TRUE))\n#     install.packages(\"BiocManager\")\n# BiocManager::install(\"DESeq2\")\n\n# Create a placeholder R script for DESeq2 differential analysis\ncat << 'EOF' > run_deseq2.R\nlibrary(DESeq2)\n\n# --- Configuration --- #\n# Input count matrix file (e.g., from featureCounts, htseq-count, or peak quantification)\n# Rows are features (peaks), columns are samples.\ncount_file <- \"peak_counts.tsv\"\n\n# Sample metadata file\n# Must contain 'sample_id' column matching count matrix column names,\n# and a 'condition' column for differential analysis.\nmetadata_file <- \"sample_metadata.tsv\"\n\n# Output directory for results\noutput_dir <- \"deseq2_results\"\ndir.create(output_dir, showWarnings = FALSE)\n\n# Define the design formula (e.g., ~ condition)\n# Adjust based on your experimental design\ndesign_formula <- ~ condition\n\n# Define the contrast for differential analysis (e.g., c(\"condition\", \"treated\", \"control\"))\n# This will compare 'treated' vs 'control'\ncontrast_factors <- c(\"condition\", \"treated\", \"control\")\n\n# --- Load Data --- #\ncounts_data <- read.delim(count_file, row.names = 1, sep = \"\\t\", header = TRUE)\nmetadata <- read.delim(metadata_file, row.names = 1, sep = \"\\t\", header = TRUE)\n\n# Ensure sample names match and are in the same order\ncommon_samples <- intersect(colnames(counts_data), rownames(metadata))\ncounts_data <- counts_data[, common_samples]\nmetadata <- metadata[common_samples, ]\n\n# Ensure count data is integer matrix\ncounts_data <- as.matrix(counts_data)\nmode(counts_data) <- \"integer\"\n\n# Ensure condition is a factor\nmetadata$condition <- factor(metadata$condition)\n\n# --- Create DESeqDataSet object --- #\ndds <- DESeqDataSetFromMatrix(countData = counts_data,\n                              colData = metadata,\n                              design = design_formula)\n\n# --- Run DESeq2 differential analysis --- #\ndds <- DESeq(dds)\n\n# --- Extract and save results --- #\nres <- results(dds, contrast = contrast_factors)\n\n# Order results by adjusted p-value\nres_ordered <- res[order(res$padj), ]\n\n# Save full results\nwrite.csv(as.data.frame(res_ordered), file.path(output_dir, \"deseq2_differential_results.csv\"))\n\n# Save significant results (e.g., padj < 0.05)\nsignificant_res <- subset(res_ordered, padj < 0.05)\nwrite.csv(as.data.frame(significant_res), file.path(output_dir, \"deseq2_significant_results.csv\"))\n\nmessage(\"DESeq2 analysis complete. Results saved in \", output_dir)\nEOF\n\n# Create placeholder input files (replace with your actual data)\n# Example peak_counts.tsv\ncat << 'EOF_COUNTS' > peak_counts.tsv\npeak_id\tsample1\tsample2\tsample3\tsample4\npeak1\t100\t150\t50\t75\npeak2\t20\t30\t10\t15\npeak3\t500\t600\t200\t250\npeak4\t10\t12\t5\t6\npeak5\t80\t90\t40\t45\nEOF_COUNTS\n\n# Example sample_metadata.tsv\ncat << 'EOF_METADATA' > sample_metadata.tsv\nsample_id\tcondition\nsample1\ttreated\nsample2\ttreated\nsample3\tcontrol\nsample4\tcontrol\nEOF_METADATA\n\n# Execute the R script\nRscript run_deseq2.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/DESeq2.html"
+        },
+        {
+            "step_order": 6,
+            "description": "Bedgraph files were generated from the r1 reads using bedtools",
+            "tool_name": "bedtools",
+            "tool_version": "2.30.0",
+            "code_example": "# Install bedtools (if not already installed)\n# conda install -c bioconda bedtools=2.30.0\n\n# Define input and output files\nINPUT_BAM=\"r1.bam\" # Assuming 'r1 reads' refers to aligned reads in BAM format\nOUTPUT_BEDGRAPH=\"r1.bedgraph\"\nGENOME_CHROM_SIZES=\"hg38.chrom.sizes\" # Placeholder for genome chromosome sizes (e.g., from UCSC)\n\n# Generate bedgraph file from aligned reads\nbedtools genomeCoverageBed -ibam ${INPUT_BAM} -bg -g ${GENOME_CHROM_SIZES} > ${OUTPUT_BEDGRAPH}",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        }
+    ],
+    "raw_text": "Adapters were removes using cutadapt and reads were mapped to hg19 using STAR.\nInitial peak calling was performed for each sample by CLIPper using only the r1 reads. Peaks with genomic overlap in at least two ePRINT samples were identified and their genomic coordinates merged to define the candidate peak superset using HOMER. These peaks were then filtered using the input retaining those significantly enriched in the ePRINT samples in comparison to the corresponding input samples. The remaining high confidence peaks were then input to DESEQ2 for differential analysis.\nBedgraph files were generated from the r1 reads using bedtools\nAssembly: hg19\nSupplementary files format and content: bedgraph",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

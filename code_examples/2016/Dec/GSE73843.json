@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize.",
-      "tool_name": "Microarray",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Iter-plier algorithm used to quantify probesets.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "As previously described (Huelga et al., 2012).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "HJAY_r2.pgf",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize. Iter-plier algorithm used to quantify probesets. As previously described (Huelga et al., 2012).\nHJAY_r2.pgf",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize.",
+            "tool_name": "Microarray",
+            "tool_version": "Not specified",
+            "code_example": "# Install Affy Power Tools (APT) if not already installed\n# conda install -c bioconda affy-power-tools\n\n# Example usage of apt-probeset-summarize\n# This command processes CEL files using a specified algorithm (e.g., RMA, MAS5)\n# and a CDF file specific to the array type, outputting a summarized probeset file.\n\n# Create a dummy list of CEL files for demonstration\n# echo \"sample1.CEL\" > input_cel_files.txt\n# echo \"sample2.CEL\" >> input_cel_files.txt\n\n# Placeholder for the CDF file specific to your Affymetrix array\n# Replace 'your_array_type.cdf' with the actual CDF file path\n# For example, for Human Gene 1.0 ST arrays, it might be HuGene-1_0-st-v1.cdf\n\n# Make sure the output directory exists\nmkdir -p output_dir\n\napt-probeset-summarize \\\n    --cel-files input_cel_files.txt \\\n    --cdf-file your_array_type.cdf \\\n    --output-file output_dir/probeset_summary.tsv \\\n    --probe-set-alg rma \\\n    --log-file output_dir/apt_log.txt",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Iter-plier algorithm used to quantify probesets.",
+            "tool_name": "affy (R package)",
+            "tool_version": "1.78.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install R and Bioconductor if not already installed\n# For Bioconductor (current release, e.g., 3.19 for R 4.3)\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\")'\n# R -e 'BiocManager::install(\"affy\")'\n\n# Example R script to quantify probesets using the PLIER algorithm via the 'affy' package\n# Assuming input CEL files are in a directory named 'cel_files'\n# and output will be written to 'quantified_probesets.tsv'\n\n# Create an R script file\ncat << 'EOF' > run_plier_quantification.R\nlibrary(affy)\n\n# --- Configuration ---\ncel_dir <- \"cel_files\" # Directory containing your CEL files\noutput_file <- \"quantified_probesets.tsv\" # Desired output file name\n\n# --- Input Validation ---\nif (!dir.exists(cel_dir)) {\n  stop(paste(\"Error: CEL file directory not found:\", cel_dir))\n}\ncel_files <- list.files(path = cel_dir, pattern = \"\\\\.CEL$\", full.names = TRUE, ignore.case = TRUE)\nif (length(cel_files) == 0) {\n  stop(paste(\"Error: No CEL files found in\", cel_dir, \". Please ensure files end with .CEL (case-insensitive).\"))\n}\n\ncat(\"Found\", length(cel_files), \"CEL files.\\n\")\n\n# --- Read CEL files into an AffyBatch object ---\n# This step might require a specific CDF environment for certain array types.\n# For common arrays, ReadAffy can often infer.\n# If you encounter errors related to CDF, you might need to install a specific\n# Bioconductor annotation package (e.g., 'hgu133plus2.db') and specify it.\n# Example: raw_data <- ReadAffy(filenames = cel_files, cdfname = \"hgu133plus2\")\n# For this example, we assume ReadAffy can proceed without explicit CDF specification.\ntryCatch({\n  raw_data <- ReadAffy(filenames = cel_files)\n}, error = function(e) {\n  stop(paste(\"Error reading CEL files into AffyBatch:\", e$message,\n             \"\\nConsider checking your CEL files or specifying a CDF environment.\"))\n})\n\ncat(\"Successfully loaded raw Affymetrix data.\\n\")\n\n# --- Quantify probesets using the PLIER algorithm (just.plier function) ---\n# The 'just.plier' function from the 'affy' package implements the PLIER algorithm.\n# It performs background correction, normalization, and summarization.\ncat(\"Performing probeset quantification using the PLIER algorithm...\\n\")\neset_plier <- just.plier(raw_data)\n\n# --- Extract expression matrix ---\nexpression_matrix <- exprs(eset_plier)\n\n# --- Write results to a TSV file ---\ncat(\"Writing quantified probesets to:\", output_file, \"\\n\")\nwrite.table(expression_matrix, file = output_file, sep = \"\\t\", quote = FALSE, row.names = TRUE)\n\ncat(\"Probeset quantification using PLIER completed successfully.\\n\")\nEOF\n\n# Execute the R script\nRscript run_plier_quantification.R\n\n# Clean up the R script (optional)\n# rm run_plier_quantification.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/affy.html"
+        },
+        {
+            "step_order": 3,
+            "description": "As previously described (Huelga et al., 2012).",
+            "tool_name": "(Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# The specific tool, version, and command cannot be inferred from the generic description 'As previously described (Huelga et al., 2012)' without further context about the assay or step type.",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1016/j.cell.2012.10.004"
+        },
+        {
+            "step_order": 4,
+            "description": "HJAY_r2.pgf",
+            "tool_name": "HJAY_r2.pgf (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "r2",
+            "code_example": "bash\n# This command is a generic placeholder as the step description \"HJAY_r2.pgf\"\n# does not provide sufficient information to infer specific parameters or\n# the exact nature of the script. The file extension '.pgf' typically refers\n# to Portable Graphics Format, suggesting this might be a plotting script or\n# an internal identifier rather than a standard bioinformatics tool.\n# Replace 'input_data.txt' and 'output_result.txt' with actual file names.\n./HJAY_r2.pgf --input input_data.txt --output output_result.txt\n",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize. Iter-plier algorithm used to quantify probesets. As previously described (Huelga et al., 2012).\nHJAY_r2.pgf",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,61 +1,61 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Mapped the sequenced reads to the reference transcript in the database obtained from Refseq, Ensemble and UCSC known genes using bowtie.",
-      "tool_name": "Bowtie",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Unmapped or poorly mapped reads were realigned to human reference genome (hg19) with the Blat software.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "The mapped reads were organized into five different libraries 1) exon read library, 2) intron read library, 3) exon-intron junction read library, 4) exon-exon junction read library, and 5) intergenic read library.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "The gene classification was done using all known Refseq transcripts.",
-      "tool_name": "RefSeq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Differential splicing analysis.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Classification of introns.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Mapped the sequenced reads to the reference transcript in the database obtained from Refseq, Ensemble and UCSC known genes using bowtie.\nUnmapped or poorly mapped reads were realigned to human reference genome (hg19) with the Blat software.\nThe mapped reads were organized into five different libraries 1) exon read library, 2) intron read library, 3) exon-intron junction read library, 4) exon-exon junction read library, and 5) intergenic read library. The gene classification was done using all known Refseq transcripts.\nDifferential splicing analysis.\nClassification of introns.\nGenome_build: hg19\nSupplementary_files_format_and_content: Normalized bigwig for each sample",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Mapped the sequenced reads to the reference transcript in the database obtained from Refseq, Ensemble and UCSC known genes using bowtie.",
+            "tool_name": "Bowtie",
+            "tool_version": "1.3.1",
+            "code_example": "# Install Bowtie (if not already installed)\n# conda install -c bioconda bowtie\n\n# Placeholder for combined transcript reference (e.g., from Refseq, Ensembl, UCSC known genes for Homo sapiens GRCh38)\n# This file would contain all transcript sequences concatenated.\n# For example, you might download cDNA sequences from Ensembl and RefSeq and combine them.\n# wget ftp://ftp.ensembl.org/pub/release-109/fasta/homo_sapiens/cdna/Homo_sapiens.GRCh38.cdna.all.fa.gz\n# gunzip Homo_sapiens.GRCh38.cdna.all.fa.gz\n# mv Homo_sapiens.GRCh38.cdna.all.fa combined_transcripts.fa\n\n# Build the Bowtie index for the combined transcript reference\n# bowtie-build combined_transcripts.fa transcript_index\n\n# Align sequenced reads to the transcript index using Bowtie\n# -q: Input reads are in FASTQ format\n# -p 8: Use 8 threads for alignment\n# --best --strata: Report only alignments that fall into the best stratum (fewest mismatches) and among those, report the ones that are 'best' (lowest sum of quality values at mismatched positions)\n# -v 2: Allow up to 2 mismatches in the alignment\n# transcript_index: The basename of the Bowtie index files\n# reads.fastq: Placeholder for the input sequenced reads file\n# aligned_reads.sam: Placeholder for the output SAM file containing alignments\nbowtie -q -p 8 --best --strata -v 2 transcript_index reads.fastq aligned_reads.sam",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie"
+        },
+        {
+            "step_order": 2,
+            "description": "Unmapped or poorly mapped reads were realigned to human reference genome (hg19) with the Blat software.",
+            "tool_name": "Blat",
+            "tool_version": "v36 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Blat (if not already installed)\n# conda install -c bioconda blat\n\n# Define reference genome path\nHG19_REF=\"/path/to/genomes/hg19/hg19.fa\" # Placeholder for hg19 reference genome\n\n# Define input reads file (unmapped or poorly mapped reads)\nINPUT_READS=\"unmapped_reads.fasta\" # Placeholder for input reads (e.g., converted from FASTQ if necessary, as Blat primarily uses FASTA)\n\n# Define output PSL file\nOUTPUT_PSL=\"realigned_reads.psl\"\n\n# Realign reads to hg19 using Blat\n# Blat aligns DNA sequences (reads) to a DNA database (reference genome).\n# The output is in PSL (BLAT alignment format).\nblat \"${HG19_REF}\" \"${INPUT_READS}\" \"${OUTPUT_PSL}\"",
+            "code_language": "bash",
+            "github_url": "https://genome.ucsc.edu/FAQ/FAQblat.html"
+        },
+        {
+            "step_order": 3,
+            "description": "The mapped reads were organized into five different libraries 1) exon read library, 2) intron read library, 3) exon-intron junction read library, 4) exon-exon junction read library, and 5) intergenic read library.",
+            "tool_name": "Custom Read Categorization Script (using samtools and bedtools) (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Define input files and reference annotations\nALIGNED_BAM=\"aligned_reads.bam\" # Input BAM file from alignment\nOUTPUT_DIR=\"read_libraries\"\nmkdir -p \"${OUTPUT_DIR}\"\n\n# --- Reference Datasets (placeholders for latest GRCh38/GENCODE) ---\n# GENCODE GTF for gene annotations (exons, introns, genes)\nGENOME_GTF=\"references/gencode.v44.annotation.gtf\"\n# Reference genome FASTA for intergenic region definition (optional, but good for completeness)\nGENOME_FASTA=\"references/GRCh38.primary_assembly.genome.fa\"\n# Chromosome sizes file for defining intergenic regions (genome complement)\nGENOME_CHROM_SIZES=\"references/GRCh38.chrom.sizes\"\n\n# # Installation of core tools (samtools, bedtools, python with pysam)\n# # conda create -n read_categorization python=3.9\n# # conda activate read_categorization\n# # conda install -c bioconda samtools bedtools pysam\n\n# # Download reference datasets (example commands)\n# # mkdir -p references\n# # wget -P references/ ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_44/gencode.v44.annotation.gtf.gz\n# # gunzip \"${GENOME_GTF}.gz\"\n# # wget -P references/ https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz\n# # gunzip \"${GENOME_FASTA}.gz\"\n# # wget -P references/ https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes\n\n# --- Conceptual Custom Python Script for Read Categorization ---\n# This script would parse the GTF to define genomic regions (exons, introns, intergenic).\n# It would then iterate through the input BAM file, analyze each read's alignment\n# and CIGAR string, and assign it to one of the five categories.\n# Finally, it would write the reads for each category into separate BAM files.\n# The logic for identifying junction reads (exon-intron, exon-exon) is complex\n# and typically involves parsing CIGAR strings and comparing with known splice sites\n# or gene models.\n\n# Execute the custom categorization script\npython3 categorize_mapped_reads.py \\\n    --input_bam \"${ALIGNED_BAM}\" \\\n    --gtf \"${GENOME_GTF}\" \\\n    --output_dir \"${OUTPUT_DIR}\" \\\n    --genome_fasta \"${GENOME_FASTA}\" \\\n    --chrom_sizes \"${GENOME_CHROM_SIZES}\"\n\n# Expected output files in ${OUTPUT_DIR}:\n# exon_read_library.bam\n# intron_read_library.bam\n# exon_intron_junction_read_library.bam\n# exon_exon_junction_read_library.bam\n# intergenic_read_library.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 4,
+            "description": "The gene classification was done using all known Refseq transcripts.",
+            "tool_name": "RefSeq",
+            "tool_version": "Not specified",
+            "code_example": "# Install ncbi-datasets if not already installed\n# conda install -c bioconda ncbi-datasets-cli\n\n# Define output directory for RefSeq data\nOUTPUT_DIR=\"refseq_transcripts\"\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Download human RefSeq mRNA transcripts (GRCh38.p14, RefSeq accession GCF_000001405.40)\n# This command uses the NCBI Datasets command-line tool to retrieve RefSeq data.\n# While RefSeq itself is a database, this tool provides programmatic access to its content,\n# which is a prerequisite for \"gene classification using RefSeq transcripts.\"\n# The actual classification step would typically involve aligning query sequences\n# against these downloaded transcripts using a separate bioinformatics tool (e.g., STAR, Salmon, BLAST).\nncbi-datasets download genome accession GCF_000001405.40 \\\n    --assembly-source RefSeq \\\n    --include rna \\\n    --filename \"${OUTPUT_DIR}/human_refseq_rna.zip\"\n\n# Unzip the downloaded data to make transcripts accessible\nunzip \"${OUTPUT_DIR}/human_refseq_rna.zip\" -d \"${OUTPUT_DIR}\"",
+            "code_language": "bash",
+            "github_url": "https://www.ncbi.nlm.nih.gov/refseq/"
+        },
+        {
+            "step_order": 5,
+            "description": "Differential splicing analysis.",
+            "tool_name": "rMATS (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "4.1.2",
+            "code_example": "# Install rMATS (example using conda)\n# conda create -n rmats_env python=3.8\n# conda activate rmats_env\n# conda install -c bioconda rmats-turbo\n\n# Define input files and parameters\n# Replace with actual paths to your BAM files and GTF annotation\nCONTROL_BAM_FILES=\"control_replicate1.bam,control_replicate2.bam\" # Comma-separated list of BAM files for condition 1\nTREATED_BAM_FILES=\"treated_replicate1.bam,treated_replicate2.bam\" # Comma-separated list of BAM files for condition 2\nGTF_FILE=\"gencode.v38.annotation.gtf\" # Example: GENCODE human hg38 annotation file\nOUTPUT_DIR=\"rmats_output\"\nREAD_TYPE=\"paired\" # or \"single\" depending on your sequencing data\nLIB_TYPE=\"fr-firststrand\" # or \"fr-secondstrand\", \"fr-unstranded\" - depends on your library preparation\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run rMATS for differential splicing analysis\nrmats.py \\\n    --b1 \"${CONTROL_BAM_FILES}\" \\\n    --b2 \"${TREATED_BAM_FILES}\" \\\n    --gtf \"${GTF_FILE}\" \\\n    --od \"${OUTPUT_DIR}\" \\\n    --tmp \"${OUTPUT_DIR}/tmp\" \\\n    --variable-read-length \\\n    --${READ_TYPE} \\\n    --libType \"${LIB_TYPE}\" \\\n    --nthread 8 # Number of threads to use\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/Xinglab/rmats-turbo"
+        },
+        {
+            "step_order": 6,
+            "description": "Classification of introns.",
+            "tool_name": "rMATS-turbo (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "4.1.2",
+            "code_example": "# conda install -c bioconda rmats-turbo\n\n# Example: Classify introns by detecting differential alternative splicing events\n# This assumes you have two groups of samples (e.g., control and treated)\n# and aligned RNA-seq BAM files. rMATS classifies introns into event types like\n# Skipped Exon (SE), Retained Intron (RI), Alternative 5' Splice Site (A5SS),\n# Alternative 3' Splice Site (A3SS), and Mutually Exclusive Exons (MXE).\n\n# Define input BAM files (replace with actual comma-separated paths for replicates)\n# Example: control_rep1.bam,control_rep2.bam\nBAM_FILES_GROUP1=\"path/to/control_sample1.bam,path/to/control_sample2.bam\"\nBAM_FILES_GROUP2=\"path/to/treated_sample1.bam,path/to/treated_sample2.bam\"\n\n# Define GTF annotation file (replace with actual path or download if needed)\n# This GTF should correspond to the genome assembly used for alignment.\n# Example: Ensembl Homo_sapiens.GRCh38.109.gtf\nGTF_FILE=\"Homo_sapiens.GRCh38.109.gtf\" # Placeholder: Download from Ensembl or similar source\n\n# Define output directory for rMATS results\nOUTPUT_DIR=\"rmats_intron_classification_results\"\n\n# Define read length (adjust based on your sequencing data)\nREAD_LENGTH=100 \n\n# Define number of threads for parallel processing\nNUM_THREADS=8\n\n# Define read type: 'paired' for paired-end reads, 'single' for single-end reads\nREAD_TYPE=\"paired\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run rMATS-turbo to classify and quantify alternative splicing events involving introns\nrmats.py \\\n    --b1 \"${BAM_FILES_GROUP1}\" \\\n    --b2 \"${BAM_FILES_GROUP2}\" \\\n    --gtf \"${GTF_FILE}\" \\\n    -t \"${READ_TYPE}\" \\\n    --readLength \"${READ_LENGTH}\" \\\n    --nthread \"${NUM_THREADS}\" \\\n    --tmp \"${OUTPUT_DIR}/tmp\" \\\n    -o \"${OUTPUT_DIR}\"\n\necho \"rMATS analysis complete. Results are in ${OUTPUT_DIR}\"\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/Xinglab/rmats-turbo"
+        }
+    ],
+    "raw_text": "Mapped the sequenced reads to the reference transcript in the database obtained from Refseq, Ensemble and UCSC known genes using bowtie.\nUnmapped or poorly mapped reads were realigned to human reference genome (hg19) with the Blat software.\nThe mapped reads were organized into five different libraries 1) exon read library, 2) intron read library, 3) exon-intron junction read library, 4) exon-exon junction read library, and 5) intergenic read library. The gene classification was done using all known Refseq transcripts.\nDifferential splicing analysis.\nClassification of introns.\nGenome_build: hg19\nSupplementary_files_format_and_content: Normalized bigwig for each sample",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

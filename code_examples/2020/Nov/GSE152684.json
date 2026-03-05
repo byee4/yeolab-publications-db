@@ -1,79 +1,79 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Raw reads were adapter-trimmed using Cutadapt (version 1.14)",
-      "tool_name": "cutadapt",
-      "tool_version": "1.14",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Sequenced reads were aligned to hg19 genome using STAR (version 2.5.2b) and sorted using samtools (version 1.5)",
-      "tool_name": "STAR",
-      "tool_version": "2.5.2b",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Gene counts were quantified from sorted BAM files using featureCounts (version 1.5.0) of the Subread (Liao et al., Nucleic Acids Research 2013) package using \"gene\" as a metafeature.",
-      "tool_name": "featureCounts",
-      "tool_version": "1.5.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Annotated gene length and gene counts were subsequently used to calculate transcript per-million (TPM) for each gene in each library.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "For downsampling prior to downstream editing analysis, samtools view -bs INT.FRAC was used for proportional downsampling of read pairs to achieve sampling depth between 15-35 million aligned reads",
-      "tool_name": "samtools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Aligned BAM files were run through SAILOR (v1.0.4) using the following parameters-- min_variant_coverage: 5, alpha: 0, beta: 0, edit_fraction: 0.01",
-      "tool_name": "SAILOR",
-      "tool_version": "1.0.4",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "BED files that are output corresponding to positive and negative strands of the genome from SAILOR are combined into one BED file and filtered based upon confidence score (Washburn et al., Cell Reports 2014)",
-      "tool_name": "SAILOR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "Recurrent sites between replicates were determined using pybedtools (version 0.8.0) intersect with the following options: wo=True, s=True",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Raw reads were adapter-trimmed using Cutadapt (version 1.14)\nSequenced reads were aligned to hg19 genome using STAR (version 2.5.2b) and sorted using samtools (version 1.5)\nGene counts were quantified from sorted BAM files using featureCounts (version 1.5.0) of the Subread (Liao et al., Nucleic Acids Research 2013) package using \"gene\" as a metafeature. Annotated gene length and gene counts were subsequently used to calculate transcript per-million (TPM) for each gene in each library.\nFor downsampling prior to downstream editing analysis, samtools view -bs INT.FRAC was used for proportional downsampling of read pairs to achieve sampling depth between 15-35 million aligned reads\nAligned BAM files were run through SAILOR (v1.0.4) using the following parameters-- min_variant_coverage: 5, alpha: 0, beta: 0, edit_fraction: 0.01\nBED files that are output corresponding to positive and negative strands of the genome from SAILOR are combined into one BED file and filtered based upon confidence score (Washburn et al., Cell Reports 2014)\nRecurrent sites between replicates were determined using pybedtools (version 0.8.0) intersect with the following options: wo=True, s=True\nGenome_build: hg19\nSupplementary_files_format_and_content: Matrix tables containing normalized transcripts per-million (TPM) data for every annotated gene; BED files containing editing events per library",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Raw reads were adapter-trimmed using Cutadapt (version 1.14)",
+            "tool_name": "cutadapt",
+            "tool_version": "1.14",
+            "code_example": "# Install Cutadapt if not already installed\n# conda install -c bioconda cutadapt=1.14\n\n# Define input and output file paths\nINPUT_READS=\"raw_reads.fastq.gz\"\nOUTPUT_TRIMMED_READS=\"trimmed_reads.fastq.gz\"\n\n# Define adapter sequence. This must be replaced with the actual adapter sequence used.\n# Common Illumina universal adapter sequence: AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC\n# If trimming 3' adapters, use -a. If trimming 5' adapters, use -g.\n# If trimming unknown adapters, consider using --trim-n.\nADAPTER_SEQUENCE=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC\" # Placeholder: Replace with actual adapter\n\n# Execute Cutadapt for adapter trimming\n# -a ADAPTER: Trims 3' adapters\n# -o: Output file for trimmed reads\ncutadapt -a \"${ADAPTER_SEQUENCE}\" \\\n         -o \"${OUTPUT_TRIMMED_READS}\" \\\n         \"${INPUT_READS}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 2,
+            "description": "Sequenced reads were aligned to hg19 genome using STAR (version 2.5.2b) and sorted using samtools (version 1.5)",
+            "tool_name": "STAR",
+            "tool_version": "2.5.2b",
+            "code_example": "# Install STAR\n# conda install -c bioconda star=2.5.2b\n\n# Install samtools\n# conda install -c bioconda samtools=1.5\n\n# Placeholder for STAR genome index directory for hg19\n# Replace with the actual path to your indexed hg19 genome\n# Example: /path/to/STAR_indices/hg19\nGENOME_DIR=\"/path/to/hg19_STAR_index\"\n\n# Placeholder for input FASTQ file(s)\n# Replace with your actual input FASTQ file(s)\nINPUT_FASTQ=\"reads.fastq.gz\"\n\n# Placeholder for output prefix\nOUTPUT_PREFIX=\"aligned_reads\"\n\n# Align reads using STAR\n# --genomeDir: path to the STAR genome index\n# --readFilesIn: input FASTQ file(s)\n# --outFileNamePrefix: prefix for output files\n# --outSAMtype BAM Unsorted: output unsorted BAM file, to be sorted by samtools\n# --runThreadN: number of threads to use (example: 8)\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${INPUT_FASTQ}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}_\" \\\n     --outSAMtype BAM Unsorted \\\n     --runThreadN 8\n\n# Sort the aligned BAM file using samtools\n# -o: output file\n# Input file is the unsorted BAM generated by STAR (e.g., aligned_reads_Aligned.out.bam)\nsamtools sort -o \"${OUTPUT_PREFIX}.sorted.bam\" \"${OUTPUT_PREFIX}_Aligned.out.bam\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "Gene counts were quantified from sorted BAM files using featureCounts (version 1.5.0) of the Subread (Liao et al., Nucleic Acids Research 2013) package using \"gene\" as a metafeature.",
+            "tool_name": "featureCounts",
+            "tool_version": "1.5.0",
+            "code_example": "# Install featureCounts (part of the Subread package)\n# conda install -c bioconda subread\n\n# Quantify gene counts from sorted BAM files using featureCounts\n# -a: Specify the annotation file (GTF/GFF) for gene features (e.g., hg38.gtf)\n# -o: Specify the output file for gene counts\n# -t gene: Specify \"gene\" as the feature type to count reads for (metafeature)\n# input.bam: Placeholder for the sorted BAM input file(s)\nfeatureCounts -a hg38.gtf -o gene_counts.txt -t gene input.bam",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "Annotated gene length and gene counts were subsequently used to calculate transcript per-million (TPM) for each gene in each library.",
+            "tool_name": "RSEM (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.3.3",
+            "code_example": "# Install RSEM (example using conda)\n# conda install -c bioconda rsem\n\n# --- Placeholder for reference data ---\n# Replace with actual paths to your genome FASTA and GTF annotation.\n# For eCLIP, this would typically be the reference genome and annotation for the species (e.g., GRCh38).\nGENOME_FASTA=\"path/to/your/genome.fa\"\nGTF_ANNOTATION=\"path/to/your/annotation.gtf\"\nRSEM_REFERENCE_DIR=\"rsem_reference_index\" # Directory to store RSEM index\n\n# --- Build RSEM reference index (if not already built) ---\n# This step needs to be run once for a given reference genome and annotation.\n# The GTF provides gene/transcript lengths and annotations necessary for RSEM.\n# rsem-prepare-reference --gtf \"${GTF_ANNOTATION}\" \"${GENOME_FASTA}\" \"${RSEM_REFERENCE_DIR}\"\n\n# --- Input data ---\n# Replace with the actual path to your aligned BAM file (e.g., from STAR alignment in an eCLIP pipeline).\nINPUT_ALIGNED_BAM=\"path/to/your/aligned_eclip_reads.bam\"\nSAMPLE_NAME=\"eclip_sample\" # Prefix for output files\n\n# --- Run RSEM to calculate expression and TPM ---\n# RSEM uses the provided GTF (for gene lengths) and the aligned reads to estimate\n# gene counts (expected counts) and subsequently calculate TPM values.\n# The '--bam' flag indicates input is a BAM file.\n# '--no-qualities' can speed up processing if quality scores are not needed for quantification.\n# '--paired-end' if your reads are paired-end (common in eCLIP). Remove if single-end.\n# '--num-threads' for parallel processing.\nrsem-calculate-expression \\\n    --bam \\\n    --no-qualities \\\n    --paired-end \\\n    --num-threads 8 \\\n    \"${INPUT_ALIGNED_BAM}\" \\\n    \"${RSEM_REFERENCE_DIR}\" \\\n    \"${SAMPLE_NAME}\"\n\n# Output files in the current directory will include:\n# ${SAMPLE_NAME}.genes.results (contains TPM values for genes, along with expected counts, FPKM, etc.)\n# ${SAMPLE_NAME}.isoforms.results (contains TPM values for isoforms)\n# ${SAMPLE_NAME}.stat (statistics about the run)",
+            "code_language": "bash",
+            "github_url": "https://github.com/deweylab/RSEM"
+        },
+        {
+            "step_order": 5,
+            "description": "For downsampling prior to downstream editing analysis, samtools view -bs INT.FRAC was used for proportional downsampling of read pairs to achieve sampling depth between 15-35 million aligned reads",
+            "tool_name": "samtools",
+            "tool_version": "1.10 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install samtools (example using conda)\n# conda install -c bioconda samtools\n\n# Define input and output BAM files\nINPUT_BAM=\"path/to/your/input.bam\"\nOUTPUT_BAM=\"path/to/your/downsampled.bam\"\n\n# --- The following variables (SAMPLING_SEED, SAMPLING_FRACTION) would be calculated\n# --- based on the current read count and the desired target range (15-35 million aligned reads).\n# --- Example calculation (replace with actual logic based on your pipeline):\n# # Get current read count (excluding unmapped reads, primary alignments)\n# CURRENT_READS=$(samtools view -c -F 4 -F 256 \"$INPUT_BAM\")\n# # Define target (e.g., 25 million, midpoint of 15-35M)\n# TARGET_READS=25000000\n# # Calculate fraction, ensuring it doesn't exceed 1 if current reads are already below target\n# SAMPLING_FRACTION=$(echo \"scale=4; if ($CURRENT_READS > $TARGET_READS) $TARGET_READS / $CURRENT_READS else 1\" | bc)\n# # Generate a random seed for reproducibility\n# SAMPLING_SEED=$(shuf -i 1-10000 -n 1)\n\n# Placeholder values for demonstration\nSAMPLING_SEED=12345\nSAMPLING_FRACTION=0.5 # Example: downsample to 50% if current reads are 50M and target is 25M\n\n# Perform proportional downsampling of read pairs\n# The -b flag outputs in BAM format.\n# The -s flag takes a seed and a fraction (e.g., 12345.0.5 for 50% sampling with seed 12345).\n# When used with paired-end reads, samtools view -s ensures both reads in a pair are kept or discarded together.\nsamtools view -b -s \"${SAMPLING_SEED}.${SAMPLING_FRACTION}\" \"$INPUT_BAM\" > \"$OUTPUT_BAM\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 6,
+            "description": "Aligned BAM files were run through SAILOR (v1.0.4) using the following parameters-- min_variant_coverage: 5, alpha: 0, beta: 0, edit_fraction: 0.01",
+            "tool_name": "SAILOR",
+            "tool_version": "1.0.4",
+            "code_example": "# Install SAILOR (example, adjust based on specific environment)\n# git clone https://github.com/yeolab/SAILOR.git\n# cd SAILOR\n# pip install .\n\n# Define input and output files\nINPUT_BAM=\"aligned.bam\" # Placeholder for aligned BAM file\nOUTPUT_FILE=\"sailor_variants.tsv\" # Placeholder for output file (e.g., TSV or VCF)\nREFERENCE_FASTA=\"genome.fa\" # Placeholder for reference genome FASTA (e.g., hg38.fa)\n\n# Execute SAILOR\npython sailor.py \\\n    --input_bam \"${INPUT_BAM}\" \\\n    --reference_fasta \"${REFERENCE_FASTA}\" \\\n    --output_file \"${OUTPUT_FILE}\" \\\n    --min_variant_coverage 5 \\\n    --alpha 0 \\\n    --beta 0 \\\n    --edit_fraction 0.01",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/SAILOR"
+        },
+        {
+            "step_order": 7,
+            "description": "BED files that are output corresponding to positive and negative strands of the genome from SAILOR are combined into one BED file and filtered based upon confidence score (Washburn et al., Cell Reports 2014)",
+            "tool_name": "SAILOR",
+            "tool_version": "Washburn et al., Cell Reports 2014",
+            "code_example": "# Define input and output file names\nPOSITIVE_STRAND_BED=\"sailor_output_positive.bed\"\nNEGATIVE_STRAND_BED=\"sailor_output_negative.bed\"\nCOMBINED_BED=\"sailor_combined.bed\"\nFILTERED_BED=\"sailor_filtered.bed\"\n\n# Define confidence score threshold (placeholder - adjust as needed)\n# The specific threshold and filtering logic (e.g., >= or <=) depends on\n# how SAILOR defines its confidence score (e.g., raw score, p-value, FDR).\n# For demonstration, assuming a higher score is better.\nCONFIDENCE_THRESHOLD=5 # Example threshold, adjust based on SAILOR's score range\n\n# Combine positive and negative strand BED files\ncat \"${POSITIVE_STRAND_BED}\" \"${NEGATIVE_STRAND_BED}\" > \"${COMBINED_BED}\"\n\n# Filter the combined BED file based on confidence score (5th column)\n# Assuming the 5th column is the confidence score and higher is better.\nawk -v threshold=\"${CONFIDENCE_THRESHOLD}\" '$5 >= threshold' \"${COMBINED_BED}\" > \"${FILTERED_BED}\"",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1016/j.celrep.2014.09.006"
+        },
+        {
+            "step_order": 8,
+            "description": "Recurrent sites between replicates were determined using pybedtools (version 0.8.0) intersect with the following options: wo=True, s=True",
+            "tool_name": "pybedtools",
+            "tool_version": "0.8.0",
+            "code_example": "# Install pybedtools and bedtools if not already installed\n# conda install -c bioconda pybedtools bedtools\n\n# Define input and output files\n# Replace 'replicate1.bed' and 'replicate2.bed' with your actual input BED files.\n# These files should contain genomic regions (e.g., peaks, binding sites).\nREPLICATE1_BED=\"replicate1.bed\"\nREPLICATE2_BED=\"replicate2.bed\"\n\n# Define the output file name.\n# The 'wo=True' option means the output will include columns from both input files\n# plus an additional column for the overlap length, making it a tab-separated file (TSV).\nOUTPUT_TSV=\"recurrent_sites_overlap_details.tsv\"\n\n# Execute the pybedtools intersect operation using a Python one-liner\n# This command finds regions that overlap between replicate1.bed and replicate2.bed.\n# - 'wo=True' ensures that the output includes the original entries from both files\n#   and the length of the overlap.\n# - 's=True' requires that overlapping features must be on the same strand.\npython -c \"\nimport pybedtools\nimport sys\n\n# Check if correct number of arguments are provided\nif len(sys.argv) != 4:\n    print('Usage: python -c \\\"...\\\" <replicate1.bed> <replicate2.bed> <output.tsv>', file=sys.stderr)\n    sys.exit(1)\n\n# Load bed files from command-line arguments\ntry:\n    a = pybedtools.BedTool(sys.argv[1])\n    b = pybedtools.BedTool(sys.argv[2])\nexcept Exception as e:\n    print(f'Error loading BedTool files: {e}', file=sys.stderr)\n    sys.exit(1)\n\n# Perform intersect with specified options\n# wo=True: write original A and B entries plus the number of base pairs of overlap\n# s=True: require same strand\nresult = a.intersect(b, wo=True, s=True)\n\n# Save the result to a file\ntry:\n    result.saveas(sys.argv[3])\n    print(f'Recurrent sites (with overlap details) saved to {sys.argv[3]}', file=sys.stderr)\nexcept Exception as e:\n    print(f'Error saving output file: {e}', file=sys.stderr)\n    sys.exit(1)\n\" \"${REPLICATE1_BED}\" \"${REPLICATE2_BED}\" \"${OUTPUT_TSV}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/daler/pybedtools"
+        }
+    ],
+    "raw_text": "Raw reads were adapter-trimmed using Cutadapt (version 1.14)\nSequenced reads were aligned to hg19 genome using STAR (version 2.5.2b) and sorted using samtools (version 1.5)\nGene counts were quantified from sorted BAM files using featureCounts (version 1.5.0) of the Subread (Liao et al., Nucleic Acids Research 2013) package using \"gene\" as a metafeature. Annotated gene length and gene counts were subsequently used to calculate transcript per-million (TPM) for each gene in each library.\nFor downsampling prior to downstream editing analysis, samtools view -bs INT.FRAC was used for proportional downsampling of read pairs to achieve sampling depth between 15-35 million aligned reads\nAligned BAM files were run through SAILOR (v1.0.4) using the following parameters-- min_variant_coverage: 5, alpha: 0, beta: 0, edit_fraction: 0.01\nBED files that are output corresponding to positive and negative strands of the genome from SAILOR are combined into one BED file and filtered based upon confidence score (Washburn et al., Cell Reports 2014)\nRecurrent sites between replicates were determined using pybedtools (version 0.8.0) intersect with the following options: wo=True, s=True\nGenome_build: hg19\nSupplementary_files_format_and_content: Matrix tables containing normalized transcripts per-million (TPM) data for every annotated gene; BED files containing editing events per library",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

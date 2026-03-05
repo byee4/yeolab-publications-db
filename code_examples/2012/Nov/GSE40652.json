@@ -1,16 +1,16 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Sequenced reads were trimmed for adaptor sequence, and masked for low-complexity or low-quality sequence, then mapped to mm9 or hg18 whole genome using bowtie v0.12.2 with parameters -q -p 4 -e 100 -y -a -m 10 --best --strata",
-      "tool_name": "Bowtie",
-      "tool_version": "0.12.2",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Sequenced reads were trimmed for adaptor sequence, and masked for low-complexity or low-quality sequence, then mapped to mm9 or hg18 whole genome using bowtie v0.12.2 with parameters -q -p 4 -e 100 -y -a -m 10 --best --strata\nGenome_build: mm9\nSupplementary_files_format_and_content: BED format of all reads",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Sequenced reads were trimmed for adaptor sequence, and masked for low-complexity or low-quality sequence, then mapped to mm9 or hg18 whole genome using bowtie v0.12.2 with parameters -q -p 4 -e 100 -y -a -m 10 --best --strata",
+            "tool_name": "Bowtie",
+            "tool_version": "0.12.2",
+            "code_example": "# Install Bowtie v0.12.2\n# conda create -n bowtie_0_12_2 bowtie=0.12.2 -c bioconda\n# conda activate bowtie_0_12_2\n\n# Download reference genome (e.g., mm9 from UCSC)\n# wget https://hgdownload.soe.ucsc.edu/goldenPath/mm9/bigZips/mm9.fa.gz\n# gunzip mm9.fa.gz\n\n# Build Bowtie index for mm9\n# bowtie-build mm9.fa mm9_index\n\n# Align pre-processed reads to the mm9 genome using Bowtie\n# Assuming 'trimmed_masked_reads.fastq' is the input file after trimming and masking,\n# and 'mm9_index' is the pre-built Bowtie index for the mm9 genome.\nbowtie -q -p 4 -e 100 -y -a -m 10 --best --strata mm9_index trimmed_masked_reads.fastq > mapped_reads.sam",
+            "code_language": "bash",
+            "github_url": "http://bowtie-bio.sourceforge.net/"
+        }
+    ],
+    "raw_text": "Sequenced reads were trimmed for adaptor sequence, and masked for low-complexity or low-quality sequence, then mapped to mm9 or hg18 whole genome using bowtie v0.12.2 with parameters -q -p 4 -e 100 -y -a -m 10 --best --strata\nGenome_build: mm9\nSupplementary_files_format_and_content: BED format of all reads",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

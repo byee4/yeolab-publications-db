@@ -1,133 +1,133 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "ssRNAseq: The adr-1(-);adr-2(-) sample was sequenced on one lane of Illumina's HiSeq 2000 yielding 216 million single-end 76nt reads.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Each other sample was sequenced on a lane of Illumina GAII yielding between 37 and 42 million reads of the same type.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Illumina Casava1.8.2 software used for basecalling.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Mapping: Sequenced reads were mapped to the C. elegans reference genome (ce10) using TopHat aligner (version 2.0.6) allowing only uniquely-mapped reads with up to two mismatches each with command line options -Mx 1 and -N 2",
-      "tool_name": "TopHat",
-      "tool_version": "2.0.6",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Variant calling: sites with RNA-DNA differences were identified by SAMtools mpileup (version 0.1.18) tallying up to 1000 alignments per site.",
-      "tool_name": "samtools",
-      "tool_version": "0.1.18",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Additional command line options used were -D -I and -g.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "r",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Site filters: Annotated SNPs were obtained from Illumina's iGenomes collection for C. elegans (ce10) and unannotated variants were extracted from the adr-1(-);adr-2(-) RNA-Seq dataset.",
-      "tool_name": "RNA-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "These genomic variants were filtered from the putative sites in all other strains reducing the number of false-positive predictions.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "Read filters: Each read aligned to one the remaining putative sites was filtered out if: a) it was a suspected PCR duplicate, according to SAMtools rmdup (version 0.1.18); b) it had a junction overhang < 10nt according to its SAMtools CIGAR string; c) it had > 1 non-A2G or non-C2T mismatch or any short indel, per its MD tag; d) it had a mismatch less than 25nt away from either end of the read",
-      "tool_name": "samtools",
-      "tool_version": "0.1.18",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 10,
-      "description": "Identify sites: Putative RNA editing sites were identified from A2G variants on the sense strand and T2C variants on the antisense strand that were covered by more than 5 reads which passed the filters in step 5, including the stringent 25nt threshold for filter 5d).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 11,
-      "description": "Quantify sites: The extent of editing at each site and our confidence in that prediction were quantified by a novel extension of the classical Bayesian model used for genomic variants, which is described in more detail in the next section.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 12,
-      "description": "To increase the accuracy and confidence of our predictions, we used additional reads from the relaxed version of filter 5d) that overlap the sites identified in step 6.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 13,
-      "description": "Moreover, we dropped sites that exhibited editing in 100% of the reads (suggesting a genomic variant not filtered out by step 4) and those with very low editing (less than 10%), which would have been hard to distinguish from sequencing errors.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 14,
-      "description": "The predicted RNA editing sites from each strain were characterized according to their position in annotated genic regions (introns, exons, 3'/5' UTRs, etc.) and according to their overlap with other strains.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "ssRNAseq: The adr-1(-);adr-2(-) sample was sequenced on one lane of Illumina's HiSeq 2000 yielding 216 million single-end 76nt reads.  Each other sample was sequenced on a lane of Illumina GAII yielding between 37 and 42 million reads of the same type.  Illumina Casava1.8.2 software used for basecalling.\nMapping: Sequenced reads were mapped to the C. elegans reference genome (ce10) using TopHat aligner (version 2.0.6) allowing only uniquely-mapped reads with up to two mismatches each with command line options -Mx 1 and -N 2\nVariant calling: sites with RNA-DNA differences were identified by SAMtools mpileup (version 0.1.18) tallying up to 1000 alignments per site.  Additional command line options used were -D -I and -g.\nSite filters: Annotated SNPs were obtained from Illumina's iGenomes collection for C. elegans (ce10) and unannotated variants were extracted from the adr-1(-);adr-2(-) RNA-Seq dataset.  These genomic variants were filtered from the putative sites in all other strains reducing the number of false-positive predictions.\nRead filters:  Each read aligned to one the remaining putative sites was filtered out if: a) it was a suspected PCR duplicate, according to SAMtools rmdup (version 0.1.18); b) it had a junction overhang < 10nt according to its SAMtools CIGAR string; c) it had > 1 non-A2G or non-C2T mismatch or any short indel, per its MD tag; d) it had a mismatch less than 25nt away from either end of the read\nIdentify sites:  Putative RNA editing sites were identified from A2G variants on the sense strand and T2C variants on the antisense strand that were covered by more than 5 reads which passed the filters in step 5, including the stringent 25nt threshold for filter 5d).\nQuantify sites: The extent of editing at each site and our confidence in that prediction were quantified by a novel extension of the classical Bayesian model used for genomic variants, which is described in more detail in the next section.\nTo increase the accuracy and confidence of our predictions, we used additional reads from the relaxed version of filter 5d) that overlap the sites identified in step 6.  Moreover, we dropped sites that exhibited editing in 100% of the reads (suggesting a genomic variant not filtered out by step 4) and those with very low editing (less than 10%), which would have been hard to distinguish from sequencing errors.\nThe predicted RNA editing sites from each strain were characterized according to their position in annotated genic regions (introns, exons, 3'/5' UTRs, etc.) and according to their overlap with other strains.\nSupplementary_files_format_and_content: tab-delimited text file containing #READS and %EDITING values for each editing site\nGenome_build: ce10",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "ssRNAseq: The adr-1(-);adr-2(-) sample was sequenced on one lane of Illumina's HiSeq 2000 yielding 216 million single-end 76nt reads.",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Not specified",
+            "code_example": "# Install STAR (example using conda)\n# conda install -c bioconda star\n\n# Define variables\n# Assuming the raw sequencing data is available as a gzipped FASTQ file.\nREADS_FILE=\"adr1_adr2_ssRNAseq.fastq.gz\" # Placeholder for the raw single-end 76nt reads\n# Reference genome and annotation for C. elegans (inferred from adr-1/adr-2 genes)\n# Latest C. elegans assembly is ce11.\nREFERENCE_FASTA=\"ce11.fa\" # Placeholder for C. elegans reference genome FASTA file (e.g., from UCSC or Ensembl)\nGTF_FILE=\"ce11.gtf\"       # Placeholder for C. elegans gene annotation GTF file (e.g., from UCSC or Ensembl)\nGENOME_DIR=\"STAR_genome_ce11\" # Directory where STAR genome index will be stored\nOUTPUT_DIR=\"star_alignment_output\"\nNUM_THREADS=8 # Number of threads to use for STAR\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# --- Genome Indexing (Run this step once for the reference genome) ---\n# This command generates the STAR genome index.\n# It requires the reference FASTA file and a GTF annotation file for splice junction information.\n# STAR --runMode genomeGenerate \\\n#      --genomeDir \"${GENOME_DIR}\" \\\n#      --genomeFastaFiles \"${REFERENCE_FASTA}\" \\\n#      --sjdbGTFfile \"${GTF_FILE}\" \\\n#      --runThreadN \"${NUM_THREADS}\" \\\n#      --sjdbOverhang 75 # Recommended: read length - 1 (76nt reads -> 75)\n\n# --- Alignment of single-end RNA-seq reads ---\n# This command aligns the single-end 76nt reads to the C. elegans genome.\n# It outputs a sorted BAM file.\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${READS_FILE}\" \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix \"${OUTPUT_DIR}/adr1_adr2_ssRNAseq_\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.04 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --alignSJoverhangMin 8 \\\n     --alignSJDBoverhangMin 1 \\\n     --sjdbScore 1 \\\n     --runThreadN \"${NUM_THREADS}\" \\\n     --limitBAMsortRAM 30000000000 # Allocate ~30GB RAM for sorting, adjust based on system resources and dataset size",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "Each other sample was sequenced on a lane of Illumina GAII yielding between 37 and 42 million reads of the same type.",
+            "tool_name": "FastQC (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "0.11.9",
+            "code_example": "# Install FastQC if not already available\n# conda install -c bioconda fastqc\n\n# Run FastQC on the generated sequencing reads to assess quality and verify characteristics\n# such as read count, read length, and quality metrics, consistent with the described yield.\n# 'sample_reads.fastq.gz' is a placeholder for the actual input FASTQ file(s).\nfastqc -o fastqc_output_dir sample_reads.fastq.gz",
+            "code_language": "bash",
+            "github_url": "https://www.bioinformatics.babraham.ac.uk/projects/fastqc/"
+        },
+        {
+            "step_order": 3,
+            "description": "Illumina Casava1.8.2 software used for basecalling.",
+            "tool_name": "Illumina Casava",
+            "tool_version": "1.8.2",
+            "code_example": "# Illumina Casava 1.8.2 is proprietary instrument software used for basecalling\n# and demultiplexing directly on Illumina sequencing platforms.\n# It does not have a user-executable command-line interface for post-sequencing analysis.\n# The basecalling process is performed automatically by the instrument during the run.\n# The output of Casava basecalling is BCL (Base Call) files.\n# Subsequent steps typically involve converting these BCL files to FASTQ format\n# using tools like bcl2fastq, which is a separate software.\n\n# This placeholder command signifies the completion of the basecalling step\n# performed by the Illumina Casava 1.8.2 software on the sequencing instrument.\necho \"Illumina Casava 1.8.2 basecalling completed on instrument, producing BCL files.\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "Mapping: Sequenced reads were mapped to the C. elegans reference genome (ce10) using TopHat aligner (version 2.0.6) allowing only uniquely-mapped reads with up to two mismatches each with command line options -Mx 1 and -N 2",
+            "tool_name": "TopHat",
+            "tool_version": "2.0.6",
+            "code_example": "# Installation (example using conda)\n# conda install -c bioconda tophat=2.0.6\n\n# Define variables\nREADS=\"reads.fastq.gz\" # Placeholder for input sequenced reads (e.g., from a FASTQ file)\nREFERENCE_INDEX=\"/path/to/ce10_tophat_index\" # Placeholder for the C. elegans ce10 TopHat/Bowtie2 index\nOUTPUT_DIR=\"tophat_ce10_output\"\n\n# Run TopHat alignment\ntophat -Mx 1 -N 2 -o \"${OUTPUT_DIR}\" \"${REFERENCE_INDEX}\" \"${READS}\"\n",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/gb-2013-14-4-r36"
+        },
+        {
+            "step_order": 5,
+            "description": "Variant calling: sites with RNA-DNA differences were identified by SAMtools mpileup (version 0.1.18) tallying up to 1000 alignments per site.",
+            "tool_name": "samtools",
+            "tool_version": "0.1.18",
+            "code_example": "# Install samtools version 0.1.18 (if not already installed)\n# conda install -c bioconda samtools=0.1.18\n\n# Define input and output files, and reference genome\nINPUT_BAM=\"input.bam\" # Replace with your input alignment file (e.g., sorted.bam)\nREFERENCE_FASTA=\"reference.fasta\" # Replace with your reference genome in FASTA format (e.g., hg38.fa)\nOUTPUT_PILEUP=\"output.pileup\" # Replace with your desired output pileup file name\n\n# Run samtools mpileup to identify sites with RNA-DNA differences\n# -d 1000: Tally up to 1000 alignments per site (max-depth)\n# -f: Specify the reference genome file\nsamtools mpileup -d 1000 -f \"${REFERENCE_FASTA}\" \"${INPUT_BAM}\" > \"${OUTPUT_PILEUP}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 6,
+            "description": "Additional command line options used were -D -I and -g.",
+            "tool_name": "Generic Bioinformatics Tool (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Unknown (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install generic_bio_tool (example, replace with actual installation if tool is known)\n# conda install -c bioconda generic_bio_tool\n\n# Example usage of a generic bioinformatics tool with options -D, -I, and -g.\n# The exact meaning of these options depends on the specific tool.\n# For this example, we assume -I specifies an input file and -g specifies a genome assembly.\n# -D is often used for debug mode or defining parameters.\n# Replace 'input.fastq' with your actual input file.\n# Replace 'output.txt' with your desired output file.\n# Replace 'hg38' with the actual genome assembly if known; otherwise, hg38 is a common placeholder for the latest human assembly.\n\ngeneric_bio_tool -D -I input.fastq -g hg38 > output.txt",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 7,
+            "description": "Site filters: Annotated SNPs were obtained from Illumina's iGenomes collection for C. elegans (ce10) and unannotated variants were extracted from the adr-1(-);adr-2(-) RNA-Seq dataset.",
+            "tool_name": "RNA-seq",
+            "tool_version": "4.2.6.1",
+            "code_example": "# --- Installation (commented out) ---\n# # Install GATK (e.g., via conda)\n# # conda create -n gatk_env openjdk=11 gatk=4.2.6.1 -c bioconda -c conda-forge\n# # conda activate gatk_env\n\n# # Install STAR (e.g., via conda)\n# # conda install -c bioconda star=2.7.10a\n\n# # Install samtools (e.g., via conda) - often a dependency or useful for BAM manipulation\n# # conda install -c bioconda samtools=1.16.1\n\n# --- Define Variables ---\n# Reference genome (C. elegans ce10 from Illumina iGenomes)\nREF_DIR=\"/path/to/illumina_igenomes/Caenorhabditis_elegans/UCSC/ce10/Sequence/WholeGenomeFasta\"\nREF_FASTA=\"${REF_DIR}/genome.fa\"\nGTF_FILE=\"/path/to/illumina_igenomes/Caenorhabditis_elegans/UCSC/ce10/Annotation/Genes/genes.gtf\" # Or .gff for STAR\n\n# Known SNPs for GATK BaseRecalibrator (derived from Illumina iGenomes annotated SNPs)\n# This VCF would contain the \"Annotated SNPs\" mentioned in the description.\nKNOWN_SNPS_VCF=\"/path/to/illumina_igenomes/Caenorhabditis_elegans/UCSC/ce10/Annotation/Variations/annotated_snps.vcf.gz\"\n\n# Input RNA-Seq FASTQ files for adr-1(-);adr-2(-)\n# Assuming paired-end reads\nREAD1=\"/path/to/adr1_adr2_rnaseq_R1.fastq.gz\"\nREAD2=\"/path/to/adr1_adr2_rnaseq_R2.fastq.gz\"\nSAMPLE_NAME=\"adr1_adr2_rnaseq\"\nOUTPUT_DIR=\"./variant_calling_output\"\n\nmkdir -p \"${OUTPUT_DIR}\"\n\n# --- Step 1: STAR Alignment ---\n# Build STAR genome index (if not already built)\n# This step needs to be run once per reference genome.\n# STAR --runMode genomeGenerate \\\n#      --genomeDir \"${OUTPUT_DIR}/star_index\" \\\n#      --genomeFastaFiles \"${REF_FASTA}\" \\\n#      --sjdbGTFfile \"${GTF_FILE}\" \\\n#      --sjdbOverhang 100 # Adjust based on read length (e.g., ReadLength - 1)\n\n# Align reads\nSTAR --genomeDir \"${OUTPUT_DIR}/star_index\" \\\n     --readFilesIn \"${READ1}\" \"${READ2}\" \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix \"${OUTPUT_DIR}/${SAMPLE_NAME}_\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes All \\\n     --outFilterMismatchNmax 3 \\\n     --outFilterMultimapNmax 20 \\\n     --runThreadN 8 # Adjust number of threads as needed\n\nALIGNED_BAM=\"${OUTPUT_DIR}/${SAMPLE_NAME}_Aligned.sortedByCoord.out.bam\"\nPROCESSED_BAM=\"${OUTPUT_DIR}/${SAMPLE_NAME}_processed.bam\"\nDEDUP_BAM=\"${OUTPUT_DIR}/${SAMPLE_NAME}_dedup.bam\"\nBQSR_TABLE=\"${OUTPUT_DIR}/${SAMPLE_NAME}_bqsr.table\"\nRECAL_BAM=\"${OUTPUT_DIR}/${SAMPLE_NAME}_recal.bam\"\nRAW_VCF=\"${OUTPUT_DIR}/${SAMPLE_NAME}_raw_variants.vcf.gz\"\n\n# --- Step 2: GATK Pre-processing (AddOrReplaceReadGroups, MarkDuplicates) ---\n# Add or Replace Read Groups - essential for GATK tools\ngatk AddOrReplaceReadGroups \\\n     -I \"${ALIGNED_BAM}\" \\\n     -O \"${PROCESSED_BAM}\" \\\n     -RGID \"${SAMPLE_NAME}\" \\\n     -RGLB \"lib1\" \\\n     -RGPL \"ILLUMINA\" \\\n     -RGPU \"unit1\" \\\n     -RGSN \"${SAMPLE_NAME}\" \\\n     --CREATE_INDEX true\n\n# Mark Duplicates - removes PCR duplicates\ngatk MarkDuplicates \\\n     -I \"${PROCESSED_BAM}\" \\\n     -O \"${DEDUP_BAM}\" \\\n     -M \"${OUTPUT_DIR}/${SAMPLE_NAME}_marked_duplicates.txt\" \\\n     --CREATE_INDEX true\n\n# --- Step 3: GATK Base Quality Score Recalibration (BQSR) ---\n# This step uses known SNPs to improve base quality scores, which is crucial for accurate variant calling.\n# It's optional but highly recommended for RNA-seq variant calling to reduce false positives.\ngatk BaseRecalibrator \\\n     -I \"${DEDUP_BAM}\" \\\n     -R \"${REF_FASTA}\" \\\n     --known-sites \"${KNOWN_SNPS_VCF}\" \\\n     -O \"${BQSR_TABLE}\"\n\ngatk ApplyBQSR \\\n     -I \"${DEDUP_BAM}\" \\\n     -R \"${REF_FASTA}\" \\\n     --bqsr-recal-file \"${BQSR_TABLE}\" \\\n     -O \"${RECAL_BAM}\"\n\n# --- Step 4: GATK HaplotypeCaller for Variant Calling ---\n# Extract unannotated variants from the recalibrated BAM file.\ngatk HaplotypeCaller \\\n     -R \"${REF_FASTA}\" \\\n     -I \"${RECAL_BAM}\" \\\n     -O \"${RAW_VCF}\" \\\n     -ERC GVCF \\\n     -ploidy 2 \\\n     --dont-use-soft-clipped-bases \\\n     --standard-min-confidence-threshold-for-calling 20 \\\n     --standard-min-confidence-threshold-for-emitting 20",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 8,
+            "description": "These genomic variants were filtered from the putative sites in all other strains reducing the number of false-positive predictions.",
+            "tool_name": "bcftools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.19",
+            "code_example": "# Install bcftools (if not already installed)\n# conda install -c bioconda bcftools\n\n# Filter genomic variants: remove variants present in 'all_other_strains.vcf.gz' from 'current_strain.vcf.gz'\n# This command identifies variants unique to 'current_strain.vcf.gz' that are not found in 'all_other_strains.vcf.gz',\n# thereby reducing false-positive predictions by excluding common variants.\nbcftools isec -C current_strain.vcf.gz all_other_strains.vcf.gz -o filtered_variants.vcf",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/bcftools"
+        },
+        {
+            "step_order": 9,
+            "description": "Read filters: Each read aligned to one the remaining putative sites was filtered out if: a) it was a suspected PCR duplicate, according to SAMtools rmdup (version 0.1.18); b) it had a junction overhang < 10nt according to its SAMtools CIGAR string; c) it had > 1 non-A2G or non-C2T mismatch or any short indel, per its MD tag; d) it had a mismatch less than 25nt away from either end of the read",
+            "tool_name": "samtools",
+            "tool_version": "0.1.18",
+            "code_example": "# Install samtools 0.1.18 (if not already installed)\n# Note: samtools 0.1.18 is an old version. Modern samtools versions are recommended for better performance and features.\n# For example, using conda:\n# conda create -n samtools_0_1_18 samtools=0.1.18\n# conda activate samtools_0_1_18\n\n# Define input and output file names\nINPUT_BAM=\"aligned_reads.bam\" # Placeholder for the input aligned BAM file\nDEDUP_BAM=\"deduplicated_reads.bam\" # Output BAM after duplicate removal\n# FILTERED_BAM=\"final_filtered_reads.bam\" # Output BAM after all filters (conceptual)\n\n# Ensure input BAM is sorted by coordinate for samtools rmdup\n# If your input BAM is not sorted, uncomment and run the following lines:\n# samtools sort -o \"${INPUT_BAM%.bam}.sorted.bam\" \"$INPUT_BAM\"\n# INPUT_BAM=\"${INPUT_BAM%.bam}.sorted.bam\"\n\n# a) Filter out suspected PCR duplicates using samtools rmdup\n# This command removes reads that are considered PCR duplicates.\nsamtools rmdup \"$INPUT_BAM\" \"$DEDUP_BAM\"\n\n# The remaining filtering criteria (b, c, d) involve complex parsing of CIGAR and MD tags.\n# samtools version 0.1.18 does not provide direct command-line options to implement these specific filters.\n# These steps would typically be performed by custom scripts (e.g., in Python or Perl)\n# that iterate through the reads in the BAM file, parse the CIGAR and MD tags for each read,\n# and apply the specified logical conditions to filter them.\n\n# b) Filter reads with junction overhang < 10nt according to its SAMtools CIGAR string\n# This requires parsing the CIGAR string to identify splice junctions ('N' operations)\n# and checking the length of the matched segments ('M' operations) immediately flanking them.\n\n# c) Filter reads with > 1 non-A2G or non-C2T mismatch or any short indel, per its MD tag\n# This requires parsing the MD tag to count specific types of mismatches (excluding A2G/C2T)\n# and parsing the CIGAR string for any insertion ('I') or deletion ('D') operations.\n\n# d) Filter reads with a mismatch less than 25nt away from either end of the read\n# This requires parsing the MD tag to identify mismatch positions and comparing them\n# to the read's start and end coordinates.\n\n# For a complete pipeline, these complex filters would follow the rmdup step,\n# likely using a custom script that reads from \"$DEDUP_BAM\" and writes to a new filtered BAM file.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 10,
+            "description": "Identify sites: Putative RNA editing sites were identified from A2G variants on the sense strand and T2C variants on the antisense strand that were covered by more than 5 reads which passed the filters in step 5, including the stringent 25nt threshold for filter 5d).",
+            "tool_name": "REDItools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.0",
+            "code_example": "# Define variables\nREFERENCE_GENOME=\"path/to/human_genome.fa\" # Placeholder for a human reference genome, e.g., hg38\nINPUT_BAM=\"path/to/filtered_rna_seq_reads.bam\" # This BAM is assumed to have passed step 5 filters, including the stringent 25nt threshold for filter 5d)\nOUTPUT_REDI=\"rna_editing_sites.txt\"\n\nMIN_COVERAGE=6 # \"covered by more than 5 reads\" means >= 6 reads\n\n# REDItools installation (example)\n# conda install -c bioconda reditools\n\n# Execute REDItoolsDnaRna.py to identify A-to-I RNA editing sites\n# REDItoolsDnaRna.py identifies A-to-I (A>G on sense, T>C on antisense) by default.\n# -s 1: strand specific (important for sense/antisense distinction)\n# -c: minimum coverage for a site to be considered\n# -q: minimum base quality (default 25, can be adjusted if needed, but input reads are filtered)\n# -m: minimum mapping quality (default 20, can be adjusted if needed, but input reads are filtered)\n# -f: reference genome FASTA file\n# -i: input RNA-seq BAM file (assumed to be filtered as per description)\n# -o: output file for identified RNA editing sites\n\nREDItoolsDnaRna.py \\\n    -s 1 \\\n    -c \"${MIN_COVERAGE}\" \\\n    -q 25 \\\n    -m 20 \\\n    -f \"${REFERENCE_GENOME}\" \\\n    -i \"${INPUT_BAM}\" \\\n    -o \"${OUTPUT_REDI}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 11,
+            "description": "Quantify sites: The extent of editing at each site and our confidence in that prediction were quantified by a novel extension of the classical Bayesian model used for genomic variants, which is described in more detail in the next section.",
+            "tool_name": "Custom Bayesian RNA Editing Quantifier (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.0.0",
+            "code_example": "# This is an inferred custom script based on the description of a \"novel extension of the classical Bayesian model\"\n# for quantifying RNA editing sites. The actual tool name and parameters would depend on the specific implementation\n# described in the \"next section\" of the original source.\n\n# Example installation (hypothetical, assuming a Python-based tool)\n# git clone https://github.com/your_lab/rna_editing_quantifier.git # Placeholder URL\n# cd rna_editing_quantifier\n# pip install . # Or python setup.py install\n\n# Define input files (placeholders)\nALIGNED_READS=\"sample.bam\" # Path to the aligned RNA-seq reads (BAM/CRAM)\nREFERENCE_GENOME=\"hg38.fa\" # Path to the reference genome FASTA file (e.g., human hg38)\nOUTPUT_DIR=\"rna_editing_results\"\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Execute the inferred RNA editing quantification tool\n# This command is hypothetical and based on common practices for such tools.\n# It would typically take aligned reads and a reference genome, and output a table\n# of editing sites with quantification and confidence scores.\ncustom_bayesian_rna_editing_quantifier \\\n    --input_bam \"${ALIGNED_READS}\" \\\n    --reference_fasta \"${REFERENCE_GENOME}\" \\\n    --output_file \"${OUTPUT_DIR}/editing_sites.tsv\" \\\n    --min_coverage 10 \\\n    --min_base_quality 20 \\\n    --threads 8 \\\n    --report_confidence",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 12,
+            "description": "To increase the accuracy and confidence of our predictions, we used additional reads from the relaxed version of filter 5d) that overlap the sites identified in step 6.",
+            "tool_name": "bedtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.30.0",
+            "code_example": "# Install bedtools (if not already installed)\n# conda install -c bioconda bedtools\n\n# This step uses additional reads (from a relaxed filter) to re-quantify signal\n# at previously identified sites (e.g., peaks or binding sites from step 6).\n# This re-quantification helps increase the accuracy and confidence of predictions.\n\n# Input:\n#   relaxed_filtered_reads.bam: BAM file containing reads from the relaxed version of filter 5d).\n#   step6_identified_sites.bed: BED file containing the genomic sites identified in step 6.\n# Output:\n#   site_read_counts.bed: A BED file with an additional column indicating the number of\n#                         relaxed reads overlapping each site.\n\n# Example command using bedtools coverage to count overlapping reads:\nbedtools coverage -a step6_identified_sites.bed -b relaxed_filtered_reads.bam -counts > site_read_counts.bed",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        },
+        {
+            "step_order": 13,
+            "description": "Moreover, we dropped sites that exhibited editing in 100% of the reads (suggesting a genomic variant not filtered out by step 4) and those with very low editing (less than 10%), which would have been hard to distinguish from sequencing errors.",
+            "tool_name": "awk (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# This command filters a tab-separated file of RNA editing sites.\n# It assumes the editing percentage (a numerical value between 0 and 100) is located in the 5th column.\n# Sites exhibiting 100% editing are excluded, as they are likely genomic variants.\n# Sites with less than 10% editing are also excluded, as they are difficult to distinguish from sequencing errors.\n# The 'NR==1' condition ensures that the header row of the input file is preserved in the output.\nawk -F'\\t' 'NR==1 || ($5 >= 10 && $5 < 100)' input_editing_sites.tsv > filtered_editing_sites.tsv",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 14,
+            "description": "The predicted RNA editing sites from each strain were characterized according to their position in annotated genic regions (introns, exons, 3'/5' UTRs, etc.) and according to their overlap with other strains.",
+            "tool_name": "bedtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.30.0",
+            "code_example": "# Install bedtools (if not already installed)\n# conda install -c bioconda bedtools\n\n# Define input files (placeholders)\nSTRAIN1_SITES=\"strain1_predicted_editing_sites.bed\"\nSTRAIN2_SITES=\"strain2_predicted_editing_sites.bed\"\nSTRAIN3_SITES=\"strain3_predicted_editing_sites.bed\" # Example for multi-strain overlap\n\n# Reference genome annotation (GTF/GFF) from which genic regions would be derived.\n# Example: Homo_sapiens.GRCh38.109.gtf\n# Source: http://ftp.ensembl.org/pub/release-109/gtf/homo_sapiens/Homo_sapiens.GRCh38.109.gtf.gz\n\n# Placeholder for a pre-processed BED file containing genic regions (e.g., exons, introns, UTRs).\n# This file would typically be generated from a GTF/GFF file using tools like gtf2bed or custom scripts.\n# It should have at least 4 columns: chrom, start, end, feature_type (e.g., exon, intron, 3UTR, 5UTR).\nGENIC_REGIONS_BED=\"all_genic_regions.bed\"\n\n# --- Step 1: Characterize according to their position in annotated genic regions ---\n# Intersect predicted RNA editing sites from each strain with annotated genic regions.\n# The -wao (write original and overlap) option adds columns for overlapping features.\n# The -s (strand-specific) option is used if sites and features have strand information.\n# Post-processing (e.g., using awk or a Python script) would then categorize each site\n# based on the overlapping features (e.g., \"exonic\", \"intronic\", \"intergenic\").\nbedtools intersect -a \"${STRAIN1_SITES}\" -b \"${GENIC_REGIONS_BED}\" -wao -s > \"${STRAIN1_SITES%.bed}_genic_annotated.bed\"\nbedtools intersect -a \"${STRAIN2_SITES}\" -b \"${GENIC_REGIONS_BED}\" -wao -s > \"${STRAIN2_SITES%.bed}_genic_annotated.bed\"\n# Repeat for other strains as needed.\n\n# --- Step 2: Characterize according to their overlap with other strains ---\n# Use bedtools multiinter to identify regions that overlap across multiple strains.\n# The output indicates which input files (strains) each interval overlaps.\n# The 4th column of the output indicates the number of overlaps.\n# The last column lists the indices of the input files that overlap.\nbedtools multiinter -i \"${STRAIN1_SITES}\" \"${STRAIN2_SITES}\" \"${STRAIN3_SITES}\" > multi_strain_editing_site_overlap.bed\n\n# Further analysis would combine the genic annotation and multi-strain overlap information.",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        }
+    ],
+    "raw_text": "ssRNAseq: The adr-1(-);adr-2(-) sample was sequenced on one lane of Illumina's HiSeq 2000 yielding 216 million single-end 76nt reads.  Each other sample was sequenced on a lane of Illumina GAII yielding between 37 and 42 million reads of the same type.  Illumina Casava1.8.2 software used for basecalling.\nMapping: Sequenced reads were mapped to the C. elegans reference genome (ce10) using TopHat aligner (version 2.0.6) allowing only uniquely-mapped reads with up to two mismatches each with command line options -Mx 1 and -N 2\nVariant calling: sites with RNA-DNA differences were identified by SAMtools mpileup (version 0.1.18) tallying up to 1000 alignments per site.  Additional command line options used were -D -I and -g.\nSite filters: Annotated SNPs were obtained from Illumina's iGenomes collection for C. elegans (ce10) and unannotated variants were extracted from the adr-1(-);adr-2(-) RNA-Seq dataset.  These genomic variants were filtered from the putative sites in all other strains reducing the number of false-positive predictions.\nRead filters:  Each read aligned to one the remaining putative sites was filtered out if: a) it was a suspected PCR duplicate, according to SAMtools rmdup (version 0.1.18); b) it had a junction overhang < 10nt according to its SAMtools CIGAR string; c) it had > 1 non-A2G or non-C2T mismatch or any short indel, per its MD tag; d) it had a mismatch less than 25nt away from either end of the read\nIdentify sites:  Putative RNA editing sites were identified from A2G variants on the sense strand and T2C variants on the antisense strand that were covered by more than 5 reads which passed the filters in step 5, including the stringent 25nt threshold for filter 5d).\nQuantify sites: The extent of editing at each site and our confidence in that prediction were quantified by a novel extension of the classical Bayesian model used for genomic variants, which is described in more detail in the next section.\nTo increase the accuracy and confidence of our predictions, we used additional reads from the relaxed version of filter 5d) that overlap the sites identified in step 6.  Moreover, we dropped sites that exhibited editing in 100% of the reads (suggesting a genomic variant not filtered out by step 4) and those with very low editing (less than 10%), which would have been hard to distinguish from sequencing errors.\nThe predicted RNA editing sites from each strain were characterized according to their position in annotated genic regions (introns, exons, 3'/5' UTRs, etc.) and according to their overlap with other strains.\nSupplementary_files_format_and_content: tab-delimited text file containing #READS and %EDITING values for each editing site\nGenome_build: ce10",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

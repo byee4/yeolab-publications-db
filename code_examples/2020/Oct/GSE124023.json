@@ -1,205 +1,205 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Sequenced reads were removed of inline barcodes and reformatted to include randomers in read headers with eclipdemux (v0.0.1).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Args: --length 10",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Reads were then trimmed with cutadapt (1.9.1).",
-      "tool_name": "cutadapt",
-      "tool_version": "1.9.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Args: --match-read-wildcards -O 1 --times 1 -e 0.1 --quality-cutoff 6 -m 18 -g g_adapters.fasta -A A_adapters.fasta -a a_adapters.fasta (fasta sequences generated from parsebarcodes.sh within the eclip 0.1.5+ pipeline)",
-      "tool_name": "eCLIP",
-      "tool_version": "0.1.5",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Reads were then trimmed once more with cutadapt (1.9.1) to remove double-ligation events.",
-      "tool_name": "cutadapt",
-      "tool_version": "1.9.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Args: --match-read-wildcards -O 1 --times 1 -e 0.1 --quality-cutoff 6 -m 18 -A A_adapters.fasta (fasta sequences generated from parsebarcodes.sh within the eclip 0.1.5+ pipeline)",
-      "tool_name": "eCLIP",
-      "tool_version": "0.1.5",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Trimmed reads were then mapped with STAR (2.4.0i) against a mouse-specific repeat element database (RepBase 18.05).",
-      "tool_name": "STAR",
-      "tool_version": "2.4.0i",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "Args: --runThreadN 16 \\ --genomeDir mouse_repbase \\ --readFilesIn path/to/read1 path/to/read2 \\ --outFileNamePrefix out_prefix \\ --outReadsUnmapped Fastx \\ --outSAMtype BAM Unsorted \\ --outSAMattributes All \\ --outSAMunmapped Within \\ --outSAMattrRGline ID:foo \\ --outFilterType BySJout \\ --outFilterMultimapNmax 30 \\ --outFilterMultimapScoreRange 1 \\ --outFilterScoreMin 10 \\ --alignEndsType EndToEnd",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "Unmapped reads filtered of repeat elements were then mapped with STAR (2.4.0i) against a mouse genome (mm10).",
-      "tool_name": "STAR",
-      "tool_version": "2.4.0i",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 10,
-      "description": "Args: --runThreadN 16 \\ --genomeDir genomedir \\ --readFilesIn /path/to/read1 /path/to/read2 \\ --outFileNamePrefix out_prefix \\ --outReadsUnmapped Fastx \\ --outSAMtype BAM Unsorted \\ --outSAMattributes All \\ --outSAMunmapped Within \\ --outSAMattrRGline ID:foo \\ --outFilterType BySJout \\ --outFilterMultimapNmax 1 \\ --outFilterMultimapScoreRange 1 \\ --outFilterScoreMin 10 \\ --alignEndsType EndToEnd",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 11,
-      "description": "Aligned reads were sorted with samtools (1.4.1)",
-      "tool_name": "samtools",
-      "tool_version": "1.4.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 12,
-      "description": "Sorted reads were collapsed with barcodecollapsepe.py included in eclip 0.1.5+ pipelines.",
-      "tool_name": "eCLIP",
-      "tool_version": "0.1.5",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 13,
-      "description": "Args: -o preRmDup.bam -m metrics_file -b rmDup.bam",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 14,
-      "description": "PCR de-duped reads from each inline barcode were then merged with samtools (1.4.1) merge (merged.bam)",
-      "tool_name": "samtools",
-      "tool_version": "1.4.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 15,
-      "description": "Merged alignments were split to keep just read2 using samtools (1.4.1) view.",
-      "tool_name": "samtools",
-      "tool_version": "1.4.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 16,
-      "description": "Args: -h -b -f 128",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 17,
-      "description": "Read2 BAM files were used to identify peak clusters with Clipper (1.2.2).",
-      "tool_name": "CLIPper",
-      "tool_version": "1.2.2",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 18,
-      "description": "Args: --species mm10 --bam path/to/input.bam --timeout 3600000 --maxgenes 1000000 --save-pickle --outfile path/to/output.bam",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 19,
-      "description": "Peak clusters were normalized using read2 BAM files for IP against read2 BAM files for INPUT with peaksnormalize.pl (overlap_peakfi_with_bam_PE.pl), included in eclip 0.1.5+.",
-      "tool_name": "eCLIP",
-      "tool_version": "0.1.5",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 20,
-      "description": "Overlapping normalized peak regions were merged with compress_l2foldenrpeakfi_for_replicate_overlapping_bedformat.pl, included within eclip-0.1.5+",
-      "tool_name": "eCLIP",
-      "tool_version": "0.1.5",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 21,
-      "description": "Normalized peak files were ranked by entropy score (make_informationcontent_from_peaks.pl included within the merge_peaks pipeline) and used as inputs to IDR (2.0.2) to determine reproducible peaks.",
-      "tool_name": "IDR",
-      "tool_version": "2.0.2",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 22,
-      "description": "Reproducible peaks were annotated by overlapping peak regions with Gencode M10 annotations",
-      "tool_name": "GENCODE",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Sequenced reads were removed of inline barcodes and reformatted to include randomers in read headers with eclipdemux (v0.0.1). Args: --length 10\nReads were then trimmed with cutadapt (1.9.1). Args: --match-read-wildcards -O 1 --times 1 -e 0.1 --quality-cutoff 6 -m 18 -g g_adapters.fasta -A A_adapters.fasta -a a_adapters.fasta (fasta sequences generated from parsebarcodes.sh within the eclip 0.1.5+ pipeline)\nReads were then trimmed once more with cutadapt (1.9.1) to remove double-ligation events. Args: --match-read-wildcards -O 1 --times 1 -e 0.1 --quality-cutoff 6 -m 18 -A A_adapters.fasta (fasta sequences generated from parsebarcodes.sh within the eclip 0.1.5+ pipeline)\nTrimmed reads were then mapped with STAR (2.4.0i) against a mouse-specific repeat element database (RepBase 18.05). Args: --runThreadN 16 \\  --genomeDir mouse_repbase \\  --readFilesIn path/to/read1 path/to/read2 \\  --outFileNamePrefix out_prefix \\  --outReadsUnmapped Fastx \\  --outSAMtype BAM Unsorted \\  --outSAMattributes All \\  --outSAMunmapped Within \\  --outSAMattrRGline ID:foo \\  --outFilterType BySJout \\  --outFilterMultimapNmax 30 \\  --outFilterMultimapScoreRange 1 \\  --outFilterScoreMin 10 \\  --alignEndsType EndToEnd\nUnmapped reads filtered of repeat elements were then mapped with STAR (2.4.0i) against a mouse genome (mm10). Args: --runThreadN 16 \\  --genomeDir genomedir \\  --readFilesIn /path/to/read1 /path/to/read2 \\  --outFileNamePrefix out_prefix \\  --outReadsUnmapped Fastx \\  --outSAMtype BAM   Unsorted \\  --outSAMattributes All \\  --outSAMunmapped Within \\  --outSAMattrRGline ID:foo \\  --outFilterType BySJout \\  --outFilterMultimapNmax 1 \\  --outFilterMultimapScoreRange 1 \\  --outFilterScoreMin 10 \\  --alignEndsType EndToEnd\nAligned reads were sorted with samtools (1.4.1)\nSorted reads were collapsed with barcodecollapsepe.py included in eclip 0.1.5+ pipelines. Args: -o preRmDup.bam -m metrics_file -b rmDup.bam\nPCR de-duped reads from each inline barcode were then merged with samtools (1.4.1) merge (merged.bam)\nMerged alignments were split to keep just read2 using samtools (1.4.1) view. Args: -h -b -f 128\nRead2 BAM files were used to identify peak clusters with Clipper (1.2.2). Args: --species mm10 --bam path/to/input.bam --timeout 3600000 --maxgenes 1000000 --save-pickle --outfile path/to/output.bam\nPeak clusters were normalized using read2 BAM files for IP against read2 BAM files for INPUT with peaksnormalize.pl (overlap_peakfi_with_bam_PE.pl), included in eclip 0.1.5+.\nOverlapping normalized peak regions were merged with compress_l2foldenrpeakfi_for_replicate_overlapping_bedformat.pl, included within eclip-0.1.5+\nNormalized peak files were ranked by entropy score (make_informationcontent_from_peaks.pl included within the merge_peaks pipeline) and used as inputs to IDR (2.0.2) to determine reproducible peaks.\nReproducible peaks were annotated by overlapping peak regions with Gencode M10 annotations\nGenome_build: mm10\nSupplementary_files_format_and_content: tab-delimited text files include -log10pValues and Log2FoldChange values for each IDR peaks called after cutoff of 3,3 in each parameter",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Sequenced reads were removed of inline barcodes and reformatted to include randomers in read headers with eclipdemux (v0.0.1).",
+            "tool_name": "eclipdemux",
+            "tool_version": "0.0.1",
+            "code_example": "# Install eclipdemux (assuming it's a Python package, often part of a larger workflow like yeolab/eclip or yeolab/skipper)\n# pip install eclipdemux\n\n# Define input and output files (placeholders)\nINPUT_FASTQ=\"raw_reads.fastq.gz\"\nOUTPUT_FASTQ=\"demuxed_reads.fastq.gz\"\nBARCODE_FILE=\"inline_barcodes.txt\" # Placeholder: file defining inline barcodes to be removed\nRANDOMER_LENGTH=10 # Placeholder: length of randomers to be added to read headers\n\n# Execute eclipdemux to remove inline barcodes and add randomers to read headers\n# The exact command might vary slightly depending on how eclipdemux is installed (e.g., as a standalone script or a Python module).\n# This example assumes it's run as a Python module, as seen in some Yeo lab pipelines.\npython -m eclipdemux.demux -i \"${INPUT_FASTQ}\" -o \"${OUTPUT_FASTQ}\" -b \"${BARCODE_FILE}\" -r \"${RANDOMER_LENGTH}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip"
+        },
+        {
+            "step_order": 2,
+            "description": "Args: --length 10",
+            "tool_name": "N/A (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "echo \"A specific tool cannot be inferred from 'Args: --length 10' without additional context (e.g., assay type, specific task). This argument could be used in various tools for filtering, k-mer length, motif length, etc.\"\n# Example placeholder if a tool were known:\n# some_tool --length 10 input.file > output.file",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "Reads were then trimmed with cutadapt (1.9.1).",
+            "tool_name": "cutadapt",
+            "tool_version": "1.9.1",
+            "code_example": "# Install cutadapt (if not already installed)\n# conda install -c bioconda cutadapt=1.9.1\n\n# Define input and output file names\nINPUT_READ1=\"input_R1.fastq.gz\"\nINPUT_READ2=\"input_R2.fastq.gz\"\nOUTPUT_READ1=\"trimmed_R1.fastq.gz\"\nOUTPUT_READ2=\"trimmed_R2.fastq.gz\"\n\n# Define common Illumina adapter sequences (adjust if specific adapters are known)\n# For Read 1 (forward strand)\nADAPTER_R1=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\"\n# For Read 2 (reverse complement of Read 1 adapter, or specific R2 adapter)\nADAPTER_R2=\"AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT\"\n\n# Trim adapters and quality trim reads\n# -a: 3' adapter for Read 1\n# -A: 3' adapter for Read 2\n# -q: Quality cutoff (e.g., 20 for both ends)\n# -m: Minimum read length after trimming (e.g., 20 bp)\n# -o: Output file for Read 1\n# -p: Output file for Read 2\ncutadapt -a \"${ADAPTER_R1}\" -A \"${ADAPTER_R2}\" \\\n         -q 20,20 -m 20 \\\n         -o \"${OUTPUT_READ1}\" -p \"${OUTPUT_READ2}\" \\\n         \"${INPUT_READ1}\" \"${INPUT_READ2}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 4,
+            "description": "Args: --match-read-wildcards -O 1 --times 1 -e 0.1 --quality-cutoff 6 -m 18 -g g_adapters.fasta -A A_adapters.fasta -a a_adapters.fasta (fasta sequences generated from parsebarcodes.sh within the eclip 0.1.5+ pipeline)",
+            "tool_name": "eCLIP",
+            "tool_version": "0.1.5",
+            "code_example": "# Install cutadapt if not already available\n# conda install -c bioconda cutadapt\n\n# Placeholder for input FASTQ file (e.g., raw reads after demultiplexing)\nINPUT_FASTQ=\"input_reads.fastq.gz\"\n# Placeholder for output trimmed FASTQ file\nOUTPUT_TRIMMED_FASTQ=\"trimmed_reads.fastq.gz\"\n\n# Adapter sequences generated from parsebarcodes.sh within the eclip 0.1.5+ pipeline\n# These files would contain the specific adapter sequences to be trimmed.\n# For example, g_adapters.fasta might contain 5' adapters, A_adapters.fasta and a_adapters.fasta 3' adapters.\n# Ensure these files are present in the working directory or provide their full paths.\nG_ADAPTERS_FASTA=\"g_adapters.fasta\"\nA_ADAPTERS_FASTA=\"A_adapters.fasta\"\na_ADAPTERS_FASTA=\"a_adapters.fasta\"\n\n# Execute cutadapt with the specified arguments for adapter trimming and quality filtering\ncutadapt \\\n  --match-read-wildcards \\\n  -O 1 \\\n  --times 1 \\\n  -e 0.1 \\\n  --quality-cutoff 6 \\\n  -m 18 \\\n  -g \"${G_ADAPTERS_FASTA}\" \\\n  -A \"${A_ADAPTERS_FASTA}\" \\\n  -a \"${a_ADAPTERS_FASTA}\" \\\n  -o \"${OUTPUT_TRIMMED_FASTQ}\" \\\n  \"${INPUT_FASTQ}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 5,
+            "description": "Reads were then trimmed once more with cutadapt (1.9.1) to remove double-ligation events.",
+            "tool_name": "cutadapt",
+            "tool_version": "1.9.1",
+            "code_example": "# Install cutadapt (version 1.9.1)\n# conda create -n cutadapt_env cutadapt=1.9.1\n# conda activate cutadapt_env\n\n# Define input and output files\nINPUT_FASTQ=\"input_reads.fastq.gz\"\nOUTPUT_FASTQ=\"trimmed_reads.fastq.gz\"\n\n# Define the 3' adapter sequence commonly used in eCLIP assays.\n# This adapter helps remove double-ligation events where the adapter ligates to itself or to the 3' end of the read.\nADAPTER_SEQUENCE=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC\"\n\n# Trim reads using cutadapt to remove the 3' adapter and filter for minimum length.\n# -a: Specifies a 3' adapter sequence.\n# -m: Discard reads shorter than MIN_LENGTH.\ncutadapt -a \"${ADAPTER_SEQUENCE}\" \\\n         -m 15 \\\n         -o \"${OUTPUT_FASTQ}\" \\\n         \"${INPUT_FASTQ}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 6,
+            "description": "Args: --match-read-wildcards -O 1 --times 1 -e 0.1 --quality-cutoff 6 -m 18 -A A_adapters.fasta (fasta sequences generated from parsebarcodes.sh within the eclip 0.1.5+ pipeline)",
+            "tool_name": "eCLIP",
+            "tool_version": "0.1.5",
+            "code_example": "# Install cutadapt if not already installed\n# conda install -c bioconda cutadapt\n\n# Placeholder for input FASTQ file (e.g., raw reads from sequencing)\nINPUT_FASTQ=\"input.fastq.gz\"\n# Placeholder for output trimmed FASTQ file\nOUTPUT_TRIMMED_FASTQ=\"output_trimmed.fastq.gz\"\n# Adapter file generated from parsebarcodes.sh within the eclip 0.1.5+ pipeline\nADAPTER_FILE=\"A_adapters.fasta\"\n\ncutadapt \\\n  --match-read-wildcards \\\n  -O 1 \\\n  --times 1 \\\n  -e 0.1 \\\n  --quality-cutoff 6 \\\n  -m 18 \\\n  -A \"${ADAPTER_FILE}\" \\\n  -o \"${OUTPUT_TRIMMED_FASTQ}\" \\\n  \"${INPUT_FASTQ}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 7,
+            "description": "Trimmed reads were then mapped with STAR (2.4.0i) against a mouse-specific repeat element database (RepBase 18.05).",
+            "tool_name": "STAR",
+            "tool_version": "2.4.0i",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables for input and reference files\nTRIMMED_READS=\"trimmed_reads.fastq.gz\" # Replace with your actual trimmed reads file\nMOUSE_REPBASE_STAR_INDEX=\"path/to/mouse_repbase_18.05_star_index\" # Replace with the actual path to the STAR index built from RepBase 18.05 mouse sequences\nOUTPUT_PREFIX=\"star_repbase_mapping_\"\nNUM_THREADS=8 # Adjust as needed\n\n# Run STAR to map trimmed reads against the mouse-specific repeat element database\nSTAR \\\n  --genomeDir \"${MOUSE_REPBASE_STAR_INDEX}\" \\\n  --readFilesIn \"${TRIMMED_READS}\" \\\n  --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n  --outSAMtype BAM SortedByCoordinate \\\n  --outFilterMultimapNmax 100 \\\n  --runThreadN \"${NUM_THREADS}\"\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 8,
+            "description": "Args: --runThreadN 16 \\ --genomeDir mouse_repbase \\ --readFilesIn path/to/read1 path/to/read2 \\ --outFileNamePrefix out_prefix \\ --outReadsUnmapped Fastx \\ --outSAMtype BAM Unsorted \\ --outSAMattributes All \\ --outSAMunmapped Within \\ --outSAMattrRGline ID:foo \\ --outFilterType BySJout \\ --outFilterMultimapNmax 30 \\ --outFilterMultimapScoreRange 1 \\ --outFilterScoreMin 10 \\ --alignEndsType EndToEnd",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR using conda\n# conda create -n star_env star=2.7.10a -c bioconda -c conda-forge\n# conda activate star_env\n\n# Placeholder for STAR genome index directory\n# Replace /path/to/STAR_index/GRCm39_with_repbase with the actual path to your STAR index.\n# This index should be generated for the mouse genome (e.g., GRCm39) and potentially include repetitive elements.\n# Example command for genome generation:\n# STAR --runThreadN <num_threads> --runMode genomeGenerate --genomeDir /path/to/STAR_index/GRCm39_with_repbase --genomeFastaFiles /path/to/GRCm39.fasta --sjdbGTFfile /path/to/GRCm39.gtf --sjdbOverhang 100\nGENOME_DIR=\"/path/to/STAR_index/GRCm39_with_repbase\"\n\n# Placeholder for input FASTQ files\nREAD1=\"path/to/read1.fastq.gz\"\nREAD2=\"path/to/read2.fastq.gz\"\n\n# Placeholder for output prefix\nOUTPUT_PREFIX=\"out_prefix\"\n\nSTAR \\\n  --runThreadN 16 \\\n  --genomeDir \"${GENOME_DIR}\" \\\n  --readFilesIn \"${READ1}\" \"${READ2}\" \\\n  --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n  --outReadsUnmapped Fastx \\\n  --outSAMtype BAM Unsorted \\\n  --outSAMattributes All \\\n  --outSAMunmapped Within \\\n  --outSAMattrRGline ID:foo \\\n  --outFilterType BySJout \\\n  --outFilterMultimapNmax 30 \\\n  --outFilterMultimapScoreRange 1 \\\n  --outFilterScoreMin 10 \\\n  --alignEndsType EndToEnd",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 9,
+            "description": "Unmapped reads filtered of repeat elements were then mapped with STAR (2.4.0i) against a mouse genome (mm10).",
+            "tool_name": "STAR",
+            "tool_version": "2.4.0i",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star=2.4.0i\n\n# Define variables\n# Input FASTQ file containing unmapped reads filtered of repeat elements\nINPUT_FASTQ=\"unmapped_reads.fastq.gz\"\n\n# Path to the pre-built STAR genome index for the mouse genome (mm10).\n# This directory should contain files like Genome, SA, SAindex, etc.\n# Replace with the actual path to your mm10 STAR index.\nGENOME_INDEX_DIR=\"/path/to/mm10_star_index\"\n\n# Prefix for output files (e.g., mapped_reads_Aligned.sortedByCoord.out.bam)\nOUTPUT_PREFIX=\"mapped_reads_\"\n\n# Number of threads to use for alignment\nNUM_THREADS=8 # Adjust based on available resources\n\n# Run STAR alignment\nSTAR --genomeDir \"${GENOME_INDEX_DIR}\" \\\n     --readFilesIn \"${INPUT_FASTQ}\" \\\n     --runThreadN \"${NUM_THREADS}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes Standard\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 10,
+            "description": "Args: --runThreadN 16 \\ --genomeDir genomedir \\ --readFilesIn /path/to/read1 /path/to/read2 \\ --outFileNamePrefix out_prefix \\ --outReadsUnmapped Fastx \\ --outSAMtype BAM Unsorted \\ --outSAMattributes All \\ --outSAMunmapped Within \\ --outSAMattrRGline ID:foo \\ --outFilterType BySJout \\ --outFilterMultimapNmax 1 \\ --outFilterMultimapScoreRange 1 \\ --outFilterScoreMin 10 \\ --alignEndsType EndToEnd",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.7.10a (Inferred with models/gemini-2.5-flash)",
+            "code_example": "STAR_GENOME_DIR=\"/path/to/STAR_genome_index_GRCh38\"\nREAD1_FILE=\"/path/to/read1.fastq.gz\"\nREAD2_FILE=\"/path/to/read2.fastq.gz\"\nOUTPUT_PREFIX=\"aligned_output\"\n\n# Install STAR using conda\n# conda install -c bioconda star\n\n# Note: The genome index must be pre-built using STAR's genomeGenerate command.\n# For human (GRCh38), you might download pre-built indices or create your own.\n\nSTAR \\\n  --runThreadN 16 \\\n  --genomeDir \"${STAR_GENOME_DIR}\" \\\n  --readFilesIn \"${READ1_FILE}\" \"${READ2_FILE}\" \\\n  --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n  --outReadsUnmapped Fastx \\\n  --outSAMtype BAM Unsorted \\\n  --outSAMattributes All \\\n  --outSAMunmapped Within \\\n  --outSAMattrRGline ID:foo \\\n  --outFilterType BySJout \\\n  --outFilterMultimapNmax 1 \\\n  --outFilterMultimapScoreRange 1 \\\n  --outFilterScoreMin 10 \\\n  --alignEndsType EndToEnd",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 11,
+            "description": "Aligned reads were sorted with samtools (1.4.1)",
+            "tool_name": "samtools",
+            "tool_version": "1.4.1",
+            "code_example": "# Install samtools if not already available\n# conda install -c bioconda samtools=1.4.1\n\n# Sort aligned reads\n# Replace 'aligned_reads.bam' with your actual input BAM file\n# Replace 'sorted_aligned_reads.bam' with your desired output sorted BAM file\nsamtools sort -o sorted_aligned_reads.bam aligned_reads.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 12,
+            "description": "Sorted reads were collapsed with barcodecollapsepe.py included in eclip 0.1.5+ pipelines.",
+            "tool_name": "eCLIP",
+            "tool_version": "0.1.5",
+            "code_example": "# Install eclip-utils, which contains barcodecollapsepe.py\n# conda install -c bioconda eclip-utils\n# or\n# pip install eclip-utils\n\n# Define input and output files\nINPUT_R1=\"sorted_reads_R1.fastq.gz\"\nINPUT_R2=\"sorted_reads_R2.fastq.gz\"\nOUTPUT_PREFIX=\"collapsed_reads\"\n\n# Collapse sorted reads using barcodecollapsepe.py\nbarcodecollapsepe.py -1 \"${INPUT_R1}\" -2 \"${INPUT_R2}\" -o \"${OUTPUT_PREFIX}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip"
+        },
+        {
+            "step_order": 13,
+            "description": "Args: -o preRmDup.bam -m metrics_file -b rmDup.bam",
+            "tool_name": "sambamba (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "0.8.0",
+            "code_example": "# Install sambamba\n# conda install -c bioconda sambamba\n\n# Execute sambamba markdup\nsambamba markdup -o preRmDup.bam -m markdup_metrics.txt rmDup.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/biod/sambamba"
+        },
+        {
+            "step_order": 14,
+            "description": "PCR de-duped reads from each inline barcode were then merged with samtools (1.4.1) merge (merged.bam)",
+            "tool_name": "samtools",
+            "tool_version": "1.4.1",
+            "code_example": "# Install samtools if not already installed\n# conda install -c bioconda samtools\n\n# Merge PCR de-duped reads from each inline barcode\n# Replace input_deduped_barcode_1.bam, input_deduped_barcode_2.bam with your actual de-duped BAM files\nsamtools merge merged.bam input_deduped_barcode_1.bam input_deduped_barcode_2.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 15,
+            "description": "Merged alignments were split to keep just read2 using samtools (1.4.1) view.",
+            "tool_name": "samtools",
+            "tool_version": "1.4.1",
+            "code_example": "# Input: merged_alignments.bam (placeholder for merged alignment file)\n# Output: read2_alignments.bam (placeholder for output file containing only read2)\n\n# Split merged alignments to keep just read2\n# -b: Output BAM format\n# -f 0x80: Select alignments where the 'read is second in pair' flag (0x80) is set.\nsamtools view -b -f 0x80 merged_alignments.bam > read2_alignments.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 16,
+            "description": "Args: -h -b -f 128",
+            "tool_name": "Unknown (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Unknown",
+            "code_example": "# The specific tool is not provided in the description.\n# This command uses a placeholder for the tool based on the given arguments.\ntool_placeholder -h -b -f 128",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 17,
+            "description": "Read2 BAM files were used to identify peak clusters with Clipper (1.2.2).",
+            "tool_name": "CLIPper",
+            "tool_version": "1.2.2",
+            "code_example": "# Install CLIPper (if not already installed)\n# pip install clipper\n# Or using conda:\n# conda install -c bioconda clipper\n\n# Placeholder for input Read2 BAM file and output prefix\nINPUT_BAM=\"input_read2.bam\"\nOUTPUT_PREFIX=\"output_peaks\"\n\n# Placeholder for genome reference files (using hg38 as the latest common assembly)\n# Ensure these files are available in your environment\nGENOME_FASTA=\"hg38.fa\"\nCHROM_SIZES=\"hg38.chrom.sizes\"\n\n# Run CLIPper to identify peak clusters\nclipper.py -b ${INPUT_BAM} -o ${OUTPUT_PREFIX} -s ${CHROM_SIZES} -f ${GENOME_FASTA}\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/clipper"
+        },
+        {
+            "step_order": 18,
+            "description": "Args: --species mm10 --bam path/to/input.bam --timeout 3600000 --maxgenes 1000000 --save-pickle --outfile path/to/output.bam",
+            "tool_name": "(Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Not specified",
+            "code_example": "# This tool is inferred based on the arguments provided.\n# The '--save-pickle' argument strongly suggests it's a Python script.\n# Replace 'python_script.py' with the actual script/tool name if known.\n\n# Example installation (replace with actual if known):\n# pip install some_python_package\n# or\n# git clone https://github.com/user/repo.git\n# cd repo\n# python setup.py install\n\n# Reference genome: mm10 (Mouse, GRCm38 assembly)\n# Source: UCSC Genome Browser or Ensembl\n\npython_script.py --species mm10 \\\n                 --bam path/to/input.bam \\\n                 --timeout 3600000 \\\n                 --maxgenes 1000000 \\\n                 --save-pickle \\\n                 --outfile path/to/output.bam",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 19,
+            "description": "Peak clusters were normalized using read2 BAM files for IP against read2 BAM files for INPUT with peaksnormalize.pl (overlap_peakfi_with_bam_PE.pl), included in eclip 0.1.5+.",
+            "tool_name": "eCLIP",
+            "tool_version": "0.1.5",
+            "code_example": "# Install eCLIP (or ensure scripts are in PATH)\n# For example, clone the repository and add scripts to PATH:\n# git clone https://github.com/yeolab/eclip.git\n# export PATH=\"$(pwd)/eclip/scripts:$PATH\"\n\n# Placeholder variables for input files\n# Replace with actual paths to your IP and INPUT read2 BAM files and the peak file to be normalized\nIP_READ2_BAM=\"ip_sample_read2.bam\"\nINPUT_READ2_BAM=\"input_sample_read2.bam\"\nPEAK_FILE=\"initial_peak_clusters.bed\"\nOUTPUT_PREFIX=\"normalized_peak_clusters\"\n\n# Normalize peak clusters using peaksnormalize.pl\n# The script uses read2 BAM files for IP against read2 BAM files for INPUT.\npeaksnormalize.pl \\\n    --ip_bam \"${IP_READ2_BAM}\" \\\n    --input_bam \"${INPUT_READ2_BAM}\" \\\n    --peak_file \"${PEAK_FILE}\" \\\n    --output_prefix \"${OUTPUT_PREFIX}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip"
+        },
+        {
+            "step_order": 20,
+            "description": "Overlapping normalized peak regions were merged with compress_l2foldenrpeakfi_for_replicate_overlapping_bedformat.pl, included within eclip-0.1.5+",
+            "tool_name": "eCLIP",
+            "tool_version": "0.1.5",
+            "code_example": "# Clone the eCLIP pipeline repository to get the script\n# git clone https://github.com/yeolab/eclip.git\n# cd eclip\n\n# Placeholder for input normalized peak regions from replicates\n# These would typically be BED files generated by a previous peak calling step\nINPUT_PEAKS_REP1=\"replicate1_normalized_peaks.bed\"\nINPUT_PEAKS_REP2=\"replicate2_normalized_peaks.bed\"\n\n# Placeholder for the output merged peak file\nOUTPUT_MERGED_PEAKS=\"merged_replicate_overlapping_peaks.bed\"\n\n# Execute the script to merge overlapping normalized peak regions\n# The script takes multiple input BED files and outputs a single merged BED file\nperl scripts/compress_l2foldenrpeakfi_for_replicate_overlapping_bedformat.pl \\\n    \"${INPUT_PEAKS_REP1}\" \\\n    \"${INPUT_PEAKS_REP2}\" \\\n    > \"${OUTPUT_MERGED_PEAKS}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip"
+        },
+        {
+            "step_order": 21,
+            "description": "Normalized peak files were ranked by entropy score (make_informationcontent_from_peaks.pl included within the merge_peaks pipeline) and used as inputs to IDR (2.0.2) to determine reproducible peaks.",
+            "tool_name": "IDR",
+            "tool_version": "2.0.2",
+            "code_example": "# Install IDR (if not already installed)\n# conda install -c bioconda idr=2.0.2\n\n# Placeholder for input files, which are \"Normalized peak files ranked by entropy score\"\n# These files would typically be generated by 'make_informationcontent_from_peaks.pl'\n# from the merge_peaks pipeline, for example:\n# perl make_informationcontent_from_peaks.pl -i replicate1.peaks.bed -o replicate1.ranked.bed\n# perl make_informationcontent_from_peaks.pl -i replicate2.peaks.bed -o replicate2.ranked.bed\n\n# Define input ranked peak files and output prefix\nINPUT_PEAKS_REP1=\"replicate1.ranked.bed\"\nINPUT_PEAKS_REP2=\"replicate2.ranked.bed\"\nOUTPUT_PREFIX=\"sample_id\"\n\n# Run IDR to determine reproducible peaks between replicates.\n# Parameters are based on the 'run_idr.sh' script within the yeolab/merge_peaks pipeline.\nidr --plot \\\n    --log-output-file \"${OUTPUT_PREFIX}.idr.log\" \\\n    --output-file \"${OUTPUT_PREFIX}.idr.peaks\" \\\n    \"${INPUT_PEAKS_REP1}\" \"${INPUT_PEAKS_REP2}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/merge_peaks"
+        },
+        {
+            "step_order": 22,
+            "description": "Reproducible peaks were annotated by overlapping peak regions with Gencode M10 annotations",
+            "tool_name": "GENCODE",
+            "tool_version": "2.27.1",
+            "code_example": "# Install bedtools\n# conda install -c bioconda bedtools\n\n# Define input and output files\nREPRODUCIBLE_PEAKS=\"reproducible_peaks.bed\" # Placeholder for your reproducible peak regions (e.g., output from IDR)\nGENCODE_GTF_URL=\"ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M10/gencode.vM10.annotation.gtf.gz\"\nGENCODE_GENES_BED=\"gencode.vM10.genes.bed\" # Placeholder for Gencode M10 gene annotations in BED format\nANNOTATED_PEAKS=\"annotated_peaks.bed\"\n\n# Download Gencode M10 annotation GTF (if not already present)\n# wget -nc \"${GENCODE_GTF_URL}\"\n\n# Extract gene features from GTF and convert to BED format.\n# This step assumes you want to annotate peaks with gene regions.\n# A more robust GTF to BED conversion might be needed depending on specific annotation requirements (e.g., exons, transcripts).\n# Example using awk to get gene regions (chr, start, end, gene_id|gene_name, score, strand):\n# zcat gencode.vM10.annotation.gtf.gz | awk '$3 == \"gene\" {\n#     split($9, a, \";\");\n#     gene_id=\"\"; gene_name=\"\";\n#     for (i=1; i<=length(a); i++) {\n#         if (a[i] ~ /gene_id/) { gene_id = substr(a[i], index(a[i], \"\\\"\")+1, length(a[i])-index(a[i], \"\\\"\")-1); }\n#         if (a[i] ~ /gene_name/) { gene_name = substr(a[i], index(a[i], \"\\\"\")+1, length(a[i])-index(a[i], \"\\\"\")-1); }\n#     }\n#     print $1\"\\t\"$4-1\"\\t\"$5\"\\t\"gene_id\"|\"gene_name\"\\t0\\t\"$7\n# }' > \"${GENCODE_GENES_BED}\"\n\n# Overlap reproducible peaks with Gencode M10 gene annotations\n# -a: input reproducible peaks BED file\n# -b: Gencode gene annotations BED file\n# -loj: left outer join, reports all entries in A, with corresponding entries in B if an overlap is found.\n#       If no overlap, B fields are reported as NULL. This is common for annotating peaks.\nbedtools intersect -a \"${REPRODUCIBLE_PEAKS}\" -b \"${GENCODE_GENES_BED}\" -loj > \"${ANNOTATED_PEAKS}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        }
+    ],
+    "raw_text": "Sequenced reads were removed of inline barcodes and reformatted to include randomers in read headers with eclipdemux (v0.0.1). Args: --length 10\nReads were then trimmed with cutadapt (1.9.1). Args: --match-read-wildcards -O 1 --times 1 -e 0.1 --quality-cutoff 6 -m 18 -g g_adapters.fasta -A A_adapters.fasta -a a_adapters.fasta (fasta sequences generated from parsebarcodes.sh within the eclip 0.1.5+ pipeline)\nReads were then trimmed once more with cutadapt (1.9.1) to remove double-ligation events. Args: --match-read-wildcards -O 1 --times 1 -e 0.1 --quality-cutoff 6 -m 18 -A A_adapters.fasta (fasta sequences generated from parsebarcodes.sh within the eclip 0.1.5+ pipeline)\nTrimmed reads were then mapped with STAR (2.4.0i) against a mouse-specific repeat element database (RepBase 18.05). Args: --runThreadN 16 \\  --genomeDir mouse_repbase \\  --readFilesIn path/to/read1 path/to/read2 \\  --outFileNamePrefix out_prefix \\  --outReadsUnmapped Fastx \\  --outSAMtype BAM Unsorted \\  --outSAMattributes All \\  --outSAMunmapped Within \\  --outSAMattrRGline ID:foo \\  --outFilterType BySJout \\  --outFilterMultimapNmax 30 \\  --outFilterMultimapScoreRange 1 \\  --outFilterScoreMin 10 \\  --alignEndsType EndToEnd\nUnmapped reads filtered of repeat elements were then mapped with STAR (2.4.0i) against a mouse genome (mm10). Args: --runThreadN 16 \\  --genomeDir genomedir \\  --readFilesIn /path/to/read1 /path/to/read2 \\  --outFileNamePrefix out_prefix \\  --outReadsUnmapped Fastx \\  --outSAMtype BAM   Unsorted \\  --outSAMattributes All \\  --outSAMunmapped Within \\  --outSAMattrRGline ID:foo \\  --outFilterType BySJout \\  --outFilterMultimapNmax 1 \\  --outFilterMultimapScoreRange 1 \\  --outFilterScoreMin 10 \\  --alignEndsType EndToEnd\nAligned reads were sorted with samtools (1.4.1)\nSorted reads were collapsed with barcodecollapsepe.py included in eclip 0.1.5+ pipelines. Args: -o preRmDup.bam -m metrics_file -b rmDup.bam\nPCR de-duped reads from each inline barcode were then merged with samtools (1.4.1) merge (merged.bam)\nMerged alignments were split to keep just read2 using samtools (1.4.1) view. Args: -h -b -f 128\nRead2 BAM files were used to identify peak clusters with Clipper (1.2.2). Args: --species mm10 --bam path/to/input.bam --timeout 3600000 --maxgenes 1000000 --save-pickle --outfile path/to/output.bam\nPeak clusters were normalized using read2 BAM files for IP against read2 BAM files for INPUT with peaksnormalize.pl (overlap_peakfi_with_bam_PE.pl), included in eclip 0.1.5+.\nOverlapping normalized peak regions were merged with compress_l2foldenrpeakfi_for_replicate_overlapping_bedformat.pl, included within eclip-0.1.5+\nNormalized peak files were ranked by entropy score (make_informationcontent_from_peaks.pl included within the merge_peaks pipeline) and used as inputs to IDR (2.0.2) to determine reproducible peaks.\nReproducible peaks were annotated by overlapping peak regions with Gencode M10 annotations\nGenome_build: mm10\nSupplementary_files_format_and_content: tab-delimited text files include -log10pValues and Log2FoldChange values for each IDR peaks called after cutoff of 3,3 in each parameter",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

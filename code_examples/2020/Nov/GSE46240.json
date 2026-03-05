@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "ChIP-seq and RNA-seq reads were aligned to the mm9 genome assembly using DNAnexus.",
-      "tool_name": "RNA-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "For ChIP-seq: Peaks were called using the DNAnexus ChIP-seq analyses tool with the following specifications: peak enrichment >20, peak-to background enrichment >3, a minimum ratio between uniquely and repetitively mapped reads of 3:1, a kernel bandwith of 30.0, FDR calculation enabled.",
-      "tool_name": "ChIP-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Background was combined input reads and reads from p53 ChIP in p53-/- MEFs.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "For RNA-seq: Tag counts were derived using the DNAnexus 3SEQ transcriptome-based quantification tool with the following specifications: Sense only, RefSeq genes.",
-      "tool_name": "RefSeq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "The DESeq library was used to normalize tag counts between samples and to call differentially expressed genes.",
-      "tool_name": "DESeq2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "ChIP-seq and RNA-seq reads were aligned to the mm9 genome assembly using DNAnexus.\nFor ChIP-seq: Peaks were called using the DNAnexus ChIP-seq analyses tool with the following specifications: peak enrichment >20, peak-to background enrichment >3, a minimum ratio between uniquely and repetitively mapped reads of 3:1, a kernel bandwith of 30.0, FDR calculation enabled. Background was combined input  reads and reads from p53 ChIP in p53-/- MEFs.\nFor RNA-seq: Tag counts were derived using the DNAnexus 3SEQ transcriptome-based quantification tool with the following specifications: Sense only, RefSeq genes. The DESeq library was used to normalize tag counts between samples and to call differentially expressed genes.\nGenome_build: mm9\nSupplementary_files_format_and_content: ChIP-seq: Processed data files are tab-delimited text files containing 1) Chromosome name, 2) Position (summit of the peak), 3) enrichment (based on background reads), 4) neg_log10_qvalue (negative log of q-value of peak) and 5) peak rank.\nSupplementary_files_format_and_content: RNA-seq: Processed files are tab-delimited text files containing normalized gene expression, obtained using DESeq.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "ChIP-seq and RNA-seq reads were aligned to the mm9 genome assembly using DNAnexus.",
+            "tool_name": "RNA-seq",
+            "tool_version": "2.7.10a (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install STAR (example using conda)\n# conda install -c bioconda star\n\n# Placeholder for genome index directory\n# You would typically download or build the STAR index for mm9.\n# Example for building index (replace with actual mm9 files, e.g., from UCSC or Ensembl):\n# mkdir -p star_index_mm9\n# STAR --runMode genomeGenerate \\\n#      --genomeDir star_index_mm9 \\\n#      --genomeFastaFiles Mus_musculus.NCBIM37.67.dna.primary_assembly.fa.gz \\\n#      --sjdbGTFfile Mus_musculus.NCBIM37.67.gtf.gz \\\n#      --runThreadN 8\n\n# Assuming STAR index for mm9 is available at /path/to/star_index_mm9\nGENOME_DIR=\"/path/to/star_index_mm9\" # Replace with actual path to mm9 STAR index\nREAD1=\"sample_R1.fastq.gz\" # Replace with actual R1 fastq file\nREAD2=\"sample_R2.fastq.gz\" # Replace with actual R2 fastq file (assuming paired-end)\nOUTPUT_PREFIX=\"sample_aligned\"\nTHREADS=8 # Adjust as needed\n\nSTAR --runThreadN ${THREADS} \\\n     --genomeDir ${GENOME_DIR} \\\n     --readFilesIn ${READ1} ${READ2} \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix ${OUTPUT_PREFIX} \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outSAMattributes Standard",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "For ChIP-seq: Peaks were called using the DNAnexus ChIP-seq analyses tool with the following specifications: peak enrichment >20, peak-to background enrichment >3, a minimum ratio between uniquely and repetitively mapped reads of 3:1, a kernel bandwith of 30.0, FDR calculation enabled.",
+            "tool_name": "ChIP-seq",
+            "tool_version": "Inferred with models/gemini-2.5-flash",
+            "code_example": "# This bash code block represents the likely underlying peak calling logic\n# using MACS2, which is commonly employed in ChIP-seq analysis pipelines\n# like the DNAnexus ChIP-seq analyses tool. The ENCODE ChIP-seq pipeline,\n# a common standard, utilizes MACS2 for peak calling.\n# The specific parameters mentioned in the description are mapped to MACS2\n# where applicable, or noted as post-processing/QC criteria.\n\n# Installation (uncomment to install via conda)\n# conda create -n macs2_env macs2=2.2.7.1\n# conda activate macs2_env\n\n# Define input files (placeholders - replace with actual paths)\n# TREATMENT_BAM: Path to the alignment file for the ChIP sample (e.g., IP sample)\n# CONTROL_BAM: Path to the alignment file for the input/control sample (e.g., Input DNA)\n# Example:\nTREATMENT_BAM=\"path/to/your/treatment.bam\"\nCONTROL_BAM=\"path/to/your/control.bam\"\nOUTPUT_DIR=\"macs2_peaks_output\"\nGENOME_SIZE=\"hs\" # For human (hg38), use 'hs'. For mouse (mm10), use 'mm'.\n                 # Refer to MACS2 documentation for other genome sizes or use --gsize <effective_genome_size>\nFDR_CUTOFF=0.05  # \"FDR calculation enabled\" - common default FDR cutoff is 0.05 if not specified\nKERNEL_BANDWIDTH=30.0 # \"a kernel bandwith of 30.0\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Execute MACS2 peak calling\n# Assuming paired-end reads (BAMPE) as is common for modern ChIP-seq. If single-end reads, change -f BAMPE to -f BAM.\nmacs2 callpeak \\\n    -t \"${TREATMENT_BAM}\" \\\n    -c \"${CONTROL_BAM}\" \\\n    -f BAMPE \\\n    -g \"${GENOME_SIZE}\" \\\n    -n \"chipseq_peaks\" \\\n    --outdir \"${OUTPUT_DIR}\" \\\n    --bw \"${KERNEL_BANDWIDTH}\" \\\n    -q \"${FDR_CUTOFF}\" \\\n    --keep-dup all # Keep all duplicate reads, common for ChIP-seq. Adjust if needed.\n\n# The following parameters are likely post-processing filters or quality control metrics\n# applied after initial peak calling, or specific to the DNAnexus tool's internal logic:\n# - Peak enrichment >20 (This would be a filter applied to the fold_enrichment column in MACS2 output)\n# - Peak-to background enrichment >3 (Similar to peak enrichment, often derived from signal over control)\n# - Minimum ratio between uniquely and repetitively mapped reads of 3:1 (This is a QC metric for input BAMs, not a direct peak calling parameter)",
+            "code_language": "bash",
+            "github_url": "https://github.com/ENCODE-DCC/chip-seq-pipeline2"
+        },
+        {
+            "step_order": 3,
+            "description": "Background was combined input reads and reads from p53 ChIP in p53-/- MEFs.",
+            "tool_name": "samtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.19",
+            "code_example": "# Install samtools if not already installed\n# conda install -c bioconda samtools\n\n# Combine aligned input reads (BAM) and aligned p53 ChIP reads from p53-/- MEFs (BAM)\n# to create a pooled background BAM file for downstream peak calling.\n# Replace 'input_control.bam' and 'p53_chip_ko.bam' with the actual paths to your input BAM files.\n# The output 'combined_background.bam' will be sorted if the input BAMs are sorted.\nsamtools merge combined_background.bam input_control.bam p53_chip_ko.bam\n\n# Index the merged background BAM file, which is often required for downstream tools like peak callers.\nsamtools index combined_background.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/ENCODE-DCC/chip-seq-pipeline2"
+        },
+        {
+            "step_order": 4,
+            "description": "For RNA-seq: Tag counts were derived using the DNAnexus 3SEQ transcriptome-based quantification tool with the following specifications: Sense only, RefSeq genes.",
+            "tool_name": "RefSeq",
+            "tool_version": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# This command is conceptual as DNAnexus 3SEQ is a platform-specific application.\n# Actual execution would involve running an app on the DNAnexus platform.\n# Example using the DNAnexus CLI (dx tool):\n\n# Assuming 'app-3seq' is the name of the 3SEQ quantification app on DNAnexus\n# and 'project-xxxx' is your project ID.\n# Input files (e.g., FASTQ reads) would need to be uploaded to DNAnexus first.\n# Reference genome and annotation (RefSeq genes) would also be available on the platform.\n\n# Placeholder for input FASTQ file ID on DNAnexus\nINPUT_FASTQ_ID=\"file-xxxx\"\n# Placeholder for RefSeq gene annotation file ID on DNAnexus (e.g., GRCh38 RefSeq GTF)\n# The specific RefSeq GTF file would need to be available or uploaded to the DNAnexus project.\nREFSEQ_GTF_ID=\"file-yyyy\" # Example: GRCh38 RefSeq GTF\n\n# Execute the 3SEQ app with specified parameters\n# The exact parameter names (e.g., --sense_only, --refseq_genes_file) are illustrative\n# and would depend on the specific app's input specifications.\ndx run app-3seq \\\n  -iinput_reads=\"${INPUT_FASTQ_ID}\" \\\n  -iref_genes=\"${REFSEQ_GTF_ID}\" \\\n  -isense_strand=\"true\" \\\n  -ooutput_counts=\"3seq_tag_counts.tsv\" \\\n  --wait # Wait for the job to complete",
+            "code_language": "bash",
+            "github_url": "https://www.dnanexus.com/"
+        },
+        {
+            "step_order": 5,
+            "description": "The DESeq library was used to normalize tag counts between samples and to call differentially expressed genes.",
+            "tool_name": "DESeq2",
+            "tool_version": "1.40.2 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install R and Bioconductor if not already present\n# sudo apt-get update\n# sudo apt-get install r-base\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\"); BiocManager::install(\"DESeq2\")'\n\n# Create dummy count data and sample information for demonstration\n# In a real scenario, these would be generated by upstream steps (e.g., featureCounts)\ncat <<EOF > counts.tsv\ngene_id\tsample1\tsample2\tsample3\tsample4\ngeneA\t100\t120\t50\t60\ngeneB\t20\t25\t10\t12\ngeneC\t500\t550\t200\t220\ngeneD\t5\t6\t2\t3\nEOF\n\ncat <<EOF > sample_info.tsv\nsample_id\tcondition\nsample1\ttreated\nsample2\ttreated\nsample3\tcontrol\nsample4\tcontrol\nEOF\n\n# R script for DESeq2 analysis\nRscript -e '\n  library(DESeq2)\n\n  # Load count data\n  count_data <- read.table(\"counts.tsv\", header = TRUE, row.names = 1, sep = \"\\t\")\n\n  # Load sample information\n  sample_info <- read.table(\"sample_info.tsv\", header = TRUE, row.names = 1, sep = \"\\t\")\n\n  # Ensure sample order matches between count data and sample info\n  sample_info <- sample_info[colnames(count_data), , drop = FALSE]\n\n  # Create DESeqDataSet object\n  dds <- DESeqDataSetFromMatrix(countData = count_data,\n                                colData = sample_info,\n                                design = ~ condition)\n\n  # Run DESeq2 analysis\n  dds <- DESeq(dds)\n\n  # Get results for the \"treated\" vs \"control\" comparison\n  # The contrast argument specifies the comparison: c(\"design_variable\", \"level_numerator\", \"level_denominator\")\n  res <- results(dds, contrast = c(\"condition\", \"treated\", \"control\"))\n\n  # Order results by adjusted p-value\n  res_ordered <- res[order(res$padj),]\n\n  # Save results to a file\n  write.table(as.data.frame(res_ordered), file = \"deseq2_results.tsv\", sep = \"\\t\", quote = FALSE, row.names = TRUE)\n\n  message(\"DESeq2 analysis complete. Results saved to deseq2_results.tsv\")\n'\n",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/DESeq2.html"
+        }
+    ],
+    "raw_text": "ChIP-seq and RNA-seq reads were aligned to the mm9 genome assembly using DNAnexus.\nFor ChIP-seq: Peaks were called using the DNAnexus ChIP-seq analyses tool with the following specifications: peak enrichment >20, peak-to background enrichment >3, a minimum ratio between uniquely and repetitively mapped reads of 3:1, a kernel bandwith of 30.0, FDR calculation enabled. Background was combined input  reads and reads from p53 ChIP in p53-/- MEFs.\nFor RNA-seq: Tag counts were derived using the DNAnexus 3SEQ transcriptome-based quantification tool with the following specifications: Sense only, RefSeq genes. The DESeq library was used to normalize tag counts between samples and to call differentially expressed genes.\nGenome_build: mm9\nSupplementary_files_format_and_content: ChIP-seq: Processed data files are tab-delimited text files containing 1) Chromosome name, 2) Position (summit of the peak), 3) enrichment (based on background reads), 4) neg_log10_qvalue (negative log of q-value of peak) and 5) peak rank.\nSupplementary_files_format_and_content: RNA-seq: Processed files are tab-delimited text files containing normalized gene expression, obtained using DESeq.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

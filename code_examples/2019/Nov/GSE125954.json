@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Reads were trimmed using cutadapt and aligned to the hg19 genome using BWA.",
-      "tool_name": "BWA",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Duplicate reads were marked using picard tools, and reads were filtered for a mapq score > 15.",
-      "tool_name": "Picard",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Macs2 callpeak was used to call peaks, with --broad used for H3K9me3.",
-      "tool_name": "MACS2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "To generate peak sets, macs2 called peaks were extended by 500bp then only kept if present and overlapping in both biological replicates.",
-      "tool_name": "MACS2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Reads were trimmed using cutadapt and aligned to the hg19 genome using BWA. Duplicate reads were marked using picard tools, and reads were filtered for a mapq score > 15.\nMacs2 callpeak was used to call peaks, with --broad used for H3K9me3.\nTo generate peak sets, macs2 called peaks were extended by 500bp then only kept if present and overlapping in both biological replicates.\nGenome_build: hg19\nSupplementary_files_format_and_content: Processed peak files are in bed format: chr, start, end.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Reads were trimmed using cutadapt and aligned to the hg19 genome using BWA.",
+            "tool_name": "BWA",
+            "tool_version": "0.7.17 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install cutadapt\n# conda install -c bioconda cutadapt\n\n# Install bwa\n# conda install -c bioconda bwa\n\n# Install samtools (often needed with BWA for post-processing)\n# conda install -c bioconda samtools\n\n# Define input files and reference genome\nREAD1=\"read1.fastq.gz\"\nREAD2=\"read2.fastq.gz\"\nHG19_REF=\"path/to/hg19.fa\" # Placeholder for hg19 reference genome\n\n# --- Step 1: Trim reads using cutadapt ---\n# Common Illumina universal adapters are used here. Adjust if specific adapters are known.\n# -a: 3' adapter for R1\n# -A: 3' adapter for R2\n# -q 20: Trim low-quality ends (quality below 20)\n# --minimum-length 20: Discard reads shorter than 20 bp after trimming\n# -o: Output file for R1\n# -p: Output file for R2\ncutadapt -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA \\\n         -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT \\\n         -q 20 \\\n         --minimum-length 20 \\\n         -o trimmed_${READ1} \\\n         -p trimmed_${READ2} \\\n         ${READ1} ${READ2}\n\n# --- Step 2: Align trimmed reads to hg19 using BWA-MEM ---\n# -M: Mark shorter split hits as secondary (for Picard compatibility)\n# -t 8: Use 8 threads (adjust based on available CPU cores)\n# | samtools view -Sb - > aligned.bam: Pipe SAM output to samtools to convert to unsorted BAM\nbwa mem -M -t 8 ${HG19_REF} trimmed_${READ1} trimmed_${READ2} | samtools view -Sb - > aligned.bam\n\n# --- Step 3: Sort and index the BAM file ---\nsamtools sort -o aligned.sorted.bam aligned.bam\nsamtools index aligned.sorted.bam\n\n# Note: The hg19 reference genome must be indexed for BWA prior to alignment.\n# If not already indexed, run:\n# bwa index ${HG19_REF}",
+            "code_language": "bash",
+            "github_url": "https://github.com/lh3/bwa"
+        },
+        {
+            "step_order": 2,
+            "description": "Duplicate reads were marked using picard tools, and reads were filtered for a mapq score > 15.",
+            "tool_name": "Picard",
+            "tool_version": "Picard 2.27.4, Samtools 1.16.1",
+            "code_example": "# Install Picard (if not already installed)\n# For example, using conda:\n# conda install -c bioconda picard\n\n# Install Samtools (if not already installed)\n# For example, using conda:\n# conda install -c bioconda samtools\n\n# Mark duplicate reads using Picard MarkDuplicates\n# Assuming input.bam is the aligned and sorted BAM file\npicard MarkDuplicates \\\n    I=input.bam \\\n    O=marked_duplicates.bam \\\n    M=markduplicates.metrics \\\n    ASSUME_SORTED=true \\\n    VALIDATION_STRINGENCY=SILENT\n\n# Filter reads for a MAPQ score > 15 using samtools view\nsamtools view -b -q 15 marked_duplicates.bam > filtered_mapq.bam\nsamtools index filtered_mapq.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/broadinstitute/picard"
+        },
+        {
+            "step_order": 3,
+            "description": "Macs2 callpeak was used to call peaks, with --broad used for H3K9me3.",
+            "tool_name": "MACS2",
+            "tool_version": "2.2.7.1 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install MACS2 (if not already installed)\n# conda install -c bioconda macs2\n\n# Define input and output files/directories (placeholders)\nINPUT_BAM=\"input.bam\" # Path to the H3K9me3 ChIP-seq alignment file\nCONTROL_BAM=\"control.bam\" # Path to the control (input) alignment file\nOUTPUT_DIR=\"macs2_peaks_H3K9me3\"\nPREFIX=\"H3K9me3_broad_peaks\"\nGENOME_SIZE=\"hs\" # For human, can also be 'mm' for mouse, or a specific number like '2.7e9'\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run MACS2 callpeak with --broad for H3K9me3\nmacs2 callpeak \\\n  -t \"${INPUT_BAM}\" \\\n  -c \"${CONTROL_BAM}\" \\\n  -f BAM \\\n  -g \"${GENOME_SIZE}\" \\\n  -n \"${PREFIX}\" \\\n  --outdir \"${OUTPUT_DIR}\" \\\n  --broad \\\n  --broad-cutoff 0.1 \\\n  -q 0.05",
+            "code_language": "bash",
+            "github_url": "https://github.com/macs3-project/MACS"
+        },
+        {
+            "step_order": 4,
+            "description": "To generate peak sets, macs2 called peaks were extended by 500bp then only kept if present and overlapping in both biological replicates.",
+            "tool_name": "MACS2",
+            "tool_version": "2.29.2",
+            "code_example": "# Install bedtools if not already present\n# conda install -c bioconda bedtools\n\n# Define input MACS2 peak files for replicates\n# These are assumed to be the 'macs2 called peaks' mentioned in the description.\nREP1_MACS2_PEAKS=\"rep1_macs2_peaks.bed\"\nREP2_MACS2_PEAKS=\"rep2_macs2_peaks.bed\"\n\n# Define genome sizes file (e.g., for hg38). This is crucial for bedtools slop to prevent extending off chromosome ends.\n# Replace 'hg38.chrom.sizes' with the actual genome sizes file used in your pipeline (e.g., from UCSC).\nGENOME_SIZES=\"hg38.chrom.sizes\"\n\n# Step 1: Extend MACS2 called peaks from replicate 1 by 500bp on both sides\n# bedtools slop adds 'b' base pairs to both ends of each feature.\nbedtools slop -i \"${REP1_MACS2_PEAKS}\" -g \"${GENOME_SIZES}\" -b 500 > rep1_macs2_peaks_extended.bed\n\n# Step 2: Extend MACS2 called peaks from replicate 2 by 500bp on both sides\nbedtools slop -i \"${REP2_MACS2_PEAKS}\" -g \"${GENOME_SIZES}\" -b 500 > rep2_macs2_peaks_extended.bed\n\n# Step 3: Identify peaks that are present and overlapping in both biological replicates.\n# This involves intersecting the extended peaks from both replicates bidirectionally.\n# The '-wao' option writes the original entry in A, the original entry in B, and the number of base pairs of overlap.\n\n# Intersect extended peaks from replicate 1 with replicate 2\nbedtools intersect -a rep1_macs2_peaks_extended.bed -b rep2_macs2_peaks_extended.bed -wao > rep1_rep2_overlap.tmp\n\n# Intersect extended peaks from replicate 2 with replicate 1\nbedtools intersect -a rep2_macs2_peaks_extended.bed -b rep1_macs2_peaks_extended.bed -wao > rep2_rep1_overlap.tmp\n\n# Step 4: Combine all identified overlapping regions, sort them, and then merge adjacent or overlapping regions\n# The awk command extracts the chromosome, start, and end coordinates of the original peak from the first file (A) that had an overlap.\n# This effectively creates a union of all peaks from both replicates that showed an overlap.\ncat rep1_rep2_overlap.tmp rep2_rep1_overlap.tmp | \\\n    awk 'BEGIN{OFS=\"\\t\"}{print $1,$2,$3}' | \\\n    sort -k1,1 -k2,2n | \\\n    bedtools merge -i - > reproducible_macs2_peaks.bed\n\n# Clean up temporary files\nrm rep1_macs2_peaks_extended.bed rep2_macs2_peaks_extended.bed rep1_rep2_overlap.tmp rep2_rep1_overlap.tmp",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/merge_peaks"
+        }
+    ],
+    "raw_text": "Reads were trimmed using cutadapt and aligned to the hg19 genome using BWA. Duplicate reads were marked using picard tools, and reads were filtered for a mapq score > 15.\nMacs2 callpeak was used to call peaks, with --broad used for H3K9me3.\nTo generate peak sets, macs2 called peaks were extended by 500bp then only kept if present and overlapping in both biological replicates.\nGenome_build: hg19\nSupplementary_files_format_and_content: Processed peak files are in bed format: chr, start, end.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

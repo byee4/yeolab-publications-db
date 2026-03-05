@@ -1,97 +1,97 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Standard processing of eCLIP data was performed as previously described (Blue SB, et al.",
-      "tool_name": "eCLIP",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Nature Protocols 2022), with mapping performed to a custom genome index that included both the VSV genome and either hg19 (for 293T experiments) or mm10 (for MEF experiments) as described below.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "UMI removal and cut adapt: umi_tools extract --random-seed 1 --bc-pattern NNNNNNNNNN --stdin 23145FL-08-01-37_S37_L001_R1_001.fastq.gz --log /dev/null | cutadapt -j 8 --match-read-wildcards --times 1 -e 0.1 --quality-cutoff 6 -m 18 -a a_adapters.fasta -O 1 - --report minimal 2> EV225_IP.cut.adapt.log | cutadapt -j 8 --match-read-wildcards --times 1 -e 0.1 --quality-cutoff 6 -m 18 -a a_adapters.fasta -O 5 - -o EV225_IP.trim.gz --report minimal >>EV225_IP.cut.adapt.log",
-      "tool_name": "cutadapt",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Repeat mapping (takes adapter-trimmed fastq files, and maps to a repeat database to filter repeat elements prior to genome mapping: STAR --runMode alignReads --runThreadN 8 --alignEndsType EndToEnd --genomeDir [mus_musculus_repbase_v2 or homo_sapiens_repbase_v2] --genomeLoad NoSharedMemory --outBAMcompression 10 --outFileNamePrefix EV225_IP.repeat.map --outFilterMultimapNmax 100 --outFilterMultimapScoreRange 1 --outFilterScoreMin 10 --outFilterType BySJout --outReadsUnmapped Fastx --outSAMattrRGline ID:foo --outSAMattributes All --outSAMmode Full --outSAMtype BAM Unsorted --outSAMunmapped None --outStd Log --readFilesCommand zcat --readFilesIn EV225_IP.trim.gz",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Unique genomic mapping (takes repeat-removed reads and maps to the reference genome: STAR --runMode alignReads --runThreadN 8 --alignEndsType EndToEnd --genomeDir [hg19+VSV or mm10+VSV] --genomeLoad NoSharedMemory --outBAMcompression 10 --outFileNamePrefix EV225_IP.genome.map --outFilterMultimapNmax 1 --outFilterMultimapScoreRange 1 --outFilterScoreMin 10 --outFilterType BySJout --outReadsUnmapped Fastx --outSAMattrRGline ID:foo --outSAMattributes All --outSAMmode Full --outSAMtype BAM Unsorted --outSAMunmapped None --outStd Log --readFilesIn EV225_IP.repeat.mapUnmapped.out.mate1",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Sort mapped reads: samtools sort -@ 8 -m 2G -o EV225_IP.genome.map.bam *Aligned.out.bam",
-      "tool_name": "samtools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Remove PCR duplicate reads: samtools index EV225_IP.genome.map.bam umi_tools dedup --random-seed 1 --stdin EV225_IP.genome.map.bam --method unique --stdout EV225_IP.bam",
-      "tool_name": "UMI-tools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "Make bigwigs: samtools index EV225_IP.bam b2bw EV225_IP.bam --cpus 1",
-      "tool_name": "samtools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "Isolate VSV-mapped reads only: bigWigToWig EV225.pos.bw -chrom=chrVSV EV225.pos.bw.chrVSV.wig",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 10,
-      "description": "wigToBigWig EV225.pos.bw.chrVSV.wig /path/to/hg19_and_vsv.chrom.sizes EV242.pos.bw.chrVSV.wig.bw",
-      "tool_name": "UCSC tools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Standard processing of eCLIP data was performed as previously described (Blue SB, et al. Nature Protocols 2022), with mapping performed to a custom genome index that included both the VSV genome and either hg19 (for 293T experiments) or mm10 (for MEF experiments) as described below.\nUMI removal and cut adapt:  umi_tools extract   --random-seed 1   --bc-pattern NNNNNNNNNN   --stdin 23145FL-08-01-37_S37_L001_R1_001.fastq.gz   --log /dev/null | cutadapt   -j 8   --match-read-wildcards   --times 1   -e 0.1   --quality-cutoff 6   -m 18   -a a_adapters.fasta   -O 1   -   --report minimal   2> EV225_IP.cut.adapt.log | cutadapt   -j 8  --match-read-wildcards   --times 1   -e 0.1   --quality-cutoff 6   -m 18   -a a_adapters.fasta   -O 5   -   -o EV225_IP.trim.gz   --report minimal   >>EV225_IP.cut.adapt.log\nRepeat mapping (takes adapter-trimmed fastq files, and maps to a repeat database to filter repeat elements prior to genome mapping:     STAR     --runMode alignReads     --runThreadN 8     --alignEndsType EndToEnd     --genomeDir  [mus_musculus_repbase_v2 or homo_sapiens_repbase_v2]   --genomeLoad NoSharedMemory     --outBAMcompression 10     --outFileNamePrefix EV225_IP.repeat.map     --outFilterMultimapNmax 100     --outFilterMultimapScoreRange 1     --outFilterScoreMin 10     --outFilterType BySJout     --outReadsUnmapped Fastx    --outSAMattrRGline ID:foo     --outSAMattributes All     --outSAMmode Full     --outSAMtype BAM Unsorted     --outSAMunmapped None     --outStd Log     --readFilesCommand zcat     --readFilesIn EV225_IP.trim.gz\nUnique genomic mapping (takes repeat-removed reads and maps to the reference genome: STAR   --runMode alignReads   --runThreadN 8   --alignEndsType EndToEnd   --genomeDir [hg19+VSV or mm10+VSV] --genomeLoad NoSharedMemory   --outBAMcompression 10   --outFileNamePrefix EV225_IP.genome.map   --outFilterMultimapNmax 1   --outFilterMultimapScoreRange 1   --outFilterScoreMin 10   --outFilterType BySJout   --outReadsUnmapped Fastx   --outSAMattrRGline ID:foo   --outSAMattributes All   --outSAMmode Full   --outSAMtype BAM Unsorted   --outSAMunmapped None   --outStd Log   --readFilesIn EV225_IP.repeat.mapUnmapped.out.mate1\nSort mapped reads: samtools sort -@ 8 -m 2G -o EV225_IP.genome.map.bam *Aligned.out.bam\nRemove PCR duplicate reads: samtools index EV225_IP.genome.map.bam umi_tools dedup   --random-seed 1   --stdin EV225_IP.genome.map.bam   --method unique   --stdout EV225_IP.bam\nMake bigwigs: samtools index EV225_IP.bam b2bw EV225_IP.bam  --cpus 1\nIsolate VSV-mapped reads only: bigWigToWig EV225.pos.bw -chrom=chrVSV EV225.pos.bw.chrVSV.wig\nwigToBigWig EV225.pos.bw.chrVSV.wig /path/to/hg19_and_vsv.chrom.sizes EV242.pos.bw.chrVSV.wig.bw\nAssembly: hg19 (for 293T) or mm10 (for MEF) with the addition of VSV (using accession NC_001560.1 with GFP was inserted between G and L as described in PMID 10400792)\nSupplementary files format and content: bw files contain read density (in bigwig format) for the VSV genome (positive or negative strand as indicated in filename). Bigwig files are not included for datasets with zero reads",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Standard processing of eCLIP data was performed as previously described (Blue SB, et al.",
+            "tool_name": "eCLIP",
+            "tool_version": "CWL workflow (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install cwltool if not already installed\n# pip install cwltool\n\n# Define placeholder paths for input files and reference genome\n# Replace these with your actual file paths and ensure reference files are indexed/prepared as required by the workflow.\n# For human (hg38) reference, ensure you have the FASTA, GTF, STAR index, chromosome sizes, and blacklist regions.\nFASTQ_R1=\"/path/to/your/sample_R1.fastq.gz\"\nFASTQ_R2=\"/path/to/your/sample_R2.fastq.gz\" # Set to \"null\" if single-end, e.g., FASTQ_R2=\"null\"\nGENOME_FASTA=\"/path/to/your/reference/hg38.fa\"\nGENOME_GTF=\"/path/to/your/reference/hg38.gtf\"\nSTAR_INDEX_DIR=\"/path/to/your/reference/STAR_index_hg38\"\nCHROM_SIZES=\"/path/to/your/reference/hg38.chrom.sizes\"\nBLACKLIST_BED=\"/path/to/your/reference/hg38_blacklist.bed\"\nOUTPUT_DIR=\"./eclip_output\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Create a CWL input YAML file for the eCLIP workflow\n# Note: If FASTQ_R2 is \"null\", the entry for fastq_r2 in the YAML should be 'fastq_r2: null'\ncat << EOF > eclip_inputs.yaml\nfastq_r1:\n  class: File\n  path: ${FASTQ_R1}\nfastq_r2:\n  class: File\n  path: ${FASTQ_R2}\ngenome_fasta:\n  class: File\n  path: ${GENOME_FASTA}\ngenome_gtf:\n  class: File\n  path: ${GENOME_GTF}\nstar_index:\n  class: Directory\n  path: ${STAR_INDEX_DIR}\nchrom_sizes:\n  class: File\n  path: ${CHROM_SIZES}\nblacklist_regions:\n  class: File\n  path: ${BLACKLIST_BED}\noutput_dir: ${OUTPUT_DIR}\nEOF\n\n# Execute the eCLIP CWL workflow using cwltool\n# Replace '/path/to/yeolab/eclip/workflow.cwl' with the actual path to the workflow.cwl file\n# from the cloned yeolab/eclip repository.\ncwltool --outdir \"${OUTPUT_DIR}\" /path/to/yeolab/eclip/workflow.cwl eclip_inputs.yaml\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 2,
+            "description": "Nature Protocols 2022), with mapping performed to a custom genome index that included both the VSV genome and either hg19 (for 293T experiments) or mm10 (for MEF experiments) as described below.",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables for input and output\n# CUSTOM_GENOME_INDEX_DIR should point to the pre-built STAR index\n# This index would have been created from a combination of the VSV genome and either hg19 (for 293T experiments) or mm10 (for MEF experiments).\n# Example for a 293T experiment (adjust paths and filenames as needed):\nCUSTOM_GENOME_INDEX_DIR=\"/path/to/star_index_vsv_hg19\" # Placeholder for the custom genome index directory (e.g., VSV+hg19)\nREAD1_FASTQ=\"sample_R1.fastq.gz\" # Placeholder for input Read 1 FASTQ file\nREAD2_FASTQ=\"sample_R2.fastq.gz\" # Placeholder for input Read 2 FASTQ file (remove if single-end reads)\nOUTPUT_PREFIX=\"aligned_sample\" # Prefix for output files\nNUM_THREADS=8 # Number of threads to use for alignment\n\n# Perform alignment using STAR\n# --genomeDir: Path to the STAR genome index\n# --readFilesIn: Input FASTQ files (space-separated for paired-end, single file for single-end)\n# --runThreadN: Number of threads for parallel processing\n# --outFileNamePrefix: Prefix for all output files generated by STAR\n# --outSAMtype BAM SortedByCoordinate: Output a sorted BAM file\n# --readFilesCommand zcat: Command to decompress gzipped FASTQ files on-the-fly\nSTAR --genomeDir \"${CUSTOM_GENOME_INDEX_DIR}\" \\\n     --readFilesIn \"${READ1_FASTQ}\" \"${READ2_FASTQ}\" \\\n     --runThreadN \"${NUM_THREADS}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}_\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --readFilesCommand zcat\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "UMI removal and cut adapt: umi_tools extract --random-seed 1 --bc-pattern NNNNNNNNNN --stdin 23145FL-08-01-37_S37_L001_R1_001.fastq.gz --log /dev/null | cutadapt -j 8 --match-read-wildcards --times 1 -e 0.1 --quality-cutoff 6 -m 18 -a a_adapters.fasta -O 1 - --report minimal 2> EV225_IP.cut.adapt.log | cutadapt -j 8 --match-read-wildcards --times 1 -e 0.1 --quality-cutoff 6 -m 18 -a a_adapters.fasta -O 5 - -o EV225_IP.trim.gz --report minimal >>EV225_IP.cut.adapt.log",
+            "tool_name": "cutadapt",
+            "tool_version": "4.0",
+            "code_example": "# Reference dataset 'a_adapters.fasta' source is not specified.\numi_tools extract --random-seed 1 --bc-pattern NNNNNNNNNN --stdin 23145FL-08-01-37_S37_L001_R1_001.fastq.gz --log /dev/null | \\\ncutadapt -j 8 --match-read-wildcards --times 1 -e 0.1 --quality-cutoff 6 -m 18 -a a_adapters.fasta -O 1 - --report minimal 2> EV225_IP.cut.adapt.log | \\\ncutadapt -j 8 --match-read-wildcards --times 1 -e 0.1 --quality-cutoff 6 -m 18 -a a_adapters.fasta -O 5 - -o EV225_IP.trim.gz --report minimal >>EV225_IP.cut.adapt.log",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 4,
+            "description": "Repeat mapping (takes adapter-trimmed fastq files, and maps to a repeat database to filter repeat elements prior to genome mapping: STAR --runMode alignReads --runThreadN 8 --alignEndsType EndToEnd --genomeDir [mus_musculus_repbase_v2 or homo_sapiens_repbase_v2] --genomeLoad NoSharedMemory --outBAMcompression 10 --outFileNamePrefix EV225_IP.repeat.map --outFilterMultimapNmax 100 --outFilterMultimapScoreRange 1 --outFilterScoreMin 10 --outFilterType BySJout --outReadsUnmapped Fastx --outSAMattrRGline ID:foo --outSAMattributes All --outSAMmode Full --outSAMtype BAM Unsorted --outSAMunmapped None --outStd Log --readFilesCommand zcat --readFilesIn EV225_IP.trim.gz",
+            "tool_name": "STAR",
+            "tool_version": "Inferred with models/gemini-2.5-flash",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables\nINPUT_FASTQ=\"EV225_IP.trim.gz\"\nOUTPUT_PREFIX=\"EV225_IP.repeat.map\"\n# Choose the appropriate repeat database genome directory:\n# For Mus musculus: GENOME_DIR=\"mus_musculus_repbase_v2\"\n# For Homo sapiens: GENOME_DIR=\"homo_sapiens_repbase_v2\"\nGENOME_DIR=\"[mus_musculus_repbase_v2 or homo_sapiens_repbase_v2]\" # Placeholder - replace with actual path\nTHREADS=8\n\n# Execute STAR command for repeat mapping\nSTAR --runMode alignReads \\\n     --runThreadN \"${THREADS}\" \\\n     --alignEndsType EndToEnd \\\n     --genomeDir \"${GENOME_DIR}\" \\\n     --genomeLoad NoSharedMemory \\\n     --outBAMcompression 10 \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --outFilterMultimapNmax 100 \\\n     --outFilterMultimapScoreRange 1 \\\n     --outFilterScoreMin 10 \\\n     --outFilterType BySJout \\\n     --outReadsUnmapped Fastx \\\n     --outSAMattrRGline ID:foo \\\n     --outSAMattributes All \\\n     --outSAMmode Full \\\n     --outSAMtype BAM Unsorted \\\n     --outSAMunmapped None \\\n     --outStd Log \\\n     --readFilesCommand zcat \\\n     --readFilesIn \"${INPUT_FASTQ}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 5,
+            "description": "Unique genomic mapping (takes repeat-removed reads and maps to the reference genome: STAR --runMode alignReads --runThreadN 8 --alignEndsType EndToEnd --genomeDir [hg19+VSV or mm10+VSV] --genomeLoad NoSharedMemory --outBAMcompression 10 --outFileNamePrefix EV225_IP.genome.map --outFilterMultimapNmax 1 --outFilterMultimapScoreRange 1 --outFilterScoreMin 10 --outFilterType BySJout --outReadsUnmapped Fastx --outSAMattrRGline ID:foo --outSAMattributes All --outSAMmode Full --outSAMtype BAM Unsorted --outSAMunmapped None --outStd Log --readFilesIn EV225_IP.repeat.mapUnmapped.out.mate1",
+            "tool_name": "STAR",
+            "tool_version": "2.7.9a",
+            "code_example": "# Install STAR (example using conda)\n# conda install -c bioconda star\n\n# Placeholder for genome directory.\n# This directory should contain the STAR-indexed genome (e.g., hg19 with VSV sequences).\n# Example for genome generation:\n# STAR --runMode genomeGenerate --genomeDir hg19_vsv_genome_dir --genomeFastaFiles hg19.fa vsv.fa --sjdbGTFfile annotation.gtf --runThreadN 8\nGENOME_DIR=\"hg19_vsv_genome_dir\" # Replace with the actual path to your indexed genome (e.g., hg19+VSV or mm10+VSV)\n\n# Input reads file\nREADS_FILE=\"EV225_IP.repeat.mapUnmapped.out.mate1\"\n\n# Output prefix\nOUTPUT_PREFIX=\"EV225_IP.genome.map\"\n\nSTAR \\\n  --runMode alignReads \\\n  --runThreadN 8 \\\n  --alignEndsType EndToEnd \\\n  --genomeDir \"${GENOME_DIR}\" \\\n  --genomeLoad NoSharedMemory \\\n  --outBAMcompression 10 \\\n  --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n  --outFilterMultimapNmax 1 \\\n  --outFilterMultimapScoreRange 1 \\\n  --outFilterScoreMin 10 \\\n  --outFilterType BySJout \\\n  --outReadsUnmapped Fastx \\\n  --outSAMattrRGline ID:foo \\\n  --outSAMattributes All \\\n  --outSAMmode Full \\\n  --outSAMtype BAM Unsorted \\\n  --outSAMunmapped None \\\n  --outStd Log \\\n  --readFilesIn \"${READS_FILE}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 6,
+            "description": "Sort mapped reads: samtools sort -@ 8 -m 2G -o EV225_IP.genome.map.bam *Aligned.out.bam",
+            "tool_name": "samtools",
+            "tool_version": "1.9",
+            "code_example": "# Install samtools if not already available\n# conda install -c bioconda samtools\n\n# Define input and output file paths\n# Replace 'sample_name_Aligned.out.bam' with your actual input BAM file.\n# The description uses '*Aligned.out.bam' as a placeholder for the input file.\nINPUT_BAM=\"sample_name_Aligned.out.bam\"\nOUTPUT_BAM=\"EV225_IP.genome.map.bam\"\n\n# Sort mapped reads\nsamtools sort -@ 8 -m 2G -o \"${OUTPUT_BAM}\" \"${INPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 7,
+            "description": "Remove PCR duplicate reads: samtools index EV225_IP.genome.map.bam umi_tools dedup --random-seed 1 --stdin EV225_IP.genome.map.bam --method unique --stdout EV225_IP.bam",
+            "tool_name": "UMI-tools",
+            "tool_version": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "samtools index EV225_IP.genome.map.bam\numi_tools dedup --random-seed 1 --stdin EV225_IP.genome.map.bam --method unique --stdout EV225_IP.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/CGATOxford/UMI-tools"
+        },
+        {
+            "step_order": 8,
+            "description": "Make bigwigs: samtools index EV225_IP.bam b2bw EV225_IP.bam --cpus 1",
+            "tool_name": "samtools",
+            "tool_version": "3.5.1",
+            "code_example": "# Install samtools\n# conda install -c bioconda samtools\n\n# Install deepTools\n# conda install -c bioconda deepTools\n\n# Index the BAM file, a prerequisite for bigWig generation\nsamtools index EV225_IP.bam\n\n# Generate bigWig file from the indexed BAM file\n# The description uses 'b2bw', which is inferred to be a custom script or alias wrapping deepTools bamCoverage.\n# We use common parameters for bigWig generation from sequencing data.\nbamCoverage -b EV225_IP.bam \\\n            -o EV225_IP.bigwig \\\n            --numberOfProcessors 1 \\\n            --binSize 10 \\\n            --normalizeUsing RPKM",
+            "code_language": "bash",
+            "github_url": "https://github.com/deeptools/deepTools"
+        },
+        {
+            "step_order": 9,
+            "description": "Isolate VSV-mapped reads only: bigWigToWig EV225.pos.bw -chrom=chrVSV EV225.pos.bw.chrVSV.wig",
+            "tool_name": "bigWigToWig",
+            "tool_version": "UCSC Genome Browser utilities (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install UCSC Genome Browser utilities if not already installed\n# conda install -c bioconda ucsc-bigwigtowig\n\nbigWigToWig EV225.pos.bw -chrom=chrVSV EV225.pos.bw.chrVSV.wig",
+            "code_language": "bash",
+            "github_url": "https://genome.ucsc.edu/goldenPath/help/bigWig.html"
+        },
+        {
+            "step_order": 10,
+            "description": "wigToBigWig EV225.pos.bw.chrVSV.wig /path/to/hg19_and_vsv.chrom.sizes EV242.pos.bw.chrVSV.wig.bw",
+            "tool_name": "UCSC tools",
+            "tool_version": "UCSC tools",
+            "code_example": "# Install UCSC tools if not already available\n# conda install -c bioconda ucsc-wigtobigwig\n\n# Define input, reference, and output files\nINPUT_WIG=\"EV225.pos.bw.chrVSV.wig\"\nCHROM_SIZES=\"/path/to/hg19_and_vsv.chrom.sizes\" # This file should contain chromosome names and their sizes for hg19 and VSV. A standard hg19.chrom.sizes can be obtained from UCSC, but 'hg19_and_vsv' implies a custom file.\nOUTPUT_BIGWIG=\"EV242.pos.bw.chrVSV.wig.bw\"\n\n# Execute the wigToBigWig command\nwigToBigWig \"${INPUT_WIG}\" \"${CHROM_SIZES}\" \"${OUTPUT_BIGWIG}\"",
+            "code_language": "bash",
+            "github_url": "https://genome.ucsc.edu/goldenPath/help/bigWig.html"
+        }
+    ],
+    "raw_text": "Standard processing of eCLIP data was performed as previously described (Blue SB, et al. Nature Protocols 2022), with mapping performed to a custom genome index that included both the VSV genome and either hg19 (for 293T experiments) or mm10 (for MEF experiments) as described below.\nUMI removal and cut adapt:  umi_tools extract   --random-seed 1   --bc-pattern NNNNNNNNNN   --stdin 23145FL-08-01-37_S37_L001_R1_001.fastq.gz   --log /dev/null | cutadapt   -j 8   --match-read-wildcards   --times 1   -e 0.1   --quality-cutoff 6   -m 18   -a a_adapters.fasta   -O 1   -   --report minimal   2> EV225_IP.cut.adapt.log | cutadapt   -j 8  --match-read-wildcards   --times 1   -e 0.1   --quality-cutoff 6   -m 18   -a a_adapters.fasta   -O 5   -   -o EV225_IP.trim.gz   --report minimal   >>EV225_IP.cut.adapt.log\nRepeat mapping (takes adapter-trimmed fastq files, and maps to a repeat database to filter repeat elements prior to genome mapping:     STAR     --runMode alignReads     --runThreadN 8     --alignEndsType EndToEnd     --genomeDir  [mus_musculus_repbase_v2 or homo_sapiens_repbase_v2]   --genomeLoad NoSharedMemory     --outBAMcompression 10     --outFileNamePrefix EV225_IP.repeat.map     --outFilterMultimapNmax 100     --outFilterMultimapScoreRange 1     --outFilterScoreMin 10     --outFilterType BySJout     --outReadsUnmapped Fastx    --outSAMattrRGline ID:foo     --outSAMattributes All     --outSAMmode Full     --outSAMtype BAM Unsorted     --outSAMunmapped None     --outStd Log     --readFilesCommand zcat     --readFilesIn EV225_IP.trim.gz\nUnique genomic mapping (takes repeat-removed reads and maps to the reference genome: STAR   --runMode alignReads   --runThreadN 8   --alignEndsType EndToEnd   --genomeDir [hg19+VSV or mm10+VSV] --genomeLoad NoSharedMemory   --outBAMcompression 10   --outFileNamePrefix EV225_IP.genome.map   --outFilterMultimapNmax 1   --outFilterMultimapScoreRange 1   --outFilterScoreMin 10   --outFilterType BySJout   --outReadsUnmapped Fastx   --outSAMattrRGline ID:foo   --outSAMattributes All   --outSAMmode Full   --outSAMtype BAM Unsorted   --outSAMunmapped None   --outStd Log   --readFilesIn EV225_IP.repeat.mapUnmapped.out.mate1\nSort mapped reads: samtools sort -@ 8 -m 2G -o EV225_IP.genome.map.bam *Aligned.out.bam\nRemove PCR duplicate reads: samtools index EV225_IP.genome.map.bam umi_tools dedup   --random-seed 1   --stdin EV225_IP.genome.map.bam   --method unique   --stdout EV225_IP.bam\nMake bigwigs: samtools index EV225_IP.bam b2bw EV225_IP.bam  --cpus 1\nIsolate VSV-mapped reads only: bigWigToWig EV225.pos.bw -chrom=chrVSV EV225.pos.bw.chrVSV.wig\nwigToBigWig EV225.pos.bw.chrVSV.wig /path/to/hg19_and_vsv.chrom.sizes EV242.pos.bw.chrVSV.wig.bw\nAssembly: hg19 (for 293T) or mm10 (for MEF) with the addition of VSV (using accession NC_001560.1 with GFP was inserted between G and L as described in PMID 10400792)\nSupplementary files format and content: bw files contain read density (in bigwig format) for the VSV genome (positive or negative strand as indicated in filename). Bigwig files are not included for datasets with zero reads",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

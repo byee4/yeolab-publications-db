@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Sequenced reads were performed quality assessment using FastQC.",
-      "tool_name": "FastQC",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Sequenced reads were then aligend to GRCm38.p5 reference genome using Hisat2 tool.",
-      "tool_name": "HISAT2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Raw read counts were then obtained from aligned files using HTSeq.",
-      "tool_name": "HTSeq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Differential expression was analyzed by DESeq2",
-      "tool_name": "DESeq2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Sequenced reads were performed quality assessment using FastQC.\nSequenced reads were then aligend to GRCm38.p5 reference genome using Hisat2 tool.\nRaw read counts were then obtained from aligned files using HTSeq.\nDifferential expression was analyzed by DESeq2\nGenome_build: GRCm38.p5\nSupplementary_files_format_and_content: Test files include raw read counts for each sample and expression data.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Sequenced reads were performed quality assessment using FastQC.",
+            "tool_name": "FastQC",
+            "tool_version": "0.11.9",
+            "code_example": "# Install FastQC via Conda\n# conda install -c bioconda fastqc\n\n# Run FastQC on input FASTQ files\n# Replace 'input_reads.fastq.gz' with your actual input file(s)\n# Replace 'output_directory' with your desired output location\nfastqc input_reads.fastq.gz -o output_directory",
+            "code_language": "bash",
+            "github_url": "https://www.bioinformatics.babraham.ac.uk/projects/fastqc/"
+        },
+        {
+            "step_order": 2,
+            "description": "Sequenced reads were then aligend to GRCm38.p5 reference genome using Hisat2 tool.",
+            "tool_name": "HISAT2",
+            "tool_version": "2.2.1",
+            "code_example": "# Install HISAT2 (example using conda)\n# conda install -c bioconda hisat2\n\n# Create a directory for reference genome and index\nmkdir -p reference_genome\ncd reference_genome\n\n# Download GRCm38.p5 reference genome from NCBI\nwget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/635/24/GCF_000001635.24_GRCm38.p5/GCF_000001635.24_GRCm38.p5_genomic.fna.gz\ngunzip GCF_000001635.24_GRCm38.p5_genomic.fna.gz\n\n# Build HISAT2 index\n# The index name 'GRCm38_p5' is chosen to reflect the reference genome.\nhisat2-build GCF_000001635.24_GRCm38.p5_genomic.fna GRCm38_p5\n\ncd ..\n\n# Define input and output files\nREADS_R1=\"reads_R1.fastq.gz\" # Placeholder for forward reads\nREADS_R2=\"reads_R2.fastq.gz\" # Placeholder for reverse reads (if paired-end)\nOUTPUT_SAM=\"aligned_reads.sam\"\nOUTPUT_BAM=\"aligned_reads.bam\"\n\n# Align sequenced reads to GRCm38.p5 reference genome using HISAT2\n# Assuming paired-end reads and outputting SAM format, then converting to BAM and sorting.\n# --dta: Report alignments tailored for transcript assemblers like StringTie.\n# -p 8: Use 8 threads.\nhisat2 -x reference_genome/GRCm38_p5 -1 ${READS_R1} -2 ${READS_R2} --dta -p 8 -S ${OUTPUT_SAM}\n\n# Convert SAM to BAM and sort (requires samtools)\n# conda install -c bioconda samtools\nsamtools view -bS ${OUTPUT_SAM} | samtools sort -o ${OUTPUT_BAM}\n\n# Index the BAM file\nsamtools index ${OUTPUT_BAM}",
+            "code_language": "bash",
+            "github_url": "https://github.com/DaehwanKimLab/hisat2"
+        },
+        {
+            "step_order": 3,
+            "description": "Raw read counts were then obtained from aligned files using HTSeq.",
+            "tool_name": "HTSeq",
+            "tool_version": "Inferred with models/gemini-2.5-flash",
+            "code_example": "# Install HTSeq (if not already installed)\n# conda install -c bioconda htseq\n\n# Placeholder for reference genome annotation (e.g., GENCODE for hg38)\n# Replace with the actual path to your GTF file\nGTF_FILE=\"/path/to/gencode.v38.annotation.gtf\"\n\n# Placeholder for aligned BAM file\n# Replace with the actual path to your aligned BAM file\nALIGNED_BAM=\"/path/to/aligned_reads.bam\"\n\n# Output file for raw read counts\nOUTPUT_COUNTS=\"gene_counts.txt\"\n\n# Obtain raw read counts using htseq-count\n# Parameters are common defaults for RNA-seq counting:\n# -f bam: Input file format is BAM\n# -r pos: Reads are sorted by position (common for aligners like STAR)\n# -s reverse: Strandedness (adjust based on library preparation, 'yes', 'no', or 'reverse')\n# -a 10: Minimum alignment quality score to consider (default is 10)\n# -t exon: Feature type to count (e.g., 'exon' for gene-level counts)\n# -i gene_id: Attribute in GTF file to use as feature ID (e.g., 'gene_id')\n# --mode union: How to handle reads overlapping multiple features (union is common)\nhtseq-count -f bam -r pos -s reverse -a 10 -t exon -i gene_id --mode union \"${ALIGNED_BAM}\" \"${GTF_FILE}\" > \"${OUTPUT_COUNTS}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "Differential expression was analyzed by DESeq2",
+            "tool_name": "DESeq2",
+            "tool_version": "1.44.0",
+            "code_example": "# Install R if not already installed\n# sudo apt-get update\n# sudo apt-get install r-base\n\n# Install BiocManager if not already installed\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\")'\n\n# Install DESeq2\n# R -e 'BiocManager::install(\"DESeq2\")'\n\n# Create dummy input files for demonstration\n# In a real scenario, these would be generated by upstream steps (e.g., featureCounts, Salmon, Kallisto)\nmkdir -p data\ncat << EOF > data/counts.tsv\ngene_id\\tsample1\\tsample2\\tsample3\\tsample4\\tsample5\\tsample6\ngeneA\\t100\\t120\\t110\\t200\\t210\\t220\ngeneB\\t50\\t60\\t55\\t100\\t110\\t105\ngeneC\\t200\\t210\\t205\\t100\\t90\\t95\ngeneD\\t10\\t12\\t11\\t20\\t21\\t22\ngeneE\\t5\\t6\\t5\\t10\\t11\\t10\nEOF\n\ncat << EOF > data/sample_info.tsv\nsample_id\\tcondition\nsample1\\tcontrol\nsample2\\tcontrol\nsample3\\tcontrol\nsample4\\ttreated\nsample5\\ttreated\nsample6\\ttreated\nEOF\n\n# Define the R script for DESeq2 analysis\nDESEQ2_SCRIPT=\"\n# Load DESeq2 library\nlibrary(DESeq2)\n\n# --- Configuration ---\n# Input count matrix file (e.g., from featureCounts, Salmon, Kallisto)\n# This file should have genes/features as rows and samples as columns.\ncount_matrix_file <- \\\"data/counts.tsv\\\"\n\n# Sample information file (e.g., CSV or TSV)\n# This file should have sample names matching column names in count_matrix_file,\n# and columns for experimental conditions (e.g., \\\"condition\\\", \\\"treatment\\\").\nsample_info_file <- \\\"data/sample_info.tsv\\\"\n\n# Output file for differential expression results\noutput_results_file <- \\\"deseq2_results.tsv\\\"\n\n# Design formula (e.g., \\\"~ condition\\\", \\\"~ treatment + condition\\\")\n# This specifies the variables to use in the differential expression model.\ndesign_formula_str <- \\\"~ condition\\\"\n\n# --- Load Data ---\n# Read count matrix\ncount_data <- read.table(count_matrix_file, header = TRUE, row.names = 1, sep = \\\"\\t\\\")\n# Ensure counts are integers\ncount_data <- round(count_data)\n\n# Read sample information\nsample_info <- read.table(sample_info_file, header = TRUE, row.names = 1, sep = \\\"\\t\\\")\n\n# Ensure sample names match and are in the same order\nsample_info <- sample_info[colnames(count_data), , drop = FALSE]\n\n# --- Create DESeqDataSet object ---\ndds <- DESeqDataSetFromMatrix(countData = count_data,\n                              colData = sample_info,\n                              design = as.formula(design_formula_str))\n\n# --- Run DESeq2 analysis ---\ndds <- DESeq(dds)\n\n# --- Extract Results ---\n# Example: comparing \\\"treated\\\" vs \\\"control\\\" if \\\"condition\\\" has these levels\n# Replace \\\"condition\\\", \\\"treated\\\", \\\"control\\\" with actual column name and levels from your sample_info\nresults_obj <- results(dds, contrast = c(\\\"condition\\\", \\\"treated\\\", \\\"control\\\"))\n\n# Order results by adjusted p-value\nresults_obj <- results_obj[order(results_obj$padj), ]\n\n# --- Save Results ---\nwrite.table(as.data.frame(results_obj), file = output_results_file, sep = \\\"\\t\\\", quote = FALSE, row.names = TRUE)\n\nmessage(paste(\\\"Differential expression results saved to:\\\", output_results_file))\n\"\n\n# Execute the R script\nRscript -e \"$DESEQ2_SCRIPT\"",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/DESeq2.html"
+        }
+    ],
+    "raw_text": "Sequenced reads were performed quality assessment using FastQC.\nSequenced reads were then aligend to GRCm38.p5 reference genome using Hisat2 tool.\nRaw read counts were then obtained from aligned files using HTSeq.\nDifferential expression was analyzed by DESeq2\nGenome_build: GRCm38.p5\nSupplementary_files_format_and_content: Test files include raw read counts for each sample and expression data.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

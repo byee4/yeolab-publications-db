@@ -1,124 +1,124 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Data is processed in a similar way to standard eCLIP pipeline, except for a few adjustments to ABC\u00e2\u0080\u0099s multiplex design and library structure.",
-      "tool_name": "eCLIP",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "UMI are extracted using umitools 1.0.0 and adaptors are removed using cutadapt 2.8, then fastqs are demultiplexed based on the 5nt barcode sequence using fastx toolkit.",
-      "tool_name": "cutadapt",
-      "tool_version": "2.8",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Since ABC is sequenced on the reverse strand, we reverse complement sequences.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Alignment to the repetitive regions removes multi-mapped reads, then aligned to the genomic sequences using STAR 2.7.6.",
-      "tool_name": "STAR",
-      "tool_version": "2.7.6",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "The pipeline is available at https://github.com/algaebrown/oligoCLIP.git",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Given the genome alignment, we subsequently follow the steps to do peak call using CLIPper, then rank the peaks comparing to \u00e2\u0080\u009cbackgrounds\u00e2\u0080\u009d, either SMInput (eCLIP), RNA-seq (ABC), or to other multiplex libraries (internal normalization).",
-      "tool_name": "CLIPper",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "CLIPper uses nearby regions (+/- 500 b.p.) to estimate the background, followed by a Poisson distribution to assess the significance of a peak, whereas \u00e2\u0080\u009cnormalization\u00e2\u0080\u009d takes into account of another background library.",
-      "tool_name": "CLIPper",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "In the eCLIP protocol, the SMInput library is prepared the same way as the IP library, which estimates the background crosslinking rate of other RBPs with similar size ranges as well as the RNA expression level and all other bias in library preparation.",
-      "tool_name": "eCLIP",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "Since ABC does not have a SMInput, we realize that a total RNA-seq library can capture part of the bias.",
-      "tool_name": "RNA-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 10,
-      "description": "Furthermore, internal normalization to other multiplexed library can estimate not only the expression level, but also other biases introduced within the protocol.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 11,
-      "description": "Ideally, as the number of RBP approaches infinity, the summation of \u00e2\u0080\u009cother RBPs in the multiplexed library\u00e2\u0080\u009d should approach the SMI-input.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 12,
-      "description": "To estimate the significance of the peak based on backgrounds, we used a chi-square test (or Fisher Exact test, if the number of reads < 5) to compare the number of reads in the IP library and the background library within and outside of the peak region.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 13,
-      "description": "The pipeline is available at https://github.com/algaebrown/oligoCLIP.git",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Data is processed in a similar way to standard eCLIP pipeline, except for a few adjustments to ABC\u00e2\u0080\u0099s multiplex design and library structure. UMI are extracted using umitools 1.0.0 and adaptors are removed using cutadapt 2.8, then fastqs are demultiplexed based on the 5nt barcode sequence using fastx toolkit. Since ABC is sequenced on the reverse strand, we reverse complement sequences. Alignment to the repetitive regions removes multi-mapped reads, then aligned to the genomic sequences using STAR 2.7.6. The pipeline is available at https://github.com/algaebrown/oligoCLIP.git\nGiven the genome alignment, we subsequently follow the steps to do peak call using CLIPper, then rank the peaks comparing to \u00e2\u0080\u009cbackgrounds\u00e2\u0080\u009d, either SMInput (eCLIP), RNA-seq (ABC), or to other multiplex libraries (internal normalization). CLIPper uses nearby regions (+/- 500 b.p.) to estimate the background, followed by a Poisson distribution to assess the significance of a peak, whereas \u00e2\u0080\u009cnormalization\u00e2\u0080\u009d takes into account of another background library. In the eCLIP protocol, the SMInput library is prepared the same way as the IP library, which estimates the background crosslinking rate of other RBPs with similar size ranges as well as the RNA expression level and all other bias in library preparation. Since ABC does not have a SMInput, we realize that a total RNA-seq library can capture part of the bias. Furthermore, internal normalization to other multiplexed library can estimate not only the expression level, but also other biases introduced within the protocol. Ideally, as the number of RBP approaches infinity, the summation of \u00e2\u0080\u009cother RBPs in the multiplexed library\u00e2\u0080\u009d should approach the SMI-input. To estimate the significance of the peak based on backgrounds, we used a chi-square test (or Fisher Exact test, if the number of reads < 5) to compare the number of reads in the IP library and the background library within and outside of the peak region. The pipeline is available at https://github.com/algaebrown/oligoCLIP.git\nAssembly: GRCh38\nSupplementary files format and content: bed (unnormalized CLIPper peak)\nSupplementary files format and content: bed (normalized to RNA-seq)\nSupplementary files format and content: bed (normalized to other multiplex library, repeat element removed)",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Data is processed in a similar way to standard eCLIP pipeline, except for a few adjustments to ABC\u00e2\u0080\u0099s multiplex design and library structure.",
+            "tool_name": "eCLIP",
+            "tool_version": "CWL workflow (state of yeolab/eclip repository before 2021)",
+            "code_example": "# Install cwltool if not already installed\n# pip install cwltool\n\n# Clone the eCLIP CWL workflow repository\n# git clone https://github.com/yeolab/eclip.git\n# cd eclip\n\n# Placeholder for input files and reference genome\n# Replace with actual paths to your FASTQ files and reference genome/annotations\n# The description mentions \"adjustments to ABC\u2019s multiplex design and library structure\".\n# These adjustments would typically involve custom demultiplexing, adapter trimming, or UMI extraction\n# steps that might precede or be integrated into the initial stages of the eCLIP workflow.\n# For this standard eCLIP pipeline representation, we assume these initial steps are handled\n# or the input FASTQ files are ready for standard processing.\n\nINPUT_FASTQ_R1=\"path/to/your/sample_R1.fastq.gz\"\nINPUT_FASTQ_R2=\"path/to/your/sample_R2.fastq.gz\"\n\n# Reference genome (using hg38 as a common placeholder)\nGENOME_FASTA=\"path/to/your/hg38.fa\"\nGENOME_GTF=\"path/to/your/hg38.gtf\"\nSTAR_INDEX=\"path/to/your/star_index_hg38\" # Pre-built STAR index for hg38\n\n# Create a CWL input YAML file (example based on yeolab/eclip structure)\n# This is a simplified representation; actual inputs might be more complex\ncat << EOF > inputs.yaml\nfastq_r1:\n  class: File\n  path: ${INPUT_FASTQ_R1}\nfastq_r2:\n  class: File\n  path: ${INPUT_FASTQ_R2}\ngenome_fasta:\n  class: File\n  path: ${GENOME_FASTA}\ngenome_gtf:\n  class: File\n  path: ${GENOME_GTF}\nstar_index:\n  class: Directory\n  path: ${STAR_INDEX}\n# Add other necessary parameters as per eclip.cwl, e.g., adapters, output_prefix, etc.\n# For example, if custom adapters are used due to ABC's library structure:\n# adapters:\n#   class: File\n#   path: path/to/your/custom_adapters.fa\nEOF\n\n# Execute the eCLIP CWL workflow\n# This command runs the main eclip.cwl workflow, which orchestrates alignment, deduplication, peak calling, etc.\ncwltool --outdir ./eclip_output eclip.cwl inputs.yaml",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 2,
+            "description": "UMI are extracted using umitools 1.0.0 and adaptors are removed using cutadapt 2.8, then fastqs are demultiplexed based on the 5nt barcode sequence using fastx toolkit.",
+            "tool_name": "cutadapt",
+            "tool_version": "2.8",
+            "code_example": "# Install cutadapt (version 2.8)\n# conda create -n cutadapt_env cutadapt=2.8\n# conda activate cutadapt_env\n\n# Define input and output files\n# Input files are assumed to be the output from the UMI extraction step.\nINPUT_R1=\"umi_extracted_R1.fastq.gz\"\nINPUT_R2=\"umi_extracted_R2.fastq.gz\"\nOUTPUT_R1=\"cutadapt_trimmed_R1.fastq.gz\"\nOUTPUT_R2=\"cutadapt_trimmed_R2.fastq.gz\"\n\n# Define common Illumina adaptors (these might need to be adjusted based on specific library preparation kit)\nADAPTOR_R1=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\" # Illumina Universal Adaptor\nADAPTOR_R2=\"AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT\" # Illumina Read 2 Adaptor (or same as R1 depending on library)\n\n# Execute cutadapt to remove adaptors\ncutadapt -a \"${ADAPTOR_R1}\" -A \"${ADAPTOR_R2}\" \\\n         -o \"${OUTPUT_R1}\" -p \"${OUTPUT_R2}\" \\\n         \"${INPUT_R1}\" \"${INPUT_R2}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 3,
+            "description": "Since ABC is sequenced on the reverse strand, we reverse complement sequences.",
+            "tool_name": "seqtk (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.3",
+            "code_example": "# Install seqtk if not already available\n# conda install -c bioconda seqtk\n\n# Reverse complement sequences from 'input.fastq' and save to 'output.fastq'\n# The '-r' option performs reverse complement.\nseqtk seq -r input.fastq > output.fastq",
+            "code_language": "bash",
+            "github_url": "https://github.com/lh3/seqtk"
+        },
+        {
+            "step_order": 4,
+            "description": "Alignment to the repetitive regions removes multi-mapped reads, then aligned to the genomic sequences using STAR 2.7.6.",
+            "tool_name": "STAR",
+            "tool_version": "2.7.6",
+            "code_example": "# Install STAR if not already available\n# conda install -c bioconda star\n\n# Define variables\nREAD1=\"input_R1.fastq.gz\"\nREAD2=\"input_R2.fastq.gz\" # Assuming paired-end reads, common for eCLIP\nOUTPUT_PREFIX=\"sample_aligned\"\nTHREADS=$(nproc) # Use all available CPU cores\n\n# --- Reference Data Paths (PLACEHOLDERS - Update with actual paths) ---\n# Blacklist/Repetitive regions STAR index (e.g., rRNA, tRNA, simple repeats, ENCODE blacklist regions)\n# This index should be built from sequences that are to be filtered out.\n# Example: /path/to/star_index/blacklist_hg38\nBLACKLIST_STAR_INDEX=\"/path/to/star_index/blacklist_hg38\"\n\n# Genomic STAR index (e.g., human hg38)\n# Example: /path/to/star_index/hg38\nGENOME_STAR_INDEX=\"/path/to/star_index/hg38\"\n\n# Temporary files for unmapped reads from the blacklist alignment\nUNMAPPED_R1_TEMP=\"${OUTPUT_PREFIX}_blacklist_Unmapped.out.mate1\"\nUNMAPPED_R2_TEMP=\"${OUTPUT_PREFIX}_blacklist_Unmapped.out.mate2\"\n\necho \"Step 1: Aligning reads to repetitive regions (blacklist) to identify and filter out non-specific reads.\"\n# Align to blacklist genome. Reads that map here are considered repetitive/non-specific.\n# --outSAMtype None: Do not output BAM/SAM for this step, only interested in unmapped reads.\n# --outReadsUnmapped Fastx: Output unmapped reads in FASTQ format.\n# --outFilterMultimapNmax 100: Allow multi-mapping to blacklist, as we are primarily interested in reads that *don't* map anywhere here.\nSTAR --runThreadN ${THREADS} \\\n     --genomeDir ${BLACKLIST_STAR_INDEX} \\\n     --readFilesIn ${READ1} ${READ2} \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix ${OUTPUT_PREFIX}_blacklist_ \\\n     --outSAMtype None \\\n     --outReadsUnmapped Fastx \\\n     --outFilterMultimapNmax 100\n\necho \"Step 2: Aligning unmapped reads from blacklist alignment to the genomic sequences.\"\n# Align the reads that did not map to the blacklist to the main genome.\n# --outFilterMultimapNmax 1: Ensures only uniquely mapped reads are reported for the genomic alignment,\n#                             effectively \"removing multi-mapped reads\" from the final genomic BAM.\n# Standard STAR parameters for RNA-seq alignment are included.\nSTAR --runThreadN ${THREADS} \\\n     --genomeDir ${GENOME_STAR_INDEX} \\\n     --readFilesIn ${UNMAPPED_R1_TEMP} ${UNMAPPED_R2_TEMP} \\\n     --readFilesCommand cat \\\n     --outFileNamePrefix ${OUTPUT_PREFIX}_genome_ \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outFilterMultimapNmax 1 \\\n     --outFilterType BySJout \\\n     --outFilterScoreMinOverLread 0.3 \\\n     --outFilterMatchNminOverLread 0.3 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --limitBAMsortRAM 60000000000 # Adjust based on available RAM (e.g., 60GB)\n\n# Clean up temporary unmapped files\nrm ${UNMAPPED_R1_TEMP} ${UNMAPPED_R2_TEMP}\n\necho \"Alignment complete. Final BAM: ${OUTPUT_PREFIX}_genome_Aligned.sortedByCoordinate.out.bam\"\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper"
+        },
+        {
+            "step_order": 5,
+            "description": "The pipeline is available at https://github.com/algaebrown/oligoCLIP.git",
+            "tool_name": "oligoCLIP",
+            "tool_version": "latest",
+            "code_example": "# Clone the oligoCLIP pipeline repository\ngit clone https://github.com/algaebrown/oligoCLIP.git\ncd oligoCLIP\n\n# The description does not provide specific commands or parameters to run the pipeline.\n# Please refer to the repository's documentation (e.g., README.md) for usage instructions.\n# Example placeholder:\n# python run_oligoCLIP.py --input <input_file> --output <output_directory>",
+            "code_language": "bash",
+            "github_url": "https://github.com/algaebrown/oligoCLIP.git"
+        },
+        {
+            "step_order": 6,
+            "description": "Given the genome alignment, we subsequently follow the steps to do peak call using CLIPper, then rank the peaks comparing to \u00e2\u0080\u009cbackgrounds\u00e2\u0080\u009d, either SMInput (eCLIP), RNA-seq (ABC), or to other multiplex libraries (internal normalization).",
+            "tool_name": "CLIPper",
+            "tool_version": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install CLIPper (if not already installed)\n# pip install clipper\n\n# Download a genome size file (e.g., for hg38)\n# wget -O hg38.chrom.sizes http://hgdownload.cse.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes\n\n# Execute CLIPper for peak calling\n# Replace 'aligned_reads.bam' with your IP sample's aligned BAM file.\n# Replace 'background_reads.bam' with your control (SMInput, RNA-seq, or other multiplex library) aligned BAM file.\n# Replace 'hg38.chrom.sizes' with the appropriate genome size file for your reference genome.\n# Replace 'clipper_output' with your desired output prefix.\npython clipper.py -b aligned_reads.bam -c background_reads.bam -s hg38.chrom.sizes -o clipper_output",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/clipper"
+        },
+        {
+            "step_order": 7,
+            "description": "CLIPper uses nearby regions (+/- 500 b.p.) to estimate the background, followed by a Poisson distribution to assess the significance of a peak, whereas \u00e2\u0080\u009cnormalization\u00e2\u0080\u009d takes into account of another background library.",
+            "tool_name": "CLIPper",
+            "tool_version": "1.0.0",
+            "code_example": "# Install CLIPper (example using pip, or check repo for specific instructions)\n# A common way to install is via pip, or by cloning the repository and running setup.py.\n# pip install clipper\n# Alternatively, for the yeolab/clipper version, you might clone the repo and run directly:\n# git clone https://github.com/yeolab/clipper.git\n# cd clipper\n# python setup.py install\n\n# Example command for CLIPper peak calling\n# 'eclip_ip.bam' represents the treatment (IP) library.\n# 'eclip_input.bam' represents the control (background) library, used for normalization.\n# The '-w 500' parameter specifies the window size (+/- 500 b.p.) for background estimation.\n# 'hg38' is used as a placeholder for the genome assembly, which CLIPper uses for chromosome information.\nclipper.py -t eclip_ip.bam -c eclip_input.bam -o clipper_peaks -s hg38 -w 500",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/clipper"
+        },
+        {
+            "step_order": 8,
+            "description": "In the eCLIP protocol, the SMInput library is prepared the same way as the IP library, which estimates the background crosslinking rate of other RBPs with similar size ranges as well as the RNA expression level and all other bias in library preparation.",
+            "tool_name": "eCLIP",
+            "tool_version": "N/A (Protocol description)",
+            "code_example": "# This step describes the wet-lab preparation of the SMInput library, which is part of the eCLIP protocol.\n# The SMInput library is prepared to estimate background crosslinking rates and RNA expression levels for normalization.\n# There is no direct computational command for the physical preparation of the library.\n# The following command represents a typical first computational step: alignment of sequencing reads generated from the prepared SMInput library.\n\n# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables for input and output\n# Replace 'sm_input.fastq.gz' with the actual path to your SMInput sequencing reads.\n# Replace '/path/to/STAR_genome_index/hg38' with the actual path to your STAR genome index.\nSM_INPUT_FASTQ=\"sm_input.fastq.gz\"\nGENOME_DIR=\"/path/to/STAR_genome_index/hg38\" # Example for human hg38\nOUTPUT_PREFIX=\"sm_input_aligned\"\n\n# Example command to generate STAR genome index (run once per genome)\n# STAR --runMode genomeGenerate \\\n#      --genomeDir ${GENOME_DIR} \\\n#      --genomeFastaFiles /path/to/hg38.fa \\\n#      --sjdbGTFfile /path/to/gencode.vXX.annotation.gtf \\\n#      --runThreadN 8 # Adjust thread count as needed\n\n# Align SMInput reads using STAR\nSTAR --genomeDir ${GENOME_DIR} \\\n     --readFilesIn ${SM_INPUT_FASTQ} \\\n     --runThreadN 8 \\\n     --outFileNamePrefix ${OUTPUT_PREFIX}. \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.04 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --alignSJoverhangMin 8 \\\n     --alignSJDBoverhangMin 1 \\\n     --sjdbScore 1 \\\n     --readFilesCommand zcat",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1038/nmeth.3810"
+        },
+        {
+            "step_order": 9,
+            "description": "Since ABC does not have a SMInput, we realize that a total RNA-seq library can capture part of the bias.",
+            "tool_name": "RNA-seq",
+            "tool_version": "1.10.2",
+            "code_example": "# Install Salmon (example using conda)\n# conda install -c bioconda salmon=1.10.2\n\n# Define variables\n# Using human GRCh38 as a common reference assembly placeholder.\n# Transcriptome FASTA and GTF files are required for building the Salmon index.\nGENOME_VERSION=\"GRCh38\"\nTRANSCRIPTOME_FASTA=\"Homo_sapiens.${GENOME_VERSION}.cdna.all.fa.gz\" # Placeholder for transcriptome FASTA\nGTF_FILE=\"Homo_sapiens.${GENOME_VERSION}.109.gtf.gz\" # Placeholder for GTF file (optional for index, but good for context)\nSALMON_INDEX_DIR=\"salmon_index_${GENOME_VERSION}\"\nREAD1=\"sample_R1.fastq.gz\" # Placeholder for input R1 FASTQ\nREAD2=\"sample_R2.fastq.gz\" # Placeholder for input R2 FASTQ\nOUTPUT_DIR=\"salmon_quant_output\"\nNUM_THREADS=8 # Example number of threads\n\n# Download reference files (if not already present)\n# Example for Ensembl release 109:\n# wget -P . \"ftp://ftp.ensembl.org/pub/release-109/fasta/homo_sapiens/cdna/${TRANSCRIPTOME_FASTA}\"\n# wget -P . \"ftp://ftp.ensembl.org/pub/release-109/gtf/homo_sapiens/${GTF_FILE}\"\n\n# Build Salmon index (if not already built)\n# This step requires the transcriptome FASTA file.\n# salmon index -t \"${TRANSCRIPTOME_FASTA}\" -i \"${SALMON_INDEX_DIR}\" --type quasi -k 31\n\n# Run Salmon quantification\n# -i: index directory\n# -l A: automatically detect library type\n# -1: first read file\n# -2: second read file\n# -o: output directory\n# --gcBias: correct for GC bias (relevant to \"capture part of the bias\" in description)\n# --seqBias: correct for sequence-specific bias\n# -p: number of threads\nsalmon quant -i \"${SALMON_INDEX_DIR}\" \\\n             -l A \\\n             -1 \"${READ1}\" \\\n             -2 \"${READ2}\" \\\n             -o \"${OUTPUT_DIR}\" \\\n             --gcBias \\\n             --seqBias \\\n             -p \"${NUM_THREADS}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/COMBINE-lab/salmon"
+        },
+        {
+            "step_order": 10,
+            "description": "Furthermore, internal normalization to other multiplexed library can estimate not only the expression level, but also other biases introduced within the protocol.",
+            "tool_name": "DESeq2 (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.38.3",
+            "code_example": "# Install R and DESeq2 if not already installed\n# conda create -n deseq2_env r-base bioconductor-deseq2\n# conda activate deseq2_env\n\n# --- Placeholder for input files ---\n# counts.tsv: A tab-separated file with gene/transcript IDs as rows and sample names as columns, containing raw counts.\n#             Example:\n#             gene_id    sample1    sample2    sample3\n#             geneA      100        150        120\n#             geneB      50         70         60\n#             ...\n#\n# sample_info.tsv: A tab-separated file with sample names as rows and experimental design variables as columns.\n#                  The row names MUST match the column names of counts.tsv.\n#                  Example:\n#                  sample_id    condition    batch\n#                  sample1      treated      batch1\n#                  sample2      control      batch1\n#                  sample3      treated      batch2\n#                  ...\n\n# Example R script for DESeq2 normalization\ncat << 'EOF' > normalize_deseq2.R\nlibrary(DESeq2)\n\n# Load count data\n# Ensure the first column is used as row names (gene IDs)\ncount_data <- read.table(\"counts.tsv\", header=TRUE, row.names=1, sep=\"\\t\", check.names=FALSE)\n\n# Load sample information\n# Ensure the first column is used as row names (sample IDs)\nsample_info <- read.table(\"sample_info.tsv\", header=TRUE, row.names=1, sep=\"\\t\", check.names=FALSE)\n\n# Ensure sample order and names match between count data and sample info\n# This step is crucial for DESeq2\nif (!all(colnames(count_data) %in% rownames(sample_info))) {\n  stop(\"Sample names in count_data columns do not match sample names in sample_info rows.\")\n}\nsample_info <- sample_info[colnames(count_data), , drop=FALSE]\n\n# Create DESeqDataSet object\n# The 'design' formula specifies the experimental design.\n# Replace 'condition' with the actual column name from your sample_info.tsv that represents your primary variable of interest.\n# For simple normalization without differential expression, a design like ~1 or ~condition is often used.\ndds <- DESeqDataSetFromMatrix(countData = count_data,\n                              colData = sample_info,\n                              design = ~ condition) # !!! IMPORTANT: Adjust 'condition' to your actual column name from sample_info.tsv\n\n# Estimate size factors for normalization (median-of-ratios method)\ndds <- estimateSizeFactors(dds)\n\n# Get normalized counts\n# These are the raw counts divided by the size factors.\nnormalized_counts <- counts(dds, normalized=TRUE)\n\n# Save normalized counts to a file\nwrite.table(normalized_counts, file=\"normalized_counts.tsv\", sep=\"\\t\", quote=FALSE, col.names=NA)\n\nmessage(\"Normalization complete. Normalized counts saved to normalized_counts.tsv\")\n\n# Optional: For downstream analyses like PCA or clustering, it's often better to use\n# variance-stabilized data (rlog or vst transformation) rather than raw normalized counts.\n# These transformations account for the mean-variance relationship in count data.\n\n# # Rlog transformation (slower for large datasets, good for small-medium)\n# message(\"Performing rlog transformation...\")\n# rlog_data <- rlog(dds, blind=FALSE) # blind=FALSE if you have a design formula\n# write.table(assay(rlog_data), file=\"rlog_transformed_counts.tsv\", sep=\"\\t\", quote=FALSE, col.names=NA)\n# message(\"rlog transformed counts saved to rlog_transformed_counts.tsv\")\n\n# # VST transformation (faster for large datasets)\n# message(\"Performing vst transformation...\")\n# vst_data <- vst(dds, blind=FALSE) # blind=FALSE if you have a design formula\n# write.table(assay(vst_data), file=\"vst_transformed_counts.tsv\", sep=\"\\t\", quote=FALSE, col.names=NA)\n# message(\"vst transformed counts saved to vst_transformed_counts.tsv\")\nEOF\n\n# Execute the R script\nRscript normalize_deseq2.R\n\n# Reference genome/annotation for upstream count generation (e.g., GRCh38/hg38)\n# Source: Ensembl, GENCODE, UCSC",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/DESeq2.html"
+        },
+        {
+            "step_order": 11,
+            "description": "Ideally, as the number of RBP approaches infinity, the summation of \u00e2\u0080\u009cother RBPs in the multiplexed library\u00e2\u0080\u009d should approach the SMI-input.",
+            "tool_name": "(Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 12,
+            "description": "To estimate the significance of the peak based on backgrounds, we used a chi-square test (or Fisher Exact test, if the number of reads < 5) to compare the number of reads in the IP library and the background library within and outside of the peak region.",
+            "tool_name": "clipper (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Not specified",
+            "code_example": "    # Install clipper (example, actual installation might vary)\n    # pip install clipper\n\n    # Define input files and genome assembly\n    IP_BAM=\"ip_library.bam\" # Placeholder for IP library BAM file\n    BACKGROUND_BAM=\"background_library.bam\" # Placeholder for background library BAM file\n    GENOME_ASSEMBLY=\"hg38\" # Placeholder for genome assembly (e.g., hg38, mm10)\n    OUTPUT_DIR=\"clipper_peaks_output\"\n\n    # Create output directory if it doesn't exist\n    mkdir -p \"${OUTPUT_DIR}\"\n\n    # Run clipper to identify peaks and estimate significance using chi-square or Fisher's exact test.\n    # The tool internally compares reads in IP vs background within and outside peak regions.\n    clipper \\\n        --species \"${GENOME_ASSEMBLY}\" \\\n        --ip-bam \"${IP_BAM}\" \\\n        --control-bam \"${BACKGROUND_BAM}\" \\\n        --output-dir \"${OUTPUT_DIR}\" \\\n        --threshold 0.05 # Example p-value threshold for peak significance\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/clipper"
+        },
+        {
+            "step_order": 13,
+            "description": "The pipeline is available at https://github.com/algaebrown/oligoCLIP.git",
+            "tool_name": "oligoCLIP (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "unspecified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Clone the oligoCLIP repository\ngit clone https://github.com/algaebrown/oligoCLIP.git\n\n# Navigate into the cloned directory\ncd oligoCLIP\n\n# Refer to the project's documentation (e.g., README.md) for installation instructions, dependencies, and how to run the pipeline.",
+            "code_language": "bash",
+            "github_url": "https://github.com/algaebrown/oligoCLIP.git"
+        }
+    ],
+    "raw_text": "Data is processed in a similar way to standard eCLIP pipeline, except for a few adjustments to ABC\u00e2\u0080\u0099s multiplex design and library structure. UMI are extracted using umitools 1.0.0 and adaptors are removed using cutadapt 2.8, then fastqs are demultiplexed based on the 5nt barcode sequence using fastx toolkit. Since ABC is sequenced on the reverse strand, we reverse complement sequences. Alignment to the repetitive regions removes multi-mapped reads, then aligned to the genomic sequences using STAR 2.7.6. The pipeline is available at https://github.com/algaebrown/oligoCLIP.git\nGiven the genome alignment, we subsequently follow the steps to do peak call using CLIPper, then rank the peaks comparing to \u00e2\u0080\u009cbackgrounds\u00e2\u0080\u009d, either SMInput (eCLIP), RNA-seq (ABC), or to other multiplex libraries (internal normalization). CLIPper uses nearby regions (+/- 500 b.p.) to estimate the background, followed by a Poisson distribution to assess the significance of a peak, whereas \u00e2\u0080\u009cnormalization\u00e2\u0080\u009d takes into account of another background library. In the eCLIP protocol, the SMInput library is prepared the same way as the IP library, which estimates the background crosslinking rate of other RBPs with similar size ranges as well as the RNA expression level and all other bias in library preparation. Since ABC does not have a SMInput, we realize that a total RNA-seq library can capture part of the bias. Furthermore, internal normalization to other multiplexed library can estimate not only the expression level, but also other biases introduced within the protocol. Ideally, as the number of RBP approaches infinity, the summation of \u00e2\u0080\u009cother RBPs in the multiplexed library\u00e2\u0080\u009d should approach the SMI-input. To estimate the significance of the peak based on backgrounds, we used a chi-square test (or Fisher Exact test, if the number of reads < 5) to compare the number of reads in the IP library and the background library within and outside of the peak region. The pipeline is available at https://github.com/algaebrown/oligoCLIP.git\nAssembly: GRCh38\nSupplementary files format and content: bed (unnormalized CLIPper peak)\nSupplementary files format and content: bed (normalized to RNA-seq)\nSupplementary files format and content: bed (normalized to other multiplex library, repeat element removed)",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

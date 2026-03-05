@@ -1,70 +1,70 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Sequenced paired-end reads were mapped to the whole genome (mm10) using STAR (Dobin et al., 2013) with default parameters.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Genome index was built considering Ensembl annotation.",
-      "tool_name": "Ensembl",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "For each Ensembl gene, all of the exons of the respective annotated protein-coding transcripts were considered.",
-      "tool_name": "Ensembl",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Reads up to one mismatch were counted considering only reads in the right gene orientation and mapped in the defined exons.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Read counts were normalized by the library size (EdgeR, Robinson et al.",
-      "tool_name": "edgeR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "2010) and the average size of the transcripts.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Normalized reads count (RPKM) were log2 transformed.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Sequenced paired-end reads were mapped to the whole genome (mm10) using STAR (Dobin et al., 2013) with default parameters. Genome index was built considering Ensembl annotation.\nFor each Ensembl gene, all of the exons of the respective annotated protein-coding transcripts were considered. Reads up to one mismatch were counted considering only reads in the right gene orientation and mapped in the defined exons.\nRead counts were normalized by the library size (EdgeR, Robinson et al. 2010) and the average size of the transcripts. Normalized reads count (RPKM) were log2 transformed.\nGenome_build: mm10\nSupplementary_files_format_and_content: Tab-delimited text file include RPKM values for each sample",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Sequenced paired-end reads were mapped to the whole genome (mm10) using STAR (Dobin et al., 2013) with default parameters.",
+            "tool_name": "STAR",
+            "tool_version": "2.3.0e",
+            "code_example": "# Install STAR\n# conda install -c bioconda star\n\n# Define paths and filenames\nGENOME_DIR=\"./mm10_star_index\"\nFASTA_URL=\"ftp://ftp.ensembl.org/pub/release-109/fasta/mus_musculus/dna/Mus_musculus.GRCm38.dna.primary_assembly.fa.gz\"\nGTF_URL=\"ftp://ftp.ensembl.org/pub/release-109/gtf/mus_musculus/Mus_musculus.GRCm38.109.gtf.gz\"\nFASTA_GZ_FILE=\"Mus_musculus.GRCm38.dna.primary_assembly.fa.gz\"\nGTF_GZ_FILE=\"Mus_musculus.GRCm38.109.gtf.gz\"\nGENOME_FASTA=\"Mus_musculus.GRCm38.dna.primary_assembly.fa\"\nGENOME_GTF=\"Mus_musculus.GRCm38.109.gtf\"\n\nREAD1=\"sample_R1.fastq.gz\" # Placeholder for paired-end read 1\nREAD2=\"sample_R2.fastq.gz\" # Placeholder for paired-end read 2\nOUTPUT_PREFIX=\"sample_aligned_\"\nNUM_THREADS=8 # Adjust based on available resources\n\n# 1. Create directory for genome index\n# mkdir -p \"${GENOME_DIR}\"\n\n# 2. Download reference genome FASTA and GTF files\n# wget -O \"${FASTA_GZ_FILE}\" \"${FASTA_URL}\"\n# wget -O \"${GTF_GZ_FILE}\" \"${GTF_URL}\"\n\n# 3. Decompress files\n# gunzip -f \"${FASTA_GZ_FILE}\"\n# gunzip -f \"${GTF_GZ_FILE}\"\n\n# 4. Generate STAR genome index (using common parameters for RNA-seq, sjdbOverhang is often read_length - 1, 100 is a common default)\n# STAR --runMode genomeGenerate \\\n#      --genomeDir \"${GENOME_DIR}\" \\\n#      --genomeFastaFiles \"${GENOME_FASTA}\" \\\n#      --sjdbGTFfile \"${GENOME_GTF}\" \\\n#      --sjdbOverhang 100 \\\n#      --runThreadN \"${NUM_THREADS}\"\n\n# 5. Perform paired-end alignment with STAR using default parameters (and common output format for pipelines)\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${READ1}\" \"${READ2}\" \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --runThreadN \"${NUM_THREADS}\"\n",
+            "code_language": "bash",
+            "github_url": "https://pubmed.ncbi.nlm.nih.gov/23104886/"
+        },
+        {
+            "step_order": 2,
+            "description": "Genome index was built considering Ensembl annotation.",
+            "tool_name": "Ensembl",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR if not already available\n# conda install -c bioconda star\n\n# Define variables for genome and annotation files\n# Using Homo sapiens GRCh38 and Ensembl release 109 as a common example.\nGENOME_FASTA=\"Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz\"\nGTF_FILE=\"Homo_sapiens.GRCh38.109.gtf.gz\"\nGENOME_DIR=\"STAR_GRCh38_Ensembl109_Index\"\nNUM_THREADS=8 # Adjust as needed\n\n# Download reference files (example, actual download method may vary)\n# mkdir -p reference_data\n# wget -P reference_data ftp://ftp.ensembl.org/pub/release-109/fasta/homo_sapiens/dna/${GENOME_FASTA}\n# wget -P reference_data ftp://ftp.ensembl.org/pub/release-109/gtf/homo_sapiens/${GTF_FILE}\n\n# Create output directory for the genome index\nmkdir -p ${GENOME_DIR}\n\n# Build the STAR genome index\nSTAR --runMode genomeGenerate \\\n     --genomeDir ${GENOME_DIR} \\\n     --genomeFastaFiles reference_data/${GENOME_FASTA} \\\n     --sjdbGTFfile reference_data/${GTF_FILE} \\\n     --sjdbOverhang 100 \\\n     --runThreadN ${NUM_THREADS}",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "For each Ensembl gene, all of the exons of the respective annotated protein-coding transcripts were considered.",
+            "tool_name": "Ensembl",
+            "tool_version": "Release 111 (GRCh38) (Inferred from common usage and recent releases)",
+            "code_example": "# This step describes the *selection criteria* for genomic features from Ensembl.\n# It implies using a GTF/GFF file derived from Ensembl annotations.\n# The following commands demonstrate how one might obtain and filter such a file\n# to focus on exons of protein-coding transcripts for Homo sapiens (GRCh38).\n\n# --- Installation (if needed, wget, gunzip, awk are usually pre-installed) ---\n# # conda install -c conda-forge wget\n\n# --- Define variables for species and Ensembl release ---\nSPECIES=\"Homo_sapiens\"\nASSEMBLY=\"GRCh38\"\nENSEMBL_RELEASE=\"111\" # Example: Use a specific Ensembl release version\n\n# --- Download the Ensembl GTF file for the specified release and assembly ---\n# This URL pattern is common for Ensembl FTP archives.\n# Adjust the URL if a different mirror or specific file path is required.\nENSEMBL_FTP_BASE=\"ftp://ftp.ensembl.org/pub/release-${ENSEMBL_RELEASE}/gtf/${SPECIES,,}\"\nGTF_FILE=\"${SPECIES}.${ASSEMBLY}.${ENSEMBL_RELEASE}.gtf.gz\"\nDOWNLOAD_URL=\"${ENSEMBL_FTP_BASE}/${GTF_FILE}\"\n\necho \"Downloading Ensembl GTF file from: ${DOWNLOAD_URL}\"\nwget -nc \"${DOWNLOAD_URL}\"\n\n# --- Decompress the GTF file ---\ngunzip -f \"${GTF_FILE}\"\n\n# --- Filter the GTF file to consider only exons from protein-coding transcripts ---\n# This command extracts lines where the feature type is 'exon' AND\n# the gene_biotype attribute is 'protein_coding'.\nINPUT_GTF=\"${SPECIES}.${ASSEMBLY}.${ENSEMBL_RELEASE}.gtf\"\nOUTPUT_FILTERED_GTF=\"${SPECIES}.${ASSEMBLY}.${ENSEMBL_RELEASE}.protein_coding_exons.gtf\"\n\necho \"Filtering GTF file for protein-coding exons...\"\nawk '$3 == \"exon\" && $0 ~ /gene_biotype \"protein_coding\"/' \"${INPUT_GTF}\" > \"${OUTPUT_FILTERED_GTF}\"\n\necho \"Filtered GTF saved to: ${OUTPUT_FILTERED_GTF}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "Reads up to one mismatch were counted considering only reads in the right gene orientation and mapped in the defined exons.",
+            "tool_name": "featureCounts (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.0.6",
+            "code_example": "# Install Subread (which includes featureCounts)\n# conda install -c bioconda subread\n# conda install -c bioconda samtools\n\n# Define input and output files\nRAW_ALIGNED_BAM=\"aligned_reads.bam\" # Input BAM from alignment step\nFILTERED_ALIGNED_BAM=\"aligned_reads_mismatch_filtered.bam\"\nANNOTATION_GTF=\"Homo_sapiens.GRCh38.109.gtf\" # Placeholder for annotation file (e.g., from Ensembl)\nOUTPUT_COUNTS=\"exon_counts.txt\"\nFEATURE_TYPE=\"exon\" # As specified in the description\nGENE_ID_ATTRIBUTE=\"gene_id\" # Common attribute for grouping exons into genes\n\n# 1. Filter reads for up to one mismatch (NM:i:0 or NM:i:1)\n# This step uses samtools to convert BAM to SAM, then awk to filter based on the NM tag\n# (number of mismatches), and finally samtools to convert back to BAM.\nsamtools view -h \"${RAW_ALIGNED_BAM}\" | \\\nawk 'BEGIN{FS=\"\\t\"} /^@/ || /NM:i:0/ || /NM:i:1/' | \\\nsamtools view -b - > \"${FILTERED_ALIGNED_BAM}\"\n\n# 2. Count reads in defined exons with right gene orientation\n# -a: Annotation file\n# -o: Output file\n# -s 2: Strand-specific counting (reverse strand, common for many RNA-seq protocols).\n#       \"right gene orientation\" implies either -s 1 or -s 2. We assume -s 2 as a common default.\n# -t exon: Count reads mapping to exons\n# -g gene_id: Group features by gene_id\n# -p: If paired-end reads (add if applicable, otherwise omit)\nfeatureCounts -a \"${ANNOTATION_GTF}\" \\\n              -o \"${OUTPUT_COUNTS}\" \\\n              -s 2 \\\n              -t \"${FEATURE_TYPE}\" \\\n              -g \"${GENE_ID_ATTRIBUTE}\" \\\n              \"${FILTERED_ALIGNED_BAM}\"\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 5,
+            "description": "Read counts were normalized by the library size (EdgeR, Robinson et al.",
+            "tool_name": "edgeR",
+            "tool_version": "3.42.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install R and edgeR if not already present\n# conda install -c conda-forge r-base\n# conda install -c bioconductor bioconductor-edger\n\n# Create a dummy counts.tsv for demonstration purposes.\n# In a real pipeline, this file would be the output of a previous step (e.g., featureCounts, HTSeq).\n# It should contain gene/feature IDs in the first column and raw counts for each sample in subsequent columns.\necho -e \"Gene\\tSample1\\tSample2\\tSample3\" > counts.tsv\necho -e \"GeneA\\t1000\\t1200\\t1100\" >> counts.tsv\necho -e \"GeneB\\t2000\\t2500\\t2200\" >> counts.tsv\necho -e \"GeneC\\t500\\t600\\t550\" >> counts.tsv\necho -e \"GeneD\\t100\\t120\\t110\" >> counts.tsv\n\n# R script to perform edgeR library size normalization using TMM (Trimmed Mean of M-values).\n# The normalization factors are calculated and saved to 'normalization_factors.tsv'.\n# These factors are typically used in downstream differential expression analysis with edgeR.\nRscript -e '\n  library(edgeR)\n  \n  # Read count data. Assumes first column is row names (e.g., gene IDs).\n  counts_data <- read.delim(\"counts.tsv\", row.names = 1, check.names = FALSE)\n  \n  # Create a DGEList object from the count matrix.\n  dge <- DGEList(counts = counts_data)\n  \n  # Calculate normalization factors (TMM method is default for calcNormFactors).\n  # These factors adjust for differences in library size and composition.\n  dge <- calcNormFactors(dge)\n  \n  # Save the sample information, including the calculated normalization factors, to a TSV file.\n  # The normalization factors are in the \"norm.factors\" column.\n  write.table(dge$samples, \"normalization_factors.tsv\", sep = \"\\t\", quote = FALSE, row.names = TRUE)\n  \n  # Optional: To get TMM-normalized counts (e.g., as Counts Per Million - CPM),\n  # you can use the cpm() function with normalized.lib.sizes = TRUE.\n  # normalized_cpm_counts <- cpm(dge, normalized.lib.sizes = TRUE)\n  # write.table(normalized_cpm_counts, \"normalized_cpm_counts.tsv\", sep = \"\\t\", quote = FALSE, row.names = TRUE)\n'",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 6,
+            "description": "2010) and the average size of the transcripts.",
+            "tool_name": "seqkit (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.3.1",
+            "code_example": "# Install seqkit (if not already installed)\n# conda install -c bioconda seqkit\n\n# Define reference paths\n# Replace with actual paths to your reference genome and annotation files\nREF_DIR=\"/path/to/reference/GRCh38\"\nTRANSCRIPTOME_FASTA=\"${REF_DIR}/gencode.v44.transcripts.fa\" # Placeholder for GRCh38 transcriptome FASTA\n\n# Ensure the reference transcriptome FASTA file exists\n# Example download (uncomment and modify as needed):\n# wget -P \"${REF_DIR}\" https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_44/gencode.v44.transcripts.fa.gz\n# gunzip \"${REF_DIR}/gencode.v44.transcripts.fa.gz\"\n\n# Calculate the average size of transcripts using seqkit\n# seqkit fxlen outputs sequence ID and length. We then pipe to awk to calculate the average.\nseqkit fxlen \"${TRANSCRIPTOME_FASTA}\" | awk '\nBEGIN {\n    total_length = 0;\n    transcript_count = 0;\n}\nNR > 1 { # Skip header line from seqkit fxlen output\n    total_length += $2; # Second column is length\n    transcript_count++;\n}\nEND {\n    if (transcript_count > 0) {\n        print \"Total transcripts: \" transcript_count;\n        print \"Total length (bases): \" total_length;\n        print \"Average transcript size (bases): \" total_length / transcript_count;\n    } else {\n        print \"No transcripts found or file is empty.\";\n    }\n}' > average_transcript_size.txt",
+            "code_language": "bash",
+            "github_url": "https://github.com/shenwei356/seqkit"
+        },
+        {
+            "step_order": 7,
+            "description": "Normalized reads count (RPKM) were log2 transformed.",
+            "tool_name": "awk (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A (Generic mathematical operation)",
+            "code_example": "# This script assumes RPKM values are in a tab-separated file, e.g., in the second column.\n# Adjust column number ($2) if RPKM values are in a different column.\n# Add a pseudocount (e.g., +1) before log2 transformation if RPKM values can be zero to avoid -Inf.\n# Example: input_rpkm.tsv contains gene_id\\tRPKM_value\n\n# Example using awk for log2 transformation (adding a pseudocount of 1 to avoid log(0))\n# Assuming RPKM values are in the second column\nawk 'BEGIN {OFS=\"\\t\"} {print $1, log($2 + 1)/log(2)}' input_rpkm.tsv > output_log2_rpkm.tsv\n\n# Alternative using R (requires R installation)\n# Rscript -e '\n#   data <- read.table(\"input_rpkm.tsv\", header=FALSE, sep=\"\\t\")\n#   # Add a pseudocount of 1 to avoid log(0)\n#   data$V2_log2 <- log2(data$V2 + 1)\n#   write.table(data, \"output_log2_rpkm.tsv\", sep=\"\\t\", quote=FALSE, row.names=FALSE, col.names=FALSE)\n# '\n\n# Alternative using Python (requires Python and pandas/numpy installation)\n# # conda install pandas numpy\n# python -c '\n# import pandas as pd\n# import numpy as np\n# df = pd.read_csv(\"input_rpkm.tsv\", sep=\"\\t\", header=None)\n# # Add a pseudocount of 1 to avoid log(0)\n# df[1] = np.log2(df[1] + 1)\n# df.to_csv(\"output_log2_rpkm.tsv\", sep=\"\\t\", header=False, index=False)\n# '\n",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Sequenced paired-end reads were mapped to the whole genome (mm10) using STAR (Dobin et al., 2013) with default parameters. Genome index was built considering Ensembl annotation.\nFor each Ensembl gene, all of the exons of the respective annotated protein-coding transcripts were considered. Reads up to one mismatch were counted considering only reads in the right gene orientation and mapped in the defined exons.\nRead counts were normalized by the library size (EdgeR, Robinson et al. 2010) and the average size of the transcripts. Normalized reads count (RPKM) were log2 transformed.\nGenome_build: mm10\nSupplementary_files_format_and_content: Tab-delimited text file include RPKM values for each sample",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

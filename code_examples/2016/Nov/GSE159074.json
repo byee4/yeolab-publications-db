@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Raw sequencing reads were mapped to the human reference transcriptome (GENCODE v19) using gapped-alignment strategies.",
-      "tool_name": "GENCODE",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Alignment was performed by STAR (version 2.3.0).",
-      "tool_name": "STAR",
-      "tool_version": "2.3.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Gene-level quantification was performed with HTseq (version 0.6.1).",
-      "tool_name": "HTSeq",
-      "tool_version": "0.6.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Per-gene expression outputs were scaled to transcripts per million (TPM) units.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Raw sequencing reads were mapped to the human reference transcriptome (GENCODE v19) using gapped-alignment strategies.\nAlignment was performed by STAR (version 2.3.0).\nGene-level quantification was performed with HTseq (version 0.6.1).\nPer-gene expression outputs were scaled to transcripts per million (TPM) units.\nGenome_build: GENCODE v19\nSupplementary_files_format_and_content: tab-delimited text file provides transcripts per million (TPM) expression values (rows = genes, columns = cells)",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Raw sequencing reads were mapped to the human reference transcriptome (GENCODE v19) using gapped-alignment strategies.",
+            "tool_name": "GENCODE",
+            "tool_version": "2.5.3a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables\nGENOME_DIR=\"star_index_gencode_v19\"\nGENOME_FASTA=\"Homo_sapiens.GRCh37.dna.primary_assembly.fa\"\nGTF_FILE=\"gencode.v19.annotation.gtf\"\nREAD1=\"raw_reads_R1.fastq.gz\" # Placeholder for raw sequencing reads\nREAD2=\"raw_reads_R2.fastq.gz\" # Placeholder for raw sequencing reads (remove if single-end)\nOUTPUT_PREFIX=\"aligned_reads\"\nTHREADS=8 # Number of threads to use\nREAD_LENGTH=100 # Assumed read length for sjdbOverhang (e.g., 100bp)\n\n# 1. Download reference genome (GRCh37/hg19) and GENCODE v19 GTF\n# For GRCh37 primary assembly (Ensembl release 75 corresponds to GENCODE v19)\n# wget ftp://ftp.ensembl.org/pub/release-75/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz\n# gunzip Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz\n\n# For GENCODE v19 GTF\n# wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19/gencode.v19.annotation.gtf.gz\n# gunzip gencode.v19.annotation.gtf.gz\n\n# Create genome directory\nmkdir -p \"${GENOME_DIR}\"\n\n# 2. Build STAR genome index\nSTAR --runMode genomeGenerate \\\n     --genomeDir \"${GENOME_DIR}\" \\\n     --genomeFastaFiles \"${GENOME_FASTA}\" \\\n     --sjdbGTFfile \"${GTF_FILE}\" \\\n     --sjdbOverhang $((READ_LENGTH - 1)) \\\n     --runThreadN \"${THREADS}\"\n\n# 3. Perform gapped-alignment of raw sequencing reads to the transcriptome\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${READ1}\" \"${READ2}\" \\\n     --readFilesCommand zcat \\\n     --runThreadN \"${THREADS}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}.\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outFilterType BySJout \\\n     --outFilterMultimapNmax 20 \\\n     --alignSJDBoverhangMin 1 \\\n     --alignSJoverhangMin 8 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --outReadsUnmapped Fastx",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "Alignment was performed by STAR (version 2.3.0).",
+            "tool_name": "STAR",
+            "tool_version": "2.3.0",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star=2.3.0\n\n# Placeholder for reference genome index directory. \n# For a real analysis, replace 'path/to/GRCh38_STAR_index' with the actual path to your STAR genome index.\n# If you need to generate the index, here's an example (uncomment and modify as needed):\n# STAR --runMode genomeGenerate \\\n#      --genomeDir path/to/GRCh38_STAR_index \\\n#      --genomeFastaFiles path/to/GRCh38.fa \\\n#      --sjdbGTFfile path/to/GRCh38.gtf \\\n#      --runThreadN 16\n\n# Placeholder for input FASTQ files. \n# Replace 'read1.fastq.gz' and 'read2.fastq.gz' with your actual input file names.\n# Assuming paired-end reads, common for RNA-seq.\n# If single-end, remove --readFilesCommand zcat and the second FASTQ file.\n\n# Perform alignment using STAR\nSTAR --genomeDir path/to/GRCh38_STAR_index \\\n     --readFilesIn read1.fastq.gz read2.fastq.gz \\\n     --runThreadN 8 \\\n     --outFileNamePrefix aligned_reads_ \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outFilterType BySJout \\\n     --outFilterMultimapNmax 20 \\\n     --alignSJDBoverhangMin 1 \\\n     --alignSJoverhangMin 8 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --limitBAMsortRAM 30000000000 \\\n     --readFilesCommand zcat",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "Gene-level quantification was performed with HTseq (version 0.6.1).",
+            "tool_name": "HTSeq",
+            "tool_version": "0.6.1",
+            "code_example": "# Install HTSeq (if not already installed)\n# conda install -c bioconda htseq\n# pip install HTSeq\n\n# Define input files and parameters (placeholders - replace with actual paths and values)\n# aligned_reads.bam: Path to your alignment file (BAM format).\n# annotation.gtf: Path to your gene annotation file (GTF format).\n#                  Example: GENCODE human hg38 (gencode.v44.annotation.gtf) from https://www.gencodegenes.org/human/release_44.html\n# output_counts.txt: Desired name for the output count file.\n\n# HTSeq htseq-count command for gene-level quantification\n# Parameters used are common defaults or reasonable assumptions, as specific parameters were not provided in the description.\n# -f bam: Input file format is BAM.\n# -r pos: Order of features in GTF/GFF file (default is 'pos').\n# -s reverse: Strandedness of the library. Common options are 'yes', 'no', 'reverse'.\n#             This is a critical parameter; verify your library's strandedness based on your library preparation protocol.\n# -a 10: Minimum alignment quality score (default is 10).\n# -m union: Mode to handle reads overlapping multiple features (default is 'union').\n#           Other options: 'intersection-strict', 'intersection-nonempty'.\n# --idattr=gene_id: Attribute in the GTF file to use as feature ID (default is 'gene_id').\n\nhtseq-count \\\n    -f bam \\\n    -r pos \\\n    -s reverse \\\n    -a 10 \\\n    -m union \\\n    --idattr=gene_id \\\n    aligned_reads.bam \\\n    annotation.gtf \\\n    > output_counts.txt\n\n# Note: Replace 'aligned_reads.bam', 'annotation.gtf', and 'output_counts.txt'\n#       with your actual file paths and desired output name.\n#       Adjust the '-s' (strandedness) parameter based on your library preparation.",
+            "code_language": "bash",
+            "github_url": "https://github.com/simon-anders/htseq"
+        },
+        {
+            "step_order": 4,
+            "description": "Per-gene expression outputs were scaled to transcripts per million (TPM) units.",
+            "tool_name": "RSEM (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.3.0",
+            "code_example": "# Install RSEM (if not already installed)\n# conda install -c bioconda rsem=1.3.0\n\n# Define variables\n# REFERENCE_NAME: Placeholder for the RSEM reference name (e.g., GRCh38, mm10).\n# This reference must have been prepared previously using rsem-prepare-reference.\nREFERENCE_NAME=\"GRCh38\" \nRSEM_REFERENCE_DIR=\"/path/to/rsem_references/${REFERENCE_NAME}\" # Directory containing RSEM reference files\n\n# INPUT_BAM: Input alignment file, typically generated by an aligner like STAR.\n# Ensure this BAM file is sorted and indexed.\nINPUT_BAM=\"aligned_reads.bam\" \n\nOUTPUT_DIR=\"rsem_quantification_output\"\nSAMPLE_NAME=\"sample1\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run RSEM to calculate gene and isoform expression and scale to TPM.\n# This example assumes a paired-end, unstranded library and a STAR-aligned BAM file.\n# Adjust parameters like --paired-end, --strandedness, --fragment-length-dist, \n# --forward-prob, --seed, -p (number of threads), etc., as needed for your specific data.\n# --no-qualities is often used for BAM files from aligners like STAR to save memory.\nrsem-calculate-expression \\\n    --bam \\\n    --paired-end \\\n    --no-qualities \\\n    -p 8 \\\n    \"${INPUT_BAM}\" \\\n    \"${RSEM_REFERENCE_DIR}/${REFERENCE_NAME}\" \\\n    \"${OUTPUT_DIR}/${SAMPLE_NAME}\"\n\n# The output files will include:\n# ${OUTPUT_DIR}/${SAMPLE_NAME}.genes.results (contains TPM values for genes)\n# ${OUTPUT_DIR}/${SAMPLE_NAME}.isoforms.results (contains TPM values for isoforms)",
+            "code_language": "bash",
+            "github_url": "https://github.com/deweylab/RSEM"
+        }
+    ],
+    "raw_text": "Raw sequencing reads were mapped to the human reference transcriptome (GENCODE v19) using gapped-alignment strategies.\nAlignment was performed by STAR (version 2.3.0).\nGene-level quantification was performed with HTseq (version 0.6.1).\nPer-gene expression outputs were scaled to transcripts per million (TPM) units.\nGenome_build: GENCODE v19\nSupplementary_files_format_and_content: tab-delimited text file provides transcripts per million (TPM) expression values (rows = genes, columns = cells)",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

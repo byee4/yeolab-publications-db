@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "RNA-seq reads were aligned to the human genome (hg19) with STAR 2.4.0h (outFilterMultimapNmax 20, outFilterMismatchNmax 999, outFilterMismatchNoverLmax 0.04, outFilterIntronMotifs RemoveNoncanonicalUnannotated, outSJfilterOverhangMin 6 6 6 6, seedSearchStartLmax 20, alignSJDBoverhangMin 1) using a gene database constructed from Gencode v19",
-      "tool_name": "STAR",
-      "tool_version": "2.4.0h",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reads that overlap with exon coordinates were counted using HTSeqcount (-s reverse -a 0 -t exon -i gene_id -m union)",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "RNA-seq reads were aligned to the human genome (hg19) with STAR 2.4.0h (outFilterMultimapNmax 20, outFilterMismatchNmax 999, outFilterMismatchNoverLmax 0.04, outFilterIntronMotifs RemoveNoncanonicalUnannotated, outSJfilterOverhangMin 6 6 6 6, seedSearchStartLmax 20, alignSJDBoverhangMin 1) using a gene database constructed from Gencode v19\nReads that overlap with exon coordinates were counted using HTSeqcount (-s reverse -a 0 -t exon -i gene_id -m union)\nGenome_build: hg19\nSupplementary_files_format_and_content: tab-separated file created using featureCounts v1.5.0 (number of reads mapped to each Gencode V.19 gene)",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "RNA-seq reads were aligned to the human genome (hg19) with STAR 2.4.0h (outFilterMultimapNmax 20, outFilterMismatchNmax 999, outFilterMismatchNoverLmax 0.04, outFilterIntronMotifs RemoveNoncanonicalUnannotated, outSJfilterOverhangMin 6 6 6 6, seedSearchStartLmax 20, alignSJDBoverhangMin 1) using a gene database constructed from Gencode v19",
+            "tool_name": "STAR",
+            "tool_version": "2.4.0h",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables\nREAD1_FASTQ=\"input_R1.fastq.gz\" # Replace with your R1 fastq file\n# READ2_FASTQ=\"input_R2.fastq.gz\" # Uncomment and replace if paired-end\nOUTPUT_PREFIX=\"aligned_reads/sample_name\" # Replace with your desired output prefix\nSTAR_INDEX_DIR=\"/path/to/your/star_index/hg19_gencode_v19\" # Replace with the path to your STAR index (built with hg19 and Gencode v19)\nNUM_THREADS=8 # Adjust as needed\n\n# Create output directory if it doesn't exist\nmkdir -p $(dirname \"${OUTPUT_PREFIX}\")\n\n# Run STAR alignment\nSTAR \\\n  --runThreadN \"${NUM_THREADS}\" \\\n  --genomeDir \"${STAR_INDEX_DIR}\" \\\n  --readFilesIn \"${READ1_FASTQ}\" \\\n  # --readFilesIn \"${READ1_FASTQ}\" \"${READ2_FASTQ}\" # Uncomment if paired-end\n  --readFilesCommand zcat \\\n  --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n  --outFilterMultimapNmax 20 \\\n  --outFilterMismatchNmax 999 \\\n  --outFilterMismatchNoverLmax 0.04 \\\n  --outFilterIntronMotifs RemoveNoncanonicalUnannotated \\\n  --outSJfilterOverhangMin 6 6 6 6 \\\n  --seedSearchStartLmax 20 \\\n  --alignSJDBoverhangMin 1 \\\n  --outSAMtype BAM SortedByCoordinate \\\n  --outSAMunmapped Within \\\n  --outSAMattributes All \\\n  --outSAMstrandField intronMotif",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "Reads that overlap with exon coordinates were counted using HTSeqcount (-s reverse -a 0 -t exon -i gene_id -m union)",
+            "tool_name": "HTSeq (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "0.13.5 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install HTSeq (if not already installed)\n# conda install -c bioconda htseq\n\n# Placeholder for aligned reads (BAM/SAM) and annotation (GTF/GFF)\n# Replace 'aligned_reads.bam' with your actual aligned reads file.\n# Replace 'annotation.gtf' with your actual gene annotation file (e.g., from GENCODE, Ensembl).\n# Ensure the GTF/GFF file contains 'exon' features and 'gene_id' attributes.\n\nhtseq-count -s reverse -a 0 -t exon -i gene_id -m union aligned_reads.bam annotation.gtf > gene_counts.txt",
+            "code_language": "bash",
+            "github_url": "https://htseq.readthedocs.io/en/master/"
+        }
+    ],
+    "raw_text": "RNA-seq reads were aligned to the human genome (hg19) with STAR 2.4.0h (outFilterMultimapNmax 20, outFilterMismatchNmax 999, outFilterMismatchNoverLmax 0.04, outFilterIntronMotifs RemoveNoncanonicalUnannotated, outSJfilterOverhangMin 6 6 6 6, seedSearchStartLmax 20, alignSJDBoverhangMin 1) using a gene database constructed from Gencode v19\nReads that overlap with exon coordinates were counted using HTSeqcount (-s reverse -a 0 -t exon -i gene_id -m union)\nGenome_build: hg19\nSupplementary_files_format_and_content: tab-separated file created using featureCounts v1.5.0 (number of reads mapped to each Gencode V.19 gene)",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,16 +1,16 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Cell intesity files (CEL files) were generated in the Genechip Command Console Software (AGCC), (Affymetrix, Santa Clara, CA, USA)",
-      "tool_name": "Microarray",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Cell intesity files (CEL files) were generated in the Genechip Command Console Software (AGCC), (Affymetrix, Santa Clara, CA, USA)",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Cell intesity files (CEL files) were generated in the Genechip Command Console Software (AGCC), (Affymetrix, Santa Clara, CA, USA)",
+            "tool_name": "Microarray",
+            "tool_version": "Not specified",
+            "code_example": "# CEL files are generated using the Genechip Command Console Software (AGCC).\n# This is typically a GUI-based process performed on the Affymetrix instrument workstation,\n# not a direct command-line execution in a bioinformatics pipeline.\n# The output of this step are the raw CEL intensity files.",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Cell intesity files (CEL files) were generated in the Genechip Command Console Software (AGCC), (Affymetrix, Santa Clara, CA, USA)",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

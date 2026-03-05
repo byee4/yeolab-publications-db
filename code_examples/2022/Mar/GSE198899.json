@@ -1,61 +1,61 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Library strategy: Ribo-Seq",
-      "tool_name": "Ribo-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Raw sequencing reads were trimmed for adapter sequences using cutadapt (v1.14).",
-      "tool_name": "cutadapt",
-      "tool_version": "1.14",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Trimmed reads were mapped against RepBase (v18.05) to remove reads mapping to repetitive sequences.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Remaining reads were mapped to the appropriate genome build using STAR aligner (v2.5.2b).",
-      "tool_name": "STAR",
-      "tool_version": "2.5.2b",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Raw read counts were generated from all mapped reads using featureCounts (v1.5.3) package.",
-      "tool_name": "featureCounts",
-      "tool_version": "1.5.3",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Normalized counts were derived from DESeq output.",
-      "tool_name": "DESeq2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Library strategy: Ribo-Seq\nRaw sequencing reads were trimmed for adapter sequences using cutadapt (v1.14). Trimmed reads were mapped against RepBase (v18.05) to remove reads mapping to repetitive sequences. Remaining reads were mapped to the appropriate genome build using STAR aligner (v2.5.2b). Raw read counts were generated from all mapped reads using featureCounts (v1.5.3) package.\nNormalized counts were derived from DESeq output.\nAssembly: hg19 (GRCh37)\nSupplementary files format and content: counts_for_pub.txt contains featureCounts output in comma-delimited format.\nSupplementary files format and content: diffexp.tsv files contain DESeq2 output in tab-separated format.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Library strategy: Ribo-Seq",
+            "tool_name": "Ribo-seq",
+            "tool_version": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Define variables\nFASTQ_R1=\"sample_R1.fastq.gz\"\nFASTQ_R2=\"sample_R2.fastq.gz\" # Remove if single-end\nOUTPUT_DIR=\"ribo_seq_analysis_output\"\nGENOME_DIR=\"/path/to/STAR_genome_index/GRCh38\" # Placeholder for human genome GRCh38\nRRNA_FASTA=\"/path/to/rRNA_sequences.fasta\" # Placeholder for rRNA sequences (e.g., from Ensembl or NCBI)\nRRNA_INDEX_DIR=\"/path/to/STAR_rRNA_index\" # Directory for STAR rRNA index\n\nmkdir -p \"${OUTPUT_DIR}\"\n\n# --- 1. Quality Control ---\n# fastqc \"${FASTQ_R1}\" -o \"${OUTPUT_DIR}\"\n# fastqc \"${FASTQ_R2}\" -o \"${OUTPUT_DIR}\" # If paired-end\n\n# --- 2. Adapter Trimming and Quality Filtering ---\n# Using Trim Galore! (wrapper for Cutadapt and FastQC)\n# For single-end reads:\n# trim_galore --quality 20 --length 20 --output_dir \"${OUTPUT_DIR}\" \"${FASTQ_R1}\"\n# TRIMMED_FASTQ=\"${OUTPUT_DIR}/$(basename \"${FASTQ_R1}\" .fastq.gz)_trimmed.fq.gz\"\n\n# For paired-end reads:\ntrim_galore --quality 20 --length 20 --paired \"${FASTQ_R1}\" \"${FASTQ_R2}\" --output_dir \"${OUTPUT_DIR}\"\nTRIMMED_FASTQ_R1=\"${OUTPUT_DIR}/$(basename \"${FASTQ_R1}\" .fastq.gz)_trimmed.fq.gz\"\nTRIMMED_FASTQ_R2=\"${OUTPUT_DIR}/$(basename \"${FASTQ_R2}\" .fastq.gz)_trimmed.fq.gz\"\n\n# --- 3. Depletion of rRNA reads ---\n# Build rRNA index (run once if not already done):\n# STAR --runMode genomeGenerate --genomeDir \"${RRNA_INDEX_DIR}\" --genomeFastaFiles \"${RRNA_FASTA}\" --runThreadN 8\n\n# Align to rRNA and keep unmapped reads\nSTAR --genomeDir \"${RRNA_INDEX_DIR}\" \\\n     --readFilesIn \"${TRIMMED_FASTQ_R1}\" \"${TRIMMED_FASTQ_R2}\" \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix \"${OUTPUT_DIR}/rRNA_depleted_\" \\\n     --outSAMtype BAM Unsorted \\\n     --outFilterMultimapNmax 100 \\\n     --outFilterMismatchNmax 3 \\\n     --outFilterScoreMinOverLread 0.6 \\\n     --outFilterMatchNminOverLread 0.6 \\\n     --outReadsUnmapped Fastx \\\n     --runThreadN 8\n\nRRNA_DEPLETED_R1=\"${OUTPUT_DIR}/rRNA_depleted_Unmapped.out.mate1\"\nRRNA_DEPLETED_R2=\"${OUTPUT_DIR}/rRNA_depleted_Unmapped.out.mate2\"\n\n# --- 4. Alignment to reference genome (e.g., human GRCh38) ---\n# Build genome index (run once if not already done):\n# STAR --runMode genomeGenerate --genomeDir \"${GENOME_DIR}\" --genomeFastaFiles /path/to/GRCh38.fa --sjdbGTFfile /path/to/GRCh38.gtf --runThreadN 8\n\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${RRNA_DEPLETED_R1}\" \"${RRNA_DEPLETED_R2}\" \\\n     --readFilesCommand cat \\\n     --outFileNamePrefix \"${OUTPUT_DIR}/genome_aligned_\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outFilterMultimapNmax 1 \\\n     --outFilterMismatchNmax 3 \\\n     --outFilterScoreMinOverLread 0.6 \\\n     --outFilterMatchNminOverLread 0.6 \\\n     --alignIntronMax 1 \\\n     --alignEndsType EndToEnd \\\n     --runThreadN 8\n\nALIGNED_BAM=\"${OUTPUT_DIR}/genome_aligned_Aligned.sortedByCoord.out.bam\"\n\n# --- 5. Index the BAM file ---\nsamtools index \"${ALIGNED_BAM}\"\n\n# --- 6. (Conceptual) P-site mapping, footprint length analysis, and quantification ---\n# This step typically involves specialized Ribo-seq tools or custom scripts\n# Example:\n# ribo_profiling_tool --input_bam \"${ALIGNED_BAM}\" --output_prefix \"${OUTPUT_DIR}/ribo_analysis\" --genome_fasta /path/to/GRCh38.fa --gtf /path/to/GRCh38.gtf\n# Further analysis might include differential translation, ORF calling, etc.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Raw sequencing reads were trimmed for adapter sequences using cutadapt (v1.14).",
+            "tool_name": "cutadapt",
+            "tool_version": "1.14",
+            "code_example": "# Install cutadapt (example using conda)\n# conda install -c bioconda cutadapt=1.14\n\n# Define input and output files\n# Replace 'raw_reads.fastq.gz' with your actual input file.\n# Replace 'trimmed_reads.fastq.gz' with your desired output file.\nINPUT_READS=\"raw_reads.fastq.gz\"\nOUTPUT_TRIMMED_READS=\"trimmed_reads.fastq.gz\"\n\n# Define common Illumina adapter sequence (example for 3' end).\n# Note: The specific adapter sequence used should be provided if known.\n# This is a placeholder for a common Illumina universal adapter.\nADAPTER_SEQUENCE=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\"\n\n# Trim adapter sequences and filter for minimum read length (e.g., 20 bp)\ncutadapt -a \"${ADAPTER_SEQUENCE}\" \\\n         -m 20 \\\n         -o \"${OUTPUT_TRIMMED_READS}\" \\\n         \"${INPUT_READS}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 3,
+            "description": "Trimmed reads were mapped against RepBase (v18.05) to remove reads mapping to repetitive sequences.",
+            "tool_name": "bowtie2 (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.3.4.1",
+            "code_example": "# Define input and output file paths\nTRIMMED_READS_R1=\"trimmed_reads_R1.fastq.gz\"\nTRIMMED_READS_R2=\"trimmed_reads_R2.fastq.gz\"\n# Output prefix for non-repetitive reads (bowtie2 will append .1.fastq.gz and .2.fastq.gz)\nOUTPUT_NON_REP_PREFIX=\"non_repetitive_reads\"\nREPBASE_INDEX_PREFIX=\"repbase_v18.05_index\" # This is the prefix for the bowtie2 index files\n\n# --- Installation (commented out) ---\n# # Install bowtie2\n# # conda install -c bioconda bowtie2\n\n# # Download RepBase (v18.05) and build bowtie2 index if not already available\n# # RepBase requires login for direct download from girinst.org. \n# # Users typically obtain pre-indexed versions or use a local mirror/subscription.\n# # For demonstration, here's a conceptual process:\n# # mkdir -p repbase_index\n# # cd repbase_index\n# # # Example: Download RepBase fasta for a specific genome (e.g., hg38)\n# # # wget -O RepBase_v18.05_hg38.fa.gz \"https://www.girinst.org/server/RepBase/protected/RepBase_v18.05_hg38.fasta.gz\" # Placeholder URL\n# # # gunzip RepBase_v18.05_hg38.fa.gz\n# # # bowtie2-build RepBase_v18.05_hg38.fasta ${REPBASE_INDEX_PREFIX}\n# # # cd ..\n\n# --- Execution Command ---\n# Map trimmed reads against RepBase (v18.05) to identify and filter out repetitive sequences.\n# Reads that do not map to RepBase are kept for downstream analysis.\n# --threads $(nproc): Use all available CPU cores for mapping.\n# --very-sensitive-local: Uses a local alignment strategy with very sensitive parameters,\n#                         suitable for finding short repetitive elements.\n# -x: Specifies the basename of the bowtie2 index files for RepBase.\n# -1, -2: Input paired-end reads (R1 and R2).\n# --un-conc-gz: Writes reads that did not align to the index to two gzipped files,\n#               one for each mate, with .1.fastq.gz and .2.fastq.gz suffixes appended to the prefix.\n# -S /dev/null: Suppresses SAM output to stdout, as we are only interested in the unmapped reads.\nbowtie2 \\\n    --threads $(nproc) \\\n    --very-sensitive-local \\\n    -x \"${REPBASE_INDEX_PREFIX}\" \\\n    -1 \"${TRIMMED_READS_R1}\" \\\n    -2 \"${TRIMMED_READS_R2}\" \\\n    --un-conc-gz \"${OUTPUT_NON_REP_PREFIX}\" \\\n    -S /dev/null",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip"
+        },
+        {
+            "step_order": 4,
+            "description": "Remaining reads were mapped to the appropriate genome build using STAR aligner (v2.5.2b).",
+            "tool_name": "STAR",
+            "tool_version": "2.5.2b",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star=2.5.2b\n\n# --- Prepare STAR genome index (run once per genome) ---\n# Replace 'path/to/genome_fasta.fa' with your genome FASTA file (e.g., hg38.fa, mm10.fa)\n# Replace 'path/to/annotations.gtf' with your gene annotations GTF file (e.g., gencode.v38.annotation.gtf)\n# Replace 'path/to/star_genome_index_dir' with your desired output directory for the index\n# Adjust --sjdbOverhang based on your read length (read_length - 1)\n# STAR --runMode genomeGenerate \\\n#      --genomeDir path/to/star_genome_index_dir \\\n#      --genomeFastaFiles path/to/genome_fasta.fa \\\n#      --sjdbGTFfile path/to/annotations.gtf \\\n#      --sjdbOverhang 100 \\\n#      --runThreadN 8 # Adjust threads as needed\n\n# --- Map reads using STAR ---\n# Replace 'path/to/star_genome_index_dir' with the path to your STAR-indexed genome for the appropriate build.\n# Replace 'path/to/reads_R1.fastq.gz' and 'path/to/reads_R2.fastq.gz' with your input FASTQ files.\n# For single-end reads, only use --readFilesIn path/to/reads_R1.fastq.gz\n# Replace 'output_prefix' with your desired prefix for output files (e.g., sample_name)\n\nSTAR --genomeDir path/to/star_genome_index_dir \\\n     --readFilesIn path/to/reads_R1.fastq.gz path/to/reads_R2.fastq.gz \\\n     --runThreadN 8 \\\n     --outFileNamePrefix output_prefix. \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes Standard \\\n     --outSAMunmapped Within \\\n     --quantMode GeneCounts # Optional: for gene counts quantification\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 5,
+            "description": "Raw read counts were generated from all mapped reads using featureCounts (v1.5.3) package.",
+            "tool_name": "featureCounts",
+            "tool_version": "1.5.3",
+            "code_example": "# Install featureCounts (part of the Subread package)\n# conda install -c bioconda subread\n\n# Placeholder for annotation file (e.g., GENCODE human annotation)\n# Download from: https://www.gencodegenes.org/human/\n# For example, for human GRCh38, release 44:\n# wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_44/gencode.v44.annotation.gtf.gz\n# gunzip gencode.v44.annotation.gtf.gz\nANNOTATION_FILE=\"gencode.v44.annotation.gtf\"\n\n# Placeholder for input BAM file(s) containing mapped reads\n# Replace 'input_mapped_reads.bam' with your actual alignment file(s)\nINPUT_BAM=\"input_mapped_reads.bam\"\n\n# Output file for raw read counts\nOUTPUT_COUNTS=\"raw_read_counts.txt\"\n\n# Generate raw read counts from all mapped reads\n# -a: specify the annotation file (GTF/GFF format)\n# -o: specify the output file for the read counts\n# -T: number of threads (adjust as needed, e.g., -T 8)\n# -t exon: specify feature type to count (default is exon)\n# -g gene_id: specify attribute to group features by (default is gene_id)\nfeatureCounts -a \"${ANNOTATION_FILE}\" -o \"${OUTPUT_COUNTS}\" \"${INPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 6,
+            "description": "Normalized counts were derived from DESeq output.",
+            "tool_name": "DESeq2",
+            "tool_version": "1.44.0",
+            "code_example": "# Install R and DESeq2 if not already installed (example using Bioconda)\n# conda create -n deseq2_env r-base bioconductor-deseq2 -c conda-forge -c bioconda\n# conda activate deseq2_env\n\n# Create an R script to perform DESeq2 normalization\ncat << 'EOF' > deseq2_normalize.R\n# Load DESeq2 library\nlibrary(DESeq2)\n\n# --- User-defined parameters --- \n# Input count matrix file (e.g., from featureCounts, HTSeq-count, or tximport output).\n# This file should have gene/feature IDs as row names and sample names as column names.\n# Example format:\n# gene_id\\tsample1\\tsample2\\tsample3\n# geneA\\t100\\t150\\t120\n# geneB\\t50\\t70\\t60\ncount_matrix_file <- \"path/to/your/raw_count_matrix.tsv\"\n\n# Sample information file (metadata) with experimental design.\n# This file should have sample names as row names and experimental factors as column names.\n# Example format:\n# sample_id\\tcondition\\tbatch\n# sample1\\ttreated\\tbatch1\n# sample2\\tcontrol\\tbatch1\n# sample3\\ttreated\\tbatch2\nsample_info_file <- \"path/to/your/sample_metadata.tsv\"\n\n# Output file for normalized counts\noutput_normalized_counts_file <- \"normalized_counts.tsv\"\n\n# Design formula for DESeq2. Replace 'condition' with your actual experimental factor(s).\n# For simple normalization, a design like '~ 1' or '~ condition' is common.\n# If you have multiple factors, e.g., '~ batch + condition'\ndesign_formula_str <- \"~ condition\" # IMPORTANT: Adjust this based on your experimental design\n\n# Read count matrix\n# Ensure the first column is row names (gene IDs) and subsequent columns are counts\ncount_data <- read.table(count_matrix_file, header=TRUE, row.names=1, sep=\"\\t\", check.names=FALSE)\n\n# Ensure count data is integer (DESeq2 requires integer counts)\ncount_data <- round(count_data)\ncount_data[is.na(count_data)] <- 0 # Replace NA with 0 if any\n\n# Read sample information\n# Ensure the first column is row names (sample IDs) and subsequent columns are factors\nsample_info <- read.table(sample_info_file, header=TRUE, row.names=1, sep=\"\\t\", check.names=FALSE)\n\n# Ensure sample_info row names match count_data column names and are in the same order\nsample_info <- sample_info[colnames(count_data), , drop=FALSE]\n\n# Convert design formula string to an R formula object\ndesign_formula <- as.formula(design_formula_str)\n\n# Create DESeqDataSet object\ndds <- DESeqDataSetFromMatrix(countData = count_data,\n                              colData = sample_info,\n                              design = design_formula)\n\n# Optional: Pre-filtering to remove rows with very low counts across all samples\n# This can reduce memory usage and speed up calculations without losing much information.\n# For example, keep only genes with at least 10 counts in total across all samples.\nkeep <- rowSums(counts(dds)) >= 10\ndds <- dds[keep,]\n\n# Run DESeq2 analysis to estimate size factors and dispersions\n# Even if only normalized counts are needed, this step is required for proper normalization.\ndds <- DESeq(dds)\n\n# Extract normalized counts (size factor normalized counts)\nnormalized_counts <- counts(dds, normalized=TRUE)\n\n# Save normalized counts to a TSV file\nwrite.table(normalized_counts, file=output_normalized_counts_file, sep=\"\\t\", quote=FALSE, col.names=NA)\n\nmessage(paste(\"Normalized counts saved to:\", output_normalized_counts_file))\nEOF\n\n# Execute the R script\nRscript deseq2_normalize.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/DESeq2.html"
+        }
+    ],
+    "raw_text": "Library strategy: Ribo-Seq\nRaw sequencing reads were trimmed for adapter sequences using cutadapt (v1.14). Trimmed reads were mapped against RepBase (v18.05) to remove reads mapping to repetitive sequences. Remaining reads were mapped to the appropriate genome build using STAR aligner (v2.5.2b). Raw read counts were generated from all mapped reads using featureCounts (v1.5.3) package.\nNormalized counts were derived from DESeq output.\nAssembly: hg19 (GRCh37)\nSupplementary files format and content: counts_for_pub.txt contains featureCounts output in comma-delimited format.\nSupplementary files format and content: diffexp.tsv files contain DESeq2 output in tab-separated format.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

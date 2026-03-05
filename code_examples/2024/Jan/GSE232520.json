@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "remove adapter with Cutadapt",
-      "tool_name": "cutadapt",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "align to genome using bowtie2 or bwa-mem",
-      "tool_name": "Bowtie2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "generate count tables along reporter sequence using Pysamstats",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "remove adapter with Cutadapt\nalign to genome using bowtie2 or bwa-mem\ngenerate count tables along reporter sequence using Pysamstats\nAssembly: 12X MS2 stem-loop reporter mRNA\nSupplementary files format and content: pysamstats tables that contain the read counts for RNA bases  at each position along the reporter mRNA sequence",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "remove adapter with Cutadapt",
+            "tool_name": "cutadapt",
+            "tool_version": "4.0",
+            "code_example": "# Install cutadapt (if not already installed)\n# conda install -c bioconda cutadapt\n\n# Example for paired-end reads, common in eCLIP assays.\n# Replace 'input_R1.fastq.gz' and 'input_R2.fastq.gz' with your actual input files.\n# Replace adapter sequences if different from standard Illumina adapters.\n# -a: Adapter sequence for read 1\n# -A: Adapter sequence for read 2\n# -o: Output file for trimmed read 1\n# -p: Output file for trimmed read 2\n# -m: Minimum read length after trimming (e.g., 18 bp)\n# -q: Trim low-quality ends from reads (e.g., quality score 20)\n# --cores: Number of CPU cores to use\n# --report=full: Print a full report of the trimming process\n\ncutadapt -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA \\\n         -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT \\\n         -o trimmed_R1.fastq.gz \\\n         -p trimmed_R2.fastq.gz \\\n         -m 18 \\\n         -q 20 \\\n         --cores=4 \\\n         --report=full \\\n         input_R1.fastq.gz \\\n         input_R2.fastq.gz",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 2,
+            "description": "align to genome using bowtie2 or bwa-mem",
+            "tool_name": "Bowtie2",
+            "tool_version": "2.5.2 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Bowtie2 and Samtools (if not already installed)\n# conda install -c bioconda bowtie2 samtools\n\n# Define variables\n# Replace 'path/to/GRCh38_index' with the actual path to your pre-built Bowtie2 genome index for GRCh38.\n# You can build an index using `bowtie2-build <genome.fa> GRCh38_index`.\nGENOME_INDEX=\"path/to/GRCh38_index\" \nREAD1=\"sample_R1.fastq.gz\" # Replace with your R1 fastq file\nREAD2=\"sample_R2.fastq.gz\" # Replace with your R2 fastq file\nOUTPUT_SAM=\"sample_aligned.sam\"\nOUTPUT_BAM=\"sample_aligned.bam\"\nSORTED_BAM=\"sample_aligned.sorted.bam\"\n\n# Align paired-end reads to the genome using Bowtie2\n# -x: specify the genome index basename\n# -1: specify the first mate reads file\n# -2: specify the second mate reads file\n# -S: specify the output SAM file\n# --threads: number of threads to use (adjust based on available CPU cores)\nbowtie2 -x \"${GENOME_INDEX}\" -1 \"${READ1}\" -2 \"${READ2}\" -S \"${OUTPUT_SAM}\" --threads 8\n\n# Convert SAM to BAM format and sort the BAM file by coordinate\n# samtools view: convert SAM to BAM (-bS) and output to file (-o)\n# samtools sort: sort BAM file by coordinate and output to file (-o)\n# -@: number of threads for samtools\nsamtools view -bS \"${OUTPUT_SAM}\" -o \"${OUTPUT_BAM}\" -@ 8\nsamtools sort \"${OUTPUT_BAM}\" -o \"${SORTED_BAM}\" -@ 8\n\n# Index the sorted BAM file (optional, but highly recommended for downstream tools like IGV or peak callers)\nsamtools index \"${SORTED_BAM}\"\n\n# Clean up intermediate files (optional)\n# rm \"${OUTPUT_SAM}\" \"${OUTPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie2"
+        },
+        {
+            "step_order": 3,
+            "description": "generate count tables along reporter sequence using Pysamstats",
+            "tool_name": "Pysamstats",
+            "tool_version": "1.2.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Pysamstats (if not already installed)\n# pip install pysamstats\n# or\n# conda install -c bioconda pysamstats\n\n# Generate count tables along reporter sequences\n# This command assumes you have an aligned BAM file, a BED file defining the reporter sequences,\n# and a reference FASTA file (optional, but good practice for coverage calculations).\n# The --field reads_all counts all reads overlapping the region.\n# Adjust --type and --field as needed for specific counting requirements (e.g., base_counts, reads_pp).\npysamstats --type coverage \\\n           --field reads_all \\\n           --regions-file reporter_sequences.bed \\\n           --fasta reference.fa \\\n           input.bam > output_reporter_counts.tsv",
+            "code_language": "bash",
+            "github_url": "https://github.com/alimanfoo/pysamstats"
+        }
+    ],
+    "raw_text": "remove adapter with Cutadapt\nalign to genome using bowtie2 or bwa-mem\ngenerate count tables along reporter sequence using Pysamstats\nAssembly: 12X MS2 stem-loop reporter mRNA\nSupplementary files format and content: pysamstats tables that contain the read counts for RNA bases  at each position along the reporter mRNA sequence",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

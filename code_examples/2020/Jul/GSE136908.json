@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "STAR2.6.0a was used to align reads to the genome with default parameters",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Kallisto0.44.0 was used to quantify transcripts abundance in terms of TPM",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "STAR2.6.0a was used to align reads to the genome with default parameters\nKallisto0.44.0 was used to quantify transcripts abundance in terms of TPM\nGenome_build: hg38\nSupplementary_files_format_and_content: tab-delimited text files include TPM values",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "STAR2.6.0a was used to align reads to the genome with default parameters",
+            "tool_name": "STAR",
+            "tool_version": "2.6.0a",
+            "code_example": "# Install STAR (example using conda)\n# conda install -c bioconda star=2.6.0a\n\n# Define variables\n# Placeholder for the pre-built STAR genome index (e.g., for hg38)\nGENOME_DIR=\"/path/to/STAR_genome_index/hg38\"\n# Placeholder for input FASTQ files (assuming paired-end reads)\nREADS_R1=\"sample_R1.fastq.gz\"\nREADS_R2=\"sample_R2.fastq.gz\"\n# Prefix for output files\nOUTPUT_PREFIX=\"sample_aligned\"\n# Number of threads to use (a common default might be 8 or more)\nNUM_THREADS=8\n\n# Run STAR alignment with default parameters\n# STAR 2.6.0a was used to align reads to the genome.\nSTAR \\\n  --genomeDir \"${GENOME_DIR}\" \\\n  --readFilesIn \"${READS_R1}\" \"${READS_R2}\" \\\n  --runThreadN \"${NUM_THREADS}\" \\\n  --outFileNamePrefix \"${OUTPUT_PREFIX}_\" \\\n  --outSAMtype BAM SortedByCoordinate \\\n  --outSAMattributes All",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "Kallisto0.44.0 was used to quantify transcripts abundance in terms of TPM",
+            "tool_name": "Kallisto",
+            "tool_version": "0.44.0",
+            "code_example": "# Assume Kallisto 0.44.0 is installed and in PATH.\n# For installation, you might use:\n# conda create -n kallisto_env kallisto=0.44.0 -c bioconda -c conda-forge\n# conda activate kallisto_env\n\n# Placeholder for reference transcriptome index (e.g., human GRCh38 cDNA)\n# Replace with your actual index file path\nKALLISTO_INDEX=\"path/to/your/GRCh38_kallisto_index.idx\"\n\n# Placeholder for input RNA-seq reads (assuming paired-end)\n# Replace with your actual input FASTQ files\nREADS_R1=\"path/to/your/sample_R1.fastq.gz\"\nREADS_R2=\"path/to/your/sample_R2.fastq.gz\"\n\n# Output directory for quantification results\nOUTPUT_DIR=\"kallisto_quant_output\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run Kallisto quantification\nkallisto quant \\\n  -i \"${KALLISTO_INDEX}\" \\\n  -o \"${OUTPUT_DIR}\" \\\n  \"${READS_R1}\" \\\n  \"${READS_R2}\"\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/pachterlab/kallisto"
+        }
+    ],
+    "raw_text": "STAR2.6.0a was used to align reads to the genome with default parameters\nKallisto0.44.0 was used to quantify transcripts abundance in terms of TPM\nGenome_build: hg38\nSupplementary_files_format_and_content: tab-delimited text files include TPM values",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

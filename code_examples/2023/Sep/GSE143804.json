@@ -1,88 +1,88 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Reads trimmed using default paramters of Trim Galore!",
-      "tool_name": "Trim Galore",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Version 0.4.3",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Trimmed reads aligned to human reference genome GRCh38, release 87 using bowtie2 (version 2.3.4)",
-      "tool_name": "Bowtie2",
-      "tool_version": "2.3.4",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Alignments filtered for reads with MAPQ score >= 11 using samtools (version 1.3.1)",
-      "tool_name": "samtools",
-      "tool_version": "1.3.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Duplicates removed using picard tools (version 2.9.0)",
-      "tool_name": "Picard",
-      "tool_version": "2.9.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Peaks called using MACS2 (version 2.1.1.20160309)",
-      "tool_name": "MACS2",
-      "tool_version": "2.1.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Peaks filtered for known chromosomes only",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "common peaks shared between replicates determined by findOverlapsOfPeaks() from ChIPpeakAnno R package (version 3.14.2)",
-      "tool_name": "R",
-      "tool_version": "3.14.2",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "common peaks shared between treatments determined by findOverlapsOfPeaks() from ChIPpeakAnno R package (version 3.14.2)",
-      "tool_name": "R",
-      "tool_version": "3.14.2",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Reads trimmed using default paramters of Trim Galore! Version 0.4.3\nTrimmed reads aligned to human reference genome GRCh38, release 87 using bowtie2 (version 2.3.4)\nAlignments filtered for reads with MAPQ score >= 11 using samtools (version 1.3.1)\nDuplicates removed using picard tools (version 2.9.0)\nPeaks called using MACS2 (version 2.1.1.20160309)\nPeaks filtered for known chromosomes only\ncommon peaks shared between replicates determined by findOverlapsOfPeaks() from ChIPpeakAnno R package (version 3.14.2)\ncommon peaks shared between treatments determined by findOverlapsOfPeaks() from ChIPpeakAnno R package (version 3.14.2)\nGenome_build: GRCh38",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Reads trimmed using default paramters of Trim Galore!",
+            "tool_name": "Trim Galore",
+            "tool_version": "0.6.10 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Trim Galore! (and its dependency Cutadapt) if not already installed\n# conda install -c bioconda trim-galore\n\n# Define input files (adjust as needed for your data)\n# For paired-end reads:\nINPUT_READ1=\"input_read1.fastq.gz\"\nINPUT_READ2=\"input_read2.fastq.gz\"\n\n# For single-end reads (uncomment and use if applicable):\n# INPUT_READ=\"input_read.fastq.gz\"\n\n# Define output directory (optional, Trim Galore! creates files in current dir by default)\nOUTPUT_DIR=\".\"\n\n# Trim reads using Trim Galore! with default parameters.\n# Default parameters include: quality cutoff 20, minimum read length 20bp, adapter auto-detection.\n# For paired-end reads:\ntrim_galore --paired \"${INPUT_READ1}\" \"${INPUT_READ2}\" --output_dir \"${OUTPUT_DIR}\"\n\n# For single-end reads (uncomment and use if applicable):\n# trim_galore \"${INPUT_READ}\" --output_dir \"${OUTPUT_DIR}\"\n",
+            "code_language": "bash",
+            "github_url": "https://www.bioinformatics.babraham.ac.uk/projects/trim_galore/"
+        },
+        {
+            "step_order": 2,
+            "description": "Version 0.4.3",
+            "tool_name": "Unknown (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "0.4.3",
+            "code_example": "# The description 'Version 0.4.3' does not provide enough information to infer a specific tool, command, or parameters.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "Trimmed reads aligned to human reference genome GRCh38, release 87 using bowtie2 (version 2.3.4)",
+            "tool_name": "Bowtie2",
+            "tool_version": "2.3.4",
+            "code_example": "# Install Bowtie2 (if not already installed)\n# conda install -c bioconda bowtie2=2.3.4\n\n# Create a directory for reference data\nmkdir -p reference_data\ncd reference_data\n\n# Download human reference genome GRCh38, release 87 (Ensembl)\n# Ensembl release 87 corresponds to GRCh38. We use the primary assembly.\nwget ftp://ftp.ensembl.org/pub/release-87/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz\ngunzip Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz\n\n# Build Bowtie2 index for the reference genome\n# The index prefix will be 'grch38_r87_index'\nbowtie2-build Homo_sapiens.GRCh38.dna.primary_assembly.fa grch38_r87_index\n\n# Go back to the main working directory\ncd ..\n\n# Placeholder for trimmed reads file\n# Replace 'trimmed_reads.fastq' with the actual path to your input FASTQ file(s).\n# If your input is gzipped, ensure it's unzipped or use zcat/gunzip in a pipe.\n# Example for single-end reads:\n# trimmed_reads_file=\"path/to/your/trimmed_reads.fastq\"\n# Example for paired-end reads:\n# trimmed_reads_file_1=\"path/to/your/trimmed_reads_R1.fastq\"\n# trimmed_reads_file_2=\"path/to/your/trimmed_reads_R2.fastq\"\n\n# Align trimmed reads to the human reference genome using Bowtie2\n# -x: specify the index basename\n# -U: specify single-end FASTQ reads (use -1 and -2 for paired-end reads)\n# -S: specify SAM output file\n# -p: number of threads (optional, adjust as needed for performance)\nbowtie2 -x reference_data/grch38_r87_index -U trimmed_reads.fastq -S aligned_reads.sam -p 8\n\n# Optional: Convert SAM to BAM, sort, and index (common post-alignment steps)\n# samtools view -bS aligned_reads.sam > aligned_reads.bam\n# samtools sort aligned_reads.bam -o aligned_reads.sorted.bam\n# samtools index aligned_reads.sorted.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie2"
+        },
+        {
+            "step_order": 4,
+            "description": "Alignments filtered for reads with MAPQ score >= 11 using samtools (version 1.3.1)",
+            "tool_name": "samtools",
+            "tool_version": "1.3.1",
+            "code_example": "# Install samtools (if not already installed)\n# conda install -c bioconda samtools=1.3.1\n\n# Filter alignments for reads with MAPQ score >= 11\n# Replace input.bam with your actual input alignment file\n# Replace filtered.bam with your desired output file name\nsamtools view -b -q 11 input.bam -o filtered.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 5,
+            "description": "Duplicates removed using picard tools (version 2.9.0)",
+            "tool_name": "Picard",
+            "tool_version": "2.9.0",
+            "code_example": "# Install Picard (if not already installed)\n# For example, using conda:\n# conda install -c bioconda picard=2.9.0\n\n# Define input and output file names\nINPUT_BAM=\"input.bam\" # Replace with your actual input BAM file (e.g., aligned.bam)\nOUTPUT_BAM=\"output.dedup.bam\" # Replace with your desired output BAM file\nMETRICS_FILE=\"dedup_metrics.txt\" # Replace with your desired metrics file\n\n# Remove duplicates using Picard RemoveDuplicates\n# This command creates a new BAM file with duplicate reads removed.\n# Ensure 'picard.jar' is in your PATH or provide the full path to the JAR file.\njava -jar picard.jar RemoveDuplicates \\\n    I=${INPUT_BAM} \\\n    O=${OUTPUT_BAM} \\\n    M=${METRICS_FILE}",
+            "code_language": "bash",
+            "github_url": "https://github.com/broadinstitute/picard"
+        },
+        {
+            "step_order": 6,
+            "description": "Peaks called using MACS2 (version 2.1.1.20160309)",
+            "tool_name": "MACS2",
+            "tool_version": "2.1.1",
+            "code_example": "# Install MACS2 (e.g., via Bioconda)\n# conda install -c bioconda macs2\n\n# Define input files and parameters (placeholders)\n# Replace with actual paths and desired values\nTREATMENT_BAM=\"path/to/your/treatment.bam\" # Aligned ChIP-seq reads\nCONTROL_BAM=\"path/to/your/control.bam\"     # Aligned Input/Control reads\nOUTPUT_DIR=\"macs2_peaks\"                   # Directory for output files\nGENOME_SIZE=\"hs\"                           # Genome size: e.g., 'hs' for human, 'mm' for mouse, or a specific number like '2.7e9'\nQ_VALUE=\"0.01\"                             # Q-value (FDR) cutoff for peak detection\nPREFIX=\"sample_name\"                       # Prefix for output file names\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Execute MACS2 callpeak command\nmacs2 callpeak \\\n    -t \"${TREATMENT_BAM}\" \\\n    -c \"${CONTROL_BAM}\" \\\n    -f BAMPE \\\n    -g \"${GENOME_SIZE}\" \\\n    -n \"${PREFIX}\" \\\n    -q \"${Q_VALUE}\" \\\n    --outdir \"${OUTPUT_DIR}\" \\\n    --keep-dup all # Keep all duplicate reads (common for ChIP-seq)",
+            "code_language": "bash",
+            "github_url": "https://github.com/macs3-project/MACS"
+        },
+        {
+            "step_order": 7,
+            "description": "Peaks filtered for known chromosomes only",
+            "tool_name": "filter_peaks_on_chromosomes.py (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "v0.1.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Assume input_peaks.bed is the output from the previous peak calling step\n# Assume hg38 reference genome was used for alignment\n\n# Create a file with known chromosomes for hg38.\n# This list can be customized based on the specific reference genome and desired chromosomes.\n# For example, if using a different assembly or only canonical chromosomes.\necho -e \"chr1\\nchr2\\nchr3\\nchr4\\nchr5\\nchr6\\nchr7\\nchr8\\nchr9\\nchr10\\nchr11\\nchr12\\nchr13\\nchr14\\nchr15\\nchr16\\nchr17\\nchr18\\nchr19\\nchr20\\nchr21\\nchr22\\nchrX\\nchrY\\nchrM\" > known_chromosomes_hg38.txt\n\n# The 'filter_peaks_on_chromosomes.py' script is part of the yeolab/eclip workflow.\n# It expects an input BED file, an output BED file, and a file listing known chromosomes.\n\n# Example of how to obtain the script (uncomment and run if not already available):\n# git clone https://github.com/yeolab/eclip.git\n# cd eclip\n# git checkout v0.1.0 # Or the specific version of the workflow being used\n# cd .. # Go back to the working directory\n\n# Execute the filtering script\n# Assuming the script is located at eclip/scripts/filter_peaks_on_chromosomes.py relative to the current directory\npython eclip/scripts/filter_peaks_on_chromosomes.py \\\n    input_peaks.bed \\\n    filtered_peaks_on_known_chromosomes.bed \\\n    known_chromosomes_hg38.txt",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip"
+        },
+        {
+            "step_order": 8,
+            "description": "common peaks shared between replicates determined by findOverlapsOfPeaks() from ChIPpeakAnno R package (version 3.14.2)",
+            "tool_name": "R",
+            "tool_version": "3.14.2",
+            "code_example": "#!/bin/bash\n\n# Define output file for the common peaks\nOUTPUT_BED=\"common_reproducible_peaks.bed\"\n\n# Create an R script to perform the peak overlap analysis\ncat << 'EOF' > run_findOverlapsOfPeaks.R\n# Installation instructions (uncomment and run if packages are not installed):\n# if (!requireNamespace(\"BiocManager\", quietly = TRUE))\n#     install.packages(\"BiocManager\")\n#\n# BiocManager::install(\"ChIPpeakAnno\")\n# BiocManager::install(\"rtracklayer\") # Useful for importing/exporting genomic ranges\n\n# Load necessary libraries\nlibrary(ChIPpeakAnno)\nlibrary(GenomicRanges) # Provides GRanges objects\nlibrary(rtracklayer)   # For importing/exporting BED/narrowPeak files\n\n# --- Configuration for input peak files ---\n# IMPORTANT: Replace these placeholder file paths with your actual peak files.\n# These files should typically be in BED, narrowPeak, or similar formats.\n# Example of how to load actual peak files:\n# peak_file_rep1 <- \"path/to/your/replicate1.narrowPeak\"\n# peak_file_rep2 <- \"path/to/your/replicate2.narrowPeak\"\n# peaks_rep1 <- toGRanges(peak_file_rep1, format=\"narrowPeak\")\n# peaks_rep2 <- toGRanges(peak_file_rep2, format=\"narrowPeak\")\n\n# For demonstration purposes, we'll create dummy GRanges objects.\n# In a real scenario, you would load your peak files as shown above.\n\n# Dummy Replicate 1 peaks\npeaks_rep1 <- GRanges(\n    seqnames = c(\"chr1\", \"chr1\", \"chr2\", \"chr3\"),\n    ranges = IRanges(start = c(100, 300, 50, 1000), end = c(200, 400, 150, 1100)),\n    strand = \"*\",\n    score = c(10, 15, 12, 20)\n)\n\n# Dummy Replicate 2 peaks\npeaks_rep2 <- GRanges(\n    seqnames = c(\"chr1\", \"chr1\", \"chr2\", \"chr3\"),\n    ranges = IRanges(start = c(150, 350, 60, 1050), end = c(250, 450, 160, 1150)),\n    strand = \"*\",\n    score = c(11, 16, 13, 22)\n)\n\n# If you have more replicates, create similar GRanges objects for them.\n# Example for a third replicate:\n# peaks_rep3 <- GRanges(\n#     seqnames = c(\"chr1\", \"chr1\", \"chr2\"),\n#     ranges = IRanges(start = c(120, 320, 70), end = c(220, 420, 170)),\n#     strand = \"*\",\n#     score = c(9, 14, 11)\n# )\n\n# Create a list of peak GRanges objects for all replicates you want to compare.\npeaklist <- list(\n    \"replicate1\" = peaks_rep1,\n    \"replicate2\" = peaks_rep2\n    # \"replicate3\" = peaks_rep3 # Uncomment and add if you have more replicates\n)\n\n# Determine common peaks shared between replicates using findOverlapsOfPeaks()\n# Default parameters:\n#   minoverlap = 1 (at least 1 bp overlap)\n#   maxgap = -1 (no gap allowed between overlapping features)\n#   type = \"any\" (any overlap type, e.g., \"start\", \"end\", \"within\", \"equal\")\n# Adjust these parameters if your definition of \"common\" differs (e.g., minoverlap = 0.5 for 50% overlap).\ncommon_peaks_result <- findOverlapsOfPeaks(peaklist)\n\n# The result 'common_peaks_result' is a GRangesList containing several elements.\n# The '$overlappingPeaks' element provides the merged regions of common peaks,\n# which represent the reproducible peaks across replicates.\nmerged_common_regions <- common_peaks_result$overlappingPeaks\n\n# Print the identified common (reproducible) peaks to standard output for inspection\nmessage(\"Identified common (reproducible) peaks:\")\nprint(merged_common_regions)\n\n# Save the common peaks to a BED file\noutput_file <- Sys.getenv(\"OUTPUT_BED\")\nif (output_file != \"\") {\n    message(paste(\"Saving common peaks to:\", output_file))\n    # For BED format, typically only seqnames, ranges, and strand are used.\n    # You can add score or other metadata as extra columns if desired.\n    export(merged_common_regions, output_file, format = \"bed\")\n} else {\n    message(\"OUTPUT_BED environment variable not set. Not saving common peaks to a file.\")\n}\nEOF\n\n# Execute the R script\n# Ensure R and the necessary Bioconductor packages (ChIPpeakAnno, rtracklayer) are installed\n# and accessible in your system's PATH.\nRscript run_findOverlapsOfPeaks.R\n",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/ChIPpeakAnno.html"
+        },
+        {
+            "step_order": 9,
+            "description": "common peaks shared between treatments determined by findOverlapsOfPeaks() from ChIPpeakAnno R package (version 3.14.2)",
+            "tool_name": "R",
+            "tool_version": "3.14.2",
+            "code_example": "# Install R and Bioconductor if not already present\n# For Bioconductor 3.14 (R 4.1), use:\n# Rscript -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\")'\n# Rscript -e 'BiocManager::install(c(\"ChIPpeakAnno\", \"rtracklayer\"), version = \"3.14\")'\n\n# Create dummy peak files for demonstration\n# In a real scenario, these would be actual peak files from your treatments\ncat <<EOF > treatment1_peaks.bed\nchr1    1000    1500    peak1_t1    1000    .\nchr1    2000    2500    peak2_t1    800     .\nchr2    500     1000    peak3_t1    900     .\nEOF\n\ncat <<EOF > treatment2_peaks.bed\nchr1    1200    1700    peak1_t2    1100    .\nchr1    2300    2800    peak2_t2    950     .\nchr2    600     1100    peak3_t2    1050    .\nchr3    100     200     peak4_t2    700     .\nEOF\n\nRscript -e '\n  library(ChIPpeakAnno)\n  library(GenomicRanges)\n  library(rtracklayer)\n\n  # Load peak files\n  # Assuming peak files are in BED format. Adjust format argument if needed (e.g., \"narrowPeak\").\n  peaks_t1 <- import(\"treatment1_peaks.bed\", format=\"BED\")\n  peaks_t2 <- import(\"treatment2_peaks.bed\", format=\"BED\")\n\n  # Create a list of GRanges objects for input to findOverlapsOfPeaks\n  peaklist <- GRangesList(treatment1 = peaks_t1, treatment2 = peaks_t2)\n\n  # Find common peaks using findOverlapsOfPeaks.\n  # The `overlappingPeaks` slot of the returned object is a GRanges object\n  # representing the union of all overlapping regions across the input peak lists.\n  # `minoverlap = 1L` means at least 1 base pair overlap is required.\n  overlaps_obj <- findOverlapsOfPeaks(peaklist, minoverlap = 1L)\n\n  # Extract the GRanges object containing the actual common genomic regions.\n  common_regions <- overlaps_obj$overlappingPeaks\n\n  # Save the common regions to a BED file.\n  # The output BED file will contain the genomic coordinates of the regions\n  # where peaks from different treatments overlap.\n  export(common_regions, \"common_peaks.bed\", format=\"BED\")\n\n  message(\"Common peaks saved to common_peaks.bed\")\n'\n",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/ChIPpeakAnno.html"
+        }
+    ],
+    "raw_text": "Reads trimmed using default paramters of Trim Galore! Version 0.4.3\nTrimmed reads aligned to human reference genome GRCh38, release 87 using bowtie2 (version 2.3.4)\nAlignments filtered for reads with MAPQ score >= 11 using samtools (version 1.3.1)\nDuplicates removed using picard tools (version 2.9.0)\nPeaks called using MACS2 (version 2.1.1.20160309)\nPeaks filtered for known chromosomes only\ncommon peaks shared between replicates determined by findOverlapsOfPeaks() from ChIPpeakAnno R package (version 3.14.2)\ncommon peaks shared between treatments determined by findOverlapsOfPeaks() from ChIPpeakAnno R package (version 3.14.2)\nGenome_build: GRCh38",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Affymetrix package (Affy Power Tools) apt-probeset-summarize.",
-      "tool_name": "Microarray",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Iter-plier algorithm used to quantify probesets.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "GPL13185_mjay.pgf",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "GPL13185_mjay.clf",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Affymetrix package (Affy Power Tools) apt-probeset-summarize. Iter-plier algorithm used to quantify probesets.\nGPL13185_mjay.pgf\nGPL13185_mjay.clf",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Affymetrix package (Affy Power Tools) apt-probeset-summarize.",
+            "tool_name": "Microarray",
+            "tool_version": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Affymetrix Power Tools (APT) is proprietary software.\n# Installation typically involves downloading the appropriate installer from Thermo Fisher Scientific's website\n# and following their specific installation instructions for your operating system.\n# Example (conceptual, actual download URL and process varies):\n# wget https://www.thermofisher.com/content/dam/LifeTech/Documents/PDFs/APT_Installer_Linux_x64.zip\n# unzip APT_Installer_Linux_x64.zip\n# cd APT_Installer_Linux_x64\n# ./install.sh\n\n# Define input and output paths\n# Replace 'sample*.CEL' with your actual Affymetrix CEL files.\nINPUT_CEL_FILES=\"sample1.CEL sample2.CEL sample3.CEL\"\n# Replace 'HG-U133_Plus_2.cdf' with the specific CDF (Chip Description File) or library file\n# corresponding to your Affymetrix array type. These files are usually downloaded from Thermo Fisher Scientific.\nLIBRARY_FILE=\"HG-U133_Plus_2.cdf\"\nOUTPUT_FILE=\"probeset_summary.txt\"\n\n# Execute apt-probeset-summarize to summarize probe-level data into probeset-level data.\n# -a: Specifies the summarization algorithm (e.g., rma, mas5, plier). RMA (Robust Multichip Average) is a common choice.\n# -o: Specifies the path for the output file containing the summarized expression values.\n# -p: Specifies the probeset annotation file (CDF or library file) required for mapping probes to probesets.\n# Input CEL files are provided as positional arguments after all options.\napt-probeset-summarize -a rma -o \"${OUTPUT_FILE}\" -p \"${LIBRARY_FILE}\" ${INPUT_CEL_FILES}",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Iter-plier algorithm used to quantify probesets.",
+            "tool_name": "iter-plier (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.62.0",
+            "code_example": "# Install R and Bioconductor if not already present\n# sudo apt-get update\n# sudo apt-get install r-base\n# R -e \"if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager')\"\n# R -e \"BiocManager::install('iter-plier')\"\n# R -e \"BiocManager::install('affy')\" # 'affy' package is often needed to read .CEL files\n\n# Create an R script to run iter-plier\ncat << 'EOF' > run_iter_plier.R\nlibrary(iter-plier)\nlibrary(affy) # Often used for reading CEL files\n\n# --- USER CONFIGURATION ---\n# Directory containing your .CEL files\ncel_files_dir <- \"path/to/your/cel_files\"\n# Output file name for quantified probesets\noutput_file <- \"probeset_quantification.tsv\"\n# Optional: Path to a custom CDF file for your array type (e.g., \"HG-U133_Plus_2.cdf\")\n# If not specified, ReadAffy will try to infer it or use a default if available.\n# For best results, specify the correct CDF package or file.\n# Example for Affymetrix Human Genome U133 Plus 2.0 Array: array_type_cdf <- \"hgu133plus2\"\n# (Requires BiocManager::install(\"hgu133plus2.db\"))\narray_type_cdf <- NULL # Set to \"path/to/your/array_type.cdf\" or a CDF package name if you have one\n# --- END USER CONFIGURATION ---\n\n# List CEL files\ncel_files <- list.files(cel_files_dir, pattern = \"\\\\.CEL$\", full.names = TRUE)\n\nif (length(cel_files) == 0) {\n  stop(paste(\"No .CEL files found in the specified directory:\", cel_files_dir))\n}\n\nmessage(paste(\"Found\", length(cel_files), \".CEL files.\"))\n\n# Read CEL files into an AffyBatch object\n# This step requires actual .CEL files and potentially a specific CDF annotation.\n# If array_type_cdf is NULL, ReadAffy will attempt to infer the CDF.\n# For specific arrays, you might need to install a Bioconductor annotation package\n# (e.g., BiocManager::install(\"hgu133plus2.db\")) and then use cdfname=\"hgu133plus2\".\nif (!is.null(array_type_cdf)) {\n  message(paste(\"Reading CEL files with custom CDF/package:\", array_type_cdf))\n  affybatch_data <- ReadAffy(filenames = cel_files, cdfname = array_type_cdf)\n} else {\n  message(\"Reading CEL files. Attempting to infer CDF.\")\n  affybatch_data <- ReadAffy(filenames = cel_files)\n}\n\nmessage(\"AffyBatch object created.\")\n\n# Quantify probesets using iter-plier\n# The 'iter-plier' function takes an AffyBatch object and returns an ExpressionSet object.\n# For specific parameters (e.g., background correction, normalization), refer to ?iter-plier.\n# Example: iter_plier_eset <- iter_plier(affybatch_data, background = TRUE, normalize = TRUE)\n# Using default parameters for a generic example.\nmessage(\"Running iter-plier algorithm...\")\niter_plier_eset <- iter_plier(affybatch_data)\nmessage(\"iter-plier algorithm completed.\")\n\n# Extract expression matrix\nexpression_matrix <- exprs(iter_plier_eset)\n\n# Save results\nwrite.table(expression_matrix, file = output_file, sep = \"\\t\", quote = FALSE, row.names = TRUE)\n\nmessage(paste(\"Probeset quantification saved to:\", output_file))\nEOF\n\n# Execute the R script\nRscript run_iter_plier.R",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "GPL13185_mjay.pgf",
+            "tool_name": "(Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Unknown",
+            "code_example": "# No specific tool or command can be inferred from the description 'GPL13185_mjay.pgf'.\n# The identifier 'GPL13185' refers to the Homo sapiens (human) genome assembly GRCh37 (hg19) on NCBI GEO, but the specific operation or tool using this reference cannot be determined from the provided step description.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "GPL13185_mjay.clf",
+            "tool_name": "Custom Script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# The description 'GPL13185_mjay.clf' refers to a custom script or file, likely for processing microarray data from the GPL13185 platform (Illumina HumanHT-12 V4.0 expression beadchip).\n# Specific tool, parameters, and reference datasets are not explicitly stated in the description.\n# Assuming 'GPL13185_mjay.clf' is an executable script.\n./GPL13185_mjay.clf",
+            "code_language": "bash",
+            "github_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GPL13185"
+        }
+    ],
+    "raw_text": "Affymetrix package (Affy Power Tools) apt-probeset-summarize. Iter-plier algorithm used to quantify probesets.\nGPL13185_mjay.pgf\nGPL13185_mjay.clf",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

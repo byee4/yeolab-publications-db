@@ -1,16 +1,16 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Illumina GenomeStudio",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Illumina GenomeStudio",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Illumina GenomeStudio",
+            "tool_name": "Illumina GenomeStudio",
+            "tool_version": "Not specified",
+            "code_example": "# Illumina GenomeStudio is a proprietary, GUI-based software developed by Illumina for the analysis of data generated from Illumina instruments, particularly for array-based applications (e.g., genotyping, methylation, gene expression) and for viewing sequencing run quality control metrics.\n# As a graphical user interface (GUI) application, it does not have a direct command-line interface for automated execution within a bioinformatics pipeline.\n# Therefore, no executable bash command can be provided for this step. This step typically involves manual interaction within the GenomeStudio software environment.",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Illumina GenomeStudio",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Basecalls performed using CASAVA 1.8",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Sequenced reads were mapped to the reference genome using CASAVA 1.8",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Reads Per Kilobase of exon per Megabase of library size (RPKM) were calculated using CASAVA 1.8",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Basecalls performed using CASAVA 1.8\nSequenced reads were mapped to the reference genome using CASAVA 1.8\nReads Per Kilobase of exon per Megabase of library size (RPKM) were calculated using CASAVA 1.8\nGenome_build: hg19\nSupplementary_files_format_and_content: Tab-delimited text files include RPKM values for each sample. Columns are: Chromosome, Start location, Stop location, Gene, RPKM, base count.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Basecalls performed using CASAVA 1.8",
+            "tool_name": "CASAVA",
+            "tool_version": "1.8",
+            "code_example": "# CASAVA 1.8 is an older Illumina proprietary software suite for base calling and demultiplexing.\n# It typically runs on the instrument or a dedicated server.\n# The primary script for converting BCL files to FASTQ in CASAVA 1.8 was often configureBclToFastq.pl,\n# which was part of the bcl2fastq conversion software.\n# This command is a generic example; actual parameters depend on the specific run and setup.\n\n# Example command for base calling and demultiplexing using CASAVA's bcl2fastq component:\nconfigureBclToFastq.pl --input-dir /path/to/illumina/run/folder --output-dir /path/to/output/fastq/files --mismatches 1",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Sequenced reads were mapped to the reference genome using CASAVA 1.8",
+            "tool_name": "CASAVA",
+            "tool_version": "1.8",
+            "code_example": "# CASAVA 1.8 was an integrated Illumina software suite for base calling, demultiplexing, alignment, and variant calling.\n# The mapping of sequenced reads to a reference genome was an internal step within its larger workflow.\n# A direct, standalone command for \"mapping\" is not typically exposed for CASAVA 1.8.\n\n# Placeholder for reference genome (e.g., GRCh38/hg38).\n# If not specified in the description, use the latest assembly as a placeholder.\nREFERENCE_GENOME=\"path/to/GRCh38.fasta\"\n\n# Placeholder for input FASTQ files directory.\n# CASAVA often processed a directory containing FASTQ files for multiple samples.\nFASTQ_INPUT_DIR=\"path/to/sequenced_reads_fastq_directory\"\n\n# Placeholder for the output directory where CASAVA will place its results, including aligned BAM files.\nCASAVA_OUTPUT_DIR=\"path/to/casava_output_directory\"\n\n# Placeholder for a CASAVA configuration file (e.g., XML or a custom format).\n# This file would specify parameters for the build, including alignment settings.\nCASAVA_BUILD_CONFIG=\"path/to/casava_build_configuration.xml\"\n\n# The 'configureBuild.pl' script was used to set up the alignment and variant calling pipeline.\n# This command initiates the CASAVA 1.8 build process that includes mapping.\n# It generates a Makefile and other necessary files in the output directory.\nconfigureBuild.pl \\\n    --fastq-dir ${FASTQ_INPUT_DIR} \\\n    --output-dir ${CASAVA_OUTPUT_DIR} \\\n    --genome ${REFERENCE_GENOME} \\\n    --config ${CASAVA_BUILD_CONFIG}\n\n# After configuration, one would typically navigate to the generated output directory\n# and run 'make' to execute the pipeline, which includes the alignment step.\n# cd ${CASAVA_OUTPUT_DIR}\n# make",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "Reads Per Kilobase of exon per Megabase of library size (RPKM) were calculated using CASAVA 1.8",
+            "tool_name": "RSEM (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.3.3",
+            "code_example": "# Install RSEM (if not already installed)\n# conda install -c bioconda rsem\n# conda install -c bioconda star # RSEM often uses STAR internally for alignment if given FASTQ\n\n# Define reference genome and annotation (using GRCh38 and GENCODE v38 as placeholders)\n# Download GRCh38 primary assembly FASTA\n# wget -O GRCh38.primary_assembly.genome.fa.gz \"http://ftp.ensembl.org/pub/release-109/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz\"\n# gunzip GRCh38.primary_assembly.genome.fa.gz\n# Download GENCODE v38 annotation GTF\n# wget -O gencode.v38.annotation.gtf.gz \"http://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_38/gencode.v38.annotation.gtf.gz\"\n# gunzip gencode.v38.annotation.gtf.gz\n\nGENOME_FASTA=\"GRCh38.primary_assembly.genome.fa\"\nGTF_FILE=\"gencode.v38.annotation.gtf\"\nRSEM_REF_DIR=\"rsem_ref_GRCh38_gencode38\"\n\n# Build RSEM reference (this step needs to be done once)\n# rsem-prepare-reference --gtf \"${GTF_FILE}\" \"${GENOME_FASTA}\" \"${RSEM_REF_DIR}\"\n\n# Input BAM file (assuming it's already aligned, e.g., by STAR, and processed from CASAVA 1.8 FASTQs)\n# Replace 'sample.aligned.bam' with the actual path to your aligned BAM file.\nINPUT_BAM=\"sample.aligned.bam\"\n\n# Output directory and prefix for RSEM results\nOUTPUT_DIR=\"rsem_quantification\"\nSAMPLE_PREFIX=\"sample_rpkm\"\n\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run RSEM quantification to calculate RPKM\n# --bam: Specifies that the input is a BAM file\n# --no-qualities: Assumes BAM file might not have quality scores (common for some aligners or older data)\n# --strandedness none: Assumes unstranded library. Adjust to 'forward' or 'reverse' if known.\n# -p 8: Use 8 threads for parallel processing\n# The output files will be in ${OUTPUT_DIR} with prefix ${SAMPLE_PREFIX}\n# RPKM values are found in the .genes.results file (column 6) and .isoforms.results file (column 6)\n\nrsem-calculate-expression \\\n    --bam \\\n    --no-qualities \\\n    --strandedness none \\\n    -p 8 \\\n    \"${INPUT_BAM}\" \\\n    \"${RSEM_REF_DIR}\" \\\n    \"${OUTPUT_DIR}/${SAMPLE_PREFIX}\"\n\necho \"RPKM values are available in ${OUTPUT_DIR}/${SAMPLE_PREFIX}.genes.results (column 6) and ${OUTPUT_DIR}/${SAMPLE_PREFIX}.isoforms.results (column 6).\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/deweylab/RSEM"
+        }
+    ],
+    "raw_text": "Basecalls performed using CASAVA 1.8\nSequenced reads were mapped to the reference genome using CASAVA 1.8\nReads Per Kilobase of exon per Megabase of library size (RPKM) were calculated using CASAVA 1.8\nGenome_build: hg19\nSupplementary_files_format_and_content: Tab-delimited text files include RPKM values for each sample. Columns are: Chromosome, Start location, Stop location, Gene, RPKM, base count.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

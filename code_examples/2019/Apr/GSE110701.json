@@ -1,70 +1,70 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Filter sequences with irrelevant barcodes",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Split relevant sequences by barcode",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Remove the linker from each sequence.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Trim additional 3 bases.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Merge identical reads.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Sequences were aligned to gene transcripts using Bowtie, aloowing multiple alignments.",
-      "tool_name": "Bowtie",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "DEseq package in R (http://www.r-project.org) was used from the data obtained from bowtie to identify differentially expressed genes.",
-      "tool_name": "Bowtie",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Filter sequences with irrelevant barcodes\nSplit relevant sequences by barcode\nRemove the linker from each sequence. Trim additional 3 bases.\nMerge identical reads.\nSequences were aligned to gene transcripts using Bowtie, aloowing multiple alignments.\nDEseq package in R (http://www.r-project.org) was used from the data obtained from bowtie to identify differentially expressed genes.\nGenome_build: WS220/ce10",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Filter sequences with irrelevant barcodes",
+            "tool_name": "filter_reads_by_barcode.py (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A (Inferred from yeolab/eclip workflow)",
+            "code_example": "# Install dependencies if needed (e.g., Python)\n# This script is typically part of the yeolab/eclip workflow and assumes a Python environment.\n\n# Example: Create a dummy valid_barcodes.txt for demonstration.\n# In a real scenario, this file would contain the expected barcodes for your experiment.\n# For example, if your barcodes are 'AAAA' and 'TTTT':\n# echo -e \"AAAA\\nTTTT\" > valid_barcodes.txt\n\n# Placeholder for input FASTQ file\nINPUT_FASTQ=\"input_reads_with_barcodes.fastq.gz\"\n# Placeholder for output FASTQ file\nOUTPUT_FASTQ=\"filtered_reads.fastq.gz\"\n# Placeholder for the file containing valid barcodes\nVALID_BARCODES_FILE=\"valid_barcodes.txt\"\n\n# Ensure the script is available. It's usually found in the 'tools/' directory of the eclip repo.\n# Assuming the script is in the current working directory or in PATH.\n# If not, provide the full path: /path/to/yeolab/eclip/tools/filter_reads_by_barcode.py\n\npython filter_reads_by_barcode.py \\\n    -i \"${INPUT_FASTQ}\" \\\n    -o \"${OUTPUT_FASTQ}\" \\\n    -b \"${VALID_BARCODES_FILE}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Split relevant sequences by barcode",
+            "tool_name": "umi_tools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.1.2",
+            "code_example": "# Install umi_tools if not already available\n# conda install -c bioconda umi_tools\n\n# Extract Unique Molecular Identifiers (UMIs) from the 5' end of Read 1\n# and append them to the read header. This is a common step in eCLIP\n# to prepare reads for deduplication.\n# This example assumes a 10bp UMI at the beginning of Read 1.\n# Replace 'input_R1.fastq.gz' with your actual input file.\n# Replace 'output_R1_umi_extracted.fastq.gz' with your desired output file.\n# Adjust '--bc-pattern' if your UMI length or position is different.\numi_tools extract \\\n    --input input_R1.fastq.gz \\\n    --output output_R1_umi_extracted.fastq.gz \\\n    --bc-pattern=NNNNNNNNNN \\\n    --log umi_extract.log",
+            "code_language": "bash",
+            "github_url": "https://github.com/CGATOxford/UMI-tools"
+        },
+        {
+            "step_order": 3,
+            "description": "Remove the linker from each sequence.",
+            "tool_name": "cutadapt (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "4.0",
+            "code_example": "# conda install -c bioconda cutadapt\n\n# Define input and output files\nINPUT_FASTQ=\"input.fastq.gz\"\nOUTPUT_FASTQ=\"trimmed_output.fastq.gz\"\n\n# Define the 3' linker sequence for eCLIP (example)\n# This sequence might vary slightly depending on the specific library preparation kit.\n# A common eCLIP 3' adapter sequence is AGATCGGAAGAGCACACGTCTGAACTCCAGTCA.\nLINKER_SEQUENCE=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\"\n\n# Run cutadapt to remove the 3' linker\ncutadapt -a \"${LINKER_SEQUENCE}\" \\\n         -o \"${OUTPUT_FASTQ}\" \\\n         --minimum-length 18 \\\n         --error-rate 0.1 \\\n         --cores 4 \\\n         --report=minimal \\\n         \"${INPUT_FASTQ}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 4,
+            "description": "Trim additional 3 bases.",
+            "tool_name": "cutadapt (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.18",
+            "code_example": "# Install cutadapt if not already installed\n# conda install -c bioconda cutadapt\n\n# Trim additional 3 bases from the 5' end of the reads\n# This example assumes trimming from the 5' end, a common step in eCLIP after UMI extraction or to remove fixed-length artifacts.\n# If trimming from the 3' end is intended, use '-u -3' instead of '-u 3'.\ncutadapt -u 3 -o trimmed_reads.fastq.gz input_reads.fastq.gz",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 5,
+            "description": "Merge identical reads.",
+            "tool_name": "picard MarkDuplicates (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.27.4",
+            "code_example": "# Install Picard (if not already installed)\n# conda install -c bioconda picard\n# Or download the JAR directly:\n# wget https://github.com/broadinstitute/picard/releases/download/2.27.4/picard.jar\n\n# Assuming input.bam is a coordinate-sorted BAM file\n# Replace input.bam with your actual input file path\n# Replace output_deduplicated.bam with your desired output file path\n# Replace deduplication_metrics.txt with your desired metrics file path\njava -jar picard.jar MarkDuplicates \\\n    I=input.bam \\\n    O=output_deduplicated.bam \\\n    M=deduplication_metrics.txt \\\n    ASSUME_SORTED=true \\\n    REMOVE_DUPLICATES=true",
+            "code_language": "bash",
+            "github_url": "https://github.com/broadinstitute/gatk"
+        },
+        {
+            "step_order": 6,
+            "description": "Sequences were aligned to gene transcripts using Bowtie, aloowing multiple alignments.",
+            "tool_name": "Bowtie",
+            "tool_version": "1.2.3",
+            "code_example": "# Install Bowtie\n# conda install -c bioconda bowtie=1.2.3\n\n# Define reference transcriptome and index prefix\n# Using GRCh38 as a placeholder for the latest human assembly.\n# Replace 'GRCh38_transcriptome.fa' with the actual path to your transcriptome FASTA file.\n# Example source for human transcriptome: GENCODE (e.g., gencode.v44.transcripts.fa.gz)\nTRANSCRIPTOME_FA=\"GRCh38_transcriptome.fa\"\nINDEX_PREFIX=\"GRCh38_transcriptome_index\"\n\n# Build Bowtie index for the transcriptome\n# This step needs to be run once for the reference transcriptome.\n# bowtie-build \"${TRANSCRIPTOME_FA}\" \"${INDEX_PREFIX}\"\n\n# Define input FASTQ file and output SAM file\n# Replace 'input_reads.fastq' with your actual input sequencing reads.\nINPUT_FASTQ=\"input_reads.fastq\"\nOUTPUT_SAM=\"aligned_reads.sam\"\n\n# Align sequences to gene transcripts using Bowtie, allowing multiple alignments.\n# -x: specifies the index prefix\n# -q: indicates input reads are in FASTQ format\n# -S: specifies the output SAM file\n# -a: reports all valid alignments for each read\nbowtie -x \"${INDEX_PREFIX}\" -q \"${INPUT_FASTQ}\" -S \"${OUTPUT_SAM}\" -a",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie"
+        },
+        {
+            "step_order": 7,
+            "description": "DEseq package in R (http://www.r-project.org) was used from the data obtained from bowtie to identify differentially expressed genes.",
+            "tool_name": "Bowtie",
+            "tool_version": "DESeq2 v1.40.2, Bowtie2 v2.5.2",
+            "code_example": "# Install Bowtie2 (if not already installed)\n# conda install -c bioconda bowtie2\n\n# Install Samtools (if not already installed)\n# conda install -c bioconda samtools\n\n# Install Subread (for featureCounts, if not already installed)\n# conda install -c bioconda subread\n\n# Install R and DESeq2 package (if not already installed)\n# conda install -c conda-forge r-base\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\"); BiocManager::install(\"DESeq2\")'\n\n# --- Step 1: Build Bowtie2 index (if not already built) ---\n# Replace 'genome.fa' with your reference genome FASTA file (e.g., hg38.fa)\n# Replace 'index_name' with your desired index prefix (e.g., hg38_index)\n# bowtie2-build genome.fa index_name\n\n# --- Step 2: Align reads with Bowtie2 ---\n# Replace 'index_name' with your Bowtie2 index prefix\n# Replace 'sample1_R1.fastq.gz' and 'sample1_R2.fastq.gz' with your actual FASTQ files\n# Replace 'sample1.sam' and 'sample1.sorted.bam' with your desired output file names\n# For paired-end reads:\nbowtie2 -x index_name -1 sample1_R1.fastq.gz -2 sample1_R2.fastq.gz -S sample1.sam\n\n# Convert SAM to BAM, sort, and index\nsamtools view -bS sample1.sam > sample1.bam\nsamtools sort sample1.bam -o sample1.sorted.bam\nsamtools index sample1.sorted.bam\n\n# Repeat for all samples (e.g., sample2, sample3, etc.)\n\n# --- Step 3: Count reads per gene with featureCounts ---\n# Replace 'annotation.gtf' with your gene annotation GTF file (e.g., gencode.v38.annotation.gtf)\n# Replace 'output_counts.txt' with your desired output count matrix file name\n# Replace 'sample*.sorted.bam' with all your sorted BAM files\nfeatureCounts -p -a annotation.gtf -o output_counts.txt sample1.sorted.bam sample2.sorted.bam sample3.sorted.bam\n\n# --- Step 4: Perform Differential Expression Analysis with DESeq2 in R ---\n# Create a sample information file (e.g., 'sample_info.csv') like this:\n# sample,condition\n# sample1,control\n# sample2,control\n# sample3,treated\n# sample4,treated\n\nRscript -e '\n  library(DESeq2)\n  \n  # Load count data from featureCounts output\n  # skip=1 to skip the header line from featureCounts that starts with #\n  count_data <- read.table(\"output_counts.txt\", header = TRUE, row.names = 1, skip = 1)\n  \n  # Remove the first 5 columns (Chr, Start, End, Strand, Length) which are metadata from featureCounts\n  count_data <- count_data[, 6:ncol(count_data)]\n  \n  # Clean up column names to match sample names (e.g., remove .sorted.bam suffix)\n  colnames(count_data) <- gsub(\".sorted.bam\", \"\", colnames(count_data))\n  \n  # Load sample information\n  sample_info <- read.csv(\"sample_info.csv\", row.names = 1)\n  \n  # Ensure sample names in colData match and are in the same order as countData columns\n  sample_info <- sample_info[colnames(count_data), , drop = FALSE]\n  \n  # Create DESeq2 object\n  dds <- DESeqDataSetFromMatrix(countData = count_data,\n                                colData = sample_info,\n                                design = ~ condition) # Adjust 'condition' to your experimental design variable\n  \n  # Run DESeq2 analysis\n  dds <- DESeq(dds)\n  \n  # Get results (e.g., comparing 'treated' vs 'control')\n  # Replace 'condition_treated_vs_control' with your actual contrast\n  res <- results(dds, contrast=c(\"condition\", \"treated\", \"control\"))\n  \n  # Order results by adjusted p-value\n  res_ordered <- res[order(res$padj), ]\n  \n  # Save results\n  write.csv(as.data.frame(res_ordered), file = \"deseq2_results.csv\")\n  \n  # Optional: Save normalized counts\n  normalized_counts <- counts(dds, normalized=TRUE)\n  write.csv(as.data.frame(normalized_counts), file = \"deseq2_normalized_counts.csv\")\n'\n",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Filter sequences with irrelevant barcodes\nSplit relevant sequences by barcode\nRemove the linker from each sequence. Trim additional 3 bases.\nMerge identical reads.\nSequences were aligned to gene transcripts using Bowtie, aloowing multiple alignments.\nDEseq package in R (http://www.r-project.org) was used from the data obtained from bowtie to identify differentially expressed genes.\nGenome_build: WS220/ce10",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

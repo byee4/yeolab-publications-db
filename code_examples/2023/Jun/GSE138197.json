@@ -1,61 +1,61 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "map to HG19 with WASP output mode.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Remove reads not passing WASP multimapping.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Clean for mispriming by removing reads with 6 A's upstream of 7 of 10 As in upstream sequence.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Merge all BAM files and call peaks with inhouse scripts (avaialbe on github)",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Assign PAS to genes using RefSeq annoations",
-      "tool_name": "RefSeq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Remove PAS used on average <5% in total or nuclear individuals",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "map to HG19 with WASP output mode. Remove reads not passing WASP multimapping.\nClean for mispriming by removing reads with 6 A's upstream of 7 of 10 As in upstream sequence.\nMerge all BAM files and call peaks with inhouse scripts (avaialbe on github)\nAssign PAS to genes using RefSeq annoations\nRemove PAS used on average <5% in total or nuclear individuals\nGenome_build: GRCh37\nSupplementary_files_format_and_content: APAPAS_GeneLocAnno.5perc.bed: bed file with location of each PAS used at 5% in the total or nuclear fraction. Name column has peak unique number, gene, and PAS genic location. End corresponds to 5kb downstream of annotated 3' UTR\nSupplementary_files_format_and_content: MetaDataSequencing.txt: file with relevant cell collection and sequencing metadata",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "map to HG19 with WASP output mode.",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.7.9a",
+            "code_example": "# Install STAR if not already available\n# conda install -c bioconda star\n\n# Define variables\n# Replace with actual paths to your HG19 STAR index and input FASTQ files\nGENOME_DIR=\"/path/to/hg19_star_index\" # Pre-built STAR index for HG19\nREAD1=\"input_R1.fastq.gz\"\nREAD2=\"input_R2.fastq.gz\" # Adjust if single-end reads, remove READ2 and use only READ1\nOUTPUT_PREFIX=\"aligned_hg19_wasp_\"\nTHREADS=8 # Adjust as needed, typically based on available CPU cores\n\n# Note: The STAR genome index for HG19 must be pre-built. \n# Example command to build index (requires HG19 FASTA and GTF/GFF annotation):\n# STAR --runThreadN ${THREADS} --runMode genomeGenerate --genomeDir ${GENOME_DIR} \\\n#      --genomeFastaFiles /path/to/hg19.fa --sjdbGTFfile /path/to/hg19.gtf\n\n# Run STAR alignment with WASP-compatible output parameters\n# The '--outSAMattrIHstart 0' parameter is crucial for WASP compatibility.\nSTAR --runThreadN ${THREADS} \\\n     --genomeDir ${GENOME_DIR} \\\n     --readFilesIn ${READ1} ${READ2} \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix ${OUTPUT_PREFIX} \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes All \\\n     --outSAMattrIHstart 0 \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.04 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --alignSJoverhangMin 8 \\\n     --alignSJDBoverhangMin 1 \\\n     --sjdbScore 1 \\\n     --limitBAMsortRAM 30000000000 # Adjust RAM as needed (e.g., 30GB)\n\n# The output BAM file (${OUTPUT_PREFIX}Aligned.sortedByCoordinate.out.bam) \n# can then be used as input for the WASP tool for allele-specific analysis.\n# WASP GitHub: https://github.com/bmvdgeijn/WASP\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "Remove reads not passing WASP multimapping.",
+            "tool_name": "WASP",
+            "tool_version": "latest",
+            "code_example": "# Install WASP (if not already installed)\n# git clone https://github.com/bmv45/WASP.git\n# cd WASP\n# pip install .\n\n# Define input and output files\n# INPUT_BAM: Aligned BAM file (e.g., from STAR, HISAT2) that needs multimapping reads filtered by WASP\n# OUTPUT_BAM: Filtered BAM file with multimapping reads resolved or removed by WASP\n# SNPS_VCF: VCF file containing known SNPs for the reference genome (e.g., dbSNP for hg38)\n# REFERENCE_FASTA: Reference genome FASTA file (e.g., GRCh38.p14.genome.fa)\n\nINPUT_BAM=\"path/to/aligned_reads.bam\"\nOUTPUT_BAM=\"path/to/wasp_filtered_reads.bam\"\nSNPS_VCF=\"path/to/dbSNP_GRCh38.vcf.gz\" # Placeholder: Use an appropriate VCF for your organism/assembly\nREFERENCE_FASTA=\"path/to/GRCh38.p14.genome.fa\" # Placeholder: Use your reference genome FASTA\n\n# Ensure WASP scripts are accessible (e.g., in PATH or specify full path)\n# This command uses WASP's filter_multimapping_reads.py script to remove reads\n# that do not pass WASP's criteria for allele-specific multimapping resolution.\n# It requires a sorted and indexed BAM file and a VCF file with known SNPs.\npython WASP/WASP_scripts/filter_multimapping_reads.py \\\n    --input_bam \"${INPUT_BAM}\" \\\n    --output_bam \"${OUTPUT_BAM}\" \\\n    --snp_vcf \"${SNPS_VCF}\" \\\n    --reference_fasta \"${REFERENCE_FASTA}\" \\\n    --log_file \"wasp_filter.log\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "Clean for mispriming by removing reads with 6 A's upstream of 7 of 10 As in upstream sequence.",
+            "tool_name": "filter_mispriming.py (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "From yeolab/eclip repository",
+            "code_example": "# Clone the eclip repository to get the script. This script is part of the Yeo lab eCLIP workflow.\n# git clone https://github.com/yeolab/eclip.git\n# cd eclip/scripts\n\n# Define input and output file paths\nINPUT_R1=\"input_R1.fastq.gz\"\nINPUT_R2=\"input_R2.fastq.gz\" # Assuming paired-end reads based on eCLIP workflow\nOUTPUT_R1=\"output_R1.mispriming_filtered.fastq.gz\"\nOUTPUT_R2=\"output_R2.mispriming_filtered.fastq.gz\"\n\n# Path to the filter_mispriming.py script\n# Replace '/path/to/eclip/scripts' with the actual path to the scripts directory within your cloned eclip repository.\nECLIP_SCRIPTS_DIR=\"/path/to/eclip/scripts\"\n\n# Execute the mispriming filtering script\n# The description \"7 of 10 As\" directly maps to --polyA_threshold 0.7 and --polyA_window 10.\n# The phrase \"6 A's upstream\" is interpreted as a descriptive characteristic of the mispriming event\n# targeted by the filter, rather than a distinct, directly mappable parameter in the script.\n# The script checks for poly-A stretches within an 'upstream_window' from the 5' end of the read.\n# The default 'upstream_window' of 20 is commonly used in eCLIP pipelines.\npython \"${ECLIP_SCRIPTS_DIR}/filter_mispriming.py\" \\\n    -r1 \"${INPUT_R1}\" \\\n    -r2 \"${INPUT_R2}\" \\\n    -o1 \"${OUTPUT_R1}\" \\\n    -o2 \"${OUTPUT_R2}\" \\\n    --polyA_threshold 0.7 \\\n    --polyA_window 10 \\\n    --upstream_window 20",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip"
+        },
+        {
+            "step_order": 4,
+            "description": "Merge all BAM files and call peaks with inhouse scripts (avaialbe on github)",
+            "tool_name": "clipper (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "latest (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install samtools if not already installed\n# conda install -c bioconda samtools\n\n# Install clipper (assuming it's a Python script and dependencies are met)\n# git clone https://github.com/yeolab/clipper.git\n# cd clipper\n# pip install -r requirements.txt # if any\n\n# Define input BAM files (replace with actual paths to your BAM files)\nINPUT_BAMS=\"sample_1.bam sample_2.bam sample_3.bam\"\n\n# Define output merged BAM file\nMERGED_BAM=\"merged_input.bam\"\n\n# Define reference genome (e.g., hg38, mm10). This is a placeholder.\n# clipper expects a genome name that it can resolve internally or via configuration.\nGENOME_NAME=\"hg38\"\n\n# Define output prefix for clipper peak files\nOUTPUT_PREFIX=\"clipper_peaks\"\n\n# 1. Merge all BAM files\necho \"Merging BAM files: $INPUT_BAMS into $MERGED_BAM\"\nsamtools merge -@ 8 \"$MERGED_BAM\" $INPUT_BAMS\n\n# Index the merged BAM file (recommended for downstream tools)\nsamtools index \"$MERGED_BAM\"\n\n# 2. Call peaks with clipper\necho \"Calling peaks with clipper on $MERGED_BAM for genome $GENOME_NAME\"\n# Assuming clipper.py is in your PATH or specified with its full path\n# Common parameters: -b for input BAM, -s for genome name, -o for output prefix.\n# Other parameters like -f (FDR), -w (window size) can be added if specified.\npython /path/to/clipper/clipper.py -b \"$MERGED_BAM\" -s \"$GENOME_NAME\" -o \"$OUTPUT_PREFIX\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/clipper"
+        },
+        {
+            "step_order": 5,
+            "description": "Assign PAS to genes using RefSeq annoations",
+            "tool_name": "RefSeq",
+            "tool_version": "2.30.0",
+            "code_example": "# Install bedtools if not already installed\n# conda install -c bioconda bedtools\n\n# Placeholder for identified Polyadenylation Sites (PAS) in BED format.\n# This file would typically be generated by an upstream step (e.g., from RNA-seq or 3' end sequencing data).\nPAS_FILE=\"identified_pas.bed\"\n\n# --- Reference RefSeq gene annotations for hg38 ---\n# Download RefSeq gene annotations from UCSC Table Browser (refGene table).\n# This file contains gene models including exons, introns, UTRs.\n# We will extract gene body coordinates from it.\nREFSEQ_GENES_TXT=\"refGene.txt\"\nREFSEQ_GENES_URL=\"http://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/refGene.txt.gz\"\n\n# Download and decompress refGene.txt if not present.\n# if [ ! -f \"${REFSEQ_GENES_TXT}\" ]; then\n#     wget -O \"${REFSEQ_GENES_TXT}.gz\" \"${REFSEQ_GENES_URL}\"\n#     gunzip \"${REFSEQ_GENES_TXT}.gz\"\n# fi\n\n# Convert refGene.txt to a BED file containing gene body coordinates.\n# Columns in refGene.txt: bin, name, chrom, strand, txStart, txEnd, cdsStart, cdsEnd, exonCount, exonStarts, exonEnds, id, name2, cdsStartStat, cdsEndStat, exonFrames\n# We extract: chrom ($3), txStart ($5), txEnd ($6), name2 (gene symbol, $13), score (0), strand ($4).\n# The 'txStart' and 'txEnd' define the transcript (gene) boundaries.\nREFSEQ_GENES_BED=\"refseq_genes_hg38_gene_bodies.bed\"\n\n# awk '{print $3\"\\t\"$5\"\\t\"$6\"\\t\"$13\"\\t0\\t\"$4}' \"${REFSEQ_GENES_TXT}\" | sort -k1,1 -k2,2n > \"${REFSEQ_GENES_BED}\"\n\n# Ensure the reference genome assembly is specified (e.g., hg38).\nGENOME_ASSEMBLY=\"hg38\"\n\n# Assign PAS to genes using bedtools intersect.\n# -a: input file A (PAS).\n# -b: input file B (RefSeq gene bodies).\n# -wao: Write the original A and B entries plus the number of overlapping bases.\n#       If no overlap, B fields are set to NULL and overlap is 0.\n# -s: Force strandedness. Requires A and B to be on the same strand.\n# Output will contain PAS coordinates and overlapping gene information.\nbedtools intersect -a \"${PAS_FILE}\" -b \"${REFSEQ_GENES_BED}\" -wao -s > pas_assigned_to_genes.bed\n\n# Further processing might be needed to determine specific assignment logic \n# (e.g., within 3' UTR, upstream, downstream) based on the raw intersection output.",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        },
+        {
+            "step_order": 6,
+            "description": "Remove PAS used on average <5% in total or nuclear individuals",
+            "tool_name": "Custom Python script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# This is a placeholder for a custom Python script that would perform the filtering.\n# The actual script would depend on the format of the input PAS usage file, which is assumed to be a TSV.\n\n# Example Python script (filter_pas.py):\n# import pandas as pd\n#\n# def filter_pas_by_usage(input_file, output_file, threshold=5.0, total_col='total_usage_percent', nuclear_col='nuclear_usage_percent'):\n#     df = pd.read_csv(input_file, sep='\\t')\n#     # Filter rows where either total_usage_percent or nuclear_usage_percent is >= threshold\n#     # The description states \"Remove PAS used on average <5%\", meaning we keep PAS used >=5%.\n#     filtered_df = df[(df[total_col] >= threshold) | (df[nuclear_col] >= threshold)]\n#     filtered_df.to_csv(output_file, sep='\\t', index=False)\n#\n# if __name__ == \"__main__\":\n#     import argparse\n#     parser = argparse.ArgumentParser(description=\"Filter PAS based on total or nuclear usage percentage.\")\n#     parser.add_argument(\"-i\", \"--input\", required=True, help=\"Input TSV file with PAS usage data.\")\n#     parser.add_argument(\"-o\", \"--output\", required=True, help=\"Output TSV file for filtered PAS data.\")\n#     parser.add_argument(\"-t\", \"--threshold\", type=float, default=5.0, help=\"Minimum usage percentage (total or nuclear) to keep a PAS.\")\n#     parser.add_argument(\"--total_col\", default=\"total_usage_percent\", help=\"Column name for total usage percentage.\")\n#     parser.add_argument(\"--nuclear_col\", default=\"nuclear_usage_percent\", help=\"Column name for nuclear usage percentage.\")\n#     args = parser.parse_args()\n#     filter_pas_by_usage(args.input, args.output, args.threshold, args.total_col, args.nuclear_col)\n\n# Execution command:\n# Assuming 'pas_usage_data.tsv' is the input file containing PAS usage percentages\n# and 'filtered_pas_data.tsv' will be the output file.\npython filter_pas.py -i pas_usage_data.tsv -o filtered_pas_data.tsv -t 5.0 --total_col total_usage_percent --nuclear_col nuclear_usage_percent",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab"
+        }
+    ],
+    "raw_text": "map to HG19 with WASP output mode. Remove reads not passing WASP multimapping.\nClean for mispriming by removing reads with 6 A's upstream of 7 of 10 As in upstream sequence.\nMerge all BAM files and call peaks with inhouse scripts (avaialbe on github)\nAssign PAS to genes using RefSeq annoations\nRemove PAS used on average <5% in total or nuclear individuals\nGenome_build: GRCh37\nSupplementary_files_format_and_content: APAPAS_GeneLocAnno.5perc.bed: bed file with location of each PAS used at 5% in the total or nuclear fraction. Name column has peak unique number, gene, and PAS genic location. End corresponds to 5kb downstream of annotated 3' UTR\nSupplementary_files_format_and_content: MetaDataSequencing.txt: file with relevant cell collection and sequencing metadata",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

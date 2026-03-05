@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "The raw data was mapped using STAR.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "We calculated the gene-level read counts and identified differentially expressed genes by in-house script.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "The raw data was mapped using STAR.\nWe calculated the gene-level read counts and identified differentially expressed genes by in-house script.\nAssembly: mm10",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "The raw data was mapped using STAR.",
+            "tool_name": "STAR",
+            "tool_version": "2.7.9a (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install STAR (example using conda)\n# conda install -c bioconda star\n\n# Create STAR genome index (if not already done)\n# Replace /path/to/genome_fasta.fa with your reference genome FASTA file\n# Replace /path/to/annotations.gtf with your gene annotations GTF file\n# Replace /path/to/STAR_index_hg38 with your desired index directory\n# STAR --runThreadN 8 --runMode genomeGenerate --genomeDir /path/to/STAR_index_hg38 --genomeFastaFiles /path/to/genome_fasta.fa --sjdbGTFfile /path/to/annotations.gtf --sjdbOverhang 100\n\n# Define variables\nGENOME_DIR=\"/path/to/STAR_index_hg38\" # Placeholder: Replace with path to your STAR genome index for hg38\nREAD1=\"sample_R1.fastq.gz\" # Placeholder: Replace with your R1 FASTQ file\nREAD2=\"sample_R2.fastq.gz\" # Placeholder: Replace with your R2 FASTQ file (remove if single-end)\nOUTPUT_PREFIX=\"sample_aligned_\"\nTHREADS=8 # Number of threads to use\n\n# Run STAR alignment\nSTAR \\\n  --genomeDir ${GENOME_DIR} \\\n  --readFilesIn ${READ1} ${READ2} \\\n  --runThreadN ${THREADS} \\\n  --outFileNamePrefix ${OUTPUT_PREFIX} \\\n  --outSAMtype BAM SortedByCoordinate \\\n  --outSAMattributes All \\\n  --outFilterMismatchNmax 3 \\\n  --outFilterScoreMinOverLread 0.66 \\\n  --outFilterMatchNminOverLread 0.66 \\\n  --alignIntronMin 20 \\\n  --alignIntronMax 1000000 \\\n  --alignMatesGapMax 1000000 \\\n  --outReadsUnmapped Fastx \\\n  --outFilterType BySJout \\\n  --outFilterMultimapNmax 20 \\\n  --outFilterMultimapScoreRange 1 \\\n  --outFilterScoreMin 10 \\\n  --outFilterMatchNmin 10 \\\n  --limitSjdbInsertNsj 1200000 \\\n  --sjdbScore 1 \\\n  --seedSearchStartLmax 30 \\\n  --seedPerReadNmax 1000 \\\n  --seedPerWindowNmax 50 \\\n  --alignTranscriptsPerReadNmax 10000 \\\n  --alignTranscriptsPerWindowNmax 1000\n\n# The output BAM file will be named sample_aligned_Aligned.sortedByCoord.out.bam\n# Other output files (e.g., Log.final.out, SJ.out.tab) will also be generated.",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "We calculated the gene-level read counts and identified differentially expressed genes by in-house script.",
+            "tool_name": "in-house script",
+            "tool_version": "N/A",
+            "code_example": "# Installation of common tools that might be wrapped by an in-house script\n# conda install -c bioconda subread # For featureCounts\n# conda install -c conda-forge r-base # For R-based DE analysis (DESeq2, edgeR)\n# R -e \"install.packages('DESeq2')\"\n# R -e \"install.packages('edgeR')\"\n\n# Placeholder for input BAM files (replace with actual paths)\nBAM_FILES=\"sample1_rep1.bam sample1_rep2.bam sample2_rep1.bam sample2_rep2.bam\"\n\n# Placeholder for gene annotation GTF file (replace with actual path or download)\n# Example download for GRCh38:\n# wget -O Homo_sapiens.GRCh38.109.gtf.gz \"https://ftp.ensembl.org/pub/release-109/gtf/homo_sapiens/Homo_sapiens.GRCh38.109.gtf.gz\"\n# gunzip Homo_sapiens.GRCh38.109.gtf.gz\nGENE_ANNOTATION=\"Homo_sapiens.GRCh38.109.gtf\"\n\n# Placeholder for experimental design file (e.g., tab-separated file with sample_id, condition)\n# Example design.tsv:\n# sample_id    condition\n# sample1_rep1    treated\n# sample1_rep2    treated\n# sample2_rep1    control\n# sample2_rep2    control\nDESIGN_FILE=\"design.tsv\"\n\n# Execute the conceptual in-house script\n# The actual command would depend on the implementation of the in-house script.\n# It typically takes aligned BAM files, a gene annotation GTF, and a design file.\n# It performs gene quantification and differential expression analysis.\n./in_house_expression_pipeline.sh \\\n  --bams ${BAM_FILES} \\\n  --gtf ${GENE_ANNOTATION} \\\n  --design ${DESIGN_FILE} \\\n  --output_dir ./results",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "The raw data was mapped using STAR.\nWe calculated the gene-level read counts and identified differentially expressed genes by in-house script.\nAssembly: mm10",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

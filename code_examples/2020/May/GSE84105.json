@@ -1,16 +1,16 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Data was normalized using RMAExpress.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Data was normalized using RMAExpress.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Data was normalized using RMAExpress.",
+            "tool_name": "RMAExpress",
+            "tool_version": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# The original RMAExpress is a GUI application. This code block demonstrates how to perform Robust Multi-array Average (RMA) normalization using the 'affy' Bioconductor package in R, which implements the same algorithm.\n\n# Install R and Bioconductor if not already present\n# R\n# if (!requireNamespace(\"BiocManager\", quietly = TRUE))\n#     install.packages(\"BiocManager\")\n# BiocManager::install(\"affy\")\n\n# Create an R script for RMA normalization\ncat << 'EOF' > normalize_rma.R\nlibrary(affy)\n\n# Get CEL file paths from command line arguments\n# The first argument is expected to be the directory containing CEL files.\nargs <- commandArgs(trailingOnly = TRUE)\nif (length(args) == 0) {\n  stop(\"Please provide the path to the directory containing CEL files as the first argument.\", call. = FALSE)\n}\ncel_dir <- args[1]\noutput_file <- \"rma_normalized_data.txt\"\n\n# List all .CEL files in the specified directory\ncel_files <- list.files(path = cel_dir, pattern = \"\\\\.CEL$\", full.names = TRUE)\nif (length(cel_files) == 0) {\n  stop(paste(\"No .CEL files found in directory:\", cel_dir), call. = FALSE)\n}\n\nmessage(paste(\"Found\", length(cel_files), \"CEL files in\", cel_dir))\nmessage(\"Reading CEL files...\")\ndata <- ReadAffy(filenames = cel_files)\n\nmessage(\"Performing RMA normalization...\")\neset <- rma(data)\n\n# Extract normalized expression matrix\nnormalized_matrix <- exprs(eset)\n\n# Write normalized data to a tab-separated file\nwrite.table(normalized_matrix, file = output_file, sep = \"\\t\", quote = FALSE, row.names = TRUE)\n\nmessage(paste(\"RMA normalized data written to\", output_file))\nEOF\n\n# Execute the R script\n# Replace 'path/to/your/cel_files_directory' with the actual directory containing your .CEL files\nRscript normalize_rma.R path/to/your/cel_files_directory",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Data was normalized using RMAExpress.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

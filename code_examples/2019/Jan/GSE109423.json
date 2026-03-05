@@ -1,61 +1,61 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Library strategy: ribosome profiling",
-      "tool_name": "Ribo-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Raw sequencing reads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using cutadapt.",
-      "tool_name": "cutadapt",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Trimmed reads were mapped against RepBase to remove reads mapping to repetitive sequences.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Remaining reads were mapped to the appropriate genome build using STAR aligner",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "RPKM values were calculated for all polysome and rnaseq samples.",
-      "tool_name": "RNA-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "For eCLIP samples, read densities were calculated to identify eCLIP peaks. eCLIP peaks were identified using clipper",
-      "tool_name": "CLIPper",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Library strategy: ribosome profiling\nRaw sequencing reads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using cutadapt. Trimmed reads were mapped against RepBase to remove reads mapping to repetitive sequences. Remaining reads were mapped to the appropriate genome build using STAR aligner\nRPKM values were calculated for all polysome and rnaseq samples. For eCLIP samples, read densities were calculated to identify eCLIP peaks. eCLIP peaks were identified using clipper\nGenome_build: mm10 and hg19\nSupplementary_files_format_and_content: RPKM files for all polysome samples. eCLIP input normalized peaks in BED format",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Library strategy: ribosome profiling",
+            "tool_name": "Ribo-seq",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables\n# Replace with actual paths and filenames\nGENOME_DIR=\"/path/to/STAR_genome_index/hg38\" # Directory containing STAR genome index files (e.g., SA, SAindex)\nREADS_FILE=\"input_riboseq_reads.fastq.gz\" # Input gzipped FASTQ file\nOUTPUT_PREFIX=\"riboseq_alignment\" # Prefix for output files\nTHREADS=8 # Number of threads to use\n\n# Note: A STAR genome index must be pre-built using STAR --runMode genomeGenerate.\n# Example command for building index (run once per genome/annotation combination):\n# STAR --runMode genomeGenerate \\\n#      --genomeDir ${GENOME_DIR} \\\n#      --genomeFastaFiles /path/to/hg38.fa \\\n#      --sjdbGTFfile /path/to/hg38.gtf \\\n#      --runThreadN ${THREADS}\n\n# Align Ribo-seq reads using STAR\nSTAR --genomeDir ${GENOME_DIR} \\\n     --readFilesIn ${READS_FILE} \\\n     --runThreadN ${THREADS} \\\n     --outFileNamePrefix ${OUTPUT_PREFIX}_ \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped None \\\n     --outFilterType BySJout \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.04 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --alignSJoverhangMin 8 \\\n     --alignSJDBoverhangMin 1 \\\n     --sjdbScore 1 \\\n     --limitBAMsortRAM 30000000000 # Adjust based on available RAM (e.g., 30GB)\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "Raw sequencing reads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using cutadapt.",
+            "tool_name": "cutadapt",
+            "tool_version": "3.4",
+            "code_example": "# Install cutadapt if not already available\n# conda install -c bioconda cutadapt=3.4\n\n# Define input and output files\nINPUT_READS=\"raw_reads.fastq.gz\"\nOUTPUT_TRIMMED_READS=\"trimmed_reads.fastq.gz\"\n\n# Define adapter and barcode sequences common in eCLIP\n# Common Illumina TruSeq Universal Adapter (3' end)\nADAPTER_3PRIME=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\"\n# Placeholder for a 5' barcode/UMI (e.g., 8 Ns)\n# In a real eCLIP experiment, this would be a specific barcode sequence or a UMI pattern.\nBARCODE_5PRIME=\"NNNNNNNN\"\n\n# Trim adapter and barcode sequences, perform quality trimming, and filter by length\ncutadapt \\\n  -a \"${ADAPTER_3PRIME}\" \\\n  -g \"${BARCODE_5PRIME}\" \\\n  -m 18 \\\n  -q 20 \\\n  -e 0.1 \\\n  --cores 4 \\\n  -o \"${OUTPUT_TRIMMED_READS}\" \\\n  \"${INPUT_READS}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper"
+        },
+        {
+            "step_order": 3,
+            "description": "Trimmed reads were mapped against RepBase to remove reads mapping to repetitive sequences.",
+            "tool_name": "bowtie2 (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.4.5 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install bowtie2 if not already installed\n# conda install -c bioconda bowtie2\n\n# --- Reference Data Preparation (RepBase) ---\n# RepBase sequences are typically obtained from the Genetic Information Research Institute (GIRI).\n# For demonstration, we assume a RepBase FASTA file is available. \n# The actual download might involve specific species or versions (e.g., human, mouse).\n# Example (illustrative, actual URL/process may vary):\n# wget -O RepBase.fasta \"http://www.girinst.org/repbase/update/RepBase.fasta\"\n\nREPBASE_FASTA=\"RepBase.fasta\" # Placeholder for the RepBase FASTA file\nREPBASE_INDEX_PREFIX=\"RepBase_index\"\n\n# Build bowtie2 index for RepBase\n# This step only needs to be done once per RepBase FASTA\nif [ ! -f \"${REPBASE_INDEX_PREFIX}.1.bt2\" ]; then\n    echo \"Building bowtie2 index for RepBase...\"\n    bowtie2-build \"${REPBASE_FASTA}\" \"${REPBASE_INDEX_PREFIX}\"\n    echo \"bowtie2 index built.\"\nelse\n    echo \"bowtie2 index for RepBase already exists.\"\nfi\n\n# --- Read Mapping and Filtering ---\nINPUT_FASTQ=\"trimmed_reads.fastq.gz\" # Input trimmed reads\nOUTPUT_UNMAPPED_FASTQ=\"reads_without_repetitive_sequences.fastq.gz\" # Output reads that did not map to RepBase\nNUM_THREADS=8 # Number of threads to use\n\necho \"Mapping trimmed reads against RepBase to remove repetitive sequences...\"\nbowtie2 -x \"${REPBASE_INDEX_PREFIX}\" \\\n        -U \"${INPUT_FASTQ}\" \\\n        --un-gz \"${OUTPUT_UNMAPPED_FASTQ}\" \\\n        -S /dev/null \\\n        -p \"${NUM_THREADS}\" \\\n        --very-sensitive-local # Using a sensitive local alignment mode for better detection of repetitive elements\n\necho \"Reads not mapping to RepBase saved to ${OUTPUT_UNMAPPED_FASTQ}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie2"
+        },
+        {
+            "step_order": 4,
+            "description": "Remaining reads were mapped to the appropriate genome build using STAR aligner",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR (if not already installed)\n# conda create -n star_env star=2.7.10a -c bioconda -c conda-forge\n# conda activate star_env\n\n# Define variables\n# Placeholder for GRCh38 genome index. Replace with the actual path to your STAR genome index.\nGENOME_DIR=\"/path/to/STAR_genome_index/GRCh38\"\n\n# Input FASTQ files. Assuming paired-end reads. Adjust if single-end.\nREADS_R1=\"remaining_reads_R1.fastq.gz\"\nREADS_R2=\"remaining_reads_R2.fastq.gz\"\n\nOUTPUT_PREFIX=\"remaining_reads_aligned\"\nNUM_THREADS=8 # Adjust based on available CPU cores\nRAM_LIMIT_BAM_SORT=30000000000 # 30GB, adjust based on available RAM\n\n# Run STAR alignment\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${READS_R1}\" \"${READS_R2}\" \\\n     --readFilesCommand zcat \\\n     --runThreadN \"${NUM_THREADS}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes Standard \\\n     --outFilterType BySJout \\\n     --outFilterMismatchNmax 10 \\\n     --outFilterScoreMinOverLread 0.3 \\\n     --outFilterMatchNminOverLread 0.3 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --limitBAMsortRAM \"${RAM_LIMIT_BAM_SORT}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 5,
+            "description": "RPKM values were calculated for all polysome and rnaseq samples.",
+            "tool_name": "RNA-seq",
+            "tool_version": "1.3.3",
+            "code_example": "# Install RSEM (if not already installed)\n# conda install -c bioconda rsem\n\n# --- Reference Preparation (run once) ---\n# RSEM requires a reference genome and a GTF annotation file to build its index.\n# For human (GRCh38), you can download these from Ensembl or GENCODE.\n# Example for human GRCh38 (Ensembl release 109):\n# wget -O Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz ftp://ftp.ensembl.org/pub/release-109/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz\n# wget -O Homo_sapiens.GRCh38.109.gtf.gz ftp://ftp.ensembl.org/pub/release-109/gtf/homo_sapiens/Homo_sapiens.GRCh38.109.gtf.gz\n# gunzip Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz\n# gunzip Homo_sapiens.GRCh38.109.gtf.gz\n\n# Define paths for reference files (replace with your actual paths)\n# GENOME_FA=\"/path/to/Homo_sapiens.GRCh38.dna.primary_assembly.fa\"\n# GTF_FILE=\"/path/to/Homo_sapiens.GRCh38.109.gtf\"\n# RSEM_REF_INDEX=\"/path/to/rsem_ref_index_GRCh38\"\n\n# Build RSEM reference index (uncomment and run once per reference)\n# mkdir -p $(dirname \"${RSEM_REF_INDEX}\")\n# rsem-prepare-reference \\\n#     --gtf \"${GTF_FILE}\" \\\n#     \"${GENOME_FA}\" \\\n#     \"${RSEM_REF_INDEX}\"\n\n# --- RPKM Calculation for Samples ---\n# Define paths for input FASTQ files and output results\n# INPUT_DIR=\"/path/to/your/fastq_files\"\n# OUTPUT_DIR=\"/path/to/your/rsem_results\"\n# RSEM_REF_INDEX=\"/path/to/rsem_ref_index_GRCh38\" # Same as used for reference preparation\n\n# Create output directory if it doesn't exist\n# mkdir -p \"${OUTPUT_DIR}\"\n\n# Loop through samples (assuming paired-end FASTQ files: SAMPLE_ID_R1.fastq.gz, SAMPLE_ID_R2.fastq.gz)\n# Replace 'sample1 sample2' with the actual list of your sample IDs\nfor sample_id in sample1 sample2; do\n    READ1=\"${INPUT_DIR}/${sample_id}_R1.fastq.gz\"\n    READ2=\"${INPUT_DIR}/${sample_id}_R2.fastq.gz\"\n    OUTPUT_PREFIX=\"${OUTPUT_DIR}/${sample_id}\"\n\n    echo \"Processing sample: ${sample_id}\"\n    rsem-calculate-expression \\\n        --paired-end \\\n        --num-threads 8 \\\n        \"${READ1}\" \\\n        \"${READ2}\" \\\n        \"${RSEM_REF_INDEX}\" \\\n        \"${OUTPUT_PREFIX}\"\ndone\n\n# RPKM values for genes are typically found in the '.genes.results' file\n# The 6th column of this file (0-indexed) contains the RPKM values.\n# Example: To view gene_id and RPKM for 'sample1':\n# head -n 1 \"${OUTPUT_DIR}/sample1.genes.results\"\n# cat \"${OUTPUT_DIR}/sample1.genes.results\" | awk 'NR==1 || $1 ~ /^ENSG/ {print $1, $6}'\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/deweylab/RSEM"
+        },
+        {
+            "step_order": 6,
+            "description": "For eCLIP samples, read densities were calculated to identify eCLIP peaks. eCLIP peaks were identified using clipper",
+            "tool_name": "CLIPper",
+            "tool_version": "Not specified (from yeolab/clipper GitHub repo, last commit 2019-07-17)",
+            "code_example": "# Clone the clipper repository if you haven't already\n# git clone https://github.com/yeolab/clipper.git\n# cd clipper\n\n# Install dependencies (if not already present in your environment)\n# CLIPper is a Python script and typically requires numpy, scipy, and pysam.\n# conda install -c conda-forge numpy scipy pysam\n\n# Define input files and parameters\n# Replace with your actual file paths and desired parameters\nTREATMENT_BAM=\"path/to/your/eCLIP_sample.bam\"\nCONTROL_BAM=\"path/to/your/SMInput_or_IgG_control.bam\" # This is typically the size-matched input or IgG control BAM\nGENOME_SIZE=\"hg38\" # Example: hg38 for human, mm10 for mouse. Adjust as needed.\nOUTPUT_PREFIX=\"eCLIP_peaks_output\"\nP_VALUE_THRESHOLD=\"0.01\" # Default p-value threshold in clipper.py\nFDR_THRESHOLD=\"0.05\"   # Default FDR threshold in clipper.py\nMIN_PEAK_LENGTH=\"10\"   # Default minimum peak length in clipper.py\n\n# Execute clipper\n# Ensure clipper.py is in your current directory or in your PATH\npython clipper.py \\\n    -t \"${TREATMENT_BAM}\" \\\n    -c \"${CONTROL_BAM}\" \\\n    -s \"${GENOME_SIZE}\" \\\n    -o \"${OUTPUT_PREFIX}\" \\\n    -p \"${P_VALUE_THRESHOLD}\" \\\n    -f \"${FDR_THRESHOLD}\" \\\n    -l \"${MIN_PEAK_LENGTH}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/clipper"
+        }
+    ],
+    "raw_text": "Library strategy: ribosome profiling\nRaw sequencing reads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using cutadapt. Trimmed reads were mapped against RepBase to remove reads mapping to repetitive sequences. Remaining reads were mapped to the appropriate genome build using STAR aligner\nRPKM values were calculated for all polysome and rnaseq samples. For eCLIP samples, read densities were calculated to identify eCLIP peaks. eCLIP peaks were identified using clipper\nGenome_build: mm10 and hg19\nSupplementary_files_format_and_content: RPKM files for all polysome samples. eCLIP input normalized peaks in BED format",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

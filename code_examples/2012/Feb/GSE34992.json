@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize.",
-      "tool_name": "Microarray",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Iter-plier algorithm used to quantify probesets.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize. Iter-plier algorithm used to quantify probesets.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize.",
+            "tool_name": "Microarray",
+            "tool_version": "Inferred with models/gemini-2.5-flash",
+            "code_example": "# Install Affymetrix Power Tools (APT)\n# conda install -c bioconda affymetrix-power-tools\n\n# Define input and output paths\n# Replace with actual CEL files and the correct CDF file for your array type\nCEL_FILES=\"sample1.CEL sample2.CEL sample3.CEL\" # Placeholder for actual CEL files\nCDF_FILE=\"HG-U133A.cdf\" # Placeholder for the specific array's CDF file (e.g., from Affymetrix support site)\nOUTPUT_DIR=\"apt_summarize_output\"\nALGORITHM=\"rma\" # Common summarization algorithm (e.g., rma, mas5, dabg)\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Execute apt-probeset-summarize\napt-probeset-summarize \\\n    -a \"${ALGORITHM}\" \\\n    -o \"${OUTPUT_DIR}\" \\\n    -c \"${CDF_FILE}\" \\\n    ${CEL_FILES}",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Iter-plier algorithm used to quantify probesets.",
+            "tool_name": "plier (R package) (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "(Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install R and Bioconductor if not already installed\n# sudo apt-get update\n# sudo apt-get install r-base\n# R -e \"if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager'); BiocManager::install(c('plier', 'affy'))\"\n\ncat << 'EOF' > run_plier.R\n# Load necessary R packages\nlibrary(plier)\nlibrary(affy) # Required for ReadAffy\n\n# Define input CEL files directory and output file\n# IMPORTANT: Replace \"path/to/your/raw_cel_files\" with the actual directory containing your .CEL files.\ncel_files_dir <- Sys.getenv(\"CEL_FILES_DIR\", \"path/to/your/raw_cel_files\")\noutput_file <- Sys.getenv(\"OUTPUT_FILE\", \"probeset_quantification_plier.tsv\")\n\n# Check if the CEL files directory exists\nif (!dir.exists(cel_files_dir)) {\n  stop(paste(\"Error: CEL files directory not found:\", cel_files_dir,\n             \"\\nPlease update the 'CEL_FILES_DIR' environment variable to point to your actual .CEL files.\"))\n}\n\n# Read CEL files into an AffyBatch object\n# This step requires valid Affymetrix .CEL files.\n# Ensure that the appropriate annotation package for your array type is installed\n# if you plan to use it for downstream analysis (e.g., hgu133plus2.db).\n# Example: BiocManager::install(\"hgu133plus2.db\")\nraw_data <- ReadAffy(celfile.path = cel_files_dir)\n\n# Perform PLIER quantification\n# The 'plier' function implements the Iter-plier algorithm.\neset_plier <- plier(raw_data)\n\n# Extract expression values (log2 transformed)\nexpression_matrix <- exprs(eset_plier)\n\n# Write results to a TSV file\nwrite.table(expression_matrix, file = output_file, sep = \"\\t\", quote = FALSE, row.names = TRUE)\n\nmessage(paste(\"PLIER quantification complete. Results saved to:\", output_file))\nEOF\n\n# Set environment variables for the R script\n# IMPORTANT: Replace \"path/to/your/raw_cel_files\" with the actual directory containing your .CEL files\nexport CEL_FILES_DIR=\"path/to/your/raw_cel_files\"\nexport OUTPUT_FILE=\"probeset_quantification_plier.tsv\"\n\n# Execute the R script\nRscript run_plier.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/plier.html"
+        }
+    ],
+    "raw_text": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize. Iter-plier algorithm used to quantify probesets.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

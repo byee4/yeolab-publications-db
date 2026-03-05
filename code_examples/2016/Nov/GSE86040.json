@@ -1,61 +1,61 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Reads were demultiplexed using custom scripts and the randomer was appended to the read name.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reads were trimmed, filtered for repetitive elements, and mapped to human genome assembly hg19 as described in iCLIP computational analysis.",
-      "tool_name": "iCLIP",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "PCR duplicated reads were removed based on the start positions of read1, read2, and the sequence of the randomer. eCLIP peaks were identified using CLIPPER with parameters \u00e2\u0080\u0093s hg19 \u00e2\u0080\u0093o \u00e2\u0080\u0093bonferroni \u00e2\u0080\u0093superlocal --threshold-method binomial --save-pickle (Lovci et al.",
-      "tool_name": "CLIPper",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "NSMB, 2013).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Peak strength was then normalized against a size matched input by calculating fold enrichment of number of reads in IP versus number of reads in size matched input.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Peaks were called significant if the number of reads in IP was greater than the number of reads in input and the the peaks a Bonferroni corrected fisher exact p-value of less than .05.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Reads were demultiplexed using custom scripts and the randomer was appended to the read name. Reads were trimmed, filtered for repetitive elements, and mapped to human genome assembly hg19 as described in iCLIP computational analysis. PCR duplicated reads were removed based on the start positions of read1, read2, and the sequence of the randomer. eCLIP peaks were identified using CLIPPER with parameters  \u00e2\u0080\u0093s hg19 \u00e2\u0080\u0093o \u00e2\u0080\u0093bonferroni \u00e2\u0080\u0093superlocal --threshold-method binomial --save-pickle (Lovci et al. NSMB, 2013). Peak strength was then normalized against a size matched input by calculating fold enrichment of number of reads in IP versus number of reads in size matched input.  Peaks were called significant if the number of reads in IP was greater than the number of reads in input and the the peaks a Bonferroni corrected fisher exact p-value of less than .05.\nGenome_build: hg19\nSupplementary_files_format_and_content: peaks.bed and bigwig",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Reads were demultiplexed using custom scripts and the randomer was appended to the read name.",
+            "tool_name": "Custom Script",
+            "tool_version": "N/A (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# This example assumes a custom Python script 'eclip_demultiplex_and_randomer_append.py'\n# that performs both demultiplexing based on barcodes and appends a randomer to the read name.\n# A common randomer length in eCLIP is 6 base pairs.\n\n# Installation (example for a Python script with Biopython dependency):\n# conda create -n eclip_demux python=3.8\n# conda activate eclip_demux\n# pip install biopython\n\n# Create a dummy barcode file (replace with actual barcodes and sample names)\n# echo -e \"AAAA\\tsample1\\nTTTT\\tsample2\" > barcodes.tsv\n\n# Execute the custom script\npython eclip_demultiplex_and_randomer_append.py \\\n  --input_fastq \"raw_reads.fastq.gz\" \\\n  --barcode_file \"barcodes.tsv\" \\\n  --randomer_length 6 \\\n  --output_dir \"demultiplexed_reads\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip"
+        },
+        {
+            "step_order": 2,
+            "description": "Reads were trimmed, filtered for repetitive elements, and mapped to human genome assembly hg19 as described in iCLIP computational analysis.",
+            "tool_name": "iCLIP",
+            "tool_version": "4.0, 2.7.10a (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Input FASTQ file\nREADS=\"input.fastq.gz\"\nOUTPUT_PREFIX=\"sample\"\n\n# Reference paths (placeholders - replace with actual paths)\n# Download hg19 genome and annotation files from UCSC or Ensembl.\n# Build STAR index for hg19:\n# STAR --runThreadN <threads> --runMode genomeGenerate --genomeDir /path/to/hg19_STAR_index --genomeFastaFiles /path/to/hg19.fa --sjdbGTFfile /path/to/hg19.gtf\nHG19_STAR_INDEX=\"/path/to/hg19_STAR_index\"\n\n# Create a repeatome FASTA file (e.g., combining rRNA, tRNA, snRNA, snoRNA sequences)\n# and build STAR index for it.\n# Example repeatome FASTA: hg19_rRNA_tRNA_snRNA_snoRNA_ensembl_ERCC.fa\n# STAR --runThreadN <threads> --runMode genomeGenerate --genomeDir /path/to/repeatome_STAR_index --genomeFastaFiles /path/to/repeatome.fa\nREPEATOME_STAR_INDEX=\"/path/to/repeatome_STAR_index\"\n\n# 1. Trimming with cutadapt\n# Common 3' adapter for iCLIP/eCLIP. Adjust adapter sequence as needed.\n# -a: 3' adapter sequence\n# -q 20: Trim low-quality ends (Phred score < 20)\n# -m 15: Discard reads shorter than 15 bp after trimming\n# conda install -c bioconda cutadapt\ncutadapt -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC -q 20 -m 15 -o \"${OUTPUT_PREFIX}_trimmed.fastq.gz\" \"$READS\"\n\n# 2. Filtering for repetitive elements (e.g., rRNA, tRNA, snRNA, snoRNA) using STAR\n# Align reads to a repeatome index and keep unmapped reads.\n# --outReadsUnmapped Fastx: Output unmapped reads to a FASTQ file.\n# conda install -c bioconda star\nSTAR --runThreadN 8 \\\n     --genomeDir \"$REPEATOME_STAR_INDEX\" \\\n     --readFilesIn \"${OUTPUT_PREFIX}_trimmed.fastq.gz\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}_repeatome_\" \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 3 \\\n     --outFilterScoreMinOverLread 0 \\\n     --outFilterMatchNminOverLread 0 \\\n     --outFilterType BySJout \\\n     --outSAMattributes All \\\n     --outSAMtype BAM Unsorted \\\n     --outReadsUnmapped Fastx \\\n     --outStd Log \\\n     --readFilesCommand zcat\n\n# The unmapped reads from the repeatome alignment are the filtered reads.\nmv \"${OUTPUT_PREFIX}_repeatome_Unmapped.out.mate1\" \"${OUTPUT_PREFIX}_filtered_for_repeats.fastq.gz\"\n\n# 3. Mapping to human genome assembly hg19 with STAR\n# --outSAMtype BAM SortedByCoordinate: Output sorted BAM file.\nSTAR --runThreadN 8 \\\n     --genomeDir \"$HG19_STAR_INDEX\" \\\n     --readFilesIn \"${OUTPUT_PREFIX}_filtered_for_repeats.fastq.gz\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}_hg19_\" \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 3 \\\n     --outFilterScoreMinOverLread 0 \\\n     --outFilterMatchNminOverLread 0 \\\n     --outFilterType BySJout \\\n     --outSAMattributes All \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outReadsUnmapped Fastx \\\n     --outStd Log \\\n     --readFilesCommand zcat",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip"
+        },
+        {
+            "step_order": 3,
+            "description": "PCR duplicated reads were removed based on the start positions of read1, read2, and the sequence of the randomer. eCLIP peaks were identified using CLIPPER with parameters \u00e2\u0080\u0093s hg19 \u00e2\u0080\u0093o \u00e2\u0080\u0093bonferroni \u00e2\u0080\u0093superlocal --threshold-method binomial --save-pickle (Lovci et al.",
+            "tool_name": "CLIPper",
+            "tool_version": "(Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install clipper (example, adjust as needed)\n# It's recommended to install clipper in a dedicated conda environment or via pip.\n# For example:\n# conda create -n clipper_env python=3.8\n# conda activate clipper_env\n# pip install git+https://github.com/yeolab/clipper.git\n\n# Define input BAM files (these files are assumed to be PCR deduplicated as per the description)\n# Replace with actual paths to your CLIP-seq and control BAM files.\n# Example placeholders:\nCLIP_BAM_FILES=\"clip_sample1.dedup.bam clip_sample2.dedup.bam\"\nCONTROL_BAM_FILES=\"control_sample1.dedup.bam control_sample2.dedup.bam\"\nOUTPUT_DIR=\"clipper_peaks_hg19\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run CLIPPER peak calling\n# Parameters are directly from the description: -s hg19 -o --bonferroni --superlocal --threshold-method binomial --save-pickle\nclipper.py \\\n  -s hg19 \\\n  -o \"${OUTPUT_DIR}\" \\\n  --bonferroni \\\n  --superlocal \\\n  --threshold-method binomial \\\n  --save-pickle \\\n  ${CLIP_BAM_FILES} \\\n  -c ${CONTROL_BAM_FILES}",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/clipper"
+        },
+        {
+            "step_order": 4,
+            "description": "NSMB, 2013).",
+            "tool_name": "Unknown Tool (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# The step description \"NSMB, 2013)\" refers to a publication and does not specify a bioinformatics tool,\n# parameters, or the type of assay being performed.\n# Therefore, a specific bash command cannot be generated.\n#\n# To generate a command, more context is needed, such as:\n# - The specific bioinformatics task (e.g., alignment, peak calling, variant calling).\n# - The name of the tool to be used.\n# - Input file types and desired output.\n# - Reference genome or other reference datasets.",
+            "code_language": "bash",
+            "github_url": "https://www.nature.com/nsmb/volumes/2013"
+        },
+        {
+            "step_order": 5,
+            "description": "Peak strength was then normalized against a size matched input by calculating fold enrichment of number of reads in IP versus number of reads in size matched input.",
+            "tool_name": "normalize_bedgraph.py (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "From yeolab/eclip workflow (CWL version, before 2021)",
+            "code_example": "# Assuming ip_signal.bedgraph and input_signal.bedgraph are generated from previous steps\n# (e.g., from bedtools genomecov or similar signal generation tools, potentially after library size normalization).\n\n# Clone the eclip repository to access the script if not already available.\n# git clone https://github.com/yeolab/eclip.git\n# cd eclip\n\n# Execute the normalization script to calculate fold enrichment.\n# -i: Input IP bedGraph file containing read counts or signal.\n# -c: Input control (size-matched input) bedGraph file containing read counts or signal.\n# -o: Output bedGraph file for fold enrichment.\n# --method fold_enrichment: Specifies the normalization method to calculate fold enrichment.\npython scripts/normalize_bedgraph.py \\\n    -i ip_signal.bedgraph \\\n    -c input_signal.bedgraph \\\n    -o ip_fold_enrichment.bedgraph \\\n    --method fold_enrichment",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip"
+        },
+        {
+            "step_order": 6,
+            "description": "Peaks were called significant if the number of reads in IP was greater than the number of reads in input and the the peaks a Bonferroni corrected fisher exact p-value of less than .05.",
+            "tool_name": "clipper (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Not specified",
+            "code_example": "# Install clipper (if not already installed)\n# git clone https://github.com/yeolab/clipper.git\n# cd clipper\n# # Ensure Python dependencies are met, e.g., pysam, numpy\n# # pip install -r requirements.txt\n\n# Example usage of clipper for peak calling\n# Replace IP.bam, INPUT.bam, and hg38.chrom.sizes with actual file paths.\n# The description implies a Bonferroni corrected Fisher exact p-value < 0.05\n# and enrichment of IP over input, which is inherently handled by clipper's statistical test.\npython clipper.py \\\n    -b IP.bam \\\n    -c INPUT.bam \\\n    -s hg38.chrom.sizes \\\n    -o significant_peaks.bed \\\n    --bonferroni \\\n    --p_value 0.05",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/clipper"
+        }
+    ],
+    "raw_text": "Reads were demultiplexed using custom scripts and the randomer was appended to the read name. Reads were trimmed, filtered for repetitive elements, and mapped to human genome assembly hg19 as described in iCLIP computational analysis. PCR duplicated reads were removed based on the start positions of read1, read2, and the sequence of the randomer. eCLIP peaks were identified using CLIPPER with parameters  \u00e2\u0080\u0093s hg19 \u00e2\u0080\u0093o \u00e2\u0080\u0093bonferroni \u00e2\u0080\u0093superlocal --threshold-method binomial --save-pickle (Lovci et al. NSMB, 2013). Peak strength was then normalized against a size matched input by calculating fold enrichment of number of reads in IP versus number of reads in size matched input.  Peaks were called significant if the number of reads in IP was greater than the number of reads in input and the the peaks a Bonferroni corrected fisher exact p-value of less than .05.\nGenome_build: hg19\nSupplementary_files_format_and_content: peaks.bed and bigwig",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

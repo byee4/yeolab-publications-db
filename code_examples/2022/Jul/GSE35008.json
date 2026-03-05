@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Data were normalized normalized with the Expression Console Software version 1.1 from Affymetrix using Robust Multi-array Average (RMA) algorithm.",
-      "tool_name": "Microarray",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "MEV software was used to select differentially expressed genes by applying the following criteria: (a) Absolute value of the group mean difference greater than 1.5, and (b) p value smaller than 0.05 (Welch's t test)",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Data were normalized normalized with the Expression Console Software  version 1.1 from Affymetrix using Robust Multi-array Average (RMA) algorithm. MEV software was used to select differentially expressed genes by applying the following criteria: (a) Absolute value of the group mean difference greater than 1.5, and (b) p value smaller than 0.05 (Welch's t test)",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Data were normalized normalized with the Expression Console Software version 1.1 from Affymetrix using Robust Multi-array Average (RMA) algorithm.",
+            "tool_name": "Microarray",
+            "tool_version": "1.1",
+            "code_example": "# Expression Console Software is a GUI-based application. It is not typically run via command-line.\n#\n# Manual steps within Expression Console Software (version 1.1):\n# 1. Launch Expression Console Software.\n# 2. Load Affymetrix .CEL files (raw data) for the experiment.\n# 3. Select the loaded files for analysis.\n# 4. Choose \"Analysis\" -> \"GeneChip Analysis\" or similar option.\n# 5. In the analysis settings, select \"Robust Multi-array Average (RMA)\" as the normalization algorithm.\n# 6. Specify output directory and file format (e.g., tab-delimited text file for expression matrix).\n# 7. Run the analysis to generate normalized expression values.\n#\n# Input: Affymetrix .CEL files\n# Output: Normalized expression matrix (e.g., .txt, .csv)",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "MEV software was used to select differentially expressed genes by applying the following criteria: (a) Absolute value of the group mean difference greater than 1.5, and (b) p value smaller than 0.05 (Welch's t test)",
+            "tool_name": "MEV",
+            "tool_version": "(Inferred with models/gemini-2.5-flash)",
+            "code_example": "# MEV (MultiExperiment Viewer) is primarily a graphical user interface (GUI) software\n# for microarray and RNA-seq data analysis. The described differential expression\n# analysis and filtering steps are typically performed interactively within the MEV GUI.\n#\n# The following command is a conceptual representation of how these parameters and\n# methods would be applied if MEV had a direct command-line interface for this task.\n# In practice, these steps are executed through menu selections and dialog boxes in the MEV GUI.\n\n# Placeholder for input data:\n# EXPRESSION_MATRIX=\"your_expression_data.txt\" # e.g., tab-delimited gene expression matrix\n# GROUP_INFO=\"your_group_definitions.txt\"     # e.g., file mapping samples to groups\n# OUTPUT_FILE=\"differentially_expressed_genes.txt\"\n\nmev_cli --input \"${EXPRESSION_MATRIX}\" \\\n        --groups \"${GROUP_INFO}\" \\\n        --test welch_t_test \\\n        --min-abs-mean-diff 1.5 \\\n        --max-pvalue 0.05 \\\n        --output \"${OUTPUT_FILE}\"",
+            "code_language": "bash",
+            "github_url": "https://mev.tm4.org/"
+        }
+    ],
+    "raw_text": "Data were normalized normalized with the Expression Console Software  version 1.1 from Affymetrix using Robust Multi-array Average (RMA) algorithm. MEV software was used to select differentially expressed genes by applying the following criteria: (a) Absolute value of the group mean difference greater than 1.5, and (b) p value smaller than 0.05 (Welch's t test)",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

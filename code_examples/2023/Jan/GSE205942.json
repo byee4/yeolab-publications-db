@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Cell Ranger ATAC (v6.0.1) was used to process sequencing information and single cell barcodes.",
-      "tool_name": "Cell Ranger",
-      "tool_version": "6.0.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Cellranger outputs were analyzed in R using Signac (v1.6.0)",
-      "tool_name": "Cell Ranger",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Annotation, quality control, dimensional reduction, and UMAPcreationwerecompleted using the standard Signac workflow.",
-      "tool_name": "Signac",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Cell Ranger ATAC (v6.0.1) was used to process sequencing information and single cell barcodes.\nCellranger outputs were analyzed in R using Signac (v1.6.0)\nAnnotation, quality control, dimensional reduction, and UMAPcreationwerecompleted using the standard Signac workflow.\nAssembly: mm10\nSupplementary files format and content: 10x Genomics output files used: filtered_peak_bc_matrix.h5, singlecell.csv, fragments.tsv.gz, peaks.bed",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Cell Ranger ATAC (v6.0.1) was used to process sequencing information and single cell barcodes.",
+            "tool_name": "Cell Ranger",
+            "tool_version": "6.0.1",
+            "code_example": "# Install Cell Ranger ATAC (version 6.0.1 or compatible)\n# Download from 10x Genomics website and add to PATH, or use a container.\n# Example using a placeholder for installation:\n# conda install -c bioconda 10x-cellranger-atac=6.0.1\n\n# Define variables (replace with actual paths and IDs)\nSAMPLE_ID=\"my_atac_sample\"\nFASTQ_DIR=\"/path/to/your/fastqs\"\nREFERENCE_PATH=\"/path/to/refdata-cellranger-atac-GRCh38-1.2.0\" # Example: GRCh38 reference\n\n# Run Cell Ranger ATAC to process sequencing information and single cell barcodes\ncellranger atac \\\n    --id=${SAMPLE_ID} \\\n    --fastqs=${FASTQ_DIR} \\\n    --reference=${REFERENCE_PATH}",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Cellranger outputs were analyzed in R using Signac (v1.6.0)",
+            "tool_name": "Cell Ranger",
+            "tool_version": "1.6.0",
+            "code_example": "# Install Signac and Seurat if not already installed\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\")'\n# R -e 'BiocManager::install(c(\"Signac\", \"Seurat\"))'\n\n# Define input and output paths\nCELLRANGER_OUTPUT_DIR=\"path/to/cellranger/outs\" # e.g., /path/to/sample_id/outs\nSIGNAC_OUTPUT_DIR=\"path/to/signac_analysis\"\nmkdir -p \"${SIGNAC_OUTPUT_DIR}\"\n\n# Create an R script for Signac analysis\ncat << 'EOF' > \"${SIGNAC_OUTPUT_DIR}/signac_analysis.R\"\nlibrary(Signac)\nlibrary(Seurat)\nlibrary(GenomeInfoDb) # Often needed for Signac/Seurat\n\n# Define input Cell Ranger ATAC output directory\ncellranger_output_dir <- Sys.getenv(\"CELLRANGER_OUTPUT_DIR\")\nif (cellranger_output_dir == \"\") {\n  stop(\"CELLRANGER_OUTPUT_DIR environment variable not set.\")\n}\n\n# Define output directory\nsignac_output_dir <- Sys.getenv(\"SIGNAC_OUTPUT_DIR\")\nif (signac_output_dir == \"\") {\n  stop(\"SIGNAC_OUTPUT_DIR environment variable not set.\")\n}\n\nmessage(paste(\"Loading Cell Ranger outputs from:\", cellranger_output_dir))\n\n# Load Cell Ranger ATAC data\n# This assumes the standard Cell Ranger ATAC output structure:\n# filtered_feature_bc_matrix.h5 (or filtered_feature_bc_matrix/ for separate files)\n# fragments.tsv.gz\n# singlecell.csv (optional, for cell metrics)\n\n# Path to the filtered feature barcode matrix (HDF5 format)\nmatrix_path <- file.path(cellranger_output_dir, \"filtered_feature_bc_matrix.h5\")\nif (!file.exists(matrix_path)) {\n  # Fallback for older Cell Ranger ATAC versions or if separate files are preferred\n  matrix_dir <- file.path(cellranger_output_dir, \"filtered_feature_bc_matrix\")\n  if (dir.exists(matrix_dir)) {\n    counts <- Read10x(data.dir = matrix_dir)\n  } else {\n    stop(paste(\"Cell Ranger matrix file or directory not found:\", matrix_path, \"or\", matrix_dir))\n  }\n} else {\n  counts <- Read10x_h5(filename = matrix_path)\n}\n\n# Path to the fragments file\nfragment_path <- file.path(cellranger_output_dir, \"fragments.tsv.gz\")\nif (!file.exists(fragment_path)) {\n  stop(paste(\"Cell Ranger fragments file not found:\", fragment_path))\n}\nfragments <- CreateFragmentObject(path = fragment_path)\n\n# Path to the singlecell.csv file (optional, for metadata)\nsinglecell_csv_path <- file.path(cellranger_output_dir, \"singlecell.csv\")\ncell_metrics <- NULL\nif (file.exists(singlecell_csv_path)) {\n  cell_metrics <- read.csv(singlecell_csv_path, row.names = 1)\n}\n\n# Create a Seurat object\n# Assuming 'counts' contains peak counts (from Cell Ranger ATAC)\n# If Cell Ranger Multiome, 'counts' might be a list with 'Gene Expression' and 'Peaks'\nif (\"Peaks\" %in% names(counts)) { # For Cell Ranger Multiome\n  peak_counts <- counts$Peaks\n} else { # For Cell Ranger ATAC\n  peak_counts <- counts\n}\n\nseurat_object <- CreateSeuratObject(\n  counts = peak_counts,\n  assay = \"ATAC\" # Name the assay \"ATAC\"\n)\n\n# Add fragment information to the ATAC assay\nseurat_object[[\"ATAC\"]] <- SetAssayData(\n  object = seurat_object[[\"ATAC\"]],\n  slot = \"fragments\",\n  new.data = fragments\n)\n\n# Add cell metrics if available\nif (!is.null(cell_metrics)) {\n  seurat_object <- AddMetaData(seurat_object, metadata = cell_metrics)\n}\n\n# Add genome information (placeholder, replace with actual genome if known, e.g., \"hg38\", \"mm10\")\n# This is important for downstream functions like motif analysis\n# seqlevelsStyle(seurat_object[[\"ATAC\"]]) <- \"UCSC\" # Ensure consistent chromosome naming\n# genome(seurat_object[[\"ATAC\"]]) <- \"hg38\" # Placeholder\n\n# Perform initial processing (e.g., calculating QC metrics, normalization)\n# seurat_object <- NucleosomeSignal(object = seurat_object)\n# seurat_object <- TSSEnrichment(object = seurat_object, fast = FALSE)\n# seurat_object <- NormalizeData(object = seurat_object, assay = \"ATAC\", normalization.method = \"CLR\")\n# seurat_object <- FindVariableFeatures(object = seurat_object, assay = \"ATAC\")\n\n# Save the initial Seurat object\nsaveRDS(seurat_object, file = file.path(signac_output_dir, \"initial_seurat_object.rds\"))\n\nmessage(paste(\"Initial Seurat object saved to:\", file.path(signac_output_dir, \"initial_seurat_object.rds\")))\nmessage(\"Signac analysis script finished. Further analysis steps can be added.\")\nEOF\n\n# Execute the R script\nCELLRANGER_OUTPUT_DIR=\"${CELLRANGER_OUTPUT_DIR}\" SIGNAC_OUTPUT_DIR=\"${SIGNAC_OUTPUT_DIR}\" Rscript \"${SIGNAC_OUTPUT_DIR}/signac_analysis.R\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/timoast/signac"
+        },
+        {
+            "step_order": 3,
+            "description": "Annotation, quality control, dimensional reduction, and UMAPcreationwerecompleted using the standard Signac workflow.",
+            "tool_name": "Signac",
+            "tool_version": "1.x.x",
+            "code_example": "# Install R and necessary packages (commented out)\n# sudo apt-get update\n# sudo apt-get install -y r-base\n# R -e 'install.packages(\"BiocManager\", repos=\"https://cloud.r-project.org\")'\n# R -e 'BiocManager::install(c(\"Seurat\", \"Signac\", \"EnsDb.Hsapiens.v86\"))' # Example annotation package for hg38\n\n# Create an R script for the Signac workflow\ncat << 'EOF' > run_signac_workflow.R\n# Load necessary libraries\nlibrary(Seurat)\nlibrary(Signac)\nlibrary(GenomeInfoDb)\nlibrary(EnsDb.Hsapiens.v86) # Example: Human genome annotation for hg38\n\n# --- Placeholder for input data and paths ---\n# Replace with actual paths to your 10x Genomics ATAC-seq data\n# For example:\n# input_matrix_path <- \"path/to/filtered_feature_bc_matrix.h5\"\n# input_fragments_path <- \"path/to/fragments.tsv.gz\"\n# output_seurat_object_path <- \"processed_seurat_object.rds\"\n\n# --- Reference Data ---\n# Get gene annotations for hg38 (or your relevant genome assembly)\n# This is used for the annotation step.\nannotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Hsapiens.v86)\nseqlevelsStyle(annotations) <- 'UCSC'\ngenome(annotations) <- \"hg38\" # Specify genome assembly\n\n# --- Standard Signac Workflow Steps (conceptual) ---\n# 1. Load data and create Seurat object\n#    (e.g., from 10x Genomics ATAC-seq output)\n# seurat_object <- CreateSeuratObject(\n#   counts = Read10x_h5(input_matrix_path)[[\"ATAC\"]],\n#   assay = \"ATAC\",\n#   project = \"ATAC_Project\"\n# )\n# fragments <- CreateFragmentObject(input_fragments_path)\n# seurat_object <- SetAssayData(seurat_object, slot = \"fragments\", new.data = fragments)\n\n# 2. Annotation\n# seurat_object <- AddGeneAnnotation(object = seurat_object, annotation = annotations)\n\n# 3. Quality Control\n#    (e.g., filtering based on fragment counts, mitochondrial content)\n# seurat_object[[\"percent.mt\"]] <- PercentageFeatureSet(seurat_object, pattern = \"^MT-\")\n# seurat_object <- subset(\n#   x = seurat_object,\n#   subset = nCount_ATAC < 100000 & # Example upper bound\n#            nCount_ATAC > 500 &    # Example lower bound\n#            percent.mt < 5         # Example mitochondrial content threshold\n# )\n\n# 4. Normalization and Dimensional Reduction (LSI)\n# seurat_object <- RunTFIDF(seurat_object)\n# seurat_object <- FindTopFeatures(seurat_object, min.cutoff = 'q0')\n# seurat_object <- RunSVD(seurat_object)\n\n# 5. UMAP creation\n# seurat_object <- RunUMAP(object = seurat_object, reduction = 'lsi', dims = 2:30)\n\n# 6. Save processed object (optional)\n# saveRDS(seurat_object, file = output_seurat_object_path)\n\nprint(\"Signac workflow steps conceptually outlined.\")\nprint(\"Please replace placeholder comments with actual data loading and adjust parameters as needed.\")\nEOF\n\n# Execute the R script\nRscript run_signac_workflow.R",
+            "code_language": "bash",
+            "github_url": "https://github.com/timoast/signac"
+        }
+    ],
+    "raw_text": "Cell Ranger ATAC (v6.0.1) was used to process sequencing information and single cell barcodes.\nCellranger outputs were analyzed in R using Signac (v1.6.0)\nAnnotation, quality control, dimensional reduction, and UMAPcreationwerecompleted using the standard Signac workflow.\nAssembly: mm10\nSupplementary files format and content: 10x Genomics output files used: filtered_peak_bc_matrix.h5, singlecell.csv, fragments.tsv.gz, peaks.bed",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

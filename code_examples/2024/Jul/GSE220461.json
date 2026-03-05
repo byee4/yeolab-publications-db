@@ -1,16 +1,16 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Cell Ranger (version 5.0.1, reference genome: mm10-2020-A<based on Gencode vM23, and filtering out pseudogenes, TEC, miRNA etc. a total of 32285 genes) was used to perform alignment, filtering, barcode counting, and UMI counting for single cell RNA-Seq.",
-      "tool_name": "Cell Ranger",
-      "tool_version": "5.0.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Cell Ranger (version 5.0.1, reference genome: mm10-2020-A<based on Gencode vM23, and filtering out pseudogenes, TEC, miRNA etc. a total of 32285 genes) was used to perform alignment, filtering, barcode counting, and UMI counting for single cell RNA-Seq.\nAssembly: mm10",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Cell Ranger (version 5.0.1, reference genome: mm10-2020-A<based on Gencode vM23, and filtering out pseudogenes, TEC, miRNA etc. a total of 32285 genes) was used to perform alignment, filtering, barcode counting, and UMI counting for single cell RNA-Seq.",
+            "tool_name": "Cell Ranger",
+            "tool_version": "5.0.1",
+            "code_example": "# Install Cell Ranger (example, actual installation might vary)\n# Download Cell Ranger 5.0.1 from 10x Genomics website\n# wget https://cf.10xgenomics.com/releases/cell-ranger/cellranger-5.0.1.tar.gz\n# tar -xzf cellranger-5.0.1.tar.gz\n# export PATH=/path/to/cellranger-5.0.1:$PATH\n\n# Define paths for custom reference and input FASTQ files\n# The description specifies a custom reference:\n# \"mm10-2020-A<based on Gencode vM23, and filtering out pseudogenes, TEC, miRNA etc. a total of 32285 genes)\"\n# This would be a directory created by 'cellranger mkref' prior to running 'count'.\nCUSTOM_TRANSCRIPTOME_PATH=\"/path/to/your/mm10-2020-A_custom_transcriptome_ref\"\n\n# Placeholder for the directory containing FASTQ files\n# FASTQ files should be named according to 10x Genomics conventions (e.g., SampleName_S1_L001_R1_001.fastq.gz)\nFASTQ_INPUT_DIR=\"/path/to/your/fastq_files\"\n\n# Placeholder for the sample identifier\nSAMPLE_ID=\"your_single_cell_sample\"\n\n# Execute Cell Ranger count for alignment, filtering, barcode counting, and UMI counting\ncellranger count \\\n    --id=\"${SAMPLE_ID}_cellranger_output\" \\\n    --transcriptome=\"${CUSTOM_TRANSCRIPTOME_PATH}\" \\\n    --fastqs=\"${FASTQ_INPUT_DIR}\" \\\n    --sample=\"${SAMPLE_ID}\" \\\n    --expect-cells=3000 # Common parameter, adjust based on expected cell recovery",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Cell Ranger (version 5.0.1, reference genome: mm10-2020-A<based on Gencode vM23, and filtering out pseudogenes, TEC, miRNA etc. a total of 32285 genes) was used to perform alignment, filtering, barcode counting, and UMI counting for single cell RNA-Seq.\nAssembly: mm10",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

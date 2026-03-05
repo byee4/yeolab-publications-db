@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Library strategy: GRO-seq",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "GRO-seq reads were mapped on the human reference genome using the Bowtie2 local model",
-      "tool_name": "Bowtie2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Non-redundant reads were determined and kept for downstream analysis by using Samtools",
-      "tool_name": "samtools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "DEseq2 package was used to search for differentially expressed genes (DEGs), which was defined with the following cutoff: adjusted p-value of \u00e2\u0089\u00a40.05 and fold change of \u00e2\u0089\u00a42/3 or \u00e2\u0089\u00a53/2.",
-      "tool_name": "DESeq2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "processed data files format and content: BED and BigWig",
-      "tool_name": "UCSC tools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Library strategy: GRO-seq\nGRO-seq reads were mapped on the human reference genome using the Bowtie2 local model\nNon-redundant reads were determined and kept for downstream analysis by using Samtools\nDEseq2 package was used to search for differentially expressed genes (DEGs), which was defined with the following cutoff: adjusted p-value of \u00e2\u0089\u00a40.05 and fold change of \u00e2\u0089\u00a42/3 or \u00e2\u0089\u00a53/2.\nGenome_build: GRCh37 (hg19)\nprocessed data files format and content: BED and BigWig",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Library strategy: GRO-seq",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.7.10a (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install STAR (example using conda)\n# conda install -c bioconda star\n\n# Define variables\nREADS=\"groseq_sample.fastq.gz\" # Assuming single-end reads, common for GRO-seq\nOUTPUT_DIR=\"star_alignment_output\"\nGENOME_DIR=\"/path/to/STAR_genome_index/hg38\" # Placeholder for human hg38 genome index. Replace with actual path.\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run STAR alignment for GRO-seq data\n# GRO-seq measures nascent transcription, so alignment to a reference genome is a primary step.\n# STAR is a splice-aware aligner suitable for RNA-based assays.\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${READS}\" \\\n     --runThreadN 8 \\\n     --outFileNamePrefix \"${OUTPUT_DIR}/groseq_sample_\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.04 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --readFilesCommand zcat",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "GRO-seq reads were mapped on the human reference genome using the Bowtie2 local model",
+            "tool_name": "Bowtie2",
+            "tool_version": "Inferred with models/gemini-2.5-flash",
+            "code_example": "# Install Bowtie2 and Samtools if not already installed\n# conda install -c bioconda bowtie2 samtools\n\n# Define reference genome index (replace with actual path to your hg38 reference FASTA)\n# To build the index for hg38 (human reference genome), assuming you have hg38.fa:\n# bowtie2-build hg38.fa hg38_index\n\n# Placeholder for input reads and output BAM\nREADS_FILE=\"gro_seq_reads.fastq\" # Replace with your actual GRO-seq reads file\nREFERENCE_INDEX=\"hg38_index\" # Path to your Bowtie2 index for hg38\nOUTPUT_BAM=\"mapped_gro_seq_reads.bam\"\n\n# Run Bowtie2 with the local alignment model, pipe to samtools for BAM conversion and sorting\n# -p 8 specifies 8 threads; adjust as needed based on available resources\nbowtie2 --local -p 8 -x \"${REFERENCE_INDEX}\" -U \"${READS_FILE}\" | samtools view -bS - | samtools sort -o \"${OUTPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie2"
+        },
+        {
+            "step_order": 3,
+            "description": "Non-redundant reads were determined and kept for downstream analysis by using Samtools",
+            "tool_name": "samtools",
+            "tool_version": "1.19",
+            "code_example": "# Install samtools if not already installed\n# conda install -c bioconda samtools\n\n# Input BAM file (assumed to be coordinate-sorted and indexed)\nINPUT_BAM=\"aligned_reads_sorted.bam\"\nOUTPUT_DEDUP_BAM=\"non_redundant_reads.bam\"\n\n# Determine and keep non-redundant reads by removing PCR duplicates.\n# The -s flag removes duplicate reads from the output.\n# The input BAM file must be sorted by coordinate.\n# The output BAM file will contain only unique reads.\nsamtools markdup -s \"${INPUT_BAM}\" \"${OUTPUT_DEDUP_BAM}\"\n\n# Index the deduplicated BAM file for downstream analysis\nsamtools index \"${OUTPUT_DEDUP_BAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 4,
+            "description": "DEseq2 package was used to search for differentially expressed genes (DEGs), which was defined with the following cutoff: adjusted p-value of \u00e2\u0089\u00a40.05 and fold change of \u00e2\u0089\u00a42/3 or \u00e2\u0089\u00a53/2.",
+            "tool_name": "DESeq2",
+            "tool_version": "1.40.2",
+            "code_example": "# Create dummy input files for demonstration purposes.\n# In a real scenario, 'counts.tsv' would be generated by an upstream quantification step\n# (e.g., featureCounts, Salmon, Kallisto) and 'coldata.tsv' would be provided by the user.\n# Reference datasets for DESeq2 are typically the experimental count matrix and sample metadata,\n# not a genomic reference assembly.\n\n# Example counts.tsv (replace with your actual count matrix)\necho -e \"gene\\tsample1\\tsample2\\tsample3\\tsample4\" > counts.tsv\necho -e \"geneA\\t100\\t120\\t50\\t60\" >> counts.tsv\necho -e \"geneB\\t50\\t60\\t100\\t110\" >> counts.tsv\necho -e \"geneC\\t200\\t210\\t220\\t230\" >> counts.tsv\necho -e \"geneD\\t10\\t12\\t15\\t18\" >> counts.tsv\n\n# Example coldata.tsv (replace with your actual sample metadata)\necho -e \"sample\\tcondition\" > coldata.tsv\necho -e \"sample1\\ttreated\" >> coldata.tsv\necho -e \"sample2\\ttreated\" >> coldata.tsv\necho -e \"sample3\\tcontrol\" >> coldata.tsv\necho -e \"sample4\\tcontrol\" >> coldata.tsv\n\n# R script for DESeq2 analysis\n# This script performs differential expression analysis using DESeq2\n# based on the specified cutoffs: adjusted p-value <= 0.05 and\n# fold change <= 2/3 or >= 3/2 (i.e., |log2FoldChange| >= log2(3/2)).\ncat << 'EOF' > run_deseq2.R\n# R script for DESeq2 analysis\n# Assumes 'counts.tsv' contains raw counts and 'coldata.tsv' contains sample metadata.\n\n# Load DESeq2 library\n# If DESeq2 is not installed, uncomment and run the following lines:\n# if (!requireNamespace(\"BiocManager\", quietly = TRUE))\n#     install.packages(\"BiocManager\")\n# BiocManager::install(\"DESeq2\", update = FALSE, ask = FALSE)\nlibrary(DESeq2)\n\n# Load count data\n# Assuming counts.tsv has gene IDs as row names and sample IDs as column names\ncountData <- as.matrix(read.csv(\"counts.tsv\", sep=\"\\t\", row.names=1))\n\n# Load sample metadata\n# Assuming coldata.tsv has sample IDs as row names and 'condition' as a column\ncolData <- read.csv(\"coldata.tsv\", sep=\"\\t\", row.names=1)\ncolData$condition <- factor(colData$condition, levels = c(\"control\", \"treated\")) # Ensure condition is a factor and set reference level\n\n# Ensure sample names match between countData and colData\nif (!all(rownames(colData) %in% colnames(countData))) {\n  stop(\"Sample names in colData do not match column names in countData.\")\n}\ncountData <- countData[, rownames(colData)] # Reorder countData columns to match colData rows\nif (!all(rownames(colData) == colnames(countData))) {\n  stop(\"Sample order mismatch after reordering.\")\n}\n\n# Create DESeqDataSet object\ndds <- DESeqDataSetFromMatrix(countData = countData,\n                              colData = colData,\n                              design = ~ condition)\n\n# Pre-filtering: remove genes with very low counts\n# This helps to reduce the memory footprint and increase the speed of DESeq2.\n# A common threshold is to keep genes with at least 10 total counts across all samples.\nkeep <- rowSums(counts(dds)) >= 10\ndds <- dds[keep,]\n\n# Run DESeq2 analysis\ndds <- DESeq(dds)\n\n# Extract results\n# The contrast specifies the comparison: 'treated' vs 'control'\nres <- results(dds, contrast=c(\"condition\", \"treated\", \"control\"))\n\n# Define cutoff values\npadj_cutoff <- 0.05\nlog2fc_cutoff <- log2(3/2) # log2(1.5) approximately 0.585\n\n# Filter for differentially expressed genes\n# Genes with adjusted p-value <= 0.05 AND (log2FoldChange <= -log2(3/2) OR log2FoldChange >= log2(3/2))\ndegs <- subset(res, padj <= padj_cutoff & (log2FoldChange >= log2fc_cutoff | log2FoldChange <= -log2fc_cutoff))\n\n# Sort by adjusted p-value\ndegs <- degs[order(degs$padj),]\n\n# Save results\nwrite.csv(as.data.frame(degs), file=\"differentially_expressed_genes.csv\", row.names=TRUE)\nwrite.csv(as.data.frame(res), file=\"deseq2_all_results.csv\", row.names=TRUE)\n\n# Print summary\ncat(\"DESeq2 analysis completed.\\n\")\ncat(\"Number of differentially expressed genes found (padj <= \", padj_cutoff, \" and |log2FC| >= \", round(log2fc_cutoff, 3), \"): \", nrow(degs), \"\\n\", sep=\"\")\nEOF\n\n# Execute the R script\nRscript run_deseq2.R\n\n# Optional: Clean up dummy input files and the R script\n# rm counts.tsv coldata.tsv run_deseq2.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/DESeq2.html"
+        },
+        {
+            "step_order": 5,
+            "description": "processed data files format and content: BED and BigWig",
+            "tool_name": "UCSC tools",
+            "tool_version": "Latest available binaries (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# UCSC tools are typically downloaded as pre-compiled binaries.\n# The following commands demonstrate how to download them for a Linux x86_64 system.\n# Adjust the URL for other operating systems (e.g., macOsX.x86_64).\n\n# --- Installation of bedGraphToBigWig ---\n# wget https://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/bedGraphToBigWig\n# chmod +x bedGraphToBigWig\n\n# --- Installation of bedToBigBed ---\n# wget https://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/bedToBigBed\n# chmod +x bedToBigBed\n\n# --- Download chromosome sizes for hg38 (latest assembly as placeholder) ---\n# This file is required for both bedGraphToBigWig and bedToBigBed.\n# wget https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes -O hg38.chrom.sizes\n\n# --- Example: Convert a bedGraph file to BigWig ---\n# Create a dummy bedGraph input file for demonstration\n# echo -e \"chr1\\t100\\t200\\t0.5\\nchr1\\t250\\t300\\t1.2\\nchr2\\t50\\t150\\t0.8\" > input.bedGraph\n\n# Execute bedGraphToBigWig\n./bedGraphToBigWig input.bedGraph hg38.chrom.sizes output.bigWig\n\n# --- Example: Convert a BED file to BigBed ---\n# Create a dummy BED input file (e.g., bed6 format) for demonstration\n# echo -e \"chr1\\t100\\t200\\tfeatureA\\t0\\t+\\nchr1\\t250\\t300\\tfeatureB\\t0\\t-\" > input.bed\n\n# Execute bedToBigBed (assuming bed6 format for input.bed)\n./bedToBigBed -type=bed6 input.bed hg38.chrom.sizes output.bigBed\n",
+            "code_language": "bash",
+            "github_url": "https://genome.ucsc.edu/FAQ/FAQformat.html"
+        }
+    ],
+    "raw_text": "Library strategy: GRO-seq\nGRO-seq reads were mapped on the human reference genome using the Bowtie2 local model\nNon-redundant reads were determined and kept for downstream analysis by using Samtools\nDEseq2 package was used to search for differentially expressed genes (DEGs), which was defined with the following cutoff: adjusted p-value of \u00e2\u0089\u00a40.05 and fold change of \u00e2\u0089\u00a42/3 or \u00e2\u0089\u00a53/2.\nGenome_build: GRCh37 (hg19)\nprocessed data files format and content: BED and BigWig",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,88 +1,88 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "data were processed by cellranger 2.1.0 with default parameter, using mm10 as reference.",
-      "tool_name": "Cell Ranger",
-      "tool_version": "2.1.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Raw cell-reads were then loaded to R using the cellrangerRkit package.",
-      "tool_name": "R",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "The pre-filtered VDJ information table (all_contig_annotations.csv, output by cellranger) were loaded at the same time.",
-      "tool_name": "Cell Ranger",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "A cell was considered \u00e2\u0080\u009cvalid\u00e2\u0080\u009d if it satisfied the following criteria: (1) Cell has enough RNA reads to pass the Cell Ranger threshold. (2) Cell has productive full-length BCR or TCR detected.",
-      "tool_name": "Cell Ranger",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Only valid cells were kept for downstream analysis in both the scRNA-seq and scTCR-seq/scBCR-seq datasets.",
-      "tool_name": "scRNA-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "The scRNA-seq dataset was then further filtered based on gene numbers and mitochondria gene counts tototal counts ratio.",
-      "tool_name": "scRNA-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Only cells with > 400 genes,UMI > 0,and 0.5% ~ 30% of their UMIs mappingto mitochondria genes were kept for downstream analysis.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "All the VDJ data that don't have the following flag of cellranger were filtered: 1. the is_cell flag, 2. the full-length flag and 3. the productive flag.",
-      "tool_name": "Cell Ranger",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "For the 5' scRNA-seq and 5' VDJ-seq, the first 16 bp of R1 is the cell barcode and the next 10bp (17-26bp) is the UMI.",
-      "tool_name": "scRNA-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "data were processed by cellranger 2.1.0 with default parameter, using mm10 as reference.\nRaw cell-reads were then loaded to R using the cellrangerRkit package. The pre-filtered VDJ information table (all_contig_annotations.csv, output by cellranger) were loaded at the same time. A cell was considered \u00e2\u0080\u009cvalid\u00e2\u0080\u009d if it satisfied the following criteria: (1) Cell has enough RNA reads to pass the Cell Ranger threshold. (2) Cell has productive full-length BCR or TCR detected. Only valid cells were kept for downstream analysis in both the scRNA-seq and scTCR-seq/scBCR-seq datasets. The scRNA-seq dataset was then further filtered based on gene numbers and mitochondria gene counts tototal counts ratio. Only cells with > 400 genes,UMI > 0,and 0.5% ~ 30% of their UMIs mappingto mitochondria genes were kept for downstream analysis.\nAll the VDJ data that don't have the following flag of cellranger were filtered: 1. the is_cell flag, 2. the full-length flag and 3. the productive flag.\nFor the 5' scRNA-seq and 5' VDJ-seq, the first 16 bp of R1 is the cell barcode and the next 10bp (17-26bp) is the UMI.\nGenome_build: hg38\nSupplementary_files_format_and_content: cell-gene UMI table: UMI table with each row represent a cell and each column represent a gene.   BCR table: table containing BCR information, including V/D/J/C genes and CDR3  TCR table:  table containing TCR information, including V/D/J/C genes and CDR3",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "data were processed by cellranger 2.1.0 with default parameter, using mm10 as reference.",
+            "tool_name": "Cell Ranger",
+            "tool_version": "2.1.0",
+            "code_example": "# Install Cell Ranger (example using conda, adjust for your system)\n# conda create -n cellranger-2.1.0 python=2.7\n# conda activate cellranger-2.1.0\n# Download and install Cell Ranger 2.1.0 from 10x Genomics website\n# For example: wget https://cf.10xgenomics.com/releases/cell-ranger/cellranger-2.1.0.tar.gz\n# tar -xzf cellranger-2.1.0.tar.gz\n# export PATH=/path/to/cellranger-2.1.0:$PATH\n\n# Download or build the mm10 reference transcriptome (if not already available)\n# For example, from 10x Genomics support site for Cell Ranger 2.1.0:\n# wget https://cf.10xgenomics.com/releases/cell-ranger/refdata-cellranger-mm10-1.2.0.tar.gz\n# tar -xzf refdata-cellranger-mm10-1.2.0.tar.gz\n\n# Define variables (replace with actual paths and sample names)\nMM10_REFERENCE_PATH=\"/path/to/refdata-cellranger-mm10-1.2.0\"\nFASTQ_PATH=\"/path/to/your/fastq_directory\"\nSAMPLE_ID=\"your_sample_name\"\nOUTPUT_DIR=\"./cellranger_output\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run cellranger count with default parameters\ncellranger count \\\n    --id=\"${SAMPLE_ID}\" \\\n    --transcriptome=\"${MM10_REFERENCE_PATH}\" \\\n    --fastqs=\"${FASTQ_PATH}\" \\\n    --localcores=8 \\\n    --localmem=32\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Raw cell-reads were then loaded to R using the cellrangerRkit package.",
+            "tool_name": "R",
+            "tool_version": "Infer from description",
+            "code_example": "# Install R if not already installed\n# sudo apt-get update && sudo apt-get install -y r-base\n\n# Install cellrangerRkit package in R\n# R -e 'install.packages(\"cellrangerRkit\", repos=\"http://cran.us.r-project.org\")'\n\n# Create a placeholder R script to load cell-reads\n# This script assumes 'path/to/your/cellranger_output_dir' is the path to the Cell Ranger output directory\n# and 'loaded_cellranger_data.rds' is where the loaded data will be saved.\ncat << 'EOF' > load_cellranger_data.R\nlibrary(cellrangerRkit)\n\n# Define the path to your Cell Ranger output directory\n# This directory typically contains 'matrix.mtx', 'barcodes.tsv', 'features.tsv'\n# or a 'filtered_feature_bc_matrix.h5' file.\n# Replace 'path/to/your/cellranger_output_dir' with the actual path to your Cell Ranger output.\ncellranger_output_dir <- \"path/to/your/cellranger_output_dir\" \n\n# Load the cell-reads data using cellrangerRkit's primary function.\n# The 'load_cellranger_output' function is designed to read the output of 10x Cell Ranger.\n# It typically returns a list containing the expression matrix, cell barcodes, and gene information.\n# In some versions or configurations, it might directly return a Seurat object or similar.\nif (dir.exists(cellranger_output_dir)) {\n    message(paste(\"Loading data from:\", cellranger_output_dir))\n    \n    # Attempt to load data. The exact structure of 'cell_data' will depend on the package version\n    # and the specific Cell Ranger output format.\n    # This function is designed to handle the standard Cell Ranger output directory structure.\n    cell_data <- load_cellranger_output(cellranger_output_dir)\n    \n    # Save the loaded R object for subsequent analysis steps.\n    # This creates an R Data Serialization (RDS) file.\n    saveRDS(cell_data, file = \"loaded_cellranger_data.rds\")\n    message(\"Cell Ranger data loaded and saved to loaded_cellranger_data.rds\")\n} else {\n    stop(paste(\"Error: Cell Ranger output directory not found at\", cellranger_output_dir))\n}\nEOF\n\n# Execute the R script\nRscript load_cellranger_data.R",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "The pre-filtered VDJ information table (all_contig_annotations.csv, output by cellranger) were loaded at the same time.",
+            "tool_name": "Cell Ranger",
+            "tool_version": "7.0.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Cell Ranger (example, specific version might vary)\n# For Cell Ranger v7.0.0, download from 10x Genomics website:\n# wget https://cf.10xgenomics.com/releases/cell-vdj/cellranger-vdj-7.0.0.tar.gz\n# tar -xzf cellranger-vdj-7.0.0.tar.gz\n# export PATH=/path/to/cellranger-7.0.0:$PATH\n\n# Download a VDJ reference (example: human VDJ GRCh38 v7.0.0)\n# wget https://cf.10xgenomics.com/releases/vdj-ref/ref-GRCh38-d_STAR_vdj-7.0.0.tar.gz\n# tar -xzf ref-GRCh38-d_STAR_vdj-7.0.0.tar.gz\n# VDJ_REFERENCE_PATH=\"./ref-GRCh38-d_STAR_vdj-7.0.0\"\n\n# Define input FASTQ directory and sample ID\n# Replace with your actual FASTQ directory and sample name\nFASTQ_DIR=\"/path/to/your/vdj_fastqs\"\nSAMPLE_ID=\"your_sample_name\"\n\n# Run cellranger vdj to process raw VDJ sequencing data\n# This command generates various output files, including 'all_contig_annotations.csv'\n# The output directory will be named after the --id parameter (e.g., your_sample_name)\ncellranger vdj \\\n    --id=\"${SAMPLE_ID}\" \\\n    --fastqs=\"${FASTQ_DIR}\" \\\n    --reference=\"${VDJ_REFERENCE_PATH}\" \\\n    --sample=\"${SAMPLE_ID}\" # Optional, if fastqs are named with sample prefix\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "A cell was considered \u00e2\u0080\u009cvalid\u00e2\u0080\u009d if it satisfied the following criteria: (1) Cell has enough RNA reads to pass the Cell Ranger threshold. (2) Cell has productive full-length BCR or TCR detected.",
+            "tool_name": "Cell Ranger",
+            "tool_version": "7.0.0",
+            "code_example": "    # Define input FASTQ directories and sample names\n    # Replace with actual paths to your FASTQ files\n    FASTQ_DIR_GEX=\"/path/to/your/gex_fastqs\"\n    FASTQ_DIR_VDJ=\"/path/to/your/vdj_fastqs\"\n    SAMPLE_ID=\"my_immune_sample\"\n    OUTPUT_DIR=\"${SAMPLE_ID}_cellranger_output\"\n\n    # Define reference paths\n    # Download reference data from 10x Genomics website if not already available\n    # Example: https://www.10xgenomics.com/support/software/cell-ranger/latest/references\n    # For GEX: refdata-gex-GRCh38-2020-A (or a newer version)\n    # For VDJ: refdata-cellranger-vdj-GRCh38-alts-ensembl-7.0.0 (or a newer version)\n    GEX_REF=\"/path/to/your/refdata-gex-GRCh38-2020-A\"\n    VDJ_REF=\"/path/to/your/refdata-cellranger-vdj-GRCh38-alts-ensembl-7.0.0\"\n\n    # Create a multi config CSV file\n    # This file specifies the input libraries and references for cellranger multi\n    cat <<EOF > multi_config.csv\n[gene-expression]\nreference,$GEX_REF\nfastqs,$FASTQ_DIR_GEX\nsample,$SAMPLE_ID\n\n[vdj]\nreference,$VDJ_REF\nfastqs,$FASTQ_DIR_VDJ\nsample,$SAMPLE_ID\nEOF\n\n    # Run Cell Ranger multi to process both gene expression and VDJ data.\n    # This command generates the necessary output files (e.g., filtered_feature_bc_matrix,\n    # filtered_contig_annotations.csv) from which cells satisfying the described criteria\n    # can be identified in a subsequent analysis step.\n    # Adjust --localcores and --localmem based on available system resources.\n    cellranger multi --id=$OUTPUT_DIR --csv=multi_config.csv --localcores=16 --localmem=64",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 5,
+            "description": "Only valid cells were kept for downstream analysis in both the scRNA-seq and scTCR-seq/scBCR-seq datasets.",
+            "tool_name": "scRNA-seq",
+            "tool_version": "4.x.x",
+            "code_example": "# Install Seurat (if not already installed)\n# R -e \"install.packages('Seurat')\"\n# R -e \"install.packages('dplyr')\"\n\n# Define input and output paths\n# INPUT_CELLRANGER_DIR: Path to the directory containing CellRanger output (e.g., 'raw_feature_bc_matrix')\n# This directory should contain matrix.mtx, features.tsv, and barcodes.tsv files.\nINPUT_CELLRANGER_DIR=\"path/to/cellranger/outs/raw_feature_bc_matrix\"\nOUTPUT_RDS=\"path/to/filtered_seurat_object.rds\"\n\n# Create an R script for filtering cells\ncat << 'EOF' > filter_cells.R\nlibrary(Seurat)\nlibrary(dplyr)\n\n# Get input and output paths from environment variables\ninput_dir <- Sys.getenv(\"INPUT_CELLRANGER_DIR\")\noutput_rds_path <- Sys.getenv(\"OUTPUT_RDS\")\n\n# Check if input directory exists\nif (!dir.exists(input_dir)) {\n  stop(paste(\"Input CellRanger directory not found:\", input_dir))\n}\n\n# Load raw data from CellRanger output\nraw_data <- Read10X(data.dir = input_dir)\n\n# Create a Seurat object\nseurat_object <- CreateSeuratObject(counts = raw_data, project = \"scRNAseq_filtered\")\n\n# Calculate mitochondrial percentage\n# Assuming mitochondrial genes start with \"MT-\" or \"mt-\"\nseurat_object[[\"percent.mt\"]] <- PercentageFeatureSet(seurat_object, pattern = \"^MT-\")\n\n# Filter cells based on common QC metrics\n# Parameters are inferred as they are not specified in the description.\n# Common thresholds used for filtering low-quality cells:\n# nFeature_RNA: number of genes detected per cell (e.g., min 200, max 5000)\n# nCount_RNA: total number of UMIs per cell (e.g., min 500)\n# percent.mt: percentage of mitochondrial reads (e.g., max 10%)\nmin_features <- 200\nmax_features <- 5000\nmin_umis <- 500\nmax_mt_percent <- 10\n\nmessage(paste(\"Original number of cells:\", ncol(seurat_object)))\n\nfiltered_seurat_object <- subset(seurat_object,\n                                 subset = nFeature_RNA > min_features &\n                                          nFeature_RNA < max_features &\n                                          nCount_RNA > min_umis &\n                                          percent.mt < max_mt_percent)\n\nmessage(paste(\"Filtered number of cells:\", ncol(filtered_seurat_object)))\n\n# Save the filtered Seurat object\nsaveRDS(filtered_seurat_object, file = output_rds_path)\nEOF\n\n# Set environment variables for the R script\nexport INPUT_CELLRANGER_DIR=\"path/to/cellranger/outs/raw_feature_bc_matrix\" # Placeholder for raw counts\nexport OUTPUT_RDS=\"path/to/filtered_seurat_object.rds\"\n\n# Execute the R script\nRscript filter_cells.R",
+            "code_language": "bash",
+            "github_url": "https://github.com/satijalab/seurat"
+        },
+        {
+            "step_order": 6,
+            "description": "The scRNA-seq dataset was then further filtered based on gene numbers and mitochondria gene counts tototal counts ratio.",
+            "tool_name": "scRNA-seq",
+            "tool_version": "4.x",
+            "code_example": "# Install R and Seurat if not already installed\n# conda create -n r_seurat r-base r-essentials -y\n# conda activate r_seurat\n# R -q -e \"install.packages('Seurat', repos='http://cran.us.r-project.org')\"\n\n# Define input and output files\nINPUT_SEURAT_OBJECT=\"input_seurat_object.rds\"\nOUTPUT_SEURAT_OBJECT=\"filtered_seurat_object.rds\"\n\n# Define filtering parameters based on common scRNA-seq QC thresholds\n# The description implies filtering based on 'gene numbers' (min and max)\n# and 'mitochondria gene counts to total counts ratio' (max percentage)\nMIN_GENES=200\nMAX_GENES=2500\nMAX_MITO_PERCENT=5\n\n# Run Seurat filtering using Rscript\nRscript -e \"\n    library(Seurat)\n\n    # Load the Seurat object\n    seurat_obj <- readRDS('${INPUT_SEURAT_OBJECT}')\n\n    # Calculate mitochondrial percentage (assuming human data with 'MT-' prefix)\n    # Adjust pattern if organism is different (e.g., '^mt-' for mouse)\n    seurat_obj[['percent.mt']] <- PercentageFeatureSet(seurat_obj, pattern = '^MT-')\n\n    # Filter cells based on gene numbers and mitochondrial content\n    filtered_seurat_obj <- subset(seurat_obj, \n                                  subset = nFeature_RNA > ${MIN_GENES} & \n                                           nFeature_RNA < ${MAX_GENES} & \n                                           percent.mt < ${MAX_MITO_PERCENT})\n\n    # Save the filtered Seurat object\n    saveRDS(filtered_seurat_obj, '${OUTPUT_SEURAT_OBJECT}')\n\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/satijalab/seurat"
+        },
+        {
+            "step_order": 7,
+            "description": "Only cells with > 400 genes,UMI > 0,and 0.5% ~ 30% of their UMIs mappingto mitochondria genes were kept for downstream analysis.",
+            "tool_name": "scanpy (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.9.8",
+            "code_example": "#!/bin/bash\n\n# This script performs quality control filtering on single-cell RNA-seq data\n# using scanpy, based on the specified criteria.\n\n# Define input and output file paths\n# Replace 'input_raw_cells.h5ad' with your actual input AnnData file (e.g., from cellranger output)\n# Replace 'output_filtered_cells.h5ad' with your desired output file name\nINPUT_H5AD=\"input_raw_cells.h5ad\"\nOUTPUT_H5AD=\"output_filtered_cells.h5ad\"\n\n# Check if the input file exists\nif [ ! -f \"$INPUT_H5AD\" ]; then\n    echo \"Error: Input file $INPUT_H5AD not found. Please provide a valid .h5ad file.\" >&2\n    exit 1\nfi\n\n# Install scanpy and its dependencies if not already installed (uncomment to run)\n# Note: It's recommended to use a dedicated conda environment for bioinformatics tools.\n# conda create -n sc_env python=3.9\n# conda activate sc_env\n# pip install scanpy pandas numpy scipy\n\n# Execute the Python script for filtering using scanpy\npython -c \"\nimport scanpy as sc\nimport pandas as pd\nimport numpy as np\n\n# Load the AnnData object\ntry:\n    adata = sc.read_h5ad('$INPUT_H5AD')\nexcept FileNotFoundError:\n    print(f'Error: Input file $INPUT_H5AD not found.')\n    exit(1)\nexcept Exception as e:\n    print(f'Error loading AnnData object from $INPUT_H5AD: {e}')\n    exit(1)\n\nprint(f'\\n--- Starting QC Filtering ---\\n')\nprint(f'Original number of cells: {adata.n_obs}')\nprint(f'Original number of genes: {adata.n_vars}')\n\n# Identify mitochondrial genes\n# This assumes mitochondrial genes start with 'MT-' (common for human/mouse).\n# Adjust the pattern (e.g., 'mt-') if your data uses a different convention.\nadata.var['mt'] = adata.var_names.str.startswith('MT-')\n\n# Calculate QC metrics for cells\n# 'qc_vars' specifies variables for which to calculate percentage of counts (e.g., mitochondrial genes)\n# 'percent_top' is set to None as we are not interested in top expressed genes for this filtering step\n# 'log1p' is set to False as we want raw counts for filtering criteria\nsc.pp.calculate_qc_metrics(adata, qc_vars=['mt'], percent_top=None, log1p=False, inplace=True)\n\n# --- Apply Filtering Criteria ---\n\n# 1. Filter cells with more than 400 genes detected\ninitial_cells = adata.n_obs\nadata = adata[adata.obs['n_genes_by_counts'] > 400, :].copy()\nprint(f'Cells after filtering for > 400 genes: {adata.n_obs} (removed {initial_cells - adata.n_obs} cells)')\n\n# 2. Filter cells with more than 0 UMIs (total_counts)\n# This criterion ensures that only cells with actual expression data are kept.\ninitial_cells = adata.n_obs\nadata = adata[adata.obs['total_counts'] > 0, :].copy()\nprint(f'Cells after filtering for > 0 UMIs: {adata.n_obs} (removed {initial_cells - adata.n_obs} cells)')\n\n# 3. Filter cells based on mitochondrial gene percentage (0.5% to 30%)\n# 'pct_counts_mt' is the percentage of UMIs mapping to mitochondrial genes.\ninitial_cells = adata.n_obs\nadata = adata[adata.obs['pct_counts_mt'] > 0.5, :].copy()\nadata = adata[adata.obs['pct_counts_mt'] < 30, :].copy()\nprint(f'Cells after filtering for 0.5% < MT% < 30%: {adata.n_obs} (removed {initial_cells - adata.n_obs} cells)')\n\nprint(f'\\nFinal number of cells after all filters: {adata.n_obs}')\n\n# Save the filtered AnnData object to the specified output file\ntry:\n    adata.write('$OUTPUT_H5AD')\n    print(f'Filtered data saved to $OUTPUT_H5AD')\nexcept Exception as e:\n    print(f'Error saving filtered AnnData object to $OUTPUT_H5AD: {e}')\n    exit(1)\n\" || {\n    echo \"Error: Python script execution failed.\" >&2\n    exit 1\n}\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/scverse/scanpy"
+        },
+        {
+            "step_order": 8,
+            "description": "All the VDJ data that don't have the following flag of cellranger were filtered: 1. the is_cell flag, 2. the full-length flag and 3. the productive flag.",
+            "tool_name": "Cell Ranger",
+            "tool_version": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Filter VDJ data from Cell Ranger's all_contig_annotations.csv\n# to keep only contigs that are cells, full-length, and productive.\n# This assumes the input file is 'all_contig_annotations.csv'\n# and the output file will be 'filtered_vdj_data.csv'.\n\n# Installation (awk is typically pre-installed on Linux/macOS)\n# No specific installation command needed for awk.\n\n# The filtering logic: keep rows where 'is_cell', 'full_length', and 'productive' are all \"TRUE\".\n# This command first identifies the column indices from the header,\n# then filters subsequent rows based on the values in those columns.\nawk -F',' '\nBEGIN { OFS = \",\" }\nNR == 1 {\n    for (i=1; i<=NF; i++) {\n        if ($i == \"is_cell\") is_cell_col = i;\n        if ($i == \"full_length\") full_length_col = i;\n        if ($i == \"productive\") productive_col = i;\n    }\n    print; # Print header\n    next;\n}\n$is_cell_col == \"TRUE\" && $full_length_col == \"TRUE\" && $productive_col == \"TRUE\" {\n    print;\n}\n' all_contig_annotations.csv > filtered_vdj_data.csv",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 9,
+            "description": "For the 5' scRNA-seq and 5' VDJ-seq, the first 16 bp of R1 is the cell barcode and the next 10bp (17-26bp) is the UMI.",
+            "tool_name": "scRNA-seq",
+            "tool_version": "1.1.2",
+            "code_example": "# Install umi_tools if not already installed\n# conda install -c bioconda umi_tools\n\n# Define input and output file names (placeholders)\nINPUT_R1=\"R1_input.fastq.gz\"\nOUTPUT_R1=\"R1_output_umi_extracted.fastq.gz\"\nLOG_FILE=\"umi_extract.log\"\n\n# Extract cell barcode (first 16bp) and UMI (next 10bp, i.e., 17-26bp) from R1\n# C: Cell barcode, X: UMI\numi_tools extract \\\n    --bc-pattern=CCCCCCCCCCCCCCCCXXXXXXXXXX \\\n    --read1-in \"${INPUT_R1}\" \\\n    --read1-out \"${OUTPUT_R1}\" \\\n    --log \"${LOG_FILE}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/CGATOxford/UMI-tools"
+        }
+    ],
+    "raw_text": "data were processed by cellranger 2.1.0 with default parameter, using mm10 as reference.\nRaw cell-reads were then loaded to R using the cellrangerRkit package. The pre-filtered VDJ information table (all_contig_annotations.csv, output by cellranger) were loaded at the same time. A cell was considered \u00e2\u0080\u009cvalid\u00e2\u0080\u009d if it satisfied the following criteria: (1) Cell has enough RNA reads to pass the Cell Ranger threshold. (2) Cell has productive full-length BCR or TCR detected. Only valid cells were kept for downstream analysis in both the scRNA-seq and scTCR-seq/scBCR-seq datasets. The scRNA-seq dataset was then further filtered based on gene numbers and mitochondria gene counts tototal counts ratio. Only cells with > 400 genes,UMI > 0,and 0.5% ~ 30% of their UMIs mappingto mitochondria genes were kept for downstream analysis.\nAll the VDJ data that don't have the following flag of cellranger were filtered: 1. the is_cell flag, 2. the full-length flag and 3. the productive flag.\nFor the 5' scRNA-seq and 5' VDJ-seq, the first 16 bp of R1 is the cell barcode and the next 10bp (17-26bp) is the UMI.\nGenome_build: hg38\nSupplementary_files_format_and_content: cell-gene UMI table: UMI table with each row represent a cell and each column represent a gene.   BCR table: table containing BCR information, including V/D/J/C genes and CDR3  TCR table:  table containing TCR information, including V/D/J/C genes and CDR3",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

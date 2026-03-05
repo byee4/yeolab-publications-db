@@ -1,79 +1,79 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Sequencing reads from CLIP-seq and RIP-seq libraries were first trimmed of polyA tails, adapters, and low quality ends using cutadapt with parameters --match-read-wildcards --times 2 -e 0 -O 5 --quality-cutoff' 6 -m 18 -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b TGGAATTCTCGGGTGCCAAGG -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT.",
-      "tool_name": "cutadapt",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reads were then mapped against a database of repetitive elements derived from RepBase18.05.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Bowtie version 1.0.0 with parameters -S -q -p 16 -e 100 -l 20 was used to align reads against an index generated from Repbase sequences (Langmead et al., 2009).",
-      "tool_name": "Bowtie",
-      "tool_version": "1.0.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Reads not mapped to Repbase sequences were aligned to the hg19 human genome (UCSC assembly) using STAR (Dobin et al., 2013) version 2.3.0e with parameters --outSAMunmapped Within \u00e2\u0080\u0093outFilterMultimapNmax 1 \u00e2\u0080\u0093outFilterMultimapScoreRange 1.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Reads that were PCR replicates were removed from each CLIP-seq library using a custom script.",
-      "tool_name": "CLIP-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Briefly one read was kept at each nucleotide position when more than one read\u00e2\u0080\u0099s 5' end was mapped",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Clusters were then assigned using the CLIPper software with parameters --bonferroni --superlocal --threshold- software (Lovci et al., 2013).",
-      "tool_name": "CLIPper",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "conclusions discussed in the associated manuscript are based on the BAM files",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Sequencing reads from CLIP-seq and RIP-seq libraries were first trimmed of polyA tails, adapters, and low quality ends using cutadapt with parameters --match-read-wildcards --times 2 -e 0 -O 5 --quality-cutoff' 6 -m 18 -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b TGGAATTCTCGGGTGCCAAGG -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT.\nReads were then mapped against a database of repetitive elements derived from RepBase18.05. Bowtie version 1.0.0 with parameters -S -q -p 16 -e 100 -l 20 was used to align reads against an index generated from Repbase sequences (Langmead et al., 2009).\nReads not mapped to Repbase sequences were aligned to the hg19 human genome (UCSC assembly) using STAR (Dobin et al., 2013) version 2.3.0e with parameters --outSAMunmapped Within \u00e2\u0080\u0093outFilterMultimapNmax 1 \u00e2\u0080\u0093outFilterMultimapScoreRange 1.\nReads that were PCR replicates were removed from each CLIP-seq library using a custom script. Briefly one read was kept at each nucleotide position when more than one read\u00e2\u0080\u0099s 5' end was mapped\nClusters were then assigned using the CLIPper software with parameters --bonferroni --superlocal --threshold- software (Lovci et al., 2013).\nGenome_build: hg19\nconclusions discussed in the associated manuscript are based on the BAM files",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Sequencing reads from CLIP-seq and RIP-seq libraries were first trimmed of polyA tails, adapters, and low quality ends using cutadapt with parameters --match-read-wildcards --times 2 -e 0 -O 5 --quality-cutoff' 6 -m 18 -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b TGGAATTCTCGGGTGCCAAGG -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT.",
+            "tool_name": "cutadapt",
+            "tool_version": "2.10 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install cutadapt (e.g., using conda)\n# conda install -c bioconda cutadapt\n\n# Define input and output file names\nINPUT_READS=\"reads.fastq.gz\"\nOUTPUT_TRIMMED_READS=\"trimmed_reads.fastq.gz\"\n\n# Run cutadapt to trim polyA tails, adapters, and low quality ends\ncutadapt \\\n  --match-read-wildcards \\\n  --times 2 \\\n  -e 0 \\\n  -O 5 \\\n  --quality-cutoff 6 \\\n  -m 18 \\\n  -b TCGTATGCCGTCTTCTGCTTG \\\n  -b ATCTCGTATGCCGTCTTCTGCTTG \\\n  -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC \\\n  -b TGGAATTCTCGGGTGCCAAGG \\\n  -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \\\n  -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT \\\n  -o \"${OUTPUT_TRIMMED_READS}\" \\\n  \"${INPUT_READS}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 2,
+            "description": "Reads were then mapped against a database of repetitive elements derived from RepBase18.05.",
+            "tool_name": "bowtie2 (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.5.2 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install bowtie2 (if not already installed)\n# conda install -c bioconda bowtie2\n\n# --- Reference Data Preparation ---\n# RepBase18.05 is a proprietary database. Access typically requires a license.\n# The following is a placeholder for how one would prepare the index if the FASTA file was available.\n\n# Placeholder for RepBase18.05 FASTA file (replace with actual path to your downloaded file)\n# REPBASE_FASTA=\"path/to/RepBase18.05.fasta\"\n# REPBASE_INDEX_PREFIX=\"reference/RepBase/RepBase18.05\"\n\n# Create directory for reference if it doesn't exist\n# mkdir -p $(dirname \"${REPBASE_INDEX_PREFIX}\")\n\n# Build Bowtie2 index for RepBase18.05\n# bowtie2-build \"${REPBASE_FASTA}\" \"${REPBASE_INDEX_PREFIX}\"\n\n# --- Alignment Step ---\n\n# Define input and output files\n# Assuming paired-end reads, adjust for single-end if necessary\nREAD1=\"input_read1.fastq.gz\"\nREAD2=\"input_read2.fastq.gz\"\n\n# Path to the Bowtie2 index prefix for RepBase18.05\n# This should be the same prefix used during the bowtie2-build step (e.g., 'reference/RepBase/RepBase18.05')\nREPBASE_INDEX_PREFIX=\"reference/RepBase/RepBase18.05\"\n\nOUTPUT_SAM=\"aligned_to_repeats.sam\"\nUNALIGNED_PREFIX=\"unaligned_to_repeats\"\nTHREADS=8 # Number of threads to use\n\n# Align reads against the RepBase18.05 repetitive elements database\n# --very-sensitive-local is often used for mapping to repetitive elements to allow for local alignments\n# --un-conc-gz outputs unaligned paired reads to two gzipped files (e.g., unaligned_to_repeats.1.fastq.gz, unaligned_to_repeats.2.fastq.gz)\nbowtie2 \\\n  --very-sensitive-local \\\n  -p \"${THREADS}\" \\\n  -x \"${REPBASE_INDEX_PREFIX}\" \\\n  -1 \"${READ1}\" \\\n  -2 \"${READ2}\" \\\n  --un-conc-gz \"${UNALIGNED_PREFIX}\" \\\n  -S \"${OUTPUT_SAM}\"\n\n# Optional: Convert SAM to BAM and sort\n# samtools view -bS \"${OUTPUT_SAM}\" | samtools sort -o \"${OUTPUT_SAM%.sam}.bam\"\n# samtools index \"${OUTPUT_SAM%.sam}.bam\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie2"
+        },
+        {
+            "step_order": 3,
+            "description": "Bowtie version 1.0.0 with parameters -S -q -p 16 -e 100 -l 20 was used to align reads against an index generated from Repbase sequences (Langmead et al., 2009).",
+            "tool_name": "Bowtie",
+            "tool_version": "1.0.0",
+            "code_example": "# Install Bowtie (if not already installed)\n# conda install -c bioconda bowtie=1.0.0\n\n# Assuming 'repbase_index' is the base name of the Bowtie index files\n# and 'reads.fastq' is the input reads file.\n# The output will be a SAM file named 'output.sam'.\nbowtie -S -q -p 16 -e 100 -l 20 repbase_index reads.fastq > output.sam",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie"
+        },
+        {
+            "step_order": 4,
+            "description": "Reads not mapped to Repbase sequences were aligned to the hg19 human genome (UCSC assembly) using STAR (Dobin et al., 2013) version 2.3.0e with parameters --outSAMunmapped Within \u00e2\u0080\u0093outFilterMultimapNmax 1 \u00e2\u0080\u0093outFilterMultimapScoreRange 1.",
+            "tool_name": "STAR",
+            "tool_version": "2.3.0e",
+            "code_example": "# Install STAR (example using conda)\n# conda install -c bioconda star=2.3.0e\n\n# Create STAR genome index for hg19 if not already done\n# STAR --runMode genomeGenerate --genomeDir /path/to/hg19_STAR_index --genomeFastaFiles /path/to/hg19.fa --sjdbGTFfile /path/to/hg19.gtf --runThreadN <num_threads>\n\n# Align reads to hg19\nSTAR --genomeDir /path/to/hg19_STAR_index \\\n     --readFilesIn unmapped_reads.fastq \\\n     --outSAMunmapped Within \\\n     --outFilterMultimapNmax 1 \\\n     --outFilterMultimapScoreRange 1 \\\n     --outFileNamePrefix star_hg19_alignment_",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 5,
+            "description": "Reads that were PCR replicates were removed from each CLIP-seq library using a custom script.",
+            "tool_name": "CLIP-seq",
+            "tool_version": "1.1.2",
+            "code_example": "# Install umi_tools\n# conda install -c bioconda umi_tools\n\n# Install samtools (if not already installed)\n# conda install -c bioconda samtools\n\n# Define input and output file names\nINPUT_BAM=\"input_aligned_reads.bam\"\nOUTPUT_DEDUP_BAM=\"deduplicated_reads.bam\"\n\n# Sort the BAM file by coordinate (required for umi_tools dedup)\nsamtools sort -o \"${INPUT_BAM%.bam}.sorted.bam\" \"$INPUT_BAM\"\n\n# Index the sorted BAM file\nsamtools index \"${INPUT_BAM%.bam}.sorted.bam\"\n\n# Remove PCR replicates using umi_tools dedup.\n# This command assumes Unique Molecular Identifiers (UMIs) are embedded in the read ID,\n# separated by a colon, which is a common format in eCLIP workflows (e.g., from the Yeo lab).\n# Adjust --extract-umi-method and --umi-separator if your UMI structure is different.\numi_tools dedup \\\n    --extract-umi-method=read_id \\\n    --umi-separator=':' \\\n    -I \"${INPUT_BAM%.bam}.sorted.bam\" \\\n    -S \"$OUTPUT_DEDUP_BAM\"\n\n# Index the deduplicated BAM file\nsamtools index \"$OUTPUT_DEDUP_BAM\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/CGATOxford/UMI-tools"
+        },
+        {
+            "step_order": 6,
+            "description": "Briefly one read was kept at each nucleotide position when more than one read\u00e2\u0080\u0099s 5' end was mapped",
+            "tool_name": "dedup_reads.py (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Custom Script (from Yeo Lab eCLIP pipeline)",
+            "code_example": "# Install Python (if not already available)\n# conda install python=3.8\n\n# Install pysam, a dependency for dedup_reads.py\n# pip install pysam\n\n# Clone the eclip repository to obtain the dedup_reads.py script\n# git clone https://github.com/yeolab/eclip.git\n\n# Define input and output file paths\nINPUT_BAM=\"aligned_reads.bam\" # Placeholder for the input BAM file\nOUTPUT_DEDUP_BAM=\"deduplicated_reads.bam\" # Placeholder for the deduplicated output BAM file\n\n# Path to the dedup_reads.py script within the cloned repository\nDEDUP_SCRIPT=\"eclip/scripts/dedup_reads.py\"\n\n# Execute the deduplication script\n# This script identifies reads with identical 5' end mapping positions and keeps only one, effectively removing PCR duplicates based on 5' end.\npython \"${DEDUP_SCRIPT}\" -i \"${INPUT_BAM}\" -o \"${OUTPUT_DEDUP_BAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip"
+        },
+        {
+            "step_order": 7,
+            "description": "Clusters were then assigned using the CLIPper software with parameters --bonferroni --superlocal --threshold- software (Lovci et al., 2013).",
+            "tool_name": "CLIPper",
+            "tool_version": "Inferred from Lovci et al., 2013 publication",
+            "code_example": "# Installation (example, adjust based on environment):\n# git clone https://github.com/yeolab/clipper.git\n# cd clipper\n# # Ensure Python dependencies are installed (e.g., pip install numpy scipy pysam)\n\n# Example usage of CLIPper based on description\n# Note: Input BAM file, genome size, and output file names are placeholders.\n# The '--threshold-' parameter in the description is incomplete; a placeholder [VALUE] is used.\n# Replace 'input_aligned_reads.bam', 'genome_size.txt', and '[VALUE]' with actual values relevant to your data.\npython clipper.py \\\n  -b input_aligned_reads.bam \\\n  -s genome_size.txt \\\n  -o clipper_peaks.bed \\\n  --bonferroni \\\n  --superlocal \\\n  --threshold [VALUE]",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1038/nmeth.2602"
+        },
+        {
+            "step_order": 8,
+            "description": "conclusions discussed in the associated manuscript are based on the BAM files",
+            "tool_name": "clipper (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "unspecified",
+            "code_example": "# Clone the clipper repository\n# git clone https://github.com/yeolab/clipper.git\n# cd clipper\n\n# Example: Create a dummy genome size file for hg38\n# This file should contain chromosome names and their lengths, tab-separated.\n# For a real analysis, obtain this from a genome assembly provider (e.g., UCSC, Ensembl).\n# Example for hg38 (partial):\n# echo -e \"chr1\\t248956422\" > hg38.chrom.sizes\n# echo -e \"chr2\\t242193529\" >> hg38.chrom.sizes\n# echo -e \"chr3\\t198295559\" >> hg38.chrom.sizes\n# ... add all chromosomes ...\n\n# Run clipper for peak calling\n# Replace 'input.bam' with your actual BAM file\n# Replace 'hg38.chrom.sizes' with your genome size file (e.g., for Homo sapiens, build hg38)\n# Replace 'output_peaks' with your desired output prefix\npython clipper.py -b input.bam -s hg38.chrom.sizes -o output_peaks",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/clipper"
+        }
+    ],
+    "raw_text": "Sequencing reads from CLIP-seq and RIP-seq libraries were first trimmed of polyA tails, adapters, and low quality ends using cutadapt with parameters --match-read-wildcards --times 2 -e 0 -O 5 --quality-cutoff' 6 -m 18 -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b TGGAATTCTCGGGTGCCAAGG -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT.\nReads were then mapped against a database of repetitive elements derived from RepBase18.05. Bowtie version 1.0.0 with parameters -S -q -p 16 -e 100 -l 20 was used to align reads against an index generated from Repbase sequences (Langmead et al., 2009).\nReads not mapped to Repbase sequences were aligned to the hg19 human genome (UCSC assembly) using STAR (Dobin et al., 2013) version 2.3.0e with parameters --outSAMunmapped Within \u00e2\u0080\u0093outFilterMultimapNmax 1 \u00e2\u0080\u0093outFilterMultimapScoreRange 1.\nReads that were PCR replicates were removed from each CLIP-seq library using a custom script. Briefly one read was kept at each nucleotide position when more than one read\u00e2\u0080\u0099s 5' end was mapped\nClusters were then assigned using the CLIPper software with parameters --bonferroni --superlocal --threshold- software (Lovci et al., 2013).\nGenome_build: hg19\nconclusions discussed in the associated manuscript are based on the BAM files",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

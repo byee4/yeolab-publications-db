@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "data were processed by cellranger 2.1.0 with default parameter, using mm10 as reference.",
-      "tool_name": "Cell Ranger",
-      "tool_version": "2.1.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Raw cell-reads were then loaded to R using the cellrangerRkit package.",
-      "tool_name": "R",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "The scRNA-seq dataset was then further filtered based on gene numbers and mitochondria gene counts total counts ratio.",
-      "tool_name": "scRNA-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Only cells with > 400 genes,UMI > 0,and 0.5% ~ 20% of their UMIs mappingto mitochondria genes were kept for downstream analysis.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "For the scRNA-seq, the first 16 bp of R1 is the cell barcode and the next 10bp (17-26bp) is the UMI.",
-      "tool_name": "scRNA-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "data were processed by cellranger 2.1.0 with default parameter, using mm10 as reference.\nRaw cell-reads were then loaded to R using the cellrangerRkit package. The scRNA-seq dataset was then further filtered based on gene numbers and mitochondria gene counts total counts ratio. Only cells with > 400 genes,UMI > 0,and 0.5% ~ 20% of their UMIs mappingto mitochondria genes were kept for downstream analysis.\nFor the scRNA-seq, the first 16 bp of R1 is the cell barcode and the next 10bp (17-26bp) is the UMI.\nGenome_build: mm10\nSupplementary_files_format_and_content: cell-gene UMI table: UMI table with each row represent a cell and each column represent a gene.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "data were processed by cellranger 2.1.0 with default parameter, using mm10 as reference.",
+            "tool_name": "Cell Ranger",
+            "tool_version": "2.1.0",
+            "code_example": "# Cell Ranger is a proprietary software from 10x Genomics.\n# Download and installation instructions are available on the 10x Genomics website:\n# https://www.10xgenomics.com/support/software/cell-ranger/downloads\n# Ensure cellranger 2.1.0 is in your PATH.\n\n# Download pre-built mm10 reference from 10x Genomics (or build your own using cellranger mkref):\n# https://www.10xgenomics.com/support/software/cell-ranger/downloads/latest\nREFERENCE_PATH=\"/path/to/cellranger_ref/mm10\"\n\n# Define input and output paths\nSAMPLE_ID=\"my_sample\"\nFASTQS_DIR=\"/path/to/fastq_files\"\nOUTPUT_DIR=\"/path/to/output_directory\"\n\n# Execute cellranger count with default parameters\n# The 'default parameter' implies using the standard settings for cellranger count.\n# You will need to replace SAMPLE_ID, FASTQS_DIR, OUTPUT_DIR, and REFERENCE_PATH with actual values.\ncellranger count \\\n    --id=\"${SAMPLE_ID}\" \\\n    --transcriptome=\"${REFERENCE_PATH}\" \\\n    --fastqs=\"${FASTQS_DIR}\" \\\n    --sample=\"${SAMPLE_ID}\" \\\n    --localcores=8 \\\n    --localmem=64",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Raw cell-reads were then loaded to R using the cellrangerRkit package.",
+            "tool_name": "R",
+            "tool_version": "Infer from description (for R and cellrangerRkit package) (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install R if not already installed (e.g., using conda)\n# conda create -n r_env r-base -y\n# conda activate r_env\n\n# Install the 'cellrangerRkit' package.\n# Note: 'cellrangerRkit' does not appear to be a standard CRAN or Bioconductor package.\n# If it's a custom package, you might need to install it from a specific source (e.g., GitHub).\n# Example for a hypothetical GitHub installation:\n# R -e 'install.packages(\"devtools\")'\n# R -e 'devtools::install_github(\"your_organization/cellrangerRkit\")' # Replace with actual repo if known\n\n# Create an R script to load the Cell Ranger output\ncat << 'EOF' > load_cellranger_data.R\n# Load the cellrangerRkit package\nlibrary(cellrangerRkit)\n\n# Define the path to the Cell Ranger output directory from an environment variable\n# This directory typically contains 'matrix.mtx', 'barcodes.tsv', 'features.tsv'\ncellranger_output_dir <- Sys.getenv(\"CELLRANGER_OUTPUT_DIR\")\n\nif (cellranger_output_dir == \"\") {\n    stop(\"CELLRANGER_OUTPUT_DIR environment variable is not set. Please provide the path to the Cell Ranger output directory.\")\n}\n\nmessage(paste(\"Loading raw cell-reads data from:\", cellranger_output_dir))\n\n# Load the data using a function from cellrangerRkit.\n# The exact function name might vary (e.g., read_cellranger_matrix, load_cellranger_data).\n# Assuming 'read_cellranger_matrix' is a plausible function to load the feature-barcode matrix.\ncell_reads_data <- read_cellranger_matrix(cellranger_output_dir)\n\n# Further processing or saving the loaded data can be added here\n# For example, converting to a Seurat object, or saving to an RData file\n# saveRDS(cell_reads_data, file = \"loaded_cell_reads.rds\")\n\nmessage(\"Raw cell-reads data loaded successfully into R.\")\n# You can inspect the loaded data, e.g.,\n# print(cell_reads_data)\nEOF\n\n# Set the environment variable for the Cell Ranger output directory\n# Replace 'path/to/your/cellranger/output/filtered_feature_bc_matrix' with the actual path\nexport CELLRANGER_OUTPUT_DIR=\"path/to/your/cellranger/output/filtered_feature_bc_matrix\"\n\n# Execute the R script\nRscript load_cellranger_data.R",
+            "code_language": "bash",
+            "github_url": "https://www.r-project.org/"
+        },
+        {
+            "step_order": 3,
+            "description": "The scRNA-seq dataset was then further filtered based on gene numbers and mitochondria gene counts total counts ratio.",
+            "tool_name": "scRNA-seq",
+            "tool_version": "5.0.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "cat << 'EOF' > filter_scrnaseq.R\nlibrary(Seurat)\n\n# Load your Seurat object (replace 'input_seurat_object.rds' with your actual input path)\n# This script assumes you have a Seurat object saved as an RDS file.\n# If starting from raw counts (e.g., 10x Genomics output), you would first create the Seurat object:\n# pbmc.data <- Read10X(data.dir = \"path/to/10x/data/\")\n# seurat_obj <- CreateSeuratObject(counts = pbmc.data, project = \"scRNAseq_analysis\")\nseurat_obj <- readRDS(\"input_seurat_object.rds\")\n\n# Calculate mitochondrial percentage\n# The pattern for mitochondrial genes depends on the species and annotation.\n# For human, it's typically \"^MT-\". For mouse, it's often \"^mt-\". Adjust as needed.\nseurat_obj[[\"percent.mt\"]] <- PercentageFeatureSet(seurat_obj, pattern = \"^MT-\")\n\n# Filter cells based on gene numbers (nFeature_RNA) and mitochondrial gene counts ratio (percent.mt)\n# The thresholds below are examples. Optimal thresholds should be determined by inspecting\n# violin plots or feature scatter plots of nFeature_RNA, nCount_RNA, and percent.mt\n# for your specific dataset to identify outliers and low-quality cells.\n# Example thresholds:\n# - nFeature_RNA: Number of unique genes detected per cell. Filter for cells with > 200 and < 2500 genes.\n# - percent.mt: Percentage of mitochondrial reads. Filter for cells with < 5% mitochondrial reads.\nseurat_obj_filtered <- subset(seurat_obj, subset = nFeature_RNA > 200 & nFeature_RNA < 2500 & percent.mt < 5)\n\n# Save the filtered Seurat object\nsaveRDS(seurat_obj_filtered, \"output_seurat_object_filtered.rds\")\n\n# Optional: Print summary of filtering results\ncat(\"Original number of cells: \", ncol(seurat_obj), \"\\n\")\ncat(\"Filtered number of cells: \", ncol(seurat_obj_filtered), \"\\n\")\nEOF\n\n# Install Seurat (if not already installed)\n# R -q -e \"install.packages('Seurat')\"\n# R -q -e \"install.packages('SeuratObject')\"\n\n# Execute the R script\nRscript filter_scrnaseq.R",
+            "code_language": "bash",
+            "github_url": "https://github.com/satijalab/seurat"
+        },
+        {
+            "step_order": 4,
+            "description": "Only cells with > 400 genes,UMI > 0,and 0.5% ~ 20% of their UMIs mappingto mitochondria genes were kept for downstream analysis.",
+            "tool_name": "Scanpy (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.9.1",
+            "code_example": "# Install Scanpy if not already installed\n# pip install scanpy\n\n# Create a Python script to perform cell filtering based on QC metrics\ncat << 'EOF' > filter_cells_qc.py\nimport scanpy as sc\nimport sys\n\n# Define input and output file paths\ninput_h5ad = sys.argv[1]\noutput_h5ad = sys.argv[2]\n\n# Load the AnnData object\nadata = sc.read_h5ad(input_h5ad)\n\nprint(f\"Initial number of cells: {adata.n_obs}\")\n\n# Apply filtering criteria:\n# 1. Number of genes detected (n_genes_by_counts) > 400\n# 2. Total UMIs (total_counts) > 0\n# 3. Percentage of mitochondrial UMIs (pct_counts_mt) between 0.5% and 20% (exclusive of 20% in this implementation, adjust if inclusive is strictly needed)\n#    Note: It's assumed that 'n_genes_by_counts', 'total_counts', and 'pct_counts_mt' \n#    have been pre-calculated and stored in adata.obs, typically via sc.pp.calculate_qc_metrics.\nfiltered_adata = adata[\n    (adata.obs['n_genes_by_counts'] > 400) &\n    (adata.obs['total_counts'] > 0) &\n    (adata.obs['pct_counts_mt'] > 0.5) &\n    (adata.obs['pct_counts_mt'] < 20.0)\n].copy() # Use .copy() to ensure a new AnnData object is created\n\nprint(f\"Number of cells after filtering: {filtered_adata.n_obs}\")\n\n# Save the filtered AnnData object\nfiltered_adata.write(output_h5ad)\nEOF\n\n# Execute the Python script with placeholder input and output files\n# Replace 'input_raw_cells.h5ad' with your actual input AnnData file\n# Replace 'output_filtered_cells.h5ad' with your desired output file name\npython filter_cells_qc.py input_raw_cells.h5ad output_filtered_cells.h5ad",
+            "code_language": "bash",
+            "github_url": "https://github.com/scverse/scanpy"
+        },
+        {
+            "step_order": 5,
+            "description": "For the scRNA-seq, the first 16 bp of R1 is the cell barcode and the next 10bp (17-26bp) is the UMI.",
+            "tool_name": "scRNA-seq",
+            "tool_version": "1.1.2",
+            "code_example": "# Install UMI-tools if not already installed\n# conda install -c bioconda umi-tools\n\n# Define input and output file names\nR1_IN=\"R1.fastq.gz\"\nR2_IN=\"R2.fastq.gz\"\nR1_OUT=\"R1_extracted.fastq.gz\"\nR2_OUT=\"R2_extracted.fastq.gz\"\n\n# Define the barcode and UMI pattern for R1\n# C{16} for 16 bp Cell Barcode, U{10} for 10 bp UMI\n# The pattern CCCCCCCCCCCCCCCCUUUUUUUUUU means the CB is the first 16bp,\n# followed immediately by the UMI for the next 10bp in R1.\nUMI_PATTERN=\"CCCCCCCCCCCCCCCCUUUUUUUUUU\"\n\n# Extract Cell Barcode and UMI from R1 and add to read headers of both R1 and R2\numi_tools extract \\\n    --pattern \"${UMI_PATTERN}\" \\\n    --read1-in \"${R1_IN}\" \\\n    --read2-in \"${R2_IN}\" \\\n    --read1-out \"${R1_OUT}\" \\\n    --read2-out \"${R2_OUT}\"\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/CGATOxford/UMI-tools"
+        }
+    ],
+    "raw_text": "data were processed by cellranger 2.1.0 with default parameter, using mm10 as reference.\nRaw cell-reads were then loaded to R using the cellrangerRkit package. The scRNA-seq dataset was then further filtered based on gene numbers and mitochondria gene counts total counts ratio. Only cells with > 400 genes,UMI > 0,and 0.5% ~ 20% of their UMIs mappingto mitochondria genes were kept for downstream analysis.\nFor the scRNA-seq, the first 16 bp of R1 is the cell barcode and the next 10bp (17-26bp) is the UMI.\nGenome_build: mm10\nSupplementary_files_format_and_content: cell-gene UMI table: UMI table with each row represent a cell and each column represent a gene.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

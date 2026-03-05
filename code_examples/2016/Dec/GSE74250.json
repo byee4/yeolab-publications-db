@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize.",
-      "tool_name": "Microarray",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Iter-plier algorithm used to quantify probesets.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "As previously described (Huelga et al., 2012).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "HJAY_r2.pgf",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize. Iter-plier algorithm used to quantify probesets. As previously described (Huelga et al., 2012).\nHJAY_r2.pgf",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize.",
+            "tool_name": "Microarray",
+            "tool_version": "Inferred with models/gemini-2.5-flash",
+            "code_example": "# Install Affymetrix Power Tools (APT) - specific installation steps vary by OS and version.\n# Please refer to the official Thermo Fisher Scientific documentation for the most up-to-date installation instructions.\n# Example for Linux (check official documentation for latest instructions):\n# wget https://assets.thermofisher.com/TFS-Assets/LSG/software/APT_2.11.2_Linux.zip\n# unzip APT_2.11.2_Linux.zip\n# cd APT_2.11.2_Linux\n# ./install.sh\n\n# Ensure APT executables are in your PATH\n# export PATH=\"/path/to/APT/bin:$PATH\"\n\n# Placeholder for input CEL files. Create a file named 'input_celfiles.txt'\n# containing the paths to your .CEL files, one path per line.\n# Example: \n# echo \"/path/to/sample1.CEL\" > input_celfiles.txt\n# echo \"/path/to/sample2.CEL\" >> input_celfiles.txt\n\n# Placeholder for a CDF (Chip Description File) or PGF (Probe Group File).\n# You must download the appropriate CDF/PGF file for your specific Affymetrix array type\n# from the Thermo Fisher Scientific website. For example, 'human_hg19.cdf' is a placeholder\n# for a human array based on the hg19 genome assembly.\n# Example download (replace with actual file for your array):\n# wget https://www.thermofisher.com/content/dam/LifeTech/Documents/PDFs/HuGene-1_0-st-v1.cdf -O human_hg19.cdf\n\n# Create an output directory for the summarized data\nmkdir -p apt_summarize_output\n\n# Run apt-probeset-summarize using the RMA (Robust Multi-array Average) algorithm.\n# -a rma: Specifies the RMA algorithm for background correction, normalization, and summarization.\n# --cel-files: Specifies a file containing a list of CEL file paths, one per line.\n# --cdf-file: Specifies the CDF or PGF file corresponding to the array type used.\n# -o apt_summarize_output: Specifies the output directory where summarized data will be stored.\napt-probeset-summarize -a rma \\\n  --cel-files input_celfiles.txt \\\n  --cdf-file human_hg19.cdf \\\n  -o apt_summarize_output",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Iter-plier algorithm used to quantify probesets.",
+            "tool_name": "iterpliertool (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "APT 1.18.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Affymetrix Power Tools (APT)\n# conda install -c bioconda affymetrix-power-tools\n\n# Define input CEL files (replace with actual file paths)\nCEL_FILES=\"sample1.CEL sample2.CEL sample3.CEL\"\n\n# Define the Chip Description File (CDF) for the specific array type (replace with actual CDF path)\n# Example for a common array: HG-U133_Plus_2.cdf\nCDF_FILE=\"path/to/your/array_type.cdf\"\n\n# Define the output file name for the probeset quantification\nOUTPUT_FILE=\"probeset_quantification.txt\"\n\n# Execute iterpliertool to quantify probesets using the Iter-PLIER algorithm\n# The --cel-files argument can take multiple CEL files separated by spaces\n# The --cdf-file argument specifies the CDF file for probe set definitions\n# The --output-file argument specifies the output file for the summarization results\niterpliertool --cel-files \"${CEL_FILES}\" --cdf-file \"${CDF_FILE}\" --output-file \"${OUTPUT_FILE}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "As previously described (Huelga et al., 2012).",
+            "tool_name": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Not specified",
+            "code_example": "# No specific command or parameters can be inferred from 'As previously described (Huelga et al., 2012)'.\n# This description refers to a methodology detailed in the cited publication, not a specific software tool or command.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "HJAY_r2.pgf",
+            "tool_name": "Custom Script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# This command is a placeholder for the custom script \"HJAY_r2.pgf\".\n# The specific tool, version, and parameters are not provided in the description.\n# Replace 'input.bam', 'output.tsv', and 'hg38' with actual file paths and reference genome.\n# Reference genome 'hg38' is used as a common placeholder for the latest human assembly.\n\n# Example execution of a custom script.\n# Assuming HJAY_r2.pgf is an executable script or needs an interpreter like bash/python.\n# For demonstration, we'll assume it's a bash script.\nbash HJAY_r2.pgf \\\n    --input_file \"input.bam\" \\\n    --output_file \"output.tsv\" \\\n    --genome_assembly \"hg38\"",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize. Iter-plier algorithm used to quantify probesets. As previously described (Huelga et al., 2012).\nHJAY_r2.pgf",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

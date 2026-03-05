@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Reads were quality checked using fastQC",
-      "tool_name": "FastQC",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Sequencing reads were aligned to the hg38 reference genome using STAR (v2.7.2c)",
-      "tool_name": "STAR",
-      "tool_version": "2.7.2c",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Gene-level quantification was performed using RSEM (v1.3.1)",
-      "tool_name": "RSEM",
-      "tool_version": "1.3.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Reads were quality checked using fastQC\nSequencing reads were aligned to the hg38 reference genome using STAR (v2.7.2c)\nGene-level quantification was performed using RSEM (v1.3.1)\nAssembly: hg38\nSupplementary files format and content: count_matrix.tsv (matrix of gene counts)",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Reads were quality checked using fastQC",
+            "tool_name": "FastQC",
+            "tool_version": "0.11.9 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install FastQC using Conda\n# conda create -n fastqc_env fastqc -c bioconda -y\n# conda activate fastqc_env\n\n# Run FastQC on input reads\n# Replace reads.fastq.gz with your actual input file(s)\n# Replace output_dir with your desired output directory\nmkdir -p output_dir\nfastqc reads.fastq.gz -o output_dir",
+            "code_language": "bash",
+            "github_url": "https://github.com/s-andrews/FastQC"
+        },
+        {
+            "step_order": 2,
+            "description": "Sequencing reads were aligned to the hg38 reference genome using STAR (v2.7.2c)",
+            "tool_name": "STAR",
+            "tool_version": "2.7.2c",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# --- Reference Data Setup ---\n# Download hg38 genome FASTA and GTF files (example from UCSC)\n# wget https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz\n# wget https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/genes/hg38.ncbiRefSeq.gtf.gz\n# gunzip hg38.fa.gz\n# gunzip hg38.ncbiRefSeq.gtf.gz\n\n# Create STAR genome index (if not already available)\n# mkdir -p /path/to/star_index/hg38\n# STAR --runMode genomeGenerate \\\n#      --genomeDir /path/to/star_index/hg38 \\\n#      --genomeFastaFiles hg38.fa \\\n#      --sjdbGTFfile hg38.ncbiRefSeq.gtf \\\n#      --sjdbOverhang 100 \\\n#      --runThreadN 16\n\n# --- Alignment Step ---\n# Define input files and output prefix\nINPUT_R1=\"input_R1.fastq.gz\"\nINPUT_R2=\"input_R2.fastq.gz\" # Remove if single-end\nGENOME_DIR=\"/path/to/star_index/hg38\"\nOUTPUT_PREFIX=\"aligned_reads_\"\nTHREADS=8\n\n# Execute STAR alignment\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${INPUT_R1}\" \"${INPUT_R2}\" \\\n     --runThreadN \"${THREADS}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outSAMattributes Standard \\\n     --quantMode GeneCounts \\\n     --twopassMode Basic",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "Gene-level quantification was performed using RSEM (v1.3.1)",
+            "tool_name": "RSEM",
+            "tool_version": "1.3.1",
+            "code_example": "# Install RSEM (example using conda)\n# conda install -c bioconda rsem\n\n# Placeholder for RSEM reference index.\n# This index should have been built previously using 'rsem-prepare-reference'.\n# Replace '/path/to/rsem_reference/human_GRCh38' with the actual path to your RSEM reference.\nRSEM_REFERENCE=\"/path/to/rsem_reference/human_GRCh38\"\n\n# Input aligned reads file (e.g., BAM).\n# Replace 'input.bam' with your actual input file.\nINPUT_BAM=\"input.bam\"\n\n# Output prefix for RSEM results (e.g., gene_quantification_results.genes.results, .isoforms.results)\nOUTPUT_PREFIX=\"gene_quantification_results\"\n\n# Perform gene-level quantification using rsem-calculate-expression.\n# This command assumes:\n# 1. Input is a BAM file (--bam).\n# 2. Reads are paired-end (--paired-end).\n# Adjust parameters if your input is FASTQ, single-end, or requires specific options (e.g., --strandedness).\nrsem-calculate-expression \\\n    --bam \\\n    --paired-end \\\n    \"${INPUT_BAM}\" \\\n    \"${RSEM_REFERENCE}\" \\\n    \"${OUTPUT_PREFIX}\"",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/1471-2105-12-323"
+        }
+    ],
+    "raw_text": "Reads were quality checked using fastQC\nSequencing reads were aligned to the hg38 reference genome using STAR (v2.7.2c)\nGene-level quantification was performed using RSEM (v1.3.1)\nAssembly: hg38\nSupplementary files format and content: count_matrix.tsv (matrix of gene counts)",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

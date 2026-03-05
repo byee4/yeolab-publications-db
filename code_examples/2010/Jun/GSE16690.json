@@ -1,70 +1,70 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "The signal processing implemented for the Ambion miRCHIP is a multi-step process involving probe specific signal detection calls, background estimate and correction, constant variance stabilization and either array scaling or global normalization.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "For each probe, an estimated background value is subtracted that is derived from the median signal of a set of G-C matched anti-genomic controls.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Arrays within a specific analysis experiment were normalized together according to the variance stabilization methods described by Huber et al. (Huber et al., 2002).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Detection calls were based on a Wilcoxon rank-sum test of the miRNA probe signal compared to the distribution of signals from GC-content matched anti-genomic probes.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "For statistical hypothesis testing, a two-sample t-Test, with assumption of equal variance, was applied.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "One-way ANOVA was used for experimental designs with more than two experimental groupings or levels of the same factor.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "These tests define which probes are considered to be significantly differentially expressed, or significant, based on a default p-value of 0.001 and log2 difference > 1.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "The signal processing implemented for the Ambion miRCHIP is a multi-step process involving probe specific signal detection calls, background estimate and correction, constant variance stabilization and either array scaling or global normalization. For each probe, an estimated background value is subtracted that is derived from the median signal of a set of G-C matched anti-genomic controls. Arrays within a specific analysis experiment were normalized together according to the variance stabilization methods described by Huber et al. (Huber et al., 2002). Detection calls were based on a Wilcoxon rank-sum test of the miRNA probe signal compared to the distribution of signals from GC-content matched anti-genomic probes.  For statistical hypothesis testing, a two-sample t-Test, with assumption of equal variance, was applied.  One-way ANOVA was used for experimental designs with more than two experimental groupings or levels of the same factor.  These tests define which probes are considered to be significantly differentially expressed, or significant, based on a default p-value of 0.001 and log2 difference > 1.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "The signal processing implemented for the Ambion miRCHIP is a multi-step process involving probe specific signal detection calls, background estimate and correction, constant variance stabilization and either array scaling or global normalization.",
+            "tool_name": "limma (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Bioconductor",
+            "code_example": "# Install limma if not already installed\n# if (!requireNamespace(\"BiocManager\", quietly = TRUE))\n#     install.packages(\"BiocManager\")\n# BiocManager::install(\"limma\")\n\n# R script for Ambion miRCHIP signal processing using limma\n# This script demonstrates the general steps described: probe specific signal detection calls (conceptual),\n# background estimate and correction, constant variance stabilization, and array scaling/global normalization.\n# Actual implementation details (e.g., data loading format, specific normalization methods) may vary\n# based on the exact Ambion miRCHIP output files and experimental design.\n\nlibrary(limma)\n\n# Placeholder for input data files (e.g., raw intensity files from Ambion miRCHIP)\n# For two-color arrays (common for miRCHIP), you would typically have red and green channel intensities.\n# A 'targets' file is often used to link sample names to their raw data files.\n# For demonstration, we'll simulate an RGList object.\n\n# --- Conceptual Step: Probe specific signal detection calls ---\n# This step typically involves filtering probes based on detection p-values or flags provided by the array platform.\n# limma itself doesn't generate these calls, but can use them for filtering prior to analysis.\n# For example, if you have a detection p-value matrix 'detP', you might filter probes like:\n# detected_probes <- rowSums(detP < 0.01) >= N_samples_threshold\n# RG <- RG[detected_probes, ]\n\n# --- Simulate raw data (replace with actual data loading) ---\n# For a real scenario, you would load data from files, e.g., using read.maimages()\n# or specific functions if Ambion provides a dedicated R package.\nset.seed(42)\nnum_probes <- 5000\nnum_samples <- 6\n\n# Simulate Red and Green channel intensities\nR_intensities <- matrix(rnorm(num_probes * num_samples, mean=1000, sd=200), nrow=num_probes)\nG_intensities <- matrix(rnorm(num_probes * num_samples, mean=900, sd=180), nrow=num_probes)\n\n# Add some background noise and ensure positive values\nR_intensities[R_intensities < 1] <- 1\nG_intensities[G_intensities < 1] <- 1\n\nrownames(R_intensities) <- paste0(\"Probe_\", 1:num_probes)\ncolnames(R_intensities) <- paste0(\"Sample_\", 1:num_samples)\nrownames(G_intensities) <- paste0(\"Probe_\", 1:num_probes)\ncolnames(G_intensities) <- paste0(\"Sample_\", 1:num_samples)\n\n# Create an RGList object (Red and Green channel intensities)\nRG <- new(\"RGList\", list(R=R_intensities, G=G_intensities,\n                         targets=data.frame(FileName=paste0(\"Sample_\", 1:num_samples, \".txt\"))))\nRG$genes <- data.frame(ProbeID=rownames(RG$R))\n\nmessage(\"--- Raw data loaded (simulated) ---\")\n\n# --- Background estimate and correction ---\n# Using 'normexp' method, which is robust for two-color arrays.\nMA <- backgroundCorrect(RG, method=\"normexp\")\nmessage(\"--- Background corrected ---\")\n\n# --- Constant variance stabilization and normalization ---\n# Variance stabilization is often achieved through log transformation (implicit in M and A values)\n# and robust normalization methods.\n\n# 1. Within-array normalization (e.g., 'loess' for two-color arrays to correct for dye effects)\nMA_norm_within <- normalizeWithinArrays(MA, method=\"loess\")\nmessage(\"--- Within-array normalized (loess) ---\")\n\n# 2. Between-array normalization (global normalization/array scaling)\n# 'quantile' is a common and robust global normalization method.\n# 'scale' method can also be used for global scaling.\nMA_normalized <- normalizeBetweenArrays(MA_norm_within, method=\"quantile\")\nmessage(\"--- Between-array normalized (quantile) ---\")\n\n# --- Output processed data ---\n# The 'A' component of the MA_normalized object contains the average log2 intensity for each probe/sample\n# after background correction and normalization, which can be considered the processed signal.\nprocessed_intensities <- MA_normalized$A\n\noutput_file <- \"processed_miRCHIP_data.txt\"\nwrite.table(processed_intensities, file=output_file, sep=\"\\t\", quote=FALSE, row.names=TRUE)\nmessage(paste(\"--- Processed data saved to\", output_file, \"---\"))\n\n# For further analysis (e.g., differential expression), an MArrayLM object would typically be created:\n# design <- model.matrix(~0+factor(c(1,1,2,2,3,3)))\n# colnames(design) <- c(\"Group1\", \"Group2\", \"Group3\")\n# fit <- lmFit(MA_normalized, design)\n# fit <- eBayes(fit)\n# topTable(fit, coef=\"Group2-Group1\")\n",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/limma.html"
+        },
+        {
+            "step_order": 2,
+            "description": "For each probe, an estimated background value is subtracted that is derived from the median signal of a set of G-C matched anti-genomic controls.",
+            "tool_name": "gcrma (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Bioconductor",
+            "code_example": "# Install R and Bioconductor if not already present\n# sudo apt-get update && sudo apt-get install -y r-base\n# R -e \"if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager'); BiocManager::install(c('affy', 'gcrma'))\"\n\n#!/bin/bash\n\n# Create a dummy directory for CEL files (replace with actual path to your CEL files)\nmkdir -p ./cel_files\n# In a real scenario, copy your .CEL files here, e.g.:\n# cp /path/to/your/raw_data/*.CEL ./cel_files/\n\n# Create an R script to perform GCRMA background correction\ncat << 'EOF' > run_gcrma.R\n# Load necessary libraries\nlibrary(affy)\nlibrary(gcrma)\n\n# Define the directory containing CEL files\ncel_dir <- \"./cel_files/\"\n\n# Read CEL files from the specified directory\n# This assumes all .CEL files in the directory belong to the experiment.\n# For more complex setups, a phenoData file or explicit list of files can be used.\nraw_data <- ReadAffy(celfile.path = cel_dir)\n\n# Perform GCRMA background correction, normalization, and summarization\n# GCRMA uses probe affinity and G-C content to estimate and subtract background noise.\neset <- gcrma(raw_data)\n\n# Extract the expression matrix (normalized and background-corrected values)\nexpression_matrix <- exprs(eset)\n\n# Save the processed data to a tab-separated file\n# The output file 'processed_data.txt' will contain the expression values\n# with probe IDs as row names and sample names as column names.\nwrite.table(expression_matrix, file = \"processed_data.txt\", sep = \"\\t\", quote = FALSE, row.names = TRUE)\nEOF\n\n# Execute the R script\nRscript run_gcrma.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/gcrma.html"
+        },
+        {
+            "step_order": 3,
+            "description": "Arrays within a specific analysis experiment were normalized together according to the variance stabilization methods described by Huber et al. (Huber et al., 2002).",
+            "tool_name": "vsn (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Not specified, typically part of Bioconductor",
+            "code_example": "Rscript -e '\n    # Load the vsn package\n    library(vsn)\n\n    # --- User-defined parameters ---\n    # Replace \"input_raw_microarray_data.tsv\" with the actual path to your raw microarray data file.\n    # This file is expected to be a matrix where rows are probes/features and columns are samples/arrays.\n    # Adjust `read.delim` parameters (e.g., `sep`, `header`, `row.names`) based on your specific input file format.\n    input_file=\"input_raw_microarray_data.tsv\"\n    output_file=\"normalized_microarray_data_vsn.tsv\"\n\n    # --- Load raw data ---\n    # Example: Reads a tab-separated file with probe IDs in the first column and raw intensity values in subsequent columns.\n    raw_data <- read.delim(input_file, row.names = 1, header = TRUE, sep=\"\\t\")\n\n    # Convert to matrix for vsnMatrix function\n    raw_data_matrix <- as.matrix(raw_data)\n\n    # --- Perform VSN normalization ---\n    # The vsnMatrix function applies variance stabilization normalization to a matrix of intensity values.\n    # For Affymetrix data, you might use `vsn` directly on an `AffyBatch` object from the `affy` package\n    # (e.g., `library(affy); raw_affy_data <- ReadAffy(); normalized_affy_data <- vsn(raw_affy_data)`).\n    normalized_data_matrix <- vsnMatrix(raw_data_matrix)\n\n    # --- Save normalized data ---\n    # Write the normalized matrix to a tab-separated file.\n    # `col.names = NA` ensures that the row names (probe IDs) are written as the first column,\n    # and the column names (sample IDs) are written starting from the second column.\n    write.table(normalized_data_matrix, output_file, sep = \"\\t\", quote = FALSE, col.names = NA)\n'\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "Detection calls were based on a Wilcoxon rank-sum test of the miRNA probe signal compared to the distribution of signals from GC-content matched anti-genomic probes.",
+            "tool_name": "Custom Script using Wilcoxon rank-sum test (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# Example Python script to perform Wilcoxon rank-sum test\n# This script assumes two input files, each with a single column of numerical signals.\n\n# Create dummy input files for demonstration (replace with actual data in a real pipeline)\n# echo \"10\\n12\\n11\\n15\\n9\" > miRNA_probe_signals.txt\n# echo \"8\\n7\\n9\\n10\\n6\" > anti_genomic_probe_signals.txt\n\n# Python script content\ncat << 'EOF' > run_wilcoxon_test.py\nimport pandas as pd\nfrom scipy.stats import ranksums\nimport sys\n\ndef run_wilcoxon(miRNA_file, anti_genomic_file, output_file):\n    try:\n        miRNA_signals = pd.read_csv(miRNA_file, header=None).iloc[:, 0].dropna().tolist()\n        anti_genomic_signals = pd.read_csv(anti_genomic_file, header=None).iloc[:, 0].dropna().tolist()\n    except Exception as e:\n        print(f\"Error reading input files: {e}\", file=sys.stderr)\n        sys.exit(1)\n\n    if not miRNA_signals or not anti_genomic_signals:\n        print(\"Error: One or both input signal lists are empty after reading.\", file=sys.stderr)\n        sys.exit(1)\n\n    # Perform Wilcoxon rank-sum test\n    statistic, p_value = ranksums(miRNA_signals, anti_genomic_signals)\n\n    with open(output_file, 'w') as f:\n        f.write(f\"Wilcoxon Rank-Sum Test Results:\\n\")\n        f.write(f\"Statistic: {statistic}\\n\")\n        f.write(f\"P-value: {p_value}\\n\")\n    print(f\"Results saved to {output_file}\")\n\nif __name__ == \"__main__\":\n    if len(sys.argv) != 4:\n        print(\"Usage: python run_wilcoxon_test.py <miRNA_probe_signals_file> <anti_genomic_probe_signals_file> <output_results_file>\", file=sys.stderr)\n        sys.exit(1)\n\n    miRNA_file = sys.argv[1]\n    anti_genomic_file = sys.argv[2]\n    output_file = sys.argv[3]\n    run_wilcoxon(miRNA_file, anti_genomic_file, output_file)\nEOF\n\n# Execute the Python script\n# Ensure Python, pandas, and scipy are installed (e.g., via conda or pip):\n# conda install -c anaconda python pandas scipy\npython run_wilcoxon_test.py miRNA_probe_signals.txt anti_genomic_probe_signals.txt wilcoxon_results.txt",
+            "code_language": "bash",
+            "github_url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.ranksums.html"
+        },
+        {
+            "step_order": 5,
+            "description": "For statistical hypothesis testing, a two-sample t-Test, with assumption of equal variance, was applied.",
+            "tool_name": "scipy.stats.ttest_ind (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.11.x",
+            "code_example": "# Install Python and SciPy if not already available\n# conda install -c anaconda python scipy numpy\n\n# Example Python script to perform a two-sample t-test with equal variance.\n# This script assumes 'sample1.txt' and 'sample2.txt' contain numerical data,\n# with one value per line. Replace these with actual input file paths.\n\n# Create dummy input files for demonstration purposes (uncomment to use)\n# echo -e \"10.1\\n12.3\\n11.5\\n13.0\\n10.8\" > sample1.txt\n# echo -e \"9.5\\n11.2\\n10.7\\n12.1\\n9.9\" > sample2.txt\n\npython -c \"\nimport numpy as np\nfrom scipy import stats\nimport sys\n\ndef run_ttest(file1, file2, output_file='ttest_results.txt'):\n    try:\n        sample1 = np.loadtxt(file1)\n        sample2 = np.loadtxt(file2)\n    except Exception as e:\n        print(f'Error loading samples: {e}', file=sys.stderr)\n        sys.exit(1)\n\n    if len(sample1) < 2 or len(sample2) < 2:\n        print('Each sample must have at least two data points for t-test.', file=sys.stderr)\n        sys.exit(1)\n\n    # Perform two-sample t-test assuming equal variance\n    # equal_var=True corresponds to the assumption of equal variance (Student's t-test)\n    t_statistic, p_value = stats.ttest_ind(sample1, sample2, equal_var=True)\n\n    with open(output_file, 'w') as f:\n        f.write(f'T-statistic: {t_statistic}\\n')\n        f.write(f'P-value: {p_value}\\n')\n    print(f'T-test results written to {output_file}')\n\nif __name__ == '__main__':\n    # Define input files (replace with actual paths in a real pipeline)\n    input_file1 = 'sample1.txt'\n    input_file2 = 'sample2.txt'\n    output_file = 'ttest_results.txt'\n    run_ttest(input_file1, input_file2, output_file)\n\" ",
+            "code_language": "bash",
+            "github_url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.ttest_ind.html"
+        },
+        {
+            "step_order": 6,
+            "description": "One-way ANOVA was used for experimental designs with more than two experimental groupings or levels of the same factor.",
+            "tool_name": "R (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Not specified",
+            "code_example": "# Example data file (replace with actual experimental data)\n# This file should contain a column for the dependent variable (e.g., 'measurement')\n# and a column for the grouping factor (e.g., 'group').\necho \"measurement,group\" > data.csv\necho \"10,A\" >> data.csv\necho \"12,A\" >> data.csv\necho \"11,A\" >> data.csv\necho \"15,B\" >> data.csv\necho \"14,B\" >> data.csv\necho \"16,B\" >> data.csv\necho \"18,C\" >> data.csv\necho \"20,C\" >> data.csv\necho \"19,C\" >> data.csv\n\n# Create an R script for one-way ANOVA\ncat << 'EOF' > run_anova.R\n# Load data\ndata <- read.csv(\"data.csv\")\n\n# Ensure the grouping variable is a factor\ndata$group <- as.factor(data$group)\n\n# Perform one-way ANOVA\n# The formula 'dependent_variable ~ grouping_factor'\nanova_result <- aov(measurement ~ group, data = data)\n\n# Print summary of ANOVA results\nsummary(anova_result)\n\n# Optionally, perform post-hoc tests if ANOVA is significant (e.g., Tukey HSD)\n# If you have more than two groups and the ANOVA p-value is significant,\n# you might want to know which specific groups differ.\n# if (summary(anova_result)[[1]]$`Pr(>F)`[1] < 0.05) {\n#   print(\"Performing Tukey HSD post-hoc test:\")\n#   print(TukeyHSD(anova_result))\n# }\n\n# Save results to a file (optional)\n# sink(\"anova_results.txt\")\n# summary(anova_result)\n# sink()\nEOF\n\n# Execute the R script\nRscript run_anova.R",
+            "code_language": "bash",
+            "github_url": "https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/aov"
+        },
+        {
+            "step_order": 7,
+            "description": "These tests define which probes are considered to be significantly differentially expressed, or significant, based on a default p-value of 0.001 and log2 difference > 1.",
+            "tool_name": "DESeq2 (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.42.0 (Bioconductor 3.18)",
+            "code_example": "# This script demonstrates how to filter differential expression results based on specified p-value and log2 fold change thresholds, typically performed on output from tools like DESeq2.\n\n# Install R and DESeq2 if not already installed\n# conda install -c conda-forge r-base\n# conda install -c bioconda bioconductor-deseq2\n# conda install -c conda-forge r-data.table # For efficient data handling\n\n# Create a dummy DESeq2 results file for demonstration purposes.\n# In a real pipeline, this file would be the output from a DESeq2 analysis.\ncat <<EOF > deseq2_results.csv\ngene,baseMean,log2FoldChange,lfcSE,stat,pvalue,padj\ngeneA,100,0.5,0.1,5,0.01,0.05\ngeneB,200,1.2,0.1,12,0.0001,0.0005\ngeneC,50,2.5,0.2,10,0.00001,0.00005\ngeneD,300,-1.5,0.15,-10,0.00005,0.0001\ngeneE,150,0.8,0.1,8,0.005,0.01\ngeneF,80,-0.7,0.05,-14,0.000001,0.000005\ngeneG,250,1.8,0.1,15,0.002,0.005\nEOF\n\n# R script to load DESeq2-like results and apply significance filtering\nRscript -e '\n  library(data.table) # Used for efficient reading/writing of data frames\n\n  # Load the differential expression results file\n  results_df <- fread(\"deseq2_results.csv\")\n\n  # Define the significance thresholds as per the description\n  p_value_threshold <- 0.001\n  log2_diff_threshold <- 1\n\n  # Filter for significantly differentially expressed probes/genes\n  # The description implies a p-value, but for differential expression, adjusted p-value (padj) is standard.\n  # We use padj < p_value_threshold and absolute log2FoldChange > log2_diff_threshold.\n  significant_probes <- results_df[\n    results_df$padj < p_value_threshold & \n    abs(results_df$log2FoldChange) > log2_diff_threshold,\n  ]\n\n  # Output the list of significant probes to a new CSV file\n  fwrite(significant_probes, \"significant_probes.csv\")\n\n  # Print a summary of the filtering process\n  cat(paste0(\"Total probes analyzed: \", nrow(results_df), \"\\n\"))\n  cat(paste0(\"Probes considered significant (padj < \", p_value_threshold, \" and |log2FoldChange| > \", log2_diff_threshold, \"): \", nrow(significant_probes), \"\\n\"))\n'\n\n# Clean up the dummy results file\nrm deseq2_results.csv",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "The signal processing implemented for the Ambion miRCHIP is a multi-step process involving probe specific signal detection calls, background estimate and correction, constant variance stabilization and either array scaling or global normalization. For each probe, an estimated background value is subtracted that is derived from the median signal of a set of G-C matched anti-genomic controls. Arrays within a specific analysis experiment were normalized together according to the variance stabilization methods described by Huber et al. (Huber et al., 2002). Detection calls were based on a Wilcoxon rank-sum test of the miRNA probe signal compared to the distribution of signals from GC-content matched anti-genomic probes.  For statistical hypothesis testing, a two-sample t-Test, with assumption of equal variance, was applied.  One-way ANOVA was used for experimental designs with more than two experimental groupings or levels of the same factor.  These tests define which probes are considered to be significantly differentially expressed, or significant, based on a default p-value of 0.001 and log2 difference > 1.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

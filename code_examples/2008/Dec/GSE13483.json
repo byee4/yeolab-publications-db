@@ -1,16 +1,16 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Image analysis and base calling was done using Gerald (Illumina pipeline), and reads aligned to human (hg17) using Megablast.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Image analysis and base calling was done using Gerald (Illumina pipeline), and reads aligned to human (hg17) using Megablast.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Image analysis and base calling was done using Gerald (Illumina pipeline), and reads aligned to human (hg17) using Megablast.",
+            "tool_name": "Megablast",
+            "tool_version": "N/A (pre-BLAST+) (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# The initial step of image analysis and base calling using Gerald is typically performed on the Illumina sequencing instrument and generates BCL files, which are then converted to FASTQ files. This process does not involve a user-executable bash command.\n\n# For alignment using Megablast, the following steps are conceptualized:\n\n# 1. Convert FASTQ reads (output from Gerald/bcl2fastq) to FASTA format, as legacy Megablast often prefers FASTA input.\n# Example for single-end reads:\n# zcat input_reads.fastq.gz | awk 'BEGIN{RS=\"@\";ORS=\"\"}NR>1{print \">\"$1\"\\n\"$2}' > input_reads.fasta\n\n# 2. Download the hg17 reference genome and create a BLAST database.\n# mkdir -p reference/hg17\n# wget -P reference/hg17 http://hgdownload.cse.ucsc.edu/goldenPath/hg17/bigZips/chromFa.tar.gz\n# tar -xzf reference/hg17/chromFa.tar.gz -C reference/hg17/\n# cat reference/hg17/*.fa > reference/hg17/hg17.fa\n\n# makeblastdb is part of the BLAST+ suite, which is the modern successor to legacy BLAST.\n# If using legacy megablast, ensure the database format is compatible or use legacy formatdb.\n# makeblastdb -in reference/hg17/hg17.fa -dbtype nucl -out reference/hg17/hg17_blastdb\n\n# 3. Execute Megablast for alignment.\n# Note: This command assumes the legacy 'megablast' executable is available in the PATH.\n# For modern BLAST+ installations, 'blastn -task megablast' would be used.\n# The '-m 8' option outputs a tabular format, which is common for alignments.\nmegablast -i input_reads.fasta -d reference/hg17/hg17_blastdb -o aligned_reads.txt -m 8",
+            "code_language": "bash",
+            "github_url": "https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=DeveloperInfo"
+        }
+    ],
+    "raw_text": "Image analysis and base calling was done using Gerald (Illumina pipeline), and reads aligned to human (hg17) using Megablast.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

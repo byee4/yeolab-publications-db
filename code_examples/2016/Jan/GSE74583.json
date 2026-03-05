@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Illumina Casava1.7 software used for basecalling.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Sequenced reads were trimmed for adaptor sequence, and masked for low-complexity or low-quality sequence, then mapped to mm8 whole genome using bowtie v0.12.2 with parameters -q -p 4 -e 100 -y -a -m 10 --best --strata",
-      "tool_name": "Bowtie",
-      "tool_version": "0.12.2",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Reads Per Kilobase of exon per Megabase of library size (RPKM) were calculated using a protocol from Chepelev et al., Nucleic Acids Research, 2009.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "In short, exons from all isoforms of a gene were merged to create one meta-transcript.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "The number of reads falling in the exons of this meta-transcript were counted and normalized by the size of the meta-transcript and by the size of the library.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Illumina Casava1.7 software used for basecalling.\nSequenced reads were trimmed for adaptor sequence, and masked for low-complexity or low-quality sequence, then mapped to mm8 whole genome using bowtie v0.12.2 with parameters -q -p 4 -e 100 -y -a -m 10 --best --strata\nReads Per Kilobase of exon per Megabase of library size (RPKM) were calculated using a protocol from Chepelev et al., Nucleic Acids Research, 2009. In short, exons from all isoforms of a gene were merged to create one meta-transcript. The number of reads falling in the exons of this meta-transcript were counted and normalized by the size of the meta-transcript and by the size of the library.\nGenome_build: mm9\nSupplementary_files_format_and_content: tab-delimited text files include RPKM values for each Sample",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Illumina Casava1.7 software used for basecalling.",
+            "tool_name": "Illumina Casava",
+            "tool_version": "1.7",
+            "code_example": "# Illumina Casava 1.7 is a proprietary software suite primarily used for basecalling and demultiplexing on Illumina sequencing platforms.\n# It is typically integrated into the instrument's control software or run on a dedicated Illumina analysis server.\n# There is no publicly available command-line installation or execution for Casava 1.7 in the same way as open-source tools.\n# The process converts raw intensity data (Bcl files) into FASTQ files.\n# Example conceptual representation (not an actual executable command):\n# casava_1.7_basecaller --input_bcl_directory /path/to/run/Data/Intensities/BaseCalls --output_fastq_directory /path/to/output/fastq",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Sequenced reads were trimmed for adaptor sequence, and masked for low-complexity or low-quality sequence, then mapped to mm8 whole genome using bowtie v0.12.2 with parameters -q -p 4 -e 100 -y -a -m 10 --best --strata",
+            "tool_name": "Bowtie",
+            "tool_version": "0.12.2",
+            "code_example": "# Install Bowtie (if not already installed)\n# conda install -c bioconda bowtie=0.12.2\n\n# Assuming 'reads.fastq' is the input file after trimming and masking.\n# Replace /path/to/bowtie_indexes/mm8 with the actual path to your Bowtie index for mm8.\n# Replace reads.fastq with your actual input reads file.\n# Replace output.sam with your desired output SAM file name.\n\nbowtie -q -p 4 -e 100 -y -a -m 10 --best --strata /path/to/bowtie_indexes/mm8 reads.fastq > output.sam",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie"
+        },
+        {
+            "step_order": 3,
+            "description": "Reads Per Kilobase of exon per Megabase of library size (RPKM) were calculated using a protocol from Chepelev et al., Nucleic Acids Research, 2009.",
+            "tool_name": "RPKM Calculator (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# This script calculates Reads Per Kilobase of exon per Megabase of library size (RPKM)\n# based on the protocol described in Chepelev et al., Nucleic Acids Research, 2009.\n#\n# RPKM Formula: (read_count * 10^9) / (total_mapped_reads * gene_length_in_kb)\n#\n# Input files required:\n# 1. Counts file: Tab-separated file with two columns: Feature_ID, Read_Count\n#    (e.g., output from featureCounts, HTSeq-count, or similar tools)\n# 2. Lengths file: Tab-separated file with two columns: Feature_ID, Length_in_Bases\n#    (e.g., derived from a genome annotation file like GTF/GFF for a specific assembly, e.g., GRCh38/hg38)\n# 3. Total Mapped Reads file: A plain text file containing a single integer: Total_Number_of_Mapped_Reads\n#    (e.g., extracted from samtools flagstat output)\n#\n# Output file: Tab-separated file with Feature_ID, Read_Count, Length_Bases, RPKM\n\n# --- Placeholder for input files (replace with your actual data) ---\n# For demonstration purposes, creating dummy input files:\necho -e \"gene1\\t1000\" > counts.txt\necho -e \"gene2\\t2000\" >> counts.txt\necho -e \"gene3\\t500\" >> counts.txt\n\necho -e \"gene1\\t1500\" > gene_lengths.txt # Length in bases\necho -e \"gene2\\t2500\" >> gene_lengths.txt\necho -e \"gene3\\t800\" >> gene_lengths.txt\necho -e \"gene4\\t1000\" >> gene_lengths.txt # A gene not in counts\n\necho \"10000000\" > total_mapped_reads.txt # 10 million total mapped reads\n\n# --- Python script for RPKM calculation ---\n# (Python is typically pre-installed or easily installed via package managers)\n# # conda install python # Uncomment to install Python if not available\n\ncat << 'EOF' > rpkm_calculator.py\nimport sys\n\ndef calculate_rpkm(counts_file, lengths_file, total_mapped_reads_file, output_file):\n    \"\"\"\n    Calculates RPKM values based on read counts, feature lengths, and total mapped reads.\n    Formula: RPKM = (read_count * 10^9) / (total_mapped_reads * gene_length_in_kb)\n    \"\"\"\n    \n    # Read total mapped reads\n    try:\n        with open(total_mapped_reads_file, 'r') as f:\n            total_mapped_reads = int(f.readline().strip())\n    except FileNotFoundError:\n        sys.stderr.write(f\"Error: Total mapped reads file '{total_mapped_reads_file}' not found.\\n\")\n        sys.exit(1)\n    except ValueError:\n        sys.stderr.write(f\"Error: Invalid content in total mapped reads file '{total_mapped_reads_file}'. Expected an integer.\\n\")\n        sys.exit(1)\n    \n    if total_mapped_reads == 0:\n        sys.stderr.write(\"Error: Total mapped reads is zero. Cannot calculate RPKM.\\n\")\n        sys.exit(1)\n\n    # Read feature lengths\n    feature_lengths = {}\n    try:\n        with open(lengths_file, 'r') as f:\n            for line in f:\n                parts = line.strip().split('\\t')\n                if len(parts) == 2:\n                    feature_id, length_bases_str = parts[0], parts[1]\n                    try:\n                        feature_lengths[feature_id] = int(length_bases_str)\n                    except ValueError:\n                        sys.stderr.write(f\"Warning: Skipping malformed length (not an integer) in lengths file: {line.strip()}\\n\")\n                else:\n                    sys.stderr.write(f\"Warning: Skipping malformed line in lengths file: {line.strip()}\\n\")\n    except FileNotFoundError:\n        sys.stderr.write(f\"Error: Lengths file '{lengths_file}' not found.\\n\")\n        sys.exit(1)\n\n    # Calculate RPKM and write to output\n    try:\n        with open(counts_file, 'r') as infile, open(output_file, 'w') as outfile:\n            outfile.write(\"Feature_ID\\tRead_Count\\tLength_Bases\\tRPKM\\n\")\n            for line in infile:\n                parts = line.strip().split('\\t')\n                if len(parts) == 2:\n                    feature_id, read_count_str = parts[0], parts[1]\n                    try:\n                        read_count = int(read_count_str)\n                    except ValueError:\n                        sys.stderr.write(f\"Warning: Skipping malformed read count (not an integer) in counts file: {line.strip()}\\n\")\n                        continue\n                    \n                    length_bases = feature_lengths.get(feature_id)\n                    \n                    if length_bases is None:\n                        sys.stderr.write(f\"Warning: Feature '{feature_id}' not found in lengths file. Skipping RPKM calculation for this feature.\\n\")\n                        outfile.write(f\"{feature_id}\\t{read_count}\\tN/A\\tN/A\\n\")\n                        continue\n                    \n                    if length_bases == 0:\n                        rpkm = 0.0 # RPKM is 0 if feature has no length\n                        sys.stderr.write(f\"Warning: Feature '{feature_id}' has zero length. RPKM set to 0.\\n\")\n                    else:\n                        length_kb = length_bases / 1000.0\n                        rpkm = (read_count * 10**9) / (total_mapped_reads * length_kb)\n                    \n                    outfile.write(f\"{feature_id}\\t{read_count}\\t{length_bases}\\t{rpkm:.4f}\\n\")\n                else:\n                    sys.stderr.write(f\"Warning: Skipping malformed line in counts file: {line.strip()}\\n\")\n    except FileNotFoundError:\n        sys.stderr.write(f\"Error: Counts file '{counts_file}' not found.\\n\")\n        sys.exit(1)\n\nif __name__ == \"__main__\":\n    # Define input and output file names\n    counts_file = \"counts.txt\"\n    lengths_file = \"gene_lengths.txt\"\n    total_mapped_reads_file = \"total_mapped_reads.txt\"\n    output_file = \"rpkm_output.txt\"\n\n    calculate_rpkm(counts_file, lengths_file, total_mapped_reads_file, output_file)\n    \n    print(f\"RPKM calculation complete. Output saved to {output_file}\")\nEOF\n\n# --- Execute the Python script ---\npython rpkm_calculator.py\n\n# --- Clean up generated files ---\nrm counts.txt gene_lengths.txt total_mapped_reads.txt rpkm_calculator.py",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "In short, exons from all isoforms of a gene were merged to create one meta-transcript.",
+            "tool_name": "gtf_to_genes_and_transcripts.py (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "RSEM 1.3.3",
+            "code_example": "# Install RSEM (if not already installed)\n# conda install -c bioconda rsem\n\n# Define input GTF and output prefix\nINPUT_GTF=\"gencode.v45.annotation.gtf\" # Example: Gencode human GRCh38, release 45\nOUTPUT_PREFIX=\"gencode.v45.meta_transcripts\"\n\n# Placeholder for reference GTF download (uncomment and adjust if needed)\n# wget -O ${INPUT_GTF}.gz https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_45/gencode.v45.annotation.gtf.gz\n# gunzip -f ${INPUT_GTF}.gz\n\n# Locate the gtf_to_genes_and_transcripts.py script within your RSEM installation.\n# If RSEM is installed via conda, it might be in $CONDA_PREFIX/opt/rsem-X.Y.Z/util/\n# Replace \"/path/to/rsem/util\" with the actual path to the RSEM 'util' directory.\nRSEM_UTIL_SCRIPT=\"/path/to/rsem/util/gtf_to_genes_and_transcripts.py\"\n\n# Execute the script to merge exons from all isoforms of a gene into one meta-transcript.\n# The primary output file containing the meta-transcripts (union exon models) will be: ${OUTPUT_PREFIX}.genes.gtf\npython ${RSEM_UTIL_SCRIPT} ${INPUT_GTF} ${OUTPUT_PREFIX}",
+            "code_language": "bash",
+            "github_url": "https://github.com/deweylab/RSEM"
+        },
+        {
+            "step_order": 5,
+            "description": "The number of reads falling in the exons of this meta-transcript were counted and normalized by the size of the meta-transcript and by the size of the library.",
+            "tool_name": "featureCounts (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.0.6",
+            "code_example": "# Install Subread (if not already installed)\n# conda install -c bioconda subread\n\n# Define input files and parameters\nBAM_FILE=\"aligned_reads.bam\"\n# Placeholder for the GTF/GFF file defining the exons of the meta-transcript.\n# Replace with your specific meta-transcript annotation file.\n# Example: Using a generic human GTF for GRCh38 assembly.\nGTF_FILE=\"Homo_sapiens.GRCh38.109.gtf\"\nOUTPUT_COUNTS_PREFIX=\"meta_transcript_counts\"\nOUTPUT_NORMALIZED=\"meta_transcript_rpkm.tsv\"\n\n# 1. Count reads falling in exons of the meta-transcript\n# -a: annotation file (GTF/GFF)\n# -o: output file prefix\n# -F GTF: specify GTF format\n# -t exon: count reads for features of type 'exon'\n# -g gene_id: group features by 'gene_id' (assuming meta-transcript is defined by gene_id)\n# -s 0: strand specific (0=unstranded, 1=stranded, 2=reverse stranded). Adjust as needed based on library prep.\n# -p: specify if reads are paired-end. Remove if single-end.\n# --extra-attributes=gene_name: include gene names in output (optional)\n# --fracOverlap 0.5: minimum fraction of read overlap with feature (optional, default 0)\n# --minOverlap 1: minimum number of overlapping bases (optional, default 1)\nfeatureCounts -a \"${GTF_FILE}\" -o \"${OUTPUT_COUNTS_PREFIX}.txt\" -F GTF -t exon -g gene_id -s 0 \"${BAM_FILE}\"\n\n# 2. Normalize counts to RPKM (Reads Per Kilobase of transcript per Million mapped reads)\n# RPKM = (read_count * 10^9) / (feature_length_in_bases * total_mapped_reads_in_library)\n\n# Extract total mapped reads from the featureCounts summary file\nTOTAL_MAPPED_READS=$(awk '/Total reads/{print $NF}' \"${OUTPUT_COUNTS_PREFIX}.txt.summary\")\n\n# Check if total mapped reads were extracted successfully\nif [ -z \"$TOTAL_MAPPED_READS\" ] || [ \"$TOTAL_MAPPED_READS\" -eq 0 ]; then\n    echo \"Warning: Could not extract total mapped reads from featureCounts summary or total reads are zero. Attempting to count from BAM.\"\n    TOTAL_MAPPED_READS=$(samtools view -c -F 260 \"${BAM_FILE}\") # Count primary alignments\n    if [ \"$TOTAL_MAPPED_READS\" -eq 0 ]; then\n        echo \"Error: Total mapped reads are zero. Cannot calculate RPKM.\"\n        exit 1\n    fi\nfi\n\n# Process the featureCounts output to calculate RPKM\n# The featureCounts output file has columns: Geneid, Chr, Start, End, Strand, Length, Sample_Name\n# We need Geneid, Length, and Sample_Name (read count)\necho -e \"Geneid\\tRPKM\" > \"${OUTPUT_NORMALIZED}\"\nawk -v total_reads=\"${TOTAL_MAPPED_READS}\" '\nBEGIN {\n    OFS=\"\\t\";\n    # Convert total_reads to millions for RPKM formula\n    total_reads_in_millions = total_reads / 1000000;\n}\nNR==1 {next} # Skip header line\n!/^#/ { # Skip comment lines\n    gene_id = $1;\n    feature_length = $6;\n    read_count = $7; # Assuming single sample output, this is the count column\n\n    if (feature_length > 0 && total_reads_in_millions > 0) {\n        rpkm = read_count / (feature_length / 1000) / total_reads_in_millions;\n        print gene_id, rpkm;\n    } else {\n        print gene_id, 0; # Assign 0 RPKM if length or total reads are zero\n    }\n}' \"${OUTPUT_COUNTS_PREFIX}.txt\" >> \"${OUTPUT_NORMALIZED}\"\n\n# Clean up intermediate files (optional)\n# rm \"${OUTPUT_COUNTS_PREFIX}.txt\" \"${OUTPUT_COUNTS_PREFIX}.txt.summary\"",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Illumina Casava1.7 software used for basecalling.\nSequenced reads were trimmed for adaptor sequence, and masked for low-complexity or low-quality sequence, then mapped to mm8 whole genome using bowtie v0.12.2 with parameters -q -p 4 -e 100 -y -a -m 10 --best --strata\nReads Per Kilobase of exon per Megabase of library size (RPKM) were calculated using a protocol from Chepelev et al., Nucleic Acids Research, 2009. In short, exons from all isoforms of a gene were merged to create one meta-transcript. The number of reads falling in the exons of this meta-transcript were counted and normalized by the size of the meta-transcript and by the size of the library.\nGenome_build: mm9\nSupplementary_files_format_and_content: tab-delimited text files include RPKM values for each Sample",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

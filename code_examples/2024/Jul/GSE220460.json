@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "The raw data was mapped using STAR.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "We calculated the gene-level read counts and identified differentially expressed genes by in-house script.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "The raw data was mapped using STAR.\nWe calculated the gene-level read counts and identified differentially expressed genes by in-house script.\nAssembly: mm10",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "The raw data was mapped using STAR.",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables (replace with actual paths and filenames)\nGENOME_DIR=\"/path/to/STAR_index/hg38\" # Placeholder: Use a STAR-indexed human genome (e.g., hg38)\nREAD1_FASTQ=\"input_R1.fastq.gz\" # Placeholder: Path to your R1 FASTQ file\nREAD2_FASTQ=\"input_R2.fastq.gz\" # Placeholder: Path to your R2 FASTQ file (remove if single-end)\nOUTPUT_PREFIX=\"mapped_data\" # Prefix for output files\nNUM_THREADS=8 # Number of threads to use\n\n# Create genome index if not already present (run once per genome)\n# STAR --runMode genomeGenerate \\\n#      --genomeDir ${GENOME_DIR} \\\n#      --genomeFastaFiles /path/to/hg38.fa \\\n#      --sjdbGTFfile /path/to/gencode.vXX.annotation.gtf \\\n#      --runThreadN ${NUM_THREADS}\n\n# Map raw data using STAR\nSTAR --genomeDir ${GENOME_DIR} \\\n     --readFilesIn ${READ1_FASTQ} ${READ2_FASTQ} \\\n     --runThreadN ${NUM_THREADS} \\\n     --outFileNamePrefix ${OUTPUT_PREFIX}_ \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outFilterMultimapNmax 20 \\\n     --alignSJoverhangMin 8 \\\n     --outFilterMismatchNmax 3 \\\n     --outFilterScoreMinOverLread 0.66 \\\n     --outFilterMatchNminOverLread 0.66 \\\n     --quantMode GeneCounts # Optional: Add GeneCounts for gene expression quantification\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "We calculated the gene-level read counts and identified differentially expressed genes by in-house script.",
+            "tool_name": "In-house script",
+            "tool_version": "Custom",
+            "code_example": "# This script represents a conceptual execution of an \"in-house script\"\n# for calculating gene-level read counts and performing differential expression analysis.\n# The actual script name, programming language (e.g., Python, R), and parameters\n# would be specific to the in-house implementation.\n\n# --- Reference Data Setup (Example: Ensembl GRCh38, release 111 GTF) ---\n# Download the gene annotation file if not already present.\n# mkdir -p references\n# cd references\n# wget -c https://ftp.ensembl.org/pub/release-111/gtf/homo_sapiens/Homo_sapiens.GRCh38.111.gtf.gz\n# gunzip -f Homo_sapiens.GRCh38.111.gtf.gz\n# cd ..\n\nGENE_ANNOTATION=\"references/Homo_sapiens.GRCh38.111.gtf\" # Path to your GTF file\n\n# --- Input Data (Example: Aligned BAM files) ---\n# These are placeholder BAM files that would typically be generated in a preceding alignment step.\n# Replace with actual paths to your input BAM files.\nINPUT_BAM_FILES=(\n    \"data/sample_treated_rep1.bam\"\n    \"data/sample_treated_rep2.bam\"\n    \"data/sample_control_rep1.bam\"\n    \"data/sample_control_rep2.bam\"\n)\n\n# Convert array to space-separated string for command line\nINPUT_BAM_STRING=\"${INPUT_BAM_FILES[*]}\"\n\n# --- Experimental Design File ---\n# A design file (e.g., CSV or TSV) is crucial for differential expression analysis,\n# mapping samples to experimental conditions.\n# Example content for 'design.csv':\n# sample_id,condition\n# sample_treated_rep1,treated\n# sample_treated_rep2,treated\n# sample_control_rep1,control\n# sample_control_rep2,control\n#\n# Create a placeholder design file if it doesn't exist\n# echo \"sample_id,condition\" > design.csv\n# echo \"sample_treated_rep1,treated\" >> design.csv\n# echo \"sample_treated_rep2,treated\" >> design.csv\n# echo \"sample_control_rep1,control\" >> design.csv\n# echo \"sample_control_rep2,control\" >> design.csv\n\nDESIGN_FILE=\"design.csv\"\n\n# --- Output Files ---\nOUTPUT_COUNTS_FILE=\"gene_level_read_counts.tsv\"\nOUTPUT_DE_RESULTS=\"differentially_expressed_genes.tsv\"\nOUTPUT_LOG=\"in_house_script.log\"\n\n# --- Execute the In-House Script ---\n# This command is a conceptual representation.\n# The actual script name and parameters would vary based on the in-house implementation.\n# It is assumed this script handles both gene counting and DE analysis.\nin_house_gene_quant_and_de_script.py \\\n    --input_bams \"${INPUT_BAM_STRING}\" \\\n    --gene_annotation \"${GENE_ANNOTATION}\" \\\n    --design_file \"${DESIGN_FILE}\" \\\n    --output_counts \"${OUTPUT_COUNTS_FILE}\" \\\n    --output_de_results \"${OUTPUT_DE_RESULTS}\" \\\n    --log_file \"${OUTPUT_LOG}\"",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "The raw data was mapped using STAR.\nWe calculated the gene-level read counts and identified differentially expressed genes by in-house script.\nAssembly: mm10",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

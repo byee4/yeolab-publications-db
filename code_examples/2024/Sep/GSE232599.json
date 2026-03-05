@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Data was processed using Skipper, available at: http://github.com/yeolab/skipper",
-      "tool_name": "Skipper",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://github.com/YeoLab/skipper"
-    },
-    {
-      "step_order": 2,
-      "description": "Reads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using skewer.",
-      "tool_name": "eCLIP",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Unique Molecular Identifiers (UMIs) were extracted from raw sequencing reads with fastp",
-      "tool_name": "fastp",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Extracted reads were aligned using STAR: --alignEndsType EndToEnd --genomeDir {params.star_sjdb} --genomeLoad NoSharedMemory --outBAMcompression 10 --outFileNamePrefix {params.outprefix} --winAnchorMultimapNmax 100 --outFilterMultimapNmax 100 --outFilterMultimapScoreRange 1 --outSAMmultNmax 1 --outMultimapperOrder Random --outFilterScoreMin 10 --outFilterType BySJout --limitOutSJcollapsed 5000000 --outReadsUnmapped None --outSAMattrRGline ID:{wildcards.replicate_label} --outSAMattributes All --outSAMmode Full --outSAMtype BAM Unsorted --outSAMunmapped Within --readFilesCommand zcat --outStd Log --readFilesIn {input.fq} --runMode alignReads --runThreadN {threads}",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://github.com/alexdobin/STAR"
-    },
-    {
-      "step_order": 5,
-      "description": "Custom scripts called reproducible enriched windows and repetitive elements as part of Skipper",
-      "tool_name": "Skipper",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://github.com/YeoLab/skipper"
-    }
-  ],
-  "raw_text": "Data was processed using Skipper, available at: http://github.com/yeolab/skipper\nReads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using skewer.\nUnique Molecular Identifiers (UMIs) were extracted from raw sequencing reads with fastp\nExtracted reads were aligned using STAR: --alignEndsType EndToEnd --genomeDir {params.star_sjdb} --genomeLoad NoSharedMemory --outBAMcompression 10 --outFileNamePrefix {params.outprefix} --winAnchorMultimapNmax 100 --outFilterMultimapNmax 100 --outFilterMultimapScoreRange 1 --outSAMmultNmax 1 --outMultimapperOrder Random --outFilterScoreMin 10 --outFilterType BySJout --limitOutSJcollapsed 5000000 --outReadsUnmapped None --outSAMattrRGline ID:{wildcards.replicate_label} --outSAMattributes All --outSAMmode Full --outSAMtype BAM Unsorted --outSAMunmapped Within --readFilesCommand zcat --outStd Log --readFilesIn {input.fq} --runMode alignReads --runThreadN {threads}\nCustom scripts called reproducible enriched windows and repetitive elements as part of Skipper\nAssembly: GRCh38\nSupplementary files format and content: single-replicate enriched window files contain p values, q values, enrichment, and annotations for significantly bound transcriptome tiled windows\nSupplementary files format and content: reproducible enriched window files contain p values, q values, enrichment, and annotations for significantly bound transcriptome tiled windows",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Data was processed using Skipper, available at: http://github.com/yeolab/skipper",
+            "tool_name": "Skipper",
+            "tool_version": "Not specified",
+            "code_example": "# Install Snakemake (if not already installed)\n# It is recommended to use a dedicated conda environment for Snakemake.\n# conda create -n snakemake snakemake\n# conda activate snakemake\n\n# Clone the Skipper workflow repository\n# git clone https://github.com/yeolab/skipper.git\n# cd skipper\n\n# Create or modify a configuration file (e.g., config.yaml)\n# This file defines input files, reference genome, and other parameters for the workflow.\n# A typical config.yaml for eCLIP using Skipper might look like this:\n#\n# genome: \"hg38\" # Placeholder for the reference genome (e.g., hg38, mm10). Using hg38 as a common latest assembly.\n# fastq_dir: \"/path/to/your/fastq_files\" # Directory containing raw FASTQ files\n# output_dir: \"skipper_results\" # Directory for output files\n# threads: 10 # Number of CPU threads to use\n#\n# samples:\n#   sample_RBP_rep1:\n#     RBP: \"YourRBP\"\n#     replicate: \"rep1\"\n#     fastq: [\"sample_RBP_rep1_R1.fastq.gz\", \"sample_RBP_rep1_R2.fastq.gz\"] # Adjust for single-end or paired-end\n#     control: \"input_control_sample_name\" # Name of the corresponding input control sample\n#   input_control_sample_name:\n#     RBP: \"Input\"\n#     replicate: \"rep1\"\n#     fastq: [\"input_control_sample_name_R1.fastq.gz\", \"input_control_sample_name_R2.fastq.gz\"]\n#   # Add more samples as needed following this structure.\n#\n# Ensure that the 'fastq' paths are relative to 'fastq_dir' or absolute paths.\n# The workflow will automatically manage software dependencies using conda environments defined in the workflow.\n\n# Execute the Skipper workflow\n# Ensure you are in the 'skipper' directory where the Snakefile and config.yaml are located.\n# The --use-conda flag tells Snakemake to manage environments via conda.\n# The --cores flag specifies the number of CPU cores to use.\n# The --configfile flag points to your configuration file.\nsnakemake --use-conda --cores 10 --configfile config.yaml",
+            "code_language": "bash",
+            "github_url": "http://github.com/yeolab/skipper"
+        },
+        {
+            "step_order": 2,
+            "description": "Reads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using skewer.",
+            "tool_name": "eCLIP",
+            "tool_version": "0.2.2",
+            "code_example": "# Install skewer if not already available\n# conda install -c bioconda skewer\n\n# Define input and output file names\nINPUT_R1=\"reads_R1.fastq.gz\"\nINPUT_R2=\"reads_R2.fastq.gz\"\nOUTPUT_PREFIX=\"trimmed_reads\"\n\n# Define common eCLIP 3' adapter sequence\n# This adapter is often used in eCLIP protocols (e.g., TruSeq Small RNA 3' adapter)\nADAPTER_3PRIME=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC\"\n\n# Execute skewer for adapter and quality trimming\n# -x: 3' adapter sequence\n# -q: Minimum average quality score to keep a read (e.g., 20 for Phred+33)\n# -l: Minimum read length after trimming\n# -m any: Trimming mode (any means trim any adapter found)\n# -o: Output file prefix\nskewer -x \"${ADAPTER_3PRIME}\" -q 20 -l 18 -m any -o \"${OUTPUT_PREFIX}\" \"${INPUT_R1}\" \"${INPUT_R2}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/relipmoc/skewer"
+        },
+        {
+            "step_order": 3,
+            "description": "Unique Molecular Identifiers (UMIs) were extracted from raw sequencing reads with fastp",
+            "tool_name": "fastp",
+            "tool_version": "0.23.4",
+            "code_example": "# Install fastp using conda\n# conda install -c bioconda fastp\n\n# Define input and output file names\n# Replace with actual input file paths for your raw sequencing reads\nINPUT_READ1=\"raw_sequencing_R1.fastq.gz\"\nINPUT_READ2=\"raw_sequencing_R2.fastq.gz\" # If paired-end, provide R2 file\n\n# Define output file names for reads with UMIs extracted\nOUTPUT_READ1=\"umi_extracted_R1.fastq.gz\"\nOUTPUT_READ2=\"umi_extracted_R2.fastq.gz\" # If paired-end, provide R2 output file\n\n# Define report file names for fastp's quality control and UMI processing summary\nREPORT_JSON=\"fastp_umi_report.json\"\nREPORT_HTML=\"fastp_umi_report.html\"\n\n# Execute fastp to extract UMIs from raw sequencing reads\n# This command assumes UMIs are located at the beginning of Read 1\n# and are 10 base pairs long. The UMI sequence will be moved to the read ID\n# (e.g., @read_id UMI:ATGC...).\n#\n# IMPORTANT: Adjust --umi_loc and --umi_len based on your specific library\n# preparation protocol and UMI design. Common locations include 'read1',\n# 'read2', 'index1', 'index2'.\nfastp \\\n    --in1 \"${INPUT_READ1}\" \\\n    --in2 \"${INPUT_READ2}\" \\\n    --out1 \"${OUTPUT_READ1}\" \\\n    --out2 \"${OUTPUT_READ2}\" \\\n    --umi_loc read1 \\\n    --umi_len 10 \\\n    --umi_prefix \"UMI:\" \\\n    --json \"${REPORT_JSON}\" \\\n    --html \"${REPORT_HTML}\" \\\n    --thread 8 # Adjust number of threads as needed for your system\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/OpenGene/fastp"
+        },
+        {
+            "step_order": 4,
+            "description": "Extracted reads were aligned using STAR: --alignEndsType EndToEnd --genomeDir {params.star_sjdb} --genomeLoad NoSharedMemory --outBAMcompression 10 --outFileNamePrefix {params.outprefix} --winAnchorMultimapNmax 100 --outFilterMultimapNmax 100 --outFilterMultimapScoreRange 1 --outSAMmultNmax 1 --outMultimapperOrder Random --outFilterScoreMin 10 --outFilterType BySJout --limitOutSJcollapsed 5000000 --outReadsUnmapped None --outSAMattrRGline ID:{wildcards.replicate_label} --outSAMattributes All --outSAMmode Full --outSAMtype BAM Unsorted --outSAMunmapped Within --readFilesCommand zcat --outStd Log --readFilesIn {input.fq} --runMode alignReads --runThreadN {threads}",
+            "tool_name": "STAR",
+            "tool_version": "2.5.2b",
+            "code_example": "# Install STAR if not already installed\n# conda install -c bioconda star\n\n# Example values for placeholders\nSTAR_GENOME_DIR=\"/path/to/STAR_genome_index_hg38\" # e.g., from ENCODE or custom build\nINPUT_FASTQ=\"sample_R1.fastq.gz\"\nOUTPUT_PREFIX=\"sample_aligned\"\nNUM_THREADS=\"8\"\nREPLICATE_LABEL=\"sample_rep1\"\n\nSTAR --alignEndsType EndToEnd \\\n     --genomeDir \"${STAR_GENOME_DIR}\" \\\n     --genomeLoad NoSharedMemory \\\n     --outBAMcompression 10 \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --winAnchorMultimapNmax 100 \\\n     --outFilterMultimapNmax 100 \\\n     --outFilterMultimapScoreRange 1 \\\n     --outSAMmultNmax 1 \\\n     --outMultimapperOrder Random \\\n     --outFilterScoreMin 10 \\\n     --outFilterType BySJout \\\n     --limitOutSJcollapsed 5000000 \\\n     --outReadsUnmapped None \\\n     --outSAMattrRGline ID:\"${REPLICATE_LABEL}\" \\\n     --outSAMattributes All \\\n     --outSAMmode Full \\\n     --outSAMtype BAM Unsorted \\\n     --outSAMunmapped Within \\\n     --readFilesCommand zcat \\\n     --outStd Log \\\n     --readFilesIn \"${INPUT_FASTQ}\" \\\n     --runMode alignReads \\\n     --runThreadN \"${NUM_THREADS}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 5,
+            "description": "Custom scripts called reproducible enriched windows and repetitive elements as part of Skipper",
+            "tool_name": "Skipper",
+            "tool_version": "latest",
+            "code_example": "# Clone the Skipper repository\n# git clone https://github.com/yeolab/skipper.git\n# cd skipper\n\n# Create and activate the conda environment\n# conda env create -f environment.yaml\n# conda activate skipper_env\n\n# --- Placeholder for config.yaml ---\n# Create a configuration file (config.yaml) with your specific inputs and parameters.\n# This is an example; actual parameters will depend on your data and analysis goals.\n#\n# Example config.yaml content:\n#\n# samples:\n#   sample1:\n#     replicates:\n#       rep1:\n#         ip_bam: \"path/to/sample1_rep1_ip.bam\"\n#         input_bam: \"path/to/sample1_rep1_input.bam\"\n#       rep2:\n#         ip_bam: \"path/to/sample1_rep2_ip.bam\"\n#         input_bam: \"path/to/sample1_rep2_input.bam\"\n#\n# genome: \"hg38\" # Or mm10, etc.\n# genome_fasta: \"path/to/genome.fa\"\n# genome_chrom_sizes: \"path/to/genome.chrom.sizes\"\n# blacklist_bed: \"path/to/blacklist.bed\"\n# repeatmasker_bed: \"path/to/repeatmasker.bed\" # For repetitive elements annotation\n#\n# output_dir: \"results\"\n#\n# --- End of config.yaml placeholder ---\n\n# Execute the Skipper Snakemake workflow\n# This command will run the entire pipeline, including peak calling, IDR for reproducible peaks,\n# and annotation with repetitive elements, based on the configuration in config.yaml.\nsnakemake --snakefile Snakefile --configfile config.yaml --cores 8 --use-conda",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper/"
+        }
+    ],
+    "raw_text": "Data was processed using Skipper, available at: http://github.com/yeolab/skipper\nReads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using skewer.\nUnique Molecular Identifiers (UMIs) were extracted from raw sequencing reads with fastp\nExtracted reads were aligned using STAR: --alignEndsType EndToEnd --genomeDir {params.star_sjdb} --genomeLoad NoSharedMemory --outBAMcompression 10 --outFileNamePrefix {params.outprefix} --winAnchorMultimapNmax 100 --outFilterMultimapNmax 100 --outFilterMultimapScoreRange 1 --outSAMmultNmax 1 --outMultimapperOrder Random --outFilterScoreMin 10 --outFilterType BySJout --limitOutSJcollapsed 5000000 --outReadsUnmapped None --outSAMattrRGline ID:{wildcards.replicate_label} --outSAMattributes All --outSAMmode Full --outSAMtype BAM Unsorted --outSAMunmapped Within --readFilesCommand zcat --outStd Log --readFilesIn {input.fq} --runMode alignReads --runThreadN {threads}\nCustom scripts called reproducible enriched windows and repetitive elements as part of Skipper\nAssembly: GRCh38\nSupplementary files format and content: single-replicate enriched window files contain p values, q values, enrichment, and annotations for significantly bound transcriptome tiled windows\nSupplementary files format and content: reproducible enriched window files contain p values, q values, enrichment, and annotations for significantly bound transcriptome tiled windows",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

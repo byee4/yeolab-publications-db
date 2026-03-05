@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "MaGeCk was used to process data for lentiCRISPR bulk samples to quantify sgRNA abundances.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Targeted microRaft data was processed with CRaftID software (https://github.com/YeoLab/CRaftID)",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "MaGeCk was used to process data for lentiCRISPR bulk samples to quantify sgRNA abundances.\nTargeted microRaft data was processed with CRaftID software (https://github.com/YeoLab/CRaftID)\nGenome_build: hg19\nSupplementary_files_format_and_content: [all.count_normalized.csv]  Table of normalized sgRNA counts (one column per sample) for bulk samples\nSupplementary_files_format_and_content: [microRaft_processed.csv]   Read counts and sgRNA insert identified for each microRaft library. Libraries where no sgRNA insert were detected (sequencing failure) are not included in this file.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "MaGeCk was used to process data for lentiCRISPR bulk samples to quantify sgRNA abundances.",
+            "tool_name": "MaGeCk",
+            "tool_version": "0.5.9",
+            "code_example": "# Install MaGeCk (if not already installed)\n# conda install -c bioconda mageck\n\n# Define input and output files\n# Replace 'sample.fastq.gz' with your actual lentiCRISPR bulk sample FASTQ file.\n# Replace 'lentiCRISPR_sgRNA_library.txt' with your actual sgRNA library file.\n# The sgRNA library file typically contains sgRNA sequences and their corresponding gene targets.\nINPUT_FASTQ=\"sample.fastq.gz\"\nSGRNA_LIBRARY=\"lentiCRISPR_sgRNA_library.txt\"\nOUTPUT_PREFIX=\"lentiCRISPR_sgRNA_counts\"\n\n# Run MaGeCk to quantify sgRNA abundances\nmageck count -l ${SGRNA_LIBRARY} -n ${OUTPUT_PREFIX} --fastq ${INPUT_FASTQ}",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Targeted microRaft data was processed with CRaftID software (https://github.com/YeoLab/CRaftID)",
+            "tool_name": "CRaftID",
+            "tool_version": "not specified",
+            "code_example": "# Install CRaftID (if not already installed)\n# CRaftID is a Python script, typically cloned from its repository.\n# git clone https://github.com/YeoLab/CRaftID.git\n# cd CRaftID\n\n# Define input and output paths\n# Replace with actual file paths for your targeted microRaft data, reference genome, and target regions.\nINPUT_FASTQ=\"targeted_microraft_data.fastq\" # Input FASTQ file containing microRaft reads\nOUTPUT_DIR=\"CRaftID_processed_results\" # Directory for CRaftID output\nREFERENCE_FASTA=\"GRCh38.fasta\" # Placeholder for the reference genome FASTA file (e.g., hg38, mm10)\nTARGET_REGIONS_BED=\"target_regions.bed\" # Placeholder for a BED file defining the targeted regions\n\n# Create the output directory if it does not exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Execute CRaftID software\n# Assuming CRaftID.py is in the current working directory or in your system's PATH.\npython CRaftID.py \\\n    -i \"${INPUT_FASTQ}\" \\\n    -o \"${OUTPUT_DIR}\" \\\n    -r \"${REFERENCE_FASTA}\" \\\n    -t \"${TARGET_REGIONS_BED}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/YeoLab/CRaftID"
+        }
+    ],
+    "raw_text": "MaGeCk was used to process data for lentiCRISPR bulk samples to quantify sgRNA abundances.\nTargeted microRaft data was processed with CRaftID software (https://github.com/YeoLab/CRaftID)\nGenome_build: hg19\nSupplementary_files_format_and_content: [all.count_normalized.csv]  Table of normalized sgRNA counts (one column per sample) for bulk samples\nSupplementary_files_format_and_content: [microRaft_processed.csv]   Read counts and sgRNA insert identified for each microRaft library. Libraries where no sgRNA insert were detected (sequencing failure) are not included in this file.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

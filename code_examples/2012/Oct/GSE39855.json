@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize.",
-      "tool_name": "Microarray",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Iter-plier algorithm used to quantify probesets.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "HJAY_r2.pgf",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize. Iter-plier algorithm used to quantify probesets.\nHJAY_r2.pgf",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize.",
+            "tool_name": "Microarray",
+            "tool_version": "Inferred with models/gemini-2.5-flash",
+            "code_example": "# Install Affymetrix Power Tools (APT) - typically downloaded from Thermo Fisher Scientific website.\n# Example installation (adjust version and path as needed):\n# wget https://assets.thermofisher.com/TFS-Assets/LSG/software/APT_2.11.2_Linux_x86_64.zip\n# unzip APT_2.11.2_Linux_x86_64.zip\n# export PATH=$PATH:/path/to/APT/bin\n\n# Placeholder for input CEL files and output directory.\n# 'input_cel_files.txt' should contain a list of .CEL file paths, one per line.\n# The specific library files (e.g., .pgf, .clf, .cdf) for your array type are often required\n# and can be downloaded from the Thermo Fisher Scientific website or generated.\n# Example: -p /path/to/library/file.pgf -c /path/to/library/file.clf\n\napt-probeset-summarize \\\n  -a rma \\\n  --cel-files input_cel_files.txt \\\n  -o ./summarized_output_directory \\\n  --log-file apt_summarize.log",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Iter-plier algorithm used to quantify probesets.",
+            "tool_name": "affy (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.80.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Bioconductor and necessary packages if not already installed\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\")'\n# R -e 'BiocManager::install(\"affy\")'\n# R -e 'BiocManager::install(\"hgu133plus2.db\")' # Example annotation package for a common human array (e.g., Affymetrix Human Genome U133 Plus 2.0 Array)\n\n# Create a dummy CEL file directory for demonstration purposes\nmkdir -p cel_files\n# Touch dummy CEL files (replace with actual CEL files in a real scenario)\ntouch cel_files/sample1.CEL\ntouch cel_files/sample2.CEL\n\n# Run R script to quantify probesets using the Iter-plier algorithm\nRscript -e '\n    # Load the affy package for microarray data analysis\n    library(affy)\n    # Load the appropriate annotation package for your specific Affymetrix array type\n    # Example: library(hgu133plus2.db) for Human Genome U133 Plus 2.0 Array\n    # Make sure to install the correct annotation package for your data\n    # library(YOUR_ARRAY_ANNOTATION_PACKAGE)\n\n    # Set the directory containing your raw Affymetrix CEL files\n    cel_dir <- \"cel_files\"\n\n    # Read CEL files into an AffyBatch object\n    # This function automatically detects CEL files in the specified directory\n    raw_data <- ReadAffy(celfile.path = cel_dir)\n\n    # Perform probeset quantification using the Iter-plier algorithm\n    # The justPlier function within the affy package implements PLIER and Iter-PLIER.\n    # Set type = \"iter-plier\" to use the Iter-plier algorithm.\n    # This will return an ExpressionSet object containing the quantified probeset data.\n    eset_iter_plier <- justPlier(raw_data, type = \"iter-plier\")\n\n    # Extract the expression matrix from the ExpressionSet object\n    # This matrix contains the quantified expression values for each probeset.\n    expression_matrix <- exprs(eset_iter_plier)\n\n    # Save the quantified expression matrix to a CSV file\n    write.csv(expression_matrix, \"probeset_quantification_iter_plier.csv\", row.names = TRUE)\n\n    # Optionally, save the entire ExpressionSet object for further downstream analysis in R\n    save(eset_iter_plier, file = \"eset_iter_plier.RData\")\n'",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/affy.html"
+        },
+        {
+            "step_order": 3,
+            "description": "HJAY_r2.pgf",
+            "tool_name": "R (with tikzDevice package) (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# This step is inferred to generate a PGF (Portable Graphics Format) file,\n# likely a plot or figure for a report, using R with the tikzDevice package.\n# The exact input data and plotting commands are not specified in the description.\n# A placeholder R script 'generate_HJAY_r2_plot.R' is assumed to exist,\n# which contains the R code to generate the plot named HJAY_r2.pgf.\n# Replace 'generate_HJAY_r2_plot.R' with the actual script name and ensure it's configured\n# to output 'HJAY_r2.pgf' based on relevant input data.\n\n# Example installation of R and tikzDevice (if not already installed):\n# conda install -c conda-forge r-base r-tikzdevice\n\nRscript generate_HJAY_r2_plot.R",
+            "code_language": "bash",
+            "github_url": "https://www.r-project.org/"
+        }
+    ],
+    "raw_text": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize. Iter-plier algorithm used to quantify probesets.\nHJAY_r2.pgf",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

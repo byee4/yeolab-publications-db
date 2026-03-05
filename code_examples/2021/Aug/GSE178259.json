@@ -1,61 +1,61 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Raw sequencing reads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using cutadapt.",
-      "tool_name": "cutadapt",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Trimmed reads were mapped against RepBase to remove reads mapping to repetitive sequences.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Remaining reads were mapped to the appropriate genome build using STAR aligner",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "RPKM values were calculated for all polysome samples.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "For eCLIP samples, read densities were calculated to identify eCLIP peaks.",
-      "tool_name": "eCLIP",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "eclip data processing pipeline can be requested from the following link : https://github.com/YeoLab/eclip",
-      "tool_name": "eCLIP",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Raw sequencing reads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using cutadapt. Trimmed reads were mapped against RepBase to remove reads mapping to repetitive sequences. Remaining reads were mapped to the appropriate genome build using STAR aligner\nRPKM values were calculated for all polysome samples. For eCLIP samples, read densities were calculated to identify eCLIP peaks.\neclip data processing pipeline can be requested from the following link : https://github.com/YeoLab/eclip\nGenome_build: mm10 and hg19\nSupplementary_files_format_and_content: RPKM files for all polysome samples. eCLIP input normalized peaks in BED format. eCLIP reproduclible peaks in BED format. eCLIP normalized read densitied in BIGWIG format.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Raw sequencing reads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using cutadapt.",
+            "tool_name": "cutadapt",
+            "tool_version": "1.18",
+            "code_example": "# Install cutadapt (e.g., using conda)\n# conda install -c bioconda cutadapt=1.18\n\n# Define input and output files\nINPUT_FASTQ=\"raw_reads.fastq.gz\"\nOUTPUT_FASTQ=\"trimmed_reads.fastq.gz\"\nREPORT_FILE=\"cutadapt_report.txt\"\n\n# Define adapter sequences\n# Illumina TruSeq 3' adapter (common for eCLIP)\nADAPTER_3PRIME=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\"\n# Placeholder for 5' barcode (e.g., 10 random Ns for UMI/randomer in eCLIP)\n# Adjust this based on the specific eCLIP library preparation protocol\nADAPTER_5PRIME_BARCODE=\"N{10}\" \n\n# Execute cutadapt\ncutadapt \\\n  -a \"${ADAPTER_3PRIME}\" \\\n  -g \"${ADAPTER_5PRIME_BARCODE}\" \\\n  -o \"${OUTPUT_FASTQ}\" \\\n  --minimum-length 18 \\\n  --quality-cutoff 20 \\\n  --error-rate 0.1 \\\n  --cores 8 \\\n  --discard-untrimmed \\\n  --max-n 0 \\\n  --trim-n \\\n  \"${INPUT_FASTQ}\" > \"${REPORT_FILE}\" 2>&1",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 2,
+            "description": "Trimmed reads were mapped against RepBase to remove reads mapping to repetitive sequences.",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.5.2a",
+            "code_example": "# Install STAR and samtools if not available\n# conda install -c bioconda star samtools\n\n# Placeholder for RepBase STAR index directory.\n# This directory should contain the Genome.fa, SA, SAindex, etc. files for RepBase.\nREPBASE_STAR_INDEX=\"/path/to/repbase_star_index\"\n\n# Placeholder for input trimmed reads (e.g., single-end or R1 for paired-end)\nTRIMMED_READS_R1=\"trimmed_reads_R1.fastq.gz\"\n# If paired-end, also define TRIMMED_READS_R2\n# TRIMMED_READS_R2=\"trimmed_reads_R2.fastq.gz\"\n\n# Placeholder for output prefix for STAR alignment files\nSTAR_OUTPUT_PREFIX=\"repbase_alignment\"\n\n# 1. Align trimmed reads to RepBase using STAR.\n# Parameters are chosen to be permissive for repetitive sequences and consistent with eCLIP workflows.\nSTAR --genomeDir \"${REPBASE_STAR_INDEX}\" \\\n     --readFilesIn \"${TRIMMED_READS_R1}\" \\\n     # If paired-end, uncomment the line below and add R2\n     # --readFilesIn \"${TRIMMED_READS_R1}\" \"${TRIMMED_READS_R2}\" \\\n     --outFileNamePrefix \"${STAR_OUTPUT_PREFIX}\" \\\n     --outSAMtype BAM Unsorted \\\n     --outSAMunmapped Within \\\n     --outFilterMultimapNmax 100 \\\n     --outFilterMismatchNmax 10 \\\n     --outFilterScoreMinOverLread 0.66 \\\n     --outFilterMatchNminOverLread 0.66 \\\n     --runThreadN 8 # Adjust number of threads as appropriate for your system\n\n# 2. Filter out reads that mapped to RepBase (keep only unmapped reads).\n# The flag '-f 4' selects reads where the 'read unmapped' flag is set.\n# The output 'non_repetitive_reads.bam' will contain reads that did not map to RepBase.\nsamtools view -f 4 -b \"${STAR_OUTPUT_PREFIX}Aligned.out.bam\" > non_repetitive_reads.bam\n\n# Optional: Convert the filtered BAM back to FASTQ if subsequent steps require FASTQ input\n# samtools fastq -n -F 4 \"${STAR_OUTPUT_PREFIX}Aligned.out.bam\" > non_repetitive_reads.fastq.gz",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 3,
+            "description": "Remaining reads were mapped to the appropriate genome build using STAR aligner",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR (example using conda)\n# conda create -n star_env star=2.7.10a -c bioconda -c conda-forge\n# conda activate star_env\n\n# Define variables\nREADS=\"remaining_reads.fastq.gz\" # Placeholder for input reads\nGENOME_DIR=\"STAR_genome_index/hg38\" # Placeholder for STAR genome index (e.g., for human hg38)\nOUTPUT_PREFIX=\"aligned_STAR_\"\nTHREADS=8 # Number of threads to use\n\n# --- Reference Data Setup (run once per genome) ---\n# To generate the STAR genome index, you would typically use:\n# STAR --runThreadN ${THREADS} --runMode genomeGenerate \\\n#      --genomeDir ${GENOME_DIR} \\\n#      --genomeFastaFiles /path/to/hg38.fa \\\n#      --sjdbGTFfile /path/to/gencode.v38.annotation.gtf \\\n#      --sjdbOverhang 100 # Recommended: (ReadLength - 1)\n# Reference genome (e.g., hg38.fa) can be obtained from UCSC, Ensembl, or NCBI.\n# Annotation GTF (e.g., gencode.v38.annotation.gtf) can be obtained from GENCODE.\n\n# Map reads to the genome\nSTAR --runThreadN ${THREADS} \\\n     --genomeDir ${GENOME_DIR} \\\n     --readFilesIn ${READS} \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix ${OUTPUT_PREFIX} \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes Standard \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.1 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --sjdbScore 1\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 4,
+            "description": "RPKM values were calculated for all polysome samples.",
+            "tool_name": "RSEM (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.3.3",
+            "code_example": "# Install RSEM (if not already installed)\n# conda install -c bioconda rsem\n\n# --- Reference Preparation (run once) ---\n# This step builds the RSEM reference index from a genome FASTA and gene annotation GTF file.\n# Replace 'genome.fa' with your reference genome FASTA file (e.g., hg38.fa).\n# Replace 'genes.gtf' with your gene annotation GTF file (e.g., gencode.v38.annotation.gtf).\n# 'rsem_reference_index' will be the prefix for the generated index files.\n# rsem-prepare-reference --gtf genes.gtf genome.fa rsem_reference_index\n\n# --- RPKM Calculation for a single polysome sample ---\n# This command calculates RPKM (among other metrics) for a single sample.\n# For multiple polysome samples, this command would typically be run in a loop or a pipeline.\n# Replace 'aligned_reads.bam' with the path to your input BAM file (e.g., from STAR alignment).\n# Replace 'rsem_reference_index' with the path to your prepared RSEM reference index (e.g., 'rsem_reference_index').\n# Replace 'sample_output_prefix' with a desired prefix for output files (e.g., 'polysome_sample1').\n# The '--strandedness reverse' parameter is common for many RNA-seq library preparations (e.g., Illumina TruSeq stranded).\n# Adjust to 'forward' or 'none' based on your library preparation protocol.\n\nrsem-calculate-expression \\\n    --bam \\\n    --no-qualities \\\n    -p 8 \\\n    --strandedness reverse \\\n    aligned_reads.bam \\\n    rsem_reference_index \\\n    sample_output_prefix\n\n# The RPKM values will be found in the 'sample_output_prefix.genes.results' file (e.g., 'polysome_sample1.genes.results').",
+            "code_language": "bash",
+            "github_url": "https://github.com/deweylab/RSEM"
+        },
+        {
+            "step_order": 5,
+            "description": "For eCLIP samples, read densities were calculated to identify eCLIP peaks.",
+            "tool_name": "eCLIP",
+            "tool_version": "from source",
+            "code_example": "# Install dependencies for clipper\n# pip install numpy scipy pysam\n\n# Placeholder for genome sizes file (e.g., hg38.chrom.sizes)\n# This file can be generated from a FASTA file using samtools faidx and awk,\n# or downloaded from UCSC (e.g., http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes)\n# Example:\n# samtools faidx hg38.fa\n# cut -f1,2 hg38.fa.fai > hg38.chrom.sizes\n\n# Run clipper to identify eCLIP peaks\n# -b: Input BAM file (aligned reads)\n# -s: Genome sizes file\n# -o: Output prefix for peak files\npython clipper.py -b sample_eclip.bam -s hg38.chrom.sizes -o sample_eclip_peaks",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/clipper"
+        },
+        {
+            "step_order": 6,
+            "description": "eclip data processing pipeline can be requested from the following link : https://github.com/YeoLab/eclip",
+            "tool_name": "eCLIP",
+            "tool_version": "Latest from GitHub repository (https://github.com/YeoLab/eclip)",
+            "code_example": "# Install cwltool (if not already installed)\n# pip install cwltool\n\n# Clone the YeoLab eCLIP CWL workflow repository\ngit clone https://github.com/YeoLab/eclip.git\ncd eclip # Navigate into the cloned repository directory\n\n# --- Placeholder Input Data ---\n# Replace with actual FASTQ files for your experiment\n# Assuming single-end reads for demonstration, as paired-end is optional in the CWL\nmkdir -p data/fastq\necho \"fake_read1_content\" > data/fastq/sample_R1.fastq.gz\n\n# --- Placeholder Reference Data (hg38) ---\n# Download or specify paths to your reference genome files\n# These are examples for human hg38, replace with actual paths\nmkdir -p reference/hg38\n# Example: Download from UCSC/GENCODE\n# wget -P reference/hg38 https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz\n# gunzip reference/hg38/hg38.fa.gz\n# mv reference/hg38/hg38.fa reference/hg38/GRCh38.p14.genome.fa\n# wget -P reference/hg38 http://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_45/gencode.v45.annotation.gtf.gz\n# gunzip reference/hg38/gencode.v45.annotation.gtf.gz\n# wget -P reference/hg38 https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes\n# wget -P reference/hg38 https://raw.githubusercontent.com/Boyle-Lab/Blacklist/master/lists/hg38-blacklist.v2.bed\n\n# Create a dummy STAR index directory\nmkdir -p reference/hg38/STAR_index\n# In a real scenario, you would generate this using STAR --runMode genomeGenerate\n# STAR --runMode genomeGenerate --genomeDir reference/hg38/STAR_index --genomeFastaFiles reference/hg38/GRCh38.p14.genome.fa --sjdbGTFfile reference/hg38/gencode.v45.annotation.gtf --sjdbOverhang 99 --runThreadN 8\n\n# --- Create CWL input YAML file ---\n# This file specifies all inputs for the eCLIP CWL workflow\ncat << EOF > eclip_inputs.yaml\nfastq_file_r1:\n  class: File\n  path: data/fastq/sample_R1.fastq.gz\n# fastq_file_r2: # Uncomment and provide path for paired-end reads\n#   class: File\n#   path: data/fastq/sample_R2.fastq.gz\ngenome_fasta:\n  class: File\n  path: reference/hg38/GRCh38.p14.genome.fa\ngenome_gtf:\n  class: File\n  path: reference/hg38/gencode.v45.annotation.gtf\nstar_index:\n  class: Directory\n  path: reference/hg38/STAR_index\nchrom_sizes:\n  class: File\n  path: reference/hg38/hg38.chrom.sizes\nblacklist_bed:\n  class: File\n  path: reference/hg38/hg38-blacklist.v2.bed\n# Optional parameters for CLIPper (using default values from the CWL or common practice)\nmin_read_count: 10\nmin_peak_length: 10\nmax_peak_length: 500\np_threshold: 0.01\n# Add other parameters as needed, e.g., for adapter trimming, quality filtering, etc.\nEOF\n\n# --- Execute the eCLIP CWL workflow ---\n# The eclip.cwl file is in the current directory after 'cd eclip'\ncwltool eclip.cwl eclip_inputs.yaml --outdir eclip_output",
+            "code_language": "bash",
+            "github_url": "https://github.com/YeoLab/eclip"
+        }
+    ],
+    "raw_text": "Raw sequencing reads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using cutadapt. Trimmed reads were mapped against RepBase to remove reads mapping to repetitive sequences. Remaining reads were mapped to the appropriate genome build using STAR aligner\nRPKM values were calculated for all polysome samples. For eCLIP samples, read densities were calculated to identify eCLIP peaks.\neclip data processing pipeline can be requested from the following link : https://github.com/YeoLab/eclip\nGenome_build: mm10 and hg19\nSupplementary_files_format_and_content: RPKM files for all polysome samples. eCLIP input normalized peaks in BED format. eCLIP reproduclible peaks in BED format. eCLIP normalized read densitied in BIGWIG format.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

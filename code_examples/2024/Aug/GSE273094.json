@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Reads were aligned to the GRCm38.p6 version of the mouse genome using STAR and duplicated reads were removed with MarkDuplicates.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "We used MACS3 callpeak for peak calling (q- value < 0.05 and fold change \u00e2\u0089\u00a5 1.5).",
-      "tool_name": "MACS2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Bedtools were used to generate coverage tracks.",
-      "tool_name": "bedtools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Reads were aligned to the GRCm38.p6 version of the mouse genome using STAR and duplicated reads were removed with MarkDuplicates.\nWe used MACS3 callpeak for peak calling (q- value < 0.05 and fold change \u00e2\u0089\u00a5 1.5).\nBedtools were used to generate coverage tracks.\nAssembly: GRCm38.p6\nSupplementary files format and content: Excel xlsx files containing peak information\nSupplementary files format and content: Bigwig (bw) files containing track coverage information",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Reads were aligned to the GRCm38.p6 version of the mouse genome using STAR and duplicated reads were removed with MarkDuplicates.",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR (example)\n# conda install -c bioconda star\n\n# Install Picard (example)\n# conda install -c bioconda picard\n\n# Define variables\n# Replace with actual paths to your reference genome and input reads\nGENOME_DIR=\"path/to/STAR_index/GRCm38.p6\" # Directory containing STAR genome index\nGENOME_FASTA=\"path/to/reference/GRCm38.p6.fa\" # Reference FASTA for index generation\nGENOME_GTF=\"path/to/annotation/GRCm38.p6.gtf\" # GTF for splice junction annotation (recommended for RNA-seq)\nREADS_R1=\"sample_R1.fastq.gz\" # Input R1 FASTQ file\nREADS_R2=\"sample_R2.fastq.gz\" # Input R2 FASTQ file (remove if single-end)\nOUTPUT_PREFIX=\"sample_aligned\" # Prefix for output files\nALIGNED_BAM=\"${OUTPUT_PREFIX}Aligned.sortedByCoordinate.out.bam\"\nDEDUP_BAM=\"${OUTPUT_PREFIX}.deduplicated.bam\"\nDEDUP_METRICS=\"${OUTPUT_PREFIX}.deduplication_metrics.txt\"\nNUM_THREADS=8 # Number of threads to use for STAR\nPICARD_JAR=\"picard.jar\" # Path to picard.jar, or just \"picard.jar\" if in PATH\n\n# --- STAR Alignment ---\n# Generate STAR genome index (run once per genome version)\n# STAR --runMode genomeGenerate \\\n#      --genomeDir \"${GENOME_DIR}\" \\\n#      --genomeFastaFiles \"${GENOME_FASTA}\" \\\n#      --sjdbGTFfile \"${GENOME_GTF}\" \\\n#      --runThreadN \"${NUM_THREADS}\"\n\n# Align reads to the GRCm38.p6 mouse genome\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${READS_R1}\" \"${READS_R2}\" \\\n     --runThreadN \"${NUM_THREADS}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outSAMattributes All \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.1 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --limitBAMsortRAM 30000000000 # Adjust based on available RAM (e.g., 30GB)\n\n# --- MarkDuplicates (Picard) ---\n# Remove duplicated reads\njava -jar \"${PICARD_JAR}\" MarkDuplicates \\\n     I=\"${ALIGNED_BAM}\" \\\n     O=\"${DEDUP_BAM}\" \\\n     M=\"${DEDUP_METRICS}\" \\\n     REMOVE_DUPLICATES=true \\\n     ASSUME_SORTED=true",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "We used MACS3 callpeak for peak calling (q- value < 0.05 and fold change \u00e2\u0089\u00a5 1.5).",
+            "tool_name": "MACS2",
+            "tool_version": "",
+            "code_example": "# Install MACS3 (example using conda)\n# conda install -c bioconda macs3\n\n# Define input and output files\nTREATMENT_BAM=\"treatment.bam\" # Replace with your actual treatment/IP BAM file\nCONTROL_BAM=\"control.bam\"   # Replace with your actual control/input BAM file\nOUTPUT_PREFIX=\"my_peaks\"    # Prefix for output files\nOUTPUT_DIR=\"./\"\n\n# Run MACS3 callpeak\nmacs3 callpeak \\\n  -t \"${TREATMENT_BAM}\" \\\n  -c \"${CONTROL_BAM}\" \\\n  -f BAM \\\n  -g hs \\\n  -n \"${OUTPUT_PREFIX}\" \\\n  --outdir \"${OUTPUT_DIR}\" \\\n  -q 0.05 \\\n  --fold-enrichment 1.5",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "Bedtools were used to generate coverage tracks.",
+            "tool_name": "bedtools",
+            "tool_version": "2.31.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install bedtools if not already installed\n# conda install -c bioconda bedtools\n\n# Example: Generate a bedGraph file representing genome-wide coverage from a BAM file.\n# This bedGraph can then be converted to a bigWig file for visualization as a coverage track.\n# Input:\n#   - aligned_reads.bam: A sorted and indexed BAM file containing aligned sequencing reads.\n# Output:\n#   - coverage.bedgraph: A bedGraph file showing per-base coverage depth across the genome.\n\nbedtools genomecov -ibam aligned_reads.bam -bg > coverage.bedgraph",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        }
+    ],
+    "raw_text": "Reads were aligned to the GRCm38.p6 version of the mouse genome using STAR and duplicated reads were removed with MarkDuplicates.\nWe used MACS3 callpeak for peak calling (q- value < 0.05 and fold change \u00e2\u0089\u00a5 1.5).\nBedtools were used to generate coverage tracks.\nAssembly: GRCm38.p6\nSupplementary files format and content: Excel xlsx files containing peak information\nSupplementary files format and content: Bigwig (bw) files containing track coverage information",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

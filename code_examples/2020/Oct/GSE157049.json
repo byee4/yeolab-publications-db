@@ -1,133 +1,133 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Raw RNA sequencing reads in FASTQ files were quality-tested using FASTQC (v0.11.8) (Andrews 2010) and mapped to the mouse reference genome (mm10) with STAR (v2.5.3a) aligner with default parameters (Dobin et al.",
-      "tool_name": "STAR",
-      "tool_version": "2.5.3a",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "2012).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Raw or normalized gene expression levels were quantified across all the exons of RefSeq genes with analyzeRepeats.pl in HOMER (v4.11.1) (Heinz et al.",
-      "tool_name": "HOMER",
-      "tool_version": "4.11.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "2010).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Differential expression analysis was performed with raw gene counts using R package, edgeR (v3.26.7) (Robinson et al.",
-      "tool_name": "edgeR",
-      "tool_version": "3.26.7",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "2010), using replicates to compute within-group dispersion and correcting for batch effects.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Genes with false discovery rate (FDR) < 0.05 and an absolute fold-change (FC) >= 1.5 were identified as significantly different when comparing two conditions.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "Normalized counts were log transformed, filtered, scaled, and centered prior to clustering and heatmap generation with Cluster3 (de Hoon et al.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "2004), and visualized with JavaTreeView (Saldanha 2004).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 10,
-      "description": "GSEA was carried out with the GenePattern interface, https://genepattern.broadinstitute.org) using preranked lists generated from FDR values, setting gene set permutations to 1000 and using the Hallmark collection in MSigDB version5.0.",
-      "tool_name": "GSEA",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 11,
-      "description": "GO Term and KEGG Pathway analysis were performed with David: http://david.ncifcrf.gov/.",
-      "tool_name": "DAVID",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 12,
-      "description": "Area-proportional Venn diagrams were plotted using BioVenn (Hulsen et al.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 13,
-      "description": "2008).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 14,
-      "description": "Enrichr: http://amp.pharm.mssm.edu/Enrichr.",
-      "tool_name": "Enrichr",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Raw RNA sequencing reads in FASTQ files were quality-tested using FASTQC (v0.11.8) (Andrews 2010) and mapped to the mouse reference genome (mm10) with STAR (v2.5.3a) aligner with default parameters (Dobin et al. 2012).\nRaw or normalized gene expression levels were quantified across all the exons of RefSeq genes with analyzeRepeats.pl in HOMER (v4.11.1) (Heinz et al. 2010).\nDifferential expression analysis was performed with raw gene counts using R package, edgeR (v3.26.7) (Robinson et al. 2010), using replicates to compute within-group dispersion and correcting for batch effects. Genes with false discovery rate (FDR) < 0.05 and an absolute fold-change (FC) >= 1.5 were identified as significantly different when comparing two conditions.\nNormalized counts were log transformed, filtered, scaled, and centered prior to clustering and heatmap generation with Cluster3 (de Hoon et al. 2004), and visualized with JavaTreeView (Saldanha 2004).\nGSEA was carried out with the GenePattern interface, https://genepattern.broadinstitute.org) using preranked lists generated from FDR values, setting gene set permutations to 1000 and using the Hallmark collection in MSigDB version5.0. GO Term and KEGG Pathway analysis were performed with David: http://david.ncifcrf.gov/.\nArea-proportional Venn diagrams were plotted using BioVenn (Hulsen et al. 2008). Enrichr: http://amp.pharm.mssm.edu/Enrichr.\nGenome_build: mm10\nSupplementary_files_format_and_content: Normalized expression table generated with analyzeRepeats.pl. Please see header for specific arguments used.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Raw RNA sequencing reads in FASTQ files were quality-tested using FASTQC (v0.11.8) (Andrews 2010) and mapped to the mouse reference genome (mm10) with STAR (v2.5.3a) aligner with default parameters (Dobin et al.",
+            "tool_name": "STAR",
+            "tool_version": "2.5.3a",
+            "code_example": "# Install STAR if not already installed\n# conda install -c bioconda star=2.5.3a\n\n# Placeholder for input FASTQ file(s)\n# input_reads.fastq (for single-end reads)\n# input_reads_R1.fastq input_reads_R2.fastq (for paired-end reads)\n\n# Placeholder for STAR genome index directory for mm10\n# Ensure the mm10 genome index is pre-built using STAR --runMode genomeGenerate ...\n# Example: /path/to/STAR_genome_index/mm10\n\n# Align RNA-seq reads to the mouse reference genome (mm10) using STAR with default parameters\n# This command assumes single-end reads and outputs a sorted BAM file.\n# Adjust --readFilesIn for paired-end reads (e.g., --readFilesIn input_reads_R1.fastq input_reads_R2.fastq)\nSTAR --genomeDir /path/to/STAR_genome_index/mm10 \\\n     --readFilesIn input_reads.fastq \\\n     --outFileNamePrefix aligned_reads_ \\\n     --runThreadN 8 \\\n     --outSAMtype BAM SortedByCoordinate",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "2012).",
+            "tool_name": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Not specified",
+            "code_example": "# No specific tool or command can be inferred from the description '2012).'\n# Please provide more context or a tool name to generate a relevant command.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "Raw or normalized gene expression levels were quantified across all the exons of RefSeq genes with analyzeRepeats.pl in HOMER (v4.11.1) (Heinz et al.",
+            "tool_name": "HOMER",
+            "tool_version": "4.11.1",
+            "code_example": "# Install HOMER (if not already installed)\n# For example, using conda:\n# conda install -c bioconda homer=4.11.1\n# Or manual installation:\n# wget http://homer.ucsd.edu/homer/configureHomer.pl\n# perl configureHomer.pl -install\n# perl configureHomer.pl -install hg38 # Install human genome (replace hg38 with your desired genome, e.g., mm10)\n\n# Quantify raw gene expression levels across RefSeq exons using analyzeRepeats.pl\n# -gene: Quantify expression across RefSeq genes (exons).\n# -raw: Output raw read counts. For RPKM normalized values, use -rpkm instead of -raw.\n# -count: Specify input BAM file(s) or a HOMER tag directory.\n# Replace 'hg38' with the genome you have installed in HOMER (e.g., hg38, mm10).\n# Replace 'gene_expression.txt' with your desired output file name.\n# Replace 'input.bam' with your actual aligned BAM file(s) (e.g., from STAR or HISAT2 alignment).\n# If you have multiple BAM files, list them separated by spaces (e.g., input1.bam input2.bam).\n# Alternatively, you can provide a HOMER tag directory created with makeTagDirectory.\nanalyzeRepeats.pl hg38 gene_expression.txt -gene -raw -count input.bam",
+            "code_language": "bash",
+            "github_url": "http://homer.ucsd.edu/homer/"
+        },
+        {
+            "step_order": 4,
+            "description": "2010).",
+            "tool_name": "No specific tool inferred (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "",
+            "code_example": "# The description '2010)' is insufficient to infer a specific bioinformatics tool, version, or command.\n# Please provide a more detailed step description.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 5,
+            "description": "Differential expression analysis was performed with raw gene counts using R package, edgeR (v3.26.7) (Robinson et al.",
+            "tool_name": "edgeR",
+            "tool_version": "3.26.7",
+            "code_example": "# Install R if not already installed (example for Debian/Ubuntu)\n# sudo apt-get update && sudo apt-get install -y r-base\n#\n# Install Bioconductor and edgeR package\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\")'\n# R -e 'BiocManager::install(\"edgeR\")'\n\n# Example raw gene counts file (replace with actual path)\n# counts.tsv should have genes as rows and samples as columns, with the first column being gene IDs.\n# Example sample_info.csv should have sample IDs and a 'group' column for differential expression.\n#\n# Example counts.tsv:\n# GeneID\\tSample1\\tSample2\\tSample3\\tSample4\n# GeneA\\t100\\t120\\t50\\t60\n# GeneB\\t20\\t25\\t100\\t110\n# ...\n#\n# Example sample_info.csv:\n# SampleID,Group\n# Sample1,Control\n# Sample2,Control\n# Sample3,Treated\n# Sample4,Treated\n\nRscript -e '\nlibrary(edgeR)\n\n# --- Configuration ---\ncounts_file <- \"counts.tsv\" # Path to raw gene counts file\nsample_info_file <- \"sample_info.csv\" # Path to sample information file\noutput_file <- \"de_results.csv\" # Output file for differential expression results\ngroup_column <- \"Group\" # Column in sample_info_file indicating experimental groups\ncontrol_group <- \"Control\" # Name of the control group\ntreated_group <- \"Treated\" # Name of the treated group\n# --- End Configuration ---\n\n# Load data\ncounts_data <- read.delim(counts_file, row.names = 1, check.names = FALSE)\nsample_info <- read.csv(sample_info_file, row.names = 1)\n\n# Ensure sample order matches between counts and sample info\nsample_info <- sample_info[colnames(counts_data), , drop = FALSE]\n\n# Create DGEList object\ndge <- DGEList(counts = counts_data, group = factor(sample_info[[group_column]]))\n\n# Filter out lowly expressed genes (optional but recommended)\n# Keeping genes with at least 10 counts per million (CPM) in at least 2 samples\nkeep <- filterByExpr(dge)\ndge <- dge[keep, , keep.lib.sizes = FALSE]\n\n# Normalize library sizes (TMM normalization is default)\ndge <- calcNormFactors(dge)\n\n# Create design matrix\ndesign <- model.matrix(~0 + group, data = dge$samples)\ncolnames(design) <- levels(dge$samples$group)\n\n# Estimate dispersions\ndge <- estimateDisp(dge, design)\n\n# Fit GLM\nfit <- glmFit(dge, design)\n\n# Define contrast for differential expression (e.g., Treated vs Control)\ncontrast_matrix <- makeContrasts(\n  paste0(treated_group, \"-\", control_group),\n  levels = design\n)\n\n# Perform likelihood ratio test\nlrt <- glmLRT(fit, contrast = contrast_matrix)\n\n# Get differential expression results\nresults <- topTags(lrt, n = Inf, sort.by = \"PValue\")$table\n\n# Add adjusted p-value (FDR) if not already present\nif (!\"FDR\" %in% colnames(results)) {\n  results$FDR <- p.adjust(results$PValue, method = \"BH\")\n}\n\n# Write results to file\nwrite.csv(results, file = output_file, row.names = TRUE)\n\ncat(paste0(\"Differential expression analysis completed. Results saved to \", output_file, \"\\n\"))\n'",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/edgeR.html"
+        },
+        {
+            "step_order": 6,
+            "description": "2010), using replicates to compute within-group dispersion and correcting for batch effects.",
+            "tool_name": "DESeq (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Bioconductor 2.6 (circa 2010)",
+            "code_example": "# Install R and Bioconductor if not already present\n# sudo apt-get update\n# sudo apt-get install r-base\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\")'\n# R -e 'BiocManager::install(\"DESeq2\")' # DESeq2 is the modern successor to DESeq (2010) and implements these concepts.\n\n# Placeholder for count data and sample information\n# Replace 'counts.tsv' with your actual count matrix (rows: genes, columns: samples)\n# Replace 'sample_info.tsv' with your actual sample metadata (columns: sample_id, condition, batch, etc.)\n# Example:\n# counts.tsv:\n# gene_id    sample1    sample2    sample3    sample4\n# geneA      100        120        90         110\n# geneB      50         60         45         55\n# ...\n#\n# sample_info.tsv:\n# sample_id    condition    batch\n# sample1      control      batch1\n# sample2      treated      batch1\n# sample3      control      batch2\n# sample4      treated      batch2\n\nRscript -e '\nlibrary(DESeq2)\n\n# --- Placeholder: Load your actual count data and sample information ---\n# For demonstration, creating dummy data\nset.seed(123)\nnum_genes <- 100\nnum_samples <- 6\ncounts <- matrix(sample(1:1000, num_genes * num_samples, replace = TRUE), ncol = num_samples)\ncolnames(counts) <- paste0(\"sample\", 1:num_samples)\nrownames(counts) <- paste0(\"gene\", 1:num_genes)\n\nsample_info <- data.frame(\n  sample_id = colnames(counts),\n  condition = factor(rep(c(\"control\", \"treated\"), num_samples / 2)),\n  batch = factor(c(\"batch1\", \"batch1\", \"batch2\", \"batch2\", \"batch1\", \"batch2\")) # Example batch effect\n)\nrownames(sample_info) <- sample_info$sample_id\n\n# Ensure sample order matches\nsample_info <- sample_info[colnames(counts), ]\n# --------------------------------------------------------------------\n\n# Create DESeqDataSet object\n# The design formula specifies factors to consider.\n# Here, \"batch\" is included to correct for batch effects.\n# \"condition\" is included as the primary biological variable.\n# DESeq2 internally uses replicates to estimate within-group dispersion.\ndds <- DESeqDataSetFromMatrix(countData = counts,\n                              colData = sample_info,\n                              design = ~ batch + condition)\n\n# Run the DESeq pipeline to estimate size factors, dispersions, and fit the model.\n# This step computes within-group dispersion and incorporates the design formula\n# to account for batch effects.\ndds <- DESeq(dds)\n\n# The estimated dispersions can be accessed and plotted:\n# plotDispEsts(dds)\n\nmessage(\"DESeq2 analysis completed, including dispersion estimation and batch effect correction.\")\nmessage(\"The dds object now contains normalized counts, dispersion estimates, and model fits.\")\n'",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/gb-2010-11-10-r106"
+        },
+        {
+            "step_order": 7,
+            "description": "Genes with false discovery rate (FDR) < 0.05 and an absolute fold-change (FC) >= 1.5 were identified as significantly different when comparing two conditions.",
+            "tool_name": "DESeq2 (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.42.0",
+            "code_example": "# Install R and DESeq2 if not already installed\n# sudo apt-get update && sudo apt-get install -y r-base\n# R -e \"if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager'); BiocManager::install('DESeq2')\"\n\n# Create dummy input files for demonstration purposes.\n# In a real pipeline, 'gene_counts.tsv' would be the output from a quantification tool (e.g., featureCounts, Salmon, Kallisto)\n# and 'sample_info.tsv' would be a metadata file describing your experimental design.\n\n# Dummy gene count matrix (rows: genes, columns: samples)\necho -e \"gene\\tsampleA1\\tsampleA2\\tsampleB1\\tsampleB2\" > gene_counts.tsv\necho -e \"gene1\\t100\\t120\\t200\\t210\" >> gene_counts.tsv\necho -e \"gene2\\t50\\t60\\t30\\t35\" >> gene_counts.tsv\necho -e \"gene3\\t10\\t12\\t15\\t18\" >> gene_counts.tsv\necho -e \"gene4\\t500\\t550\\t200\\t220\" >> gene_counts.tsv\necho -e \"gene5\\t20\\t25\\t40\\t45\" >> gene_counts.tsv\necho -e \"gene6\\t300\\t310\\t305\\t315\" >> gene_counts.tsv\necho -e \"gene7\\t80\\t85\\t150\\t160\" >> gene_counts.tsv\n\n# Dummy sample metadata (rows: samples, columns: experimental factors)\necho -e \"sample\\tcondition\" > sample_info.tsv\necho -e \"sampleA1\\tA\" >> sample_info.tsv\necho -e \"sampleA2\\tA\" >> sample_info.tsv\necho -e \"sampleB1\\tB\" >> sample_info.tsv\necho -e \"sampleB2\\tB\" >> sample_info.tsv\n\n# Execute R script for DESeq2 analysis\nRscript -e '\nlibrary(DESeq2)\n\n# Define input and output file paths\ncount_matrix_file <- \"gene_counts.tsv\"\nsample_metadata_file <- \"sample_info.tsv\"\noutput_file <- \"significant_genes.tsv\"\n\n# Read count data and sample metadata\ncount_data <- read.table(count_matrix_file, header=TRUE, row.names=1, sep=\"\\t\")\nsample_info <- read.table(sample_metadata_file, header=TRUE, row.names=1, sep=\"\\t\")\n\n# Ensure sample order in count_data matches sample_info\ncount_data <- count_data[, rownames(sample_info)]\n\n# DESeq2 expects integer counts, so round if necessary (e.g., from Salmon/Kallisto)\ndds <- DESeqDataSetFromMatrix(countData = round(count_data),\n                              colData = sample_info,\n                              design = ~ condition) # Assuming \"condition\" is the primary experimental variable\n\n# Run DESeq2 differential expression analysis\ndds <- DESeq(dds)\n\n# Extract results. The description specifies FDR < 0.05, which corresponds to alpha=0.05.\nres <- results(dds, alpha=0.05)\n\n# Filter for significant genes based on the criteria:\n# 1. False Discovery Rate (FDR) < 0.05 (padj < 0.05)\n# 2. Absolute Fold-Change (FC) >= 1.5 (abs(log2FoldChange) >= log2(1.5))\nsignificant_genes <- subset(res, padj < 0.05 & abs(log2FoldChange) >= log2(1.5))\n\n# Order results by adjusted p-value for easier interpretation\nsignificant_genes <- significant_genes[order(significant_genes$padj), ]\n\n# Save the table of significantly different genes\nwrite.table(as.data.frame(significant_genes), file=output_file, sep=\"\\t\", quote=FALSE, row.names=TRUE)\n\nmessage(paste(\"Identified\", nrow(significant_genes), \"significantly different genes. Results saved to\", output_file))\n'\n",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/DESeq2.html"
+        },
+        {
+            "step_order": 8,
+            "description": "Normalized counts were log transformed, filtered, scaled, and centered prior to clustering and heatmap generation with Cluster3 (de Hoon et al.",
+            "tool_name": "Cluster3",
+            "tool_version": "3.0",
+            "code_example": "# Install C Clustering Library (which provides the 'cluster' executable, the core algorithm for Cluster 3.0)\n# For Debian/Ubuntu:\n# sudo apt-get update\n# sudo apt-get install c-cluster-programs\n\n# Input file: normalized_counts.tsv (assuming a tab-separated matrix with gene IDs as first column and sample IDs as header)\nINPUT_FILE=\"normalized_counts.tsv\"\nOUTPUT_PREFIX=\"clustered_data\"\n\n# Perform log transformation, filtering, scaling, centering, clustering, and generate files for heatmap visualization.\n# The 'cluster' executable from the C Clustering Library directly supports these operations via command-line parameters.\n# -l: Log transform data (e.g., log2 transformation)\n# -g: Normalize genes (adjusts genes to have mean 0 and variance 1, effectively scaling and centering gene-wise)\n# -a: Normalize arrays (adjusts arrays/samples to have mean 0 and variance 1, effectively scaling and centering sample-wise)\n# -f 0 0: No filtering (adjust parameters if specific filtering criteria are needed, e.g., -f 1 10 for 10% missing values)\n# -m a: Hierarchical clustering (agglomerative method)\n# -s c: Similarity measure: Pearson correlation (a common choice for gene expression data)\n# -u: Output gene tree (.gtr file)\n# -e: Output array tree (.atr file)\n# -o: Output prefix for the generated .cdt, .gtr, and .atr files\n\ncluster -l -g -a -f 0 0 -m a -s c -u -e -o \"${OUTPUT_PREFIX}\" \"${INPUT_FILE}\"\n\n# Heatmap visualization is typically performed using a companion viewer like Java TreeView or similar,\n# which reads the .cdt, .gtr, and .atr files generated by the 'cluster' command.\n# For example, to open the generated data with Java TreeView (if installed and associated with .cdt files):\n# java -jar javatreeview.jar \"${OUTPUT_PREFIX}.cdt\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 9,
+            "description": "2004), and visualized with JavaTreeView (Saldanha 2004).",
+            "tool_name": "JavaTreeView",
+            "tool_version": "2004",
+            "code_example": "No specific command-line execution details are provided in the description for JavaTreeView, as it is primarily a graphical visualization tool.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 10,
+            "description": "GSEA was carried out with the GenePattern interface, https://genepattern.broadinstitute.org) using preranked lists generated from FDR values, setting gene set permutations to 1000 and using the Hallmark collection in MSigDB version5.0.",
+            "tool_name": "GSEA",
+            "tool_version": "v2.2.4 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Download GSEA software (e.g., GSEA_2.2.4.jar for command-line execution)\n# The GSEA software can be downloaded from the Broad Institute's GSEA website.\n# For example, assuming GSEA_2.2.4.jar is downloaded and placed in a 'gsea_home' directory:\n# mkdir -p gsea_home\n# # Place GSEA_2.2.4.jar here\n# export GSEA_HOME=$(pwd)/gsea_home\n\n# Download MSigDB Hallmark collection v5.0\n# mkdir -p msigdb_v5.0\n# wget -O msigdb_v5.0/h.all.v5.0.symbols.gmt https://data.broadinstitute.org/gsea-msigdb/msigdb/release/5.0/h.all.v5.0.symbols.gmt\n\n# Prepare the preranked list file (e.g., 'input_preranked.rnk')\n# This file should contain two columns: Gene Symbol and Rank Value (e.g., FDR values or a derived score).\n# Example content of input_preranked.rnk:\n# GENE_SYMBOL\tRANK_VALUE\n# TP53\t0.95\n# MYC\t0.88\n# ...\n\n# Run GSEA with the preranked list, Hallmark gene sets, and specified permutations\n# Note: The GenePattern interface provides a GUI for GSEA. This command reflects the underlying command-line execution.\n# The '-Xmx' parameter sets the maximum Java heap size, adjust as needed.\njava -Xmx4000m -cp \"$GSEA_HOME/gsea-cli.jar\" xtools.gsea.GseaPreranked \\\n    -rnk input_preranked.rnk \\\n    -gmx msigdb_v5.0/h.all.v5.0.symbols.gmt \\\n    -out gsea_output_preranked \\\n    -perm 1000 \\\n    -plot_top_x 20 \\\n    -collapse false \\\n    -mode gene_set \\\n    -norm meandiv \\\n    -rnd_seed timestamp \\\n    -set_max 500 \\\n    -set_min 15",
+            "code_language": "bash",
+            "github_url": "https://www.gsea-msigdb.org/gsea/index.jsp"
+        },
+        {
+            "step_order": 11,
+            "description": "GO Term and KEGG Pathway analysis were performed with David: http://david.ncifcrf.gov/.",
+            "tool_name": "DAVID",
+            "tool_version": "6.8",
+            "code_example": "# Create a placeholder gene list file (e.g., Entrez Gene IDs)\necho \"10000\" > my_gene_list.txt\necho \"10001\" >> my_gene_list.txt\necho \"10002\" >> my_gene_list.txt\necho \"10003\" >> my_gene_list.txt\necho \"10004\" >> my_gene_list.txt\n\n# Install the suds-py3 library for SOAP client interaction if not already installed\n# pip install suds-py3\n\n# Python script to interact with DAVID Web Service API\n# This script performs GO Term and KEGG Pathway analysis.\npython3 - <<EOF\nfrom suds.client import Client\nimport os\n\n# DAVID Web Service URL\nDAVID_WS_URL = \"https://david.ncifcrf.gov/webservice/services/DAVIDWebService?wsdl\"\n\n# Your DAVID email (required for some API calls, though often optional for basic queries)\n# Replace with your actual email if needed for authentication\n# EMAIL = \"your_email@example.com\"\n\n# Input gene list file\nGENE_LIST_FILE = \"my_gene_list.txt\"\nLIST_NAME = \"My_Experiment_Genes\"\nLIST_TYPE = \"ENTREZ_GENE_ID\" # Or \"GENE_SYMBOL\", \"ENSEMBL_GENE_ID\", etc.\n\n# Annotation categories for enrichment analysis\nANNOTATION_CATEGORIES = [\"GOTERM_BP_ALL\", \"KEGG_PATHWAY\"] # GO Biological Process and KEGG Pathways\n\n# Output file names\nGO_KEGG_CHART_FILE = \"david_go_kegg_chart.txt\"\nGO_KEGG_TABLE_FILE = \"david_go_kegg_table.txt\"\n\ntry:\n    # Initialize SOAP client\n    client = Client(DAVID_WS_URL)\n\n    # Login (optional, depending on DAVID server configuration and specific API calls)\n    # if EMAIL:\n    #     client.service.authenticate(EMAIL)\n    #     print(f\"Authenticated with DAVID Web Service (email: {EMAIL}).\")\n\n    # Read gene list from file\n    with open(GENE_LIST_FILE, 'r') as f:\n        gene_list_content = f.read().strip()\n\n    # Add gene list to DAVID\n    print(f\"Adding gene list from {GENE_LIST_FILE} to DAVID...\")\n    # The '0' indicates it's a gene list, '1' would be for a background list\n    client.service.addList(gene_list_content, LIST_TYPE, LIST_NAME, 0)\n    print(f\"Gene list '{LIST_NAME}' added successfully.\")\n\n    # Set annotation categories\n    print(f\"Setting annotation categories: {', '.join(ANNOTATION_CATEGORIES)}...\")\n    client.service.setCategories(ANNOTATION_CATEGORIES)\n    print(\"Categories set.\")\n\n    # Get Functional Annotation Chart (summary of enrichment)\n    print(f\"Retrieving Functional Annotation Chart and saving to {GO_KEGG_CHART_FILE}...\")\n    chart_results = client.service.getFunctionalAnnotationChart()\n    with open(GO_KEGG_CHART_FILE, 'w') as f:\n        # Write header\n        f.write(\"Term\\tCount\\t%\\tPValue\\tBenjamini\\tFDR\\tGenes\\tListTotal\\tPopHits\\tPopTotal\\tFoldEnrichment\\tBonferroni\\n\")\n        # Write results\n        for row in chart_results:\n            f.write(f\"{row.Term}\\t{row.Count}\\t{row.Percentage}\\t{row.PValue}\\t{row.Benjamini}\\t{row.FDR}\\t{row.Genes}\\t{row.ListHits}\\t{row.PopHits}\\t{row.PopTotal}\\t{row.FoldEnrichment}\\t{row.Bonferroni}\\n\")\n    print(\"Functional Annotation Chart saved.\")\n\n    # Get Functional Annotation Table (detailed gene-term mapping)\n    print(f\"Retrieving Functional Annotation Table and saving to {GO_KEGG_TABLE_FILE}...\")\n    table_results = client.service.getFunctionalAnnotationTable()\n    with open(GO_KEGG_TABLE_FILE, 'w') as f:\n        # Write header\n        f.write(\"GeneID\\tGeneName\\tTerm\\tCategory\\tPValue\\tBenjamini\\tFDR\\n\")\n        # Write results\n        for row in table_results:\n            f.write(f\"{row.GeneID}\\t{row.GeneName}\\t{row.Term}\\t{row.Category}\\t{row.PValue}\\t{row.Benjamini}\\t{row.FDR}\\n\")\n    print(\"Functional Annotation Table saved.\")\n\nexcept Exception as e:\n    print(f\"An error occurred: {e}\")\n    print(\"Please ensure 'suds-py3' is installed (`pip install suds-py3`) and your gene list file is correctly formatted.\")\nEOF",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 12,
+            "description": "Area-proportional Venn diagrams were plotted using BioVenn (Hulsen et al.",
+            "tool_name": "BioVenn",
+            "tool_version": "1.1.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install biovenn Python package and matplotlib for plotting\n# pip install biovenn matplotlib\n\n# Example usage:\n# Assuming set1.txt, set2.txt, set3.txt contain lists of items (one per line)\n# and venn_diagram.png is the desired output file.\n# Create dummy input files for demonstration if needed:\n# echo -e \"geneA\\ngeneB\\ngeneC\\ngeneD\" > set1.txt\n# echo -e \"geneC\\ngeneD\\ngeneE\\ngeneF\" > set2.txt\n# echo -e \"geneD\\ngeneF\\ngeneG\\ngeneH\" > set3.txt\n\npython -c '\nimport biovenn as bv\nimport matplotlib.pyplot as plt\nimport sys\nimport os\n\ndef read_list_from_file(filepath):\n    with open(filepath, \"r\") as f:\n        return [line.strip() for line in f if line.strip()]\n\nif __name__ == \"__main__\":\n    # Placeholder for actual input files and output image.\n    # In a real pipeline, these would be passed as arguments or configured.\n    list_files = [\"set1.txt\", \"set2.txt\", \"set3.txt\"]\n    output_image = \"venn_diagram.png\"\n    \n    # Check if input files exist\n    for f in list_files:\n        if not os.path.exists(f):\n            print(f\"Error: Input file not found: {f}\", file=sys.stderr)\n            sys.exit(1)\n\n    lists_data = [read_list_from_file(f) for f in list_files]\n    names = [f\"Set {i+1}\" for i in range(len(lists_data))]\n\n    # BioVenn Python package supports 2, 3, or 4 sets for area-proportional diagrams\n    if len(lists_data) == 2:\n        venn = bv.venn2(lists_data[0], lists_data[1], names=names)\n    elif len(lists_data) == 3:\n        venn = bv.venn3(lists_data[0], lists_data[1], lists_data[2], names=names)\n    elif len(lists_data) == 4:\n        venn = bv.venn4(lists_data[0], lists_data[1], lists_data[2], lists_data[3], names=names)\n    else:\n        print(\"Error: BioVenn Python package currently supports 2, 3, or 4 sets for area-proportional diagrams.\", file=sys.stderr)\n        sys.exit(1)\n\n    plt.title(\"Area-Proportional Venn Diagram\")\n    plt.savefig(output_image, dpi=300, bbox_inches=\"tight\")\n    plt.close()\n'",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 13,
+            "description": "2008).",
+            "tool_name": "Unknown (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Unknown",
+            "code_example": "",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 14,
+            "description": "Enrichr: http://amp.pharm.mssm.edu/Enrichr.",
+            "tool_name": "Enrichr",
+            "tool_version": "Web Service/API",
+            "code_example": "# Enrichr is a web-based tool for gene set enrichment analysis.\n# In automated pipelines, it's typically accessed via its API using a client library (e.g., in Python or R).\n# This step assumes a gene list (e.g., differentially expressed genes) has been generated upstream.\n\n# Example: Using a Python script (e.g., 'run_enrichr.py') that leverages the gseapy library\n# to interact with the Enrichr API.\n# The 'run_enrichr.py' script would take a gene list file and an output prefix as arguments.\n\n# Installation of gseapy (if using Python API client):\n# pip install gseapy\n\n# Example execution command:\n# Replace 'your_gene_list.txt' with the path to your gene list file (one gene symbol per line).\n# Replace 'enrichr_results' with your desired output file prefix.\n# The 'run_enrichr.py' script would need to be created separately to handle the API calls.\npython run_enrichr.py your_gene_list.txt enrichr_results\n\n# Enrichr uses its own internal databases of gene sets (e.g., GO, KEGG, WikiPathways, etc.).\n# The specific gene set libraries and organism (e.g., 'human', 'mouse') would be configured\n# within the 'run_enrichr.py' script based on the experimental context.",
+            "code_language": "bash",
+            "github_url": "http://amp.pharm.mssm.edu/Enrichr"
+        }
+    ],
+    "raw_text": "Raw RNA sequencing reads in FASTQ files were quality-tested using FASTQC (v0.11.8) (Andrews 2010) and mapped to the mouse reference genome (mm10) with STAR (v2.5.3a) aligner with default parameters (Dobin et al. 2012).\nRaw or normalized gene expression levels were quantified across all the exons of RefSeq genes with analyzeRepeats.pl in HOMER (v4.11.1) (Heinz et al. 2010).\nDifferential expression analysis was performed with raw gene counts using R package, edgeR (v3.26.7) (Robinson et al. 2010), using replicates to compute within-group dispersion and correcting for batch effects. Genes with false discovery rate (FDR) < 0.05 and an absolute fold-change (FC) >= 1.5 were identified as significantly different when comparing two conditions.\nNormalized counts were log transformed, filtered, scaled, and centered prior to clustering and heatmap generation with Cluster3 (de Hoon et al. 2004), and visualized with JavaTreeView (Saldanha 2004).\nGSEA was carried out with the GenePattern interface, https://genepattern.broadinstitute.org) using preranked lists generated from FDR values, setting gene set permutations to 1000 and using the Hallmark collection in MSigDB version5.0. GO Term and KEGG Pathway analysis were performed with David: http://david.ncifcrf.gov/.\nArea-proportional Venn diagrams were plotted using BioVenn (Hulsen et al. 2008). Enrichr: http://amp.pharm.mssm.edu/Enrichr.\nGenome_build: mm10\nSupplementary_files_format_and_content: Normalized expression table generated with analyzeRepeats.pl. Please see header for specific arguments used.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

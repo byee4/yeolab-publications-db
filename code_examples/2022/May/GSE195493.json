@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "All reads were aligned to the human genome hg38 primary assembly using STAR.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "featureCounts version 2.0.2 was used to annotate reads, using the flag --minOverlap 20 and a custom GTF file derived from gencode v34",
-      "tool_name": "featureCounts",
-      "tool_version": "2.0.2",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Differential expression was calculated using DESeq2.",
-      "tool_name": "DESeq2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Cut-offs used to determine significant differential expression were baseMean > 50 and padj <=0.01.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "In this comparison, a negative log2FoldChange indicates that a transcript was more nuclear, while a positive log2FoldChange indicates that a transcript was more cytoplasmic.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "All reads were aligned to the human genome hg38 primary assembly using STAR.\nfeatureCounts version 2.0.2 was used to annotate reads, using the flag --minOverlap 20 and a custom GTF file derived from gencode v34\nDifferential expression was calculated using DESeq2. Cut-offs used to determine significant differential expression were baseMean > 50 and padj <=0.01. In this comparison, a negative log2FoldChange indicates that a transcript was more nuclear, while a positive log2FoldChange indicates that a transcript was more cytoplasmic.\nGenome_build: hg38\nSupplementary_files_format_and_content: comma separated files with output of DESeq2; normalized abudnance measurements for all genes when comparing the nuclear and cytoplasmic fractions. In this comparison, a negative log2FoldChange indicates that a transcript was more nuclear, while a positive log2FoldChange indicates that a transcript was more cytoplasmic",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "All reads were aligned to the human genome hg38 primary assembly using STAR.",
+            "tool_name": "STAR",
+            "tool_version": "2.7.9a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables\n# Path to pre-built STAR index for hg38 primary assembly. \n# This index should be built using the hg38 primary assembly FASTA and GTF files.\nGENOME_DIR=\"/path/to/STAR_index/hg38_primary_assembly\"\nREADS_R1=\"sample_R1.fastq.gz\" # Placeholder for forward reads\nREADS_R2=\"sample_R2.fastq.gz\" # Placeholder for reverse reads (remove if single-end)\nOUTPUT_PREFIX=\"aligned_reads\" # Prefix for output files\nTHREADS=8 # Number of threads to use\n\n# Align reads to the human genome hg38 primary assembly using STAR\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${READS_R1}\" \"${READS_R2}\" \\\n     --readFilesCommand zcat \\\n     --runThreadN \"${THREADS}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}_\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outSAMattributes Standard",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "featureCounts version 2.0.2 was used to annotate reads, using the flag --minOverlap 20 and a custom GTF file derived from gencode v34",
+            "tool_name": "featureCounts",
+            "tool_version": "2.0.2",
+            "code_example": "# Install featureCounts (part of the Subread package, if not already installed)\n# conda install -c bioconda subread\n\n# Define input and reference files\nINPUT_BAM=\"aligned_reads.bam\" # Placeholder for your aligned reads BAM file\nCUSTOM_GTF=\"custom_gencode_v34.gtf\" # Placeholder for your custom GTF file derived from gencode v34\nOUTPUT_COUNTS=\"featureCounts_output_counts.txt\" # Desired output count file\n\n# Execute featureCounts to annotate reads\n# -a: Annotation file (GTF/GFF)\n# -o: Output file\n# -F GTF: Specify annotation file format as GTF\n# -t exon: Specify feature type to count (e.g., 'exon')\n# -g gene_id: Specify attribute type to group features (e.g., 'gene_id')\n# --minOverlap 20: Minimum overlap required between a read and a feature\nfeatureCounts -a \"${CUSTOM_GTF}\" -o \"${OUTPUT_COUNTS}\" -F GTF -t exon -g gene_id --minOverlap 20 \"${INPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": "http://subread.sourceforge.net/"
+        },
+        {
+            "step_order": 3,
+            "description": "Differential expression was calculated using DESeq2.",
+            "tool_name": "DESeq2",
+            "tool_version": "1.42.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install R (if not already installed)\n# For Ubuntu/Debian:\n# sudo apt update\n# sudo apt install r-base\n#\n# Install Bioconductor and DESeq2 package within R\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\")'\n# R -e 'BiocManager::install(\"DESeq2\")'\n# R -e 'install.packages(\"readr\")' # For read_tsv function\n\n# Create dummy input files for demonstration purposes.\n# In a real pipeline, these files would be generated by upstream steps (e.g., featureCounts, Salmon, Kallisto).\n# counts.tsv: Tab-separated file with gene IDs as rows and sample IDs as columns, containing raw counts.\n# sample_metadata.tsv: Tab-separated file with sample IDs and experimental conditions.\n\n# Example dummy counts.tsv\necho -e \"gene_id\\tsample1\\tsample2\\tsample3\\tsample4\" > counts.tsv\necho -e \"geneA\\t100\\t120\\t50\\t60\" >> counts.tsv\necho -e \"geneB\\t200\\t210\\t100\\t110\" >> counts.tsv\necho -e \"geneC\\t50\\t60\\t150\\t160\" >> counts.tsv\necho -e \"geneD\\t10\\t12\\t8\\t9\" >> counts.tsv\n\n# Example dummy sample_metadata.tsv\necho -e \"sample_id\\tcondition\" > sample_metadata.tsv\necho -e \"sample1\\ttreated\" >> sample_metadata.tsv\necho -e \"sample2\\ttreated\" >> sample_metadata.tsv\necho -e \"sample3\\tuntreated\" >> sample_metadata.tsv\necho -e \"sample4\\tuntreated\" >> sample_metadata.tsv\n\n# Save the R script for DESeq2 analysis\ncat << 'EOF' > run_deseq2.R\n#!/usr/bin/env Rscript\n\n# Load necessary packages\nlibrary(DESeq2)\nlibrary(readr) # For read_tsv\n\n# --- Configuration ---\ncounts_file <- \"counts.tsv\"\nmetadata_file <- \"sample_metadata.tsv\"\ndesign_formula <- \"~ condition\" # Example design formula. Adjust based on your experimental design.\noutput_prefix <- \"deseq2_results\"\n\n# --- Load Data ---\n# Read counts data\ncounts_data <- read_tsv(counts_file, col_names = TRUE)\n# Assuming the first column is gene ID, and subsequent columns are sample counts\ngene_ids <- counts_data[[1]]\ncounts_matrix <- as.matrix(counts_data[,-1])\nrownames(counts_matrix) <- gene_ids\n\n# Read sample metadata\nsample_metadata <- read_tsv(metadata_file, col_names = TRUE)\n# Ensure sample names match between counts and metadata\n# Assuming sample_metadata has a column named 'sample_id' that matches column names in counts_matrix\nsample_metadata <- as.data.frame(sample_metadata) # DESeq2 expects data.frame\nrownames(sample_metadata) <- sample_metadata$sample_id # Or whatever column holds sample IDs\nsample_metadata <- sample_metadata[colnames(counts_matrix), ] # Order metadata to match counts\n\n# --- Create DESeqDataSet ---\ndds <- DESeqDataSetFromMatrix(countData = counts_matrix,\n                              colData = sample_metadata,\n                              design = as.formula(design_formula))\n\n# --- Run DESeq2 Analysis ---\ndds <- DESeq(dds)\n\n# --- Extract Results ---\n# Get results for a specific contrast (e.g., condition treated vs untreated)\n# Adjust the contrast based on your actual data and design levels.\n# Example: res <- results(dds, contrast=c(\"condition\", \"treated\", \"untreated\"))\n# If you have multiple factors, you might specify 'name' argument, e.g., results(dds, name=\"condition_treated_vs_untreated\")\nres <- results(dds)\n\n# Order results by adjusted p-value\nres_ordered <- res[order(res$padj),]\n\n# Write results to CSV\nwrite.csv(as.data.frame(res_ordered), paste0(output_prefix, \"_differential_expression.csv\"))\n\n# Optional: Save normalized counts\nnormalized_counts <- counts(dds, normalized=TRUE)\nwrite.csv(as.data.frame(normalized_counts), paste0(output_prefix, \"_normalized_counts.csv\"))\n\n# Optional: Save DESeq2 object for later use\nsaveRDS(dds, paste0(output_prefix, \"_dds_object.rds\"))\nEOF\n\n# Make the R script executable\nchmod +x run_deseq2.R\n\n# Execute the R script\n./run_deseq2.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/DESeq2.html"
+        },
+        {
+            "step_order": 4,
+            "description": "Cut-offs used to determine significant differential expression were baseMean > 50 and padj <=0.01.",
+            "tool_name": "DESeq2 (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.40.0",
+            "code_example": "# Install R and Bioconductor if not already present\n# conda install -c conda-forge r-base\n# conda install -c bioconda bioconductor-deseq2\n\n# Create an R script to perform DESeq2 analysis and filter results\ncat << 'EOF' > run_deseq2_and_filter.R\n# Load DESeq2 library\nlibrary(DESeq2)\n\n# --- Placeholder for DESeq2 analysis setup ---\n# In a real scenario, you would load your count matrix and sample metadata.\n# Example: Assuming 'counts_matrix.tsv' contains raw counts and 'sample_metadata.tsv' has sample info.\n# counts_data <- as.matrix(read.delim(\"counts_matrix.tsv\", row.names = 1))\n# sample_info <- read.delim(\"sample_metadata.tsv\", row.names = 1)\n\n# For demonstration, creating dummy data:\nset.seed(123)\ncounts_data <- matrix(rnbinom(n=2000, size=10, mu=100), ncol=10)\nrownames(counts_data) <- paste0(\"gene\", 1:200)\ncolnames(counts_data) <- paste0(\"sample\", 1:10)\n\nsample_info <- data.frame(\n  sample = colnames(counts_data),\n  condition = factor(rep(c(\"control\", \"treated\"), each=5))\n)\nrownames(sample_info) <- sample_info$sample\n\n# Ensure sample order matches between counts and metadata\nsample_info <- sample_info[colnames(counts_data), , drop = FALSE]\n\n# Create DESeqDataSet object\ndds <- DESeqDataSetFromMatrix(countData = counts_data,\n                              colData = sample_info,\n                              design = ~ condition)\n\n# Run DESeq2 analysis\ndds <- DESeq(dds)\n\n# Get results for the contrast of interest (e.g., 'treated' vs 'control')\nres <- results(dds, contrast=c(\"condition\", \"treated\", \"control\"))\n\n# --- Filtering step based on description ---\n# Cut-offs used to determine significant differential expression were baseMean > 50 and padj <=0.01.\n\n# Filter results based on specified cut-offs\nsignificant_genes <- subset(res, baseMean > 50 & padj <= 0.01)\n\n# Order significant genes by adjusted p-value\nsignificant_genes <- significant_genes[order(significant_genes$padj),]\n\n# Save significant genes to a CSV file\nwrite.csv(as.data.frame(significant_genes), \"significant_differential_expression.csv\", row.names = TRUE)\n\n# Optionally, save all DESeq2 results\nwrite.csv(as.data.frame(res), \"deseq2_all_results.csv\", row.names = TRUE)\n\nmessage(\"DESeq2 analysis and filtering complete. Results saved to significant_differential_expression.csv and deseq2_all_results.csv\")\nEOF\n\n# Execute the R script\nRscript run_deseq2_and_filter.R",
+            "code_language": "bash",
+            "github_url": "https://www.bioconductor.org/packages/release/bioc/html/DESeq2.html"
+        },
+        {
+            "step_order": 5,
+            "description": "In this comparison, a negative log2FoldChange indicates that a transcript was more nuclear, while a positive log2FoldChange indicates that a transcript was more cytoplasmic.",
+            "tool_name": "DESeq2 (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.38.3 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Create dummy count data and sample metadata for demonstration purposes.\n# In a real pipeline, these files would be generated by upstream steps (e.g., featureCounts, Salmon)\n# based on alignment to a reference genome like hg38 (placeholder for reference dataset).\n\n# Example: Create a dummy counts.tsv\ncat <<EOF > counts.tsv\ngene_id\tnuclear_rep1\tnuclear_rep2\tnuclear_rep3\tcytoplasmic_rep1\tcytoplasmic_rep2\tcytoplasmic_rep3\ngene1\t200\t220\t190\t100\t110\t95\ngene2\t50\t55\t48\t120\t130\t115\ngene3\t150\t145\t155\t150\t145\t155\ngene4\t300\t310\t290\t150\t160\t145\ngene5\t80\t85\t78\t180\t190\t175\nEOF\n\n# Example: Create a dummy sample_metadata.tsv\ncat <<EOF > sample_metadata.tsv\nsample_id\tcondition\nnuclear_rep1\tnuclear\nnuclear_rep2\tnuclear\nnuclear_rep3\tnuclear\ncytoplasmic_rep1\tcytoplasmic\ncytoplasmic_rep2\tcytoplasmic\ncytoplasmic_rep3\tcytoplasmic\nEOF\n\n# Install R and DESeq2 if not already installed\n# For Ubuntu/Debian:\n# sudo apt-get update\n# sudo apt-get install r-base\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\"); BiocManager::install(\"DESeq2\")'\n\n# Create the R script for DESeq2 analysis\ncat <<'EOF' > run_deseq2.R\n# run_deseq2.R\n# This script performs differential localization analysis using DESeq2\n# based on nuclear and cytoplasmic count data.\n\nlibrary(DESeq2)\nlibrary(dplyr) # For data manipulation\nlibrary(tibble) # For rownames_to_column\n\n# --- Configuration ---\ncount_file <- \"counts.tsv\"\nsample_info_file <- \"sample_metadata.tsv\"\noutput_file <- \"differential_localization_results.tsv\"\n\n# Read count data\ncount_data <- read.delim(count_file, row.names = 1, check.names = FALSE)\ncount_data <- round(count_data) # Ensure counts are integers\n\n# Read sample metadata\nsample_info <- read.delim(sample_info_file, row.names = 1)\n\n# Ensure sample names match and are in the same order\nsample_info <- sample_info[colnames(count_data), , drop = FALSE]\nif (!all(rownames(sample_info) == colnames(count_data))) {\n    stop(\"Sample names in count data and metadata do not match or are not in the same order.\")\n}\n\n# Set 'nuclear' as the reference level for the 'condition' factor.\n# This ensures that when comparing 'cytoplasmic' vs 'nuclear',\n# a positive log2FoldChange indicates higher expression in 'cytoplasmic'.\nsample_info$condition <- factor(sample_info$condition, levels = c(\"nuclear\", \"cytoplasmic\"))\n\n# Create DESeqDataSet object\ndds <- DESeqDataSetFromMatrix(countData = count_data,\n                              colData = sample_info,\n                              design = ~ condition)\n\n# Run DESeq analysis\ndds <- DESeq(dds)\n\n# Get results for cytoplasmic vs nuclear.\n# According to the description:\n# - A positive log2FoldChange indicates that a transcript was more cytoplasmic.\n#   (i.e., log2(cytoplasmic / nuclear) > 0, meaning cytoplasmic > nuclear)\n# - A negative log2FoldChange indicates that a transcript was more nuclear.\n#   (i.e., log2(cytoplasmic / nuclear) < 0, meaning nuclear > cytoplasmic)\n# This contrast directly aligns with the desired interpretation.\nres <- results(dds, contrast=c(\"condition\", \"cytoplasmic\", \"nuclear\"))\n\n# Convert to data frame and save\nres_df <- as.data.frame(res) %>%\n    tibble::rownames_to_column(\"gene_id\")\n\nwrite.table(res_df, file = output_file, sep = \"\\t\", quote = FALSE, row.names = FALSE)\n\nmessage(paste(\"Differential localization results saved to:\", output_file))\nEOF\n\n# Execute the R script\nRscript run_deseq2.R\n\n# Clean up the R script and dummy data (optional)\n# rm run_deseq2.R counts.tsv sample_metadata.tsv",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/DESeq2.html"
+        }
+    ],
+    "raw_text": "All reads were aligned to the human genome hg38 primary assembly using STAR.\nfeatureCounts version 2.0.2 was used to annotate reads, using the flag --minOverlap 20 and a custom GTF file derived from gencode v34\nDifferential expression was calculated using DESeq2. Cut-offs used to determine significant differential expression were baseMean > 50 and padj <=0.01. In this comparison, a negative log2FoldChange indicates that a transcript was more nuclear, while a positive log2FoldChange indicates that a transcript was more cytoplasmic.\nGenome_build: hg38\nSupplementary_files_format_and_content: comma separated files with output of DESeq2; normalized abudnance measurements for all genes when comparing the nuclear and cytoplasmic fractions. In this comparison, a negative log2FoldChange indicates that a transcript was more nuclear, while a positive log2FoldChange indicates that a transcript was more cytoplasmic",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

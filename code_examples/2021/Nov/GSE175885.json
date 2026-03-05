@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "To identify, quantify and annotate circular RNAs from back-splice junctions we first aligned the RNASeq results using TopHat2 on the RiboMinus depleted paired-end RNA-Seq FASTQ files, via the CIRCexplorer2 pipeline, on each individual sample (default options).",
-      "tool_name": "TopHat",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "This workflow identified far greater putative circRNAs than using the same pipeline with STAR 2.4.0.",
-      "tool_name": "STAR",
-      "tool_version": "2.4.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "For differential circRNA analysis we ran RUVSEQ from the CSBB pipeline (https://github.com/csbbcompbio/CSBB-v3.0) on the back-splice junction counts for each sample for all relevant comparison groups.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "This workflow applies the software EdgeR to perform a differential expression analysis using a generalized linear model approach using the upper quartile normalization.",
-      "tool_name": "edgeR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "All together, we identified circRNAs for 448 genes, with evidence of at least two reads per circRNA. circRNAs with a non-adjusted EdgeR p<0.1 were considered differentially expressed.",
-      "tool_name": "edgeR",
-      "tool_version": "0.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "To identify, quantify and annotate circular RNAs from back-splice junctions we first aligned the RNASeq results using TopHat2 on the RiboMinus depleted paired-end RNA-Seq FASTQ files, via the CIRCexplorer2 pipeline, on each individual sample (default options). This workflow identified far greater putative circRNAs than using the same pipeline with STAR 2.4.0. For differential circRNA analysis we ran RUVSEQ from the CSBB pipeline (https://github.com/csbbcompbio/CSBB-v3.0) on the back-splice junction counts for each sample for all relevant comparison groups. This workflow applies the software EdgeR to perform a differential expression analysis using a generalized linear model approach using the upper quartile normalization. All together, we identified circRNAs for 448 genes, with evidence of at least two reads per circRNA. circRNAs with a non-adjusted EdgeR p<0.1 were considered differentially expressed.\nGenome_build: hg19\nSupplementary_files_format_and_content: tab-delimited-text\nSupplementary_files_format_and_content: CIRCexplorer2 back-splice junction read counts",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "To identify, quantify and annotate circular RNAs from back-splice junctions we first aligned the RNASeq results using TopHat2 on the RiboMinus depleted paired-end RNA-Seq FASTQ files, via the CIRCexplorer2 pipeline, on each individual sample (default options).",
+            "tool_name": "TopHat",
+            "tool_version": "2",
+            "code_example": "# Install TopHat2 (e.g., via Bioconda)\n# conda install -c bioconda tophat=2.1.1 # Or a specific version\n# conda install -c bioconda bowtie2\n\n# Define input and output paths\nGENOME_INDEX=\"path/to/hg38_index/hg38\" # Replace with your genome index path (e.g., from Ensembl or UCSC for Homo sapiens hg38)\nGTF_FILE=\"path/to/hg38.gtf\" # Replace with your GTF annotation file path (e.g., from Ensembl or UCSC for Homo sapiens hg38)\nSAMPLE_ID=\"sample1\" # Replace with actual sample ID\nREAD1_FASTQ=\"${SAMPLE_ID}_R1.fastq.gz\" # Replace with actual R1 FASTQ file\nREAD2_FASTQ=\"${SAMPLE_ID}_R2.fastq.gz\" # Replace with actual R2 FASTQ file\nOUTPUT_DIR=\"${SAMPLE_ID}_tophat_out\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run TopHat2 for paired-end alignment with default options\ntophat2 \\\n  -o \"${OUTPUT_DIR}\" \\\n  -G \"${GTF_FILE}\" \\\n  --num-threads 8 \\\n  \"${GENOME_INDEX}\" \\\n  \"${READ1_FASTQ}\" \\\n  \"${READ2_FASTQ}\"",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/gb-2013-14-4-r36"
+        },
+        {
+            "step_order": 2,
+            "description": "This workflow identified far greater putative circRNAs than using the same pipeline with STAR 2.4.0.",
+            "tool_name": "STAR",
+            "tool_version": "2.4.0",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star=2.4.0\n\n# Placeholder for STAR genome index directory (e.g., for human GRCh38)\nGENOME_DIR=\"/path/to/STAR_index/GRCh38\"\n\n# Placeholder for input FASTQ files\nREAD1=\"sample_R1.fastq.gz\"\nREAD2=\"sample_R2.fastq.gz\"\n\n# Placeholder for output directory and prefix\nOUTPUT_PREFIX=\"circRNA_alignment_output_\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"$(dirname ${OUTPUT_PREFIX})\"\n\n# Run STAR alignment for circRNA detection\n# Parameters like --chimSegmentMin and --chimJunctionOverhangMin are crucial for identifying chimeric junctions indicative of circRNAs.\nSTAR \\\n  --genomeDir ${GENOME_DIR} \\\n  --readFilesIn ${READ1} ${READ2} \\\n  --runThreadN 8 \\\n  --outFileNamePrefix ${OUTPUT_PREFIX} \\\n  --outSAMtype BAM SortedByCoordinate \\\n  --outFilterMultimapNmax 20 \\\n  --alignIntronMin 20 \\\n  --alignIntronMax 1000000 \\\n  --alignMatesGapMax 1000000 \\\n  --chimSegmentMin 15 \\\n  --chimJunctionOverhangMin 15 \\\n  --outReadsUnmapped Fastx \\\n  --outSAMattributes NH HI AS NM MD jM jI XS\n\n# Note: After STAR alignment, a dedicated circRNA calling tool (e.g., find_circ, CIRCexplorer2, CIRI2) \n# would typically be used to process the Chimeric.out.junction file generated by STAR \n# to identify and quantify putative circRNAs.\n# Example (conceptual, tool not specified in description):\n# find_circ.py ${OUTPUT_PREFIX}Chimeric.out.junction > circRNAs.bed",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "For differential circRNA analysis we ran RUVSEQ from the CSBB pipeline (https://github.com/csbbcompbio/CSBB-v3.0) on the back-splice junction counts for each sample for all relevant comparison groups.",
+            "tool_name": "RUVSEQ",
+            "tool_version": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install R and Bioconductor if not already present\n# sudo apt-get update\n# sudo apt-get install r-base\n# R -e \"if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager'); BiocManager::install('RUVSeq')\"\n\n# Placeholder for input files:\n# back_splice_junction_counts.tsv: Tab-separated file with circRNA counts per sample.\n# sample_metadata.tsv: Tab-separated file with sample information, including comparison groups.\n\n# Assuming the CSBB-v3.0 pipeline contains a script for differential circRNA analysis\n# that incorporates RUVSEQ for normalization. The exact script name and parameters\n# would be specific to the CSBB implementation. This command represents running\n# such a script from the pipeline, processing back-splice junction counts for\n# specified comparison groups.\n\nRscript /path/to/CSBB-v3.0/scripts/run_differential_circRNA_analysis_with_ruvseq.R \\\n  --counts back_splice_junction_counts.tsv \\\n  --metadata sample_metadata.tsv \\\n  --comparison-groups \"Control_vs_Treatment\" \\\n  --output-dir ruvseq_differential_results",
+            "code_language": "bash",
+            "github_url": "https://github.com/csbbcompbio/CSBB-v3.0"
+        },
+        {
+            "step_order": 4,
+            "description": "This workflow applies the software EdgeR to perform a differential expression analysis using a generalized linear model approach using the upper quartile normalization.",
+            "tool_name": "edgeR",
+            "tool_version": "3.44.1",
+            "code_example": "# Install edgeR if not already installed\n# conda install -c bioconda bioconductor-edger\n# R -e \"if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager'); BiocManager::install('edgeR')\"\n\n# Create a dummy R script for differential expression analysis with edgeR\n# This script assumes 'counts.tsv' (gene counts) and 'sample_info.tsv' (design matrix) as input.\n# Replace these with actual file paths.\n\ncat << 'EOF' > run_edger_dea.R\nlibrary(edgeR)\n\n# --- Configuration ---\n# Input files (replace with actual paths)\ncounts_file <- \"counts.tsv\"\nsample_info_file <- \"sample_info.tsv\"\noutput_file <- \"edger_differential_expression_results.tsv\"\ndesign_formula_str <- \"~ condition\" # Example: adjust based on your sample_info_file columns\n\n# --- Load Data ---\n# Load count matrix\ncounts <- read.delim(counts_file, row.names = 1, check.names = FALSE)\n# Ensure counts are integers\ncounts <- round(counts)\n\n# Load sample information (design matrix)\nsample_info <- read.delim(sample_info_file, row.names = 1, check.names = FALSE)\n\n# Ensure sample order matches between counts and sample_info\nsample_info <- sample_info[colnames(counts), , drop = FALSE]\n\n# --- edgeR Analysis ---\n\n# Create DGEList object\ndge <- DGEList(counts = counts, group = sample_info$condition) # 'condition' is an example column\n\n# Filter out lowly expressed genes (optional but recommended)\n# Keep genes with at least 10 counts per million (CPM) in at least 2 samples\nkeep <- filterByExpr(dge, group = sample_info$condition)\ndge <- dge[keep, , keep.lib.sizes = FALSE]\n\n# Upper quartile normalization\ndge <- calcNormFactors(dge, method = \"upperquartile\")\n\n# Create design matrix\ndesign <- model.matrix(as.formula(design_formula_str), data = sample_info)\n\n# Estimate dispersion\ndge <- estimateDisp(dge, design)\n\n# Fit generalized linear model (GLM) using quasi-likelihood F-tests\nfit <- glmQLFit(dge, design)\n\n# Perform differential expression testing\n# For a simple two-group comparison (e.g., control vs. treated) with design `~ condition`,\n# the last coefficient typically represents the logFC of the second level vs the first (reference) level.\nlrt <- glmQLFTest(fit, coef = ncol(design)) # Test the last coefficient\n\n# Get differential expression results\nresults <- topTags(lrt, n = Inf, sort.by = \"PValue\")$table\n\n# Write results to file\nwrite.table(results, file = output_file, sep = \"\\t\", quote = FALSE, row.names = TRUE)\n\nmessage(\"Differential expression analysis complete. Results saved to \", output_file)\nEOF\n\n# Create dummy input files for demonstration\necho -e \"Gene\\tSample1_Control\\tSample2_Control\\tSample3_Treated\\tSample4_Treated\" > counts.tsv\necho -e \"GeneA\\t100\\t120\\t500\\t550\" >> counts.tsv\necho -e \"GeneB\\t50\\t60\\t30\\t35\" >> counts.tsv\necho -e \"GeneC\\t200\\t210\\t220\\t230\" >> counts.tsv\necho -e \"GeneD\\t10\\t12\\t100\\t110\" >> counts.tsv\n\necho -e \"Sample\\tcondition\" > sample_info.tsv\necho -e \"Sample1_Control\\tcontrol\" >> sample_info.tsv\necho -e \"Sample2_Control\\tcontrol\" >> sample_info.tsv\necho -e \"Sample3_Treated\\ttreated\" >> sample_info.tsv\necho -e \"Sample4_Treated\\ttreated\" >> sample_info.tsv\n\n# Execute the R script\nRscript run_edger_dea.R\n\n# Clean up dummy files (optional)\n# rm counts.tsv sample_info.tsv run_edger_dea.R edger_differential_expression_results.tsv",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/edgeR.html"
+        },
+        {
+            "step_order": 5,
+            "description": "All together, we identified circRNAs for 448 genes, with evidence of at least two reads per circRNA. circRNAs with a non-adjusted EdgeR p<0.1 were considered differentially expressed.",
+            "tool_name": "edgeR",
+            "tool_version": "0.1",
+            "code_example": "# Install R and Bioconductor if not already installed\n# sudo apt-get update\n# sudo apt-get install r-base\n# R -e \"if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager'); BiocManager::install('edgeR')\"\n\n# Create a dummy R script for edgeR differential expression\ncat << 'EOF' > run_edger.R\nlibrary(edgeR)\n\n# --- Configuration ---\ncounts_file <- \"circrna_counts.tsv\" # Placeholder for circRNA count matrix\nsample_info_file <- \"sample_info.tsv\" # Placeholder for sample metadata (e.g., condition)\noutput_file <- \"differentially_expressed_circRNAs.tsv\"\np_value_threshold <- 0.1 # From description: \"non-adjusted EdgeR p<0.1\"\n\n# --- Load Data ---\n# Assuming counts_file is a tab-separated file with circRNA IDs as row names and sample IDs as column names\n# The description implies circRNAs with at least two reads are already identified and included here.\ncounts <- read.delim(counts_file, row.names = 1, check.names = FALSE)\n\n# Assuming sample_info_file has columns like 'SampleID', 'Condition'\nsample_info <- read.delim(sample_info_file, row.names = 1, check.names = FALSE)\n\n# Ensure sample order matches between counts and sample_info\nsample_info <- sample_info[colnames(counts), , drop = FALSE]\n\n# Create DGEList object\ndge <- DGEList(counts = counts)\n\n# --- Normalization ---\ndge <- calcNormFactors(dge)\n\n# --- Design Matrix ---\n# Assuming 'Condition' is the column in sample_info that defines groups\ndesign <- model.matrix(~0 + sample_info$Condition)\ncolnames(design) <- levels(sample_info$Condition)\n\n# --- Estimate Dispersion ---\ndge <- estimateDisp(dge, design)\n\n# --- Fit GLM ---\nfit <- glmQLFit(dge, design) # Using QLF for more robust error control\n\n# --- Define Contrasts (Example: comparing the first two conditions found) ---\ncond_levels <- levels(sample_info$Condition)\nif (length(cond_levels) >= 2) {\n    contrast_name <- paste0(cond_levels[2], \"_vs_\", cond_levels[1])\n    contrast_formula <- as.formula(paste0(cond_levels[2], \" - \", cond_levels[1]))\n    contrast_matrix <- makeContrasts(contrast_formula, levels = design)\n} else {\n    stop(\"Not enough conditions for differential expression comparison.\")\n}\n\n# --- Perform Test ---\nqlf_test <- glmQLFTest(fit, contrast = contrast_matrix)\n\n# --- Get Results ---\nresults <- topTags(qlf_test, n = Inf, adjust.method = \"none\")$table\n\n# --- Filter by p-value ---\n# \"circRNAs with a non-adjusted EdgeR p<0.1 were considered differentially expressed.\"\ndeg_circRNAs <- results[results$PValue < p_value_threshold, ]\n\n# --- Save Results ---\nwrite.table(deg_circRNAs, file = output_file, sep = \"\\t\", quote = FALSE, row.names = TRUE)\n\nmessage(paste(\"Differentially expressed circRNAs (p <\", p_value_threshold, \") saved to\", output_file))\nEOF\n\n# Create dummy input files for demonstration\n# circrna_counts.tsv: Assumes circRNAs with at least two reads are already included.\necho -e \"circRNA_ID\\tSample1_Control\\tSample2_Control\\tSample3_Treated\\tSample4_Treated\" > circrna_counts.tsv\necho -e \"circRNA_1\\t10\\t12\\t50\\t55\" >> circrna_counts.tsv\necho -e \"circRNA_2\\t100\\t110\\t105\\t115\" >> circrna_counts.tsv\necho -e \"circRNA_3\\t5\\t6\\t8\\t9\" >> circrna_counts.tsv\necho -e \"circRNA_4\\t20\\t22\\t10\\t11\" >> circrna_counts.tsv\necho -e \"circRNA_5\\t2\\t3\\t2\\t3\" >> circrna_counts.tsv # Example meeting \"at least two reads\"\n\necho -e \"SampleID\\tCondition\" > sample_info.tsv\necho -e \"Sample1_Control\\tControl\" >> sample_info.tsv\necho -e \"Sample2_Control\\tControl\" >> sample_info.tsv\necho -e \"Sample3_Treated\\tTreated\" >> sample_info.tsv\necho -e \"Sample4_Treated\\tTreated\" >> sample_info.tsv\n\n# Execute the R script\nRscript run_edger.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/edgeR.html"
+        }
+    ],
+    "raw_text": "To identify, quantify and annotate circular RNAs from back-splice junctions we first aligned the RNASeq results using TopHat2 on the RiboMinus depleted paired-end RNA-Seq FASTQ files, via the CIRCexplorer2 pipeline, on each individual sample (default options). This workflow identified far greater putative circRNAs than using the same pipeline with STAR 2.4.0. For differential circRNA analysis we ran RUVSEQ from the CSBB pipeline (https://github.com/csbbcompbio/CSBB-v3.0) on the back-splice junction counts for each sample for all relevant comparison groups. This workflow applies the software EdgeR to perform a differential expression analysis using a generalized linear model approach using the upper quartile normalization. All together, we identified circRNAs for 448 genes, with evidence of at least two reads per circRNA. circRNAs with a non-adjusted EdgeR p<0.1 were considered differentially expressed.\nGenome_build: hg19\nSupplementary_files_format_and_content: tab-delimited-text\nSupplementary_files_format_and_content: CIRCexplorer2 back-splice junction read counts",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

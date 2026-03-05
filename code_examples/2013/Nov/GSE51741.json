@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Illumina Casava1.8.2 software used for basecalling.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Demultiplexing based on index sequences",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Sequenced reads were mapped to Refseq RNA sequences using bowtie v0.12.7 with parameters -q -e 100 -m 10 --best --strata",
-      "tool_name": "Bowtie",
-      "tool_version": "0.12.7",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Count reads for each genes",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Illumina Casava1.8.2 software used for basecalling.\nDemultiplexing based on index sequences\nSequenced reads were mapped to Refseq RNA sequences using bowtie v0.12.7 with parameters -q -e 100 -m 10 --best --strata\nCount reads for each genes\nSupplementary_files_format_and_content: tab-delimited text files include counts for each genes in each samples.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Illumina Casava1.8.2 software used for basecalling.",
+            "tool_name": "Illumina Casava",
+            "tool_version": "1.8.2",
+            "code_example": "# Illumina Casava 1.8.2 is proprietary software run on Illumina sequencing instruments\n# for basecalling and demultiplexing. This step is performed by the sequencer itself.\n# No user-executable command-line tool is typically run for Casava basecalling post-sequencing.\n# The output of this step would be raw sequencing data in FASTQ format, which serves as input for downstream bioinformatics analysis.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Demultiplexing based on index sequences",
+            "tool_name": "bcl2fastq (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.20.0.422 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install bcl2fastq (example using conda)\n# conda install -c bioconda bcl2fastq2\n\n# Define input and output directories and sample sheet\nRUN_FOLDER_DIR=\"/path/to/illumina/run/directory\" # Directory containing BCL files\nOUTPUT_FASTQ_DIR=\"/path/to/output/fastq/directory\"\nSAMPLE_SHEET=\"/path/to/sample_sheet.csv\" # This file defines samples and their index sequences\n\n# Execute bcl2fastq for demultiplexing based on index sequences\nbcl2fastq --runfolder-dir \"${RUN_FOLDER_DIR}\" \\\n          --output-dir \"${OUTPUT_FASTQ_DIR}\" \\\n          --sample-sheet \"${SAMPLE_SHEET}\" \\\n          --no-lane-splitting \\\n          --barcode-mismatches 1 \\\n          --minimum-trimmed-read-length 8 \\\n          --mask-short-adapter-reads 8 \\\n          --ignore-missing-bcl \\\n          --ignore-missing-stats \\\n          --ignore-missing-positions",
+            "code_language": "bash",
+            "github_url": "https://support.illumina.com/sequencing/sequencing_software/bcl2fastq-conversion-software.html"
+        },
+        {
+            "step_order": 3,
+            "description": "Sequenced reads were mapped to Refseq RNA sequences using bowtie v0.12.7 with parameters -q -e 100 -m 10 --best --strata",
+            "tool_name": "Bowtie",
+            "tool_version": "0.12.7",
+            "code_example": "# Install Bowtie v0.12.7 if not already installed\n# conda install -c bioconda bowtie=0.12.7\n\n# Placeholder for Refseq RNA index. This index needs to be built beforehand\n# using bowtie-build from your Refseq RNA FASTA file (e.g., refseq_rna.fasta).\n# Example: bowtie-build refseq_rna.fasta refseq_rna_index\n\n# Placeholder for input sequenced reads (e.g., a FASTQ file)\n# Placeholder for output SAM file\n\n# Execute Bowtie mapping\nbowtie -q -e 100 -m 10 --best --strata refseq_rna_index reads.fastq > output.sam",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie"
+        },
+        {
+            "step_order": 4,
+            "description": "Count reads for each genes",
+            "tool_name": "featureCounts (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.0.1",
+            "code_example": "# Install Subread (which includes featureCounts)\n# conda install -c bioconda subread\n\n# Define input and output files\n# Replace 'aligned_reads.bam' with your actual aligned BAM file(s)\n# Replace 'Homo_sapiens.GRCh38.109.gtf' with your specific gene annotation GTF file\nINPUT_BAM=\"aligned_reads.bam\"\nGENE_ANNOTATION_GTF=\"Homo_sapiens.GRCh38.109.gtf\" # Example: Ensembl GRCh38 release 109\nOUTPUT_COUNTS=\"gene_counts.txt\"\n\n# Execute featureCounts to count reads per gene\n# -a: Annotation file\n# -o: Output file\n# -F GTF: Specify annotation file format\n# -t exon: Feature type to count (e.g., 'exon')\n# -g gene_id: Attribute type to group features (e.g., 'gene_id')\n# -s 2: Strandedness (0=unstranded, 1=forward, 2=reverse). eCLIP often uses reverse stranded.\n# -T 8: Number of threads\nfeatureCounts \\\n  -a \"${GENE_ANNOTATION_GTF}\" \\\n  -o \"${OUTPUT_COUNTS}\" \\\n  -F GTF \\\n  -t exon \\\n  -g gene_id \\\n  -s 2 \\\n  -T 8 \\\n  \"${INPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip"
+        }
+    ],
+    "raw_text": "Illumina Casava1.8.2 software used for basecalling.\nDemultiplexing based on index sequences\nSequenced reads were mapped to Refseq RNA sequences using bowtie v0.12.7 with parameters -q -e 100 -m 10 --best --strata\nCount reads for each genes\nSupplementary_files_format_and_content: tab-delimited text files include counts for each genes in each samples.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

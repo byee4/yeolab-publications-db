@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Adaptors and sequence with a quality below 20 were removed using trimmomatic (galaxy version 0.38.0)",
-      "tool_name": "Trimmomatic",
-      "tool_version": "0.38.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reads were aligned on mm10 genome using RNA star (galaxy version 2.7.8a+galaxy0)",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Number of reads per transcript was determined using FeatureCounts (galaxy version 2.0.1+galaxy2)",
-      "tool_name": "featureCounts",
-      "tool_version": "2.0.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Differential gene expression was determined using DESeq2 (galaxy version 2.11.40.7+galaxy1)",
-      "tool_name": "DESeq2",
-      "tool_version": "2.11.40",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Adaptors and sequence with a quality below 20 were removed using trimmomatic (galaxy version 0.38.0)\nReads were aligned on mm10 genome using RNA star (galaxy version 2.7.8a+galaxy0)\nNumber of reads per transcript was determined using FeatureCounts (galaxy version 2.0.1+galaxy2)\nDifferential gene expression was determined using DESeq2 (galaxy version 2.11.40.7+galaxy1)\nAssembly: mm10\nSupplementary files format and content: Featurecounts files, reads aligned on mm10 genome",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Adaptors and sequence with a quality below 20 were removed using trimmomatic (galaxy version 0.38.0)",
+            "tool_name": "Trimmomatic",
+            "tool_version": "0.38.0",
+            "code_example": "# Install Trimmomatic (if not already installed)\n# conda install -c bioconda trimmomatic=0.38.0\n\n# Define input/output files (placeholders, replace with actual file names)\nINPUT_R1=\"input_R1.fastq.gz\"\nINPUT_R2=\"input_R2.fastq.gz\"\nOUTPUT_R1_PAIRED=\"output_R1_paired.fastq.gz\"\nOUTPUT_R1_UNPAIRED=\"output_R1_unpaired.fastq.gz\"\nOUTPUT_R2_PAIRED=\"output_R2_paired.fastq.gz\"\nOUTPUT_R2_UNPAIRED=\"output_R2_unpaired.fastq.gz\"\n\n# Define Trimmomatic JAR path (adjust if needed, e.g., if installed via conda, it might be in $CONDA_PREFIX/share/trimmomatic-0.38.0-0/trimmomatic.jar)\nTRIMMOMATIC_JAR=\"/path/to/trimmomatic-0.38.jar\" # REPLACE WITH ACTUAL PATH\n\n# Define adapter file path (adjust if needed, or download). \n# A common adapter file is TruSeq3-PE.fa, often found in the Trimmomatic installation directory's 'adapters' folder.\nADAPTER_FILE=\"/path/to/Trimmomatic-0.38/adapters/TruSeq3-PE.fa\" # REPLACE WITH ACTUAL PATH OR DOWNLOAD\n\n# Execute Trimmomatic for paired-end reads\njava -jar \"${TRIMMOMATIC_JAR}\" PE \\\n    -phred33 \\\n    \"${INPUT_R1}\" \"${INPUT_R2}\" \\\n    \"${OUTPUT_R1_PAIRED}\" \"${OUTPUT_R1_UNPAIRED}\" \\\n    \"${OUTPUT_R2_PAIRED}\" \"${OUTPUT_R2_UNPAIRED}\" \\\n    ILLUMINACLIP:\"${ADAPTER_FILE}\":2:30:10 \\\n    LEADING:20 \\\n    TRAILING:20 \\\n    SLIDINGWINDOW:4:20 \\\n    MINLEN:36",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Reads were aligned on mm10 genome using RNA star (galaxy version 2.7.8a+galaxy0)",
+            "tool_name": "STAR",
+            "tool_version": "2.7.8a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Placeholder for STAR genome index directory\n# Replace with the actual path to your mm10 STAR index\nGENOME_DIR=\"/path/to/STAR_index/mm10\"\n\n# Placeholder for input FASTQ file(s)\n# Replace with your actual input FASTQ file(s)\nREAD1=\"input_R1.fastq.gz\"\n# READ2=\"input_R2.fastq.gz\" # Uncomment if paired-end\n\n# Placeholder for output prefix\nOUTPUT_PREFIX=\"aligned_reads\"\n\n# Run STAR alignment\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${READ1}\" \\\n     --runThreadN 8 \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}_\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes Standard",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "Number of reads per transcript was determined using FeatureCounts (galaxy version 2.0.1+galaxy2)",
+            "tool_name": "featureCounts",
+            "tool_version": "2.0.1",
+            "code_example": "# Install featureCounts (part of the Subread package)\n# conda install -c bioconda subread=2.0.1\n\n# Define input and output files\nINPUT_BAM=\"aligned_reads.bam\" # Placeholder for the input BAM file containing aligned reads\nANNOTATION_GTF=\"Homo_sapiens.GRCh38.109.gtf\" # Placeholder for a GTF annotation file (e.g., from Ensembl GRCh38)\nOUTPUT_COUNTS=\"transcript_counts.txt\" # Output file for read counts\n\n# Run featureCounts to determine the number of reads per transcript (gene-level counts)\n# -a: Specify the annotation file (GTF/GFF format)\n# -o: Specify the output file for read counts\n# -t exon: Specify feature type to count (e.g., 'exon' is commonly used for gene-level counting)\n# -g gene_id: Specify attribute type in GTF/GFF annotation which contains gene identifiers\n# Note: While the description states 'per transcript', featureCounts is most commonly used for gene-level quantification.\n#       For strictly isoform-specific quantification, tools like RSEM, Salmon, or Kallisto are typically employed.\n#       This command assumes 'per transcript' refers to gene-level expression counts.\nfeatureCounts -a ${ANNOTATION_GTF} -o ${OUTPUT_COUNTS} -t exon -g gene_id ${INPUT_BAM}",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "Differential gene expression was determined using DESeq2 (galaxy version 2.11.40.7+galaxy1)",
+            "tool_name": "DESeq2",
+            "tool_version": "2.11.40",
+            "code_example": "# Install DESeq2 (if not already installed)\n# conda install -c bioconda bioconductor-deseq2\n\n# Create dummy count data (replace with actual featureCounts/HTSeq/Salmon/Kallisto output)\n# Example: counts.tsv with gene IDs as first column and sample counts in subsequent columns\necho -e \"gene\\tsample1\\tsample2\\tsample3\\tsample4\" > counts.tsv\necho -e \"geneA\\t100\\t120\\t50\\t60\" >> counts.tsv\necho -e \"geneB\\t50\\t60\\t100\\t110\" >> counts.tsv\necho -e \"geneC\\t200\\t210\\t180\\t190\" >> counts.tsv\necho -e \"geneD\\t10\\t12\\t20\\t22\" >> counts.tsv\n\n# Create dummy sample information (replace with actual experimental design)\n# Example: sample_info.tsv with sample IDs as first column and experimental conditions in subsequent columns\necho -e \"sample\\tcondition\" > sample_info.tsv\necho -e \"sample1\\tcontrol\" >> sample_info.tsv\necho -e \"sample2\\tcontrol\" >> sample_info.tsv\necho -e \"sample3\\ttreated\" >> sample_info.tsv\necho -e \"sample4\\ttreated\" >> sample_info.tsv\n\n# Create an R script for DESeq2 analysis\ncat << 'EOF' > run_deseq2.R\nlibrary(DESeq2)\n\n# Load count data\n# Ensure row names are gene IDs and column names are sample IDs\ncount_data <- read.table(\"counts.tsv\", header = TRUE, row.names = 1)\n\n# Load sample information\n# Ensure row names are sample IDs and column names are experimental factors\nsample_info <- read.table(\"sample_info.tsv\", header = TRUE, row.names = 1)\n\n# Ensure sample order in colData matches countData columns\nsample_info <- sample_info[colnames(count_data), , drop = FALSE]\n\n# Create DESeqDataSet object\n# The 'design' formula specifies the experimental design (e.g., ~ condition)\ndds <- DESeqDataSetFromMatrix(countData = count_data,\n                              colData = sample_info,\n                              design = ~ condition)\n\n# Run DESeq2 analysis\ndds <- DESeq(dds)\n\n# Get results for a specific contrast (e.g., 'treated' vs 'control' for the 'condition' factor)\n# Replace 'condition', 'treated', 'control' with your actual factor names and levels\nres <- results(dds, contrast = c(\"condition\", \"treated\", \"control\"))\n\n# Order results by adjusted p-value\nres <- res[order(res$padj), ]\n\n# Save differential expression results\nwrite.csv(as.data.frame(res), file = \"deseq2_results.csv\")\n\n# Save normalized counts\nnorm_counts <- counts(dds, normalized=TRUE)\nwrite.csv(as.data.frame(norm_counts), file = \"deseq2_normalized_counts.csv\")\n\nEOF\n\n# Execute the R script\nRscript run_deseq2.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/DESeq2.html"
+        }
+    ],
+    "raw_text": "Adaptors and sequence with a quality below 20 were removed using trimmomatic (galaxy version 0.38.0)\nReads were aligned on mm10 genome using RNA star (galaxy version 2.7.8a+galaxy0)\nNumber of reads per transcript was determined using FeatureCounts (galaxy version 2.0.1+galaxy2)\nDifferential gene expression was determined using DESeq2 (galaxy version 2.11.40.7+galaxy1)\nAssembly: mm10\nSupplementary files format and content: Featurecounts files, reads aligned on mm10 genome",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

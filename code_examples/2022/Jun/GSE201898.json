@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Alignment, cell barcode processing, umis processing, abundance measurements: cellranger count (version 3.0.2)",
-      "tool_name": "Cell Ranger",
-      "tool_version": "3.0.2",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "MD tags were added to alignments with samtools calmd --threads 15 -rb possorted_genome_bam.bam refdata-cellranger-hg19-3.0.0/fasta/genome.fa > possorted_genome_bam_MD.bam",
-      "tool_name": "Cell Ranger",
-      "tool_version": "3.0.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Reads were split based on the CB:Z tag, resulting in one BAM file per barcode.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Alignment, cell barcode processing, umis processing, abundance measurements: cellranger count (version 3.0.2)\nMD tags were added to alignments with samtools calmd --threads 15 -rb possorted_genome_bam.bam refdata-cellranger-hg19-3.0.0/fasta/genome.fa > possorted_genome_bam_MD.bam\nReads were split based on the CB:Z tag, resulting in one BAM file per barcode.\nAssembly: hg19\nSupplementary files format and content: Tab-separated values files and matrix files",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Alignment, cell barcode processing, umis processing, abundance measurements: cellranger count (version 3.0.2)",
+            "tool_name": "Cell Ranger",
+            "tool_version": "3.0.2",
+            "code_example": "cellranger_version=\"3.0.2\"\n\n# Cell Ranger is typically installed by downloading the tarball from 10x Genomics and adding it to your PATH.\n# Example (adjust path as needed):\n# wget https://cf.10xgenomics.com/releases/cell-exp/cellranger-3.0.2.tar.gz\n# tar -xzf cellranger-3.0.2.tar.gz\n# export PATH=/path/to/cellranger-3.0.2:$PATH\n\n# Define variables for the run\nSAMPLE_ID=\"my_sample_id\" # A unique ID for this run\nFASTQ_DIR=\"/path/to/your/fastqs\" # Directory containing FASTQ files (e.g., from bcl2fastq or mkfastq)\nSAMPLE_NAME=\"sample_1\" # The sample name prefix for your FASTQ files (e.g., sample_1_S1_L001_R1_001.fastq.gz)\nTRANSCRIPTOME_REF=\"/path/to/refdata-gex-GRCh38-2020-A\" # Path to a Cell Ranger-compatible transcriptome reference (e.g., from 10x Genomics)\n\n# Execute cellranger count\ncellranger count \\\n    --id=${SAMPLE_ID} \\\n    --transcriptome=${TRANSCRIPTOME_REF} \\\n    --fastqs=${FASTQ_DIR} \\\n    --sample=${SAMPLE_NAME} \\\n    --expect-cells=3000 # Optional: Expected number of cells, adjust as needed\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "MD tags were added to alignments with samtools calmd --threads 15 -rb possorted_genome_bam.bam refdata-cellranger-hg19-3.0.0/fasta/genome.fa > possorted_genome_bam_MD.bam",
+            "tool_name": "Cell Ranger",
+            "tool_version": "3.0.0",
+            "code_example": "# Install samtools if not already available\n# conda install -c bioconda samtools\n\n# Add MD tags to alignments\nsamtools calmd --threads 15 -rb possorted_genome_bam.bam refdata-cellranger-hg19-3.0.0/fasta/genome.fa > possorted_genome_bam_MD.bam",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1038/ncomms14049"
+        },
+        {
+            "step_order": 3,
+            "description": "Reads were split based on the CB:Z tag, resulting in one BAM file per barcode.",
+            "tool_name": "fgbio (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.3.0",
+            "code_example": "# Install fgbio if not already installed\n# conda install -c bioconda fgbio\n\n# Define input BAM file (replace with actual input file)\nINPUT_BAM=\"input.bam\"\n\n# Define output prefix for split BAM files\nOUTPUT_PREFIX=\"barcode_split_\"\n\n# Split BAM file based on the CB:Z tag, creating one BAM file per unique barcode.\n# The --tag CB option specifies the tag to split by (CB:Z refers to the CB tag with Z string type).\n# The --strategy BARCODE option ensures splitting by unique barcode values found in the tag.\nfgbio SplitBamByTag --input \"${INPUT_BAM}\" --output-prefix \"${OUTPUT_PREFIX}\" --tag CB --strategy BARCODE",
+            "code_language": "bash",
+            "github_url": "https://github.com/fulcrumgenomics/fgbio"
+        }
+    ],
+    "raw_text": "Alignment, cell barcode processing, umis processing, abundance measurements: cellranger count (version 3.0.2)\nMD tags were added to alignments with samtools calmd --threads 15 -rb possorted_genome_bam.bam refdata-cellranger-hg19-3.0.0/fasta/genome.fa > possorted_genome_bam_MD.bam\nReads were split based on the CB:Z tag, resulting in one BAM file per barcode.\nAssembly: hg19\nSupplementary files format and content: Tab-separated values files and matrix files",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

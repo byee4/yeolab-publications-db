@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Sequencing on Illumina NextSeq500 and basecalling by Real-Time Analysis (RTA) software version 2.4.11",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Alignment to the mm10 genome using STAR version 2.5.0",
-      "tool_name": "STAR",
-      "tool_version": "2.5.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "mRNA quantitation using featureCounts version 1.5.3 and the option \u00e2\u0080\u009c\u00e2\u0080\u0093t exon\u00e2\u0080\u009d was specified to count mRNA features",
-      "tool_name": "featureCounts",
-      "tool_version": "1.5.3",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Differential expression using DESeq2 version 1.22.1 specifying a false discovery cutoff of 0.01 for independent filtering",
-      "tool_name": "DESeq2",
-      "tool_version": "1.22.1",
-      "code_example": "",
-      "code_language": "r",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Sequencing on Illumina NextSeq500 and basecalling by Real-Time Analysis (RTA) software version 2.4.11\nAlignment to the mm10 genome using STAR version 2.5.0\nmRNA quantitation using featureCounts version 1.5.3 and the option \u00e2\u0080\u009c\u00e2\u0080\u0093t exon\u00e2\u0080\u009d was specified to count mRNA features\nDifferential expression using DESeq2 version 1.22.1 specifying a false discovery cutoff of 0.01 for independent filtering\nGenome_build: mm10\nSupplementary_files_format_and_content: Transcripts per kilobase million (TPM) normalized count matrix of mapped reads, and DESeq2 outputs for Bmal1 and Clock knockout comparisons in \".csv\" format",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Sequencing on Illumina NextSeq500 and basecalling by Real-Time Analysis (RTA) software version 2.4.11",
+            "tool_name": "Real-Time Analysis (RTA) software",
+            "tool_version": "2.4.11",
+            "code_example": "# This step describes the physical sequencing process on an Illumina NextSeq500 instrument.\n# The Real-Time Analysis (RTA) software, version 2.4.11, is proprietary Illumina software\n# integrated into the instrument's control system (e.g., NextSeq Control Software).\n# RTA performs image analysis, base calling, and quality scoring in real-time during the sequencing run.\n# There is no direct user-executable bash command for this process; it is managed by the instrument's onboard software.\n# The output of this step typically includes BCL (base call) files, which are then demultiplexed and converted to FASTQ files\n# in subsequent bioinformatics steps.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Alignment to the mm10 genome using STAR version 2.5.0",
+            "tool_name": "STAR",
+            "tool_version": "2.5.0",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star=2.5.0\n\n# Define variables\n# Replace with actual paths to your mm10 genome index and input FASTQ files\nGENOME_DIR=\"/path/to/STAR_mm10_index\" # Example: /data/genomes/mm10/STAR_index\nREAD1=\"sample_R1.fastq.gz\"\nREAD2=\"sample_R2.fastq.gz\" # Remove if single-end (e.g., for eCLIP, often single-end)\nOUTPUT_PREFIX=\"sample_aligned_\"\nTHREADS=8 # Adjust based on available CPU cores\n\n# --- Genome Index Generation (run once per genome) ---\n# This step requires the mm10 FASTA and GTF files.\n# Example sources: UCSC (http://hgdownload.soe.ucsc.edu/goldenPath/mm10/bigZips/)\n#                  Ensembl (ftp://ftp.ensembl.org/pub/release-109/fasta/mus_musculus/dna/)\n#                  Ensembl (ftp://ftp.ensembl.org/pub/release-109/gtf/mus_musculus/)\n#\n# Example command to generate index:\n# STAR --runMode genomeGenerate \\\n#      --genomeDir ${GENOME_DIR} \\\n#      --genomeFastaFiles /path/to/mm10.fa \\\n#      --sjdbGTFfile /path/to/mm10.gtf \\\n#      --runThreadN ${THREADS} \\\n#      --sjdbOverhang 100 # Recommended for RNA-seq, typically read_length - 1\n\n# --- Alignment Command ---\nSTAR --genomeDir ${GENOME_DIR} \\\n     --readFilesIn ${READ1} ${READ2} \\\n     --runThreadN ${THREADS} \\\n     --outFileNamePrefix ${OUTPUT_PREFIX} \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --readFilesCommand zcat \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.04 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --sjdbScore 1 \\\n     --limitBAMsortRAM 30000000000 # Adjust based on available RAM, e.g., 30GB",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "mRNA quantitation using featureCounts version 1.5.3 and the option \u00e2\u0080\u009c\u00e2\u0080\u0093t exon\u00e2\u0080\u009d was specified to count mRNA features",
+            "tool_name": "featureCounts",
+            "tool_version": "1.5.3",
+            "code_example": "# Install featureCounts (part of the Subread package)\n# conda install -c bioconda subread\n\n# Placeholder for annotation file. Replace with the actual path to your GTF/GFF file.\n# For example, to download a human GRCh38 GTF from Ensembl:\n# wget http://ftp.ensembl.org/pub/release-109/gtf/homo_sapiens/Homo_sapiens.GRCh38.109.gtf.gz\n# gunzip Homo_sapiens.GRCh38.109.gtf.gz\nANNOTATION_FILE=\"Homo_sapiens.GRCh38.109.gtf\"\n\n# Placeholder for input BAM files. Replace with your actual aligned BAM files.\n# Example: INPUT_BAM_FILES=\"sample1_aligned.bam sample2_aligned.bam\"\nINPUT_BAM_FILES=\"input1.bam input2.bam\"\n\n# Output file for the gene counts\nOUTPUT_COUNTS_FILE=\"mrna_gene_counts.txt\"\n\n# Execute featureCounts for mRNA quantitation, counting reads overlapping 'exon' features\n# and summarizing by 'gene_id'.\nfeatureCounts -t exon -g gene_id -a \"${ANNOTATION_FILE}\" -o \"${OUTPUT_COUNTS_FILE}\" ${INPUT_BAM_FILES}",
+            "code_language": "bash",
+            "github_url": "http://subread.sourceforge.net/"
+        },
+        {
+            "step_order": 4,
+            "description": "Differential expression using DESeq2 version 1.22.1 specifying a false discovery cutoff of 0.01 for independent filtering",
+            "tool_name": "DESeq2",
+            "tool_version": "1.22.1",
+            "code_example": "#!/bin/bash\n\n# --- Installation instructions (commented out) ---\n# # Install R (example for Ubuntu/Debian)\n# # sudo apt-get update\n# # sudo apt-get install r-base\n#\n# # Install BiocManager and DESeq2 within R\n# # DESeq2 version 1.22.1 corresponds to Bioconductor 3.7 (released Oct 2018).\n# # To ensure this specific version:\n# # R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\")'\n# # R -e 'BiocManager::install(version = \"3.7\", ask = FALSE)' # Install Bioconductor 3.7\n# # R -e 'BiocManager::install(\"DESeq2\", ask = FALSE)' # Install DESeq2 for Bioconductor 3.7\n\n# --- Create dummy input files for demonstration ---\n# In a real pipeline, these files (e.g., featureCounts output) would be generated by upstream steps.\n\n# Create a dummy counts matrix (e.g., from featureCounts)\necho \"GeneID,sample1,sample2,sample3,sample4,sample5,sample6\" > counts_matrix.csv\necho \"geneA,100,120,110,200,210,220\" >> counts_matrix.csv\necho \"geneB,50,60,55,100,110,105\" >> counts_matrix.csv\necho \"geneC,10,12,11,20,22,21\" >> counts_matrix.csv\necho \"geneD,500,510,505,500,510,505\" >> counts_matrix.csv\necho \"geneE,1000,1050,1020,100,110,105\" >> counts_matrix.csv\necho \"geneF,10,11,12,100,105,102\" >> counts_matrix.csv\necho \"geneG,5,6,7,8,9,10\" >> counts_matrix.csv # Low count gene\necho \"geneH,0,0,0,0,0,0\" >> counts_matrix.csv # Zero count gene\n\n# Create a dummy colData file (sample metadata)\necho \"sample,condition\" > coldata.csv\necho \"sample1,control\" >> coldata.csv\necho \"sample2,control\" >> coldata.csv\necho \"sample3,control\" >> coldata.csv\necho \"sample4,treated\" >> coldata.csv\necho \"sample5,treated\" >> coldata.csv\necho \"sample6,treated\" >> coldata.csv\n\n# --- Execute DESeq2 analysis using Rscript ---\nRscript -e '\n  # Load DESeq2 library\n  library(DESeq2)\n\n  # Read count data\n  # Assuming the first column is GeneID and subsequent columns are sample counts\n  counts_data <- read.csv(\"counts_matrix.csv\", row.names = 1)\n\n  # Read sample metadata\n  # Assuming the first column is sample name and subsequent columns are metadata\n  col_data <- read.csv(\"coldata.csv\", row.names = 1)\n  col_data$condition <- factor(col_data$condition) # Ensure condition is a factor\n\n  # Ensure sample names in counts_data columns match row names in col_data\n  if (!all(colnames(counts_data) == rownames(col_data))) {\n    stop(\"Sample names in counts matrix columns and colData row names do not match or are not in the same order.\")\n  }\n\n  # Create DESeqDataSet object\n  # Design formula specifies the experimental design (e.g., ~ condition)\n  dds <- DESeqDataSetFromMatrix(countData = counts_data,\n                                colData = col_data,\n                                design = ~ condition)\n\n  # Pre-filtering: remove genes with very low counts across all samples\n  # This helps to reduce the number of tests and increase statistical power.\n  # A common threshold is to keep genes with at least 10 counts summed across all samples.\n  keep <- rowSums(counts(dds)) >= 10\n  dds <- dds[keep,]\n\n  # Run DESeq2 analysis\n  # This performs normalization, dispersion estimation, and Wald test.\n  dds <- DESeq(dds)\n\n  # Extract results with a specified false discovery rate (FDR) cutoff (alpha)\n  # Independent filtering is applied by default in the results() function,\n  # which aims to optimize the number of significant genes by filtering out\n  # genes with very low mean normalized counts.\n  res <- results(dds, alpha = 0.01)\n\n  # Order results by adjusted p-value (padj)\n  res_ordered <- res[order(res$padj),]\n\n  # Save the differential expression results to a CSV file\n  write.csv(as.data.frame(res_ordered), \"deseq2_results_alpha0.01.csv\")\n\n  message(\"DESeq2 analysis complete. Results saved to deseq2_results_alpha0.01.csv\")\n'\n",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/DESeq2.html"
+        }
+    ],
+    "raw_text": "Sequencing on Illumina NextSeq500 and basecalling by Real-Time Analysis (RTA) software version 2.4.11\nAlignment to the mm10 genome using STAR version 2.5.0\nmRNA quantitation using featureCounts version 1.5.3 and the option \u00e2\u0080\u009c\u00e2\u0080\u0093t exon\u00e2\u0080\u009d was specified to count mRNA features\nDifferential expression using DESeq2 version 1.22.1 specifying a false discovery cutoff of 0.01 for independent filtering\nGenome_build: mm10\nSupplementary_files_format_and_content: Transcripts per kilobase million (TPM) normalized count matrix of mapped reads, and DESeq2 outputs for Bmal1 and Clock knockout comparisons in \".csv\" format",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

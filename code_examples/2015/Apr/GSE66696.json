@@ -1,61 +1,61 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize.",
-      "tool_name": "Microarray",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Iter-plier algorithm used to quantify probesets.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "probe group file: GPL13185_mjay.pgf",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Data were analyzed with Omniviewer software: http://exon.ucsc.edu/omniviewer/.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "The Omniviewer output is available on the series record.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "The \"A\" set represents the Nxf1-CAST mutants and the \"B\" set represents the Nxf1-B6 mutants.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize. Iter-plier algorithm used to quantify probesets.\nprobe group file: GPL13185_mjay.pgf\nData were analyzed with Omniviewer software: http://exon.ucsc.edu/omniviewer/. The Omniviewer output is available on the series record. The \"A\" set represents the Nxf1-CAST mutants and the \"B\" set represents the Nxf1-B6 mutants.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize.",
+            "tool_name": "Microarray",
+            "tool_version": "2.12.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Affymetrix Power Tools (APT) is typically downloaded as a binary package from Thermo Fisher Scientific.\n# Installation instructions vary by OS. For example, on Linux:\n# wget https://assets.thermofisher.com/TFS-Assets/LSG/software/APT_2.12.0_Linux_x64.zip\n# unzip APT_2.12.0_Linux_x64.zip\n# cd APT_2.12.0_Linux_x64\n# export PATH=$PWD/bin:$PATH\n\n# Placeholder for input CEL files, output directory, and array-specific reference files.\n# Replace 'sample*.CEL' with actual input CEL file names.\n# Replace 'HG-U133_Plus_2.cdf' and 'HG-U133_Plus_2' with the appropriate CDF file and chip type for your array.\nINPUT_CEL_FILES=\"sample1.CEL sample2.CEL sample3.CEL\"\nOUTPUT_DIR=\"apt_summarize_output\"\nPROBESET_FILE=\"HG-U133_Plus_2.cdf\" # Example: CDF file for a common Affymetrix array\nCHIP_TYPE=\"HG-U133_Plus_2\" # Example: Chip type corresponding to the array\n\nmkdir -p \"${OUTPUT_DIR}\"\n\napt-probeset-summarize \\\n    -a rma \\\n    -o \"${OUTPUT_DIR}\" \\\n    -p \"${PROBESET_FILE}\" \\\n    -c \"${CHIP_TYPE}\" \\\n    ${INPUT_CEL_FILES}",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Iter-plier algorithm used to quantify probesets.",
+            "tool_name": "Iter-plier",
+            "tool_version": "Implemented in `affy` R package (Bioconductor 3.18) (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install R and Bioconductor if not already present\n# R -e \"install.packages('BiocManager')\"\n# R -e \"BiocManager::install('affy')\"\n\n# Create an R script for Iter-plier quantification\ncat << 'EOF' > quantify_probesets_iterplier.R\n# Load the affy package, which implements the Iter-plier algorithm\nlibrary(affy)\n\n# --- Configuration ---\n# Specify the path to your Affymetrix CEL files.\n# IMPORTANT: Replace \"./\" with the actual directory containing your CEL files.\nCEL_FILES_PATH <- \"./\" # Example: current directory\n\n# --- Data Loading ---\n# Read Affymetrix CEL files into an AffyBatch object.\n# This object contains the raw probe intensity data.\n# The 'affy' package automatically uses the appropriate CDF (Chip Description File)\n# based on the array type detected in the CEL files.\nmessage(paste(\"Loading CEL files from:\", CEL_FILES_PATH))\nif (!dir.exists(CEL_FILES_PATH)) {\n  stop(paste(\"Error: CEL files directory not found:\", CEL_FILES_PATH))\n}\nraw_data <- ReadAffy(celfile.path = CEL_FILES_PATH)\n\n# --- Probeset Quantification using Iter-plier Algorithm ---\n# The 'expresso' function performs a complete quantification pipeline,\n# allowing specification of methods for background correction, normalization,\n# PM/MM correction, and summarization.\n# Here, we explicitly use \"iterplier\" for background correction.\n# Other common methods are quantile normalization and median polish summarization.\nmessage(\"Performing probeset quantification using Iter-plier background correction...\")\neset <- expresso(raw_data,\n                 bgcorrect.method = \"iterplier\",\n                 normalize.method = \"quantiles\",\n                 pmcorrect.method = \"pmonly\", # Perfect Match only correction\n                 summary.method = \"medianpolish\")\n\n# --- Extract and Save Results ---\n# Extract the expression matrix from the ExpressionSet object.\nexpression_matrix <- exprs(eset)\n\n# Save the quantified probeset data to a CSV file.\noutput_filename <- \"probeset_quantification_iterplier.csv\"\nwrite.csv(expression_matrix, output_filename, row.names = TRUE)\n\nmessage(paste(\"Probeset quantification complete. Output saved to:\", output_filename))\nEOF\n\n# Execute the R script\nRscript quantify_probesets_iterplier.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/affy.html"
+        },
+        {
+            "step_order": 3,
+            "description": "probe group file: GPL13185_mjay.pgf",
+            "tool_name": "Affymetrix Power Tools (APT) (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Latest (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Installation of Affymetrix Power Tools (APT) from Thermo Fisher Scientific:\n# APT is typically downloaded as a binary package from the official website.\n# Example for Linux:\n# wget https://assets.thermofisher.com/TFS-Assets/LSG/software/APT_2.11.2_Linux_x86_64.zip\n# unzip APT_2.11.2_Linux_x86_64.zip\n# export PATH=$PATH:/path/to/apt/bin\n\n# The GPL13185_mjay.pgf file is a probe group file, which defines the probe sets\n# for the Affymetrix Mouse Gene 1.0 ST Array (GPL13185).\n# This file is a reference dataset used by Affymetrix Power Tools for data processing.\n# Ensure the probe group file is accessible in your working directory or specified path.\n# Example: Copying or linking the reference file if it's stored elsewhere.\n# cp /path/to/reference_files/GPL13185_mjay.pgf .\n\n# Example command: Using apt-probeset-summarize to process CEL files\n# and generate expression summaries using the specified probe group file.\n# Replace 'input_cel_files.txt' with a file containing a list of your CEL file paths (one per line).\n# Replace 'output_dir' with your desired output directory.\n# This command assumes you have raw Affymetrix .CEL files to process.\napt-probeset-summarize --cel-files input_cel_files.txt --probe-group-file GPL13185_mjay.pgf --output-dir output_dir --log-file apt_summarize.log",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "Data were analyzed with Omniviewer software: http://exon.ucsc.edu/omniviewer/.",
+            "tool_name": "Omniviewer",
+            "tool_version": "N/A",
+            "code_example": "# Omniviewer is a web-based genome browser/viewer.\n# Data analysis with Omniviewer typically involves interactive exploration through its web interface.\n# There is no direct command-line execution for the 'analysis' step itself.\n# The following command is a placeholder to indicate the action of viewing data.\n\necho \"Data were analyzed interactively using the Omniviewer web interface at http://exon.ucsc.edu/omniviewer/.\"",
+            "code_language": "bash",
+            "github_url": "http://exon.ucsc.edu/omniviewer/"
+        },
+        {
+            "step_order": 5,
+            "description": "The Omniviewer output is available on the series record.",
+            "tool_name": "OmniViewer",
+            "tool_version": "Not specified",
+            "code_example": "# This step describes the availability of Omniviewer output on a series record.\n# OmniViewer is primarily a web-based interactive visualization tool for multi-omics data.\n# The \"output\" likely refers to data viewable through the OmniViewer web interface\n# or a report/export generated by it.\n#\n# As there is no direct command-line execution implied for *generating* this output\n# by a web-based viewer, the following command represents a conceptual way to access\n# the available output. Replace [OMNIVIEWER_OUTPUT_URL] with the actual URL where the output is hosted.\n# For Linux/WSL environments:\nxdg-open \"https://omniviewer.example.com/series_record_id/output\"\n# For macOS:\n# open \"https://omniviewer.example.com/series_record_id/output\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 6,
+            "description": "The \"A\" set represents the Nxf1-CAST mutants and the \"B\" set represents the Nxf1-B6 mutants.",
+            "tool_name": "Data Grouping/Sample Annotation (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# Define sample sets based on description\n# Set A: Nxf1-CAST mutants\n# Set B: Nxf1-B6 mutants\n\n# This step represents the logical grouping of samples based on experimental design.\n# A common way to represent this in a pipeline is through a manifest or sample sheet.\n\n# Create a placeholder manifest file to categorize samples.\n# In a real scenario, this file would be generated from experimental metadata.\n\n# Example: Assuming sample IDs are available and need to be assigned to sets.\n# This script creates a CSV file defining the sets.\n\necho \"Sample_ID,Set_Name,Genotype\" > sample_manifest.csv\necho \"Nxf1_CAST_Sample_1,A,Nxf1-CAST\" >> sample_manifest.csv\necho \"Nxf1_CAST_Sample_2,A,Nxf1-CAST\" >> sample_manifest.csv\necho \"Nxf1_B6_Sample_1,B,Nxf1-B6\" >> sample_manifest.csv\necho \"Nxf1_B6_Sample_2,B,Nxf1-B6\" >> sample_manifest.csv\n\necho \"Sample manifest 'sample_manifest.csv' created, defining 'A' and 'B' sets.\"\n\n# No specific reference datasets are directly used in this sample grouping step.\n# Reference genomes (e.g., GRCh38) would be used in subsequent analysis steps (e.g., alignment, peak calling).",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Data processed using Affymetrix package (Affy Power Tools) apt-probeset-summarize. Iter-plier algorithm used to quantify probesets.\nprobe group file: GPL13185_mjay.pgf\nData were analyzed with Omniviewer software: http://exon.ucsc.edu/omniviewer/. The Omniviewer output is available on the series record. The \"A\" set represents the Nxf1-CAST mutants and the \"B\" set represents the Nxf1-B6 mutants.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

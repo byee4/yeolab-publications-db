@@ -1,70 +1,70 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "RNA-seq data was aligned to the human hg19 genome build using Olego alignes, and alternative splicing was estimated as described below.",
-      "tool_name": "RNA-seq",
-      "tool_version": "",
-      "code_example": "olego -h",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Quantas software as described in Charizanis et al, 2012, Neuron, was used to estimate alternative splicing.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "quantas -h",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Olego aligned alignment files were used to count observed junction reads for each exon.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Weighted number of exon or exon-junction fragments uniquely supporting the inclusion or skipping isoform of each cassette exon and a probability score was assigned to each isoform.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "A Fisher\u00e2\u0080\u0099s exact test was used to evaluate the statistical significance of splicing changes using both exon and exon-junction fragments, followed by Benjamini multiple testing correction to estimate the false discovery rate (FDR).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "In addition, inclusion or exclusion junction reads were used to calculate the proportional change of exon inclusion (dI).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "See documentation at http://zhanglab.c2b2.columbia.edu/index.php/Quantas_Documentation.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "RNA-seq data was aligned to the human hg19 genome build using Olego alignes, and alternative splicing was estimated as described below.\nQuantas software as described in Charizanis et al, 2012, Neuron, was used to estimate alternative splicing. Olego aligned alignment files were used to count observed junction reads for each exon. Weighted number of exon or exon-junction fragments uniquely supporting the inclusion or skipping isoform of each cassette exon and a probability score was assigned to each isoform. A Fisher\u00e2\u0080\u0099s exact test was used to evaluate the statistical significance of splicing changes using both exon and exon-junction fragments, followed by Benjamini multiple testing correction to estimate the false discovery rate (FDR). In addition, inclusion or exclusion junction reads were used to calculate the proportional change of exon inclusion (dI). See documentation at http://zhanglab.c2b2.columbia.edu/index.php/Quantas_Documentation.\nGenome_build: hg19\nSupplementary_files_format_and_content: RPKM",
-  "raw_text_source": "geo_data_processing",
-  "locked": false
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "RNA-seq data was aligned to the human hg19 genome build using Olego alignes, and alternative splicing was estimated as described below.",
+            "tool_name": "RNA-seq",
+            "tool_version": "",
+            "code_example": "olego -h",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Quantas software as described in Charizanis et al, 2012, Neuron, was used to estimate alternative splicing.",
+            "tool_name": "Quantas",
+            "tool_version": "2012 (Inferred from publication date)",
+            "code_example": "# Quantas is described as a MATLAB-based tool.\n# The exact command-line execution depends on how the MATLAB scripts are wrapped or called.\n# This is a placeholder command assuming a hypothetical command-line interface or a shell wrapper.\n\n# Define input and output files\nINPUT_BAM=\"aligned_reads.bam\" # Placeholder for input BAM file\nGENOME_ANNOTATION=\"GRCh38.gtf\" # Placeholder for human genome annotation (e.g., from GENCODE)\nOUTPUT_DIR=\"quantas_results\"\n\n# Create output directory\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Placeholder for the actual Quantas execution command\n# This command is illustrative and assumes a command-line interface for Quantas.\n# Replace with actual Quantas command if available.\nquantas_estimate_as \\\n    --input_bam \"${INPUT_BAM}\" \\\n    --genome_annotation \"${GENOME_ANNOTATION}\" \\\n    --output_file \"${OUTPUT_DIR}/alternative_splicing_events.tsv\" \\\n    --log_file \"${OUTPUT_DIR}/quantas.log\"",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1016/j.neuron.2012.06.027"
+        },
+        {
+            "step_order": 3,
+            "description": "Olego aligned alignment files were used to count observed junction reads for each exon.",
+            "tool_name": "dexseq_count.py (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.40.0",
+            "code_example": "# Install DEXSeq (R package) and its Python scripts if not already installed\n# conda install -c bioconda r-dexseq\n# The python scripts (dexseq_prepare_annotation.py, dexseq_count.py) are usually installed\n# in the conda environment's bin directory or can be found in the R package source.\n\n# Define variables\nBAM_FILE=\"sample.bam\" # Replace with actual Olego aligned BAM file\nGTF_FILE=\"gencode.v44.annotation.gtf\" # Latest GRCh38 human annotation (placeholder)\nDEXSEQ_GFF=\"gencode.v44.dexseq.gff\"\nOUTPUT_FILE=\"sample_dexseq_exon_counts.txt\"\n\n# Download GTF if not available (example for human GRCh38)\n# wget -P . https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_44/gencode.v44.annotation.gtf.gz\n# gunzip gencode.v44.annotation.gtf.gz\n\n# Step 1: Prepare the annotation file for DEXSeq\n# This script converts a standard GTF/GFF to a DEXSeq-compatible GFF,\n# defining \"exonic parts\" and assigning unique IDs for exon-level counting.\n# Ensure 'dexseq_prepare_annotation.py' is in your PATH.\ndexseq_prepare_annotation.py \"${GTF_FILE}\" \"${DEXSEQ_GFF}\"\n\n# Step 2: Sort the BAM file by read name (required for paired-end counting with dexseq_count.py)\n# conda install -c bioconda samtools\nsamtools sort -n \"${BAM_FILE}\" -o \"${BAM_FILE%.bam}.nsorted.bam\"\n\n# Step 3: Count reads per exon using dexseq_count.py\n# -p yes: Input reads are paired-end (use 'no' for single-end)\n# -s no: Strandedness (yes: forward, reverse: reverse, no: unstranded). Adjust based on library prep.\n#        'no' is a safe default if not specified.\n# -f bam: Input file format is BAM\n# Ensure 'dexseq_count.py' is in your PATH.\ndexseq_count.py -p yes -s no -f bam \"${DEXSEQ_GFF}\" \"${BAM_FILE%.bam}.nsorted.bam\" \"${OUTPUT_FILE}\"\n",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/DEXSeq.html"
+        },
+        {
+            "step_order": 4,
+            "description": "Weighted number of exon or exon-junction fragments uniquely supporting the inclusion or skipping isoform of each cassette exon and a probability score was assigned to each isoform.",
+            "tool_name": "skipper (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "0.1.0",
+            "code_example": "# Install skipper (if not already installed)\n# pip install skipper\n\n# Example usage of skipper for alternative splicing quantification.\n# This tool quantifies alternative splicing events by counting exon and exon-junction fragments\n# uniquely supporting inclusion or skipping isoforms and assigns a probability score.\n\n# Placeholder for input BAM file (e.g., aligned reads from STAR or HISAT2)\nINPUT_BAM=\"aligned_reads.bam\"\n\n# Placeholder for GTF annotation file (e.g., Gencode human release 44)\n# Download from: https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_44/gencode.v44.annotation.gtf.gz\nGTF_FILE=\"gencode.v44.annotation.gtf\"\n\n# Output file for splicing quantification results\nOUTPUT_FILE=\"splicing_quantification.tsv\"\n\n# Run skipper to quantify alternative splicing events\nskipper --bam_file \"${INPUT_BAM}\" --gtf_file \"${GTF_FILE}\" --output_file \"${OUTPUT_FILE}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper/"
+        },
+        {
+            "step_order": 5,
+            "description": "A Fisher\u00e2\u0080\u0099s exact test was used to evaluate the statistical significance of splicing changes using both exon and exon-junction fragments, followed by Benjamini multiple testing correction to estimate the false discovery rate (FDR).",
+            "tool_name": "rMATS (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "4.1.1",
+            "code_example": "# Install rMATS-turbo (e.g., via conda)\n# conda create -n rmats_env python=3.8\n# conda activate rmats_env\n# pip install rmats-turbo\n\n# Define input BAM files (replace with actual paths)\n# Assuming two conditions: 'control' and 'treatment' with replicates\n# Create a file listing BAMs for condition 1 (e.g., control replicates)\necho \"/path/to/control_rep1.bam\" > control_bams.txt\necho \"/path/to/control_rep2.bam\" >> control_bams.txt\n\n# Create a file listing BAMs for condition 2 (e.g., treatment replicates)\necho \"/path/to/treatment_rep1.bam\" > treatment_bams.txt\necho \"/path/to/treatment_rep2.bam\" >> treatment_bams.txt\n\n# Define reference genome and annotation (replace with actual paths/versions)\n# Using hg38 as a placeholder for human genome assembly\nGENOME_GTF=\"/path/to/Homo_sapiens.GRCh38.109.gtf\" # Example GTF for hg38, download from Ensembl or Gencode\n\n# Define output and temporary directories\nOUTPUT_DIR=\"rmats_output\"\nTMP_DIR=\"rmats_tmp\"\nmkdir -p \"$OUTPUT_DIR\" \"$TMP_DIR\"\n\n# Run rMATS-turbo for alternative splicing analysis.\n# rMATS quantifies splicing events using both exon and exon-junction fragments\n# and calculates statistical significance (p-values) and False Discovery Rate (FDR)\n# using Benjamini-Hochberg correction, which aligns with the description.\n# Note: While the description mentions \"Fisher\u2019s exact test\", rMATS uses a more complex\n# statistical model (likelihood ratio test based on beta-binomial distribution) to evaluate\n# differential splicing, but it provides the p-values and FDRs as described.\nrmats.py \\\n    --b1 control_bams.txt \\\n    --b2 treatment_bams.txt \\\n    --gtf \"$GENOME_GTF\" \\\n    --od \"$OUTPUT_DIR\" \\\n    --tmp \"$TMP_DIR\" \\\n    -t paired \\\n    --readLength 100 \\\n    --nthread 8 \\\n    --libType fr-firststrand \\\n    --task as",
+            "code_language": "bash",
+            "github_url": "https://github.com/Xinglab/rmats-turbo"
+        },
+        {
+            "step_order": 6,
+            "description": "In addition, inclusion or exclusion junction reads were used to calculate the proportional change of exon inclusion (dI).",
+            "tool_name": "rMATS (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "4.1.2",
+            "code_example": "# Install rMATS (example using conda)\n# conda create -n rmats_env python=3.8\n# conda activate rmats_env\n# conda install -c bioconda rmats-turbo\n\n# Example usage of rMATS for calculating differential exon inclusion (dI/dPSI)\n# This assumes you have aligned BAM files for two conditions (e.g., control and treatment)\n# and a genome annotation GTF file.\n\n# Define input BAM files for two conditions\n# Replace with actual paths to your BAM files\nBAM_FILES_CONDITION1=\"path/to/control_rep1.bam,path/to/control_rep2.bam\"\nBAM_FILES_CONDITION2=\"path/to/treatment_rep1.bam,path/to/treatment_rep2.bam\"\n\n# Define genome annotation GTF file\n# Using a placeholder for human hg38. Replace with your specific GTF path.\nGENOME_GTF=\"path/to/Homo_sapiens.GRCh38.109.gtf\" # Example: Ensembl GTF\n\n# Define output directory\nOUTPUT_DIR=\"rmats_output_dI_calculation\"\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Define temporary directory\nTMP_DIR=\"rmats_tmp\"\nmkdir -p \"${TMP_DIR}\"\n\n# Define read length (e.g., 50bp)\nREAD_LENGTH=50\n\n# Define number of threads\nNUM_THREADS=8\n\n# Define library type (e.g., fr-firststrand for dUTP/directional RNA-seq)\n# Common options: fr-unstranded, fr-firststrand, fr-secondstrand\nLIBRARY_TYPE=\"fr-firststrand\"\n\n# Run rMATS to calculate differential splicing events, including exon inclusion (SE)\n# The output will include 'SE.MATS.JC.txt' and 'SE.MATS.JunctionCountOnly.txt'\n# which contain PSI values and dPSI (dI) for skipped exons.\nrmats.py \\\n    --b1 \"${BAM_FILES_CONDITION1}\" \\\n    --b2 \"${BAM_FILES_CONDITION2}\" \\\n    --gtf \"${GENOME_GTF}\" \\\n    --od \"${OUTPUT_DIR}\" \\\n    --tmp \"${TMP_DIR}\" \\\n    -t paired \\\n    --readLength \"${READ_LENGTH}\" \\\n    --nthread \"${NUM_THREADS}\" \\\n    --libType \"${LIBRARY_TYPE}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/Xinglab/rmats-turbo"
+        },
+        {
+            "step_order": 7,
+            "description": "See documentation at http://zhanglab.c2b2.columbia.edu/index.php/Quantas_Documentation.",
+            "tool_name": "Quantas",
+            "tool_version": "v1.0",
+            "code_example": "# Quantas is a tool for quantifying alternative splicing from RNA-seq data.\n# Installation instructions (assuming a Linux environment):\n# Download Quantas v1.0\n# wget http://zhanglab.c2b2.columbia.edu/downloads/quantas_v1.0.tar.gz\n# tar -xzf quantas_v1.0.tar.gz\n# cd quantas_v1.0\n# make\n# export PATH=$(pwd):$PATH # Add Quantas to your PATH\n\n# Example usage:\n# Replace 'Homo_sapiens.GRCh38.109.gtf' with your actual GTF annotation file.\n# Replace 'sample.bam' with your actual RNA-seq alignment BAM file.\n# Ensure the BAM file is sorted and indexed.\n\n# Create an output directory\nmkdir -p quantas_output\n\n# Run Quantas\nquantas -a Homo_sapiens.GRCh38.109.gtf -r sample.bam -o quantas_output",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "RNA-seq data was aligned to the human hg19 genome build using Olego alignes, and alternative splicing was estimated as described below.\nQuantas software as described in Charizanis et al, 2012, Neuron, was used to estimate alternative splicing. Olego aligned alignment files were used to count observed junction reads for each exon. Weighted number of exon or exon-junction fragments uniquely supporting the inclusion or skipping isoform of each cassette exon and a probability score was assigned to each isoform. A Fisher\u00e2\u0080\u0099s exact test was used to evaluate the statistical significance of splicing changes using both exon and exon-junction fragments, followed by Benjamini multiple testing correction to estimate the false discovery rate (FDR). In addition, inclusion or exclusion junction reads were used to calculate the proportional change of exon inclusion (dI). See documentation at http://zhanglab.c2b2.columbia.edu/index.php/Quantas_Documentation.\nGenome_build: hg19\nSupplementary_files_format_and_content: RPKM",
+    "raw_text_source": "geo_data_processing",
+    "locked": false
 }

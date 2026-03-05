@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "miRDeep2 0.0.8 was used to count the number of microRNAs",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "The numbers are then manually normalized into FPKM values",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "miRDeep2 0.0.8 was used to count the number of  microRNAs\nThe numbers are then manually normalized into FPKM values\nGenome_build: mm10\nSupplementary_files_format_and_content: tab-delimited text files include FPKM values",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "miRDeep2 0.0.8 was used to count the number of microRNAs",
+            "tool_name": "miRDeep2",
+            "tool_version": "0.0.8",
+            "code_example": "# Install miRDeep2 (example using conda)\n# conda create -n miRDeep2_env\n# conda activate miRDeep2_env\n# conda install -c bioconda mirdeep2=0.0.8\n\n# --- Placeholder for input files ---\n# Raw sequencing reads (e.g., from small RNA-seq)\n# Replace with your actual FASTQ file\nreads_fastq=\"reads.fastq\"\n\n# Reference genome in FASTA format (e.g., human hg38)\n# Download from NCBI, UCSC, or Ensembl\n# Example: wget -O GRCh38.p14.genome.fa.gz \"http://ftp.ensembl.org/pub/release-110/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz\"\n# gunzip GRCh38.p14.genome.fa.gz\ngenome_fa=\"GRCh38.p14.genome.fa\"\n\n# Known mature miRNAs in FASTA format (e.g., from miRBase)\n# Download from miRBase: https://www.mirbase.org/ftp/CURRENT/\n# Example: wget -O hsa_mature.fa.gz \"ftp://mirbase.org/pub/mirbase/CURRENT/mature.fa.gz\"\n# gunzip hsa_mature.fa.gz\nmature_mirnas_fa=\"hsa_mature.fa\"\n\n# Known precursor miRNAs in FASTA format (e.g., from miRBase)\n# Example: wget -O hsa_precursor.fa.gz \"ftp://mirbase.org/pub/mirbase/CURRENT/hairpin.fa.gz\"\n# gunzip hsa_precursor.fa.gz\nprecursor_mirnas_fa=\"hsa_precursor.fa\"\n\n# Species name (e.g., hsa for Homo sapiens)\nspecies_name=\"hsa\"\n\n# --- Run miRDeep2.pl to identify and quantify microRNAs ---\n# This command will predict novel miRNAs and quantify known miRNAs.\n# miRDeep2.pl will internally call mapper.pl to align reads to the genome and known miRNAs.\n# The output includes a comprehensive report and expression counts.\n# -v: verbose output\n# -P: number of threads\n# -d: output directory\n# -a: 3' adapter sequence (REQUIRED for trimming, replace with your actual adapter)\n# -h: minimum read length after trimming (e.g., 18)\n# -m: maximum read length after trimming (e.g., 26)\n# The output directory 'miRDeep2_output' will contain files like 'mirna_predictions.csv' and 'expression_analyses.csv'\n# Replace 'ADAPTER_SEQUENCE' with the actual 3' adapter sequence used in your small RNA-seq library preparation.\n# A common Illumina TruSeq Small RNA 3' adapter is: TGGAATTCTCGGGTGCCAAGGAACTCC\nmiRDeep2.pl \"$reads_fastq\" \"$genome_fa\" \"$mature_mirnas_fa\" \"$precursor_mirnas_fa\" \"$species_name\" \\\n    -v \\\n    -P 8 \\\n    -d miRDeep2_output \\\n    -a TGGAATTCTCGGGTGCCAAGGAACTCC \\\n    -h 18 \\\n    -m 26",
+            "code_language": "bash",
+            "github_url": "https://github.com/rajewsky-lab/miRDeep2"
+        },
+        {
+            "step_order": 2,
+            "description": "The numbers are then manually normalized into FPKM values",
+            "tool_name": "Custom Python script for FPKM calculation (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# This script calculates FPKM values from raw read counts, gene lengths, and total mapped reads.\n# It is a placeholder for a custom script often used for \"manual normalization\".\n\n# --- Placeholder for calculate_fpkm.py content ---\n# #!/usr/bin/env python\n# import pandas as pd\n# import sys\n\n# def calculate_fpkm(counts_file, gene_lengths_file, total_mapped_reads_file, output_file):\n#     # Load counts (e.g., from featureCounts output)\n#     counts_df = pd.read_csv(counts_file, sep='\\t', index_col=0)\n    \n#     # Load gene lengths (e.g., derived from a GTF file)\n#     gene_lengths_df = pd.read_csv(gene_lengths_file, sep='\\t', index_col=0)\n    \n#     # Load total mapped reads (e.g., from STAR Log.final.out)\n#     with open(total_mapped_reads_file, 'r') as f:\n#         total_mapped_reads = float(f.read().strip())\n    \n#     # Ensure indices match for common genes\n#     common_genes = counts_df.index.intersection(gene_lengths_df.index)\n#     counts_df = counts_df.loc[common_genes]\n#     gene_lengths_df = gene_lengths_df.loc[common_genes]\n    \n#     fpkm_df = pd.DataFrame(index=counts_df.index)\n    \n#     # Iterate through samples (columns in counts_df)\n#     for col in counts_df.columns:\n#         read_counts = counts_df[col]\n#         # Assuming 'length_bp' is the column name for lengths in gene_lengths_df\n#         gene_lengths = gene_lengths_df['length_bp'] \n        \n#         # Avoid division by zero for genes with 0 length\n#         gene_lengths_safe = gene_lengths.replace(0, 1) \n        \n#         # FPKM calculation: (num_reads * 10^9) / (gene_length_bp * total_mapped_reads)\n#         fpkm_values = (read_counts * 10**9) / (gene_lengths_safe * total_mapped_reads)\n#         fpkm_df[col] = fpkm_values\n        \n#     fpkm_df.to_csv(output_file, sep='\\t')\n\n# if __name__ == \"__main__\":\n#     if len(sys.argv) != 5:\n#         print(\"Usage: python calculate_fpkm.py <counts_file> <gene_lengths_file> <total_mapped_reads_file> <output_file>\")\n#         sys.exit(1)\n    \n#     counts_file = sys.argv[1]\n#     gene_lengths_file = sys.argv[2]\n#     total_mapped_reads_file = sys.argv[3]\n#     output_file = sys.argv[4]\n    \n#     calculate_fpkm(counts_file, gene_lengths_file, total_mapped_reads_file, output_file)\n# ---------------------------------------------------\n\n# Example input files (these would be generated by previous steps in a pipeline):\n# raw_counts.tsv: Tab-separated file with gene IDs and raw read counts per sample.\n#                 e.g., gene_id\\tsample1\\tsample2\\nENSG000...\\t100\\t150\n# gene_lengths.tsv: Tab-separated file with gene IDs and their lengths in base pairs.\n#                   (Derived from a genome annotation GTF/GFF file, e.g., Homo_sapiens.GRCh38.109.gtf)\n#                   e.g., gene_id\\tlength_bp\\nENSG000...\\t1234\n# total_mapped_reads.txt: A file containing a single number representing the total mapped reads for the sample.\n#                         e.g., 50000000\n\n# Make the custom FPKM calculation script executable (assuming it's named calculate_fpkm.py)\n# chmod +x calculate_fpkm.py\n\n# Execute the FPKM calculation script\n./calculate_fpkm.py raw_counts.tsv gene_lengths.tsv total_mapped_reads.txt fpkm_normalized_counts.tsv",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1038/nbt.1621"
+        }
+    ],
+    "raw_text": "miRDeep2 0.0.8 was used to count the number of  microRNAs\nThe numbers are then manually normalized into FPKM values\nGenome_build: mm10\nSupplementary_files_format_and_content: tab-delimited text files include FPKM values",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,16 +1,16 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "CEL files were analyzed using the oligo package in R/Bioconductor and normalized using RMA",
-      "tool_name": "R",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "CEL files were analyzed using the oligo package in R/Bioconductor and normalized using RMA",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "CEL files were analyzed using the oligo package in R/Bioconductor and normalized using RMA",
+            "tool_name": "R",
+            "tool_version": "Inferred from description",
+            "code_example": "# Install R and Bioconductor (if not already installed)\n# sudo apt-get update\n# sudo apt-get install r-base\n# R -e \"if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager'); BiocManager::install('oligo')\"\n\n# Create an R script for oligo processing and RMA normalization\ncat << 'EOF' > process_cel_files.R\nlibrary(oligo)\n\n# Define the directory containing CEL files\n# Replace '.' with the actual path to your CEL files if they are not in the current directory\ncel_files_dir <- \".\"\n\n# List all CEL files in the specified directory\ncel_files <- list.celfiles(path = cel_files_dir, full.names = TRUE, pattern = \"\\\\.CEL$|\\\\.cel$\")\n\nif (length(cel_files) == 0) {\n    stop(\"No CEL files found in the specified directory: \", cel_files_dir)\n}\n\nmessage(\"Found CEL files: \", paste(basename(cel_files), collapse = \", \"))\n\n# Read CEL files into an appropriate oligo object (e.g., GeneFeatureSet, ExpressionFeatureSet)\nraw_data <- read.celfiles(cel_files)\n\nmessage(\"Performing RMA normalization...\")\n# Perform RMA normalization\nnormalized_data <- rma(raw_data)\n\n# Extract normalized expression matrix\nexprs_matrix <- exprs(normalized_data)\n\n# Define output file name\noutput_file <- \"normalized_expression_rma.tsv\"\n\n# Save normalized expression matrix to a tab-separated file\nwrite.table(exprs_matrix, file = output_file, sep = \"\\t\", quote = FALSE, row.names = TRUE)\n\nmessage(\"RMA normalization complete. Normalized expression saved to: \", output_file)\nEOF\n\n# Execute the R script\nRscript process_cel_files.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/oligo.html"
+        }
+    ],
+    "raw_text": "CEL files were analyzed using the oligo package in R/Bioconductor and normalized using RMA",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

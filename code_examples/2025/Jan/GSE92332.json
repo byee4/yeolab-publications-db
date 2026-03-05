@@ -1,79 +1,79 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "3' polyA RNA-seq",
-      "tool_name": "RNA-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "CellRanger 1.0",
-      "tool_name": "Cell Ranger",
-      "tool_version": "1.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "PCA (prcomp in R)",
-      "tool_name": "PCA",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "kNN-based graph clustering (R code)",
-      "tool_name": "R",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Full-length RNAseq (SMART-Seq2)",
-      "tool_name": "RNA-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Tophat",
-      "tool_name": "TopHat",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Bowtie",
-      "tool_name": "Bowtie",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "RSEM",
-      "tool_name": "RSEM",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "3' polyA RNA-seq\nCellRanger 1.0\nPCA (prcomp in R)\nkNN-based graph clustering (R code)\nFull-length RNAseq (SMART-Seq2)\nTophat\nBowtie\nRSEM\nGenome_build: mm10\nSupplementary_files_format_and_content: 3' polyA RNA-seq: UMI count expression values for each gene (rows) in each cell (columns)\nSupplementary_files_format_and_content: Full-length RNAseq (SMART-Seq2): Transcripts per million (TPM) expression values (derived from RSEM  for each gene (rows) in each cell (columns)",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "3' polyA RNA-seq",
+            "tool_name": "RNA-seq",
+            "tool_version": "1.10.2",
+            "code_example": "# Install Salmon (if not already installed)\n# conda install -c bioconda salmon\n\n# --- Reference Data Setup ---\n# Download human transcriptome FASTA (e.g., Ensembl GRCh38 release 110 cdna)\n# Replace with actual paths to your reference files\n# wget -O Homo_sapiens.GRCh38.cdna.all.fa.gz http://ftp.ensembl.org/pub/release-110/fasta/homo_sapiens/cdna/Homo_sapiens.GRCh38.cdna.all.fa.gz\n# gunzip Homo_sapiens.GRCh38.cdna.all.fa.gz\n\nTRANSCRIPTOME_FASTA=\"Homo_sapiens.GRCh38.cdna.all.fa\" # Path to your transcriptome FASTA\nSALMON_INDEX_DIR=\"salmon_grch38_index\"\nOUTPUT_DIR=\"salmon_quant_output\"\nREAD1=\"sample_R1.fastq.gz\" # Replace with your actual R1 reads\nREAD2=\"sample_R2.fastq.gz\" # Replace with your actual R2 reads (for paired-end)\n# For single-end reads, use READS=\"sample.fastq.gz\" and adjust salmon quant command\nTHREADS=8 # Number of threads to use\n\n# --- Step 1: Build Salmon Index ---\n# This step only needs to be run once per reference transcriptome\necho \"Building Salmon index...\"\nsalmon index -t \"${TRANSCRIPTOME_FASTA}\" -i \"${SALMON_INDEX_DIR}\" --threads \"${THREADS}\"\n\n# --- Step 2: Quantify 3' polyA RNA-seq reads ---\necho \"Quantifying 3' polyA RNA-seq reads with Salmon...\"\nsalmon quant \\\n    -i \"${SALMON_INDEX_DIR}\" \\\n    -l A \\\n    -1 \"${READ1}\" \\\n    -2 \"${READ2}\" \\\n    --gcBias \\\n    --seqBias \\\n    -p \"${THREADS}\" \\\n    -o \"${OUTPUT_DIR}\"\n\necho \"Salmon quantification complete. Results are in ${OUTPUT_DIR}\"",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1038/nmeth.4197"
+        },
+        {
+            "step_order": 2,
+            "description": "CellRanger 1.0",
+            "tool_name": "Cell Ranger",
+            "tool_version": "1.0",
+            "code_example": "# Download and install Cell Ranger (example, adjust path as needed)\n# wget https://cf.10xgenomics.com/releases/cell-exp/cellranger-1.0.0.tar.gz\n# tar -xzf cellranger-1.0.0.tar.gz\n# export PATH=/path/to/cellranger-1.0.0:$PATH\n\n# Create a reference transcriptome (if not already available) or download a pre-built one.\n# This is a placeholder. For Cell Ranger 1.0, a common reference would be human GRCh38.\n# Example download for human GRCh38 v1.0.0 reference:\n# wget https://cf.10xgenomics.com/releases/cell-exp/refdata-cellranger-GRCh38-1.0.0.tar.gz\n# tar -xzf refdata-cellranger-GRCh38-1.0.0.tar.gz\n# REF_PATH=\"refdata-cellranger-GRCh38-1.0.0\"\n\n# Example usage of cellranger count for single-cell gene expression data.\n# Replace with actual paths and sample names.\nOUTPUT_DIR=\"my_cellranger_output\"\nREFERENCE_TRANSCRIPTOME=\"/path/to/your/10x_genomics_reference/refdata-cellranger-GRCh38-1.0.0\" # Placeholder for GRCh38 v1.0.0\nFASTQ_DIR=\"/path/to/your/fastq_files\" # Directory containing R1, R2, and I1 fastq files\nSAMPLE_NAME=\"my_sample\"\n\ncellranger count \\\n    --id=\"${OUTPUT_DIR}\" \\\n    --transcriptome=\"${REFERENCE_TRANSCRIPTOME}\" \\\n    --fastqs=\"${FASTQ_DIR}\" \\\n    --sample=\"${SAMPLE_NAME}\" \\\n    --localcores=8 \\\n    --localmem=64",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "PCA (prcomp in R)",
+            "tool_name": "PCA",
+            "tool_version": "4.2.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install R if not already installed (example for Ubuntu)\n# sudo apt-get update\n# sudo apt-get install r-base\n\n# Create a dummy input TSV file for demonstration\n# In a real scenario, replace 'input_matrix.tsv' with your actual data file.\necho -e \"Sample\\tFeature1\\tFeature2\\tFeature3\\tFeature4\\tFeature5\" > input_matrix.tsv\necho -e \"S1\\t10\\t20\\t30\\t40\\t50\" >> input_matrix.tsv\necho -e \"S2\\t12\\t22\\t33\\t44\\t55\" >> input_matrix.tsv\necho -e \"S3\\t8\\t18\\t28\\t38\\t48\" >> input_matrix.tsv\necho -e \"S4\\t11\\t21\\t31\\t41\\t51\" >> input_matrix.tsv\necho -e \"S5\\t9\\t19\\t29\\t39\\t49\" >> input_matrix.tsv\n\n# R script to perform PCA using prcomp\nRscript -e '\n  # Read input data (assuming tab-separated with header, first column as row names)\n  # Adjust \"input_matrix.tsv\", \"sep\", and \"row.names\" according to your data format.\n  data_raw <- read.table(\"input_matrix.tsv\", header = TRUE, sep = \"\\t\", row.names = 1)\n  \n  # Ensure all columns are numeric for PCA. If your data contains non-numeric columns\n  # that should not be part of PCA, select only the numeric ones.\n  data_numeric <- as.matrix(data_raw)\n  \n  # Perform PCA. \n  # `scale. = TRUE` standardizes variables to have unit variance (recommended).\n  # `center. = TRUE` centers variables to have zero mean (default and recommended).\n  pca_result <- prcomp(data_numeric, scale. = TRUE, center. = TRUE)\n\n  # Save PCA results to CSV files\n  # 1. Principal Components (scores): Coordinates of the observations in the principal component space.\n  write.csv(pca_result$x, \"pca_scores.csv\", row.names = TRUE)\n  \n  # 2. Loadings (rotations): The matrix of variable loadings (eigenvectors).\n  write.csv(pca_result$rotation, \"pca_loadings.csv\", row.names = TRUE)\n  \n  # 3. Standard deviations of the principal components.\n  sdev_df <- as.data.frame(pca_result$sdev)\n  colnames(sdev_df) <- \"Standard_Deviation\"\n  write.csv(sdev_df, \"pca_sdev.csv\", row.names = TRUE)\n  \n  # 4. Calculate and save the proportion of variance explained by each principal component.\n  variance_explained <- pca_result$sdev^2 / sum(pca_result$sdev^2)\n  variance_explained_df <- as.data.frame(variance_explained)\n  colnames(variance_explained_df) <- \"Proportion_of_Variance_Explained\"\n  write.csv(variance_explained_df, \"pca_variance_explained.csv\", row.names = TRUE)\n  \n  # 5. Calculate and save the cumulative variance explained.\n  cumulative_variance_explained <- cumsum(variance_explained)\n  cumulative_variance_explained_df <- as.data.frame(cumulative_variance_explained)\n  colnames(cumulative_variance_explained_df) <- \"Cumulative_Variance_Explained\"\n  write.csv(cumulative_variance_explained_df, \"pca_cumulative_variance_explained.csv\", row.names = TRUE)\n'",
+            "code_language": "bash",
+            "github_url": "https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/prcomp"
+        },
+        {
+            "step_order": 4,
+            "description": "kNN-based graph clustering (R code)",
+            "tool_name": "R",
+            "tool_version": "Not specified",
+            "code_example": "# Install R if not already installed\n# sudo apt-get update\n# sudo apt-get install r-base\n\n# Install R packages if not already installed\n# R -q -e \"install.packages('RANN', repos='http://cran.us.r-project.org')\"\n# R -q -e \"install.packages('igraph', repos='http://cran.us.r-project.org')\"\n\n# Placeholder for input data: A CSV file where rows are samples and columns are features.\n# The first column is assumed to be a unique identifier (e.g., SampleID).\n# Example:\n# SampleID,Feature1,Feature2,Feature3\n# SampleA,0.1,0.5,0.9\n# SampleB,0.2,0.6,0.8\n# SampleC,0.9,0.1,0.2\n# SampleD,0.8,0.2,0.1\n# SampleE,0.15,0.55,0.85\ninput_data=\"input_data.csv\"\noutput_clusters=\"output_clusters.csv\"\nk_neighbors=5 # Number of nearest neighbors for graph construction\n\n# Create a dummy input file for demonstration if it doesn't exist\nif [ ! -f \"$input_data\" ]; then\n  echo \"Creating a dummy input_data.csv for demonstration.\"\n  echo \"SampleID,Feature1,Feature2,Feature3\" > \"$input_data\"\n  echo \"SampleA,0.1,0.5,0.9\" >> \"$input_data\"\n  echo \"SampleB,0.2,0.6,0.8\" >> \"$input_data\"\n  echo \"SampleC,0.9,0.1,0.2\" >> \"$input_data\"\n  echo \"SampleD,0.8,0.2,0.1\" >> \"$input_data\"\n  echo \"SampleE,0.15,0.55,0.85\" >> \"$input_data\"\n  echo \"SampleF,0.95,0.05,0.15\" >> \"$input_data\"\nfi\n\n# R script for kNN-based graph clustering\nR_SCRIPT=\"knn_graph_clustering.R\"\n\ncat << 'EOF' > \"$R_SCRIPT\"\n# Load necessary libraries\nlibrary(RANN) # For nn2 (k-nearest neighbors search)\nlibrary(igraph) # For graph creation and community detection algorithms\n\n# --- Parameters (passed from shell) ---\nargs <- commandArgs(trailingOnly = TRUE)\ninput_file <- args[1]\noutput_file <- args[2]\nk_neighbors <- as.integer(args[3])\n\n# Validate command-line arguments\nif (length(args) != 3) {\n  stop(\"Usage: Rscript knn_graph_clustering.R <input_file.csv> <output_file.csv> <k_neighbors>\")\n}\n\n# Check if input file exists\nif (!file.exists(input_file)) {\n  stop(paste(\"Input file not found:\", input_file))\n}\n\n# 1. Load data\n# Reads a CSV file, assuming the first column contains row names (sample IDs)\n# and subsequent columns are numerical features.\ndata <- as.matrix(read.csv(input_file, row.names = 1))\n\n# 2. Perform kNN search to build the graph\n# nn2 finds the k nearest neighbors for each point in 'data'.\n# We add 1 to k_neighbors because nn2 includes the point itself in its neighbors list.\nknn_results <- nn2(data, k = k_neighbors + 1)\n\n# Extract neighbor indices, excluding the first column which corresponds to the point itself.\nneighbor_indices <- knn_results$nn.idx[, -1]\n\n# Create edges for the graph based on kNN results.\n# Each point is connected to its k nearest neighbors.\nedges <- c()\nfor (i in 1:nrow(data)) {\n  for (j in 1:k_neighbors) {\n    neighbor_idx <- neighbor_indices[i, j]\n    # Add an edge between point 'i' and its 'j'-th nearest neighbor.\n    # For an undirected graph, we only need to add each unique pair once.\n    edges <- c(edges, i, neighbor_idx)\n  }\n}\n\n# Create an igraph graph object.\n# 'directed = FALSE' creates an undirected graph.\n# 'simplify = TRUE' removes multiple edges between the same two vertices and self-loops.\ng <- graph(edges, directed = FALSE)\ng <- simplify(g)\n\n# 3. Perform graph clustering (e.g., Louvain community detection)\n# The Louvain algorithm is a popular method for detecting communities (clusters)\n# in large networks by optimizing modularity.\n# Other igraph clustering functions include cluster_walktrap, cluster_fast_greedy, cluster_leiden.\nclusters <- cluster_louvain(g)\n\n# Get the cluster assignment for each vertex (sample).\ncluster_assignments <- membership(clusters)\n\n# Create a data frame to store the results.\noutput_df <- data.frame(\n  Sample = rownames(data),\n  Cluster = cluster_assignments\n)\n\n# 4. Save results to a CSV file.\nwrite.csv(output_df, output_file, row.names = FALSE)\n\nmessage(paste(\"Clustering complete. Results saved to:\", output_file))\nEOF\n\n# Execute the R script with the specified parameters\nRscript \"$R_SCRIPT\" \"$input_data\" \"$output_clusters\" \"$k_neighbors\"\n\n# Clean up the R script (optional)\n# rm \"$R_SCRIPT\"",
+            "code_language": "bash",
+            "github_url": "https://igraph.org/r/"
+        },
+        {
+            "step_order": 5,
+            "description": "Full-length RNAseq (SMART-Seq2)",
+            "tool_name": "RNA-seq",
+            "tool_version": "1.3.3",
+            "code_example": "# Define variables\n# Replace with actual paths and filenames\nGENOME_FASTA=\"/path/to/hg38.fa\" # Example: Human genome FASTA file (e.g., hg38.fa)\nGENOME_DIR=\"/path/to/STAR_genome_index/hg38\" # Directory for STAR genome index\nGTF_FILE=\"/path/to/gencode.v44.annotation.gtf\" # Example: Gencode v44 annotation GTF for hg38\nREAD1=\"sample_R1.fastq.gz\"\nREAD2=\"sample_R2.fastq.gz\" # Assuming paired-end reads for SMART-Seq2\nOUTPUT_PREFIX=\"sample_output\"\nRSEM_REFERENCE_NAME=\"hg38_rsem_ref\" # Name for RSEM reference files\nSTAR_EXECUTABLE=\"STAR\" # Path to STAR executable if not in PATH\n\n# --- Installation (commented out) ---\n# # Install STAR (e.g., using conda)\n# # conda install -c bioconda star=2.7.10a\n#\n# # Install RSEM (e.g., using conda)\n# # conda install -c bioconda rsem=1.3.3\n\n# --- Reference Preparation (usually done once per genome/annotation, uncomment and run if needed) ---\n# # 1. Prepare STAR genome index (if not already done)\n# # This step creates the necessary genome index files for STAR alignment.\n# # Adjust --sjdbOverhang based on your read length (e.g., ReadLength - 1).\n# # ${STAR_EXECUTABLE} --runMode genomeGenerate \\\n# #      --genomeDir ${GENOME_DIR} \\\n# #      --genomeFastaFiles ${GENOME_FASTA} \\\n# #      --sjdbGTFfile ${GTF_FILE} \\\n# #      --sjdbOverhang 100 \\\n# #      --runThreadN 8\n#\n# # 2. Prepare RSEM reference (requires STAR genome index and GTF)\n# # This step builds the RSEM reference files, which include transcript sequences and gene-transcript mappings.\n# # It uses STAR internally for transcript indexing.\n# # rsem-prepare-reference --gtf ${GTF_FILE} \\\n# #                        --star \\\n# #                        --star-path ${STAR_EXECUTABLE} \\\n# #                        --num-threads 8 \\\n# #                        ${GENOME_FASTA} \\\n# #                        ${RSEM_REFERENCE_NAME}\n\n# --- Full-length RNAseq (SMART-Seq2) Analysis --- \n\n# 1. Alignment with STAR\n# Aligns paired-end RNA-seq reads to the genome using a splice-aware aligner.\n# The --quantMode TranscriptomeSAM option generates a transcriptome-aligned BAM file,\n# which is required by RSEM for accurate quantification.\n${STAR_EXECUTABLE} --genomeDir ${GENOME_DIR} \\\n     --readFilesIn ${READ1} ${READ2} \\\n     --runThreadN 8 \\\n     --outFileNamePrefix ${OUTPUT_PREFIX}.STAR. \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outSAMattributes Standard \\\n     --quantMode TranscriptomeSAM\n\n# 2. Quantification with RSEM\n# Quantifies gene and transcript expression levels from the STAR-aligned transcriptome BAM.\n# The output includes FPKM, TPM, and read counts for genes and isoforms.\nrsem-calculate-expression --paired-end \\\n                          --num-threads 8 \\\n                          --bam ${OUTPUT_PREFIX}.STAR.Aligned.toTranscriptome.out.bam \\\n                          ${RSEM_REFERENCE_NAME} \\\n                          ${OUTPUT_PREFIX}.RSEM",
+            "code_language": "bash",
+            "github_url": "https://github.com/deweylab/RSEM"
+        },
+        {
+            "step_order": 6,
+            "description": "Tophat",
+            "tool_name": "TopHat",
+            "tool_version": "2.1.1 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install TopHat2 and its dependencies (example using conda)\n# conda create -n tophat_env tophat2=2.1.1 bowtie2=2.3.4.3 samtools=1.9 -c bioconda -y\n# conda activate tophat_env\n\n# Define variables\n# Placeholder for human genome (hg38) Bowtie2 index prefix.\n# Ensure the directory '/path/to/genome/index/hg38/' contains Bowtie2 index files\n# like hg38.1.bt2, hg38.2.bt2, etc.\nGENOME_INDEX_PREFIX=\"/path/to/genome/index/hg38/hg38\"\n\n# Placeholder for human genome (hg38) GTF annotation file (e.g., Gencode v38)\nGTF_FILE=\"/path/to/annotation/gencode.v38.annotation.gtf\"\n\n# Input FASTQ file(s)\n# Assuming single-end reads for this example. For paired-end, use FASTQ_R1 and FASTQ_R2 variables.\nFASTQ_FILE=\"input_eclip_reads.fastq.gz\"\n# For paired-end: FASTQ_R1=\"input_eclip_read1.fastq.gz\"\n# For paired-end: FASTQ_R2=\"input_eclip_read2.fastq.gz\"\n\n# Output directory for TopHat2 results\nOUTPUT_DIR=\"tophat2_alignment_output\"\n\n# Number of threads to use for alignment\nTHREADS=8\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Execute TopHat2 for eCLIP alignment\n# --library-type fr-firststrand is commonly used for eCLIP assays\ntophat2 \\\n    --library-type fr-firststrand \\\n    --num-threads \"${THREADS}\" \\\n    --gtf \"${GTF_FILE}\" \\\n    --output-dir \"${OUTPUT_DIR}\" \\\n    \"${GENOME_INDEX_PREFIX}\" \\\n    \"${FASTQ_FILE}\"\n# For paired-end: tophat2 ... \"${GENOME_INDEX_PREFIX}\" \"${FASTQ_R1}\" \"${FASTQ_R2}\"\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 7,
+            "description": "Bowtie",
+            "tool_name": "Bowtie",
+            "tool_version": "2.4.2",
+            "code_example": "# Install bowtie2 (e.g., using conda)\n# conda install -c bioconda bowtie2=2.4.2\n\n# Define variables (placeholders)\nINPUT_FASTQ=\"input.fastq.gz\" # Replace with your input FASTQ file\nOUTPUT_SAM=\"output.sam\"     # Replace with your desired output SAM file\nTHREADS=8                   # Number of threads to use\nLOG_FILE=\"bowtie2.log\"      # Log file for bowtie2 output\nGENOME_INDEX_PREFIX=\"/path/to/your/genome/index/hg38\" # Replace with the path to your Bowtie2 index prefix (e.g., for hg38)\n\n# Example: Download and build hg38 index if not available (this is a placeholder, actual index building might be more complex)\n# mkdir -p /path/to/your/genome/index\n# wget -P /path/to/your/genome/index https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz\n# gunzip /path/to/your/genome/index/hg38.fa.gz\n# bowtie2-build /path/to/your/genome/index/hg38.fa /path/to/your/genome/index/hg38\n\n# Run bowtie2 alignment for eCLIP assays\nbowtie2 \\\n    -p \"${THREADS}\" \\\n    --local \\\n    --very-sensitive-local \\\n    -x \"${GENOME_INDEX_PREFIX}\" \\\n    -U \"${INPUT_FASTQ}\" \\\n    -S \"${OUTPUT_SAM}\" \\\n    2> \"${LOG_FILE}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/BenLangmead/bowtie2"
+        },
+        {
+            "step_order": 8,
+            "description": "RSEM",
+            "tool_name": "RSEM",
+            "tool_version": "1.3.3 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install RSEM (if not already installed)\n# conda install -c bioconda rsem\n\n# --- Reference Data Preparation (Run once) ---\n# RSEM requires an index built from a reference genome FASTA and a gene annotation GTF/GFF file.\n# Example for human GRCh38 (hg38) using Gencode v38 annotation:\n\n# # Create a directory for RSEM index files\n# mkdir -p rsem_index_hg38\n# cd rsem_index_hg38\n\n# # Download reference genome FASTA (primary assembly)\n# # wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_38/GRCh38.primary_assembly.genome.fa.gz\n# # gunzip GRCh38.primary_assembly.genome.fa.gz\n\n# # Download gene annotation GTF\n# # wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_38/gencode.v38.annotation.gtf.gz\n# # gunzip gencode.v38.annotation.gtf.gz\n\n# # Build the RSEM reference index\n# # This step can take a significant amount of time and memory.\n# # rsem-prepare-reference --gtf gencode.v38.annotation.gtf \\\n# #                      GRCh38.primary_assembly.genome.fa \\\n# #                      hg38_rsem_index\n\n# --- RSEM Quantification Command ---\n\n# Define input and output paths\n# INPUT_BAM: Path to the alignment file (e.g., from STAR, HISAT2) in BAM format.\n#            Assumes paired-end reads were aligned.\nINPUT_BAM=\"/path/to/your/aligned_reads.bam\"\n\n# RSEM_INDEX: Path to the RSEM reference index directory and prefix created by rsem-prepare-reference.\n#             e.g., if index was built as 'hg38_rsem_index' in '/path/to/rsem_index_hg38/', then it's '/path/to/rsem_index_hg38/hg38_rsem_index'\nRSEM_INDEX=\"/path/to/rsem_index_hg38/hg38_rsem_index\"\n\n# OUTPUT_PREFIX: Prefix for all output files generated by RSEM (e.g., .genes.results, .isoforms.results, .stat).\nOUTPUT_PREFIX=\"sample_quantification_results\"\n\n# Number of threads to use for parallel processing\nNUM_THREADS=8\n\n# Strandedness of the RNA-seq library. Common options:\n#   --strandedness none (for unstranded libraries)\n#   --strandedness forward (for dUTP, Ligation, Standard Illumina with first read sense to transcript)\n#   --strandedness reverse (for dUTP, Ligation, Standard Illumina with first read antisense to transcript)\n# If unsure, 'none' is a safe default but might reduce accuracy for stranded libraries.\nSTRANDEDNESS=\"none\"\n\n# Execute RSEM to calculate gene and isoform expression\nrsem-calculate-expression \\\n    --bam \\                         # Specify that input is a BAM file\n    --paired-end \\                  # Specify that reads are paired-end\n    --no-qualities \\                # Input BAM does not need quality scores for quantification\n    --num-threads \"${NUM_THREADS}\" \\ # Number of threads for parallel processing\n    --strandedness \"${STRANDEDNESS}\" \\ # Library strandedness\n    \"${INPUT_BAM}\" \\                # Input BAM file\n    \"${RSEM_INDEX}\" \\               # RSEM reference index\n    \"${OUTPUT_PREFIX}\"              # Output file prefix",
+            "code_language": "bash",
+            "github_url": "https://github.com/deweylab/RSEM"
+        }
+    ],
+    "raw_text": "3' polyA RNA-seq\nCellRanger 1.0\nPCA (prcomp in R)\nkNN-based graph clustering (R code)\nFull-length RNAseq (SMART-Seq2)\nTophat\nBowtie\nRSEM\nGenome_build: mm10\nSupplementary_files_format_and_content: 3' polyA RNA-seq: UMI count expression values for each gene (rows) in each cell (columns)\nSupplementary_files_format_and_content: Full-length RNAseq (SMART-Seq2): Transcripts per million (TPM) expression values (derived from RSEM  for each gene (rows) in each cell (columns)",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

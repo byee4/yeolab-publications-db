@@ -1,88 +1,88 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "CCS calling (v8.0.0)",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "read deconcatenation using skera(1.2.0)",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "read trimming with lima(v2.9.0)",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "refine reads with isoseq refine (v4.1.1)",
-      "tool_name": "IsoSeq",
-      "tool_version": "4.1.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "read alignment with pbmm2 (v1.13.0)",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "http://www.htslib.org"
-    },
-    {
-      "step_order": 6,
-      "description": "QC with NanoPlot (v1.32.1)",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "filter unmapped reads, supplementary alignment reads, reads aligned to the incorrect strand, and reads having read quality below 20",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "call edits using custom script",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "http://homer.ucsd.edu"
-    },
-    {
-      "step_order": 9,
-      "description": "remove SNPs",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://github.com/YeoLab/sailor"
-    }
-  ],
-  "raw_text": "CCS calling (v8.0.0)\nread deconcatenation using skera(1.2.0)\nread trimming with lima(v2.9.0)\nrefine reads with isoseq refine (v4.1.1)\nread alignment with pbmm2 (v1.13.0)\nQC with NanoPlot (v1.32.1)\nfilter unmapped reads, supplementary alignment reads, reads aligned to the incorrect strand, and reads having read quality below 20\ncall edits using custom script\nremove SNPs\nAssembly: hg38\nSupplementary files format and content: isoforms level edit detection (.bed)",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "CCS calling (v8.0.0)",
+            "tool_name": "ccs",
+            "tool_version": "8.0.0",
+            "code_example": "# Install PacBio SMRT Link/SMRT Tools (which includes the ccs tool).\n# This can typically be done by downloading the SMRT Link installer from PacBio's website\n# or, for the `pbccs` standalone tool, via bioconda:\n# conda install -c bioconda pbccs=8.0.0\n\n# Example command for Circular Consensus Sequencing (CCS) calling.\n# Replace 'input.subreads.bam' with the path to your PacBio subreads BAM file.\n# Replace 'output.ccs.bam' with the desired path for the output CCS BAM file.\n# The version 8.0.0 refers to the specific version of the ccs tool.\nccs input.subreads.bam output.ccs.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/PacificBiosciences/pbccs"
+        },
+        {
+            "step_order": 2,
+            "description": "read deconcatenation using skera(1.2.0)",
+            "tool_name": "skera",
+            "tool_version": "1.2.0",
+            "code_example": "# Install skera (if not already installed)\n# conda install -c bioconda skera\n\n# Example command for read deconcatenation using skera split\n# This command assumes 'input.fastq.gz' is the concatenated file\n# and will split it into multiple files with 'deconcatenated_reads_' prefix.\n# The exact splitting logic (e.g., by barcode, by number of files) would depend on specific use case.\nskera split input.fastq.gz --output-prefix deconcatenated_reads_",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "read trimming with lima(v2.9.0)",
+            "tool_name": "lima",
+            "tool_version": "2.9.0",
+            "code_example": "# Install lima (example using conda)\n# conda install -c bioconda lima=2.9.0\n\n# Example command for read trimming and demultiplexing with lima.\n# This command assumes you have a primer FASTA file and an input FASTQ file.\n# Adjust parameters like --min-score, --min-length, --max-length as needed for your data.\n# Replace 'primers.fasta' with the path to your actual primer file.\n# Replace 'input_reads.fastq' with the path to your actual input FASTQ file.\n# The --split-fastq option will output demultiplexed and trimmed reads into the specified output directory.\nlima --ccs \\\n     --peek-guess \\\n     --min-score 70 \\\n     --min-length 50 \\\n     --max-length 10000 \\\n     --split-fastq \\\n     --output-dir trimmed_demux_reads \\\n     primers.fasta \\\n     input_reads.fastq",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "refine reads with isoseq refine (v4.1.1)",
+            "tool_name": "IsoSeq",
+            "tool_version": "4.1.1",
+            "code_example": "# Install pb-isoseq-sm if not already installed\n# conda install -c bioconda pb-isoseq-sm=4.1.1\n\n# Refine reads using isoseq refine\n# This command typically takes demultiplexed CCS reads (from lima) and a primer file.\n# Replace 'input.lima.ccs.bam' with your actual demultiplexed CCS BAM file.\n# Replace 'primers.fasta' with your actual primer FASTA file.\n# Replace 'output.flnc.bam' with your desired output file name for full-length non-chimeric reads.\nisoseq refine --primer primers.fasta input.lima.ccs.bam output.flnc.bam",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 5,
+            "description": "read alignment with pbmm2 (v1.13.0)",
+            "tool_name": "pbmm2",
+            "tool_version": "v1.13.0",
+            "code_example": "# Install pbmm2 (e.g., via conda)\n# conda install -c bioconda pbmm2=1.13.0\n\n# Define variables (replace with actual paths and filenames)\nREFERENCE_GENOME=\"/path/to/your/reference_genome.fasta\" # e.g., hg38.fasta\nINPUT_READS=\"/path/to/your/input_reads.bam\" # or .fastq.gz, .fasta.gz\nOUTPUT_ALIGNED_BAM=\"output_aligned_reads.bam\"\nNUM_THREADS=8 # Adjust as needed\n\n# Perform read alignment with pbmm2\n# Using --preset CCS for HiFi reads, adjust if using CLR reads (--preset SUBREAD)\npbmm2 align \\\n  --sort \\\n  -j ${NUM_THREADS} \\\n  --preset CCS \\\n  ${REFERENCE_GENOME} \\\n  ${INPUT_READS} \\\n  ${OUTPUT_ALIGNED_BAM}",
+            "code_language": "bash",
+            "github_url": "https://github.com/PacificBiosciences/pbmm2"
+        },
+        {
+            "step_order": 6,
+            "description": "QC with NanoPlot (v1.32.1)",
+            "tool_name": "NanoPlot",
+            "tool_version": "1.32.1",
+            "code_example": "# Install NanoPlot if not already installed\n# conda install -c bioconda nanoplot\n\n# Perform QC with NanoPlot\n# INPUT_FASTQ: Path to the input FASTQ file (e.g., from Oxford Nanopore sequencing)\n# OUTPUT_PREFIX: Prefix for output files (e.g., nanoplot_qc_results)\nnanoplot --fastq \"$INPUT_FASTQ\" --prefix \"$OUTPUT_PREFIX\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/wdecoster/NanoPlot"
+        },
+        {
+            "step_order": 7,
+            "description": "filter unmapped reads, supplementary alignment reads, reads aligned to the incorrect strand, and reads having read quality below 20",
+            "tool_name": "samtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.19",
+            "code_example": "# Install samtools (if not already installed)\n# conda install -c bioconda samtools=1.19\n\n# Define input and output file paths\nINPUT_BAM=\"input.bam\"\nOUTPUT_BAM=\"filtered.bam\"\n\n# Filter reads based on the specified criteria:\n# -F 4: Exclude unmapped reads (FLAG 4 is UNMAPPED)\n# -F 2048: Exclude supplementary alignments (FLAG 2048 is SUPPLEMENTARY_ALIGNMENT)\n# -F 16: Exclude reads aligned to the reverse strand (FLAG 16 is READ_REVERSE_STRAND). \n#        This interprets 'reads aligned to the incorrect strand' as filtering out reads \n#        that align to the reverse strand, assuming a preference for forward-strand alignments.\n# -q 20: Exclude reads with mapping quality below 20\n# -b: Output in BAM format\nsamtools view -b -F 4 -F 2048 -F 16 -q 20 \"${INPUT_BAM}\" > \"${OUTPUT_BAM}\"\n\n# Index the filtered BAM file for downstream use\nsamtools index \"${OUTPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 8,
+            "description": "call edits using custom script",
+            "tool_name": "REDItools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.2.1 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# This step uses a custom Python script (call_edits.py) from the Yeo lab eCLIP pipeline,\n# which in turn calls REDItoolDnaRna.py to identify RNA editing sites.\n\n# Install REDItools (example, adjust for specific environment)\n# REDItools can be installed via pip or from source.\n# pip install REDItools==1.2.1\n\n# Define input and reference files (placeholders - replace with actual paths)\nINPUT_BAM=\"path/to/merged_replicates.bam\"\nGENOME_FASTA=\"path/to/GRCh38.primary_assembly.genome.fa\" # Example: hg38 primary assembly\nGENOME_GTF=\"path/to/gencode.v38.annotation.gtf\" # Example: GENCODE v38 annotations\nOUTPUT_PREFIX=\"sample_name_edits\"\n\n# Optional: Common variants VCF (e.g., dbSNP) to filter known SNPs\nCOMMON_VARIANTS_VCF=\"path/to/dbSNP_155_GRCh38.vcf.gz\" # Example: dbSNP build 155 for hg38\n\n# Optional: Known RNA editing sites (e.g., from REDIportal) to annotate known sites\nKNOWN_RNA_EDITING_SITES=\"path/to/REDIportal_hg38_all_sites.txt\" # Example: REDIportal sites for hg38\n\n# Parameters for REDItoolDnaRna.py, as used in the eCLIP pipeline's call_edits.py script\nMIN_READ_COVERAGE=5         # Minimum read coverage\nMIN_BASE_QUALITY=20         # Minimum base quality\nMIN_MAPPING_QUALITY=20      # Minimum mapping quality\nMIN_VARIANT_FREQUENCY=0.05  # Minimum variant frequency\nMAX_VARIANT_FREQUENCY=0.95  # Maximum variant frequency\nMIN_VARIANT_READS=2         # Minimum number of reads supporting the variant\nSTRAND_SPECIFIC=1           # 0 for non-strand-specific, 1 for strand-specific (eCLIP is strand-specific)\nFILTER_MULTIHIT_FLAG=\"-x\"   # Filter reads mapping to multiple locations\nFILTER_INDELS_FLAG=\"-i\"     # Filter sites with indels\nFILTER_REPEATS_FLAG=\"-r\"    # Filter sites in repetitive regions\n\n# Construct the REDItoolDnaRna.py command\nREDItools_COMMAND=\"REDItoolDnaRna.py\"\nREDItools_COMMAND+=\" -s ${STRAND_SPECIFIC}\"\nREDItools_COMMAND+=\" -t 16\" # Number of threads (hardcoded in the eCLIP script)\nREDItools_COMMAND+=\" -f ${GENOME_FASTA}\"\nREDItools_COMMAND+=\" -o ${OUTPUT_PREFIX}\"\nREDItools_COMMAND+=\" -g ${GENOME_GTF}\"\nREDItools_COMMAND+=\" -q ${MIN_BASE_QUALITY}\"\nREDItools_COMMAND+=\" -m ${MIN_MAPPING_QUALITY}\"\nREDItools_COMMAND+=\" -c ${MIN_READ_COVERAGE}\"\nREDItools_COMMAND+=\" -v ${MIN_VARIANT_FREQUENCY}\"\nREDItools_COMMAND+=\" -V ${MAX_VARIANT_FREQUENCY}\"\nREDItools_COMMAND+=\" -n ${MIN_VARIANT_READS}\"\nREDItools_COMMAND+=\" ${FILTER_MULTIHIT_FLAG}\"\nREDItools_COMMAND+=\" ${FILTER_INDELS_FLAG}\"\nREDItools_COMMAND+=\" ${FILTER_REPEATS_FLAG}\"\n\n# Add optional filters if files are provided\nif [ -f \"${COMMON_VARIANTS_VCF}\" ]; then\n    REDItools_COMMAND+=\" -d ${COMMON_VARIANTS_VCF}\"\nfi\nif [ -f \"${KNOWN_RNA_EDITING_SITES}\" ]; then\n    REDItools_COMMAND+=\" -e ${KNOWN_RNA_EDITING_SITES}\"\nfi\n\nREDItools_COMMAND+=\" ${INPUT_BAM}\"\n\n# Execute the REDItools command\neval \"${REDItools_COMMAND}\"\n\n# The eCLIP pipeline's call_edits.py script also performs post-processing\n# to convert REDItools output to VCF and TSV formats, which would involve\n# custom parsing scripts not shown here.",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 9,
+            "description": "remove SNPs",
+            "tool_name": "bcftools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.19",
+            "code_example": "# This script demonstrates how to remove known SNPs from a VCF file.\n# It assumes you have an input VCF file (e.g., from variant calling)\n# and a reference VCF file containing known SNPs (e.g., dbSNP).\n\n# Define input and output files\nINPUT_VCF=\"variants.vcf.gz\" # Replace with your actual input VCF file\nKNOWN_SNPS_VCF=\"dbSNP_GRCh38_common.vcf.gz\" # Placeholder: common SNPs from dbSNP for hg38\nOUTPUT_VCF=\"variants_no_known_snps.vcf.gz\"\n\n# Reference genome assembly (e.g., hg38)\n# Ensure the dbSNP VCF matches the reference used for variant calling.\nGENOME_ASSEMBLY=\"GRCh38\"\n\n# --- Installation (uncomment to install if needed) ---\n# conda install -c bioconda bcftools\n# bcftools --version # Check installed version\n\n# --- Pre-requisites ---\n# Ensure input VCF and known SNPs VCF are indexed (.csi or .tbi files).\n# If not, uncomment and run the following:\n# bcftools index \"${INPUT_VCF}\"\n# bcftools index \"${KNOWN_SNPS_VCF}\"\n\n# Step 1: Annotate the input VCF with information from the known SNPs VCF.\n# This command adds an 'DB' flag to the INFO field of variants found in both files.\nbcftools annotate -a \"${KNOWN_SNPS_VCF}\" -c ID,INFO/DB \"${INPUT_VCF}\" | \\\n# Step 2: Filter out variants that have the 'DB' flag (i.e., are known SNPs).\nbcftools filter -e 'INFO/DB' -Oz -o \"${OUTPUT_VCF}\"\n\n# Create index for the output VCF\nbcftools index \"${OUTPUT_VCF}\"\n\necho \"Known SNPs removed. Output VCF: ${OUTPUT_VCF}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/bcftools"
+        }
+    ],
+    "raw_text": "CCS calling (v8.0.0)\nread deconcatenation using skera(1.2.0)\nread trimming with lima(v2.9.0)\nrefine reads with isoseq refine (v4.1.1)\nread alignment with pbmm2 (v1.13.0)\nQC with NanoPlot (v1.32.1)\nfilter unmapped reads, supplementary alignment reads, reads aligned to the incorrect strand, and reads having read quality below 20\ncall edits using custom script\nremove SNPs\nAssembly: hg38\nSupplementary files format and content: isoforms level edit detection (.bed)",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

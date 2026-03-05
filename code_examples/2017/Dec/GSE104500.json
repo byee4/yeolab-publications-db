@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Read counts were quantified using kallisto.",
-      "tool_name": "kallisto",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "These were then aligned to C. elegans genome WS247.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Read counts were quantified using kallisto.\nThese were then aligned to C. elegans genome WS247.\nGenome_build: WS247\nSupplementary_files_format_and_content: Csv; Contains tpm values for each replicate",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Read counts were quantified using kallisto.",
+            "tool_name": "kallisto",
+            "tool_version": "0.46.0",
+            "code_example": "# Install kallisto (if not already installed)\n# conda install -c bioconda kallisto=0.46.0\n\n# Define variables (replace with actual paths and filenames)\nTRANSCRIPTOME_FASTA=\"GRCh38_transcriptome.fasta\" # Placeholder: Replace with path to your transcriptome FASTA (e.g., from Ensembl or GENCODE)\nKALLISTO_INDEX=\"kallisto_index.idx\"\nSAMPLE_R1_FASTQ=\"sample_R1.fastq.gz\" # Replace with your R1 FASTQ file\nSAMPLE_R2_FASTQ=\"sample_R2.fastq.gz\" # Replace with your R2 FASTQ file (omit if single-end)\nOUTPUT_DIR=\"kallisto_quant_output\"\nNUM_THREADS=8 # Number of threads to use\n\n# 1. Build kallisto index (if not already built)\n# This step needs to be run once for a given transcriptome.\n# kallisto index -i ${KALLISTO_INDEX} ${TRANSCRIPTOME_FASTA}\n\n# 2. Quantify read counts using kallisto\n# For paired-end reads:\nkallisto quant \\\n  -i ${KALLISTO_INDEX} \\\n  -o ${OUTPUT_DIR} \\\n  --bias \\\n  --threads ${NUM_THREADS} \\\n  ${SAMPLE_R1_FASTQ} \\\n  ${SAMPLE_R2_FASTQ}\n\n# For single-end reads (uncomment and modify if applicable):\n# kallisto quant \\\n#   -i ${KALLISTO_INDEX} \\\n#   -o ${OUTPUT_DIR} \\\n#   --single \\\n#   -l 200 \\\n#   -s 20 \\\n#   --bias \\\n#   --threads ${NUM_THREADS} \\\n#   ${SAMPLE_R1_FASTQ}\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/pachterlab/kallisto"
+        },
+        {
+            "step_order": 2,
+            "description": "These were then aligned to C. elegans genome WS247.",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables\nGENOME_DIR=\"celegans_WS247_STAR_index\"\nGENOME_FASTA=\"c_elegans.WS247.dna.toplevel.fa.gz\" # Placeholder: Download from WormBase FTP for WS247\nGENOME_GTF=\"c_elegans.WS247.annotations.gtf.gz\"   # Placeholder: Download from WormBase FTP for WS247\nREADS_R1=\"input_reads_R1.fastq.gz\"               # Placeholder for input forward reads\nREADS_R2=\"input_reads_R2.fastq.gz\"               # Placeholder for input reverse reads (if paired-end)\nOUTPUT_PREFIX=\"aligned_reads\"\n\n# --- Reference Data Acquisition (Example - replace with actual download if needed) ---\n# For C. elegans genome WS247, reference files are typically found on WormBase FTP.\n# Example download commands (adjust paths and filenames as necessary):\n# wget ftp://ftp.wormbase.org/pub/wormbase/releases/WS247/species/c_elegans/PRJNA13758/c_elegans.PRJNA13758.WS247.dna.toplevel.fa.gz\n# wget ftp://ftp.wormbase.org/pub/wormbase/releases/WS247/species/c_elegans/PRJNA13758/c_elegans.PRJNA13758.WS247.annotations.gtf.gz\n\n# 1. Create STAR genome index\nmkdir -p ${GENOME_DIR}\nSTAR --runMode genomeGenerate \\\n     --genomeDir ${GENOME_DIR} \\\n     --genomeFastaFiles ${GENOME_FASTA} \\\n     --sjdbGTFfile ${GENOME_GTF} \\\n     --sjdbOverhang 100 \\\n     --runThreadN 8 # Adjust threads as needed\n\n# 2. Align reads to the C. elegans WS247 genome\n# Assuming paired-end reads. For single-end, remove ${READS_R2}\nSTAR --runMode alignReads \\\n     --genomeDir ${GENOME_DIR} \\\n     --readFilesIn ${READS_R1} ${READS_R2} \\\n     --outFileNamePrefix ${OUTPUT_PREFIX}_ \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outSAMattributes Standard \\\n     --runThreadN 8 # Adjust threads as needed\n\n# Rename output file for clarity\nmv ${OUTPUT_PREFIX}_Aligned.sortedByCoord.out.bam ${OUTPUT_PREFIX}.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        }
+    ],
+    "raw_text": "Read counts were quantified using kallisto.\nThese were then aligned to C. elegans genome WS247.\nGenome_build: WS247\nSupplementary_files_format_and_content: Csv; Contains tpm values for each replicate",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

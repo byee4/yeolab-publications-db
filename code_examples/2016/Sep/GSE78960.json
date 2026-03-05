@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Linker tags were removed from RNA sequencing and ribosome profiling reads by the FASTX Toolkit, v0.0.13 (http://hannonlab.cshl.edu/fastx_toolkit/)",
-      "tool_name": "RNA-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "All reads that mapped to rRNAs, tRNAs or mitochondrial rRNAs were removed, and the remaining reads were mapped to RefSeq (v38) by TopHat v2.0.13.",
-      "tool_name": "TopHat",
-      "tool_version": "2.0.13",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Finally all read counts that mapped uniquely to genes were extracted for expression analysis with the help of samtools, v1.1.",
-      "tool_name": "samtools",
-      "tool_version": "1.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Linker tags were removed from RNA sequencing and ribosome profiling reads by the FASTX Toolkit, v0.0.13 (http://hannonlab.cshl.edu/fastx_toolkit/)\nAll reads that mapped to rRNAs, tRNAs or mitochondrial rRNAs were removed, and the remaining reads were mapped to RefSeq (v38) by TopHat v2.0.13.\nFinally all read counts that mapped uniquely to genes were extracted for expression analysis with the help of samtools, v1.1.\nGenome_build: GRCh37.p13\nSupplementary_files_format_and_content: .txt files report raw read counts that mapped uniquely to genes",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Linker tags were removed from RNA sequencing and ribosome profiling reads by the FASTX Toolkit, v0.0.13 (http://hannonlab.cshl.edu/fastx_toolkit/)",
+            "tool_name": "RNA-seq",
+            "tool_version": "0.0.13",
+            "code_example": "bash\n# Install FASTX Toolkit (if not already installed)\n# conda install -c bioconda fastx_toolkit\n\n# Define input and output file names\nINPUT_FASTQ=\"input_reads.fastq\"\nOUTPUT_FASTQ=\"reads_linker_removed.fastq\"\n\n# Placeholder for the linker tag sequence. This needs to be replaced with the actual linker sequence.\n# Example: ADAPTER_SEQUENCE=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC\"\nLINKER_SEQUENCE=\"YOUR_LINKER_TAG_SEQUENCE\"\n\n# Remove linker tags using fastx_clipper\n# -a: adapter sequence to clip\n# -i: input FASTQ file\n# -o: output FASTQ file\n# -Q 33: specify quality score format (Phred+33, common for Illumina)\nfastx_clipper -a \"${LINKER_SEQUENCE}\" -i \"${INPUT_FASTQ}\" -o \"${OUTPUT_FASTQ}\" -Q 33\n",
+            "code_language": "bash",
+            "github_url": "http://hannonlab.cshl.edu/fastx_toolkit/"
+        },
+        {
+            "step_order": 2,
+            "description": "All reads that mapped to rRNAs, tRNAs or mitochondrial rRNAs were removed, and the remaining reads were mapped to RefSeq (v38) by TopHat v2.0.13.",
+            "tool_name": "TopHat",
+            "tool_version": "2.0.13",
+            "code_example": "# Create a directory for reference data\nmkdir -p ref_data\n\n# Download GRCh38.p13 genome (RefSeq assembly GCF_000001405.39)\n# wget -P ref_data https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/397/GRCh38.p13/GCF_000001405.39_GRCh38.p13_genomic.fna.gz\n# gunzip ref_data/GCF_000001405.39_GRCh38.p13_genomic.fna.gz\n# mv ref_data/GCF_000001405.39_GRCh38.p13_genomic.fna ref_data/GRCh38.p13_genomic.fna\n\n# Build Bowtie2 index for GRCh38.p13 (TopHat v2 uses Bowtie2 by default)\n# bowtie2-build ref_data/GRCh38.p13_genomic.fna ref_data/grch38_refseq_index\n\n# Download RefSeq GTF for GRCh38.p13\n# wget -P ref_data https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/397/GRCh38.p13/GCF_000001405.39_GRCh38.p13_genomic.gtf.gz\n# gunzip ref_data/GCF_000001405.39_GRCh38.p13_genomic.gtf.gz\n# mv ref_data/GCF_000001405.39_GRCh38.p13_genomic.gtf ref_data/grch38_refseq.gtf\n\n# Installation of TopHat\n# conda install -c bioconda tophat=2.0.13\n\n# Define input and output\nINPUT_READS=\"filtered_reads.fastq\" # Placeholder for reads after removing rRNA/tRNA/mito\nOUTPUT_DIR=\"tophat_output\"\nGENOME_INDEX_PREFIX=\"ref_data/grch38_refseq_index\"\nGTF_FILE=\"ref_data/grch38_refseq.gtf\"\n\n# Create output directory\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Execute TopHat\ntophat -o \"${OUTPUT_DIR}\" \\\n       -G \"${GTF_FILE}\" \\\n       \"${GENOME_INDEX_PREFIX}\" \\\n       \"${INPUT_READS}\"",
+            "code_language": "bash",
+            "github_url": "http://ccb.jhu.edu/software/tophat/index.shtml"
+        },
+        {
+            "step_order": 3,
+            "description": "Finally all read counts that mapped uniquely to genes were extracted for expression analysis with the help of samtools, v1.1.",
+            "tool_name": "samtools",
+            "tool_version": "1.1",
+            "code_example": "# Install samtools (if not already installed)\n# conda install -c bioconda samtools=1.1\n\n# Extract read counts per reference sequence (chromosome/contig).\n# This command provides counts for mapped reads, unmapped reads, and number of bases per reference.\n# While samtools idxstats counts all mapped reads per reference, the description \"mapped uniquely to genes\"\n# implies further filtering or interpretation that might be handled by downstream tools or custom scripts\n# not explicitly mentioned here. For true gene-level unique counts, tools like featureCounts or htseq-count\n# are typically used on a BAM file that has been filtered for unique alignments (e.g., using samtools view -F 0x100 -F 0x4).\n# Replace 'input.bam' with your actual alignment file.\n# Replace 'output_read_counts.txt' with your desired output file name.\n# A placeholder reference genome (e.g., hg38) is assumed for context, though not directly used by idxstats.\nsamtools idxstats input.bam > output_read_counts.txt",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        }
+    ],
+    "raw_text": "Linker tags were removed from RNA sequencing and ribosome profiling reads by the FASTX Toolkit, v0.0.13 (http://hannonlab.cshl.edu/fastx_toolkit/)\nAll reads that mapped to rRNAs, tRNAs or mitochondrial rRNAs were removed, and the remaining reads were mapped to RefSeq (v38) by TopHat v2.0.13.\nFinally all read counts that mapped uniquely to genes were extracted for expression analysis with the help of samtools, v1.1.\nGenome_build: GRCh37.p13\nSupplementary_files_format_and_content: .txt files report raw read counts that mapped uniquely to genes",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

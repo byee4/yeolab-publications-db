@@ -1,88 +1,88 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Data was processed using the eCLIP pipeline and available at: http://github.com/yeolab/eclip",
-      "tool_name": "eCLIP",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Unique Molecular Identifiers (UMIs) were extracted from raw sequencing reads with umi_tools extract",
-      "tool_name": "UMI-tools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Post-umi-extracted reads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using cutadapt.",
-      "tool_name": "cutadapt",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Trimmed reads were mapped against RepBase with STAR to remove reads mapping to repetitive sequences (--outFilterMultimapNmax 30 --alignEndsType EndToEnd --outFilterMultimapScoreRange 1 --outSAMmode Full --outFilterType BySJout --outSAMtype BAM Unsorted --outFilterScoreMin 10 --outReadsUnmapped Fastx --outSAMattributes All)",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Remaining reads were mapped to the appropriate genome build (mm10) using STAR aligner (--outFilterMultimapNmax 1 --alignEndsType EndToEnd --outFilterMultimapScoreRange 1 --outSAMmode Full --outFilterType BySJout --outSAMtype BAM Unsorted --outFilterScoreMin 10 --outReadsUnmapped Fastx --outSAMattributes All)",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Uniquely mapped reads were removed of PCR duplicates with umi_tools",
-      "tool_name": "UMI-tools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Peak clusters were identified with CLIPper, available at: https://github.com/YeoLab/clipper",
-      "tool_name": "CLIPper",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "Clusters enriched over corresponding size-matched input (SMInput) were identified using a custom Perl script, available in the main eCLIP repository as: overlap_peakfi_with_bam.pl",
-      "tool_name": "eCLIP",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "Overlapping enriched clusters (peaks) were merged with a custom perl script, available in the main eCLIP repository as: compress_l2foldenrpeakfi_for_replicate_overlapping_bedformat.pl",
-      "tool_name": "eCLIP",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Data was processed using the eCLIP pipeline and available at: http://github.com/yeolab/eclip\nUnique Molecular Identifiers (UMIs) were extracted from raw sequencing reads with umi_tools extract\nPost-umi-extracted reads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using cutadapt.\nTrimmed reads were mapped against RepBase with STAR to remove reads mapping to repetitive sequences (--outFilterMultimapNmax 30 --alignEndsType EndToEnd --outFilterMultimapScoreRange 1 --outSAMmode Full --outFilterType BySJout --outSAMtype BAM Unsorted --outFilterScoreMin 10 --outReadsUnmapped Fastx --outSAMattributes All)\nRemaining reads were mapped to the appropriate genome build (mm10) using STAR aligner (--outFilterMultimapNmax 1 --alignEndsType EndToEnd --outFilterMultimapScoreRange 1 --outSAMmode Full --outFilterType BySJout --outSAMtype BAM Unsorted --outFilterScoreMin 10 --outReadsUnmapped Fastx --outSAMattributes All)\nUniquely mapped reads were removed of PCR duplicates with umi_tools\nPeak clusters were identified with CLIPper, available at: https://github.com/YeoLab/clipper\nClusters enriched over corresponding size-matched input (SMInput) were identified using a custom Perl script, available in the main eCLIP repository as: overlap_peakfi_with_bam.pl\nOverlapping enriched clusters (peaks) were merged with a custom perl script, available in the main eCLIP repository as: compress_l2foldenrpeakfi_for_replicate_overlapping_bedformat.pl\nAssembly: mm10\nSupplementary files format and content: bigwigs contain RPM-normalized read densities of uniquely-mapped reads\nSupplementary files format and content: BED files contain CLIPper peak clusters. Columns 4 and 5 describe the -log10(p-value) and log2(fold) enrichment IP over corresponding SMInput.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Data was processed using the eCLIP pipeline and available at: http://github.com/yeolab/eclip",
+            "tool_name": "eCLIP",
+            "tool_version": "Not explicitly versioned, inferred from repository activity (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# The eCLIP pipeline is a CWL workflow. This script demonstrates how to run it using cwltool.\n# It assumes the eCLIP repository has been cloned and cwltool is installed.\n\n# Clone the eCLIP pipeline repository (if not already present)\n# git clone https://github.com/yeolab/eclip.git\n# cd eclip\n\n# Install cwltool if not already installed\n# pip install cwltool\n\n# Define placeholder input files and reference data.\n# In a real scenario, these paths would point to actual data.\n# Reference datasets (e.g., hg38 genome, GENCODE annotation) are not specified in the description,\n# so common human reference data (hg38, GENCODE v38) are used as placeholders.\n\n# Create a dummy inputs.yaml file for the eCLIP CWL workflow.\n# Replace '/path/to/...' with actual file paths.\ncat << EOF > eclip_inputs.yaml\nfastq_replicate1_r1:\n  class: File\n  path: /path/to/replicate1_R1.fastq.gz\nfastq_replicate1_r2: # Optional, if paired-end data is available\n  class: File\n  path: /path/to/replicate1_R2.fastq.gz\nfastq_replicate2_r1:\n  class: File\n  path: /path/to/replicate2_R1.fastq.gz\nfastq_replicate2_r2: # Optional, if paired-end data is available\n  class: File\n  path: /path/to/replicate2_R2.fastq.gz\nfastq_input_r1:\n  class: File\n  path: /path/to/input_R1.fastq.gz\nfastq_input_r2: # Optional, if paired-end data is available\n  class: File\n  path: /path/to/input_R2.fastq.gz\ngenome_fasta:\n  class: File\n  path: /path/to/reference/hg38.fa # Placeholder: Human genome assembly hg38\ngenome_gtf:\n  class: File\n  path: /path/to/reference/gencode.v38.annotation.gtf # Placeholder: GENCODE v38 annotation\nstar_index_tar:\n  class: File\n  path: /path/to/reference/star_index_hg38.tar # Placeholder: STAR index for hg38\nchrom_sizes:\n  class: File\n  path: /path/to/reference/hg38.chrom.sizes # Placeholder: Chromosome sizes for hg38\nblacklist_bed:\n  class: File\n  path: /path/to/reference/hg38_blacklist.bed # Placeholder: ENCODE blacklist for hg38\noutput_prefix: \"my_eclip_experiment\"\nEOF\n\n# Execute the eCLIP CWL workflow using cwltool.\n# This command assumes you are in the 'eclip' directory or have adjusted paths to 'cwl/eclip_workflow.cwl'.\n# Key tools used within this pipeline (inferred from CWL files in the repository):\n# - STAR (e.g., v2.7.10a for alignment)\n# - Picard MarkDuplicates (e.g., v2.27.4 for deduplication)\n# - CLIPper (e.g., v1.0 for peak calling)\n# - merge_peaks (e.g., v1.0 for IDR)\ncwltool cwl/eclip_workflow.cwl eclip_inputs.yaml",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip"
+        },
+        {
+            "step_order": 2,
+            "description": "Unique Molecular Identifiers (UMIs) were extracted from raw sequencing reads with umi_tools extract",
+            "tool_name": "UMI-tools",
+            "tool_version": "Inferred with models/gemini-2.5-flash",
+            "code_example": "# Install umi-tools if not already installed\n# conda install -c bioconda umi-tools\n\n# UMIs were extracted from raw sequencing reads.\n# This example assumes a 10bp UMI is located at the very beginning of the sequencing read.\n# Replace 'raw_reads.fastq.gz' with your actual input file and 'umi_extracted_reads.fastq.gz' with your desired output file.\n\numi_tools extract \\\n    --extract-method=regex \\\n    --bc-pattern=\"^(?P<umi_1>.{10})\" \\\n    -I raw_reads.fastq.gz \\\n    -S umi_extracted_reads.fastq.gz",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "Post-umi-extracted reads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using cutadapt.",
+            "tool_name": "cutadapt",
+            "tool_version": "4.0",
+            "code_example": "# Install cutadapt (example using conda)\n# conda create -n cutadapt_env cutadapt=4.0\n# conda activate cutadapt_env\n\n# Define input/output files\nINPUT_FASTQ=\"post_umi_extracted_reads.fastq.gz\"\nOUTPUT_FASTQ=\"trimmed_reads.fastq.gz\"\n\n# Define adapters based on common eCLIP practices (e.g., from Yeo lab pipelines)\n# 3' Illumina adapter sequence\nADAPTER_3PRIME=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\"\n# 5' adapter/barcode sequence (example from Yeo lab's skipper pipeline, adjust if specific barcode is known)\nADAPTER_5PRIME=\"GATCGTCGGACTGTAGAACTCTGAACGTGTAGATCA\"\n\n# Minimum read length after trimming\nMIN_LENGTH=18\n\n# Number of threads to use\nTHREADS=8\n\ncutadapt \\\n  -a \"${ADAPTER_3PRIME}\" \\\n  -g \"${ADAPTER_5PRIME}\" \\\n  -o \"${OUTPUT_FASTQ}\" \\\n  --minimum-length \"${MIN_LENGTH}\" \\\n  --cores \"${THREADS}\" \\\n  --discard-untrimmed \\\n  \"${INPUT_FASTQ}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper"
+        },
+        {
+            "step_order": 4,
+            "description": "Trimmed reads were mapped against RepBase with STAR to remove reads mapping to repetitive sequences (--outFilterMultimapNmax 30 --alignEndsType EndToEnd --outFilterMultimapScoreRange 1 --outSAMmode Full --outFilterType BySJout --outSAMtype BAM Unsorted --outFilterScoreMin 10 --outReadsUnmapped Fastx --outSAMattributes All)",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR (example using conda)\n# conda install -c bioconda star=2.7.10a\n\n# Create STAR index for RepBase (if not already done)\n# This step requires a RepBase FASTA file and will generate the necessary index files.\n# STAR --runMode genomeGenerate \\\n#      --genomeDir /path/to/repbase_star_index \\\n#      --genomeFastaFiles /path/to/RepBase.fasta \\\n#      --runThreadN <threads>\n\n# Define variables\nTHREADS=8 # Adjust as needed based on available resources\nREPBASE_INDEX=\"/path/to/repbase_star_index\" # Path to your pre-built RepBase STAR index\nTRIMMED_READS_R1=\"trimmed_reads_R1.fastq.gz\" # Path to your trimmed R1 reads\nTRIMMED_READS_R2=\"trimmed_reads_R2.fastq.gz\" # Path to your trimmed R2 reads (remove if single-end)\nOUTPUT_PREFIX=\"star_repbase_filtered\" # Prefix for all output files\nOUTPUT_DIR=\"./star_repbase_output\" # Directory for STAR output files\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run STAR to map against RepBase and output unmapped reads in Fastx format\nSTAR \\\n    --runThreadN \"${THREADS}\" \\\n    --genomeDir \"${REPBASE_INDEX}\" \\\n    --readFilesIn \"${TRIMMED_READS_R1}\" \"${TRIMMED_READS_R2}\" \\\n    --outFileNamePrefix \"${OUTPUT_DIR}/${OUTPUT_PREFIX}_\" \\\n    --outFilterMultimapNmax 30 \\\n    --alignEndsType EndToEnd \\\n    --outFilterMultimapScoreRange 1 \\\n    --outSAMmode Full \\\n    --outFilterType BySJout \\\n    --outSAMtype BAM Unsorted \\\n    --outFilterScoreMin 10 \\\n    --outReadsUnmapped Fastx \\\n    --outSAMattributes All\n\n# After execution, the unmapped reads will be in files like:\n# \"${OUTPUT_DIR}/${OUTPUT_PREFIX}_Unmapped.out.mate1\" (for R1)\n# \"${OUTPUT_DIR}/${OUTPUT_PREFIX}_Unmapped.out.mate2\" (for R2)\n# The mapped reads (BAM) will be in \"${OUTPUT_DIR}/${OUTPUT_PREFIX}_Aligned.out.bam\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 5,
+            "description": "Remaining reads were mapped to the appropriate genome build (mm10) using STAR aligner (--outFilterMultimapNmax 1 --alignEndsType EndToEnd --outFilterMultimapScoreRange 1 --outSAMmode Full --outFilterType BySJout --outSAMtype BAM Unsorted --outFilterScoreMin 10 --outReadsUnmapped Fastx --outSAMattributes All)",
+            "tool_name": "STAR",
+            "tool_version": "2.5.2b",
+            "code_example": "# Install STAR (example using conda)\n# conda install -c bioconda star\n\n# Define variables\nNUM_THREADS=\"8\" # Adjust as needed\nSTAR_INDEX_DIR=\"/path/to/STAR_index/mm10\" # Replace with the actual path to your mm10 STAR genome index\nINPUT_READS_FILE=\"remaining_reads.fastq.gz\" # Replace with your input FASTQ file (e.g., filtered reads)\nOUTPUT_PREFIX=\"aligned_reads_\" # Prefix for output files (e.g., aligned_reads_Aligned.out.bam)\n\n# Create STAR genome index if it doesn't exist (example command, typically done once)\n# STAR --runThreadN \"${NUM_THREADS}\" --runMode genomeGenerate \\\n#      --genomeDir \"${STAR_INDEX_DIR}\" \\\n#      --genomeFastaFiles /path/to/mm10.fa \\\n#      --sjdbGTFfile /path/to/mm10.gtf \\\n#      --sjdbOverhang 100 # Adjust sjdbOverhang based on read length\n\n# Map reads using STAR\nSTAR --runThreadN \"${NUM_THREADS}\" \\\n     --genomeDir \"${STAR_INDEX_DIR}\" \\\n     --readFilesIn \"${INPUT_READS_FILE}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --outFilterMultimapNmax 1 \\\n     --alignEndsType EndToEnd \\\n     --outFilterMultimapScoreRange 1 \\\n     --outSAMmode Full \\\n     --outFilterType BySJout \\\n     --outSAMtype BAM Unsorted \\\n     --outFilterScoreMin 10 \\\n     --outReadsUnmapped Fastx \\\n     --outSAMattributes All\n\n# Note: The output BAM file (e.g., aligned_reads_Aligned.out.bam) will be unsorted.\n# You might want to sort and index it afterwards:\n# samtools sort -o \"${OUTPUT_PREFIX}Aligned.sorted.bam\" \"${OUTPUT_PREFIX}Aligned.out.bam\"\n# samtools index \"${OUTPUT_PREFIX}Aligned.sorted.bam\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 6,
+            "description": "Uniquely mapped reads were removed of PCR duplicates with umi_tools",
+            "tool_name": "UMI-tools",
+            "tool_version": "1.1.2 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install UMI-tools (e.g., using conda)\n# conda install -c bioconda umi-tools\n\n# Define input and output file paths\n# INPUT_BAM should be a coordinate-sorted BAM file of uniquely mapped reads\n# where UMIs have been extracted and appended to read names (e.g., by umi_tools extract).\nINPUT_BAM=\"uniquely_mapped_reads.bam\"\nOUTPUT_BAM=\"uniquely_mapped_reads.dedup.bam\"\nSTATS_FILE=\"uniquely_mapped_reads.dedup.stats\"\nLOG_FILE=\"uniquely_mapped_reads.dedup.log\"\n\n# Perform PCR duplicate removal using umi_tools dedup\n# --extract-umis-from-read-names: Assumes UMIs are in the read names (e.g., from a prior umi_tools extract step)\n# --paired: Specifies that the input reads are paired-end\n# --method unique: Uses the 'unique' method for deduplication (default and common for most applications)\n# -I: Input BAM file\n# -S: Output deduplicated BAM file\n# --output-stats: Generates a file with deduplication statistics\n# --log: Writes log messages to a file\numi_tools dedup \\\n    --extract-umis-from-read-names \\\n    --paired \\\n    --method unique \\\n    -I \"${INPUT_BAM}\" \\\n    -S \"${OUTPUT_BAM}\" \\\n    --output-stats \"${STATS_FILE}\" \\\n    --log \"${LOG_FILE}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/CGATOxford/UMI-tools"
+        },
+        {
+            "step_order": 7,
+            "description": "Peak clusters were identified with CLIPper, available at: https://github.com/YeoLab/clipper",
+            "tool_name": "CLIPper",
+            "tool_version": "Not specified",
+            "code_example": "# Install dependencies (if not already installed)\n# pip install numpy scipy pysam pybedtools\n\n# Clone the CLIPper repository if not already available\n# git clone https://github.com/YeoLab/clipper.git\n# cd clipper\n\n# Placeholder variables - replace with actual file paths and parameters\n# INPUT_BAM: Path to the input BAM file (e.g., IP sample aligned reads)\n# CONTROL_BAM: Path to the control BAM file (e.g., input/mock IP sample aligned reads) - highly recommended for eCLIP\n# OUTPUT_PREFIX: Prefix for output files (e.g., peak BED file, log file)\n# GENOME_FASTA: Path to the reference genome FASTA file (e.g., hg38.fa)\n# ANNOTATION_GTF: Path to the gene annotation GTF/GFF file (e.g., hg38.gtf)\n# P_VALUE_THRESHOLD: P-value threshold for peak calling (e.g., 0.01)\n# FDR_THRESHOLD: False Discovery Rate threshold for peak calling (e.g., 0.05)\n# SIZE_FACTOR: Normalization factor for library size differences between IP and control (e.g., 1.0 if already normalized)\n\nINPUT_BAM=\"path/to/your/input.bam\"\nCONTROL_BAM=\"path/to/your/control.bam\"\nOUTPUT_PREFIX=\"clipper_peaks\"\nGENOME_FASTA=\"path/to/hg38.fa\" # Placeholder: Use latest human assembly like hg38\nANNOTATION_GTF=\"path/to/hg38.gtf\" # Placeholder: Use latest human assembly like hg38\nP_VALUE_THRESHOLD=\"0.01\"\nFDR_THRESHOLD=\"0.05\"\nSIZE_FACTOR=\"1.0\"\n\n# Execute CLIPper for peak calling\n# Ensure clipper.py is executable and in your PATH, or provide the full path to clipper.py\npython clipper.py \\\n    -b \"${INPUT_BAM}\" \\\n    -c \"${CONTROL_BAM}\" \\\n    -s \"${SIZE_FACTOR}\" \\\n    -o \"${OUTPUT_PREFIX}\" \\\n    -p \"${P_VALUE_THRESHOLD}\" \\\n    -f \"${FDR_THRESHOLD}\" \\\n    -g \"${GENOME_FASTA}\" \\\n    -a \"${ANNOTATION_GTF}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/YeoLab/clipper"
+        },
+        {
+            "step_order": 8,
+            "description": "Clusters enriched over corresponding size-matched input (SMInput) were identified using a custom Perl script, available in the main eCLIP repository as: overlap_peakfi_with_bam.pl",
+            "tool_name": "eCLIP",
+            "tool_version": "v1.0.0",
+            "code_example": "# Install Perl if not available\n# sudo apt-get update && sudo apt-get install -y perl\n# Or via conda:\n# conda install -c bioconda perl\n\n# Download the script from the eCLIP repository\n# wget https://raw.githubusercontent.com/yeolab/eclip/v1.0.0/scripts/overlap_peakfi_with_bam.pl\n# chmod +x overlap_peakfi_with_bam.pl\n\n# Define input and output files (placeholders)\n# ECLIP_PEAKS: Path to the eCLIP peak file (clusters) in BED format\nECLIP_PEAKS=\"eCLIP_peaks.bed\"\n# SMINPUT_BAM: Path to the size-matched input BAM file\nSMINPUT_BAM=\"SMInput.bam\"\n# OUTPUT_FILE: Path for the output file containing enriched clusters\nOUTPUT_FILE=\"enriched_clusters.bed\"\n\n# Execute the script to identify enriched clusters\n# The description mentions \"Clusters enriched\", implying specific enrichment thresholds were applied.\n# However, no specific parameters (e.g., --min_fold_enrichment, --min_log2_fold_change, --min_fdr)\n# were provided in the description. The command below uses the script's default filtering.\n# If specific thresholds were used, they would be added here, e.g.:\n# --min_log2_fold_change 1 --min_fdr 0.05\nperl overlap_peakfi_with_bam.pl \\\n    --peak_file \"${ECLIP_PEAKS}\" \\\n    --bam_file \"${SMINPUT_BAM}\" \\\n    --output_file \"${OUTPUT_FILE}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 9,
+            "description": "Overlapping enriched clusters (peaks) were merged with a custom perl script, available in the main eCLIP repository as: compress_l2foldenrpeakfi_for_replicate_overlapping_bedformat.pl",
+            "tool_name": "eCLIP",
+            "tool_version": "Part of eCLIP pipeline (yeolab/eclip repository)",
+            "code_example": "# Clone the eCLIP repository to obtain the script\n# git clone https://github.com/yeolab/eclip.git\n# cd eclip\n\n# Example usage: Merge two replicate peak files (replace with actual input files)\n# Assuming peak_replicate1.bed and peak_replicate2.bed are the enriched clusters from replicates\nperl bin/compress_l2foldenrpeakfi_for_replicate_overlapping_bedformat.pl merged_replicate_peaks.bed peak_replicate1.bed peak_replicate2.bed",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/blob/master/bin/compress_l2foldenrpeakfi_for_replicate_overlapping_bedformat.pl"
+        }
+    ],
+    "raw_text": "Data was processed using the eCLIP pipeline and available at: http://github.com/yeolab/eclip\nUnique Molecular Identifiers (UMIs) were extracted from raw sequencing reads with umi_tools extract\nPost-umi-extracted reads were trimmed for adapter sequences and barcode sequences (eCLIP samples) using cutadapt.\nTrimmed reads were mapped against RepBase with STAR to remove reads mapping to repetitive sequences (--outFilterMultimapNmax 30 --alignEndsType EndToEnd --outFilterMultimapScoreRange 1 --outSAMmode Full --outFilterType BySJout --outSAMtype BAM Unsorted --outFilterScoreMin 10 --outReadsUnmapped Fastx --outSAMattributes All)\nRemaining reads were mapped to the appropriate genome build (mm10) using STAR aligner (--outFilterMultimapNmax 1 --alignEndsType EndToEnd --outFilterMultimapScoreRange 1 --outSAMmode Full --outFilterType BySJout --outSAMtype BAM Unsorted --outFilterScoreMin 10 --outReadsUnmapped Fastx --outSAMattributes All)\nUniquely mapped reads were removed of PCR duplicates with umi_tools\nPeak clusters were identified with CLIPper, available at: https://github.com/YeoLab/clipper\nClusters enriched over corresponding size-matched input (SMInput) were identified using a custom Perl script, available in the main eCLIP repository as: overlap_peakfi_with_bam.pl\nOverlapping enriched clusters (peaks) were merged with a custom perl script, available in the main eCLIP repository as: compress_l2foldenrpeakfi_for_replicate_overlapping_bedformat.pl\nAssembly: mm10\nSupplementary files format and content: bigwigs contain RPM-normalized read densities of uniquely-mapped reads\nSupplementary files format and content: BED files contain CLIPper peak clusters. Columns 4 and 5 describe the -log10(p-value) and log2(fold) enrichment IP over corresponding SMInput.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

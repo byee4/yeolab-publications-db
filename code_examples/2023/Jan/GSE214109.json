@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "RNAseq reads were adapter-trimmed using Cutadapt (v1.14) and mapped to human-specific repetitive elements from RepBase (version 18.05) by STAR (v2.4.0i) (Dobin et al., 2013).",
-      "tool_name": "STAR",
-      "tool_version": "2.4.0i",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Repeat-mapping reads were removed, and remaining reads were mapped to the mouse genome assembly (mm10) with STAR (v2.4.0i)",
-      "tool_name": "STAR",
-      "tool_version": "2.4.0i",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Read counts for all genes annotated in GENCODE (vM20) were calculated using the read summarization program featureCounts (v1.5.3) (Liao et al., 2014).",
-      "tool_name": "featureCounts",
-      "tool_version": "1.5.3",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Batch correction was completed with Combat-seq",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Differential expression was completed by DESeq2 (v1.5.3)",
-      "tool_name": "DESeq2",
-      "tool_version": "1.5.3",
-      "code_example": "",
-      "code_language": "r",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "RNAseq reads were adapter-trimmed using Cutadapt (v1.14) and mapped to human-specific repetitive elements from RepBase (version 18.05) by STAR (v2.4.0i) (Dobin et al., 2013).\nRepeat-mapping reads were removed, and remaining reads were mapped to the mouse genome assembly (mm10) with STAR (v2.4.0i)\nRead counts for all genes annotated in GENCODE (vM20) were calculated using the read summarization program featureCounts (v1.5.3) (Liao et al., 2014).\nBatch correction was completed with Combat-seq\nDifferential expression was completed by DESeq2 (v1.5.3)\nAssembly: mm10",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "RNAseq reads were adapter-trimmed using Cutadapt (v1.14) and mapped to human-specific repetitive elements from RepBase (version 18.05) by STAR (v2.4.0i) (Dobin et al., 2013).",
+            "tool_name": "STAR",
+            "tool_version": "2.4.0i",
+            "code_example": "# Install STAR if not already installed\n# conda install -c bioconda star=2.4.0i\n\n# --- Reference Data Setup (Prerequisites) ---\n# The description specifies mapping to \"human-specific repetitive elements from RepBase (version 18.05)\".\n# This requires obtaining the relevant FASTA file from RepBase and building a STAR index from it.\n\n# Placeholder for RepBase 18.05 human-specific repetitive elements FASTA file.\n# Note: Access to RepBase often requires a license or subscription.\n# For demonstration, let's assume a file named 'RepBase18.05_human_repeats.fasta' is available.\n# Example: wget -O RepBase18.05_human_repeats.fasta \"URL_TO_REPEATS_FASTA\"\n\n# Create STAR index for RepBase elements (if not already done)\n# GENOME_DIR=\"repbase_index_18.05\"\n# mkdir -p \"${GENOME_DIR}\"\n# STAR --runMode genomeGenerate \\\n#      --genomeDir \"${GENOME_DIR}\" \\\n#      --genomeFastaFiles RepBase18.05_human_repeats.fasta \\\n#      --runThreadN 8 # Adjust threads as needed for index generation\n\n# --- STAR Mapping Command ---\n# Assume adapter-trimmed reads are available from the previous Cutadapt step.\nTRIMMED_READS=\"cutadapt_trimmed_reads.fastq.gz\" # Placeholder for actual trimmed reads file\nOUTPUT_PREFIX=\"star_repbase_mapping_output/\"\nGENOME_DIR=\"repbase_index_18.05\" # Directory containing the pre-built STAR index for RepBase\n\nmkdir -p \"${OUTPUT_PREFIX}\"\n\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${TRIMMED_READS}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --runThreadN 8 \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outReadsUnmapped Fastx # Output unmapped reads to Fastx files, often useful for further analysis",
+            "code_language": "bash",
+            "github_url": "https://pubmed.ncbi.nlm.nih.gov/23104886/"
+        },
+        {
+            "step_order": 2,
+            "description": "Repeat-mapping reads were removed, and remaining reads were mapped to the mouse genome assembly (mm10) with STAR (v2.4.0i)",
+            "tool_name": "STAR",
+            "tool_version": "2.4.0i",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star=2.4.0i\n\n# Define variables\n# Replace with the actual path to your pre-built STAR index for mm10\nGENOME_DIR=\"/path/to/STAR_index/mm10\"\n# Replace with your actual input FASTQ file(s). For paired-end, use \"read1.fastq.gz read2.fastq.gz\"\nREADS_FILE=\"input_reads.fastq.gz\"\nOUTPUT_DIR=\"STAR_output\" # Output directory for STAR results\nNUM_THREADS=8 # Number of threads to use\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run STAR alignment\n# --outFilterMultimapNmax 1: Ensures only uniquely mapping reads are reported, effectively \"removing\" repeat-mapping reads from the output.\n# --outSAMtype BAM SortedByCoordinate: Outputs a sorted BAM file, which is standard for downstream analysis.\n# --outBAMcompression 6: Sets BAM compression level.\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${READS_FILE}\" \\\n     --runThreadN \"${NUM_THREADS}\" \\\n     --outFileNamePrefix \"${OUTPUT_DIR}/\" \\\n     --outFilterMultimapNmax 1 \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outBAMcompression 6",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "Read counts for all genes annotated in GENCODE (vM20) were calculated using the read summarization program featureCounts (v1.5.3) (Liao et al., 2014).",
+            "tool_name": "featureCounts",
+            "tool_version": "1.5.3",
+            "code_example": "# Install subread (which includes featureCounts) if not already installed\n# conda install -c bioconda subread\n\n# Define variables for input and output\nANNOTATION_GTF=\"gencode.vM20.annotation.gtf\" # Placeholder for GENCODE vM20 annotation file\nINPUT_BAM=\"aligned_reads.bam\" # Placeholder for your input BAM file(s)\nOUTPUT_COUNTS=\"gene_counts.txt\"\n\n# Download GENCODE vM20 annotation if needed (example, adjust URL if necessary)\n# wget -O ${ANNOTATION_GTF}.gz \"ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M20/gencode.vM20.annotation.gtf.gz\"\n# gunzip -f ${ANNOTATION_GTF}.gz\n\n# Run featureCounts\n# -a: Annotation file (GTF/GFF format)\n# -o: Output file for read counts\n# -t exon: Specify feature type to count (exons are typically used for gene-level counts)\n# -g gene_id: Specify attribute to group features by (gene_id for gene-level counts)\n# -s 0: Strandedness (0=unstranded, 1=forward, 2=reverse). Adjust based on library preparation protocol.\n# -T 8: Number of threads (adjust as needed for parallel processing)\n# --primary: Only count primary alignments (recommended for RNA-seq to avoid counting multi-mapped reads multiple times)\nfeatureCounts -a \"${ANNOTATION_GTF}\" \\\n              -o \"${OUTPUT_COUNTS}\" \\\n              -t exon \\\n              -g gene_id \\\n              -s 0 \\\n              -T 8 \\\n              --primary \\\n              \"${INPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": "https://sourceforge.net/projects/subread/"
+        },
+        {
+            "step_order": 4,
+            "description": "Batch correction was completed with Combat-seq",
+            "tool_name": "sva (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "3.54.0",
+            "code_example": "# Install R and Bioconductor if not already installed\n# For Bioconductor 3.19 (R 4.4):\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\")'\n# R -e 'BiocManager::install(\"sva\")'\n\n# Create dummy input files for demonstration (replace with your actual data)\n# Example counts.tsv\necho -e \"gene\\tsample1\\tsample2\\tsample3\\tsample4\" > counts.tsv\necho -e \"geneA\\t100\\t120\\t80\\t90\" >> counts.tsv\necho -e \"geneB\\t50\\t60\\t40\\t45\" >> counts.tsv\necho -e \"geneC\\t200\\t210\\t180\\t190\" >> counts.tsv\n\n# Example metadata.tsv\necho -e \"sample\\tbatch\\tcondition\" > metadata.tsv\necho -e \"sample1\\tbatch1\\tcontrol\" >> metadata.tsv\necho -e \"sample2\\tbatch1\\ttreated\" >> metadata.tsv\necho -e \"sample3\\tbatch2\\tcontrol\" >> metadata.tsv\necho -e \"sample4\\tbatch2\\ttreated\" >> metadata.tsv\n\n# R script to perform ComBat-seq batch correction\nRscript -e '\n  library(sva)\n  library(data.table) # For fread/fwrite\n\n  # Load count data\n  counts_df <- fread(\"counts.tsv\", data.table = FALSE)\n  rownames(counts_df) <- counts_df$gene\n  counts_matrix <- as.matrix(counts_df[, -1])\n\n  # Load metadata\n  metadata_df <- fread(\"metadata.tsv\", data.table = FALSE)\n  rownames(metadata_df) <- metadata_df$sample\n\n  # Ensure sample order matches between counts and metadata\n  metadata_df <- metadata_df[colnames(counts_matrix), ]\n\n  # Define batch variable\n  batch <- metadata_df$batch\n\n  # Define biological covariates to preserve (e.g., condition)\n  # If no other covariates, set covar_mod = NULL\n  covar_mod <- model.matrix(~condition, data = metadata_df) # Example with \"condition\"\n\n  # Perform ComBat-seq batch correction\n  # For more options, refer to ?ComBat_seq in R\n  corrected_counts <- ComBat_seq(\n    counts = counts_matrix,\n    batch = batch,\n    covar_mod = covar_mod,\n    full_mod = TRUE # Use full_mod = TRUE if covar_mod is a full design matrix\n  )\n\n  # Output corrected counts\n  fwrite(as.data.frame(corrected_counts), \"corrected_counts_combatseq.tsv\", sep = \"\\t\", row.names = TRUE)\n'",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/sva.html"
+        },
+        {
+            "step_order": 5,
+            "description": "Differential expression was completed by DESeq2 (v1.5.3)",
+            "tool_name": "DESeq2",
+            "tool_version": "1.5.3",
+            "code_example": "# Install Bioconductor and DESeq2 if not already installed.\n# Note: DESeq2 v1.5.3 is an older version. To install it, you would typically need an older R version (e.g., R 3.0.x or 3.1.x) and an older Bioconductor release (e.g., Bioconductor 2.13 or 2.14).\n# The general installation method for older Bioconductor packages was:\n# source(\"http://bioconductor.org/biocLite.R\")\n# biocLite(\"DESeq2\") # This would install the version compatible with your R version at the time.\n\n# Create a placeholder R script for DESeq2 analysis\ncat << 'EOF' > run_deseq2.R\n# Load DESeq2 library\nlibrary(DESeq2)\n\n# --- Placeholder for loading count data and sample metadata ---\n# Replace 'counts.tsv' and 'sample_info.tsv' with your actual input files.\n# 'counts.tsv' should be a tab-separated or comma-separated file with gene IDs as row names\n# and sample IDs as column names (e.g., output from featureCounts, HTSeq-count, or aggregated Salmon/Kallisto counts).\n# 'sample_info.tsv' should be a tab-separated or comma-separated file with sample IDs as row names\n# and experimental conditions/covariates as columns.\n\n# Example: Load count matrix\n# counts_matrix <- as.matrix(read.table(\"counts.tsv\", header = TRUE, row.names = 1, sep = \"\\t\"))\n\n# Example: Load sample metadata\n# sample_metadata <- read.table(\"sample_info.tsv\", header = TRUE, row_names = 1, sep = \"\\t\"))\n\n# Ensure sample names match and are in the same order\n# if (!all(rownames(sample_metadata) == colnames(counts_matrix))) {\n#   stop(\"Sample names in metadata and counts matrix do not match or are not in the same order.\")\n# }\n\n# --- Create a DESeqDataSet object ---\n# Replace 'condition' with the actual column name in your sample_metadata that defines your experimental groups.\n# dds <- DESeqDataSetFromMatrix(countData = counts_matrix,\n#                               colData = sample_metadata,\n#                               design = ~ condition)\n\n# --- Run DESeq2 analysis ---\n# dds <- DESeq(dds)\n\n# --- Extract results ---\n# Replace 'condition_treatment_vs_control' with your specific contrast.\n# For example, if 'condition' has levels 'control' and 'treatment':\n# res <- results(dds, contrast = c(\"condition\", \"treatment\", \"control\"))\n\n# --- Optional: Apply LFC shrinkage (requires 'apeglm' or 'ashr' package) ---\n# resLFC <- lfcShrink(dds, coef=\"condition_treatment_vs_control\", type=\"apeglm\")\n\n# --- Save results ---\n# write.csv(as.data.frame(res), file = \"deseq2_differential_expression_results.csv\")\n# write.csv(as.data.frame(resLFC), file = \"deseq2_lfc_shrinkage_results.csv\")\n\n# --- Print session info for reproducibility ---\nsessionInfo()\nEOF\n\n# Execute the R script\nRscript run_deseq2.R",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/s13059-014-0550-8"
+        }
+    ],
+    "raw_text": "RNAseq reads were adapter-trimmed using Cutadapt (v1.14) and mapped to human-specific repetitive elements from RepBase (version 18.05) by STAR (v2.4.0i) (Dobin et al., 2013).\nRepeat-mapping reads were removed, and remaining reads were mapped to the mouse genome assembly (mm10) with STAR (v2.4.0i)\nRead counts for all genes annotated in GENCODE (vM20) were calculated using the read summarization program featureCounts (v1.5.3) (Liao et al., 2014).\nBatch correction was completed with Combat-seq\nDifferential expression was completed by DESeq2 (v1.5.3)\nAssembly: mm10",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

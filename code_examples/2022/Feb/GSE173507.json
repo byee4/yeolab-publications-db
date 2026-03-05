@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Raw reads were trimmed using cutadapt (v1.14) using the following parameters -O 5 -f fastq --match-read-wildcards --times 2 -e 0.0 --quality-cutoff 6 -m 18 -o data.fastqTr.fq -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b GATCGGAAGAGCACACGTCTGAACTCCAGTCAC -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT data.fastq.gz",
-      "tool_name": "cutadapt",
-      "tool_version": "1.14",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Trimmed reads were mapped to and filtered of repeat elements (RepBase 18.05) with STAR (2.5.2) using the following parameters: --alignEndsType EndToEnd --genomeDir repbase --genomeLoad NoSharedMemory --outBAMcompression 10 --outFileNamePrefix data --outFilterMultimapNmax 10 --outFilterMultimapScoreRange 1 --outFilterScoreMin 10 --outFilterType BySJout --outReadsUnmapped Fastx --outSAMattrRGline ID:foo --outSAMattributes All --outSAMmode Full --outSAMtype BAM Unsorted --outSAMunmapped Within --outStd Log --readFilesIn data.fastqTr.fq --runMode alignReads --runThreadN 8",
-      "tool_name": "STAR",
-      "tool_version": "2.5.2",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Reads unmapped to repeat elements were mapped to the human genome with STAR using the same parameters as the previous step, using an hg19/ChlSab2 index in place of the repeat element index",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Subread featureCounts (-a gencode.v19.annotation.gtf -s 2 -p -o counts.txt data.bam) was used to count features using human annotations (Gencode v19)",
-      "tool_name": "featureCounts",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Raw reads were trimmed using cutadapt (v1.14) using the following parameters -O 5 -f  fastq --match-read-wildcards --times 2 -e 0.0 --quality-cutoff 6 -m 18 -o data.fastqTr.fq -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b GATCGGAAGAGCACACGTCTGAACTCCAGTCAC -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT data.fastq.gz\nTrimmed reads were mapped to and filtered of repeat elements (RepBase 18.05) with STAR (2.5.2) using the following parameters: --alignEndsType  EndToEnd  --genomeDir  repbase  --genomeLoad  NoSharedMemory  --outBAMcompression  10  --outFileNamePrefix  data  --outFilterMultimapNmax  10  --outFilterMultimapScoreRange  1  --outFilterScoreMin  10  --outFilterType  BySJout  --outReadsUnmapped  Fastx  --outSAMattrRGline  ID:foo  --outSAMattributes  All  --outSAMmode  Full  --outSAMtype  BAM  Unsorted  --outSAMunmapped  Within  --outStd  Log  --readFilesIn data.fastqTr.fq  --runMode  alignReads  --runThreadN  8\nReads unmapped to repeat elements were mapped to the human genome with STAR using the same parameters as the previous step, using an hg19/ChlSab2 index in place of the repeat element index\nSubread featureCounts (-a gencode.v19.annotation.gtf -s 2 -p -o counts.txt data.bam) was used to count features using human annotations (Gencode v19)\nGenome_build: ChlSab2\nGenome_build: hg19\nSupplementary_files_format_and_content: BigWig",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Raw reads were trimmed using cutadapt (v1.14) using the following parameters -O 5 -f fastq --match-read-wildcards --times 2 -e 0.0 --quality-cutoff 6 -m 18 -o data.fastqTr.fq -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b GATCGGAAGAGCACACGTCTGAACTCCAGTCAC -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT data.fastq.gz",
+            "tool_name": "cutadapt",
+            "tool_version": "1.14",
+            "code_example": "# Install cutadapt (if not already installed)\n# conda install -c bioconda cutadapt\n\ncutadapt -O 5 -f fastq --match-read-wildcards --times 2 -e 0.0 --quality-cutoff 6 -m 18 -o data.fastqTr.fq -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b GATCGGAAGAGCACACGTCTGAACTCCAGTCAC -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT data.fastq.gz",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 2,
+            "description": "Trimmed reads were mapped to and filtered of repeat elements (RepBase 18.05) with STAR (2.5.2) using the following parameters: --alignEndsType EndToEnd --genomeDir repbase --genomeLoad NoSharedMemory --outBAMcompression 10 --outFileNamePrefix data --outFilterMultimapNmax 10 --outFilterMultimapScoreRange 1 --outFilterScoreMin 10 --outFilterType BySJout --outReadsUnmapped Fastx --outSAMattrRGline ID:foo --outSAMattributes All --outSAMmode Full --outSAMtype BAM Unsorted --outSAMunmapped Within --outStd Log --readFilesIn data.fastqTr.fq --runMode alignReads --runThreadN 8",
+            "tool_name": "STAR",
+            "tool_version": "2.5.2",
+            "code_example": "STAR --alignEndsType EndToEnd --genomeDir repbase --genomeLoad NoSharedMemory --outBAMcompression 10 --outFileNamePrefix data --outFilterMultimapNmax 10 --outFilterMultimapScoreRange 1 --outFilterScoreMin 10 --outFilterType BySJout --outReadsUnmapped Fastx --outSAMattrRGline ID:foo --outSAMattributes All --outSAMmode Full --outSAMtype BAM Unsorted --outSAMunmapped Within --outStd Log --readFilesIn data.fastqTr.fq --runMode alignReads --runThreadN 8",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "Reads unmapped to repeat elements were mapped to the human genome with STAR using the same parameters as the previous step, using an hg19/ChlSab2 index in place of the repeat element index",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR (example using conda)\n# conda install -c bioconda star\n\n# Define variables\n# STAR_INDEX_DIR: Path to the STAR index built from hg19 and ChlSab2 reference genomes.\n#   hg19 (Human genome assembly GRCh37) can be obtained from UCSC Genome Browser (e.g., http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.fa.gz).\n#   ChlSab2 (Chimpanzee chromosome 2) is often used as a spike-in or for specific comparative analyses.\n#   The index would typically be built using STAR's --runMode genomeGenerate with both reference sequences.\nSTAR_INDEX_DIR=\"/path/to/hg19_ChlSab2_STAR_index\"\n\n# INPUT_FASTQ: Placeholder for the input FASTQ file containing reads that did not map to repeat elements.\n#   This file would be the output of a previous filtering step.\nINPUT_FASTQ=\"unmapped_reads.fastq.gz\"\n\n# OUTPUT_PREFIX: Prefix for all output files generated by STAR.\nOUTPUT_PREFIX=\"genome_mapped_reads\"\n\n# N_THREADS: Number of threads (CPU cores) to use for the alignment.\nN_THREADS=8\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_PREFIX}_output\"\n\n# Run STAR alignment\n# Parameters are chosen to reflect common practices for unique mapping after repeat filtering,\n# and are consistent with parameters found in eCLIP pipelines (e.g., Yeo lab).\nSTAR \\\n    --genomeDir \"${STAR_INDEX_DIR}\" \\\n    --readFilesIn \"${INPUT_FASTQ}\" \\\n    --runThreadN \"${N_THREADS}\" \\\n    --outFileNamePrefix \"${OUTPUT_PREFIX}_output/\" \\\n    --outSAMtype BAM SortedByCoordinate \\\n    --outSAMattributes All \\\n    --outFilterMultimapNmax 1 \\\n    --outFilterMismatchNmax 3 \\\n    --alignIntronMax 1 \\\n    --outFilterType BySJout \\\n    --outFilterScoreMinOverLread 0.3 \\\n    --outFilterMatchNminOverLread 0.3 \\\n    --limitBAMsortRAM 30000000000",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip"
+        },
+        {
+            "step_order": 4,
+            "description": "Subread featureCounts (-a gencode.v19.annotation.gtf -s 2 -p -o counts.txt data.bam) was used to count features using human annotations (Gencode v19)",
+            "tool_name": "featureCounts",
+            "tool_version": "(Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Define input and output files\nINPUT_BAM=\"data.bam\" # Placeholder for your input BAM file\nOUTPUT_COUNTS=\"counts.txt\"\n\n# Define annotation file\nGENCODE_GTF=\"gencode.v19.annotation.gtf\"\nGENCODE_GTF_URL=\"ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19/gencode.v19.annotation.gtf.gz\"\n\n# Install featureCounts (part of Subread package)\n# conda install -c bioconda subread\n\n# Download Gencode v19 annotation if not already present\nif [ ! -f \"${GENCODE_GTF}\" ]; then\n    echo \"Downloading Gencode v19 annotation...\"\n    wget -O \"${GENCODE_GTF}.gz\" \"${GENCODE_GTF_URL}\"\n    gunzip \"${GENCODE_GTF}.gz\"\nfi\n\n# Run featureCounts\nfeatureCounts -a \"${GENCODE_GTF}\" -s 2 -p -o \"${OUTPUT_COUNTS}\" \"${INPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Raw reads were trimmed using cutadapt (v1.14) using the following parameters -O 5 -f  fastq --match-read-wildcards --times 2 -e 0.0 --quality-cutoff 6 -m 18 -o data.fastqTr.fq -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b GATCGGAAGAGCACACGTCTGAACTCCAGTCAC -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT data.fastq.gz\nTrimmed reads were mapped to and filtered of repeat elements (RepBase 18.05) with STAR (2.5.2) using the following parameters: --alignEndsType  EndToEnd  --genomeDir  repbase  --genomeLoad  NoSharedMemory  --outBAMcompression  10  --outFileNamePrefix  data  --outFilterMultimapNmax  10  --outFilterMultimapScoreRange  1  --outFilterScoreMin  10  --outFilterType  BySJout  --outReadsUnmapped  Fastx  --outSAMattrRGline  ID:foo  --outSAMattributes  All  --outSAMmode  Full  --outSAMtype  BAM  Unsorted  --outSAMunmapped  Within  --outStd  Log  --readFilesIn data.fastqTr.fq  --runMode  alignReads  --runThreadN  8\nReads unmapped to repeat elements were mapped to the human genome with STAR using the same parameters as the previous step, using an hg19/ChlSab2 index in place of the repeat element index\nSubread featureCounts (-a gencode.v19.annotation.gtf -s 2 -p -o counts.txt data.bam) was used to count features using human annotations (Gencode v19)\nGenome_build: ChlSab2\nGenome_build: hg19\nSupplementary_files_format_and_content: BigWig",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

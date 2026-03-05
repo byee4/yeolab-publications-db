@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Linker tags were removed from RNA sequencing and ribosome profiling reads by the FASTX Toolkit, v0.0.13 (http://hannonlab.cshl.edu/fastx_toolkit/)",
-      "tool_name": "RNA-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "All reads that mapped to rRNAs, tRNAs or mitochondrial rRNAs were removed, and the remaining reads were mapped to RefSeq (v38) by TopHat v2.0.13.",
-      "tool_name": "TopHat",
-      "tool_version": "2.0.13",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Finally all read counts that mapped uniquely to genes were extracted for expression analysis with the help of samtools, v1.1.",
-      "tool_name": "samtools",
-      "tool_version": "1.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Linker tags were removed from RNA sequencing and ribosome profiling reads by the FASTX Toolkit, v0.0.13 (http://hannonlab.cshl.edu/fastx_toolkit/)\nAll reads that mapped to rRNAs, tRNAs or mitochondrial rRNAs were removed, and the remaining reads were mapped to RefSeq (v38) by TopHat v2.0.13.\nFinally all read counts that mapped uniquely to genes were extracted for expression analysis with the help of samtools, v1.1.\nGenome_build: GRCh37.p13\nSupplementary_files_format_and_content: .txt files report raw read counts that mapped uniquely to genes",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Linker tags were removed from RNA sequencing and ribosome profiling reads by the FASTX Toolkit, v0.0.13 (http://hannonlab.cshl.edu/fastx_toolkit/)",
+            "tool_name": "RNA-seq",
+            "tool_version": "0.0.13",
+            "code_example": "# Install FASTX Toolkit (if not already installed)\n# conda install -c bioconda fastx_toolkit\n\n# Placeholder for linker sequence. This needs to be provided based on experimental design.\n# Example linker sequence, replace with actual if known.\nLINKER_SEQUENCE=\"AGATCGGAAGAG\"\n\n# Placeholder for input and output file names.\nINPUT_FILE=\"raw_reads.fastq\"\nOUTPUT_FILE=\"linker_trimmed_reads.fastq\"\n\n# Remove linker tags using fastx_clipper\n# -a: linker sequence to clip\n# -i: input FASTQ file\n# -o: output FASTQ file\nfastx_clipper -a \"${LINKER_SEQUENCE}\" -i \"${INPUT_FILE}\" -o \"${OUTPUT_FILE}\"",
+            "code_language": "bash",
+            "github_url": "http://hannonlab.cshl.edu/fastx_toolkit/"
+        },
+        {
+            "step_order": 2,
+            "description": "All reads that mapped to rRNAs, tRNAs or mitochondrial rRNAs were removed, and the remaining reads were mapped to RefSeq (v38) by TopHat v2.0.13.",
+            "tool_name": "TopHat",
+            "tool_version": "2.0.13",
+            "code_example": "# Install TopHat (if not already installed)\n# conda install -c bioconda tophat=2.0.13\n\n# Define variables\n# Replace with actual paths to your reference files and input reads\nGENOME_FASTA=\"/path/to/GRCh38.fa\" # Example: Human genome GRCh38 (RefSeq v38 implies GRCh38)\nGTF_FILE=\"/path/to/GRCh38_RefSeq.gtf\" # Example: RefSeq annotations for GRCh38\nBOWTIE2_INDEX_PREFIX=\"/path/to/GRCh38_bowtie2_index/GRCh38\" # Prefix for Bowtie2 index files\nINPUT_READS=\"filtered_reads.fastq\" # Reads after removal of r/t/mtRNA mappings\nOUTPUT_DIR=\"tophat_output\"\nNUM_THREADS=8 # Example: Number of threads to use\n\n# Build Bowtie2 index (if not already built)\n# This step is usually done once for a given genome\n# bowtie2-build $GENOME_FASTA $BOWTIE2_INDEX_PREFIX\n\n# Create output directory\nmkdir -p $OUTPUT_DIR\n\n# Map reads to RefSeq (v38) using TopHat\n# -p: number of threads\n# -G: GTF file for known transcripts (improves splice junction detection)\n# $BOWTIE2_INDEX_PREFIX: Path to the Bowtie2 index\n# $INPUT_READS: Input FASTQ file (assumed to be single-end; for paired-end, use -1 and -2)\ntophat2 -p $NUM_THREADS -G $GTF_FILE -o $OUTPUT_DIR $BOWTIE2_INDEX_PREFIX $INPUT_READS",
+            "code_language": "bash",
+            "github_url": "https://github.com/infphilo/tophat"
+        },
+        {
+            "step_order": 3,
+            "description": "Finally all read counts that mapped uniquely to genes were extracted for expression analysis with the help of samtools, v1.1.",
+            "tool_name": "samtools",
+            "tool_version": "1.1",
+            "code_example": "# Install samtools v1.1\n# conda install -c bioconda samtools=1.1\n\n# Placeholder: input alignment file (BAM)\nINPUT_BAM=\"aligned_reads.bam\"\n\n# Output file for uniquely mapped reads (BAM format)\nOUTPUT_BAM=\"uniquely_mapped_reads.bam\"\n\n# Extract reads that mapped uniquely to genes\n# This command filters the input BAM file to retain only uniquely mapped reads.\n# -F 0x100: Exclude secondary alignments (often indicative of multi-mappers or less reliable alignments)\n# -q 20: Minimum mapping quality of 20 (a common threshold for uniquely mapped reads)\n# -b: Output in BAM format\n# The resulting BAM file (uniquely_mapped_reads.bam) would then be used by downstream\n# expression analysis tools (e.g., featureCounts, htseq-count) to generate gene-level counts.\nsamtools view -F 0x100 -q 20 -b \"${INPUT_BAM}\" > \"${OUTPUT_BAM}\"\n\n# Index the filtered BAM file (optional, but good practice for downstream tools)\nsamtools index \"${OUTPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        }
+    ],
+    "raw_text": "Linker tags were removed from RNA sequencing and ribosome profiling reads by the FASTX Toolkit, v0.0.13 (http://hannonlab.cshl.edu/fastx_toolkit/)\nAll reads that mapped to rRNAs, tRNAs or mitochondrial rRNAs were removed, and the remaining reads were mapped to RefSeq (v38) by TopHat v2.0.13.\nFinally all read counts that mapped uniquely to genes were extracted for expression analysis with the help of samtools, v1.1.\nGenome_build: GRCh37.p13\nSupplementary_files_format_and_content: .txt files report raw read counts that mapped uniquely to genes",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

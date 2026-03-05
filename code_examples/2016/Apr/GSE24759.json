@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Transcript levels were processed from data image files using RMA method, implemented by Bioconductor R package.",
-      "tool_name": "R",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "To reduce batch effects, transcript levels were further corrected with the ComBat method (Johnson, 2007), which applies empirical Bayes framework for adjusting data for batch effects.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Final dataset which was used in the paper and contains 8968 genes is included in the supplementary file GSE24759_data.sort.txt.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Transcript levels were processed from data image files using RMA method, implemented by Bioconductor R package. To reduce batch effects, transcript levels were further corrected with the ComBat method (Johnson, 2007), which applies empirical Bayes framework for adjusting data for batch effects. Final dataset which was used in the paper and contains 8968 genes is included in the supplementary file GSE24759_data.sort.txt.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Transcript levels were processed from data image files using RMA method, implemented by Bioconductor R package.",
+            "tool_name": "R",
+            "tool_version": "Latest stable Bioconductor version compatible with R (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install R and Bioconductor affy package (example using conda)\n# conda create -n rma_env r-base bioconductor-affy -c conda-forge -c bioconda -y\n# conda activate rma_env\n\n# Create an R script for RMA processing\ncat << 'EOF' > process_rma.R\nlibrary(affy)\n\n# Define input directory containing .CEL files\n# Replace 'input_cel_files_dir' with the actual path to your CEL files\ncel_files_dir <- \"input_cel_files_dir\" \n\n# Read Affymetrix CEL files\n# This will automatically detect and read all .CEL files in the specified directory\n# For specific files, you can use: ReadAffy(filenames=c(\"file1.CEL\", \"file2.CEL\"))\ndata <- ReadAffy(celfile.path=cel_files_dir)\n\n# Perform RMA normalization\nrma_data <- rma(data)\n\n# Extract normalized expression matrix\nexpression_matrix <- exprs(rma_data)\n\n# Define output file path\n# Replace 'output_expression_file.tsv' with your desired output file name\noutput_file <- \"output_expression_file.tsv\"\n\n# Write the normalized expression matrix to a tab-separated file\nwrite.table(expression_matrix, file=output_file, sep=\"\\t\", quote=FALSE, row.names=TRUE)\n\ncat(paste0(\"RMA normalization complete. Output written to: \", output_file, \"\\n\"))\nEOF\n\n# Execute the R script\nRscript process_rma.R\n\n# Deactivate conda environment if it was activated\n# conda deactivate",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/affy.html"
+        },
+        {
+            "step_order": 2,
+            "description": "To reduce batch effects, transcript levels were further corrected with the ComBat method (Johnson, 2007), which applies empirical Bayes framework for adjusting data for batch effects.",
+            "tool_name": "ComBat (sva R package) (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "latest stable (sva R package)",
+            "code_example": "# Install R and Bioconductor if not already installed\n# sudo apt-get update\n# sudo apt-get install r-base\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\"); BiocManager::install(\"sva\")'\n\n# Create dummy input files for demonstration purposes.\n# In a real scenario, 'expression_matrix.tsv' would be your transcript level data\n# and 'sample_info.tsv' would contain batch information for each sample.\n# Example: expression_matrix.tsv (genes as rows, samples as columns)\necho -e \"gene\\tsample1\\tsample2\\tsample3\\tsample4\" > expression_matrix.tsv\necho -e \"geneA\\t100\\t120\\t150\\t180\" >> expression_matrix.tsv\necho -e \"geneB\\t50\\t60\\t70\\t80\" >> expression_matrix.tsv\necho -e \"geneC\\t200\\t210\\t220\\t230\" >> expression_matrix.tsv\n\n# Example: sample_info.tsv (sample IDs and corresponding batch information)\necho -e \"sample\\tbatch\\tcondition\" > sample_info.tsv\necho -e \"sample1\\tbatch1\\tcontrol\" >> sample_info.tsv\necho -e \"sample2\\tbatch1\\ttreated\" >> sample_info.tsv\necho -e \"sample3\\tbatch2\\tcontrol\" >> sample_info.tsv\necho -e \"sample4\\tbatch2\\ttreated\" >> sample_info.tsv\n\n# R script to perform ComBat correction using the sva package\ncat << 'EOF' > run_combat.R\nlibrary(sva)\nlibrary(data.table) # For fread/fwrite\n\n# Load expression data\n# Assuming genes in rows, samples in columns, first column is gene ID\nexpr_data <- fread(\"expression_matrix.tsv\", data.table = FALSE)\ngene_ids <- expr_data[, 1]\nexpr_matrix <- as.matrix(expr_data[, -1])\nrownames(expr_matrix) <- gene_ids\n\n# Load sample information\nsample_info <- fread(\"sample_info.tsv\", data.table = FALSE)\n# Ensure sample order in sample_info matches expression matrix columns\nsample_info <- sample_info[match(colnames(expr_matrix), sample_info$sample), ]\n\n# Extract batch variable\nbatch <- sample_info$batch\n\n# Perform ComBat correction\n# If there are other covariates to preserve (e.g., 'condition'),\n# they can be added to the 'mod' parameter:\n# mod <- model.matrix(~condition, data=sample_info)\n# combat_corrected_data <- ComBat(dat=expr_matrix, batch=batch, mod=mod)\ncombat_corrected_data <- ComBat(dat=expr_matrix, batch=batch)\n\n# Prepare output dataframe\ncorrected_df <- as.data.frame(combat_corrected_data)\ncorrected_df <- cbind(gene = rownames(corrected_df), corrected_df)\n\n# Save batch-corrected data to a new TSV file\nfwrite(corrected_df, \"corrected_expression_matrix.tsv\", sep = \"\\t\", row.names = FALSE)\nEOF\n\n# Execute the R script to perform ComBat correction\nRscript run_combat.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/sva.html"
+        },
+        {
+            "step_order": 3,
+            "description": "Final dataset which was used in the paper and contains 8968 genes is included in the supplementary file GSE24759_data.sort.txt.",
+            "tool_name": "(Inferred with models/gemini-2.5-flash)",
+            "tool_version": "",
+            "code_example": "# This step describes the final dataset file GSE24759_data.sort.txt\n# which contains 8968 genes and was used in the paper.\n# Assuming the file is available in the current directory, you can inspect its content:\nhead GSE24759_data.sort.txt",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1016/j.stem.2011.08.007"
+        }
+    ],
+    "raw_text": "Transcript levels were processed from data image files using RMA method, implemented by Bioconductor R package. To reduce batch effects, transcript levels were further corrected with the ComBat method (Johnson, 2007), which applies empirical Bayes framework for adjusting data for batch effects. Final dataset which was used in the paper and contains 8968 genes is included in the supplementary file GSE24759_data.sort.txt.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Libraries were filtered and mapped to the mm10 genome using ENCODE Transcription Factor and Histone ChIP-Seq processing pipeline with default parameters for histone marks (github.com/ENCODE-DCC/chip-seq-pipeline2).",
-      "tool_name": "ChIP-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Final pooled bigwig files were used for visualization.",
-      "tool_name": "UCSC tools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "none provided by the submitter",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Libraries were filtered and mapped to the mm10 genome using ENCODE Transcription Factor and Histone ChIP-Seq processing pipeline with default parameters for histone marks (github.com/ENCODE-DCC/chip-seq-pipeline2). Final pooled bigwig files were used for visualization.\nnone provided by the submitter\nAssembly: mm10\nSupplementary files format and content: bigwig files from pooled replicates",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Libraries were filtered and mapped to the mm10 genome using ENCODE Transcription Factor and Histone ChIP-Seq processing pipeline with default parameters for histone marks (github.com/ENCODE-DCC/chip-seq-pipeline2).",
+            "tool_name": "ChIP-seq",
+            "tool_version": "default",
+            "code_example": "# Install Cromwell (requires Java). Replace X.Y.Z with the actual version.\n# java -jar cromwell-X.Y.Z.jar install\n\n# Clone the ENCODE ChIP-seq pipeline repository if not already present\n# git clone https://github.com/ENCODE-DCC/chip-seq-pipeline2.git\n# cd chip-seq-pipeline2\n\n# Create an inputs JSON file specifying the parameters based on the description.\n# This includes the genome assembly (mm10) and pipeline type (histone).\n# Replace 'path/to/your/fastq_R1.fastq.gz' and 'path/to/your/fastq_R2.fastq.gz' with actual input FASTQ files.\n# Replace 'path/to/mm10_genome.tsv' with the path to your genome TSV file for mm10.\n# The genome TSV file typically contains paths to the genome FASTA, BWA index, blacklist regions, etc.,\n# and can be found in the pipeline's 'genome_data' directory or generated.\ncat << EOF > inputs.json\n{\n  \"chip.pipeline_type\": \"histone\",\n  \"chip.genome_tsv\": \"path/to/mm10_genome.tsv\",\n  \"chip.fastqs_rep1_R1\": [\"path/to/your/fastq_R1.fastq.gz\"],\n  \"chip.fastqs_rep1_R2\": [\"path/to/your/fastq_R2.fastq.gz\"],\n  \"chip.paired_end\": true,\n  \"chip.auto_detect_adapter\": true,\n  \"chip.trim_adapter\": true,\n  \"chip.multimapping\": 0,\n  \"chip.nthr\": 8,\n  \"chip.mem_gb\": 32\n  // Other default parameters for histone marks are handled by the pipeline's internal logic\n}\nEOF\n\n# Execute the ENCODE ChIP-seq pipeline using Cromwell.\n# Ensure you are in the directory containing 'chip.wdl' and 'inputs.json'.\n# Replace 'cromwell-X.Y.Z.jar' with the actual Cromwell JAR file name.\njava -jar cromwell-X.Y.Z.jar run chip.wdl -i inputs.json",
+            "code_language": "bash",
+            "github_url": "https://github.com/ENCODE-DCC/chip-seq-pipeline2"
+        },
+        {
+            "step_order": 2,
+            "description": "Final pooled bigwig files were used for visualization.",
+            "tool_name": "UCSC tools",
+            "tool_version": "v443",
+            "code_example": "# Install UCSC tools (if not already installed)\n# conda install -c bioconda ucsc-bedgraphtobigwig\n\n# Define input and output files\n# INPUT_BEDGRAPH: This would be the pooled and normalized bedGraph file generated in a previous step.\nINPUT_BEDGRAPH=\"final_pooled.bedGraph\"\n# CHROM_SIZES: Chromosome sizes file for the reference genome (e.g., hg38).\nCHROM_SIZES=\"hg38.chrom.sizes\"\nOUTPUT_BIGWIG=\"final_pooled.bigWig\"\n\n# Download chrom.sizes for hg38 (if not available)\n# wget -O ${CHROM_SIZES} http://hgdownload.cse.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes\n\n# Convert bedGraph to bigWig format for efficient visualization on the UCSC Genome Browser\nbedGraphToBigWig \"${INPUT_BEDGRAPH}\" \"${CHROM_SIZES}\" \"${OUTPUT_BIGWIG}\"",
+            "code_language": "bash",
+            "github_url": "https://genome.ucsc.edu/"
+        },
+        {
+            "step_order": 3,
+            "description": "none provided by the submitter",
+            "tool_name": "N/A (No step description provided) (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A (No step description provided)",
+            "code_example": "# No step description was provided, so specific tools, parameters,\n# and reference datasets cannot be inferred.\n# Please provide a step description to generate a relevant code block.",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Libraries were filtered and mapped to the mm10 genome using ENCODE Transcription Factor and Histone ChIP-Seq processing pipeline with default parameters for histone marks (github.com/ENCODE-DCC/chip-seq-pipeline2). Final pooled bigwig files were used for visualization.\nnone provided by the submitter\nAssembly: mm10\nSupplementary files format and content: bigwig files from pooled replicates",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "STAR was used to map sequencing reads to human reference genome (Ensembl annotation of hg19 assembly).",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Read counts over transcripts were calculated using HTSeq v.0.6.0 based on Ensembl annotation of hg19 genome.",
-      "tool_name": "HTSeq",
-      "tool_version": "0.6.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Differential expression analysis was performed using EdgeR.",
-      "tool_name": "edgeR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "STAR was used to map sequencing reads to human reference genome (Ensembl annotation of hg19 assembly).\nRead counts over transcripts were calculated using HTSeq v.0.6.0 based on Ensembl annotation of hg19 genome.\nDifferential expression analysis was performed using EdgeR.\nGenome_build: Homo sapiens UCSC hg19\nSupplementary_files_format_and_content: Tab-delimited tables of RPKM values",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "STAR was used to map sequencing reads to human reference genome (Ensembl annotation of hg19 assembly).",
+            "tool_name": "STAR",
+            "tool_version": "2.7.11a",
+            "code_example": "# Install STAR\n# conda install -c bioconda star\n\n# Define variables\nGENOME_DIR=\"path/to/hg19_star_index\" # Path to the pre-built STAR genome index\nFASTA_FILE=\"path/to/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa\" # Placeholder for hg19 FASTA\nGTF_FILE=\"path/to/Homo_sapiens.GRCh37.75.gtf\" # Placeholder for Ensembl hg19 GTF\nREADS_R1=\"input_R1.fastq.gz\" # Input FASTQ file for Read 1 (or single-end reads)\nREADS_R2=\"input_R2.fastq.gz\" # Input FASTQ file for Read 2 (omit for single-end reads)\nOUTPUT_DIR=\"star_output\" # Directory for alignment output\nOUTPUT_PREFIX=\"aligned_reads\" # Prefix for output files\nTHREADS=8 # Number of CPU threads to use, adjust based on available resources\nRAM_LIMIT_BAM_SORT=30000000000 # RAM limit for BAM sorting in bytes (e.g., 30GB), adjust based on available RAM\n\n# --- Reference Data Preparation (Run once if index not available) ---\n# Download reference files (example for Ensembl hg19/GRCh37 release 75)\n# mkdir -p references/hg19_ensembl_75\n# cd references/hg19_ensembl_75\n# wget ftp://ftp.ensembl.org/pub/release-75/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa.gz\n# wget ftp://ftp.ensembl.org/pub/release-75/gtf/homo_sapiens/Homo_sapiens.GRCh37.75.gtf.gz\n# gunzip *.gz\n# cd -\n\n# Create STAR genome index (run once with appropriate FASTA and GTF files)\n# mkdir -p \"${GENOME_DIR}\"\n# STAR --runMode genomeGenerate \\\n#      --genomeDir \"${GENOME_DIR}\" \\\n#      --genomeFastaFiles \"${FASTA_FILE}\" \\\n#      --sjdbGTFfile \"${GTF_FILE}\" \\\n#      --sjdbOverhang 100 \\\n#      --runThreadN \"${THREADS}\"\n\n# --- Alignment Step ---\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run STAR alignment\nSTAR --runThreadN \"${THREADS}\" \\\n     --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${READS_R1}\" \"${READS_R2}\" \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix \"${OUTPUT_DIR}/${OUTPUT_PREFIX}_\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes All \\\n     --outSAMunmapped Within KeepPairs \\\n     --outFilterType BySJout \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.04 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --alignSJFilterReads UniqueBothMultipleReadGroup \\\n     --limitBAMsortRAM \"${RAM_LIMIT_BAM_SORT}\"\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "Read counts over transcripts were calculated using HTSeq v.0.6.0 based on Ensembl annotation of hg19 genome.",
+            "tool_name": "HTSeq",
+            "tool_version": "0.6.0",
+            "code_example": "# Install HTSeq (if not already installed)\n# conda install -c bioconda htseq\n\n# Define input and output files\nINPUT_BAM=\"aligned_reads.bam\" # Replace with your actual alignment file\nOUTPUT_COUNTS=\"transcript_counts.txt\"\n\n# Download Ensembl hg19 GTF annotation (example, replace with actual path if already downloaded)\n# For hg19 (GRCh37), Ensembl release 75 is a common choice.\n# wget -O Homo_sapiens.GRCh37.75.gtf.gz ftp://ftp.ensembl.org/pub/release-75/gtf/homo_sapiens/Homo_sapiens.GRCh37.75.gtf.gz\n# gunzip Homo_sapiens.GRCh37.75.gtf.gz\n\n# Placeholder for annotation GTF path\nANNOTATION_GTF=\"/path/to/Homo_sapiens.GRCh37.75.gtf\" # Replace with your actual GTF path\n\n# Run htseq-count\n# Parameters:\n# -f bam: Input file format is BAM\n# -r pos: Assume input BAM is sorted by position\n# -s no: Assume unstranded library (adjust to 'yes' or 'reverse' if known)\n# -a 10: Minimum alignment quality score (adjust as needed)\n# -t exon: Feature type to count (default for gene/transcript counting)\n# -i gene_id: Attribute in GTF to use as feature ID (default)\nhtseq-count -f bam -r pos -s no -a 10 \"${INPUT_BAM}\" \"${ANNOTATION_GTF}\" > \"${OUTPUT_COUNTS}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "Differential expression analysis was performed using EdgeR.",
+            "tool_name": "edgeR",
+            "tool_version": "3.42.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install R and Bioconductor if not already present\n# sudo apt-get update && sudo apt-get install -y r-base\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\")'\n# R -e 'BiocManager::install(\"edgeR\")'\n\n# Create dummy input files for demonstration if they don't exist\n# In a real scenario, counts.tsv would be generated by a quantification tool (e.g., featureCounts, htseq-count)\n# and design.tsv would be a metadata file describing your samples.\nif [ ! -f \"counts.tsv\" ]; then\n  echo -e \"gene\\tsample1_control\\tsample2_control\\tsample3_treatment\\tsample4_treatment\"\n  echo -e \"geneA\\t100\\t120\\t500\\t550\"\n  echo -e \"geneB\\t50\\t60\\t30\\t35\"\n  echo -e \"geneC\\t200\\t210\\t220\\t230\"\n  echo -e \"geneD\\t10\\t12\\t100\\t110\"\n  echo -e \"geneE\\t5\\t7\\t8\\t9\"\n  echo -e \"geneF\\t1000\\t1100\\t1050\\t1150\"\n  echo -e \"geneG\\t20\\t25\\t10\\t12\"\n  echo -e \"geneH\\t150\\t160\\t70\\t80\"\n  echo -e \"geneI\\t30\\t35\\t150\\t160\"\n  echo -e \"geneJ\\t80\\t90\\t40\\t45\"\n  echo -e \"geneK\\t120\\t130\\t60\\t65\"\n  echo -e \"geneL\\t25\\t28\\t120\\t130\"\n  echo -e \"geneM\\t5\\t6\\t20\\t22\"\n  echo -e \"geneN\\t10\\t11\\t5\\t6\"\n  echo -e \"geneO\\t15\\t17\\t30\\t32\"\n  echo -e \"geneP\\t20\\t22\\t10\\t11\"\n  echo -e \"geneQ\\t25\\t27\\t50\\t55\"\n  echo -e \"geneR\\t30\\t33\\t15\\t17\"\n  echo -e \"geneS\\t35\\t38\\t70\\t75\"\n  echo -e \"geneT\\t40\\t42\\t20\\t22\"\n  echo -e \"geneU\\t45\\t48\\t90\\t95\"\n  echo -e \"geneV\\t50\\t52\\t25\\t27\"\n  echo -e \"geneW\\t55\\t58\\t110\\t115\"\n  echo -e \"geneX\\t60\\t62\\t30\\t32\"\n  echo -e \"geneY\\t65\\t68\\t130\\t135\"\n  echo -e \"geneZ\\t70\\t72\\t35\\t37\"\n  echo \"Created dummy counts.tsv\"\nfi\n\nif [ ! -f \"design.tsv\" ]; then\n  echo -e \"sample\\tcondition\"\n  echo -e \"sample1_control\\tcontrol\"\n  echo -e \"sample2_control\\tcontrol\"\n  echo -e \"sample3_treatment\\ttreatment\"\n  echo -e \"sample4_treatment\\ttreatment\"\n  echo \"Created dummy design.tsv\"\nfi\n\n# Create an R script for edgeR analysis\ncat << 'EOF' > run_edger.R\nlibrary(edgeR)\n\n# --- Configuration ---\ncounts_file <- \"counts.tsv\"\ndesign_file <- \"design.tsv\"\noutput_file <- \"de_results.tsv\"\n\n# --- Load Data ---\ncounts_data <- read.delim(counts_file, row.names = 1, stringsAsFactors = FALSE)\nsample_info <- read.delim(design_file, row.names = 1, stringsAsFactors = TRUE)\n\n# Ensure sample order matches between counts and design\nsample_info <- sample_info[colnames(counts_data), , drop = FALSE]\n\n# --- Create DGEList object ---\ndge <- DGEList(counts = counts_data, group = sample_info$condition)\n\n# --- Filtering low-expressed genes ---\n# Keep genes with at least 1 CPM in at least 2 samples (minimum group size)\nkeep <- filterByExpr(dge, group = sample_info$condition)\ndge <- dge[keep, , keep.lib.sizes = FALSE]\n\n# --- Normalization ---\ndge <- calcNormFactors(dge)\n\n# --- Design Matrix ---\ndesign <- model.matrix(~0 + group, data = dge$samples)\ncolnames(design) <- levels(dge$samples$group)\n\n# --- Estimate Dispersion ---\ndge <- estimateDisp(dge, design)\n\n# --- Fit GLM and Test for Differential Expression ---\nfit <- glmFit(dge, design)\n\n# Define contrasts for comparison (e.g., Treatment vs Control)\ncontrast_matrix <- makeContrasts(Treatment_vs_Control = treatment - control, levels = design)\nlrt <- glmLRT(fit, contrast = contrast_matrix[, \"Treatment_vs_Control\"])\n\n# --- Extract Results ---\nresults <- topTags(lrt, n = Inf, adjust.method = \"BH\", sort.by = \"PValue\")\n\n# --- Write Results ---\nwrite.table(results$table, file = output_file, sep = \"\\t\", quote = FALSE, row.names = TRUE)\n\nmessage(paste(\"Differential expression results saved to:\", output_file))\nEOF\n\n# Execute the R script\nRscript run_edger.R",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "STAR was used to map sequencing reads to human reference genome (Ensembl annotation of hg19 assembly).\nRead counts over transcripts were calculated using HTSeq v.0.6.0 based on Ensembl annotation of hg19 genome.\nDifferential expression analysis was performed using EdgeR.\nGenome_build: Homo sapiens UCSC hg19\nSupplementary_files_format_and_content: Tab-delimited tables of RPKM values",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

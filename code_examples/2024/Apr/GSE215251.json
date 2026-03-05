@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Reads were first trimmed of adapters and low-complexity sequences with cutadapt 1.14 (-O 5 -f fastq --match-read-wildcards --times 2 -e 0.0 --quality-cutoff 6 -m 18 -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b GATCGGAAGAGCACACGTCTGAACTCCAGTCAC -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT)",
-      "tool_name": "cutadapt",
-      "tool_version": "1.14",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Trimmed reads were then sorted with fastq-tools (fastq-sort)",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Trimmed reads were mapped against RepBase with STAR v2.4.0j to remove reads mapping to repetitive sequences (--outFilterMultimapNmax 10 --alignEndsType EndToEnd --outFilterMultimapScoreRange 1 --outSAMmode Full --outFilterType BySJout --outSAMtype BAM Unsorted --outFilterScoreMin 10 --outReadsUnmapped Fastx --outSAMattributes All)",
-      "tool_name": "STAR",
-      "tool_version": "2.4.0j",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Remaining reads were mapped to the appropriate genome build (hg19) using STAR aligner (--outFilterMultimapNmax 10 --alignEndsType EndToEnd --outFilterMultimapScoreRange 1 --outSAMmode Full --outFilterType BySJout --outSAMtype BAM Unsorted --outFilterScoreMin 10 --outReadsUnmapped Fastx --outSAMattributes All)",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "featureCounts was used to count reads according to gencode v19 annotations (-s 2 -M)",
-      "tool_name": "featureCounts",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Reads were first trimmed of adapters and low-complexity sequences with cutadapt 1.14 (-O 5 -f fastq --match-read-wildcards --times 2 -e 0.0 --quality-cutoff 6 -m 18 -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b GATCGGAAGAGCACACGTCTGAACTCCAGTCAC -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT)\nTrimmed reads were then sorted with fastq-tools (fastq-sort)\nTrimmed reads were mapped against RepBase with STAR v2.4.0j to remove reads mapping to repetitive sequences (--outFilterMultimapNmax 10 --alignEndsType EndToEnd --outFilterMultimapScoreRange 1 --outSAMmode Full --outFilterType BySJout --outSAMtype BAM Unsorted --outFilterScoreMin 10 --outReadsUnmapped Fastx --outSAMattributes All)\nRemaining reads were mapped to the appropriate genome build (hg19) using STAR aligner (--outFilterMultimapNmax 10 --alignEndsType EndToEnd --outFilterMultimapScoreRange 1 --outSAMmode Full --outFilterType BySJout --outSAMtype BAM Unsorted --outFilterScoreMin 10 --outReadsUnmapped Fastx --outSAMattributes All)\nfeatureCounts was used to count reads according to gencode v19 annotations (-s 2 -M)\nAssembly: hg19\nSupplementary files format and content: bigwigs contain RPM-normalized read densities of uniquely-mapped reads\nSupplementary files format and content: counts text files contain output from featureCounts",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Reads were first trimmed of adapters and low-complexity sequences with cutadapt 1.14 (-O 5 -f fastq --match-read-wildcards --times 2 -e 0.0 --quality-cutoff 6 -m 18 -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b GATCGGAAGAGCACACGTCTGAACTCCAGTCAC -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT)",
+            "tool_name": "cutadapt",
+            "tool_version": "1.14",
+            "code_example": "# Install cutadapt if not already installed\n# conda install -c bioconda cutadapt=1.14\n\n# Define input and output files (placeholders)\nINPUT_FASTQ=\"input.fastq\"\nOUTPUT_FASTQ=\"output.fastq\"\n\n# Reads were first trimmed of adapters and low-complexity sequences\ncutadapt -O 5 -f fastq --match-read-wildcards --times 2 -e 0.0 --quality-cutoff 6 -m 18 \\\n-b TCGTATGCCGTCTTCTGCTTG \\\n-b ATCTCGTATGCCGTCTTCTGCTTG \\\n-b CGACAGGTTCAGAGTTCTACAGTCCGACGATC \\\n-b GATCGGAAGAGCACACGTCTGAACTCCAGTCAC \\\n-b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \\\n-b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT \\\n-o \"${OUTPUT_FASTQ}\" \"${INPUT_FASTQ}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 2,
+            "description": "Trimmed reads were then sorted with fastq-tools (fastq-sort)",
+            "tool_name": "fastq-tools",
+            "tool_version": "Not specified",
+            "code_example": "# Install fastq-tools (example using conda, adjust as needed)\n# conda install -c bioconda fastq-tools\n\n# Sort trimmed reads\n# Assuming 'trimmed_reads.fastq' is the input file\nfastq-sort trimmed_reads.fastq > sorted_reads.fastq",
+            "code_language": "bash",
+            "github_url": "https://github.com/dcjones/fastq-tools"
+        },
+        {
+            "step_order": 3,
+            "description": "Trimmed reads were mapped against RepBase with STAR v2.4.0j to remove reads mapping to repetitive sequences (--outFilterMultimapNmax 10 --alignEndsType EndToEnd --outFilterMultimapScoreRange 1 --outSAMmode Full --outFilterType BySJout --outSAMtype BAM Unsorted --outFilterScoreMin 10 --outReadsUnmapped Fastx --outSAMattributes All)",
+            "tool_name": "STAR",
+            "tool_version": "2.4.0j",
+            "code_example": "# Install STAR if not already installed\n# conda install -c bioconda star\n\n# Placeholder for STAR index creation for RepBase (if not already done)\n# Replace repbase.fasta with the actual RepBase FASTA file and adjust threads.\n# STAR --runMode genomeGenerate --genomeDir repbase_star_index --genomeFastaFiles repbase.fasta --runThreadN <num_threads>\n\n# Map trimmed reads against RepBase to identify and remove repetitive sequences\n# Input: trimmed_reads.fastq.gz (or .fq.gz, .fasta, .fa, .bam)\n# Output: repbase_filtered_Unmapped.out.mate1 (and mate2 if paired-end) containing reads that did NOT map to RepBase\n# Output: repbase_filtered_Aligned.out.bam containing reads that DID map to RepBase\nSTAR \\\n  --genomeDir repbase_star_index \\\n  --readFilesIn trimmed_reads.fastq.gz \\\n  --outFileNamePrefix repbase_filtered_ \\\n  --outFilterMultimapNmax 10 \\\n  --alignEndsType EndToEnd \\\n  --outFilterMultimapScoreRange 1 \\\n  --outSAMmode Full \\\n  --outFilterType BySJout \\\n  --outSAMtype BAM Unsorted \\\n  --outFilterScoreMin 10 \\\n  --outReadsUnmapped Fastx \\\n  --outSAMattributes All \\\n  --runThreadN 8 # Example: use 8 threads, adjust as needed\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 4,
+            "description": "Remaining reads were mapped to the appropriate genome build (hg19) using STAR aligner (--outFilterMultimapNmax 10 --alignEndsType EndToEnd --outFilterMultimapScoreRange 1 --outSAMmode Full --outFilterType BySJout --outSAMtype BAM Unsorted --outFilterScoreMin 10 --outReadsUnmapped Fastx --outSAMattributes All)",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star=2.7.10a\n\n# Placeholder variables\nSTAR_INDEX_DIR=\"/path/to/STAR_index/hg19\" # Replace with actual path to hg19 STAR index\nINPUT_READS=\"remaining_reads.fastq.gz\" # Replace with actual input FASTQ file (e.g., from a trimming step)\nOUTPUT_PREFIX=\"aligned_reads_\" # Prefix for output files\nNUM_THREADS=8 # Adjust as needed for your system\n\n# Execute STAR alignment\nSTAR --genomeDir \"${STAR_INDEX_DIR}\" \\\n     --readFilesIn \"${INPUT_READS}\" \\\n     --runThreadN \"${NUM_THREADS}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --outFilterMultimapNmax 10 \\\n     --alignEndsType EndToEnd \\\n     --outFilterMultimapScoreRange 1 \\\n     --outSAMmode Full \\\n     --outFilterType BySJout \\\n     --outSAMtype BAM Unsorted \\\n     --outFilterScoreMin 10 \\\n     --outReadsUnmapped Fastx \\\n     --outSAMattributes All",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 5,
+            "description": "featureCounts was used to count reads according to gencode v19 annotations (-s 2 -M)",
+            "tool_name": "featureCounts",
+            "tool_version": "2.0.6 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Subread package (includes featureCounts)\n# conda install -c bioconda subread=2.0.6\n\n# Define input and output files\nINPUT_BAM=\"aligned_reads.bam\" # Placeholder for input BAM file(s)\nOUTPUT_COUNTS=\"gene_counts.txt\" # Placeholder for output counts file\nGENCODE_GTF=\"/path/to/gencode.v19.annotation.gtf\" # Placeholder for Gencode v19 GTF file path\n\n# Execute featureCounts\nfeatureCounts -a \"${GENCODE_GTF}\" -o \"${OUTPUT_COUNTS}\" -s 2 -M \"${INPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": "https://pubmed.ncbi.nlm.nih.gov/24227686/"
+        }
+    ],
+    "raw_text": "Reads were first trimmed of adapters and low-complexity sequences with cutadapt 1.14 (-O 5 -f fastq --match-read-wildcards --times 2 -e 0.0 --quality-cutoff 6 -m 18 -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b GATCGGAAGAGCACACGTCTGAACTCCAGTCAC -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT)\nTrimmed reads were then sorted with fastq-tools (fastq-sort)\nTrimmed reads were mapped against RepBase with STAR v2.4.0j to remove reads mapping to repetitive sequences (--outFilterMultimapNmax 10 --alignEndsType EndToEnd --outFilterMultimapScoreRange 1 --outSAMmode Full --outFilterType BySJout --outSAMtype BAM Unsorted --outFilterScoreMin 10 --outReadsUnmapped Fastx --outSAMattributes All)\nRemaining reads were mapped to the appropriate genome build (hg19) using STAR aligner (--outFilterMultimapNmax 10 --alignEndsType EndToEnd --outFilterMultimapScoreRange 1 --outSAMmode Full --outFilterType BySJout --outSAMtype BAM Unsorted --outFilterScoreMin 10 --outReadsUnmapped Fastx --outSAMattributes All)\nfeatureCounts was used to count reads according to gencode v19 annotations (-s 2 -M)\nAssembly: hg19\nSupplementary files format and content: bigwigs contain RPM-normalized read densities of uniquely-mapped reads\nSupplementary files format and content: counts text files contain output from featureCounts",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

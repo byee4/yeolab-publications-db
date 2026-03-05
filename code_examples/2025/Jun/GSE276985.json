@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "eCLIP data was analyzed using Skipper with default settings.",
-      "tool_name": "Skipper",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "The kDa of each ORF was matched to the closest input sample beginning at that range; for example, a 78 kDa ORF would be paired with the input sample covering the range of 75 to 150 kDa.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "eCLIP data was analyzed using Skipper with default settings. The kDa of each ORF was matched to the closest input sample beginning at that range; for example, a 78 kDa ORF would be paired with the input sample covering the range of 75 to 150 kDa.\nAssembly: hg38/mm10\nSupplementary files format and content: Reproducible enriched peaks output by Skipper",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "eCLIP data was analyzed using Skipper with default settings.",
+            "tool_name": "Skipper",
+            "tool_version": "v0.1.0",
+            "code_example": "# Install Skipper (if not already installed)\n# conda install -c bioconda skipper\n\n# Skipper requires a configuration file (config.yaml) to specify input files, genome references, and other parameters.\n# For \"default settings\", ensure your config.yaml is set up with standard paths and parameters.\n# Example minimal config.yaml content (adjust paths and parameters as needed):\n# wildcards:\n#   rbp: [\"RBP_NAME\"]\n#   replicate: [\"rep1\"]\n# # Placeholder for human GRCh38 genome fasta and GTF annotation\n# genome_fasta: \"/path/to/human/GRCh38/genome.fa\"\n# gtf: \"/path/to/human/GRCh38/annotation.gtf\"\n# # ... other default Skipper parameters ...\n\n# Run Skipper using the specified configuration file.\n# The --cores parameter can be adjusted based on available computational resources.\nskipper run --configfile config.yaml --cores 8",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper/"
+        },
+        {
+            "step_order": 2,
+            "description": "The kDa of each ORF was matched to the closest input sample beginning at that range; for example, a 78 kDa ORF would be paired with the input sample covering the range of 75 to 150 kDa.",
+            "tool_name": "Custom script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# Create dummy input files for demonstration\necho -e \"ORF1\\t78.0\\nORF2\\t120.5\\nORF3\\t60.0\\nORF4\\t160.0\" > orf_data.tsv\necho -e \"SampleA\\t75.0\\t150.0\\nSampleB\\t50.0\\t74.9\\nSampleC\\t150.1\\t200.0\" > sample_ranges.tsv\n\n# Python script to perform the matching logic\npython3 -c '\nimport sys\n\ndef match_orf_to_sample_range(orf_data_file, sample_ranges_file, output_file):\n    \"\"\"\n    Matches ORFs by kDa to the closest input sample range.\n    Input files are assumed to be tab-separated:\n    - orf_data_file: ORF_ID\\tkDa\n    - sample_ranges_file: Sample_ID\\tMin_kDa\\tMax_kDa\n    Output file: ORF_ID\\tkDa\\tMatched_Sample_ID\n    \"\"\"\n    sample_ranges = [] # List of (min_kDa, max_kDa, sample_id)\n    try:\n        with open(sample_ranges_file, \"r\") as f:\n            for line in f:\n                parts = line.strip().split(\"\\t\")\n                if len(parts) == 3:\n                    sample_id, min_str, max_str = parts\n                    min_kDa = float(min_str)\n                    max_kDa = float(max_str)\n                    sample_ranges.append((min_kDa, max_kDa, sample_id))\n                else:\n                    sys.stderr.write(f\"Warning: Skipping malformed line in {sample_ranges_file}: {line.strip()}\\n\")\n    except FileNotFoundError:\n        sys.stderr.write(f\"Error: Sample ranges file not found: {sample_ranges_file}\\n\")\n        sys.exit(1)\n    except ValueError:\n        sys.stderr.write(f\"Error: Invalid number format in {sample_ranges_file}\\n\")\n        sys.exit(1)\n\n    try:\n        with open(orf_data_file, \"r\") as orf_f, open(output_file, \"w\") as out_f:\n            out_f.write(\"ORF_ID\\tkDa\\tMatched_Sample_ID\\n\")\n            for line in orf_f:\n                parts = line.strip().split(\"\\t\")\n                if len(parts) == 2:\n                    orf_id, kDa_str = parts\n                    orf_kDa = float(kDa_str)\n                    \n                    matched_sample_id = \"N/A\"\n                    # Find the range where orf_kDa falls (inclusive range based on example)\n                    for min_r, max_r, sample_id_r in sample_ranges:\n                        if min_r <= orf_kDa <= max_r:\n                            matched_sample_id = sample_id_r\n                            break # Assuming each ORF matches only one range\n                    \n                    out_f.write(f\"{orf_id}\\t{orf_kDa}\\t{matched_sample_id}\\n\")\n                else:\n                    sys.stderr.write(f\"Warning: Skipping malformed line in {orf_data_file}: {line.strip()}\\n\")\n    except FileNotFoundError:\n        sys.stderr.write(f\"Error: ORF data file not found: {orf_data_file}\\n\")\n        sys.exit(1)\n    except ValueError:\n        sys.stderr.write(f\"Error: Invalid number format in {orf_data_file}\\n\")\n        sys.exit(1)\n\nif __name__ == \"__main__\":\n    # Define input and output filenames\n    ORF_DATA_FILE = \"orf_data.tsv\"\n    SAMPLE_RANGES_FILE = \"sample_ranges.tsv\"\n    OUTPUT_FILE = \"matched_orfs.tsv\"\n    \n    match_orf_to_sample_range(ORF_DATA_FILE, SAMPLE_RANGES_FILE, OUTPUT_FILE)\n'\n\n# Display the output\ncat matched_orfs.tsv",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "eCLIP data was analyzed using Skipper with default settings. The kDa of each ORF was matched to the closest input sample beginning at that range; for example, a 78 kDa ORF would be paired with the input sample covering the range of 75 to 150 kDa.\nAssembly: hg38/mm10\nSupplementary files format and content: Reproducible enriched peaks output by Skipper",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

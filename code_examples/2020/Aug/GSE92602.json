@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Base calling was with Illumina GAP Pipeline Software v1.90",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Sequences were aligned to mm9 reference genome using Tophat 2.0.8 with option -g with mm9 reference GTF",
-      "tool_name": "TopHat",
-      "tool_version": "2.0.8",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Novel transcripts were predicted with Cufflinks 2.1.1",
-      "tool_name": "Cufflinks",
-      "tool_version": "2.1.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Novel transcripts predictions were merged with mm9 reference genome using Cuffmerge 2.1.1 with option -G with mm9 reference GTF",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Counts were generated using htseq-count v0.5.4p3",
-      "tool_name": "HTSeq",
-      "tool_version": "0.5.4p",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Base calling was with Illumina GAP Pipeline Software v1.90\nSequences were aligned to mm9 reference genome using Tophat 2.0.8 with option -g with mm9 reference GTF\nNovel transcripts were predicted with Cufflinks 2.1.1\nNovel transcripts predictions were merged with mm9 reference genome using Cuffmerge 2.1.1 with option -G with mm9 reference GTF\nCounts were generated using htseq-count v0.5.4p3\nGenome_build: mm9\nSupplementary_files_format_and_content: Raw count data for genes were normalized to the relative size of each library using R/Bioconductor package edgeR calcNormFactors function. Count data are provided in tab-delimited format",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Base calling was with Illumina GAP Pipeline Software v1.90",
+            "tool_name": "Illumina GAP Pipeline Software",
+            "tool_version": "1.90",
+            "code_example": "# Base calling is an initial processing step performed by the Illumina sequencing instrument's onboard software.\n# It converts raw signal data (intensities) from the sequencer into base calls (A, T, C, G) and quality scores.\n# This process is typically not executed by the user via a command-line tool post-sequencing.\n# The specified software, Illumina GAP Pipeline Software v1.90, is proprietary to Illumina.\n# No user-executable command is available for this step.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Sequences were aligned to mm9 reference genome using Tophat 2.0.8 with option -g with mm9 reference GTF",
+            "tool_name": "TopHat",
+            "tool_version": "2.0.8",
+            "code_example": "# Install TopHat 2.0.8 and its dependencies (e.g., Bowtie 1.x)\n# Note: TopHat is an older tool and may require specific environment setup.\n# conda create -n tophat2_env tophat=2.0.8 bowtie=1.1.2 -c bioconda -c conda-forge\n# conda activate tophat2_env\n\n# Define input and output files (placeholders - replace with actual paths)\nREADS_1=\"input_reads_R1.fastq.gz\" # Path to input FASTQ file(s) for read 1\n# READS_2=\"input_reads_R2.fastq.gz\" # Uncomment and provide path if paired-end reads\nOUTPUT_DIR=\"tophat_alignment_output\"\n\n# Define reference files (placeholders - replace with actual paths)\n# mm9 reference genome FASTA file\nGENOME_FASTA=\"/path/to/mm9.fa\"\n# mm9 reference GTF file\nGTF_FILE=\"/path/to/mm9.gtf\"\n# Prefix for the Bowtie index files built from the mm9 genome\nBOWTIE_INDEX_PREFIX=\"/path/to/mm9_bowtie_index/mm9\"\n\n# --- Pre-computation: Build Bowtie index if not already present ---\n# TopHat requires a Bowtie index for the reference genome.\n# If the index for mm9 is not already built at BOWTIE_INDEX_PREFIX, uncomment and run the following:\n# mkdir -p $(dirname \"$BOWTIE_INDEX_PREFIX\")\n# bowtie-build \"$GENOME_FASTA\" \"$BOWTIE_INDEX_PREFIX\"\n\n# --- Run TopHat 2.0.8 for alignment ---\n# Align sequences to the mm9 reference genome using the provided GTF for splice junction discovery.\n# The -g option specifies the GTF file.\ntophat2 \\\n    -o \"$OUTPUT_DIR\" \\\n    -g \"$GTF_FILE\" \\\n    \"$BOWTIE_INDEX_PREFIX\" \\\n    \"$READS_1\" # Add \"$READS_2\" here if using paired-end reads\n",
+            "code_language": "bash",
+            "github_url": "https://genomebiology.biomedcentral.com/articles/10.1186/gb-2013-14-4-r36"
+        },
+        {
+            "step_order": 3,
+            "description": "Novel transcripts were predicted with Cufflinks 2.1.1",
+            "tool_name": "Cufflinks",
+            "tool_version": "2.1.1",
+            "code_example": "# Install Cufflinks (example using conda)\n# conda install -c bioconda cufflinks=2.1.1\n\n# Define input and output paths\n# Replace 'path/to/aligned_reads.bam' with your actual input BAM file\nINPUT_BAM=\"path/to/aligned_reads.bam\"\n# Replace 'path/to/reference_annotation.gtf' with your actual reference GTF/GFF file (e.g., from GENCODE or Ensembl)\nREFERENCE_GTF=\"path/to/Homo_sapiens.GRCh38.109.gtf\" \nOUTPUT_DIR=\"cufflinks_novel_transcripts_output\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run Cufflinks to predict novel transcripts\n# -o: Output directory\n# -g: Reference annotation to guide assembly and identify novel transcripts\n# --frag-bias-correct: Correct for sequence-specific bias\n# --multi-read-correct: Correct for reads mapping to multiple locations\n# -p: Number of threads (adjust as needed)\ncufflinks \\\n  -o \"${OUTPUT_DIR}\" \\\n  -g \"${REFERENCE_GTF}\" \\\n  --frag-bias-correct \\\n  --multi-read-correct \\\n  -p 8 \\\n  \"${INPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": "http://cole-trapnell-lab.github.io/cufflinks/"
+        },
+        {
+            "step_order": 4,
+            "description": "Novel transcripts predictions were merged with mm9 reference genome using Cuffmerge 2.1.1 with option -G with mm9 reference GTF",
+            "tool_name": "Cuffmerge",
+            "tool_version": "2.1.1",
+            "code_example": "# Install Cufflinks suite (which includes Cuffmerge)\n# conda install -c bioconda cufflinks=2.1.1\n\n# Define reference paths\n# Placeholder paths for mm9 reference GTF and FASTA.\n# These files can typically be downloaded from UCSC Genome Browser (e.g., http://hgdownload.soe.ucsc.edu/goldenPath/mm9/bigZips/)\n# or Ensembl (e.g., ftp://ftp.ensembl.org/pub/release-54/gtf/mus_musculus/)\nMM9_REFERENCE_GTF=\"/path/to/mm9.ncbiRefSeq.gtf\"\nMM9_REFERENCE_FASTA=\"/path/to/mm9.fa\"\n\n# Define input file(s) for novel transcript predictions.\n# This should be a text file where each line is the path to a GTF file\n# containing novel transcript predictions (e.g., from Cufflinks assembly output).\nNOVEL_TRANSCRIPTS_GTF_LIST=\"novel_transcript_assemblies.txt\"\n\n# Define output file for the merged GTF\nOUTPUT_MERGED_GTF=\"merged_novel_transcripts.gtf\"\n\n# Execute Cuffmerge to merge novel transcript predictions with the mm9 reference GTF\n# The -g option specifies the reference annotation GTF file.\n# The -s option specifies the reference genome FASTA file.\ncuffmerge -g \"${MM9_REFERENCE_GTF}\" -s \"${MM9_REFERENCE_FASTA}\" \"${NOVEL_TRANSCRIPTS_GTF_LIST}\" -o \"${OUTPUT_MERGED_GTF}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/cole-trapnell-lab/cufflinks"
+        },
+        {
+            "step_order": 5,
+            "description": "Counts were generated using htseq-count v0.5.4p3",
+            "tool_name": "HTSeq",
+            "tool_version": "0.5.4p",
+            "code_example": "# Install HTSeq (if not already installed)\n# conda install -c bioconda htseq\n\n# Example usage of htseq-count for generating gene counts from an alignment file and a GTF annotation.\n# Parameters are inferred based on common usage for RNA-seq data.\n# -f bam: Input file format is BAM.\n# -r pos: Reads are sorted by position.\n# -s no: Data is unstranded (use 'yes' or 'reverse' for stranded data).\n# -a 10: Minimum alignment quality score is 10.\n# -t exon: Feature type to count is 'exon'.\n# -i gene_id: Attribute in the GTF file to use as feature ID (e.g., gene_id).\n# aligned_reads.bam: Placeholder for the input alignment file.\n# gencode.vXX.annotation.gtf: Placeholder for the GTF annotation file (e.g., for human GRCh38/hg38, use a recent Gencode version).\n# > gene_counts.txt: Output file for the generated counts.\nhtseq-count \\\n  -f bam \\\n  -r pos \\\n  -s no \\\n  -a 10 \\\n  -t exon \\\n  -i gene_id \\\n  aligned_reads.bam \\\n  gencode.vXX.annotation.gtf \\\n  > gene_counts.txt",
+            "code_language": "bash",
+            "github_url": "https://htseq.readthedocs.io/en/master/"
+        }
+    ],
+    "raw_text": "Base calling was with Illumina GAP Pipeline Software v1.90\nSequences were aligned to mm9 reference genome using Tophat 2.0.8 with option -g with mm9 reference GTF\nNovel transcripts were predicted with Cufflinks 2.1.1\nNovel transcripts predictions were merged with mm9 reference genome using Cuffmerge 2.1.1 with option -G with mm9 reference GTF\nCounts were generated using htseq-count v0.5.4p3\nGenome_build: mm9\nSupplementary_files_format_and_content: Raw count data for genes were normalized to the relative size of each library using R/Bioconductor package edgeR calcNormFactors function. Count data are provided in tab-delimited format",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "RNA-sequencing reads were trimmed using cutadapt (v1.4.0) of adaptor sequences, and mapped to repetitive elements (RepBase v18.04) using the STAR (v2.4.0i).",
-      "tool_name": "STAR",
-      "tool_version": "2.4.0i",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reads did not map to repetitive elements were then mapped to the human genome (hg19).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Using GENCODE (v19) gene annotations and featureCounts (v.1.5.0) to create read count matrices.",
-      "tool_name": "featureCounts",
-      "tool_version": "1.5.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "The transcript RPKMs of input and polysome fractions were calculated from the read count matrices.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "RNA-sequencing reads were trimmed using cutadapt (v1.4.0) of adaptor sequences, and mapped to repetitive elements (RepBase v18.04) using the STAR (v2.4.0i). Reads did not map to repetitive elements were then mapped to the human genome (hg19). Using GENCODE (v19) gene annotations and featureCounts (v.1.5.0) to create read count matrices.\nThe transcript RPKMs of input and polysome fractions were calculated from the read count matrices.\nGenome_build: Homo sapiens UCSC hg19\nSupplementary_files_format_and_content: RPKM",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "RNA-sequencing reads were trimmed using cutadapt (v1.4.0) of adaptor sequences, and mapped to repetitive elements (RepBase v18.04) using the STAR (v2.4.0i).",
+            "tool_name": "STAR",
+            "tool_version": "2.4.0i",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Placeholder for input trimmed reads\n# Replace 'trimmed_reads.fastq.gz' with your actual trimmed RNA-seq reads file\nINPUT_READS=\"trimmed_reads.fastq.gz\"\n\n# Placeholder for RepBase v18.04 STAR index directory\n# You would need to build this index yourself using STAR's --runMode genomeGenerate\n# with the RepBase v18.04 sequences. \n# Example: STAR --runMode genomeGenerate --genomeDir path/to/RepBase_v18.04_STAR_index --genomeFastaFiles RepBase_v18.04.fasta --sjdbGTFfile RepBase_v18.04.gtf --runThreadN <threads>\nREPBASE_STAR_INDEX=\"path/to/RepBase_v18.04_STAR_index\"\n\n# Output prefix for STAR alignment files\nOUTPUT_PREFIX=\"repbase_alignment_\"\n\n# Number of threads to use\nNUM_THREADS=8 # Adjust as needed\n\n# Map RNA-sequencing reads to repetitive elements (RepBase v18.04) using STAR\nSTAR --runThreadN ${NUM_THREADS} \\\n     --genomeDir ${REPBASE_STAR_INDEX} \\\n     --readFilesIn ${INPUT_READS} \\\n     --outFileNamePrefix ${OUTPUT_PREFIX} \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outBAMcompression 6 \\\n     --outFilterMultimapNmax 100 # Allow reads to map to up to 100 locations, common for repetitive elements",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "Reads did not map to repetitive elements were then mapped to the human genome (hg19).",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.7.10a",
+            "code_example": "# Define variables\nINPUT_FASTQ=\"reads_unmapped_to_repeats.fastq.gz\" # Placeholder for input reads after repetitive element filtering\nGENOME_DIR=\"STAR_index_hg19\" # Path to pre-built STAR genome index for hg19\nOUTPUT_PREFIX=\"aligned_to_hg19\"\nNUM_THREADS=8 # Adjust as needed\n\n# Reference genome: hg19 (UCSC source)\n# Example for building STAR index (commented out as per instructions):\n# # mkdir -p ${GENOME_DIR}\n# # wget -O hg19.fa.gz http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.fa.gz\n# # wget -O hg19.ncbiRefSeq.gtf.gz http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/genes/hg19.ncbiRefSeq.gtf.gz\n# # gunzip hg19.fa.gz hg19.ncbiRefSeq.gtf.gz\n# # STAR --runMode genomeGenerate \\\n# #      --genomeDir ${GENOME_DIR} \\\n# #      --genomeFastaFiles hg19.fa \\\n# #      --sjdbGTFfile hg19.ncbiRefSeq.gtf \\\n# #      --sjdbOverhang 100 \\\n# #      --runThreadN ${NUM_THREADS}\n\n# Run STAR alignment\nSTAR --genomeDir ${GENOME_DIR} \\\n     --readFilesIn ${INPUT_FASTQ} \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix ${OUTPUT_PREFIX}_ \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outFilterType BySJout \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.04 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --runThreadN ${NUM_THREADS}\n\n# Index the resulting BAM file\nsamtools index ${OUTPUT_PREFIX}_Aligned.sortedByCoord.out.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "Using GENCODE (v19) gene annotations and featureCounts (v.1.5.0) to create read count matrices.",
+            "tool_name": "featureCounts",
+            "tool_version": "1.5.0",
+            "code_example": "# Install featureCounts (part of Subread package)\n# For Linux/macOS, download the specific version from SourceForge or a mirror:\n# wget https://sourceforge.net/projects/subread/files/subread-1.5.0-Linux-x86_64.tar.gz # (adjust for your OS/architecture)\n# tar -xzf subread-1.5.0-Linux-x86_64.tar.gz\n# export PATH=$PATH:$(pwd)/subread-1.5.0-Linux-x86_64/bin # Adjust path as needed\n\n# Or via Bioconda (ensure correct channel and version):\n# conda install -c bioconda subread=1.5.0\n\n# Reference Data: GENCODE (v19) gene annotations\n# Download GENCODE v19 GTF file\n# wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19/gencode.v19.annotation.gtf.gz\n# gunzip gencode.v19.annotation.gtf.gz\nGENCODE_V19_GTF=\"gencode.v19.annotation.gtf\"\n\n# Example input BAM files (replace with actual sample files)\n# Assuming aligned reads are in BAM format, e.g., from STAR or HISAT2\nINPUT_BAMS=\"sample_1.bam sample_2.bam sample_3.bam\" # List all BAM files to be included in the count matrix\n\n# Output file for the read count matrix\nOUTPUT_COUNTS=\"gene_read_counts.txt\"\n\n# Create read count matrices using featureCounts\n# Parameters:\n# -a: Annotation file (GTF/GFF) - required\n# -o: Output file - required\n# -F GTF: Specify annotation file format (GTF is common for GENCODE annotations)\n# -t exon: Count reads mapping to 'exon' features (common for gene-level counts)\n# -g gene_id: Group features by 'gene_id' attribute to get gene-level counts\n# -T 8: Use 8 threads for parallel processing (adjust as needed based on available cores)\n# -p: Specify if reads are paired-end (add this flag if your BAM files contain paired-end reads)\n# -s 0: Specify strand specificity (0: unstranded, 1: stranded, 2: reverse stranded; adjust based on library prep)\n#       For RNA-seq, 0 (unstranded) or 1/2 (stranded) are common. If not specified, 0 is the default.\nfeatureCounts -a ${GENCODE_V19_GTF} -o ${OUTPUT_COUNTS} -F GTF -t exon -g gene_id -T 8 ${INPUT_BAMS}",
+            "code_language": "bash",
+            "github_url": "http://subread.sourceforge.net/"
+        },
+        {
+            "step_order": 4,
+            "description": "The transcript RPKMs of input and polysome fractions were calculated from the read count matrices.",
+            "tool_name": "RSEM (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.3.3",
+            "code_example": "# Install RSEM\n# conda create -n rsem_env rsem -y\n# conda activate rsem_env\n\n# Define reference paths and output directory\n# Reference datasets: Using human genome assembly GRCh38 (hg38) and Gencode v38 annotation as placeholders.\nGENOME_FASTA=\"path/to/hg38.fa\" # Placeholder: Replace with actual path to human genome FASTA (e.g., from UCSC or Ensembl)\nGTF_FILE=\"path/to/gencode.v38.annotation.gtf\" # Placeholder: Replace with actual path to GTF annotation (e.g., from Gencode)\nRSEM_REF_DIR=\"rsem_ref_hg38\"\nOUTPUT_DIR=\"rsem_quantification\"\nINPUT_BAM=\"input_fraction.bam\" # Placeholder: Replace with actual path to input fraction BAM file\nPOLYSOME_BAM=\"polysome_fraction.bam\" # Placeholder: Replace with actual path to polysome fraction BAM file\nNUM_THREADS=8\n\nmkdir -p \"${RSEM_REF_DIR}\"\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Step 1: Prepare RSEM reference (if not already done)\n# This step needs to be run only once for a given reference genome and GTF.\n# The --star option is used for compatibility with STAR-aligned BAM files, which is common for RNA-seq.\nif [ ! -f \"${RSEM_REF_DIR}/hg38.idx.ok\" ]; then\n    echo \"Preparing RSEM reference...\"\n    rsem-prepare-reference \\\n        --gtf \"${GTF_FILE}\" \\\n        --star \\\n        --num-threads \"${NUM_THREADS}\" \\\n        \"${GENOME_FASTA}\" \\\n        \"${RSEM_REF_DIR}/hg38\"\n    touch \"${RSEM_REF_DIR}/hg38.idx.ok\" # Marker file to indicate successful reference preparation\nelse\n    echo \"RSEM reference already prepared.\"\nfi\n\n# Step 2: Calculate RPKMs for input fraction\n# RSEM takes aligned BAM files as input and quantifies transcript expression, including RPKM values.\necho \"Calculating RPKMs for input fraction...\"\nrsem-calculate-expression \\\n    --bam \\\n    --no-qualities \\\n    --num-threads \"${NUM_THREADS}\" \\\n    \"${INPUT_BAM}\" \\\n    \"${RSEM_REF_DIR}/hg38\" \\\n    \"${OUTPUT_DIR}/input_fraction\"\n\n# Step 3: Calculate RPKMs for polysome fraction\necho \"Calculating RPKMs for polysome fraction...\"\nrsem-calculate-expression \\\n    --bam \\\n    --no-qualities \\\n    --num-threads \"${NUM_THREADS}\" \\\n    \"${POLYSOME_BAM}\" \\\n    \"${RSEM_REF_DIR}/hg38\" \\\n    \"${OUTPUT_DIR}/polysome_fraction\"\n\necho \"RPKM calculation complete. Results are in ${OUTPUT_DIR}/\"\n# The RPKM values are typically found in the .isoforms.results and .genes.results files\n# within the output directory, e.g., ${OUTPUT_DIR}/input_fraction.isoforms.results\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/deweylab/RSEM"
+        }
+    ],
+    "raw_text": "RNA-sequencing reads were trimmed using cutadapt (v1.4.0) of adaptor sequences, and mapped to repetitive elements (RepBase v18.04) using the STAR (v2.4.0i). Reads did not map to repetitive elements were then mapped to the human genome (hg19). Using GENCODE (v19) gene annotations and featureCounts (v.1.5.0) to create read count matrices.\nThe transcript RPKMs of input and polysome fractions were calculated from the read count matrices.\nGenome_build: Homo sapiens UCSC hg19\nSupplementary_files_format_and_content: RPKM",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

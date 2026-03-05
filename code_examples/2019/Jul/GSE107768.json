@@ -1,304 +1,304 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Library strategy: eCLIP-seq",
-      "tool_name": "eCLIP",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Takes output from raw files.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Run to trim off both 5\u00e2\u0080\u0099 and 3\u00e2\u0080\u0099 adapters on both reads.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Command: quality-cutoff 6 -m 18 -a NNNNNAGATCGGAAGAGCACACGTCTGAACTCCAGTCAC -g CTTCCGATCTACAAGTT -g CTTCCGATCTTGGTCCT -A AACTTGTAGATCGGA -A AGGACCAAGATCGGA -A ACTTGTAGATCGGAA -A GGACCAAGATCGGAA -A CTTGT AGATCGGAAG -A GACCAAGATCGGAAG -A TTGTAGATCGGAAGA -A ACCAAGATCGGAAGA -A TGTAGATCGGAAGAG -A CCAAGATCGGAAGAG -A GTAGATCGGAAGAGC -A CAAGATCGGAAGAGC -A TAGATCGGAAGAGCG -A AAGATCGGAAGAGCG -A AGATCGGAAGAGCGT -A GATCGGAAGAGCGTC -A ATCGGAAGAGCGTCG -A TCGGAAGAGCGTCGT -A CGGAAGAGCGTCGTG -A GGAAGAGCGTCGTGT -o /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.fastq.gz -p /full/path/to/files/file_R2.C01.fastq.gz.adapterTrim.fastq.gz /full/path/to/files/file_R1.C01.fastq.gz /full/path/to/files/file_R2.C01.fastq.gz > /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.metrics",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Takes output from cutadapt round 1.",
-      "tool_name": "cutadapt",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Run to trim off the 3\u00e2\u0080\u0099 adapters on read 2, to control for double ligation events.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Command: cutadapt -f fastq --match-read-wildcards --times 1 -e 0.1 -O 5 --quality-cutoff 6 -m 18 -A AACTTGTAGATCGGA -A AGGACCAAGATCGGA -A ACTTGTAGATCGGAA -A GGACCAAGATCGGAA -A CTTGTAGATCGGAAG -A GACCAAGATCGGAAG -A TTGTAGATCGGAAGA -A ACCAAGATCGGAAGA -A TGTAGATCGGAAGAG -A CCAAGATCGGAAGAG -A GTAGATCGGAAGAGC -A CAAGATCGGAAGAGC -A TAGATCGGAAGAGCG -A AAGATCGGAAGAGCG -A AGATCGGAAGAGCGT -A GATCGGAAGAGCGTC -A ATCGGAAGAGCGTCG -A TCGGAAGAGCGTCGT -A CGGAAGAGCGTCGTG -A GGAAGAGCGTCGTGT -o /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.fastq.gz -p /full/path/to/files/file_R2.C01.fastq.gz.adapterTrim.round2.fastq.gz /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.fastq.gz /full/path/to/files/file_R2.C01.fastq.gz.adapterTrim.fastq.gz > /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.metrics",
-      "tool_name": "cutadapt",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "Takes output from cutadapt round 2.",
-      "tool_name": "cutadapt",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "Maps to human specific version of RepBase used to remove repetitive elements, helps control for spurious artifacts from rRNA (& other) repetitive reads.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 10,
-      "description": "Command: STAR --runMode alignReads --runThreadN 16 --genomeDir /path/to/RepBase_human_database_file --genomeLoad LoadAndRemove --readFilesIn /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.fastq.gz /full/path/to/files/file_R2.C01.fastq.gz.adapterTrim.round2.fastq.gz --outSAMunmapped Within --outFilterMultimapNmax 30 --outFilterMultimapScoreRange 1 --outFileNamePrefix /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rep.bam --outSAMattributes All --readFilesCommand zcat --outStd BAM_Unsorted --outSAMtype BAM Unsorted --outFilterType BySJout --outReadsUnmapped Fastx --outFilterScoreMin 10 --outSAMattrRGline ID:foo --alignEndsType EndToEnd > /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rep.bam",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 11,
-      "description": "Takes output from STAR rmRep.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 12,
-      "description": "Maps unique reads to the human genome.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 13,
-      "description": "Command: STAR --runMode alignReads --runThreadN 16 --genomeDir /path/to/STAR_database_file --genomeLoad LoadAndRemove --readFilesIn /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rep.bamUnmapped.out.mate1 /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rep.bamUnmapped.out.mate2 --outSAMunmapped Within --outFilterMultimapNmax 1 --outFilterMultimapScoreRange 1 --outFileNamePrefix /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.bam --outSAMattributes All --outStd BAM_Unsorted --outSAMtype BAM Unsorted --outFilterType BySJout --outReadsUnmapped Fastx --outFilterScoreMin 10 --outSAMattrRGline ID:foo --alignEndsType EndToEnd > /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.bam",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 14,
-      "description": "takes output from STAR genome mapping.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 15,
-      "description": "Custom random-mer-aware script for PCR duplicate removal.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 16,
-      "description": "Command: barcode_collapse_pe.py --bam /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.bam --out_file /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.bam --metrics_file /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.metrics",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 17,
-      "description": "Takes output from barcode collapse PE.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 18,
-      "description": "Sorts resulting bam file for use downstream.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 19,
-      "description": "Command: java -Xmx2048m -XX:+UseParallelOldGC -XX:ParallelGCThreads=4 -XX:GCTimeLimit=50 -XX:GCHeapFreeLimit=10 -Djava.io.tmpdir=/full/path/to/files/.queue/tmp -cp /path/to/gatk/dist/Queue.jar net.sf.picard.sam.SortSam INPUT=/full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.bam TMP_DIR=/full/path/to/files/.queue/tmp OUTPUT=/full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.sorted.bam VALIDATION_STRINGENCY=SILENT SO=coordinate CREATE_INDEX=true",
-      "tool_name": "Picard",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 20,
-      "description": "Takes output from sortSam, makes bam index for use downstream.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 21,
-      "description": "Command: samtools index /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.sorted.bam /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.sorted.bam.bai",
-      "tool_name": "samtools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 22,
-      "description": "Takes inputs from multiple final bam files.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 23,
-      "description": "Merges the two technical replicates for further downstream analysis.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 24,
-      "description": "Command: samtools merge /full/path/to/files/CombinedID.merged.bam /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.sorted.bam /full/path/to/files/file_R1.D08.fastq.gz.adapterTrim.round2.rmRep.rmDup.sorted.bam",
-      "tool_name": "samtools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 25,
-      "description": "Takes output from sortSam, makes bam index for use downstream.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 26,
-      "description": "Command: samtools index /full/path/to/files/CombinedID.merged.bam /full/path/to/files/CombinedID.merged.bam.bai",
-      "tool_name": "samtools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 27,
-      "description": "Takes output from sortSam.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 28,
-      "description": "Only outputs the second read in each pair for use with single stranded peak caller.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 29,
-      "description": "This is the final bam file to perform analysis on.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 30,
-      "description": "Command: samtools view -hb -f 128 /full/path/to/files/CombinedID.merged.bam > /full/path/to/files/CombinedID.merged.r2.bam",
-      "tool_name": "samtools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 31,
-      "description": "Takes results from samtools view.",
-      "tool_name": "samtools",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 32,
-      "description": "Calls peaks on those files.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 33,
-      "description": "Command: clipper -b /full/path/to/files/CombinedID.merged.r2.bam -s hg19 -o /full/path/to/files/CombinedID.merged.r2.peaks.bed --bonferroni --superlocal --threshold-method binomial --save-pickle",
-      "tool_name": "CLIPper",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Library strategy: eCLIP-seq\nTakes output from raw files.  Run to trim off both 5\u00e2\u0080\u0099 and 3\u00e2\u0080\u0099 adapters on both reads. Command: quality-cutoff 6  -m 18  -a NNNNNAGATCGGAAGAGCACACGTCTGAACTCCAGTCAC  -g CTTCCGATCTACAAGTT -g CTTCCGATCTTGGTCCT  -A AACTTGTAGATCGGA -A AGGACCAAGATCGGA -A ACTTGTAGATCGGAA -A GGACCAAGATCGGAA -A CTTGT  AGATCGGAAG -A GACCAAGATCGGAAG -A TTGTAGATCGGAAGA -A ACCAAGATCGGAAGA -A TGTAGATCGGAAGAG -A CCAAGATCGGAAGAG -A GTAGATCGGAAGAGC -A CAAGATCGGAAGAGC -A TAGATCGGAAGAGCG -A AAGATCGGAAGAGCG -A AGATCGGAAGAGCGT -A GATCGGAAGAGCGTC -A ATCGGAAGAGCGTCG -A TCGGAAGAGCGTCGT -A CGGAAGAGCGTCGTG -A GGAAGAGCGTCGTGT  -o /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.fastq.gz  -p /full/path/to/files/file_R2.C01.fastq.gz.adapterTrim.fastq.gz  /full/path/to/files/file_R1.C01.fastq.gz /full/path/to/files/file_R2.C01.fastq.gz > /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.metrics\nTakes output from cutadapt round 1. Run to trim off the 3\u00e2\u0080\u0099 adapters on read 2, to control for double ligation events. Command: cutadapt -f fastq --match-read-wildcards  --times 1  -e 0.1  -O 5  --quality-cutoff 6  -m 18  -A AACTTGTAGATCGGA -A AGGACCAAGATCGGA -A ACTTGTAGATCGGAA -A GGACCAAGATCGGAA -A CTTGTAGATCGGAAG -A GACCAAGATCGGAAG -A TTGTAGATCGGAAGA -A ACCAAGATCGGAAGA -A TGTAGATCGGAAGAG -A CCAAGATCGGAAGAG -A GTAGATCGGAAGAGC -A CAAGATCGGAAGAGC -A TAGATCGGAAGAGCG -A AAGATCGGAAGAGCG -A AGATCGGAAGAGCGT -A GATCGGAAGAGCGTC -A ATCGGAAGAGCGTCG -A TCGGAAGAGCGTCGT -A CGGAAGAGCGTCGTG -A GGAAGAGCGTCGTGT  -o /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.fastq.gz  -p /full/path/to/files/file_R2.C01.fastq.gz.adapterTrim.round2.fastq.gz  /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.fastq.gz  /full/path/to/files/file_R2.C01.fastq.gz.adapterTrim.fastq.gz > /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.metrics\nTakes output from cutadapt round 2.  Maps to human specific version of RepBase used to remove repetitive elements, helps control for spurious artifacts from rRNA (& other) repetitive reads.  Command: STAR  --runMode alignReads  --runThreadN 16  --genomeDir /path/to/RepBase_human_database_file --genomeLoad LoadAndRemove  --readFilesIn /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.fastq.gz /full/path/to/files/file_R2.C01.fastq.gz.adapterTrim.round2.fastq.gz --outSAMunmapped Within  --outFilterMultimapNmax 30  --outFilterMultimapScoreRange 1  --outFileNamePrefix /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rep.bam --outSAMattributes All  --readFilesCommand zcat  --outStd BAM_Unsorted  --outSAMtype BAM Unsorted  --outFilterType BySJout  --outReadsUnmapped Fastx  --outFilterScoreMin 10  --outSAMattrRGline ID:foo  --alignEndsType EndToEnd > /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rep.bam\nTakes output from STAR rmRep.  Maps unique reads to the human genome.  Command: STAR  --runMode alignReads  --runThreadN 16  --genomeDir  /path/to/STAR_database_file --genomeLoad LoadAndRemove  --readFilesIn  /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rep.bamUnmapped.out.mate1  /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rep.bamUnmapped.out.mate2  --outSAMunmapped Within  --outFilterMultimapNmax 1  --outFilterMultimapScoreRange 1  --outFileNamePrefix /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.bam  --outSAMattributes All  --outStd BAM_Unsorted  --outSAMtype BAM Unsorted  --outFilterType BySJout  --outReadsUnmapped Fastx  --outFilterScoreMin 10  --outSAMattrRGline ID:foo  --alignEndsType EndToEnd > /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.bam\ntakes output from STAR genome mapping.  Custom random-mer-aware script for PCR duplicate removal. Command: barcode_collapse_pe.py  --bam /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.bam  --out_file /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.bam  --metrics_file /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.metrics\nTakes output from barcode collapse PE.  Sorts resulting bam file for use downstream.  Command: java  -Xmx2048m  -XX:+UseParallelOldGC  -XX:ParallelGCThreads=4  -XX:GCTimeLimit=50  -XX:GCHeapFreeLimit=10  -Djava.io.tmpdir=/full/path/to/files/.queue/tmp  -cp /path/to/gatk/dist/Queue.jar  net.sf.picard.sam.SortSam  INPUT=/full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.bam  TMP_DIR=/full/path/to/files/.queue/tmp  OUTPUT=/full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.sorted.bam  VALIDATION_STRINGENCY=SILENT  SO=coordinate  CREATE_INDEX=true\nTakes output from sortSam, makes bam index for use downstream.  Command: samtools index  /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.sorted.bam  /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.sorted.bam.bai\nTakes inputs from multiple final bam files.  Merges the two technical replicates for further downstream analysis.  Command: samtools  merge  /full/path/to/files/CombinedID.merged.bam  /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.sorted.bam /full/path/to/files/file_R1.D08.fastq.gz.adapterTrim.round2.rmRep.rmDup.sorted.bam\nTakes output from sortSam, makes bam index for use downstream.  Command: samtools  index  /full/path/to/files/CombinedID.merged.bam  /full/path/to/files/CombinedID.merged.bam.bai\nTakes output from sortSam.  Only outputs the second read in each pair for use with single stranded peak caller.  This is the final bam file to perform analysis on.  Command: samtools view -hb -f 128  /full/path/to/files/CombinedID.merged.bam  >  /full/path/to/files/CombinedID.merged.r2.bam\nTakes results from samtools view.  Calls peaks on those files.  Command: clipper  -b /full/path/to/files/CombinedID.merged.r2.bam  -s hg19  -o /full/path/to/files/CombinedID.merged.r2.peaks.bed  --bonferroni  --superlocal  --threshold-method binomial  --save-pickle\nGenome_build: hg19\nSupplementary_files_format_and_content: bed format, contains clusters of predicted RBP binding",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Library strategy: eCLIP-seq",
+            "tool_name": "eCLIP",
+            "tool_version": "latest (as of 2020)",
+            "code_example": "# Install cwltool and other dependencies\n# pip install cwltool\n# conda install -c bioconda star clipper # For underlying tools if running manually\n# pip install git+https://github.com/yeolab/merge_peaks.git # For underlying tools if running manually\n\n# Define input files and parameters for the eCLIP CWL workflow\n# Replace with actual paths and values\nECLIP_WORKFLOW_DIR=\"path/to/yeolab/eclip/workflow\" # Clone https://github.com/yeolab/eclip.git\nECLIP_CWL=\"${ECLIP_WORKFLOW_DIR}/eclip.cwl\"\nINPUT_FASTQ_R1=\"path/to/sample_R1.fastq.gz\"\nINPUT_FASTQ_R2=\"path/to/sample_R2.fastq.gz\" # Optional, if paired-end\nCONTROL_FASTQ_R1=\"path/to/control_R1.fastq.gz\"\nCONTROL_FASTQ_R2=\"path/to/control_R2.fastq.gz\" # Optional, if paired-end\nGENOME_FASTA=\"path/to/genome.fa\" # e.g., hg38\nGENOME_GTF=\"path/to/annotations.gtf\" # e.g., GENCODE v38\nSTAR_INDEX=\"path/to/star_index\" # Pre-built STAR index for the genome\nOUTPUT_DIR=\"eclip_analysis_output\"\nSAMPLE_ID=\"my_eclip_sample\"\n\n# Create a CWL input YAML file\n# This is a simplified example; the actual workflow might require more inputs.\n# Refer to the eclip.cwl and eclip-inputs.yaml in the yeolab/eclip repository.\ncat << EOF > eclip_inputs.yaml\nfastq_r1:\n  class: File\n  path: ${INPUT_FASTQ_R1}\n# fastq_r2: # Uncomment if paired-end\n#   class: File\n#   path: ${INPUT_FASTQ_R2}\ncontrol_fastq_r1:\n  class: File\n  path: ${CONTROL_FASTQ_R1}\n# control_fastq_r2: # Uncomment if paired-end\n#   class: File\n#   path: ${CONTROL_FASTQ_R2}\ngenome_fasta:\n  class: File\n  path: ${GENOME_FASTA}\ngenome_gtf:\n  class: File\n  path: ${GENOME_GTF}\nstar_index_dir:\n  class: Directory\n  path: ${STAR_INDEX}\noutput_directory: ${OUTPUT_DIR}\nsample_id: ${SAMPLE_ID}\n# Add other parameters as required by the eclip.cwl workflow,\n# such as adapter sequences, minimum read length, etc.\nEOF\n\n# Execute the eCLIP CWL workflow\n# This workflow internally uses tools like STAR for alignment, CLIPper for peak calling,\n# and merge_peaks for IDR.\ncwltool --outdir \"${OUTPUT_DIR}\" \"${ECLIP_CWL}\" eclip_inputs.yaml",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 2,
+            "description": "Takes output from raw files.",
+            "tool_name": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# This step describes the input to the pipeline.\n# No specific tool or command can be inferred from \"Takes output from raw files.\"\n# Assuming raw sequencing data in FASTQ format as input for subsequent steps.\n\n# Define variables for raw input files (example placeholders)\nRAW_FASTQ_R1=\"sample_R1.fastq.gz\"\nRAW_FASTQ_R2=\"sample_R2.fastq.gz\" # For paired-end data\n# Or for single-end data:\n# RAW_FASTQ=\"sample.fastq.gz\"\n\n# Further pipeline steps would then process these files.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "Run to trim off both 5\u00e2\u0080\u0099 and 3\u00e2\u0080\u0099 adapters on both reads.",
+            "tool_name": "fastp (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "0.23.2",
+            "code_example": "# Install fastp if not already installed\n# conda install -c bioconda fastp=0.23.2\n\n# Define input and output file names\nREAD1_IN=\"read1.fastq.gz\"\nREAD2_IN=\"read2.fastq.gz\"\nREAD1_OUT=\"trimmed_read1.fastq.gz\"\nREAD2_OUT=\"trimmed_read2.fastq.gz\"\nJSON_REPORT=\"fastp_report.json\"\nHTML_REPORT=\"fastp_report.html\"\nTHREADS=8\nQUAL_THRESHOLD=15 # Example quality threshold for filtering low quality bases\nMIN_LENGTH=20     # Example minimum read length after trimming\n\n# Run fastp to trim adapters and perform quality filtering\n# --detect_adapter_for_pe: Automatically detect adapters for paired-end reads\n# --trim_poly_g: Trim polyG tails (common in Illumina NextSeq/NovaSeq)\n# --trim_poly_x: Trim polyX tails (any base)\n# --correction: Enable base correction for overlapping reads\n# --cut_by_quality5/3: Cut reads by quality from 5' and 3' ends\n# --cut_window_size: Window size for quality cutting\n# --cut_mean_quality: Mean quality requirement in the window\n# --low_complexity_filter: Filter reads with low complexity\n# --complexity_threshold: Threshold for low complexity filtering\nfastp \\\n    --in1 \"${READ1_IN}\" \\\n    --in2 \"${READ2_IN}\" \\\n    --out1 \"${READ1_OUT}\" \\\n    --out2 \"${READ2_OUT}\" \\\n    --json \"${JSON_REPORT}\" \\\n    --html \"${HTML_REPORT}\" \\\n    --detect_adapter_for_pe \\\n    --thread \"${THREADS}\" \\\n    --qualified_quality_phred \"${QUAL_THRESHOLD}\" \\\n    --length_required \"${MIN_LENGTH}\" \\\n    --trim_poly_g \\\n    --trim_poly_x \\\n    --correction \\\n    --cut_by_quality5 \\\n    --cut_by_quality3 \\\n    --cut_window_size 4 \\\n    --cut_mean_quality 20 \\\n    --low_complexity_filter \\\n    --complexity_threshold 30",
+            "code_language": "bash",
+            "github_url": "https://github.com/OpenGene/fastp"
+        },
+        {
+            "step_order": 4,
+            "description": "Command: quality-cutoff 6 -m 18 -a NNNNNAGATCGGAAGAGCACACGTCTGAACTCCAGTCAC -g CTTCCGATCTACAAGTT -g CTTCCGATCTTGGTCCT -A AACTTGTAGATCGGA -A AGGACCAAGATCGGA -A ACTTGTAGATCGGAA -A GGACCAAGATCGGAA -A CTTGT AGATCGGAAG -A GACCAAGATCGGAAG -A TTGTAGATCGGAAGA -A ACCAAGATCGGAAGA -A TGTAGATCGGAAGAG -A CCAAGATCGGAAGAG -A GTAGATCGGAAGAGC -A CAAGATCGGAAGAGC -A TAGATCGGAAGAGCG -A AAGATCGGAAGAGCG -A AGATCGGAAGAGCGT -A GATCGGAAGAGCGTC -A ATCGGAAGAGCGTCG -A TCGGAAGAGCGTCGT -A CGGAAGAGCGTCGTG -A GGAAGAGCGTCGTGT -o /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.fastq.gz -p /full/path/to/files/file_R2.C01.fastq.gz.adapterTrim.fastq.gz /full/path/to/files/file_R1.C01.fastq.gz /full/path/to/files/file_R2.C01.fastq.gz > /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.metrics",
+            "tool_name": "quality-cutoff.py (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Not explicitly stated (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Python (if not already installed)\n# conda install python\n\n# Clone the eCLIP pipeline repository to get the quality-cutoff.py script\n# git clone https://github.com/yeolab/eclip.git\n# cd eclip/src\n\n# Ensure quality-cutoff.py is executable or run with python\n# chmod +x quality-cutoff.py\n\n# Execute the quality-cutoff.py script for adapter trimming and quality filtering\n# Note: The original command 'quality-cutoff 6' is interpreted as 'python quality-cutoff.py -q 6'\n# based on the usage of the quality-cutoff.py script from the yeolab/eclip repository.\n# Also, '-A CTTGT AGATCGGAAG' is split into two separate -A arguments for proper parsing.\npython quality-cutoff.py -q 6 \\\n    -m 18 \\\n    -a NNNNNAGATCGGAAGAGCACACGTCTGAACTCCAGTCAC \\\n    -g CTTCCGATCTACAAGTT \\\n    -g CTTCCGATCTTGGTCCT \\\n    -A AACTTGTAGATCGGA \\\n    -A AGGACCAAGATCGGA \\\n    -A ACTTGTAGATCGGAA \\\n    -A GGACCAAGATCGGAA \\\n    -A CTTGT \\\n    -A AGATCGGAAG \\\n    -A GACCAAGATCGGAAG \\\n    -A TTGTAGATCGGAAGA \\\n    -A ACCAAGATCGGAAGA \\\n    -A TGTAGATCGGAAGAG \\\n    -A CCAAGATCGGAAGAG \\\n    -A GTAGATCGGAAGAGC \\\n    -A CAAGATCGGAAGAGC \\\n    -A TAGATCGGAAGAGCG \\\n    -A AAGATCGGAAGAGCG \\\n    -A AGATCGGAAGAGCGT \\\n    -A GATCGGAAGAGCGTC \\\n    -A ATCGGAAGAGCGTCG \\\n    -A TCGGAAGAGCGTCGT \\\n    -A CGGAAGAGCGTCGTG \\\n    -A GGAAGAGCGTCGTGT \\\n    -o /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.fastq.gz \\\n    -p /full/path/to/files/file_R2.C01.fastq.gz.adapterTrim.fastq.gz \\\n    /full/path/to/files/file_R1.C01.fastq.gz \\\n    /full/path/to/files/file_R2.C01.fastq.gz \\\n    > /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.metrics",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip"
+        },
+        {
+            "step_order": 5,
+            "description": "Takes output from cutadapt round 1.",
+            "tool_name": "cutadapt",
+            "tool_version": "1.18",
+            "code_example": "# Install cutadapt if not already installed\n# conda create -n cutadapt_env cutadapt=1.18\n# conda activate cutadapt_env\n\n# Define input and output files\nINPUT_FASTQ=\"input_from_cutadapt_round1.fastq.gz\"\nOUTPUT_FASTQ=\"output_cutadapt_round2.fastq.gz\"\nREPORT_JSON=\"cutadapt_round2_report.json\"\n\n# Define adapter sequence (example: Illumina universal adapter)\n# For eCLIP, this is typically a specific 3' adapter or a library-specific adapter.\n# This example uses a common Illumina universal adapter.\nADAPTER_SEQUENCE=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\" \n\n# Execute cutadapt for adapter and quality trimming\n# -a: 3' adapter sequence to remove\n# -q: Trim low-quality ends (e.g., 20 for phred score 20)\n# --minimum-length: Discard reads shorter than this length after trimming (e.g., 18 for eCLIP reads)\n# -o: Output file for trimmed reads\n# --json: Write a JSON report with trimming statistics\ncutadapt -a \"${ADAPTER_SEQUENCE}\" \\\n         -q 20 \\\n         --minimum-length 18 \\\n         -o \"${OUTPUT_FASTQ}\" \\\n         --json \"${REPORT_JSON}\" \\\n         \"${INPUT_FASTQ}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 6,
+            "description": "Run to trim off the 3\u00e2\u0080\u0099 adapters on read 2, to control for double ligation events.",
+            "tool_name": "cutadapt (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "4.0",
+            "code_example": "# Install cutadapt (e.g., via conda)\n# conda install -c bioconda cutadapt=4.0\n\n# Define input and output file paths\nINPUT_R1=\"read1.fastq.gz\"\nINPUT_R2=\"read2.fastq.gz\"\nOUTPUT_R1=\"trimmed_read1.fastq.gz\"\nOUTPUT_R2=\"trimmed_read2.fastq.gz\"\n\n# The 3' adapter sequence for Read 2, common in eCLIP and Illumina sequencing\n# This adapter is used to control for double ligation events.\nADAPTER_R2=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\"\n\n# Run cutadapt to trim 3' adapters from Read 2\n# -A: Specifies a 3' adapter for the second read in a paired-end library.\n# -o: Output file for the first read.\n# -p: Output file for the second read.\n# --minimum-length 18: Discard reads shorter than 18 bp after trimming. This is a common setting for eCLIP to remove very short fragments.\n# --cores 4: Use 4 CPU cores for faster processing (adjust based on available resources).\ncutadapt -A \"${ADAPTER_R2}\" \\\n         -o \"${OUTPUT_R1}\" \\\n         -p \"${OUTPUT_R2}\" \\\n         \"${INPUT_R1}\" \\\n         \"${INPUT_R2}\" \\\n         --minimum-length 18 \\\n         --cores 4",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 7,
+            "description": "Command: cutadapt -f fastq --match-read-wildcards --times 1 -e 0.1 -O 5 --quality-cutoff 6 -m 18 -A AACTTGTAGATCGGA -A AGGACCAAGATCGGA -A ACTTGTAGATCGGAA -A GGACCAAGATCGGAA -A CTTGTAGATCGGAAG -A GACCAAGATCGGAAG -A TTGTAGATCGGAAGA -A ACCAAGATCGGAAGA -A TGTAGATCGGAAGAG -A CCAAGATCGGAAGAG -A GTAGATCGGAAGAGC -A CAAGATCGGAAGAGC -A TAGATCGGAAGAGCG -A AAGATCGGAAGAGCG -A AGATCGGAAGAGCGT -A GATCGGAAGAGCGTC -A ATCGGAAGAGCGTCG -A TCGGAAGAGCGTCGT -A CGGAAGAGCGTCGTG -A GGAAGAGCGTCGTGT -o /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.fastq.gz -p /full/path/to/files/file_R2.C01.fastq.gz.adapterTrim.round2.fastq.gz /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.fastq.gz /full/path/to/files/file_R2.C01.fastq.gz.adapterTrim.fastq.gz > /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.metrics",
+            "tool_name": "cutadapt",
+            "tool_version": "Inferred with models/gemini-2.5-flash",
+            "code_example": "# Install cutadapt (e.g., via conda)\n# conda install -c bioconda cutadapt\n\ncutadapt -f fastq --match-read-wildcards --times 1 -e 0.1 -O 5 --quality-cutoff 6 -m 18 -A AACTTGTAGATCGGA -A AGGACCAAGATCGGA -A ACTTGTAGATCGGAA -A GGACCAAGATCGGAA -A CTTGTAGATCGGAAG -A GACCAAGATCGGAAG -A TTGTAGATCGGAAGA -A ACCAAGATCGGAAGA -A TGTAGATCGGAAGAG -A CCAAGATCGGAAGAG -A GTAGATCGGAAGAGC -A CAAGATCGGAAGAGC -A TAGATCGGAAGAGCG -A AAGATCGGAAGAGCG -A AGATCGGAAGAGCGT -A GATCGGAAGAGCGTC -A ATCGGAAGAGCGTCG -A TCGGAAGAGCGTCGT -A CGGAAGAGCGTCGTG -A GGAAGAGCGTCGTGT -o /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.fastq.gz -p /full/path/to/files/file_R2.C01.fastq.gz.adapterTrim.round2.fastq.gz /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.fastq.gz /full/path/to/files/file_R2.C01.fastq.gz.adapterTrim.fastq.gz > /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.metrics",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 8,
+            "description": "Takes output from cutadapt round 2.",
+            "tool_name": "cutadapt",
+            "tool_version": "3.4 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install cutadapt if not already installed\n# conda install -c bioconda cutadapt\n\n# Define input and output files\n# INPUT_FASTQ should be the output file from the previous cutadapt round (round 1).\nINPUT_FASTQ=\"input_from_cutadapt_round1.fastq.gz\"\nOUTPUT_FASTQ=\"output_cutadapt_round2.fastq.gz\"\nLOG_FILE=\"cutadapt_round2.log\"\n\n# Define common eCLIP trimming parameters (example values from Yeo lab pipelines, adjust as needed)\n# For cutadapt version 3.4, --minimum-length, --quality-cutoff, --nextseq-trim are standard.\nMIN_READ_LENGTH=18 # Minimum read length after trimming\nQUALITY_CUTOFF=20  # Quality cutoff for 3' end trimming (e.g., Phred score 20)\nNEXTSEQ_TRIM=20    # Quality cutoff for NextSeq-specific 3' end trimming (e.g., Phred score 20)\n\n# If a 5' adapter needs to be trimmed in round 2, define it here.\n# This is often for random Ns (e.g., UMI/barcode) or a specific linker.\n# Example: ADAPTER_5_PRIME=\"NNNNNNNNNN\" # For 10 random Ns at the 5' end\n# Example: ADAPTER_5_PRIME=\"AAGCAGTGGTATCAACGCAGAGTAC\" # A common 5' adapter sequence\n# If no 5' adapter trimming is required in this round, set ADAPTER_5_PRIME=\"\" or omit the -g parameter.\nADAPTER_5_PRIME=\"\" # Placeholder: Set to your specific 5' adapter sequence if needed\n\n# Execute cutadapt for round 2: quality trimming, minimum length filtering, and optional 5' adapter trimming\n# This command assumes single-end reads.\ncutadapt \\\n    --minimum-length ${MIN_READ_LENGTH} \\\n    --quality-cutoff ${QUALITY_CUTOFF} \\\n    --nextseq-trim=${NEXTSEQ_TRIM} \\\n    ${ADAPTER_5_PRIME:+-g \"${ADAPTER_5_PRIME}\"} \\\n    -o ${OUTPUT_FASTQ} \\\n    ${INPUT_FASTQ} \\\n    > ${LOG_FILE} 2>&1",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 9,
+            "description": "Maps to human specific version of RepBase used to remove repetitive elements, helps control for spurious artifacts from rRNA (& other) repetitive reads.",
+            "tool_name": "bbduk.sh (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "38.90 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install BBMap suite (contains bbduk.sh)\n# conda install -c bioconda bbmap\n\n# Placeholder for human RepBase and rRNA sequences. These files need to be prepared.\n# A common approach is to combine known human repetitive elements (e.g., from RepBase) and rRNA sequences.\n# Example (hypothetical links, actual RepBase access may require license):\n# wget -O human_repeats.fasta \"https://www.girinst.org/repbase/update/human_repeats.fasta\"\n# wget -O hg38_rRNA.fasta \"https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.rRNA.fa.gz\"\n# cat human_repeats.fasta hg38_rRNA.fasta > human_repbase_rRNA.fasta\n\n# Run bbduk.sh to remove reads matching human repetitive elements and rRNA\nbbduk.sh \\\n  in=input_reads.fastq.gz \\\n  out=filtered_reads.fastq.gz \\\n  ref=human_repbase_rRNA.fasta \\\n  k=31 \\\n  hdist=1 \\\n  minidentity=90 \\\n  stats=bbduk_repeat_rRNA_stats.txt \\\n  tpe \\\n  tbo \\\n  minlen=15",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 10,
+            "description": "Command: STAR --runMode alignReads --runThreadN 16 --genomeDir /path/to/RepBase_human_database_file --genomeLoad LoadAndRemove --readFilesIn /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.fastq.gz /full/path/to/files/file_R2.C01.fastq.gz.adapterTrim.round2.fastq.gz --outSAMunmapped Within --outFilterMultimapNmax 30 --outFilterMultimapScoreRange 1 --outFileNamePrefix /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rep.bam --outSAMattributes All --readFilesCommand zcat --outStd BAM_Unsorted --outSAMtype BAM Unsorted --outFilterType BySJout --outReadsUnmapped Fastx --outFilterScoreMin 10 --outSAMattrRGline ID:foo --alignEndsType EndToEnd > /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rep.bam",
+            "tool_name": "STAR",
+            "tool_version": "Inferred with models/gemini-2.5-flash",
+            "code_example": "# Define input and output paths\nREAD1=\"/full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.fastq.gz\"\nREAD2=\"/full/path/to/files/file_R2.C01.fastq.gz.adapterTrim.round2.fastq.gz\"\nOUTPUT_PREFIX=\"/full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rep.bam\"\nOUTPUT_BAM=\"/full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rep.bam\"\n\n# Define the genome directory for RepBase\n# This directory should contain a STAR index built from a RepBase FASTA file.\n# Example for building a RepBase index (adjust paths and RepBase FASTA as needed):\n# wget -O RepBase_human.fasta.gz \"https://www.girinst.org/server/RepBase/protected/RepBase20.09.fasta.gz\" # (Requires login)\n# gunzip RepBase_human.fasta.gz\n# STAR --runMode genomeGenerate --genomeDir /path/to/RepBase_human_database_file --genomeFastaFiles RepBase_human.fasta --genomeSAindexNbases 10 # Adjust index size if RepBase is small\nGENOME_DIR=\"/path/to/RepBase_human_database_file\"\n\n# Execute STAR alignment command\nSTAR \\\n  --runMode alignReads \\\n  --runThreadN 16 \\\n  --genomeDir \"${GENOME_DIR}\" \\\n  --genomeLoad LoadAndRemove \\\n  --readFilesIn \"${READ1}\" \"${READ2}\" \\\n  --outSAMunmapped Within \\\n  --outFilterMultimapNmax 30 \\\n  --outFilterMultimapScoreRange 1 \\\n  --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n  --outSAMattributes All \\\n  --readFilesCommand zcat \\\n  --outStd BAM_Unsorted \\\n  --outSAMtype BAM Unsorted \\\n  --outFilterType BySJout \\\n  --outReadsUnmapped Fastx \\\n  --outFilterScoreMin 10 \\\n  --outSAMattrRGline ID:foo \\\n  --alignEndsType EndToEnd > \"${OUTPUT_BAM}\"\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 11,
+            "description": "Takes output from STAR rmRep.",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR and Samtools\n# conda install -c bioconda star samtools\n\n# Define reference paths (using hg38 as a placeholder)\nGENOME_FASTA=\"/path/to/references/GRCh38/GRCh38.primary_assembly.genome.fa\"\nGTF_FILE=\"/path/to/references/GRCh38/gencode.v44.annotation.gtf\"\nSTAR_INDEX_DIR=\"/path/to/references/GRCh38/STAR_index\"\n\n# Create STAR genome index if it doesn't exist (optional, usually done once)\n# STAR --runMode genomeGenerate \\\n#      --genomeDir \"${STAR_INDEX_DIR}\" \\\n#      --genomeFastaFiles \"${GENOME_FASTA}\" \\\n#      --sjdbGTFfile \"${GTF_FILE}\" \\\n#      --sjdbOverhang 100 \\\n#      --runThreadN 8\n\n# Define input and output files\nINPUT_R1=\"sample_R1.fastq.gz\"\nINPUT_R2=\"sample_R2.fastq.gz\"\nOUTPUT_PREFIX=\"sample_aligned\"\n\n# 1. Align reads with STAR\nSTAR --genomeDir \"${STAR_INDEX_DIR}\" \\\n     --readFilesIn \"${INPUT_R1}\" \"${INPUT_R2}\" \\\n     --runThreadN 8 \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}_\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped None \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.04 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --limitBAMsortRAM 30000000000 # Adjust based on available RAM (e.g., 30GB)\n\n# Output from STAR is ${OUTPUT_PREFIX}_Aligned.sortedByCoord.out.bam\n\n# 2. Remove PCR duplicates using samtools markdup (interpreting \"rmRep\" as remove duplicates)\n# The -r option removes duplicates, -s outputs statistics\nsamtools markdup -r -s \"${OUTPUT_PREFIX}_Aligned.sortedByCoord.out.bam\" \"${OUTPUT_PREFIX}_Aligned.dedup.bam\"\n\n# Index the deduplicated BAM file\nsamtools index \"${OUTPUT_PREFIX}_Aligned.dedup.bam\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 12,
+            "description": "Maps unique reads to the human genome.",
+            "tool_name": "bwa (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "0.7.17",
+            "code_example": "# Install BWA and Samtools if not already present\n# conda install -c bioconda bwa samtools\n\n# Define variables\nREFERENCE_GENOME_PREFIX=\"human_genome_hg38\" # Placeholder for indexed human genome reference (e.g., hg38)\nREAD1=\"input_read1.fastq.gz\"\nREAD2=\"input_read2.fastq.gz\"\nOUTPUT_BAM=\"mapped_reads.bam\"\nNUM_THREADS=8\nREAD_GROUP=\"@RG\\tID:sample_id\\tSM:sample_name\\tPL:ILLUMINA\\tLB:library_name\"\n\n# Index the reference genome (if not already indexed). This creates .sa, .pac, .bwt, .ann, .amb files.\n# bwa index ${REFERENCE_GENOME_PREFIX}.fa\n\n# Map reads to the human genome using BWA-MEM\n# -t: Number of threads\n# -M: Mark shorter split hits as secondary (recommended for Picard compatibility)\n# -R: Read group header (important for downstream processing like GATK)\nbwa mem -t ${NUM_THREADS} -M -R \"${READ_GROUP}\" ${REFERENCE_GENOME_PREFIX}.fa ${READ1} ${READ2} | \\\n# Convert SAM to BAM and sort the BAM file\nsamtools view -bS - | \\\nsamtools sort -o ${OUTPUT_BAM}\n\n# Optional: Index the sorted BAM file\n# samtools index ${OUTPUT_BAM}\n\n# Optional: Filter for uniquely mapped reads (e.g., MAPQ >= 20 and primary alignment)\n# samtools view -b -q 20 -F 0x100 ${OUTPUT_BAM} > ${OUTPUT_BAM%.bam}.unique.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/lh3/bwa"
+        },
+        {
+            "step_order": 13,
+            "description": "Command: STAR --runMode alignReads --runThreadN 16 --genomeDir /path/to/STAR_database_file --genomeLoad LoadAndRemove --readFilesIn /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rep.bamUnmapped.out.mate1 /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rep.bamUnmapped.out.mate2 --outSAMunmapped Within --outFilterMultimapNmax 1 --outFilterMultimapScoreRange 1 --outFileNamePrefix /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.bam --outSAMattributes All --outStd BAM_Unsorted --outSAMtype BAM Unsorted --outFilterType BySJout --outReadsUnmapped Fastx --outFilterScoreMin 10 --outSAMattrRGline ID:foo --alignEndsType EndToEnd > /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.bam",
+            "tool_name": "STAR",
+            "tool_version": "Inferred with models/gemini-2.5-flash",
+            "code_example": "bash\n# Reference genome directory: /path/to/STAR_database_file\n# Input files: /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rep.bamUnmapped.out.mate1, /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rep.bamUnmapped.out.mate2\n# Output file: /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.bam\n\nSTAR \\\n  --runMode alignReads \\\n  --runThreadN 16 \\\n  --genomeDir /path/to/STAR_database_file \\\n  --genomeLoad LoadAndRemove \\\n  --readFilesIn /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rep.bamUnmapped.out.mate1 /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rep.bamUnmapped.out.mate2 \\\n  --outSAMunmapped Within \\\n  --outFilterMultimapNmax 1 \\\n  --outFilterMultimapScoreRange 1 \\\n  --outFileNamePrefix /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.bam \\\n  --outSAMattributes All \\\n  --outStd BAM_Unsorted \\\n  --outSAMtype BAM Unsorted \\\n  --outFilterType BySJout \\\n  --outReadsUnmapped Fastx \\\n  --outFilterScoreMin 10 \\\n  --outSAMattrRGline ID:foo \\\n  --alignEndsType EndToEnd \\\n  > /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.bam\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 14,
+            "description": "takes output from STAR genome mapping.",
+            "tool_name": "STAR",
+            "tool_version": "2.5.2b",
+            "code_example": "# Installation (commented out)\n# conda install -c bioconda star=2.5.2b\n\n# Placeholder for genome index directory\nGENOME_DIR=\"/path/to/STAR_index/GRCh38\"\n# Placeholder for input FASTQ file (single-end as commonly used in eCLIP)\nREAD_FILE=\"sample.fastq.gz\"\n# Placeholder for output prefix\nOUTPUT_PREFIX=\"sample_aligned_\"\n# Number of threads\nTHREADS=8\n\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${READ_FILE}\" \\\n     --readFilesCommand zcat \\\n     --runThreadN \"${THREADS}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes All \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.04 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --limitBAMsortRAM 30000000000 # 30GB",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip"
+        },
+        {
+            "step_order": 15,
+            "description": "Custom random-mer-aware script for PCR duplicate removal.",
+            "tool_name": "umi_tools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.1.2",
+            "code_example": "# Install umi_tools\n# conda install -c bioconda umi-tools=1.1.2\n\n# Example: Deduplicate a BAM file using umi_tools, assuming UMIs are in read names\n# This command is suitable for eCLIP data where UMIs are often extracted\n# into the read headers in a preceding step.\n# The --spliced-reads flag is important for RNA-seq based assays like eCLIP.\n\numi_tools dedup \\\n    --input input.bam \\\n    --output deduplicated.bam \\\n    --method directional \\\n    --paired \\\n    --spliced-reads \\\n    --output-stats deduplication_stats.tsv \\\n    --log deduplication.log",
+            "code_language": "bash",
+            "github_url": "https://github.com/CGATOxford/UMI-tools"
+        },
+        {
+            "step_order": 16,
+            "description": "Command: barcode_collapse_pe.py --bam /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.bam --out_file /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.bam --metrics_file /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.metrics",
+            "tool_name": "barcode_collapse_pe.py",
+            "tool_version": "v0.1.0 (part of Skipper pipeline) (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Miniconda or Anaconda if not already installed\n# wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh\n# bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda\n# source $HOME/miniconda/bin/activate\n# conda init bash\n\n# Clone the Skipper repository to get the script and environment file\n# git clone https://github.com/yeolab/skipper.git\n# cd skipper\n\n# Create and activate the conda environment using the provided environment.yml\n# conda env create -f environment.yml\n# conda activate skipper_env\n\n# Navigate to the scripts directory (assuming you are in the 'skipper' directory)\n# cd scripts\n\n# Execute the barcode collapse command\npython barcode_collapse_pe.py --bam /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.bam --out_file /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.bam --metrics_file /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.metrics",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper"
+        },
+        {
+            "step_order": 17,
+            "description": "Takes output from barcode collapse PE.",
+            "tool_name": "cutadapt (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "4.0",
+            "code_example": "# Install cutadapt if not already installed\n# conda install -c bioconda cutadapt=4.0\n\n# Define input and output file names (placeholders)\n# INPUT_R1 and INPUT_R2 are the output from the 'barcode collapse PE' step.\nINPUT_R1=\"barcode_collapsed_reads_R1.fastq.gz\"\nINPUT_R2=\"barcode_collapsed_reads_R2.fastq.gz\"\nOUTPUT_R1=\"trimmed_R1.fastq.gz\"\nOUTPUT_R2=\"trimmed_R2.fastq.gz\"\nOUTPUT_LOG=\"cutadapt.log\"\n\n# Define common Illumina adapters for paired-end reads, often used in eCLIP pipelines.\n# These specific adapters are found in the Yeo lab's eCLIP workflow.\nADAPTER_R1=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\" # Illumina TruSeq Universal Adapter\nADAPTER_R2=\"AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT\" # Illumina TruSeq Adapter, Index 1\n\n# Execute cutadapt for adapter trimming on paired-end reads.\n# -a: 3' adapter for R1\n# -A: 3' adapter for R2\n# -o: output R1 file\n# -p: output R2 file\n# -m 18: Discard reads shorter than 18 bp after trimming.\n# -q 20: Trim low-quality bases from 3' end using a quality cutoff of 20.\n# -e 0.1: Maximum error rate of 10% for adapter matching.\ncutadapt -a \"${ADAPTER_R1}\" -A \"${ADAPTER_R2}\" \\\n         -o \"${OUTPUT_R1}\" -p \"${OUTPUT_R2}\" \\\n         -m 18 -q 20 -e 0.1 \\\n         \"${INPUT_R1}\" \"${INPUT_R2}\" > \"${OUTPUT_LOG}\" 2>&1",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 18,
+            "description": "Sorts resulting bam file for use downstream.",
+            "tool_name": "samtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.19",
+            "code_example": "# Install samtools if not already available\n# conda install -c bioconda samtools\n\n# Sort the BAM file by coordinate\n# -o: Output file name\n# -@: Number of threads to use (adjust as needed)\n# -m: Maximum memory per thread (e.g., 2G for 2GB, adjust as needed)\n# Replace 'input.bam' with the path to your unsorted BAM file.\n# Replace 'output.bam' with the desired name for your sorted BAM file.\nsamtools sort -o output.bam -@ 8 -m 2G input.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 19,
+            "description": "Command: java -Xmx2048m -XX:+UseParallelOldGC -XX:ParallelGCThreads=4 -XX:GCTimeLimit=50 -XX:GCHeapFreeLimit=10 -Djava.io.tmpdir=/full/path/to/files/.queue/tmp -cp /path/to/gatk/dist/Queue.jar net.sf.picard.sam.SortSam INPUT=/full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.bam TMP_DIR=/full/path/to/files/.queue/tmp OUTPUT=/full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.sorted.bam VALIDATION_STRINGENCY=SILENT SO=coordinate CREATE_INDEX=true",
+            "tool_name": "Picard",
+            "tool_version": "Inferred with models/gemini-2.5-flash",
+            "code_example": "# Install Picard (often bundled with GATK or available standalone)\n# conda install -c bioconda picard\n# If using GATK, it's included:\n# conda install -c bioconda gatk4\n\n# Define variables for paths\nINPUT_BAM=\"/full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.bam\"\nOUTPUT_BAM=\"/full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.sorted.bam\"\nTMP_DIR=\"/full/path/to/files/.queue/tmp\"\nGATK_DIST_PATH=\"/path/to/gatk/dist\" # Path where Queue.jar is located\n\n# Create temporary directory if it doesn't exist\nmkdir -p \"${TMP_DIR}\"\n\n# Execute Picard SortSam\njava -Xmx2048m \\\n     -XX:+UseParallelOldGC \\\n     -XX:ParallelGCThreads=4 \\\n     -XX:GCTimeLimit=50 \\\n     -XX:GCHeapFreeLimit=10 \\\n     -Djava.io.tmpdir=\"${TMP_DIR}\" \\\n     -cp \"${GATK_DIST_PATH}/Queue.jar\" \\\n     net.sf.picard.sam.SortSam \\\n     INPUT=\"${INPUT_BAM}\" \\\n     TMP_DIR=\"${TMP_DIR}\" \\\n     OUTPUT=\"${OUTPUT_BAM}\" \\\n     VALIDATION_STRINGENCY=SILENT \\\n     SO=coordinate \\\n     CREATE_INDEX=true",
+            "code_language": "bash",
+            "github_url": "https://github.com/broadinstitute/gatk"
+        },
+        {
+            "step_order": 20,
+            "description": "Takes output from sortSam, makes bam index for use downstream.",
+            "tool_name": "samtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.19",
+            "code_example": "# Install samtools if not already installed\n# conda install -c bioconda samtools\n\n# Example: Assuming 'sorted.bam' is the output from sortSam\n# Replace 'sorted.bam' with the actual path to your sorted BAM file\nsamtools index sorted.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 21,
+            "description": "Command: samtools index /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.sorted.bam /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.sorted.bam.bai",
+            "tool_name": "samtools",
+            "tool_version": "1.19",
+            "code_example": "# Install samtools (if not already installed)\n# conda install -c bioconda samtools\n\n# Create a BAM index file\nsamtools index /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.sorted.bam /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.sorted.bam.bai",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 22,
+            "description": "Takes inputs from multiple final bam files.",
+            "tool_name": "samtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.19.2 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install samtools if not already available\n# conda install -c bioconda samtools=1.19.2\n\n# This command merges multiple final BAM files into a single output BAM file.\n# This is a common step when combining technical replicates or data from different lanes of the same sample.\n# Replace 'input1.bam', 'input2.bam', 'input3.bam' with the actual paths to your final BAM files.\n# Replace 'merged_output.bam' with the desired name for the merged file.\nsamtools merge merged_output.bam input1.bam input2.bam input3.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 23,
+            "description": "Merges the two technical replicates for further downstream analysis.",
+            "tool_name": "samtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.10 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "bash\n# Install samtools if not already available\n# conda install -c bioconda samtools=1.10\n\n# Merge two technical replicate BAM files\n# Replace replicate1.bam and replicate2.bam with actual input file names\n# Replace merged_replicates.bam with the desired output file name\nsamtools merge merged_replicates.bam replicate1.bam replicate2.bam\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 24,
+            "description": "Command: samtools merge /full/path/to/files/CombinedID.merged.bam /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.sorted.bam /full/path/to/files/file_R1.D08.fastq.gz.adapterTrim.round2.rmRep.rmDup.sorted.bam",
+            "tool_name": "samtools",
+            "tool_version": "1.19",
+            "code_example": "# Install samtools (if not already installed)\n# conda install -c bioconda samtools\n\n# Define input and output files\nINPUT_BAM_1=\"/full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.sorted.bam\"\nINPUT_BAM_2=\"/full/path/to/files/file_R1.D08.fastq.gz.adapterTrim.round2.rmRep.rmDup.sorted.bam\"\nOUTPUT_BAM=\"/full/path/to/files/CombinedID.merged.bam\"\n\n# Execute samtools merge command\nsamtools merge \"${OUTPUT_BAM}\" \"${INPUT_BAM_1}\" \"${INPUT_BAM_2}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 25,
+            "description": "Takes output from sortSam, makes bam index for use downstream.",
+            "tool_name": "samtools index (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.19.1 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install samtools if not already installed\n# conda install -c bioconda samtools\n\n# Assuming 'sorted.bam' is the output from sortSam\nsamtools index sorted.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 26,
+            "description": "Command: samtools index /full/path/to/files/CombinedID.merged.bam /full/path/to/files/CombinedID.merged.bam.bai",
+            "tool_name": "samtools",
+            "tool_version": "Not specified",
+            "code_example": "# Install samtools (e.g., via conda)\n# conda install -c bioconda samtools\n\n# Create a BAM index file\nsamtools index /full/path/to/files/CombinedID.merged.bam /full/path/to/files/CombinedID.merged.bam.bai",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 27,
+            "description": "Takes output from sortSam.",
+            "tool_name": "samtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.19 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install samtools if not already installed\n# conda install -c bioconda samtools\n\n# Input BAM file (output from sortSam)\nINPUT_BAM=\"sorted.bam\"\n\n# Index the sorted BAM file to allow for fast random access\nsamtools index \"${INPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 28,
+            "description": "Only outputs the second read in each pair for use with single stranded peak caller.",
+            "tool_name": "BBTools (reformat.sh) (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "38.90",
+            "code_example": "# BBTools installation\n# BBTools can be downloaded from SourceForge or installed via Bioconda.\n# For example, using Bioconda:\n# conda install -c bioconda bbtools\n\n# This command assumes 'input_interleaved.fastq.gz' is a single file containing\n# paired-end reads in an interleaved format (R1, R2, R1, R2, ...).\n# 'reformat.sh' extracts only the second read of each pair and writes it to 'output_R2.fastq.gz'.\nreformat.sh in=input_interleaved.fastq.gz out2=output_R2.fastq.gz",
+            "code_language": "bash",
+            "github_url": "https://sourceforge.net/projects/bbmap/"
+        },
+        {
+            "step_order": 29,
+            "description": "This is the final bam file to perform analysis on.",
+            "tool_name": "N/A (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "No specific tool or action can be inferred from the description 'This is the final bam file to perform analysis on.' This description refers to a resulting file rather than a processing step.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 30,
+            "description": "Command: samtools view -hb -f 128 /full/path/to/files/CombinedID.merged.bam > /full/path/to/files/CombinedID.merged.r2.bam",
+            "tool_name": "samtools",
+            "tool_version": "1.10",
+            "code_example": "# Install samtools (e.g., using conda)\n# conda install -c bioconda samtools=1.10\n\nsamtools view -hb -f 128 /full/path/to/files/CombinedID.merged.bam > /full/path/to/files/CombinedID.merged.r2.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 31,
+            "description": "Takes results from samtools view.",
+            "tool_name": "samtools",
+            "tool_version": "1.19",
+            "code_example": "# Install samtools if not already installed\n# conda install -c bioconda samtools\n\n# Example: Convert a SAM file to a BAM file\n# This command takes a SAM file (input.sam) and converts it to a BAM file (output.bam).\n# The description \"Takes results from samtools view\" implies that this step either performs\n# samtools view or processes its output. Given the tool is samtools, this example shows a common use of samtools view.\n# -b: Output BAM format\n# -S: Input is SAM format (optional for samtools 1.x as it auto-detects, but good for clarity)\n# Replace input.sam and output.bam with your actual file names.\nsamtools view -bS input.sam > output.bam\n\n# Another common use case: Filter mapped reads from a BAM file\n# samtools view -F 4 input.bam > mapped_reads.bam\n# -F 4: Exclude reads where the FLAG indicates the read is unmapped (0x4)",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 32,
+            "description": "Calls peaks on those files.",
+            "tool_name": "clipper (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "v1.0.1",
+            "code_example": "# Installation (example for a conda environment)\n# git clone https://github.com/yeolab/clipper.git\n# cd clipper\n# conda create -n clipper_env python=3.8 numpy scipy pysam pybedtools matplotlib seaborn pandas statsmodels -y\n# conda activate clipper_env\n\n# Define input and output files (placeholders)\n# Replace 'ip_sample.bam' with your immunoprecipitation (IP) BAM file\n# Replace 'sm_input.bam' with your size-matched input (SMInput) control BAM file\n# Ensure these BAM files are coordinate-sorted and indexed (.bai files exist).\nIP_BAM=\"ip_sample.bam\"\nSM_INPUT_BAM=\"sm_input.bam\"\nOUTPUT_PREFIX=\"clipper_peaks\"\n\n# Reference dataset: Placeholder for human hg38 effective genome size\n# This value represents the mappable portion of the genome. Adjust if using a different organism or assembly.\nGENOME_SIZE=\"2.7e9\" # Approximate effective genome size for human hg38\n\n# Peak calling parameters\nFDR_THRESHOLD=\"0.05\" # False Discovery Rate threshold\nP_VALUE_THRESHOLD=\"0.01\" # P-value threshold (default for clipper)\n\n# Execute clipper for peak calling\n# Assuming clipper.py is in the current directory or in your PATH\npython clipper.py \\\n    -b \"${IP_BAM}\" \\\n    -c \"${SM_INPUT_BAM}\" \\\n    -o \"${OUTPUT_PREFIX}\" \\\n    -s \"${GENOME_SIZE}\" \\\n    -f \"${FDR_THRESHOLD}\" \\\n    -p \"${P_VALUE_THRESHOLD}\"\n\n# Output files will include: clipper_peaks.bed (BED file of called peaks)",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/clipper"
+        },
+        {
+            "step_order": 33,
+            "description": "Command: clipper -b /full/path/to/files/CombinedID.merged.r2.bam -s hg19 -o /full/path/to/files/CombinedID.merged.r2.peaks.bed --bonferroni --superlocal --threshold-method binomial --save-pickle",
+            "tool_name": "CLIPper",
+            "tool_version": "Not specified",
+            "code_example": "# Install CLIPper (if not already installed)\n# It's recommended to install CLIPper in a dedicated conda environment.\n# conda create -n clipper_env python=3.8\n# conda activate clipper_env\n# pip install clipper\n\n# Define input and output paths\nINPUT_BAM=\"/full/path/to/files/CombinedID.merged.r2.bam\"\nOUTPUT_BED=\"/full/path/to/files/CombinedID.merged.r2.peaks.bed\"\nGENOME_ASSEMBLY=\"hg19\" # Reference genome assembly\n\n# Run CLIPper peak calling\nclipper -b \"${INPUT_BAM}\" -s \"${GENOME_ASSEMBLY}\" -o \"${OUTPUT_BED}\" \\\n        --bonferroni --superlocal --threshold-method binomial --save-pickle",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/clipper"
+        }
+    ],
+    "raw_text": "Library strategy: eCLIP-seq\nTakes output from raw files.  Run to trim off both 5\u00e2\u0080\u0099 and 3\u00e2\u0080\u0099 adapters on both reads. Command: quality-cutoff 6  -m 18  -a NNNNNAGATCGGAAGAGCACACGTCTGAACTCCAGTCAC  -g CTTCCGATCTACAAGTT -g CTTCCGATCTTGGTCCT  -A AACTTGTAGATCGGA -A AGGACCAAGATCGGA -A ACTTGTAGATCGGAA -A GGACCAAGATCGGAA -A CTTGT  AGATCGGAAG -A GACCAAGATCGGAAG -A TTGTAGATCGGAAGA -A ACCAAGATCGGAAGA -A TGTAGATCGGAAGAG -A CCAAGATCGGAAGAG -A GTAGATCGGAAGAGC -A CAAGATCGGAAGAGC -A TAGATCGGAAGAGCG -A AAGATCGGAAGAGCG -A AGATCGGAAGAGCGT -A GATCGGAAGAGCGTC -A ATCGGAAGAGCGTCG -A TCGGAAGAGCGTCGT -A CGGAAGAGCGTCGTG -A GGAAGAGCGTCGTGT  -o /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.fastq.gz  -p /full/path/to/files/file_R2.C01.fastq.gz.adapterTrim.fastq.gz  /full/path/to/files/file_R1.C01.fastq.gz /full/path/to/files/file_R2.C01.fastq.gz > /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.metrics\nTakes output from cutadapt round 1. Run to trim off the 3\u00e2\u0080\u0099 adapters on read 2, to control for double ligation events. Command: cutadapt -f fastq --match-read-wildcards  --times 1  -e 0.1  -O 5  --quality-cutoff 6  -m 18  -A AACTTGTAGATCGGA -A AGGACCAAGATCGGA -A ACTTGTAGATCGGAA -A GGACCAAGATCGGAA -A CTTGTAGATCGGAAG -A GACCAAGATCGGAAG -A TTGTAGATCGGAAGA -A ACCAAGATCGGAAGA -A TGTAGATCGGAAGAG -A CCAAGATCGGAAGAG -A GTAGATCGGAAGAGC -A CAAGATCGGAAGAGC -A TAGATCGGAAGAGCG -A AAGATCGGAAGAGCG -A AGATCGGAAGAGCGT -A GATCGGAAGAGCGTC -A ATCGGAAGAGCGTCG -A TCGGAAGAGCGTCGT -A CGGAAGAGCGTCGTG -A GGAAGAGCGTCGTGT  -o /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.fastq.gz  -p /full/path/to/files/file_R2.C01.fastq.gz.adapterTrim.round2.fastq.gz  /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.fastq.gz  /full/path/to/files/file_R2.C01.fastq.gz.adapterTrim.fastq.gz > /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.metrics\nTakes output from cutadapt round 2.  Maps to human specific version of RepBase used to remove repetitive elements, helps control for spurious artifacts from rRNA (& other) repetitive reads.  Command: STAR  --runMode alignReads  --runThreadN 16  --genomeDir /path/to/RepBase_human_database_file --genomeLoad LoadAndRemove  --readFilesIn /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.fastq.gz /full/path/to/files/file_R2.C01.fastq.gz.adapterTrim.round2.fastq.gz --outSAMunmapped Within  --outFilterMultimapNmax 30  --outFilterMultimapScoreRange 1  --outFileNamePrefix /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rep.bam --outSAMattributes All  --readFilesCommand zcat  --outStd BAM_Unsorted  --outSAMtype BAM Unsorted  --outFilterType BySJout  --outReadsUnmapped Fastx  --outFilterScoreMin 10  --outSAMattrRGline ID:foo  --alignEndsType EndToEnd > /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rep.bam\nTakes output from STAR rmRep.  Maps unique reads to the human genome.  Command: STAR  --runMode alignReads  --runThreadN 16  --genomeDir  /path/to/STAR_database_file --genomeLoad LoadAndRemove  --readFilesIn  /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rep.bamUnmapped.out.mate1  /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rep.bamUnmapped.out.mate2  --outSAMunmapped Within  --outFilterMultimapNmax 1  --outFilterMultimapScoreRange 1  --outFileNamePrefix /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.bam  --outSAMattributes All  --outStd BAM_Unsorted  --outSAMtype BAM Unsorted  --outFilterType BySJout  --outReadsUnmapped Fastx  --outFilterScoreMin 10  --outSAMattrRGline ID:foo  --alignEndsType EndToEnd > /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.bam\ntakes output from STAR genome mapping.  Custom random-mer-aware script for PCR duplicate removal. Command: barcode_collapse_pe.py  --bam /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.bam  --out_file /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.bam  --metrics_file /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.metrics\nTakes output from barcode collapse PE.  Sorts resulting bam file for use downstream.  Command: java  -Xmx2048m  -XX:+UseParallelOldGC  -XX:ParallelGCThreads=4  -XX:GCTimeLimit=50  -XX:GCHeapFreeLimit=10  -Djava.io.tmpdir=/full/path/to/files/.queue/tmp  -cp /path/to/gatk/dist/Queue.jar  net.sf.picard.sam.SortSam  INPUT=/full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.bam  TMP_DIR=/full/path/to/files/.queue/tmp  OUTPUT=/full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.sorted.bam  VALIDATION_STRINGENCY=SILENT  SO=coordinate  CREATE_INDEX=true\nTakes output from sortSam, makes bam index for use downstream.  Command: samtools index  /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.sorted.bam  /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.sorted.bam.bai\nTakes inputs from multiple final bam files.  Merges the two technical replicates for further downstream analysis.  Command: samtools  merge  /full/path/to/files/CombinedID.merged.bam  /full/path/to/files/file_R1.C01.fastq.gz.adapterTrim.round2.rmRep.rmDup.sorted.bam /full/path/to/files/file_R1.D08.fastq.gz.adapterTrim.round2.rmRep.rmDup.sorted.bam\nTakes output from sortSam, makes bam index for use downstream.  Command: samtools  index  /full/path/to/files/CombinedID.merged.bam  /full/path/to/files/CombinedID.merged.bam.bai\nTakes output from sortSam.  Only outputs the second read in each pair for use with single stranded peak caller.  This is the final bam file to perform analysis on.  Command: samtools view -hb -f 128  /full/path/to/files/CombinedID.merged.bam  >  /full/path/to/files/CombinedID.merged.r2.bam\nTakes results from samtools view.  Calls peaks on those files.  Command: clipper  -b /full/path/to/files/CombinedID.merged.r2.bam  -s hg19  -o /full/path/to/files/CombinedID.merged.r2.peaks.bed  --bonferroni  --superlocal  --threshold-method binomial  --save-pickle\nGenome_build: hg19\nSupplementary_files_format_and_content: bed format, contains clusters of predicted RBP binding",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

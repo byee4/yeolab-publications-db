@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Illumina software used for basecalling.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Sequenced reads were trimmed for adaptor sequence, filtered for rRNA contamination, filtered for low-complexity or low-quality sequence, then mapped to hg19 whole genome using GSNAP.",
-      "tool_name": "GSNAP",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Reads Per Kilobase of exon per Megabase of library size (RPKM) were calculated using a protocol from Chepelev et al., Nucleic Acids Research, 2009.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "In short, exons from all isoforms of a gene were merged to create one meta-transcript.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "The number of reads falling in the exons of this meta-transcript were counted and normalized by the size of the meta-transcript and by the size of the library.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Illumina software used for basecalling.\nSequenced reads were trimmed for adaptor sequence, filtered for rRNA contamination, filtered for low-complexity or low-quality sequence, then mapped to hg19 whole genome using GSNAP.\nReads Per Kilobase of exon per Megabase of library size (RPKM) were calculated using a protocol from Chepelev et al., Nucleic Acids Research, 2009. In short, exons from all isoforms of a gene were merged to create one meta-transcript. The number of reads falling in the exons of this meta-transcript were counted and normalized by the size of the meta-transcript and by the size of the library.\nGenome_build: GRCh37 (hg19)\nSupplementary_files_format_and_content: Excel file includes RPKM values for each Sample.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Illumina software used for basecalling.",
+            "tool_name": "bcl2fastq (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "v2.20 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install bcl2fastq (example using conda)\n# conda install -c bioconda bcl2fastq2\n\n# Example usage of bcl2fastq for basecalling and demultiplexing\n# Replace /path/to/illumina/run_folder with the actual path to your Illumina run folder containing BCL files\n# Replace /path/to/output_fastq with the desired output directory for FASTQ files\nbcl2fastq --runfolder-dir /path/to/illumina/run_folder \\\n              --output-dir /path/to/output_fastq \\\n              --no-lane-splitting \\\n              --minimum-trimmed-read-length 35 \\\n              --mask-short-adapter-reads 35 \\\n              --barcode-mismatches 1",
+            "code_language": "bash",
+            "github_url": "https://support.illumina.com/downloads/bcl2fastq-conversion-software-v2-20.html"
+        },
+        {
+            "step_order": 2,
+            "description": "Sequenced reads were trimmed for adaptor sequence, filtered for rRNA contamination, filtered for low-complexity or low-quality sequence, then mapped to hg19 whole genome using GSNAP.",
+            "tool_name": "GSNAP",
+            "tool_version": "2021-12-25 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install GSNAP (if not already installed)\n# conda install -c bioconda gsnap\n\n# Reference genome preparation (if not already done)\n# Download hg19 reference genome from UCSC\n# wget -c http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.fa.gz\n# gunzip hg19.fa.gz\n# Create GSNAP index for hg19. -k 15 is a common k-mer size for RNA-seq.\n# gsnap_build -d hg19_index -g hg19.fa -k 15\n\n# Define variables\nGENOME_INDEX_DIR=\"/path/to/gsnap_indexes\" # Placeholder: Directory containing the hg19_index\nGENOME_INDEX_NAME=\"hg19_index\"\nINPUT_FASTQ=\"input_reads_preprocessed.fastq\" # Placeholder: Reads after trimming, rRNA filtering, and quality filtering\nOUTPUT_SAM=\"aligned_reads.sam\"\nTHREADS=8 # Number of CPU threads to use\n\n# GSNAP alignment command\n# Description: Sequenced reads were trimmed for adaptor sequence, filtered for rRNA contamination,\n# filtered for low-complexity or low-quality sequence (these steps are assumed to be completed\n# and the output is INPUT_FASTQ). Then mapped to hg19 whole genome using GSNAP.\n# Parameters chosen are common for RNA-seq alignment with GSNAP, given the rRNA filtering step.\n# --orientation=fr is typically for paired-end reads, but can be used for single-end if library prep has specific orientation.\n# --novel-splice-sites=1 allows for detection of one novel splice site per read.\n# --max-mismatches=0.05 allows up to 5% mismatches relative to read length.\n# --quality-protocol=sanger specifies the quality score encoding.\ngsnap -d \"${GENOME_INDEX_NAME}\" \\\n      -D \"${GENOME_INDEX_DIR}\" \\\n      -t \"${THREADS}\" \\\n      --orientation=fr \\\n      --novel-splice-sites=1 \\\n      --max-mismatches=0.05 \\\n      --quality-protocol=sanger \\\n      -A sam \\\n      \"${INPUT_FASTQ}\" > \"${OUTPUT_SAM}\"\n\n# Optional: Convert SAM to BAM and sort (common post-alignment steps)\n# samtools view -bS \"${OUTPUT_SAM}\" | samtools sort -o \"${OUTPUT_SAM%.sam}.bam\"\n# samtools index \"${OUTPUT_SAM%.sam}.bam\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "Reads Per Kilobase of exon per Megabase of library size (RPKM) were calculated using a protocol from Chepelev et al., Nucleic Acids Research, 2009.",
+            "tool_name": "Custom RPKM Script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install subread (which includes featureCounts) and samtools if not already available\n# conda install -c bioconda subread samtools\n\n# Define input and reference files\n# Replace 'aligned_reads.bam' with your actual aligned BAM file\nINPUT_BAM=\"aligned_reads.bam\"\n# Placeholder for a human GRCh38 GTF file. Obtain from Ensembl, GENCODE, or UCSC.\n# Example: Homo_sapiens.GRCh38.109.gtf from Ensembl\nGENOME_GTF=\"Homo_sapiens.GRCh38.109.gtf\" \nOUTPUT_COUNTS=\"gene_counts.txt\"\nOUTPUT_RPKM=\"gene_rpkm.txt\"\n\n# 1. Count reads per gene (aggregating exon counts to gene level)\n# -p: Assume paired-end reads (remove if single-end)\n# -t exon: Count features of type 'exon'\n# -g gene_id: Aggregate counts by 'gene_id'\n# -a: Annotation file in GTF/GFF format\nfeatureCounts -p -t exon -g gene_id -a \"${GENOME_GTF}\" -o \"${OUTPUT_COUNTS}\" \"${INPUT_BAM}\"\n\n# 2. Calculate RPKM using the formula from Chepelev et al., 2009\n# RPKM = (number of reads mapped to a gene * 10^9) / (total number of reads in the library * gene length in kilobases)\n\n# Get total number of mapped reads in the library from the BAM file\n# -c: count reads\n# -F 260: Exclude unmapped (0x4), secondary alignment (0x100), and supplementary alignment (0x800) reads\nTOTAL_READS=$(samtools view -c -F 260 \"${INPUT_BAM}\")\n\n# Process the featureCounts output to calculate RPKM\n# The featureCounts output file has a header, then columns like:\n# Geneid    Chr    Start    End    Strand    Length    /path/to/aligned_reads.bam\nawk -v total_reads=\"${TOTAL_READS}\" '\nBEGIN {\n    OFS=\"\\t\";\n    print \"Geneid\", \"Length_Bases\", \"Raw_Counts\", \"RPKM\";\n}\nNR > 2 { # Skip the first two header lines from featureCounts output\n    gene_id = $1;\n    gene_length_bases = $6; # Gene length in bases (sum of exon lengths)\n    raw_counts = $7;        # Raw read counts for the gene\n\n    if (gene_length_bases > 0 && total_reads > 0) {\n        # Calculate RPKM\n        rpkm = (raw_counts * 1000000000) / (total_reads * (gene_length_bases / 1000));\n        print gene_id, gene_length_bases, raw_counts, rpkm;\n    } else {\n        # Handle cases with zero length or zero total reads to avoid division by zero\n        print gene_id, gene_length_bases, raw_counts, 0;\n    }\n}' \"${OUTPUT_COUNTS}\" > \"${OUTPUT_RPKM}\"\n\necho \"RPKM calculation complete. Results saved to ${OUTPUT_RPKM}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "In short, exons from all isoforms of a gene were merged to create one meta-transcript.",
+            "tool_name": "agat (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.0.0",
+            "code_example": "# Install AGAT if not already installed\n# conda install -c bioconda agat\n\n# Define input GTF file (e.g., Gencode annotation)\nGTF_FILE=\"gencode.v44.annotation.gtf\" # Placeholder for a reference GTF file (e.g., human GRCh38)\n\n# Define output GTF file for meta-transcripts\nOUTPUT_GTF=\"gene_meta_transcripts.gtf\"\n\n# Step: Merge exons from all isoforms of a gene to create one meta-transcript\n# agat_sp_merge_annotations.pl: Script to merge annotations\n# --gtf: Input GTF file\n# --type exon: Specify that we want to merge 'exon' features\n# --group_by gene: Group features by their parent gene_id before merging\n# --output: Output GTF file\nagat_sp_merge_annotations.pl --gtf \"${GTF_FILE}\" --type exon --group_by gene --output \"${OUTPUT_GTF}\"\n\necho \"Meta-transcripts (merged exons per gene) saved to ${OUTPUT_GTF}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/NBISweden/AGAT"
+        },
+        {
+            "step_order": 5,
+            "description": "The number of reads falling in the exons of this meta-transcript were counted and normalized by the size of the meta-transcript and by the size of the library.",
+            "tool_name": "RSEM (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.3.6",
+            "code_example": "# Install RSEM (example using conda)\n# conda install -c bioconda rsem=1.3.6\n\n# Define variables\n# Placeholder for the genome FASTA file used for alignment and RSEM reference preparation.\nGENOME_FASTA=\"path/to/reference_genome.fa\"\n# Placeholder for the GTF annotation file. This file should define the \"meta-transcripts\"\n# and their exon structures. For a general case, this would be a standard annotation like Gencode.\nGTF_ANNOTATION=\"path/to/custom_or_gencode.gtf\"\n# Name for the RSEM reference index. This will create a directory with this name.\nRSEM_REFERENCE_NAME=\"rsem_index_meta_transcripts\"\n# Path to the input BAM file containing aligned reads.\nINPUT_BAM=\"path/to/aligned_reads.bam\"\n# Prefix for the output quantification files (e.g., .genes.results, .isoforms.results).\nOUTPUT_PREFIX=\"quantification_results\"\n# Number of threads to use for parallel processing.\nNUM_THREADS=8\n# Strandedness of the library: 0 for unstranded, 0.5 for partially stranded, 1 for fully stranded.\n# Adjust based on your library preparation protocol.\nSTRANDEDNESS_PROB=0.5 # Example: partially stranded\n\n# Step 1: Prepare RSEM reference (run once for a given genome and annotation)\n# This step builds the necessary index files for RSEM from the genome FASTA and GTF.\n# The GTF_ANNOTATION must contain the definitions of the \"meta-transcripts\" for them to be quantified.\n# rsem-prepare-reference --gtf \"${GTF_ANNOTATION}\" \"${GENOME_FASTA}\" \"${RSEM_REFERENCE_NAME}\"\n\n# Step 2: Calculate expression using RSEM\n# This command quantifies transcript and gene abundances from aligned reads.\n# It counts reads falling into exons of defined transcripts (including meta-transcripts from the GTF)\n# and normalizes by transcript length and library size (e.g., to FPKM/TPM).\nrsem-calculate-expression \\\n    --bam \\\n    --paired-end \\\n    --forward-prob \"${STRANDEDNESS_PROB}\" \\\n    --num-threads \"${NUM_THREADS}\" \\\n    \"${INPUT_BAM}\" \\\n    \"${RSEM_REFERENCE_NAME}\" \\\n    \"${OUTPUT_PREFIX}\"\n\n# Output files will include:\n# ${OUTPUT_PREFIX}.genes.results: Contains gene-level quantification (e.g., FPKM, TPM, expected counts).\n# ${OUTPUT_PREFIX}.isoforms.results: Contains isoform/transcript-level quantification.\n# ${OUTPUT_PREFIX}.stat: Contains run statistics.",
+            "code_language": "bash",
+            "github_url": "https://github.com/deweylab/RSEM"
+        }
+    ],
+    "raw_text": "Illumina software used for basecalling.\nSequenced reads were trimmed for adaptor sequence, filtered for rRNA contamination, filtered for low-complexity or low-quality sequence, then mapped to hg19 whole genome using GSNAP.\nReads Per Kilobase of exon per Megabase of library size (RPKM) were calculated using a protocol from Chepelev et al., Nucleic Acids Research, 2009. In short, exons from all isoforms of a gene were merged to create one meta-transcript. The number of reads falling in the exons of this meta-transcript were counted and normalized by the size of the meta-transcript and by the size of the library.\nGenome_build: GRCh37 (hg19)\nSupplementary_files_format_and_content: Excel file includes RPKM values for each Sample.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

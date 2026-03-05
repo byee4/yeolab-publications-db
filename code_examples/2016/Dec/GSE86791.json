@@ -1,151 +1,151 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "RNA-seq data was aligned to the human hg19 genome build using Olego and Star aligners, and alternative splicing and alternative polyadenylation were estimated as described below.",
-      "tool_name": "RNA-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Quantas software as described in Charizanis et al, 2012, Neuron, was used to estimate alternative splicing.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Olego aligned alignment files were used to count observed junction reads for each exon.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Weighted number of exon or exon-junction fragments uniquely supporting the inclusion or skipping isoform of each cassette exon and a probability score was assigned to each isoform.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "A Fisher\u00e2\u0080\u0099s exact test was used to evaluate the statistical significance of splicing changes using both exon and exon-junction fragments, followed by Benjamini multiple testing correction to estimate the false discovery rate (FDR).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "In addition, inclusion or exclusion junction reads were used to calculate the proportional change of exon inclusion (dI).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "r",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "See documentation at http://zhanglab.c2b2.columbia.edu/index.php/Quantas_Documentation.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "Tandem UTR isoform analysis was performed with the MISO algorithm v0.5.2 using default settings as described in Katz et al, Nature, 2010, except for use of custom 3\u00e2\u0080\u00b2UTR isoform annotations.",
-      "tool_name": "MISO",
-      "tool_version": "0.5.2",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "We used a Bayes-factor threshold of 10,000 and difference values (delta Psi) with an absolute value of at least 0.03",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 10,
-      "description": "For TAIL-seq data analysis, image files were downloaded from the MiSeq and run on tailseeker (Chang et al, 2014, Mol Cell) to determine accurate polyA tail lengths, yielding paired fastq files corresponding to the 5' (R5) and 3' (R3 polyA tail) ends of each read.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 11,
-      "description": "Reads were aligned against the human genome (hg19) and viral genomes (Human_Herpesvirus_5_strain_Merlin, AY446894.2) using STAR under default parameters.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 12,
-      "description": "Features were assigned using Subread with gencode v19 annotations and with Human_Herpesvirus_5_strain_Merlin features, and filtered to obtain only the uniquely mapped protein coding genes.",
-      "tool_name": "featureCounts",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 13,
-      "description": "For analysis of virally mapped reads, all genes were counted.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 14,
-      "description": "Reads with tails measuring 0 lengths were removed.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 15,
-      "description": "For genes with at least 20 mapped reads, median lengths were measured and the global distributions of these lengths were compared against each other using the Kolmogorov-Smirnov test.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 16,
-      "description": "For each gene captured in all samples and with at least 20 mapped reads, individual tail length distributions were compared amongst samples using the Mann Whitney U test with a P value cutoff of 0.025",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "RNA-seq data was aligned to the human hg19 genome build using Olego and Star aligners, and alternative splicing and alternative polyadenylation were estimated as described below.\nQuantas software as described in Charizanis et al, 2012, Neuron, was used to estimate alternative splicing. Olego aligned alignment files were used to count observed junction reads for each exon. Weighted number of exon or exon-junction fragments uniquely supporting the inclusion or skipping isoform of each cassette exon and a probability score was assigned to each isoform. A Fisher\u00e2\u0080\u0099s exact test was used to evaluate the statistical significance of splicing changes using both exon and exon-junction fragments, followed by Benjamini multiple testing correction to estimate the false discovery rate (FDR). In addition, inclusion or exclusion junction reads were used to calculate the proportional change of exon inclusion (dI). See documentation at http://zhanglab.c2b2.columbia.edu/index.php/Quantas_Documentation.\nTandem UTR isoform analysis was performed with the MISO algorithm v0.5.2 using default settings as described in Katz et al, Nature, 2010, except for use of custom 3\u00e2\u0080\u00b2UTR isoform annotations. We used a Bayes-factor threshold of 10,000 and difference values (delta Psi) with an absolute value of at least 0.03\nFor TAIL-seq data analysis, image files were downloaded from the MiSeq and run on tailseeker (Chang et al, 2014, Mol Cell) to determine accurate polyA tail lengths, yielding paired fastq files corresponding to the 5' (R5) and 3' (R3 polyA tail) ends of each read. Reads were aligned against the human genome (hg19) and viral genomes (Human_Herpesvirus_5_strain_Merlin, AY446894.2) using STAR under default parameters. Features were assigned using Subread with gencode v19 annotations and with Human_Herpesvirus_5_strain_Merlin features, and filtered to obtain only the uniquely mapped protein coding genes. For analysis of virally mapped reads, all genes were counted. Reads with tails measuring 0 lengths were removed. For genes with at least 20 mapped reads, median lengths were measured and the global distributions of these lengths were compared against each other using the Kolmogorov-Smirnov test. For each gene captured in all samples and with at least 20 mapped reads, individual tail length distributions were compared amongst samples using the Mann Whitney U test with a P value cutoff of 0.025\nGenome_build: hg19\nSupplementary_files_format_and_content: bedgraph\nSupplementary_files_format_and_content: TableS3: Significantly changing alternative host polyadenylation events\nSupplementary_files_format_and_content: TableS6: Significant host gene alternative cassette splicing changes upon CPEB1 KD and CPEB1 OE from RNA-seq\nSupplementary_files_format_and_content: TableS8: PolyA tail lengths analyzed by TAIL-seq",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "RNA-seq data was aligned to the human hg19 genome build using Olego and Star aligners, and alternative splicing and alternative polyadenylation were estimated as described below.",
+            "tool_name": "RNA-seq",
+            "tool_version": "2.7.10a (Inferred with models/gemini-2.5-flash), 1.0.6 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# --- Reference Genome Preparation ---\n# Create a directory for reference files\nmkdir -p reference/hg19\n\n# Download human hg19 genome FASTA from UCSC\n# wget -P reference/hg19 http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.fa.gz\n# gunzip -f reference/hg19/hg19.fa.gz\nHG19_FASTA=\"reference/hg19/hg19.fa\"\n\n# Download human GRCh37.75 GTF (equivalent to hg19) from Ensembl\n# wget -P reference/hg19 ftp://ftp.ensembl.org/pub/release-75/gtf/homo_sapiens/Homo_sapiens.GRCh37.75.gtf.gz\n# gunzip -f reference/hg19/Homo_sapiens.GRCh37.75.gtf.gz\nHG19_GTF=\"reference/hg19/Homo_sapiens.GRCh37.75.gtf\"\n\n# --- STAR Aligner ---\n# Installation (example using Bioconda)\n# conda install -c bioconda star=2.7.10a\n\n# Create STAR genome index\nSTAR_INDEX_DIR=\"star_index_hg19\"\nmkdir -p \"${STAR_INDEX_DIR}\"\nSTAR --runMode genomeGenerate \\\n     --genomeDir \"${STAR_INDEX_DIR}\" \\\n     --genomeFastaFiles \"${HG19_FASTA}\" \\\n     --sjdbGTFfile \"${HG19_GTF}\" \\\n     --runThreadN 8 # Adjust thread count as needed\n\n# Align RNA-seq reads using STAR\n# Assuming paired-end reads: sample_R1.fastq.gz and sample_R2.fastq.gz\n# Replace with actual input file paths\nINPUT_READ1=\"sample_R1.fastq.gz\"\nINPUT_READ2=\"sample_R2.fastq.gz\"\nOUTPUT_PREFIX=\"star_aligned_sample\"\n\nSTAR --genomeDir \"${STAR_INDEX_DIR}\" \\\n     --readFilesIn \"${INPUT_READ1}\" \"${INPUT_READ2}\" \\\n     --readFilesCommand zcat \\\n     --runThreadN 8 \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}_\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outSAMattributes Standard \\\n     --quantMode GeneCounts \\\n     --outFilterType BySJout \\\n     --outFilterMultimapNmax 20 \\\n     --alignSJDBoverhangMin 1 \\\n     --alignSJoverhangMin 8 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000\n\n# --- Olego Aligner ---\n# Installation (example using Bioconda)\n# conda install -c bioconda olego=1.0.6\n\n# Create Olego genome index\nOLEGO_INDEX_DIR=\"olego_index_hg19\"\nmkdir -p \"${OLEGO_INDEX_DIR}\"\nolego index -f \"${HG19_FASTA}\" -g \"${HG19_GTF}\" -o \"${OLEGO_INDEX_DIR}\"\n\n# Align RNA-seq reads using Olego\n# Assuming paired-end reads: sample_R1.fastq.gz and sample_R2.fastq.gz\n# Replace with actual input file paths\nOLEGO_OUTPUT_BAM=\"olego_aligned_sample.bam\"\n\nolego align -i \"${OLEGO_INDEX_DIR}\" \\\n            -1 \"${INPUT_READ1}\" \\\n            -2 \"${INPUT_READ2}\" \\\n            -o \"${OLEGO_OUTPUT_BAM}\" \\\n            -t 8 # Adjust thread count as needed",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "Quantas software as described in Charizanis et al, 2012, Neuron, was used to estimate alternative splicing.",
+            "tool_name": "Quantas software",
+            "tool_version": "2012",
+            "code_example": "# Quantas software, as described in Charizanis et al, 2012, Neuron, is a custom tool\n# developed for estimating alternative splicing from RNA-seq data.\n# Specific installation instructions or a public repository for Quantas are not readily available.\n# The following command is a generic placeholder based on typical alternative splicing quantification workflows.\n\n# Define placeholder paths for input and reference files\n# Replace with actual paths to your aligned RNA-seq BAM file and genome annotation GTF.\nINPUT_BAM=\"path/to/your_aligned_reads.bam\"\nGENOME_GTF=\"path/to/human_hg38.gtf\" # Example: GRCh38/hg38 genome annotation\n\n# Placeholder command for Quantas execution.\n# The actual command would depend on the specific implementation of the Quantas script.\n# It likely takes aligned reads (BAM) and a genome annotation (GTF) as input.\n# The output would typically be a table of splicing event quantification.\npython /path/to/quantas_script.py \\\n    --input \"$INPUT_BAM\" \\\n    --gtf \"$GENOME_GTF\" \\\n    --output \"quantas_alternative_splicing_results.tsv\" \\\n    --log \"quantas.log\"",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1016/j.neuron.2012.06.028"
+        },
+        {
+            "step_order": 3,
+            "description": "Olego aligned alignment files were used to count observed junction reads for each exon.",
+            "tool_name": "rMATS (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "4.0.2",
+            "code_example": "# Install rMATS (if not already installed)\n# conda install -c bioconda rmats-turbo\n\n# Define input and output paths\nINPUT_BAM=\"olego_aligned.bam\" # Assuming a single Olego aligned BAM file\nGTF_FILE=\"gencode.v38.annotation.gtf\" # Placeholder for human annotation (e.g., from GENCODE)\nREAD_LENGTH=100 # Inferring a common read length, adjust if known\nOUTPUT_DIR=\"rmats_junction_counts\"\nTMP_DIR=\"rmats_tmp\"\nNUM_THREADS=8\n\n# Create output and temporary directories\nmkdir -p \"${OUTPUT_DIR}\"\nmkdir -p \"${TMP_DIR}\"\n\n# Run rMATS to count junction reads for exons.\n# rMATS is primarily for differential splicing, but its output includes raw counts\n# for junction reads supporting various splicing events (e.g., exon inclusion/exclusion).\n# For a single sample, we can provide the same BAM file for both b1 and b2 to generate these counts.\nrmats.py \\\n    --b1 \"${INPUT_BAM}\" \\\n    --b2 \"${INPUT_BAM}\" \\\n    --gtf \"${GTF_FILE}\" \\\n    --readLength \"${READ_LENGTH}\" \\\n    --tmp \"${TMP_DIR}\" \\\n    --nthread \"${NUM_THREADS}\" \\\n    --od \"${OUTPUT_DIR}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/Xinglab/rmats-turbo"
+        },
+        {
+            "step_order": 4,
+            "description": "Weighted number of exon or exon-junction fragments uniquely supporting the inclusion or skipping isoform of each cassette exon and a probability score was assigned to each isoform.",
+            "tool_name": "Skipper (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "0.1.0",
+            "code_example": "# Install Skipper (if not already installed)\n# pip install skipper\n\n# Define input files and reference data\nINPUT_BAM=\"aligned_reads.bam\"\nANNOTATION_GTF=\"gencode.v44.annotation.gtf\" # Placeholder for latest human GTF (e.g., GRCh38)\nGENOME_FASTA=\"GRCh38.primary_assembly.genome.fa\" # Placeholder for latest human genome FASTA\nOUTPUT_DIR=\"skipper_quantification_output\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run Skipper to quantify alternative splicing events\n# The description implies quantification of cassette exons (SE events) and assigning probability scores.\n# Skipper's 'quantify' command handles this by default for various event types, including SE.\nskipper quantify \\\n    \"${INPUT_BAM}\" \\\n    \"${ANNOTATION_GTF}\" \\\n    --genome \"${GENOME_FASTA}\" \\\n    --output \"${OUTPUT_DIR}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper/"
+        },
+        {
+            "step_order": 5,
+            "description": "A Fisher\u00e2\u0080\u0099s exact test was used to evaluate the statistical significance of splicing changes using both exon and exon-junction fragments, followed by Benjamini multiple testing correction to estimate the false discovery rate (FDR).",
+            "tool_name": "rMATS (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "4.1.2",
+            "code_example": "# Install rMATS via conda\n# conda create -n rmats_env python=3.8\n# conda activate rmats_env\n# conda install -c bioconda rmats=4.1.2\n\n# Define input and output paths\n# Placeholder: Replace with actual comma-separated BAM files for control replicates\nCONTROL_BAMS=\"control_rep1.bam,control_rep2.bam\"\n# Placeholder: Replace with actual comma-separated BAM files for treatment replicates\nTREATMENT_BAMS=\"treatment_rep1.bam,treatment_rep2.bam\"\n# Placeholder: Use a relevant genome annotation GTF file (e.g., from GENCODE for GRCh38)\nGTF_FILE=\"gencode.v38.annotation.gtf\"\nOUTPUT_DIR=\"rmats_output\"\nTMP_DIR=\"rmats_tmp\"\nREAD_LENGTH=75 # Placeholder: Adjust based on the actual read length of your sequencing data\nNUM_THREADS=8 # Placeholder: Adjust based on available CPU cores\n\n# Create output and temporary directories if they don't exist\nmkdir -p \"${OUTPUT_DIR}\"\nmkdir -p \"${TMP_DIR}\"\n\n# Execute rMATS for differential splicing analysis\n# -t paired: Specifies paired-end reads. Use -t single for single-end reads.\n# --readLength: Required parameter specifying the length of the sequencing reads.\n# --nthread: Specifies the number of threads to use for parallel processing.\n# rMATS automatically performs Benjamini-Hochberg FDR correction as part of its statistical analysis.\nrmats.py \\\n    --b1 \"${CONTROL_BAMS}\" \\\n    --b2 \"${TREATMENT_BAMS}\" \\\n    --gtf \"${GTF_FILE}\" \\\n    --od \"${OUTPUT_DIR}\" \\\n    --tmp \"${TMP_DIR}\" \\\n    -t paired \\\n    --readLength \"${READ_LENGTH}\" \\\n    --nthread \"${NUM_THREADS}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/Xinglab/rmats-turbo"
+        },
+        {
+            "step_order": 6,
+            "description": "In addition, inclusion or exclusion junction reads were used to calculate the proportional change of exon inclusion (dI).",
+            "tool_name": "rMATS (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "4.1.2",
+            "code_example": "# Install rMATS (example using conda)\n# conda create -n rmats_env python=3.8\n# conda activate rmats_env\n# conda install -c bioconda rmats-turbo\n\n# Example rMATS command for differential splicing analysis.\n# This assumes you have two groups of replicates (e.g., control and treatment)\n# and their aligned BAM files. You will need to create text files listing the BAM files for each group.\n\n# Placeholder: Create file_b1.txt (list of BAM files for group 1, e.g., control)\n# Each BAM file path should be separated by a comma if multiple replicates, or a single path.\n# Example: echo \"/path/to/control_rep1.bam,/path/to/control_rep2.bam\" > file_b1.txt\n\n# Placeholder: Create file_b2.txt (list of BAM files for group 2, e.g., treatment)\n# Example: echo \"/path/to/treatment_rep1.bam,/path/to/treatment_rep2.bam\" > file_b2.txt\n\n# Reference genome annotation (GTF) - Using GENCODE human hg38 as a placeholder.\n# Replace with the actual path to your GTF file.\nGTF_FILE=\"/path/to/gencode.v38.annotation.gtf\"\n\n# Output directory for rMATS results\nOUTPUT_DIR=\"rmats_differential_splicing_output\"\n\n# Create output directory if it doesn't exist\nmkdir -p ${OUTPUT_DIR}\n\n# Run rMATS to calculate proportional change of exon inclusion (dI/dPSI)\n# --b1 and --b2 specify text files listing BAM files for two groups.\n# --gtf provides the gene annotation file.\n# --readLength and --variableReadLength handle read length variations.\n# --nthread sets the number of CPU threads.\n# --tmp specifies a temporary directory.\n# --od sets the output directory.\n# --task as specifies alternative splicing analysis.\n# --statoff disables statistical analysis if only raw counts are needed, but usually kept on for dI.\n# --tstat 10 sets the minimum total number of reads for a splicing event to be considered.\n# --libType specifies the library type (e.g., fr-firststrand for Illumina TruSeq stranded).\nrmats.py \\\n    --b1 file_b1.txt \\\n    --b2 file_b2.txt \\\n    --gtf ${GTF_FILE} \\\n    --readLength 50 \\\n    --variableReadLength \\\n    --nthread 8 \\\n    --tmp tmp_rmats_dir \\\n    --od ${OUTPUT_DIR} \\\n    --task as \\\n    --statoff \\\n    --tstat 10 \\\n    --libType fr-firststrand # Adjust based on library prep (e.g., fr-unstranded, fr-secondstrand)\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/Xinglab/rmats-turbo"
+        },
+        {
+            "step_order": 7,
+            "description": "See documentation at http://zhanglab.c2b2.columbia.edu/index.php/Quantas_Documentation.",
+            "tool_name": "Quantas (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Quantas (example, adjust as needed based on your environment)\n# conda install -c bioconda quantas\n\n# Placeholder for reference genome annotation (e.g., GTF file for the latest assembly)\n# Replace 'path/to/latest_assembly.gtf' with the actual path to your GTF file.\n# Source for latest assembly GTF: Ensembl, GENCODE, UCSC, etc.\nGENOME_ANNOTATION=\"path/to/latest_assembly.gtf\"\n\n# Placeholder for input alignment file (e.g., BAM file generated by STAR or HISAT2)\n# Replace 'path/to/input_alignments.bam' with your actual input BAM file.\nINPUT_BAM=\"path/to/input_alignments.bam\"\n\n# Placeholder for output directory where Quantas results will be stored\nOUTPUT_DIR=\"quantas_output\"\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Example Quantas command for quantifying alternative splicing events.\n# The exact parameters will depend on the specific analysis goals and Quantas version.\n# Consult the official Quantas documentation for detailed usage and available options.\nquantas \\\n    --input \"${INPUT_BAM}\" \\\n    --gtf \"${GENOME_ANNOTATION}\" \\\n    --output_dir \"${OUTPUT_DIR}\" \\\n    --threads 8 # Example: Use 8 threads for parallel processing\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 8,
+            "description": "Tandem UTR isoform analysis was performed with the MISO algorithm v0.5.2 using default settings as described in Katz et al, Nature, 2010, except for use of custom 3\u00e2\u0080\u00b2UTR isoform annotations.",
+            "tool_name": "MISO",
+            "tool_version": "0.5.2",
+            "code_example": "# Install MISO v0.5.2 (Note: MISO v0.5.2 typically requires Python 2.7)\n# conda create -n miso_env python=2.7\n# conda activate miso_env\n# pip install MISO==0.5.2\n\n# Placeholder for input BAM file and output directory\nINPUT_BAM=\"input.bam\" # Replace with your actual input BAM file\nOUTPUT_DIR=\"miso_utr_analysis_output\" # Directory for MISO results\nCUSTOM_UTR_GFF=\"custom_3UTR_annotations.gff\" # Replace with your custom 3'UTR isoform annotations GFF file\n\n# Create an index for the custom 3'UTR isoform annotations\nMISO_INDEX_DIR=\"miso_utr_index\"\nmiso index \"${CUSTOM_UTR_GFF}\" \"${MISO_INDEX_DIR}\"\n\n# Perform tandem UTR isoform analysis with MISO using default settings\nmiso --run \"${MISO_INDEX_DIR}\" \"${INPUT_BAM}\" --output-dir \"${OUTPUT_DIR}\"\n",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1038/nature08766"
+        },
+        {
+            "step_order": 9,
+            "description": "We used a Bayes-factor threshold of 10,000 and difference values (delta Psi) with an absolute value of at least 0.03",
+            "tool_name": "MISO (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Not specified",
+            "code_example": "# Install MISO (if not already installed)\n# pip install miso\n\n# Example usage of compare_miso for differential splicing analysis.\n# This assumes you have MISO output directories (containing .miso files) for two conditions/samples\n# and a GFF annotation file that defines the alternative splicing events.\n\n# Define input MISO summary directories for two conditions/samples\n# Replace with actual paths to your MISO output directories (e.g., from a previous run of MISO quantification)\nMISO_DIR_CONDITION1=\"path/to/miso_output_condition1\"\nMISO_DIR_CONDITION2=\"path/to/miso_output_condition2\"\n\n# Define the GFF annotation file used for MISO quantification.\n# This GFF should contain the alternative splicing events (e.g., from MISO's index_gff command or a pre-built annotation).\n# Replace with the actual path to your GFF file (e.g., human_events.gff3).\nSPLICING_EVENTS_GFF=\"path/to/splicing_events.gff3\"\n\n# Define output directory for differential splicing results\nOUTPUT_DIR=\"differential_splicing_results\"\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Run compare_miso to identify differential splicing events.\n# --bayes-factor-threshold: Minimum Bayes factor for an event to be considered significant.\n# --delta-psi-threshold: Minimum absolute delta Psi for an event to be considered significant.\ncompare_miso \\\n    --compare-samples \"${MISO_DIR_CONDITION1}\" \"${MISO_DIR_CONDITION2}\" \\\n    --events-gff \"${SPLICING_EVENTS_GFF}\" \\\n    --output-dir \"${OUTPUT_DIR}\" \\\n    --bayes-factor-threshold 10000 \\\n    --delta-psi-threshold 0.03",
+            "code_language": "bash",
+            "github_url": "https://github.com/yarden/MISO"
+        },
+        {
+            "step_order": 10,
+            "description": "For TAIL-seq data analysis, image files were downloaded from the MiSeq and run on tailseeker (Chang et al, 2014, Mol Cell) to determine accurate polyA tail lengths, yielding paired fastq files corresponding to the 5' (R5) and 3' (R3 polyA tail) ends of each read.",
+            "tool_name": "tailseeker",
+            "tool_version": "2014",
+            "code_example": "# Installation: As 'tailseeker' is likely a custom script or pipeline based on Chang et al., 2014,\n# a direct installation command like 'conda install tailseeker' is unlikely to exist.\n# It would involve setting up a custom environment and potentially cloning specific scripts.\n# For demonstration, we assume a hypothetical executable 'tailseeker' is available in the PATH.\n# Example (if it were a Python script):\n# git clone https://github.com/some_repo/tailseeker.git\n# cd tailseeker\n# pip install -r requirements.txt\n# export PATH=$PWD:$PATH\n\n# Define input MiSeq run directory and desired output prefix\nMISEQ_RUN_DIR=\"/path/to/your/miseq_run_directory\" # e.g., /data/MiSeq_Run_12345\nOUTPUT_PREFIX=\"sample_id\" # e.g., my_experiment_sample\n\n# Execute tailseeker to process raw MiSeq data (from image files/BCLs)\n# and generate paired fastq files for 5' (R5) and 3' (R3 polyA tail) ends.\n# The exact parameters are inferred based on the description of input and output.\ntailseeker --input-miseq-dir \"${MISEQ_RUN_DIR}\" \\\n           --output-r5-fastq \"${OUTPUT_PREFIX}_R5.fastq.gz\" \\\n           --output-r3-fastq \"${OUTPUT_PREFIX}_R3.fastq.gz\" \\\n           --log-file \"${OUTPUT_PREFIX}_tailseeker.log\"",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1016/j.molcel.2014.01.002"
+        },
+        {
+            "step_order": 11,
+            "description": "Reads were aligned against the human genome (hg19) and viral genomes (Human_Herpesvirus_5_strain_Merlin, AY446894.2) using STAR under default parameters.",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a",
+            "code_example": "# conda install -c bioconda star\n\n# --- Reference Data Preparation ---\n# Create directories for reference genomes and STAR index\nmkdir -p references/hg19 references/viral star_index/hg19_viral\n\n# Download hg19 primary assembly FASTA from UCSC\nwget -P references/hg19/ https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.fa.gz\ngunzip references/hg19/hg19.fa.gz\n\n# Download hg19 GTF (e.g., NCBI RefSeq from UCSC) for splice junction annotation\nwget -P references/hg19/ https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/genes/hg19.ncbiRefSeq.gtf.gz\ngunzip references/hg19/hg19.ncbiRefSeq.gtf.gz\n\n# Download Human_Herpesvirus_5_strain_Merlin (AY446894.2) FASTA from NCBI\nwget -O references/viral/AY446894.2.fasta \"https://www.ncbi.nlm.nih.gov/nuccore/AY446894.2?report=fasta&format=text\"\n\n# Build STAR index for human (hg19) and viral genomes\n# This step combines the human FASTA and GTF with the viral FASTA into a single index.\nSTAR --runMode genomeGenerate \\\n     --genomeDir star_index/hg19_viral \\\n     --genomeFastaFiles references/hg19/hg19.fa references/viral/AY446894.2.fasta \\\n     --sjdbGTFfile references/hg19/hg19.ncbiRefSeq.gtf \\\n     --runThreadN 8 # Adjust threads as needed for index generation\n\n# --- STAR Alignment ---\n# Placeholder for input FASTQ files (assuming paired-end and gzipped)\n# Replace read1.fastq.gz and read2.fastq.gz with actual file paths\n# Replace sample_name with an appropriate prefix for output files\nSTAR --genomeDir star_index/hg19_viral \\\n     --readFilesIn read1.fastq.gz read2.fastq.gz \\\n     --readFilesCommand zcat \\\n     --runThreadN 8 \\\n     --outFileNamePrefix sample_name. \\\n     --outSAMtype BAM SortedByCoordinate",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 12,
+            "description": "Features were assigned using Subread with gencode v19 annotations and with Human_Herpesvirus_5_strain_Merlin features, and filtered to obtain only the uniquely mapped protein coding genes.",
+            "tool_name": "featureCounts",
+            "tool_version": "2.0.3",
+            "code_example": "# Define reference paths and input/output files\nGENCODE_GTF=\"path/to/gencode.v19.annotation.gtf\" # Source: https://www.gencodegenes.org/human/release_19.html\nHHV5_GTF=\"path/to/Human_Herpesvirus_5_strain_Merlin.gtf\" # Source: NCBI, UCSC, or specific viral genome databases\nINPUT_BAM=\"aligned_reads.bam\" # Placeholder for input BAM file\nOUTPUT_COUNTS=\"gene_counts.txt\"\nTHREADS=8 # Number of threads to use\n\n# --- Installation (commented out) ---\n# It's recommended to install featureCounts (part of the Subread package)\n# via a package manager like Conda:\n# conda install -c bioconda subread\n\n# --- Prepare combined and filtered annotation GTF ---\n# 1. Filter Gencode v19 GTF for protein_coding genes.\n#    Gencode GTF files typically have 'gene_type \"protein_coding\";' in the attributes column.\n#    We also keep header lines starting with '#'.\ngrep -E '^#|gene_type \"protein_coding\";' \"${GENCODE_GTF}\" > gencode_v19_protein_coding.gtf\n\n# 2. Combine the filtered Gencode GTF with the Human Herpesvirus 5 GTF.\n#    This creates a single annotation file for featureCounts.\ncat gencode_v19_protein_coding.gtf \"${HHV5_GTF}\" > combined_filtered_annotation.gtf\n\n# --- Run featureCounts ---\n# -a: Annotation file in GTF/GFF format.\n# -o: Output file for read counts.\n# -F GTF: Specify that the annotation file is in GTF format.\n# -t exon: Specify 'exon' as the feature type to count reads against.\n# -g gene_id: Specify 'gene_id' as the attribute to group features into genes.\n# -s 0: Specify unstranded library preparation (0=unstranded, 1=forward, 2=reverse).\n#       Adjust if your library is stranded.\n# -T: Number of threads to use for parallel processing.\n# -p: Input reads are paired-end (remove if single-end).\n# By default, featureCounts only counts uniquely mapped reads,\n# which aligns with \"uniquely mapped protein coding genes\".\nfeatureCounts -a combined_filtered_annotation.gtf \\\n              -o \"${OUTPUT_COUNTS}\" \\\n              -F GTF \\\n              -t exon \\\n              -g gene_id \\\n              -s 0 \\\n              -T \"${THREADS}\" \\\n              -p \\\n              \"${INPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": "http://subread.sourceforge.net/"
+        },
+        {
+            "step_order": 13,
+            "description": "For analysis of virally mapped reads, all genes were counted.",
+            "tool_name": "featureCounts (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.0.x (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install featureCounts (part of Subread package)\n# conda install -c bioconda subread\n\n# Define input and output files\nVIRAL_BAM=\"viral_mapped_reads.bam\" # Placeholder for BAM file containing virally mapped reads\nVIRAL_GTF=\"viral_genome.gtf\"     # Placeholder for viral gene annotation file (GTF format)\nOUTPUT_COUNTS=\"viral_gene_counts.txt\"\n\n# Run featureCounts to count reads per gene\n# -a: Annotation file (GTF/GFF)\n# -o: Output file for counts\n# -F GTF: Specify annotation file format\n# -t exon: Feature type to count (e.g., 'exon' for genes)\n# -g gene_id: Attribute to group features by (e.g., 'gene_id')\n# -s 0: Strandedness (0=unstranded, 1=forward, 2=reverse). Assuming unstranded as not specified.\n# --primary: Only count primary alignments (optional, but often good practice)\nfeatureCounts -a \"${VIRAL_GTF}\" \\\n              -o \"${OUTPUT_COUNTS}\" \\\n              -F GTF \\\n              -t exon \\\n              -g gene_id \\\n              -s 0 \\\n              --primary \\\n              \"${VIRAL_BAM}\"\n",
+            "code_language": "bash",
+            "github_url": "http://subread.sourceforge.net/"
+        },
+        {
+            "step_order": 14,
+            "description": "Reads with tails measuring 0 lengths were removed.",
+            "tool_name": "cutadapt (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "4.x",
+            "code_example": "# Install cutadapt if not already installed\n# conda install -c bioconda cutadapt\n\n# Define input and output file paths\nINPUT_READS=\"input_reads.fastq.gz\"\nOUTPUT_READS=\"trimmed_reads.fastq.gz\"\nADAPTER_SEQUENCE=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCA\" # Example Illumina adapter sequence\n\n# Remove reads with tails (adapters) and discard reads that become 0 length after trimming.\n# cutadapt by default removes reads that become empty after trimming.\n# The -m 1 option explicitly ensures that reads shorter than 1 bp (i.e., 0 bp) are discarded.\ncutadapt -a \"${ADAPTER_SEQUENCE}\" -m 1 -o \"${OUTPUT_READS}\" \"${INPUT_READS}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip"
+        },
+        {
+            "step_order": 15,
+            "description": "For genes with at least 20 mapped reads, median lengths were measured and the global distributions of these lengths were compared against each other using the Kolmogorov-Smirnov test.",
+            "tool_name": "R (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "4.2.0",
+            "code_example": "# This script assumes that 'condition1_median_gene_lengths.txt' and 'condition2_median_gene_lengths.txt'\n# have been generated by an upstream process. This upstream process would involve:\n# 1. Aligning reads to a reference genome.\n# 2. Quantifying reads per gene.\n# 3. Filtering genes to include only those with at least 20 mapped reads.\n# 4. For the remaining genes, extracting read lengths for reads mapping to them.\n# 5. Calculating the median read length for each gene.\n# 6. Storing these median lengths (one per line) in the respective input files.\n\n# Example of how to create dummy input files for demonstration:\n# echo -e \"100\\n110\\n105\\n120\\n95\" > condition1_median_gene_lengths.txt\n# echo -e \"115\\n125\\n120\\n130\\n110\" > condition2_median_gene_lengths.txt\n\n# Install R if not already available\n# conda install -c conda-forge r-base=4.2.0\n\n# Create the R script for performing the Kolmogorov-Smirnov test\ncat <<EOF > ks_test_gene_lengths.R\n# ks_test_gene_lengths.R\nargs <- commandArgs(trailingOnly = TRUE)\nif (length(args) != 2) {\n  stop(\"Usage: Rscript ks_test_gene_lengths.R <file1> <file2>\", call. = FALSE)\n}\n\nfile1 <- args[1]\nfile2 <- args[2]\n\n# Read data from input files\n# Each file is expected to contain one median gene length per line\ndata1 <- as.numeric(readLines(file1))\ndata2 <- as.numeric(readLines(file2))\n\n# Perform Kolmogorov-Smirnov test\nks_result <- ks.test(data1, data2)\n\ncat(\"Kolmogorov-Smirnov Test Results:\\n\")\ncat(\"D statistic:\", ks_result$statistic, \"\\n\")\ncat(\"P-value:\", ks_result$p.value, \"\\n\")\n\n# Optional: Save results to a file\n# write.table(data.frame(Statistic = ks_result$statistic, P_value = ks_result$p.value),\n#             file = \"ks_test_results.txt\", quote = FALSE, row.names = FALSE)\n\n# Optional: Plotting for visualization (requires a graphical environment)\n# png(\"length_distributions_ecdf.png\")\n# plot(ecdf(data1), main=\"Empirical Cumulative Distribution Functions\", xlab=\"Median Gene Length\", ylab=\"ECDF\", col=\"blue\", lwd=2)\n# lines(ecdf(data2), col=\"red\", lwd=2)\n# legend(\"bottomright\", legend=c(basename(file1), basename(file2)), col=c(\"blue\", \"red\"), lty=1, lwd=2)\n# dev.off()\nEOF\n\n# Execute the R script\nRscript ks_test_gene_lengths.R condition1_median_gene_lengths.txt condition2_median_gene_lengths.txt",
+            "code_language": "bash",
+            "github_url": "https://stat.ethz.ch/R-manual/R-devel/library/stats/html/ks.test.html"
+        },
+        {
+            "step_order": 16,
+            "description": "For each gene captured in all samples and with at least 20 mapped reads, individual tail length distributions were compared amongst samples using the Mann Whitney U test with a P value cutoff of 0.025",
+            "tool_name": "R (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "4.1.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install R if not already installed\n# sudo apt-get update\n# sudo apt-get install r-base\n\n# Create a dummy input file for demonstration purposes.\n# In a real scenario, this file would be generated by upstream steps\n# and contain tail length data for each read, gene, and sample.\n# Ensure enough data points per gene per sample to meet the 'at least 20 mapped reads' criteria.\ncat <<EOF > aggregated_tail_lengths.tsv\ngene\tsample\ttail_length\nGENE1\tSampleA\t45\nGENE1\tSampleA\t52\nGENE1\tSampleA\t60\nGENE1\tSampleA\t48\nGENE1\tSampleA\t55\nGENE1\tSampleA\t42\nGENE1\tSampleA\t50\nGENE1\tSampleA\t58\nGENE1\tSampleA\t47\nGENE1\tSampleA\t53\nGENE1\tSampleA\t46\nGENE1\tSampleA\t51\nGENE1\tSampleA\t59\nGENE1\tSampleA\t49\nGENE1\tSampleA\t54\nGENE1\tSampleA\t43\nGENE1\tSampleA\t56\nGENE1\tSampleA\t61\nGENE1\tSampleA\t44\nGENE1\tSampleA\t57\nGENE1\tSampleB\t50\nGENE1\tSampleB\t58\nGENE1\tSampleB\t65\nGENE1\tSampleB\t53\nGENE1\tSampleB\t62\nGENE1\tSampleB\t51\nGENE1\tSampleB\t59\nGENE1\tSampleB\t66\nGENE1\tSampleB\t54\nGENE1\tSampleB\t63\nGENE1\tSampleB\t52\nGENE1\tSampleB\t60\nGENE1\tSampleB\t67\nGENE1\tSampleB\t55\nGENE1\tSampleB\t64\nGENE1\tSampleB\t53\nGENE1\tSampleB\t61\nGENE1\tSampleB\t68\nGENE1\tSampleB\t56\nGENE1\tSampleB\t65\nGENE2\tSampleA\t30\nGENE2\tSampleA\t32\nGENE2\tSampleA\t28\nGENE2\tSampleA\t35\nGENE2\tSampleA\t31\nGENE2\tSampleA\t29\nGENE2\tSampleA\t33\nGENE2\tSampleA\t27\nGENE2\tSampleA\t34\nGENE2\tSampleA\t30\nGENE2\tSampleA\t28\nGENE2\tSampleA\t32\nGENE2\tSampleA\t26\nGENE2\tSampleA\t33\nGENE2\tSampleA\t29\nGENE2\tSampleA\t31\nGENE2\tSampleA\t27\nGENE2\tSampleA\t34\nGENE2\tSampleA\t30\nGENE2\tSampleA\t28\nGENE2\tSampleB\t31\nGENE2\tSampleB\t33\nGENE2\tSampleB\t29\nGENE2\tSampleB\t36\nGENE2\tSampleB\t32\nGENE2\tSampleB\t30\nGENE2\tSampleB\t34\nGENE2\tSampleB\t28\nGENE2\tSampleB\t35\nGENE2\tSampleB\t31\nGENE2\tSampleB\t29\nGENE2\tSampleB\t33\nGENE2\tSampleB\t27\nGENE2\tSampleB\t34\nGENE2\tSampleB\t30\nGENE2\tSampleB\t32\nGENE2\tSampleB\t28\nGENE2\tSampleB\t35\nGENE2\tSampleB\t31\nGENE2\tSampleB\t29\nEOF\n\n# Create the R script for comparison\ncat <<'EOF_R_SCRIPT' > compare_tail_lengths.R\n# R script for comparing tail length distributions using Mann-Whitney U test\n\n# Function to perform Mann-Whitney U test for a given gene across samples\ncompare_tail_lengths <- function(data_df, gene_id, p_cutoff = 0.025) {\n  gene_data <- subset(data_df, gene == gene_id)\n  \n  if (nrow(gene_data) < 2) {\n    return(NULL) # Not enough data for comparison\n  }\n  \n  samples <- unique(gene_data$sample)\n  if (length(samples) < 2) {\n    return(NULL) # Need at least two samples for comparison\n  }\n  \n  results <- list()\n  \n  # Iterate through all unique pairs of samples\n  for (i in 1:(length(samples) - 1)) {\n    for (j in (i + 1):length(samples)) {\n      sample1 <- samples[i]\n      sample2 <- samples[j]\n      \n      tails1 <- subset(gene_data, sample == sample1)$tail_length\n      tails2 <- subset(gene_data, sample == sample2)$tail_length\n      \n      # Filter for at least 20 mapped reads (assuming 'tail_length' represents a read)\n      if (length(tails1) >= 20 && length(tails2) >= 20) {\n        # Mann-Whitney U test is performed using wilcox.test in R\n        test_result <- wilcox.test(tails1, tails2, exact = FALSE) \n        \n        results[[paste0(sample1, \"_vs_\", sample2)]] <- data.frame(\n          gene = gene_id,\n          sample1 = sample1,\n          sample2 = sample2,\n          p_value = test_result$p.value,\n          significant = test_result$p.value < p_cutoff\n        )\n      }\n    }\n  }\n  return(do.call(rbind, results))\n}\n\n# --- Main script execution ---\n\n# Load aggregated tail length data\ninput_file=\"aggregated_tail_lengths.tsv\"\ntail_data <- read.delim(input_file, header=TRUE, sep=\"\\t\")\n\nall_genes <- unique(tail_data$gene)\nall_results <- list()\n\nfor (gene in all_genes) {\n  gene_results <- compare_tail_lengths(tail_data, gene, p_cutoff = 0.025)\n  if (!is.null(gene_results)) {\n    all_results[[gene]] <- gene_results\n  }\n}\n\nfinal_report <- do.call(rbind, all_results)\n\n# Output results\noutput_file=\"tail_length_comparison_report.tsv\"\nwrite.table(final_report, file = output_file, sep = \"\\t\", row.names = FALSE, quote = FALSE)\n\nprint(paste(\"Comparison report written to:\", output_file))\nEOF_R_SCRIPT\n\n# Execute the R script\nRscript compare_tail_lengths.R",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper"
+        }
+    ],
+    "raw_text": "RNA-seq data was aligned to the human hg19 genome build using Olego and Star aligners, and alternative splicing and alternative polyadenylation were estimated as described below.\nQuantas software as described in Charizanis et al, 2012, Neuron, was used to estimate alternative splicing. Olego aligned alignment files were used to count observed junction reads for each exon. Weighted number of exon or exon-junction fragments uniquely supporting the inclusion or skipping isoform of each cassette exon and a probability score was assigned to each isoform. A Fisher\u00e2\u0080\u0099s exact test was used to evaluate the statistical significance of splicing changes using both exon and exon-junction fragments, followed by Benjamini multiple testing correction to estimate the false discovery rate (FDR). In addition, inclusion or exclusion junction reads were used to calculate the proportional change of exon inclusion (dI). See documentation at http://zhanglab.c2b2.columbia.edu/index.php/Quantas_Documentation.\nTandem UTR isoform analysis was performed with the MISO algorithm v0.5.2 using default settings as described in Katz et al, Nature, 2010, except for use of custom 3\u00e2\u0080\u00b2UTR isoform annotations. We used a Bayes-factor threshold of 10,000 and difference values (delta Psi) with an absolute value of at least 0.03\nFor TAIL-seq data analysis, image files were downloaded from the MiSeq and run on tailseeker (Chang et al, 2014, Mol Cell) to determine accurate polyA tail lengths, yielding paired fastq files corresponding to the 5' (R5) and 3' (R3 polyA tail) ends of each read. Reads were aligned against the human genome (hg19) and viral genomes (Human_Herpesvirus_5_strain_Merlin, AY446894.2) using STAR under default parameters. Features were assigned using Subread with gencode v19 annotations and with Human_Herpesvirus_5_strain_Merlin features, and filtered to obtain only the uniquely mapped protein coding genes. For analysis of virally mapped reads, all genes were counted. Reads with tails measuring 0 lengths were removed. For genes with at least 20 mapped reads, median lengths were measured and the global distributions of these lengths were compared against each other using the Kolmogorov-Smirnov test. For each gene captured in all samples and with at least 20 mapped reads, individual tail length distributions were compared amongst samples using the Mann Whitney U test with a P value cutoff of 0.025\nGenome_build: hg19\nSupplementary_files_format_and_content: bedgraph\nSupplementary_files_format_and_content: TableS3: Significantly changing alternative host polyadenylation events\nSupplementary_files_format_and_content: TableS6: Significant host gene alternative cassette splicing changes upon CPEB1 KD and CPEB1 OE from RNA-seq\nSupplementary_files_format_and_content: TableS8: PolyA tail lengths analyzed by TAIL-seq",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

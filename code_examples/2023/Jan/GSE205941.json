@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Cell Ranger (v6.0.1) was used to process sequencing information and single cell barcodes.",
-      "tool_name": "Cell Ranger",
-      "tool_version": "6.0.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Gene and cell filtering, clustering, differential and average expression using Seurat (v4.1.1)",
-      "tool_name": "Seurat",
-      "tool_version": "4.1.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Cell Ranger output was converted to .loom files with velocyto (v0.17.17) for velocity analysis.",
-      "tool_name": "Cell Ranger",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Velocity and latent time anlysis using scVelo (v0.2.4).",
-      "tool_name": "Velocyto",
-      "tool_version": "0.2.4",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Library strategy: CITE-seq",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Cell Ranger (v6.0.1) was used to process sequencing information and single cell barcodes.\nGene and cell filtering, clustering, differential and average expression using Seurat (v4.1.1)\nCell Ranger output was converted to .loom files with velocyto (v0.17.17) for velocity analysis.\nVelocity and latent time anlysis using scVelo (v0.2.4).\nAssembly: mm10\nSupplementary files format and content: 10x Genomics output files: barcodes.tsv.gz, features.tsv.gz, matrix.mtx.gz\nLibrary strategy: CITE-seq",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Cell Ranger (v6.0.1) was used to process sequencing information and single cell barcodes.",
+            "tool_name": "Cell Ranger",
+            "tool_version": "6.0.1",
+            "code_example": "# Cell Ranger (v6.0.1) was used to process sequencing information and single cell barcodes.\n\n# Installation instructions (commented out):\n# Cell Ranger is typically downloaded and installed directly from 10x Genomics.\n# For example, to install version 6.0.1:\n# wget https://cf.10xgenomics.com/releases/cell-ranger/cellranger-6.0.1.tar.gz\n# tar -xzf cellranger-6.0.1.tar.gz\n# export PATH=/path/to/cellranger-6.0.1:$PATH\n# Ensure the Cell Ranger executable is in your PATH.\n\n# Reference dataset setup (placeholder):\n# The description does not specify a reference genome. Using human GRCh38 as a common placeholder.\n# Download a pre-built human GRCh38 transcriptome reference from 10x Genomics (e.g., 2020-A):\n# wget https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-GRCh38-2020-A.tar.gz\n# tar -xzf refdata-gex-GRCh38-2020-A.tar.gz\nREFERENCE_TRANSCRIPTOME=\"/path/to/refdata-gex-GRCh38-2020-A\" # <<< REPLACE with your actual reference path\n\n# Input FASTQ files (placeholder):\n# Replace with the directory containing your FASTQ files.\n# FASTQ files should be named according to 10x Genomics specifications (e.g., SampleName_S1_L001_R1_001.fastq.gz).\nFASTQ_DIR=\"/path/to/your/fastq_directory\" # <<< REPLACE with your actual FASTQ directory\n\n# Sample ID and output directory:\nSAMPLE_ID=\"my_single_cell_sample\" # <<< REPLACE with your sample identifier\nOUTPUT_DIR=\"${SAMPLE_ID}_cellranger_output\"\n\n# Execute Cell Ranger count command:\n# This command processes sequencing information and single cell barcodes.\n# Parameters like --expect-cells might need adjustment based on experiment design.\ncellranger count \\\n    --id=\"${OUTPUT_DIR}\" \\\n    --transcriptome=\"${REFERENCE_TRANSCRIPTOME}\" \\\n    --fastqs=\"${FASTQ_DIR}\" \\\n    --sample=\"${SAMPLE_ID}\" \\\n    --expect-cells=3000 # Example: Expected number of cells. Adjust based on your experiment.",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Gene and cell filtering, clustering, differential and average expression using Seurat (v4.1.1)",
+            "tool_name": "Seurat",
+            "tool_version": "4.1.1",
+            "code_example": "#!/bin/bash\n\n# This script performs gene and cell filtering, clustering, differential and average expression\n# using the Seurat R package (v4.1.1).\n\n# --- Installation Instructions (commented out) ---\n# Install R if not already available on your system.\n# For Debian/Ubuntu:\n# sudo apt-get update\n# sudo apt-get install r-base\n\n# Install Seurat and its dependencies within R:\n# R -q -e 'install.packages(\"Seurat\", repos=\"https://cran.rstudio.com/\")'\n# R -q -e 'install.packages(\"SeuratObject\", repos=\"https://cran.rstudio.com/\")'\n# R -q -e 'install.packages(\"patchwork\", repos=\"https://cran.rstudio.com/\")' # Often used for plotting\n\n# --- Define Input and Output Paths ---\n# Placeholder for your 10x Genomics data directory (containing matrix.mtx, barcodes.tsv, features.tsv)\n# IMPORTANT: Replace 'path/to/your/10x_data' with the actual path to your input data.\nINPUT_10X_DATA_DIR=\"path/to/your/10x_data\"\n\n# Output directory for Seurat analysis results\nOUTPUT_DIR=\"seurat_analysis_results\"\nmkdir -p \"$OUTPUT_DIR\"\n\n# R script filename\nR_SCRIPT_FILE=\"run_seurat_analysis.R\"\n\n# --- Create R Script for Seurat Analysis ---\ncat <<EOF > \"$R_SCRIPT_FILE\"\nlibrary(Seurat)\nlibrary(SeuratObject)\n# library(patchwork) # Uncomment if you plan to generate plots within R\n\n# --- 1. Load Data ---\n# Read 10x Genomics data (matrix, barcodes, features)\n# Ensure the INPUT_10X_DATA_DIR variable points to the correct directory.\ndata_dir <- \"$INPUT_10X_DATA_DIR\"\nif (!dir.exists(data_dir)) {\n  stop(\"Error: Input data directory does not exist: \", data_dir, \"\\nPlease update INPUT_10X_DATA_DIR in the bash script.\")\n}\ncounts <- Read10X(data.dir = data_dir)\n\n# Create Seurat object\n# min.cells: include features expressed in at least this many cells\n# min.features: include cells with at least this many features\nseurat_obj <- CreateSeuratObject(counts = counts, project = \"scRNAseq_analysis\", min.cells = 3, min.features = 200)\n\n# --- 2. Quality Control and Filtering ---\n# Calculate mitochondrial percentage\nseurat_obj[[\"percent.mt\"]] <- PercentageFeatureSet(seurat_obj, pattern = \"^MT-\")\n\n# Filter cells based on QC metrics\n# Adjust these thresholds based on your specific dataset's quality and expected cell types.\n# nFeature_RNA: number of genes detected per cell\n# nCount_RNA: total number of molecules (UMIs) detected per cell\n# percent.mt: percentage of mitochondrial reads\nseurat_obj <- subset(seurat_obj, subset = nFeature_RNA > 200 & nFeature_RNA < 2500 & percent.mt < 5)\n\n# --- 3. Normalization and Feature Selection ---\n# Normalize data using LogNormalize method with a scale factor of 10,000\nseurat_obj <- NormalizeData(seurat_obj, normalization.method = \"LogNormalize\", scale.factor = 10000)\n\n# Identify highly variable features (genes)\n# selection.method: \"vst\" (variance stabilizing transformation) is recommended for UMI data\n# nfeatures: number of variable features to identify\nseurat_obj <- FindVariableFeatures(seurat_obj, selection.method = \"vst\", nfeatures = 2000)\n\n# --- 4. Scaling and Dimensionality Reduction ---\n# Scale the data (regress out unwanted variation if needed, e.g., percent.mt, nCount_RNA)\n# For simplicity, scaling all genes here without regression.\nall.genes <- rownames(seurat_obj)\nseurat_obj <- ScaleData(seurat_obj, features = all.genes)\n\n# Run Principal Component Analysis (PCA)\nseurat_obj <- RunPCA(seurat_obj, features = VariableFeatures(object = seurat_obj))\n\n# --- 5. Clustering ---\n# Determine the number of dimensions (PCs) to use for clustering.\n# This often involves inspecting an ElbowPlot or JackStrawPlot (not included here for brevity).\n# Placeholder: Using the first 10 PCs. Adjust 'num_pcs' as appropriate for your data.\nnum_pcs <- 10\n\n# Find cell neighbors based on PCA space\nseurat_obj <- FindNeighbors(seurat_obj, dims = 1:num_pcs)\n\n# Find clusters using the Louvain algorithm\n# resolution: controls the granularity of the clustering. Higher values lead to more clusters.\nresolution_param <- 0.5 # Adjust this value (e.g., 0.4 to 1.2) based on desired cluster number\nseurat_obj <- FindClusters(seurat_obj, resolution = resolution_param)\n\n# Run UMAP for visualization\nseurat_obj <- RunUMAP(seurat_obj, dims = 1:num_pcs)\n\n# --- 6. Differential Expression Analysis ---\n# Find markers for all clusters compared to all other cells\n# only.pos: only return positive markers\n# min.pct: minimum percentage of cells in either of the two groups a gene must be expressed in\n# logfc.threshold: minimum log-fold change for a gene to be considered a marker\nall_cluster_markers <- FindAllMarkers(seurat_obj, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)\nwrite.csv(all_cluster_markers, file = file.path(\"$OUTPUT_DIR\", \"all_cluster_markers.csv\"), row.names = FALSE)\n\n# Example: Find markers for a specific cluster (e.g., cluster 0) vs. all other cells\n# cluster0_markers <- FindMarkers(seurat_obj, ident.1 = 0, min.pct = 0.25, logfc.threshold = 0.25)\n# write.csv(cluster0_markers, file = file.path(\"$OUTPUT_DIR\", \"cluster0_markers.csv\"), row.names = TRUE)\n\n# --- 7. Average Expression ---\n# Calculate average expression of all genes across all identified clusters\navg_expression_by_cluster <- AverageExpression(seurat_obj, group.by = \"seurat_clusters\")\nwrite.csv(avg_expression_by_cluster$RNA, file = file.path(\"$OUTPUT_DIR\", \"average_expression_by_cluster.csv\"), row.names = TRUE)\n\n# --- 8. Save Processed Seurat Object ---\nsaveRDS(seurat_obj, file = file.path(\"$OUTPUT_DIR\", \"processed_seurat_object.rds\"))\n\nmessage(\"Seurat analysis complete. Results saved to: \", \"$OUTPUT_DIR\")\nEOF\n\n# --- Execute the R Script ---\nRscript \"$R_SCRIPT_FILE\"\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/satijalab/seurat"
+        },
+        {
+            "step_order": 3,
+            "description": "Cell Ranger output was converted to .loom files with velocyto (v0.17.17) for velocity analysis.",
+            "tool_name": "Cell Ranger",
+            "tool_version": "0.17.17",
+            "code_example": "# Install velocyto and its dependencies\n# conda install -c bioconda velocyto\n# pip install loompy\n\n# Placeholder for Cell Ranger output directory\n# This directory is generated by `cellranger count` and contains files like `possorted_genome_bam.bam`\n# and `filtered_feature_bc_matrix.h5`.\nCELLRANGER_OUTPUT_DIR=\"path/to/cellranger_output_directory\"\n\n# Placeholder for reference GTF file (e.g., human GRCh38 from Ensembl or GENCODE)\n# This GTF file should match the genome assembly used by Cell Ranger.\nGENES_GTF=\"path/to/reference/Homo_sapiens.GRCh38.109.gtf\"\n\n# Convert Cell Ranger output to .loom files using velocyto\n# The 'run10x' command is specifically designed for 10x Genomics Cell Ranger output.\nvelocyto run10x \"${CELLRANGER_OUTPUT_DIR}\" \"${GENES_GTF}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/velocyto-team/velocyto.py"
+        },
+        {
+            "step_order": 4,
+            "description": "Velocity and latent time anlysis using scVelo (v0.2.4).",
+            "tool_name": "Velocyto",
+            "tool_version": "0.2.4",
+            "code_example": "# Install scVelo (if not already installed)\n# pip install scvelo==0.2.4\n# # Or using conda:\n# # conda install -c conda-forge scvelo=0.2.4\n\n# This command executes a basic scVelo workflow for velocity and latent time analysis.\n# It assumes an 'input.loom' file is available, which typically contains spliced and unspliced counts\n# generated by tools like velocyto (e.g., velocyto run -o output_folder -e exons.gtf -m masks.gtf genome_assembly.fa aligned_reads.bam).\n# The 'input.loom' file serves as the primary input dataset for scVelo.\n# The output will be an anndata object 'scvelo_analysis_output.h5ad' containing velocity and latent time information.\npython -c \"import scvelo as scv; import scanpy as sc; adata = scv.read('input.loom', cache=True); scv.pp.filter_and_normalize(adata, min_shared_counts=20, n_top_genes=2000); scv.pp.moments(adata, n_pcs=30, n_neighbors=30); scv.tl.velocity(adata); scv.tl.velocity_graph(adata); scv.tl.latent_time(adata); adata.write('scvelo_analysis_output.h5ad')\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/theislab/scvelo"
+        },
+        {
+            "step_order": 5,
+            "description": "Library strategy: CITE-seq",
+            "tool_name": "CellRanger (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "7.0.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install CellRanger (example - adjust path as needed)\n# wget https://cf.10xgenomics.com/releases/cell-ranger/cellranger-7.0.0.tar.gz\n# tar -xzf cellranger-7.0.0.tar.gz\n# export PATH=/path/to/cellranger-7.0.0:$PATH\n\n# Define input and output directories\nINPUT_FASTQ_DIR=\"raw_data/cite_seq_fastqs\"\nOUTPUT_DIR=\"cite_seq_analysis_output\"\nSAMPLE_ID=\"my_cite_seq_sample\"\n\n# Define CellRanger reference data (e.g., human GRCh38)\n# Download from 10x Genomics: https://www.10xgenomics.com/support/software/cell-ranger/latest/downloads\nCELLRANGER_REF=\"/path/to/refdata-gex-GRCh38-2020-A\" # Placeholder for human reference\n\n# Create a config.csv file for cellranger multi\n# This file specifies the library types, FASTQ paths, and feature barcode information.\n# Example config.csv content (replace with actual paths and feature definitions):\n# [gene-expression]\n# reference,/path/to/refdata-gex-GRCh38-2020-A\n# fastqs,/path/to/raw_data/cite_seq_fastqs\n# sample,my_cite_seq_sample\n# [feature]\n# reference,/path/to/feature_reference.csv\n# fastqs,/path/to/raw_data/cite_seq_fastqs\n# sample,my_cite_seq_sample\n#\n# A feature_reference.csv would contain (example for ADTs):\n# id,name,read,pattern,sequence,feature_type\n# ADT_1,CD3,R2,5P(BC),AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC,Antibody Capture\n# ADT_2,CD4,R2,5P(BC),GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG,Antibody Capture\n# ...\n\n# For demonstration, assume a config.csv is already prepared.\nCONFIG_CSV=\"config.csv\" # Path to your prepared config.csv\n\n# Run cellranger multi for combined gene expression and feature barcode analysis\ncellranger multi --id=${SAMPLE_ID} --csv=${CONFIG_CSV} --output-directory=${OUTPUT_DIR}",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1038/nmeth.4380"
+        }
+    ],
+    "raw_text": "Cell Ranger (v6.0.1) was used to process sequencing information and single cell barcodes.\nGene and cell filtering, clustering, differential and average expression using Seurat (v4.1.1)\nCell Ranger output was converted to .loom files with velocyto (v0.17.17) for velocity analysis.\nVelocity and latent time anlysis using scVelo (v0.2.4).\nAssembly: mm10\nSupplementary files format and content: 10x Genomics output files: barcodes.tsv.gz, features.tsv.gz, matrix.mtx.gz\nLibrary strategy: CITE-seq",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

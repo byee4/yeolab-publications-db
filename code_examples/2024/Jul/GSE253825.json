@@ -1,16 +1,16 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "STAR (version 2.7.11a, reference genome: mm10-2020-A<based on Gencode vM23, and filtering out pseudogenes, TEC, miRNA etc. a total of 32285 genes) was used to perform alignment, filtering, barcode counting, and UMI counting for single cell RNA-Seq.",
-      "tool_name": "STAR",
-      "tool_version": "2.7.11a",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": "https://github.com/alexdobin/STAR"
-    }
-  ],
-  "raw_text": "STAR (version 2.7.11a, reference genome: mm10-2020-A<based on Gencode vM23, and filtering out pseudogenes, TEC, miRNA etc. a total of 32285 genes) was used to perform alignment, filtering, barcode counting, and UMI counting for single cell RNA-Seq.\nAssembly: mm10\nSupplementary files format and content: Tab-separated values files and matrix files",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "STAR (version 2.7.11a, reference genome: mm10-2020-A<based on Gencode vM23, and filtering out pseudogenes, TEC, miRNA etc. a total of 32285 genes) was used to perform alignment, filtering, barcode counting, and UMI counting for single cell RNA-Seq.",
+            "tool_name": "STAR",
+            "tool_version": "2.7.11a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables\n# Path to the custom STAR index built with mm10, Gencode vM23, and filtered genes\nGENOME_DIR=\"path/to/STAR_index_mm10_Gencode_vM23_filtered\"\n# Input FASTQ files (e.g., R1 containing UMI/barcode, R2 containing cDNA)\nREAD1_FASTQ=\"path/to/sample_R1.fastq.gz\"\nREAD2_FASTQ=\"path/to/sample_R2.fastq.gz\"\n# Output directory prefix\nOUTPUT_PREFIX=\"star_alignment_output/\"\n# Path to the cell barcode whitelist (specific to scRNA-seq chemistry, e.g., 10x Genomics)\nCB_WHITELIST=\"path/to/cell_barcode_whitelist.txt\"\n\n# Create output directory\nmkdir -p \"${OUTPUT_PREFIX}\"\n\n# Run STAR for alignment, filtering, barcode counting, and UMI counting\n# Note: --solo parameters (soloType, soloCBwhitelist, soloCBstart, soloCBlen, soloUMIstart, soloUMIlen)\n#       must be adjusted based on the specific single-cell RNA-Seq library preparation chemistry.\n#       The example below assumes a common 10x Genomics v3 setup (16bp CB, 12bp UMI in R1).\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${READ1_FASTQ}\" \"${READ2_FASTQ}\" \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outFilterMultimapNmax 1 \\\n     --outFilterScoreMinOverLread 0.3 \\\n     --outFilterMatchNminOverLread 0.3 \\\n     --outFilterMismatchNmax 3 \\\n     --limitBAMsortRAM 60000000000 \\\n     --soloType CB_UMI_Simple \\\n     --soloCBwhitelist \"${CB_WHITELIST}\" \\\n     --soloCBstart 1 --soloCBlen 16 \\\n     --soloUMIstart 17 --soloUMIlen 12 \\\n     --soloFeatures Gene Velocyto \\\n     --soloCellFilter CellRanks 30 0.99 10000 \\\n     --soloOutFileNames Features.mtx Features.barcodes.txt Features.genes.txt",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "STAR (version 2.7.11a, reference genome: mm10-2020-A<based on Gencode vM23, and filtering out pseudogenes, TEC, miRNA etc. a total of 32285 genes) was used to perform alignment, filtering, barcode counting, and UMI counting for single cell RNA-Seq.\nAssembly: mm10\nSupplementary files format and content: Tab-separated values files and matrix files",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

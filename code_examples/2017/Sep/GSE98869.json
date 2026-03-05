@@ -1,124 +1,124 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Reads were trimmed of adapter sequences TCGTATGCCGTCTTCTGCTTG, ATCTCGTATGCCGTCTTCTGCTTG, CGACAGGTTCAGAGTTCTACAGTCCGACGATC GATCGGAAGAGCACACGTCTGAACTCCAGTCAC using cutadapt v1.9.1",
-      "tool_name": "cutadapt",
-      "tool_version": "1.9.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Trimmed reads were aligned to RepBase v18.05 using STAR v2.4.01",
-      "tool_name": "STAR",
-      "tool_version": "2.4.01",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Reads that didn't align to RepBase were aligned to ce11 using STAR v2.4.01",
-      "tool_name": "STAR",
-      "tool_version": "2.4.01",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Featurecounts v1.5.0-p1 and DESeq2 were used to count and normalize genes for differential expression, respectively.",
-      "tool_name": "featureCounts",
-      "tool_version": "1.5.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Gene regions were described using WS254 (Wormbase) annotations.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Reads were removed of potential duplicates and combined respective to their WT or Adr condition for editing calls using samtools v1.3.1",
-      "tool_name": "samtools",
-      "tool_version": "1.3.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Reads were filtered and removed using the following parameters: reads containing junction overhangs less than 10nt long, reads containing indels, reads containing mutations within 5nt of the 3' end, reads containing more than 1 non AG or TC antisense mutation",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "Reads were piled up using samtools 1.3.1 [-d 1000 -E -I -p -o -f -t DP,DV,DPR,INFO/DPR,DP4,SP]",
-      "tool_name": "samtools",
-      "tool_version": "1.3.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "Variants were called using bcftools 1.2.1 [-O -c -A -i -v]",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 10,
-      "description": "Variants were filtered for and removed: known SNPs (wormbase WS254), positions covered by less than 5 reads, variants which were not A-G or T-C antisense",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 11,
-      "description": "Variants were scored using a previously published bayesian method and filtered for those passing a 0.99 confidence parameter",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 12,
-      "description": "Surviving variants from the Adr2- samples were filtered out.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 13,
-      "description": "Variants were annotated using bedtools 2.26 on WS254 annotations, prioritized using the following: 3'UTR, 5'UTR, CDS, Intron, mRNA, piRNA, ncRNA, tRNA, pre-ncRNA, miRNA, snoRNA, pre_miRNA, lincRNA, snRNA, antisense RNA, rRNA, pre-miRNA, downstream from gene, upstream from gene, downstream noncoding RNA, upstream noncoding RNA and scRNA",
-      "tool_name": "bedtools",
-      "tool_version": "2.26",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Reads were trimmed of adapter sequences TCGTATGCCGTCTTCTGCTTG, ATCTCGTATGCCGTCTTCTGCTTG, CGACAGGTTCAGAGTTCTACAGTCCGACGATC GATCGGAAGAGCACACGTCTGAACTCCAGTCAC using cutadapt v1.9.1\nTrimmed reads were aligned to RepBase v18.05 using STAR v2.4.01\nReads that didn't align to RepBase were aligned to ce11 using STAR v2.4.01\nFeaturecounts v1.5.0-p1 and DESeq2 were used to count and normalize genes for differential expression, respectively. Gene regions were described using WS254 (Wormbase) annotations.\nReads were removed of potential duplicates and combined respective to their WT or Adr condition for editing calls using samtools v1.3.1\nReads were filtered and removed using the following parameters: reads containing junction overhangs less than 10nt long, reads containing indels, reads containing mutations within 5nt of the 3' end, reads containing more than 1 non AG or TC antisense mutation\nReads were piled up using samtools 1.3.1 [-d 1000 -E -I -p -o -f -t DP,DV,DPR,INFO/DPR,DP4,SP]\nVariants were called using bcftools 1.2.1 [-O -c -A -i -v]\nVariants were filtered for and removed: known SNPs (wormbase WS254), positions covered by less than 5 reads, variants which were not A-G or T-C antisense\nVariants were scored using a previously published bayesian method and filtered for those passing a 0.99 confidence parameter\nSurviving variants from the Adr2- samples were filtered out.\nVariants were annotated using bedtools 2.26 on WS254 annotations, prioritized using the following: 3'UTR, 5'UTR, CDS, Intron, mRNA, piRNA, ncRNA, tRNA, pre-ncRNA, miRNA, snoRNA, pre_miRNA, lincRNA, snRNA, antisense RNA, rRNA, pre-miRNA, downstream from gene, upstream from gene, downstream noncoding RNA, upstream noncoding RNA and scRNA\nGenome_build: ce11\nSupplementary_files_format_and_content: diffexp.tsv contains DESeq2-processed differential expression results for WS254 wormbase genes between WT and Adr2- knockout conditions. editing_calls.tsv contains all annotated editing calls removed of adr2- false positives. GSF973-Hundley-SarahD-1_S1_R1_001.polyATrim.adapterTrim.rmRep.sorted.rg.bam, GSF973-Hundley-SarahD-3_S3_R1_001.polyATrim.adapterTrim.rmRep.sorted.rg.bam, and GSF973-Hundley-SarahD-6_S6_R1_001.polyATrim.adapterTrim.rmRep.sorted.rg.bam contain ce11-aligned reads pertaining to WT neural C elegan RNA. GSF973-Hundley-SarahD-2_S2_R1_001.polyATrim.adapterTrim.rmRep.sorted.rg.bam, GSF973-Hundley-SarahD-5_S5_R1_001.polyATrim.adapterTrim.rmRep.sorted.rg.bam, and GSF973-Hundley-SarahD-7_S7_R1_001.polyATrim.adapterTrim.rmRep.sorted.rg.bam contain ce11-aligned reads pertaining to adr2 knockout neural C elegan RNA.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Reads were trimmed of adapter sequences TCGTATGCCGTCTTCTGCTTG, ATCTCGTATGCCGTCTTCTGCTTG, CGACAGGTTCAGAGTTCTACAGTCCGACGATC GATCGGAAGAGCACACGTCTGAACTCCAGTCAC using cutadapt v1.9.1",
+            "tool_name": "cutadapt",
+            "tool_version": "1.9.1",
+            "code_example": "# Install cutadapt if not already installed\n# conda install -c bioconda cutadapt=1.9.1\n\n# Define adapter sequences\nADAPTER1=\"TCGTATGCCGTCTTCTGCTTG\"\nADAPTER2=\"ATCTCGTATGCCGTCTTCTGCTTG\"\nADAPTER3=\"CGACAGGTTCAGAGTTCTACAGTCCGACGATC\"\nADAPTER4=\"GATCGGAAGAGCACACGTCTGAACTCCAGTCAC\"\n\n# Placeholder for input and output files\nINPUT_FILE=\"input.fastq.gz\"\nOUTPUT_FILE=\"output.trimmed.fastq.gz\"\n\n# Execute cutadapt command\ncutadapt -a \"${ADAPTER1}\" \\\n         -a \"${ADAPTER2}\" \\\n         -a \"${ADAPTER3}\" \\\n         -a \"${ADAPTER4}\" \\\n         -o \"${OUTPUT_FILE}\" \\\n         \"${INPUT_FILE}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 2,
+            "description": "Trimmed reads were aligned to RepBase v18.05 using STAR v2.4.01",
+            "tool_name": "STAR",
+            "tool_version": "2.4.01",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star=2.4.01\n\n# Define variables\nTRIMMED_READS=\"trimmed_reads.fastq.gz\" # Placeholder for actual trimmed reads file\nREPBASE_INDEX_DIR=\"/path/to/RepBase_v18.05_STAR_index\" # Placeholder for STAR index directory\nOUTPUT_PREFIX=\"repbase_alignment\"\n\n# Note: RepBase v18.05 FASTA file would be required to build the STAR index.\n# Example command to build STAR index (run once):\n# STAR --runMode genomeGenerate \\\n#      --genomeDir ${REPBASE_INDEX_DIR} \\\n#      --genomeFastaFiles /path/to/RepBase_v18.05.fasta \\\n#      --runThreadN 8 # Adjust threads as needed\n\n# Align trimmed reads to RepBase v18.05\nSTAR --runThreadN 8 \\\n     --genomeDir ${REPBASE_INDEX_DIR} \\\n     --readFilesIn ${TRIMMED_READS} \\\n     --outFileNamePrefix ${OUTPUT_PREFIX}_ \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outFilterMultimapNmax 100 \\\n     --outFilterMismatchNmax 10 \\\n     --alignIntronMax 1 \\\n     --alignEndsType Local",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "Reads that didn't align to RepBase were aligned to ce11 using STAR v2.4.01",
+            "tool_name": "STAR",
+            "tool_version": "2.4.01",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star=2.4.01\n\n# Define variables\nGENOME_DIR=\"/path/to/STAR_index/ce11\" # Placeholder: Replace with actual path to ce11 STAR index\nREADS_R1=\"unaligned_reads_R1.fastq.gz\" # Placeholder: Replace with actual path to unaligned R1 reads\nREADS_R2=\"unaligned_reads_R2.fastq.gz\" # Placeholder: Replace with actual path to unaligned R2 reads (remove if single-end)\nOUTPUT_PREFIX=\"ce11_aligned_\"\nTHREADS=8 # Number of threads to use\n\n# Align reads to ce11 using STAR\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${READS_R1}\" \"${READS_R2}\" \\\n     --runThreadN \"${THREADS}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outBAMcompression 6",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 4,
+            "description": "Featurecounts v1.5.0-p1 and DESeq2 were used to count and normalize genes for differential expression, respectively.",
+            "tool_name": "featureCounts",
+            "tool_version": "1.5.0",
+            "code_example": "# Install featureCounts (part of Subread package)\n# conda install -c bioconda subread\n\n# Download a reference GTF annotation file (e.g., GENCODE human GRCh38)\n# wget -O gencode.v44.annotation.gtf.gz ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_44/gencode.v44.annotation.gtf.gz\n# gunzip gencode.v44.annotation.gtf.gz\n\n# --- featureCounts execution ---\n# Assuming input BAM files are sample1_rep1.bam, sample1_rep2.bam, etc.\n# Replace with actual BAM file paths and the correct GTF path\n# The -F exon -t gene -g gene_id parameters are common for gene-level counting from exons.\nfeatureCounts -a gencode.v44.annotation.gtf -o gene_counts.txt -F exon -t gene -g gene_id \\\n  sample1_rep1.bam sample1_rep2.bam sample2_rep1.bam sample2_rep2.bam\n\n# Install DESeq2 R package\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\"); BiocManager::install(\"DESeq2\")'\n\n# --- DESeq2 execution (R script) ---\n# Create an R script file, e.g., run_deseq2.R\ncat << 'EOF' > run_deseq2.R\nlibrary(DESeq2)\n\n# Read featureCounts output\n# The first column is gene_id, subsequent columns are counts for each sample.\n# skip=1 to skip the comment line, header=TRUE to use the second line as column names,\n# row.names=1 to set the Geneid column as row names.\ncounts_data <- read.table(\"gene_counts.txt\", header = TRUE, row.names = 1, skip = 1)\n\n# Remove the 'Chr', 'Start', 'End', 'Strand', 'Length' columns if present from featureCounts output.\n# These are typically columns 1-5 after the gene_id column in the raw featureCounts output.\n# Adjust column indices if your featureCounts output format differs.\ncounts_data <- counts_data[, 6:ncol(counts_data)]\n\n# Ensure column names are clean (remove .bam suffix if present for easier matching with colData)\ncolnames(counts_data) <- gsub(\"\\\\.bam$\", \"\", colnames(counts_data))\n\n# Create sample metadata (colData)\n# THIS IS A PLACEHOLDER. You MUST replace it with your actual experimental design.\n# Example: two conditions (control, treated) with two replicates each.\n# Ensure the row names of colData match the column names of your counts_data.\n# The order of samples in colData must match the order of columns in counts_data.\nsample_names <- colnames(counts_data)\nconditions <- factor(c(\"control\", \"control\", \"treated\", \"treated\")) # Example conditions\n\ncolData <- data.frame(condition = conditions, row.names = sample_names)\n\n# Create DESeqDataSet object\ndds <- DESeqDataSetFromMatrix(countData = counts_data, colData = colData, design = ~ condition)\n\n# Run DESeq2 differential expression analysis\ndds <- DESeq(dds)\n\n# Get results for a specific contrast (e.g., treated vs control)\nres <- results(dds, contrast = c(\"condition\", \"treated\", \"control\"))\n\n# Order results by adjusted p-value\nres <- res[order(res$padj), ]\n\n# Save results to a CSV file\nwrite.csv(as.data.frame(res), file = \"deseq2_differential_expression_results.csv\")\n\n# Optional: Save normalized counts\nnormalized_counts <- counts(dds, normalized = TRUE)\nwrite.csv(as.data.frame(normalized_counts), file = \"deseq2_normalized_counts.csv\")\nEOF\n\n# Execute the R script\nRscript run_deseq2.R",
+            "code_language": "bash",
+            "github_url": "https://pubmed.ncbi.nlm.nih.gov/24227677/, https://pubmed.ncbi.nlm.nih.gov/25516281/"
+        },
+        {
+            "step_order": 5,
+            "description": "Gene regions were described using WS254 (Wormbase) annotations.",
+            "tool_name": "Wormbase (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "WS254",
+            "code_example": "# Download C. elegans WS254 annotations (GFF3 format)\n# Source: ftp://ftp.wormbase.org/pub/wormbase/releases/WS254/\nwget -O c_elegans.WS254.annotations.gff3.gz ftp://ftp.wormbase.org/pub/wormbase/releases/WS254/species/c_elegans/PRJNA13758/c_elegans.PRJNA13758.WS254.annotations.gff3.gz\ngunzip c_elegans.WS254.annotations.gff3.gz",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 6,
+            "description": "Reads were removed of potential duplicates and combined respective to their WT or Adr condition for editing calls using samtools v1.3.1",
+            "tool_name": "samtools",
+            "tool_version": "1.3.1",
+            "code_example": "# Install samtools if not already installed\n# conda install -c bioconda samtools=1.3.1\n\n# Define input BAM files (placeholders)\n# For WT condition\nWT_REP1_BAM=\"wt_replicate1.bam\"\nWT_REP2_BAM=\"wt_replicate2.bam\"\n\n# For Adr condition\nADR_REP1_BAM=\"adr_replicate1.bam\"\nADR_REP2_BAM=\"adr_replicate2.bam\"\n\n# --- Process WT samples ---\n# Deduplicate WT replicate 1\n# Assuming input BAMs are sorted by coordinate. If not, add samtools sort before markdup.\n# samtools sort -o ${WT_REP1_BAM%.bam}_sorted.bam ${WT_REP1_BAM}\n# WT_REP1_BAM_SORTED=\"${WT_REP1_BAM%.bam}_sorted.bam\"\nsamtools markdup -r ${WT_REP1_BAM} ${WT_REP1_BAM%.bam}_dedup.bam\n\n# Deduplicate WT replicate 2\nsamtools markdup -r ${WT_REP2_BAM} ${WT_REP2_BAM%.bam}_dedup.bam\n\n# Combine deduplicated WT replicates\nsamtools merge wt_combined.bam ${WT_REP1_BAM%.bam}_dedup.bam ${WT_REP2_BAM%.bam}_dedup.bam\n\n# Sort and index the combined WT BAM for editing calls\nsamtools sort -o wt_combined_sorted.bam wt_combined.bam\nsamtools index wt_combined_sorted.bam\n\n# --- Process Adr samples ---\n# Deduplicate Adr replicate 1\nsamtools markdup -r ${ADR_REP1_BAM} ${ADR_REP1_BAM%.bam}_dedup.bam\n\n# Deduplicate Adr replicate 2\nsamtools markdup -r ${ADR_REP2_BAM} ${ADR_REP2_BAM%.bam}_dedup.bam\n\n# Combine deduplicated Adr replicates\nsamtools merge adr_combined.bam ${ADR_REP1_BAM%.bam}_dedup.bam ${ADR_REP2_BAM%.bam}_dedup.bam\n\n# Sort and index the combined Adr BAM for editing calls\nsamtools sort -o adr_combined_sorted.bam adr_combined.bam\nsamtools index adr_combined_sorted.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 7,
+            "description": "Reads were filtered and removed using the following parameters: reads containing junction overhangs less than 10nt long, reads containing indels, reads containing mutations within 5nt of the 3' end, reads containing more than 1 non AG or TC antisense mutation",
+            "tool_name": "eclip_filter_reads.py (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "v1.0.0",
+            "code_example": "# This script is conceptual, representing a comprehensive filtering step within the eCLIP pipeline.\n# The exact script name and parameter names may vary based on the specific implementation\n# within the Yeo lab's eCLIP workflow (e.g., a combination of existing scripts or a custom one).\n\n# Example installation (assuming the eCLIP pipeline repository is cloned)\n# git clone https://github.com/yeolab/eclip.git\n# cd eclip\n# # Ensure Python dependencies like pysam are installed\n# # conda install -c bioconda pysam\n\n# Define input and output files\nINPUT_BAM=\"aligned_reads.bam\"\nOUTPUT_BAM=\"filtered_reads.bam\"\n\n# Execute the filtering command with inferred parameters\n# --min-junction-overhang 10: Removes reads with junction overhangs less than 10nt long.\n# --remove-indels: Removes reads containing indels.\n# --min-dist-3prime 5: Removes reads containing mutations within 5nt of the 3' end.\n# --max-non-canonical-antisense-mutations 1: Removes reads containing more than 1 non-AG or TC antisense mutation.\n# Note: The last parameter is highly specific and might be implemented with a combination of flags or internal logic within the actual script.\n\npython eclip_filter_reads.py \\\n    --input-bam \"${INPUT_BAM}\" \\\n    --output-bam \"${OUTPUT_BAM}\" \\\n    --min-junction-overhang 10 \\\n    --remove-indels \\\n    --min-dist-3prime 5 \\\n    --max-non-canonical-antisense-mutations 1",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 8,
+            "description": "Reads were piled up using samtools 1.3.1 [-d 1000 -E -I -p -o -f -t DP,DV,DPR,INFO/DPR,DP4,SP]",
+            "tool_name": "samtools",
+            "tool_version": "1.3.1",
+            "code_example": "# Install samtools if not already installed\n# conda install -c bioconda samtools=1.3.1\n\n# Placeholder for reference genome (e.g., human hg38)\n# Replace 'path/to/your/reference.fa' with the actual path to your reference genome.\nREFERENCE_GENOME=\"path/to/your/reference.fa\"\n\n# Placeholder for input BAM file\n# Replace 'path/to/your/input.bam' with the actual path to your aligned BAM file.\nINPUT_BAM=\"path/to/your/input.bam\"\n\n# Placeholder for output BCF file\n# Replace 'path/to/your/output.bcf' with your desired output file name.\nOUTPUT_BCF=\"path/to/your/output.bcf\"\n\n# Reads were piled up using samtools 1.3.1\n# -d 1000: Maximum per-BAM depth\n# -E: Extended BAQ (base alignment quality) computation\n# -I: Do not skip anomalous read pairs in variant calling\n# -u: Output uncompressed BCF (required for -t option to be effective for variant calling tags)\n# -f: Reference FASTA file\n# -t: Output tags for BCF output (DP,DV,DPR,INFO/DPR,DP4,SP)\nsamtools mpileup -d 1000 -E -I -u -f \"${REFERENCE_GENOME}\" -t DP,DV,DPR,INFO/DPR,DP4,SP \"${INPUT_BAM}\" > \"${OUTPUT_BCF}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 9,
+            "description": "Variants were called using bcftools 1.2.1 [-O -c -A -i -v]",
+            "tool_name": "bcftools",
+            "tool_version": "1.2.1",
+            "code_example": "# Install bcftools (if not already installed)\n# conda install -c bioconda bcftools=1.2.1\n\n# Placeholder for reference genome\n# Replace with your actual reference genome path (e.g., hg38.fa)\nREFERENCE_GENOME=\"path/to/your/reference.fa\"\n\n# Placeholder for input BCF/VCF file (e.g., from bcftools mpileup)\nINPUT_FILE=\"path/to/your/input.bcf\"\n\n# Placeholder for output VCF file\nOUTPUT_FILE=\"variants.vcf\"\n\n# Call variants using bcftools\n# Note: The -i option requires a filter expression. A common example 'QUAL>20' is used here.\n# Replace with the actual filter expression used in the pipeline if known.\nbcftools call \\\n    -Ov \\\n    -c \\\n    -A \\\n    -i 'QUAL>20' \\\n    -v \\\n    -f \"${REFERENCE_GENOME}\" \\\n    \"${INPUT_FILE}\" > \"${OUTPUT_FILE}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/bcftools"
+        },
+        {
+            "step_order": 10,
+            "description": "Variants were filtered for and removed: known SNPs (wormbase WS254), positions covered by less than 5 reads, variants which were not A-G or T-C antisense",
+            "tool_name": "bcftools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.16",
+            "code_example": "# Install bcftools if not already installed\n# conda install -c bioconda bcftools\n\n# Placeholder for input VCF and known SNPs VCF\nINPUT_VCF=\"input.vcf.gz\"\nKNOWN_SNPS_VCF=\"wormbase_ws254_snps.vcf.gz\" # This file should contain known SNPs from Wormbase WS254\n\n# Example of how to obtain known SNPs from WormBase WS254 (adjust URL if needed, assuming C. elegans)\n# wget -O \"${KNOWN_SNPS_VCF}\" ftp://ftp.wormbase.org/pub/wormbase/releases/WS254/species/c_elegans/PRJNA13758/variation/c_elegans.PRJNA13758.WS254.vcf.gz\n\n# Ensure the VCF files are indexed for faster processing\n# bcftools index \"${INPUT_VCF}\"\n# bcftools index \"${KNOWN_SNPS_VCF}\"\n\n# Step 1: Filter out known SNPs\n# Use 'bcftools isec' to output sites present in INPUT_VCF but NOT in KNOWN_SNPS_VCF.\n# -C: output sites unique to the first file\n# -w 1: output sites unique to the first file (redundant with -C but good for clarity)\n# -Oz: output gzipped VCF\n# -o: output file\nbcftools isec -C -w 1 \"${INPUT_VCF}\" \"${KNOWN_SNPS_VCF}\" -Oz -o temp_no_known_snps.vcf.gz\n\n# Step 2: Apply remaining filters on the VCF without known SNPs\n# -i: include sites that satisfy the expression\n# INFO/DP >= 5: Keep positions covered by at least 5 reads (assuming INFO/DP is the site-level depth)\n# (REF=\"A\" && ALT=\"G\" || REF=\"T\" && ALT=\"C\"): Keep only A-G or T-C transitions.\n#   (The term \"antisense\" here is interpreted as referring to these specific transition types regardless of strand, \n#    as A->G on sense is T->C on antisense, and T->C on sense is A->G on antisense.)\nbcftools view -i 'INFO/DP >= 5 && (REF=\"A\" && ALT=\"G\" || REF=\"T\" && ALT=\"C\")' \\\n             temp_no_known_snps.vcf.gz \\\n             -Oz -o filtered.vcf.gz\n\n# Clean up temporary file\nrm temp_no_known_snps.vcf.gz",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/bcftools"
+        },
+        {
+            "step_order": 11,
+            "description": "Variants were scored using a previously published bayesian method and filtered for those passing a 0.99 confidence parameter",
+            "tool_name": "FreeBayes (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.3.6",
+            "code_example": "# Install FreeBayes (if not already installed)\n# conda install -c bioconda freebayes\n\n# Install bcftools (if not already installed)\n# conda install -c bioconda bcftools\n\n# Define variables\nREFERENCE_GENOME=\"GRCh38.fa\" # Placeholder: Replace with actual reference genome path (e.g., /path/to/GRCh38.fa)\nINPUT_BAM=\"input.bam\"       # Placeholder: Replace with actual input BAM file path (e.g., /path/to/sample.bam)\nOUTPUT_RAW_VCF=\"raw_variants.vcf\"\nOUTPUT_FILTERED_VCF=\"filtered_variants.vcf\"\nCONFIDENCE_QUAL_THRESHOLD=20 # 0.99 confidence often translates to a Phred-scaled QUAL score of 20 (-10*log10(1-0.99))\n\n# Step 1: Score variants using FreeBayes (Bayesian method)\n# This command performs variant calling using a Bayesian model.\n# Adjust parameters like -q (min base quality), -m (min mapping quality), -C (min coverage) as needed.\nfreebayes -f \"${REFERENCE_GENOME}\" \"${INPUT_BAM}\" > \"${OUTPUT_RAW_VCF}\"\n\n# Step 2: Filter variants for those passing the 0.99 confidence parameter\n# Using bcftools to filter based on the QUAL score.\n# A QUAL score of 20 corresponds to a Phred-scaled probability of 1 - 10^(-20/10) = 1 - 10^-2 = 1 - 0.01 = 0.99.\nbcftools filter -i \"QUAL > ${CONFIDENCE_QUAL_THRESHOLD}\" \"${OUTPUT_RAW_VCF}\" -o \"${OUTPUT_FILTERED_VCF}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/freebayes/freebayes"
+        },
+        {
+            "step_order": 12,
+            "description": "Surviving variants from the Adr2- samples were filtered out.",
+            "tool_name": "bcftools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.19",
+            "code_example": "# Install bcftools if not already installed\n# conda install -c bioconda bcftools\n\n# Define input and output VCF files.\n# 'adr2_samples.vcf' is a placeholder for the VCF file containing variants from Adr2- samples.\nINPUT_VCF=\"adr2_samples.vcf\"\nOUTPUT_VCF=\"adr2_filtered_variants.vcf\"\n\n# Define a placeholder reference genome (e.g., GRCh38) if context requires it, \n# though not directly used by this specific bcftools filtering command.\n# REFERENCE_GENOME=\"GRCh38\"\n\n# Filter out variants. The description \"filtered out\" implies removing variants \n# that do not meet certain criteria. Here, we apply a common filter to keep \n# variants with a quality score (QUAL) greater than 30 and where the FILTER \n# field is either 'PASS' or not set ('.').\n# The -Oz flag compresses the output VCF with bgzip.\nbcftools view -i 'QUAL > 30 && (FILTER=\"PASS\" || FILTER=\".\")' \"${INPUT_VCF}\" -o \"${OUTPUT_VCF}\" -Oz\n\n# Index the filtered VCF file for quick access\nbcftools index \"${OUTPUT_VCF}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/bcftools"
+        },
+        {
+            "step_order": 13,
+            "description": "Variants were annotated using bedtools 2.26 on WS254 annotations, prioritized using the following: 3'UTR, 5'UTR, CDS, Intron, mRNA, piRNA, ncRNA, tRNA, pre-ncRNA, miRNA, snoRNA, pre_miRNA, lincRNA, snRNA, antisense RNA, rRNA, pre-miRNA, downstream from gene, upstream from gene, downstream noncoding RNA, upstream noncoding RNA and scRNA",
+            "tool_name": "bedtools",
+            "tool_version": "2.26",
+            "code_example": "# Install bedtools 2.26\n# conda install -c bioconda bedtools=2.26\n\n# Define input and annotation files\nVARIANTS_BED=\"variants.bed\" # Placeholder for your variant BED file (e.g., from variant calling)\n# WS254 annotations typically refer to a specific release from WormBase (e.g., C. elegans).\n# This file should contain genomic features in BED format, with a column indicating feature type (e.g., 4th column).\nWS254_ANNOTATIONS_BED=\"WS254_annotations.bed\" # Placeholder for WS254 annotations (e.g., downloaded from WormBase)\nOUTPUT_ANNOTATED_VARIANTS=\"annotated_variants_raw.bed\"\n\n# Annotate variants using bedtools intersect\n# -a: input variants (e.g., a BED file of variant coordinates)\n# -b: annotation features (e.g., WS254_annotations.bed)\n# -wao: write the original entry in A and the overlapping entry in B. If no overlap, B fields are set to '.'\n# This command will output each variant along with all overlapping features from the WS254 annotations.\nbedtools intersect -a \"${VARIANTS_BED}\" -b \"${WS254_ANNOTATIONS_BED}\" -wao > \"${OUTPUT_ANNOTATED_VARIANTS}\"\n\n# The following step involves prioritizing annotations based on the specified list:\n# 3'UTR, 5'UTR, CDS, Intron, mRNA, piRNA, ncRNA, tRNA, pre-ncRNA, miRNA, snoRNA, pre_miRNA, lincRNA, snRNA, antisense RNA, rRNA, pre-miRNA, downstream from gene, upstream from gene, downstream noncoding RNA, upstream noncoding RNA and scRNA\n# This prioritization typically requires a custom script (e.g., Python, Awk, or R) to parse the output\n# from bedtools intersect (\"${OUTPUT_ANNOTATED_VARIANTS}\") and apply the defined hierarchy.\n# The script would read each variant and its associated features, then select the highest-priority feature\n# based on the provided list.\n# Example (conceptual, assuming a Python script):\n# python prioritize_annotations.py \"${OUTPUT_ANNOTATED_VARIANTS}\" \"prioritized_variants.bed\" \\\n#   --priority_list \"3'UTR,5'UTR,CDS,Intron,mRNA,piRNA,ncRNA,tRNA,pre-ncRNA,miRNA,snoRNA,pre_miRNA,lincRNA,snRNA,antisense RNA,rRNA,pre-miRNA,downstream from gene,upstream from gene,downstream noncoding RNA,upstream noncoding RNA,scRNA\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/arq5x/bedtools2"
+        }
+    ],
+    "raw_text": "Reads were trimmed of adapter sequences TCGTATGCCGTCTTCTGCTTG, ATCTCGTATGCCGTCTTCTGCTTG, CGACAGGTTCAGAGTTCTACAGTCCGACGATC GATCGGAAGAGCACACGTCTGAACTCCAGTCAC using cutadapt v1.9.1\nTrimmed reads were aligned to RepBase v18.05 using STAR v2.4.01\nReads that didn't align to RepBase were aligned to ce11 using STAR v2.4.01\nFeaturecounts v1.5.0-p1 and DESeq2 were used to count and normalize genes for differential expression, respectively. Gene regions were described using WS254 (Wormbase) annotations.\nReads were removed of potential duplicates and combined respective to their WT or Adr condition for editing calls using samtools v1.3.1\nReads were filtered and removed using the following parameters: reads containing junction overhangs less than 10nt long, reads containing indels, reads containing mutations within 5nt of the 3' end, reads containing more than 1 non AG or TC antisense mutation\nReads were piled up using samtools 1.3.1 [-d 1000 -E -I -p -o -f -t DP,DV,DPR,INFO/DPR,DP4,SP]\nVariants were called using bcftools 1.2.1 [-O -c -A -i -v]\nVariants were filtered for and removed: known SNPs (wormbase WS254), positions covered by less than 5 reads, variants which were not A-G or T-C antisense\nVariants were scored using a previously published bayesian method and filtered for those passing a 0.99 confidence parameter\nSurviving variants from the Adr2- samples were filtered out.\nVariants were annotated using bedtools 2.26 on WS254 annotations, prioritized using the following: 3'UTR, 5'UTR, CDS, Intron, mRNA, piRNA, ncRNA, tRNA, pre-ncRNA, miRNA, snoRNA, pre_miRNA, lincRNA, snRNA, antisense RNA, rRNA, pre-miRNA, downstream from gene, upstream from gene, downstream noncoding RNA, upstream noncoding RNA and scRNA\nGenome_build: ce11\nSupplementary_files_format_and_content: diffexp.tsv contains DESeq2-processed differential expression results for WS254 wormbase genes between WT and Adr2- knockout conditions. editing_calls.tsv contains all annotated editing calls removed of adr2- false positives. GSF973-Hundley-SarahD-1_S1_R1_001.polyATrim.adapterTrim.rmRep.sorted.rg.bam, GSF973-Hundley-SarahD-3_S3_R1_001.polyATrim.adapterTrim.rmRep.sorted.rg.bam, and GSF973-Hundley-SarahD-6_S6_R1_001.polyATrim.adapterTrim.rmRep.sorted.rg.bam contain ce11-aligned reads pertaining to WT neural C elegan RNA. GSF973-Hundley-SarahD-2_S2_R1_001.polyATrim.adapterTrim.rmRep.sorted.rg.bam, GSF973-Hundley-SarahD-5_S5_R1_001.polyATrim.adapterTrim.rmRep.sorted.rg.bam, and GSF973-Hundley-SarahD-7_S7_R1_001.polyATrim.adapterTrim.rmRep.sorted.rg.bam contain ce11-aligned reads pertaining to adr2 knockout neural C elegan RNA.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

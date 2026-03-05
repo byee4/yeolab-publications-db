@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Base calling performed with bcl2fastq conversion software v2.17",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reads were aligned to hg19 genome using STAR v2.5.2b with the following configurations: --outFilterMultimapNmax 100; --outFilterMismatchNoverReadLmax 0.04",
-      "tool_name": "STAR",
-      "tool_version": "2.5.2b",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Genes and TE were quantified using TEcount (from TEtranscripts v2.0.3) with the following configurations: hg19 genic GTF from refGene (Jan 2018), custom hg19 TE GTF generated from repeatMasker; --stranded reverse",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Base calling performed with bcl2fastq conversion software v2.17\nReads were aligned to hg19 genome using STAR v2.5.2b with the following configurations: --outFilterMultimapNmax 100; --outFilterMismatchNoverReadLmax 0.04\nGenes and TE were quantified using TEcount (from TEtranscripts v2.0.3) with the following configurations: hg19 genic GTF from refGene (Jan 2018), custom hg19 TE GTF generated from repeatMasker; --stranded reverse\nGenome_build: hg19\nSupplementary_files_format_and_content: Individual count tables were generated as output from TEcount",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Base calling performed with bcl2fastq conversion software v2.17",
+            "tool_name": "bcl2fastq",
+            "tool_version": "2.17",
+            "code_example": "# Install bcl2fastq (example using conda, adjust as needed)\n# conda install -c bioconda bcl2fastq\n\n# Base calling performed with bcl2fastq conversion software v2.17\n# Replace /path/to/illumina/run/folder with the actual path to your BCL data\n# Replace /path/to/output/fastq with your desired output directory for FASTQ files\nbcl2fastq --runfolder-dir /path/to/illumina/run/folder --output-dir /path/to/output/fastq",
+            "code_language": "bash",
+            "github_url": "https://support.illumina.com/sequencing/sequencing_software/bcl2fastq-conversion-software.html"
+        },
+        {
+            "step_order": 2,
+            "description": "Reads were aligned to hg19 genome using STAR v2.5.2b with the following configurations: --outFilterMultimapNmax 100; --outFilterMismatchNoverReadLmax 0.04",
+            "tool_name": "STAR",
+            "tool_version": "2.5.2b",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star=2.5.2b\n\n# Placeholder for reference genome index\n# Ensure the hg19 STAR index is built and available at this path.\n# Example: STAR --runMode genomeGenerate --genomeDir /path/to/STAR_index/hg19 --genomeFastaFiles /path/to/hg19.fa --sjdbGTFfile /path/to/hg19.gtf --runThreadN <num_threads>\nHG19_STAR_INDEX=\"/path/to/STAR_index/hg19\"\n\n# Placeholder for input reads (e.g., a FASTQ file)\nINPUT_READS=\"input_reads.fastq.gz\" # Use \"input_reads_R1.fastq.gz input_reads_R2.fastq.gz\" for paired-end\n\n# Output prefix for alignment files\nOUTPUT_PREFIX=\"aligned_star_\"\n\nSTAR --genomeDir \"${HG19_STAR_INDEX}\" \\\n     --readFilesIn \"${INPUT_READS}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --outFilterMultimapNmax 100 \\\n     --outFilterMismatchNoverReadLmax 0.04 \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes Standard \\\n     --runThreadN 8 # Example: use 8 threads, adjust as needed\n\n# The primary output BAM file will be named: ${OUTPUT_PREFIX}Aligned.sortedByCoord.out.bam",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "Genes and TE were quantified using TEcount (from TEtranscripts v2.0.3) with the following configurations: hg19 genic GTF from refGene (Jan 2018), custom hg19 TE GTF generated from repeatMasker; --stranded reverse",
+            "tool_name": "TEcount (from TEtranscripts)",
+            "tool_version": "2.0.3",
+            "code_example": "# Install TEtranscripts (which includes TEcount) if not already installed\n# conda create -n tetranscripts python=3.7\n# conda activate tetranscripts\n# pip install TEtranscripts==2.0.3\n\n# Placeholder for input BAM file (e.g., aligned RNA-seq reads)\nINPUT_BAM=\"input_aligned_reads.bam\"\n# Placeholder for output prefix for quantification results\nOUTPUT_PREFIX=\"te_quantification_results\"\n\n# Reference GTF files based on description\n# hg19 genic GTF from refGene (Jan 2018)\nGENE_GTF=\"hg19_refgene_genic_jan2018.gtf\"\n# custom hg19 TE GTF generated from repeatMasker\nTE_GTF=\"hg19_repeatmasker_TEs.gtf\"\n\n# Execute TEcount with specified configurations\n# --mode union and --format BAM are common defaults for TEcount with BAM input\nTEcount --mode union --format BAM --stranded reverse -b \"${INPUT_BAM}\" -g \"${GENE_GTF}\" -t \"${TE_GTF}\" --out \"${OUTPUT_PREFIX}\"",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Base calling performed with bcl2fastq conversion software v2.17\nReads were aligned to hg19 genome using STAR v2.5.2b with the following configurations: --outFilterMultimapNmax 100; --outFilterMismatchNoverReadLmax 0.04\nGenes and TE were quantified using TEcount (from TEtranscripts v2.0.3) with the following configurations: hg19 genic GTF from refGene (Jan 2018), custom hg19 TE GTF generated from repeatMasker; --stranded reverse\nGenome_build: hg19\nSupplementary_files_format_and_content: Individual count tables were generated as output from TEcount",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

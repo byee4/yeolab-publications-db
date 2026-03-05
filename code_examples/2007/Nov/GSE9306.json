@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Sequences were extracted from 454 reads that had 10 bp of perfect match to the ligated adaptors (measuring from the 3' end of the 5' adaptor and 5' end of the 3' adaptor).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Contributed here are the unannotated sequence data from each library, including those sequences that did not match the mouse genome or any known non-coding RNAs.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Sequences were extracted from 454 reads that had 10 bp of perfect match to the ligated adaptors (measuring from the 3' end of the 5' adaptor and 5' end of the 3' adaptor).\nContributed here are the unannotated sequence data from each library, including those sequences that did not match the mouse genome or any known non-coding RNAs.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Sequences were extracted from 454 reads that had 10 bp of perfect match to the ligated adaptors (measuring from the 3' end of the 5' adaptor and 5' end of the 3' adaptor).",
+            "tool_name": "cutadapt (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "4.x",
+            "code_example": "# Install cutadapt (e.g., using conda)\n# conda install -c bioconda cutadapt\n\n# Define placeholder adaptor sequences for 454 reads.\n# These are common Roche 454 Titanium adaptors.\n# ADAPTOR_5_PRIME_END refers to the 5' adaptor sequence that might be at the 5' end of the read.\n# ADAPTOR_3_PRIME_END refers to the 3' adaptor sequence that might be at the 3' end of the read.\nADAPTOR_5_PRIME_END=\"GCCTCCCTCGCGCCATCAG\"\nADAPTOR_3_PRIME_END=\"GCCTTGCCAGCCCGCTCAG\"\n\n# Define input and output file names\nINPUT_FASTQ=\"raw_454_reads.fastq\"\nOUTPUT_FASTQ=\"trimmed_454_reads.fastq\"\n\n# Use cutadapt to trim adaptors from 454 reads.\n# -g: Trims the 5' adaptor (ADAPTOR_5_PRIME_END) from the 5' end of the read.\n# -a: Trims the 3' adaptor (ADAPTOR_3_PRIME_END) from the 3' end of the read.\n# -O 10: Requires a minimum overlap of 10 bp for a match to the adaptor sequence.\ncutadapt -g \"$ADAPTOR_5_PRIME_END\" -a \"$ADAPTOR_3_PRIME_END\" -O 10 -o \"$OUTPUT_FASTQ\" \"$INPUT_FASTQ\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 2,
+            "description": "Contributed here are the unannotated sequence data from each library, including those sequences that did not match the mouse genome or any known non-coding RNAs.",
+            "tool_name": "Samtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.17",
+            "code_example": "# Install Samtools\n# conda install -c bioconda samtools\n\n# Placeholder for input BAM file, which is assumed to be the result of\n# aligning raw sequences against the mouse genome and known non-coding RNAs.\n# Reads that did not match either reference are expected to be marked as unmapped (FLAG 0x4).\nINPUT_BAM=\"final_filtered_alignment.bam\"\nOUTPUT_UNANNOTATED_FASTQ=\"unannotated_sequences.fastq.gz\"\n\n# Extract reads marked as unmapped (FLAG 0x4) from the BAM file and convert them to FASTQ format.\n# These sequences represent the \"unannotated sequence data\" that did not match\n# the mouse genome or any known non-coding RNAs during upstream alignment/filtering.\nsamtools fastq -f 4 ${INPUT_BAM} > ${OUTPUT_UNANNOTATED_FASTQ}\n\n# Reference datasets used in upstream alignment/filtering (not directly in this Samtools step):\n# - Mouse genome: GRCm39 (Mus musculus) from sources like Ensembl or UCSC.\n# - Known non-coding RNAs: e.g., GRCm39 ncRNA from Ensembl, or Rfam database.",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        }
+    ],
+    "raw_text": "Sequences were extracted from 454 reads that had 10 bp of perfect match to the ligated adaptors (measuring from the 3' end of the 5' adaptor and 5' end of the 3' adaptor).\nContributed here are the unannotated sequence data from each library, including those sequences that did not match the mouse genome or any known non-coding RNAs.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

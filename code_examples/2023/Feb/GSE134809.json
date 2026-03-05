@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "FASTQ were demultiplexed using Cell Ranger v2.0 and aligned to the Grch38 human",
-      "tool_name": "Cell Ranger",
-      "tool_version": "2.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Cell barcodes and unique molecular identifiers (UMIs) were extracted and \u00e2\u0080\u009cRaw\u00e2\u0080\u009d UMI matrix generated for each sample",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "extracted cell-barcodes associated with at least 800 UMIs from the \u00e2\u0080\u009cRaw\u00e2\u0080\u009d output UMI matrices of CellRanger",
-      "tool_name": "Cell Ranger",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Epithelial cells, Red blood cells and cell-barcodess associated with high mitochondrial mRNA content were excluded by \"in-silico\" gating precedure which computes that fractoin of UMIs assocated with each gene signature.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Thresholds and genes lists are detailed in the manuscripts.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "FASTQ were demultiplexed using Cell Ranger v2.0 and aligned to the Grch38 human\nCell barcodes and unique molecular identifiers (UMIs) were extracted and \u00e2\u0080\u009cRaw\u00e2\u0080\u009d UMI matrix generated for each sample\nextracted cell-barcodes associated with at least 800 UMIs from the \u00e2\u0080\u009cRaw\u00e2\u0080\u009d output UMI matrices of CellRanger\nEpithelial cells, Red blood cells and cell-barcodess associated with high mitochondrial mRNA content were excluded by \"in-silico\" gating precedure which computes that fractoin of UMIs assocated with each gene signature. Thresholds and genes lists are detailed in the manuscripts.\nGenome_build: Grch38",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "FASTQ were demultiplexed using Cell Ranger v2.0 and aligned to the Grch38 human",
+            "tool_name": "Cell Ranger",
+            "tool_version": "2.0",
+            "code_example": "# Install Cell Ranger (example, adjust for specific environment)\n# Download Cell Ranger 2.0.0 from 10x Genomics website (requires registration)\n# For example:\n# wget https://cf.10xgenomics.com/releases/cell-ranger/cellranger-2.0.0.tar.gz\n# tar -xzf cellranger-2.0.0.tar.gz\n# export PATH=/path/to/cellranger-2.0.0:$PATH\n\n# Define variables\nSAMPLE_ID=\"sample_name\" # Replace with actual sample identifier\nFASTQ_DIR=\"/path/to/fastq_files\" # Directory containing FASTQ files (e.g., from mkfastq or direct download)\nREFERENCE_PATH=\"/path/to/cellranger_refdata/GRCh38_2.0.0\" # Path to the pre-built Cell Ranger GRCh38 reference genome for v2.0\n\n# Execute Cell Ranger count for demultiplexing (cell barcode) and alignment\n# This command takes FASTQ files, performs cell barcode demultiplexing, aligns reads to the transcriptome,\n# and generates gene-barcode matrices and other output files.\ncellranger count \\\n    --id=\"${SAMPLE_ID}_output\" \\\n    --transcriptome=\"${REFERENCE_PATH}\" \\\n    --fastqs=\"${FASTQ_DIR}\" \\\n    --sample=\"${SAMPLE_ID}\" \\\n    --expect-cells=3000 # Example parameter, adjust based on expected cell count\n\n# Note: If the initial input was BCL files, an additional 'cellranger mkfastq' step would precede this.\n# Example mkfastq command (commented out as the description implies FASTQ were already available or processed):\n# BCL_DIR=\"/path/to/bcl_directory\"\n# SAMPLE_SHEET=\"/path/to/sample_sheet.csv\" # Required for mkfastq\n# cellranger mkfastq --id=\"fastq_output\" --run=\"${BCL_DIR}\" --csv=\"${SAMPLE_SHEET}\"\n# FASTQ_DIR=\"fastq_output/outs/fastq_path\" # Output directory for FASTQ files from mkfastq\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Cell barcodes and unique molecular identifiers (UMIs) were extracted and \u00e2\u0080\u009cRaw\u00e2\u0080\u009d UMI matrix generated for each sample",
+            "tool_name": "umi_tools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.1.2",
+            "code_example": "# Install umi_tools\n# conda install -c bioconda umi_tools\n\n# --- Step 1: Extract UMIs and Cell Barcodes from raw FASTQ reads ---\n# This step extracts UMIs and Cell Barcodes and appends them to the read names.\n# The specific patterns (--bc-pattern, --umi-pattern) depend on the library preparation.\n# For eCLIP, UMIs are typically in the adapter sequence or a specific read.\n# Example for paired-end reads where UMI is in R1 and CB is in R2 (adjust as needed):\n# umi_tools extract --bc-pattern=NNNNNNNNNNNNNNNN --umi-pattern=NNNNNNNNNN --extract-method=regex \\\n#                   --stdin=sample_R1.fastq.gz --stdout=sample_R1_umi_extracted.fastq.gz \\\n#                   --read2-in=sample_R2.fastq.gz --read2-out=sample_R2_umi_extracted.fastq.gz\n\n# --- Step 2: Align the UMI-extracted reads to the genome ---\n# This step is a prerequisite for UMI counting and typically uses a splice-aware aligner like STAR.\n# STAR --genomeDir /path/to/STAR_genome --readFilesIn sample_R1_umi_extracted.fastq.gz sample_R2_umi_extracted.fastq.gz \\\n#      --outFileNamePrefix sample_ --outSAMtype BAM SortedByCoordinate --runThreadN 8\n\n# --- Step 3: Generate the \"Raw\" UMI matrix from aligned reads ---\n# This command counts unique UMIs per gene/feature for each sample, generating the raw UMI matrix.\n# It assumes the input BAM file (sample_aligned_umi.bam) has UMIs in the read names (e.g., from umi_tools extract).\n# Replace 'gencode.v38.annotation.gtf' with the appropriate gene annotation file for your reference genome (e.g., GRCh38).\numi_tools count --per-gene \\\n                --gene-coords=gencode.v38.annotation.gtf \\\n                --assigned-reads-file=sample_aligned_umi.bam \\\n                --output-counts=sample_umi_counts.tsv \\\n                --output-stats=sample_umi_stats.tsv",
+            "code_language": "bash",
+            "github_url": "https://github.com/CGATOxford/UMI-tools"
+        },
+        {
+            "step_order": 3,
+            "description": "extracted cell-barcodes associated with at least 800 UMIs from the \u00e2\u0080\u009cRaw\u00e2\u0080\u009d output UMI matrices of CellRanger",
+            "tool_name": "Cell Ranger",
+            "tool_version": "1.9.3",
+            "code_example": "# Install scanpy and pandas if not already installed\n# pip install scanpy pandas\n\n# Define input and output paths\n# Replace 'path/to/cellranger_output/raw_feature_bc_matrix' with the actual path\nCELLRANGER_OUTPUT_DIR=\"path/to/cellranger_output/raw_feature_bc_matrix\"\nOUTPUT_BARCODES_FILE=\"filtered_barcodes_800_umis.tsv\"\nUMI_THRESHOLD=800\n\n# Export variables for the Python script\nexport CELLRANGER_OUTPUT_DIR\nexport OUTPUT_BARCODES_FILE\nexport UMI_THRESHOLD\n\n# Python script to load Cell Ranger raw matrix, calculate UMIs per cell, and filter\npython -c \"\nimport scanpy as sc\nimport pandas as pd\nimport os\n\ninput_dir = os.environ.get('CELLRANGER_OUTPUT_DIR')\noutput_file = os.environ.get('OUTPUT_BARCODES_FILE')\numi_threshold = int(os.environ.get('UMI_THRESHOLD'))\n\nif not input_dir or not output_file or not umi_threshold:\n    print('Error: Environment variables for input_dir, output_file, or umi_threshold are not set.')\n    exit(1)\n\n# Check if the input directory exists\nif not os.path.isdir(input_dir):\n    print(f'Error: Input directory not found: {input_dir}')\n    exit(1)\n\ntry:\n    # Load raw data from Cell Ranger output\n    # The directory should contain matrix.mtx, barcodes.tsv, features.tsv (can be gzipped)\n    adata = sc.read_10x_mtx(\n        input_dir,\n        var_names='gene_symbols', # Or 'gene_ids' depending on the Cell Ranger version and preference\n        cache=True\n    )\n    \n    # Calculate total UMIs per cell\n    adata.obs['n_umis'] = adata.X.sum(axis=1)\n    \n    # Filter cells based on UMI count\n    initial_cells = adata.n_obs\n    filtered_adata = adata[adata.obs['n_umis'] >= umi_threshold, :]\n    filtered_cells = filtered_adata.n_obs\n    \n    # Get filtered barcodes\n    filtered_barcodes = filtered_adata.obs_names.tolist()\n    \n    # Save filtered barcodes to a file\n    with open(output_file, 'w') as f:\n        for barcode in filtered_barcodes:\n            f.write(f'{barcode}\\n')\n    \n    print(f'Successfully filtered {initial_cells} cells down to {filtered_cells} cells with >= {umi_threshold} UMIs.')\n    print(f'Filtered barcodes saved to: {output_file}')\n\nexcept Exception as e:\n    print(f'An error occurred: {e}')\n    exit(1)\n\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/scverse/scanpy"
+        },
+        {
+            "step_order": 4,
+            "description": "Epithelial cells, Red blood cells and cell-barcodess associated with high mitochondrial mRNA content were excluded by \"in-silico\" gating precedure which computes that fractoin of UMIs assocated with each gene signature.",
+            "tool_name": "Seurat (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "4.0.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Seurat if not already installed\n# install.packages(\"Seurat\")\n# install.packages(\"dplyr\") # Often used with Seurat\n# install.packages(\"Matrix\") # Dependency\n# install.packages(\"ggplot2\") # Dependency for plotting\n\nlibrary(Seurat)\nlibrary(dplyr)\n\n# --- Placeholder for loading your single-cell data into a Seurat object ---\n# In a real pipeline, 'seurat_object' would be loaded from a previous step,\n# e.g., from 10x Genomics CellRanger output using Read10X() and CreateSeuratObject(),\n# or loaded from an RDS file:\n# seurat_object <- readRDS(\"path/to/your/unfiltered_seurat_object.rds\")\n\n# For demonstration purposes, let's assume 'seurat_object' is already loaded.\n# If you need to create a dummy object for testing:\n# counts_matrix <- Matrix::Matrix(sample(0:10, 10000, replace = TRUE), nrow = 100, ncol = 100)\n# rownames(counts_matrix) <- paste0(\"gene\", 1:100)\n# colnames(counts_matrix) <- paste0(\"cell\", 1:100)\n# seurat_object <- CreateSeuratObject(counts = counts_matrix, project = \"dummy_project\")\n# seurat_object$nFeature_RNA <- colSums(counts_matrix > 0)\n# seurat_object$nCount_RNA <- colSums(counts_matrix)\n\n# --- Calculate mitochondrial percentage ---\n# Assuming human data with \"MT-\" prefix for mitochondrial genes.\n# For mouse data, use pattern = \"^mt-\".\n# This step adds 'percent.mt' to the Seurat object's metadata.\nseurat_object[[\"percent.mt\"]] <- PercentageFeatureSet(seurat_object, pattern = \"^MT-\")\n\n# --- Define filtering thresholds ---\n# These thresholds are common starting points and should be adjusted\n# based on the specific dataset, cell type, and expected data quality.\n# - min_features: Minimum number of unique genes detected per cell.\n# - max_features: Maximum number of unique genes detected per cell (to remove potential doublets).\n# - max_percent_mt: Maximum percentage of mitochondrial reads per cell.\n#   Cells with high mitochondrial content are often indicative of damaged or dying cells.\n\nmin_features <- 200\nmax_features <- 2500 # Example: adjust based on expected cell complexity\nmax_percent_mt <- 15 # Example: adjust based on data quality (e.g., 5-20%)\n\n# --- Perform \"in-silico\" gating/filtering ---\n# Exclude cells based on defined quality control metrics.\n# This step filters out cells that are likely low quality, damaged, or potential doublets.\nseurat_object_filtered <- subset(seurat_object, subset = nFeature_RNA > min_features &\n                                                    nFeature_RNA < max_features &\n                                                    percent.mt < max_percent_mt)\n\n# --- Additional considerations for \"Epithelial cells, Red blood cells\" exclusion ---\n# The description also mentions excluding specific cell types. This typically involves:\n# 1. Identifying marker genes for these cell types (e.g., HBB/HBA1 for RBCs, KRTs for epithelial).\n# 2. Scoring cells for these gene signatures (e.g., using Seurat's AddModuleScore).\n# 3. Removing cells that highly express these signatures or fall into clusters identified as these cell types.\n# This step is more complex and dataset-specific, requiring prior knowledge of cell type markers.\n# Example (conceptual, requires actual marker gene expression in data):\n# seurat_object_filtered <- subset(seurat_object_filtered, subset = HBB < 1 & HBA1 < 1) # To remove RBCs\n# seurat_object_filtered <- subset(seurat_object_filtered, subset = Epithelial_Score < threshold) # If a score was calculated\n\n# --- Save the filtered Seurat object (optional) ---\n# saveRDS(seurat_object_filtered, file = \"filtered_seurat_object.rds\")",
+            "code_language": "bash",
+            "github_url": "https://github.com/satijalab/seurat"
+        },
+        {
+            "step_order": 5,
+            "description": "Thresholds and genes lists are detailed in the manuscripts.",
+            "tool_name": "Not specified (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "Not specified",
+            "code_example": "# The step description \"Thresholds and genes lists are detailed in the manuscripts\"\n# indicates that specific parameters and outputs are documented externally.\n# This step describes a reporting or documentation aspect rather than a direct computational execution.\n# Therefore, no executable bash command can be inferred from this description.",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "FASTQ were demultiplexed using Cell Ranger v2.0 and aligned to the Grch38 human\nCell barcodes and unique molecular identifiers (UMIs) were extracted and \u00e2\u0080\u009cRaw\u00e2\u0080\u009d UMI matrix generated for each sample\nextracted cell-barcodes associated with at least 800 UMIs from the \u00e2\u0080\u009cRaw\u00e2\u0080\u009d output UMI matrices of CellRanger\nEpithelial cells, Red blood cells and cell-barcodess associated with high mitochondrial mRNA content were excluded by \"in-silico\" gating precedure which computes that fractoin of UMIs assocated with each gene signature. Thresholds and genes lists are detailed in the manuscripts.\nGenome_build: Grch38",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

@@ -1,16 +1,16 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Cell Ranger",
-      "tool_name": "Cell Ranger",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Cell Ranger\nGenome_build: hg19\nSupplementary_files_format_and_content: csv format that contains the umi count for each gene in each barcodes (cells)",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Cell Ranger",
+            "tool_name": "Cell Ranger",
+            "tool_version": "Not specified",
+            "code_example": "# Install Cell Ranger (example, adjust for specific environment and version)\n# Download Cell Ranger from the 10x Genomics website:\n# https://www.10xgenomics.com/support/software/cell-ranger/downloads\n# For example, to install version 8.0.0:\n# wget https://cf.10xgenomics.com/releases/cell-ranger/cellranger-8.0.0.tar.gz\n# tar -xzf cellranger-8.0.0.tar.gz\n# export PATH=/path/to/cellranger-8.0.0:$PATH\n\n# Reference Dataset: Cell Ranger requires a pre-built transcriptome reference.\n# This reference is typically generated once using the 'cellranger mkref' command\n# from a genome FASTA file and a gene annotation GTF file (e.g., from GENCODE or Ensembl).\n# As a placeholder, we'll assume a GRCh38 human transcriptome reference.\n# Example command to build a reference (replace paths and versions as needed):\n# cellranger mkref \\\n#     --genome=GRCh38_v8.0.0 \\\n#     --fasta=/path/to/GRCh38.primary_assembly.fa \\\n#     --genes=/path/to/gencode.v38.annotation.gtf \\\n#     --ref-version=8.0.0\n\n# Example: Run cellranger count for a single-cell RNA-seq experiment.\n# Replace 'sample_id', '/path/to/fastqs', and '/path/to/transcriptome_ref' with actual values.\n# The '--transcriptome' argument should point to the directory created by 'cellranger mkref'.\ncellranger count \\\n    --id=sample_id_output \\\n    --transcriptome=/path/to/cellranger_ref/GRCh38_v8.0.0 \\\n    --fastqs=/path/to/fastqs \\\n    --sample=sample_id \\\n    --localcores=16 \\\n    --localmem=64\n",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Cell Ranger\nGenome_build: hg19\nSupplementary_files_format_and_content: csv format that contains the umi count for each gene in each barcodes (cells)",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

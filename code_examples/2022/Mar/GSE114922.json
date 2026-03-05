@@ -1,70 +1,70 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Real time Analysis (RTA): HiSeq 4000 - RTA v2.73, HCS v3.3.52",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Base-calling: bcl2fastq v2.17.1.14",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Adapter trimming: RNA-seq reads were trimmed for SMARTer and Illumina adapter sequences using skewer-v0.1.125",
-      "tool_name": "RNA-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Alignment: Reads in gzipped fastq format were aligned using Hisat2 version-2.0.0-beta with default parameters to a modified reference genome comprising the human genome, Homo sapiens GRCh37 - human_g1k_v37, and fasta sequences for ERCC spike-ins",
-      "tool_name": "HISAT2",
-      "tool_version": "2.0.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Mark Duplicates: Duplicate reads were marked using MarkDuplicates.jar implemented in Picard tools v1.92",
-      "tool_name": "Picard",
-      "tool_version": "1.92",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Read counts (abundance measurement): Reads mapping uniquely to genes annotated in ENSEMBL release 76 were counted using featureCounts implemented in subread-v1.5.0",
-      "tool_name": "featureCounts",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Normalized Counts: Read counts were normalized to counts per million (CPM) and Transcripts per Million (TPM) by dividing each gene-count by total reads mapped (uniquely mapped to exonic regions) per million and using ENSEMBL annotated read-lengths",
-      "tool_name": "Ensembl",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Real time Analysis (RTA):  HiSeq 4000 - RTA v2.73, HCS v3.3.52\nBase-calling: bcl2fastq v2.17.1.14\nAdapter trimming: RNA-seq reads were trimmed for SMARTer and Illumina  adapter sequences using skewer-v0.1.125\nAlignment: Reads in gzipped fastq format were aligned using Hisat2 version-2.0.0-beta with default parameters to a modified reference genome comprising the human genome, Homo sapiens GRCh37 - human_g1k_v37, and fasta sequences for ERCC spike-ins\nMark Duplicates: Duplicate reads were marked using MarkDuplicates.jar implemented in Picard tools v1.92\nRead counts (abundance measurement): Reads mapping uniquely to genes annotated in ENSEMBL release 76 were counted using featureCounts implemented in subread-v1.5.0\nNormalized Counts: Read counts were normalized to counts per million (CPM) and Transcripts per Million (TPM) by dividing each gene-count by total reads mapped (uniquely mapped to exonic regions) per million and using ENSEMBL annotated read-lengths\nGenome_build: GRCh37\nSupplementary_files_format_and_content: Count_table.txt: raw read counts for all 63677 ENSEMBL annotated genes\nSupplementary_files_format_and_content: CPM_table.txt:  Counts per million normalized counts all 63677 ENSEMBL annotated genes\nSupplementary_files_format_and_content: TPM_table.txt:  Transcripts per million (gene-length and sequencing depth normalized counts) all 63677 ENSEMBL annotated genes\nSupplementary_files_format_and_content: Text",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Real time Analysis (RTA): HiSeq 4000 - RTA v2.73, HCS v3.3.52",
+            "tool_name": "RTA",
+            "tool_version": "v2.73",
+            "code_example": "bash\n# Real Time Analysis (RTA) is proprietary software embedded in Illumina sequencing instruments.\n# It performs base calling and quality scoring during the sequencing run.\n# This step is typically controlled via the instrument's graphical user interface (GUI)\n# and does not involve direct command-line execution by a user in a typical bioinformatics pipeline.\n\n# The versions specified are:\n# RTA: v2.73\n# HCS (HiSeq Control Software): v3.3.52\n\n# No direct bash command for execution is available as it's an instrument-level process.\n# The output of RTA (e.g., BCL files) is then used as input for downstream bioinformatics tools.\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Base-calling: bcl2fastq v2.17.1.14",
+            "tool_name": "bcl2fastq",
+            "tool_version": "2.17.1.14",
+            "code_example": "# Install bcl2fastq (example using conda)\n# conda create -n bcl2fastq_env bcl2fastq=2.17.1.14 -c bioconda -c conda-forge\n# conda activate bcl2fastq_env\n\n# Define input and output directories\nINPUT_RUN_FOLDER=\"/path/to/illumina/run_folder\"\nOUTPUT_FASTQ_DIR=\"/path/to/output/fastq_files\"\nSAMPLE_SHEET=\"/path/to/sample_sheet.csv\" # Required for demultiplexing\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_FASTQ_DIR}\"\n\n# Execute bcl2fastq\n# This command converts BCL files from the run folder into FASTQ files,\n# performing demultiplexing based on the provided sample sheet.\n# Common parameters include:\n# --runfolder-dir: Path to the Illumina run folder containing BCL files.\n# --output-dir: Path where the generated FASTQ files will be stored.\n# --sample-sheet: Path to the sample sheet CSV file for demultiplexing.\n# --no-lane-splitting: Prevents splitting output by lane (often preferred).\n# -r, -w, -p: Number of threads for reading, writing, and processing (example values).\nbcl2fastq --runfolder-dir \"${INPUT_RUN_FOLDER}\" \\\n          --output-dir \"${OUTPUT_FASTQ_DIR}\" \\\n          --sample-sheet \"${SAMPLE_SHEET}\" \\\n          --no-lane-splitting \\\n          --minimum-trimmed-read-length 0 \\\n          --mask-short-adapter-reads 0 \\\n          -r 8 -w 8 -p 8",
+            "code_language": "bash",
+            "github_url": "https://anaconda.org/bioconda/bcl2fastq"
+        },
+        {
+            "step_order": 3,
+            "description": "Adapter trimming: RNA-seq reads were trimmed for SMARTer and Illumina adapter sequences using skewer-v0.1.125",
+            "tool_name": "RNA-seq",
+            "tool_version": "0.1.125",
+            "code_example": "# Install skewer (example using conda)\n# conda install -c bioconda skewer=0.1.125\n\n# Define input and output files (assuming paired-end RNA-seq)\nINPUT_R1=\"input_R1.fastq.gz\"\nINPUT_R2=\"input_R2.fastq.gz\"\nOUTPUT_PREFIX=\"trimmed_reads\"\nADAPTER_FILE=\"smarter_illumina_adapters.fasta\" # Placeholder for a FASTA file containing SMARTer and Illumina adapter sequences\n\n# Example content for smarter_illumina_adapters.fasta:\n# >SMARTer_Adapter_Sequence_1\n# AAGCAGTGGTATCAACGCAGAGTACATGGGG\n# >Illumina_Universal_Adapter_Sequence_1\n# AATGATACGGCGACCACCGAGATCTACACTCTTTCCCTACACGACGCTCTTCCGATCT\n# (Add all relevant SMARTer and Illumina adapter sequences here)\n\n# Run skewer for adapter trimming\n# -x: Path to a FASTA file containing adapter sequences to be trimmed\n# -l: Minimum read length after trimming (e.g., 20 bp, common for RNA-seq)\n# -q: Minimum quality score for quality trimming (e.g., 20, common)\n# -m pe: Paired-end mode (use '-m se' for single-end if applicable)\n# -o: Output file prefix. Skewer will append '-trimmed-pair1.fastq.gz' and '-trimmed-pair2.fastq.gz' for paired-end.\nskewer -x \"${ADAPTER_FILE}\" -l 20 -q 20 -m pe -o \"${OUTPUT_PREFIX}\" \"${INPUT_R1}\" \"${INPUT_R2}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/relipmoc/skewer"
+        },
+        {
+            "step_order": 4,
+            "description": "Alignment: Reads in gzipped fastq format were aligned using Hisat2 version-2.0.0-beta with default parameters to a modified reference genome comprising the human genome, Homo sapiens GRCh37 - human_g1k_v37, and fasta sequences for ERCC spike-ins",
+            "tool_name": "HISAT2",
+            "tool_version": "2.0.0",
+            "code_example": "# Install HISAT2\n# conda install -c bioconda hisat2=2.0.0 samtools\n\n# --- Reference Preparation ---\n# Placeholder for human reference genome GRCh37 (human_g1k_v37) FASTA file.\n# This file can be obtained from sources like the GATK resource bundle or UCSC.\n# Example: wget -O human_g1k_v37.fasta.gz \"ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/reference/human_g1k_v37.fasta.gz\"\n# gunzip human_g1k_v37.fasta.gz\n\n# Placeholder for ERCC spike-in sequences FASTA file.\n# This file can be obtained from Thermo Fisher Scientific.\n# Example: wget -O ERCC_Controls_Analysis.zip \"https://assets.thermofisher.com/TFS-Assets/LSG/manuals/ERCC_Controls_Analysis.zip\"\n# unzip ERCC_Controls_Analysis.zip\n# mv ERCC92.fasta ercc_spikeins.fasta\n\n# Combine human and ERCC reference sequences into a single FASTA file\ncat human_g1k_v37.fasta ercc_spikeins.fasta > combined_reference.fasta\n\n# Build HISAT2 index for the combined reference genome\n# -p: number of threads to use for index building (e.g., 8)\nhisat2-build -p 8 combined_reference.fasta combined_reference_index\n\n# --- Alignment ---\n# Define input FASTQ files (assuming paired-end reads in gzipped format)\n# Replace 'sample_R1.fastq.gz' and 'sample_R2.fastq.gz' with actual input file names\nREADS_R1=\"sample_R1.fastq.gz\"\nREADS_R2=\"sample_R2.fastq.gz\"\nOUTPUT_SAM=\"sample.sam\"\n\n# Align reads using HISAT2 with default parameters to the modified reference genome\n# -x: basename of the HISAT2 index\n# -1: comma-separated list of files containing upstream mates (paired-end)\n# -2: comma-separated list of files containing downstream mates (paired-end)\n# -S: file to write SAM alignments to\n# --threads: number of threads to use for alignment (e.g., 8, common optimization for performance)\nhisat2 -x combined_reference_index -1 \"${READS_R1}\" -2 \"${READS_R2}\" -S \"${OUTPUT_SAM}\" --threads 8\n\n# --- Post-alignment processing (optional, often separate pipeline steps) ---\n# Convert SAM to BAM format\n# samtools view -bS \"${OUTPUT_SAM}\" > \"${OUTPUT_SAM%.sam}.bam\"\n\n# Sort the BAM file by coordinate\n# samtools sort \"${OUTPUT_SAM%.sam}.bam\" -o \"${OUTPUT_SAM%.sam}.sorted.bam\"\n\n# Index the sorted BAM file\n# samtools index \"${OUTPUT_SAM%.sam}.sorted.bam\"\n\n# Remove intermediate SAM file\n# rm \"${OUTPUT_SAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/DaehwanKimLab/hisat2"
+        },
+        {
+            "step_order": 5,
+            "description": "Mark Duplicates: Duplicate reads were marked using MarkDuplicates.jar implemented in Picard tools v1.92",
+            "tool_name": "Picard",
+            "tool_version": "1.92",
+            "code_example": "# Install Picard (if not already installed)\n# conda install -c bioconda picard\n\n# Example usage of MarkDuplicates.jar from Picard tools v1.92\n# This command marks duplicate reads in an input BAM file.\n# Replace 'input.bam', 'output.bam', and 'markduplicates_metrics.txt' with your actual file names.\n# Replace '/path/to/picard.jar' with the actual path to your Picard JAR file.\n\njava -jar /path/to/picard.jar MarkDuplicates \\\n    I=input.bam \\\n    O=output.bam \\\n    M=markduplicates_metrics.txt \\\n    VALIDATION_STRINGENCY=SILENT",
+            "code_language": "bash",
+            "github_url": "https://github.com/broadinstitute/picard"
+        },
+        {
+            "step_order": 6,
+            "description": "Read counts (abundance measurement): Reads mapping uniquely to genes annotated in ENSEMBL release 76 were counted using featureCounts implemented in subread-v1.5.0",
+            "tool_name": "featureCounts",
+            "tool_version": "1.5.0",
+            "code_example": "# Install subread (which includes featureCounts)\n# conda install -c bioconda subread=1.5.0\n\n# Placeholder for ENSEMBL release 76 GTF file (e.g., for Homo sapiens GRCh38)\n# Ensembl release 76 for human corresponds to GRCh38.\n# Download from Ensembl archives: ftp://ftp.ensembl.org/pub/release-76/gtf/homo_sapiens/Homo_sapiens.GRCh38.76.gtf.gz\nENSEMBL_GTF=\"Homo_sapiens.GRCh38.76.gtf\" # Placeholder path to unzipped GTF\n\n# Input BAM file (aligned reads)\nINPUT_BAM=\"aligned_reads.bam\" # Placeholder path to the alignment file\n\n# Output counts file\nOUTPUT_COUNTS=\"gene_counts.txt\"\n\n# Count reads mapping uniquely to genes using featureCounts\n# -a: Annotation file (GTF/GFF) containing gene features (or exons with gene_id attribute)\n# -o: Output file for counts\n# By default, featureCounts counts uniquely mapped reads and aggregates to gene_id from exon features.\nfeatureCounts -a \"${ENSEMBL_GTF}\" \\\n              -o \"${OUTPUT_COUNTS}\" \\\n              \"${INPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 7,
+            "description": "Normalized Counts: Read counts were normalized to counts per million (CPM) and Transcripts per Million (TPM) by dividing each gene-count by total reads mapped (uniquely mapped to exonic regions) per million and using ENSEMBL annotated read-lengths",
+            "tool_name": "Ensembl",
+            "tool_version": "N/A",
+            "code_example": "# --- Installation (commented out) ---\n# It is recommended to use a virtual environment or conda for package management.\n# conda create -n normalization_env python=3.9 pandas gtfparse\n# conda activate normalization_env\n# pip install gtfparse pandas\n\n# --- Reference Data Setup ---\n# Download Ensembl GTF annotation file (e.g., Homo sapiens GRCh38, release 109)\n# wget http://ftp.ensembl.org/pub/release-109/gtf/homo_sapiens/Homo_sapiens.GRCh38.109.gtf.gz\n# gunzip Homo_sapiens.GRCh38.109.gtf.gz\nGTF_FILE=\"Homo_sapiens.GRCh38.109.gtf\"\nGENE_LENGTHS_FILE=\"ensembl_gene_lengths_GRCh38.txt\"\n\n# Python script to parse GTF and calculate gene lengths (sum of exon lengths per gene)\n# This script should be saved as parse_gtf_for_gene_lengths.py\ncat << 'EOF' > parse_gtf_for_gene_lengths.py\nimport gtfparse\nimport pandas as pd\nimport sys\n\nGTF_FILE = sys.argv[1]\nOUTPUT_GENE_LENGTHS_FILE = sys.argv[2]\n\n# Load GTF\ngtf_df = gtfparse.read_gtf(GTF_FILE)\n\n# Filter for exons and calculate length\nexons_df = gtf_df[gtf_df['feature'] == 'exon']\nexons_df['length'] = exons_df['end'] - exons_df['start'] + 1\n\n# Sum lengths of all exons associated with each gene_id.\n# Note: This is a common approximation for 'gene length' in TPM calculations.\n# More sophisticated methods might consider the union of exonic regions or effective lengths.\ngene_lengths = exons_df.groupby('gene_id')['length'].sum().reset_index()\ngene_lengths.columns = ['gene_id', 'gene_length']\n\ngene_lengths.to_csv(OUTPUT_GENE_LENGTHS_FILE, sep='\\t', index=False, header=False)\nprint(f\"Gene lengths saved to {OUTPUT_GENE_LENGTHS_FILE}\")\nEOF\n\npython parse_gtf_for_gene_lengths.py \"$GTF_FILE\" \"$GENE_LENGTHS_FILE\"\n\n# --- Simulate Input Data (replace with actual pipeline outputs) ---\n# Assuming 'gene_counts.txt' is the output from a tool like featureCounts or HTSeq-count.\n# It should contain gene IDs and raw read counts.\n# Example content:\n# ENSG00000000003\\t1000\n# ENSG00000000005\\t500\n# ENSG00000000419\\t2000\n# ...\n\n# Create a dummy gene_counts.txt for demonstration\necho -e \"ENSG00000000003\\t1000\" > gene_counts.txt\necho -e \"ENSG00000000005\\t500\" >> gene_counts.txt\necho -e \"ENSG00000000419\\t2000\" >> gene_counts.txt\n\n# Assuming 'gene_counts.txt.summary' is the summary file from featureCounts\n# It contains total assigned reads, which are 'uniquely mapped to exonic regions'.\n# Create a dummy summary file for demonstration\necho -e \"Assigned\\t10000000\" > gene_counts.txt.summary\necho -e \"Unassigned_NoFeatures\\t500000\" >> gene_counts.txt.summary\necho -e \"Unassigned_Ambiguity\\t100000\" >> gene_counts.txt.summary\n\nTOTAL_MAPPED_READS_FILE=\"total_exonic_mapped_reads.txt\"\n# Extract total uniquely mapped reads to exonic regions from the summary file\nTOTAL_MAPPED_READS=$(awk '$1 == \"Assigned\" {print $2}' gene_counts.txt.summary)\necho \"$TOTAL_MAPPED_READS\" > \"$TOTAL_MAPPED_READS_FILE\"\n\n# --- Main Normalization Script ---\n# This Python script performs CPM and TPM calculations as described.\n# It should be saved as normalize_counts.py\ncat << 'EOF' > normalize_counts.py\nimport pandas as pd\nimport sys\n\nGENE_COUNTS_FILE = sys.argv[1]\nGENE_LENGTHS_FILE = sys.argv[2]\nTOTAL_MAPPED_READS_FILE = sys.argv[3]\nOUTPUT_FILE = sys.argv[4]\n\n# Load gene counts\ncounts_df = pd.read_csv(GENE_COUNTS_FILE, sep='\\t', header=None, names=['gene_id', 'raw_count'])\n\n# Load gene lengths from Ensembl annotation\nlengths_df = pd.read_csv(GENE_LENGTHS_FILE, sep='\\t', header=None, names=['gene_id', 'gene_length'])\n\n# Load total uniquely mapped reads to exonic regions\nwith open(TOTAL_MAPPED_READS_FILE, 'r') as f:\n    total_mapped_reads = int(f.read().strip())\n\n# Merge counts and lengths\nmerged_df = pd.merge(counts_df, lengths_df, on='gene_id', how='left')\n\n# Calculate CPM: (gene_count / total_mapped_reads) * 1,000,000\nmerged_df['CPM'] = (merged_df['raw_count'] / total_mapped_reads) * 1_000_000\n\n# Prepare for TPM calculation: only consider genes with length information\nmerged_df_tpm = merged_df.dropna(subset=['gene_length']).copy()\nmerged_df_tpm['gene_length'] = merged_df_tpm['gene_length'].astype(int)\n\n# Calculate RPK (Reads Per Kilobase): raw_count / (gene_length / 1000)\nmerged_df_tpm['RPK'] = merged_df_tpm['raw_count'] / (merged_df_tpm['gene_length'] / 1000)\n\n# Calculate scaling factor: sum of all RPKs / 1,000,000\nscaling_factor = merged_df_tpm['RPK'].sum() / 1_000_000\n\n# Calculate TPM: RPK / scaling_factor\nmerged_df_tpm['TPM'] = merged_df_tpm['RPK'] / scaling_factor\n\n# Merge TPM back into the main dataframe, filling NaN for genes without length (if any)\nfinal_df = pd.merge(merged_df, merged_df_tpm[['gene_id', 'TPM']], on='gene_id', how='left')\n\n# Output results\nfinal_df[['gene_id', 'raw_count', 'CPM', 'TPM']].to_csv(OUTPUT_FILE, sep='\\t', index=False)\n\nprint(f\"Normalized counts saved to {OUTPUT_FILE}\")\nEOF\n\npython normalize_counts.py gene_counts.txt \"$GENE_LENGTHS_FILE\" \"$TOTAL_MAPPED_READS_FILE\" normalized_counts.tsv",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Real time Analysis (RTA):  HiSeq 4000 - RTA v2.73, HCS v3.3.52\nBase-calling: bcl2fastq v2.17.1.14\nAdapter trimming: RNA-seq reads were trimmed for SMARTer and Illumina  adapter sequences using skewer-v0.1.125\nAlignment: Reads in gzipped fastq format were aligned using Hisat2 version-2.0.0-beta with default parameters to a modified reference genome comprising the human genome, Homo sapiens GRCh37 - human_g1k_v37, and fasta sequences for ERCC spike-ins\nMark Duplicates: Duplicate reads were marked using MarkDuplicates.jar implemented in Picard tools v1.92\nRead counts (abundance measurement): Reads mapping uniquely to genes annotated in ENSEMBL release 76 were counted using featureCounts implemented in subread-v1.5.0\nNormalized Counts: Read counts were normalized to counts per million (CPM) and Transcripts per Million (TPM) by dividing each gene-count by total reads mapped (uniquely mapped to exonic regions) per million and using ENSEMBL annotated read-lengths\nGenome_build: GRCh37\nSupplementary_files_format_and_content: Count_table.txt: raw read counts for all 63677 ENSEMBL annotated genes\nSupplementary_files_format_and_content: CPM_table.txt:  Counts per million normalized counts all 63677 ENSEMBL annotated genes\nSupplementary_files_format_and_content: TPM_table.txt:  Transcripts per million (gene-length and sequencing depth normalized counts) all 63677 ENSEMBL annotated genes\nSupplementary_files_format_and_content: Text",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

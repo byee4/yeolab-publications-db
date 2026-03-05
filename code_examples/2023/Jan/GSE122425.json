@@ -1,52 +1,52 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Bcl2fastq (v2.17.1.14) used for basecalling.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "3\u00e2\u0080\u0099 adaptor-trimming and low quality reads removing by Cutadapt\u00ef\u00bc\u0088version 1.9.1\u00ef\u00bc\u0089",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "The high quality trimmed reads (clean reads) were aligned to the human reference genome (UCSC HG19) using Hisat2(v2.0.1).",
-      "tool_name": "HISAT2",
-      "tool_version": "2.0.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Reads Per Kilobase of exon per Megabase of library size (RPKM) were calculated using Htseq (V0.6.1).",
-      "tool_name": "HTSeq",
-      "tool_version": "0.6.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Differential expression analysis used the DESeq2 (V1.6.3).",
-      "tool_name": "DESeq2",
-      "tool_version": "1.6.3",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Bcl2fastq (v2.17.1.14) used for basecalling.\n3\u00e2\u0080\u0099 adaptor-trimming and low quality reads removing by Cutadapt\u00ef\u00bc\u0088version 1.9.1\u00ef\u00bc\u0089\nThe high quality trimmed reads (clean reads) were aligned to the human reference genome (UCSC HG19) using Hisat2(v2.0.1).\nReads Per Kilobase of exon per Megabase of library size (RPKM) were calculated using Htseq (V0.6.1).\nDifferential expression analysis used the DESeq2 (V1.6.3).\nGenome_build: HG19\nSupplementary_files_format_and_content: Excel files include RPKM values for each Sample",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Bcl2fastq (v2.17.1.14) used for basecalling.",
+            "tool_name": "Bcl2fastq",
+            "tool_version": "2.17.1.14",
+            "code_example": "# Install bcl2fastq (example using conda)\n# conda install -c bioconda bcl2fastq2\n\n# Define input and output directories\nBCL_INPUT_DIR=\"/path/to/your/bcl_run_folder\" # Replace with the actual path to your Illumina run folder\nOUTPUT_DIR=\"/path/to/your/output_fastq_folder\" # Replace with your desired output directory\n\n# Execute bcl2fastq for basecalling and demultiplexing\n# A sample sheet (SampleSheet.csv) is often required in the run folder or specified with --sample-sheet\nbcl2fastq --runfolder-dir \"$BCL_INPUT_DIR\" \\\n          --output-dir \"$OUTPUT_DIR\"",
+            "code_language": "bash",
+            "github_url": "https://support.illumina.com/sequencing/sequencing_software/bcl2fastq-conversion-software.html"
+        },
+        {
+            "step_order": 2,
+            "description": "3\u00e2\u0080\u0099 adaptor-trimming and low quality reads removing by Cutadapt\u00ef\u00bc\u0088version 1.9.1\u00ef\u00bc\u0089",
+            "tool_name": "Cutadapt",
+            "tool_version": "1.9.1",
+            "code_example": "# Install Cutadapt (version 1.9.1)\n# conda install -c bioconda cutadapt=1.9.1\n\n# Define input and output file paths\nINPUT_FASTQ=\"input_reads.fastq.gz\"\nOUTPUT_FASTQ=\"trimmed_reads.fastq.gz\"\n\n# Define the 3' adaptor sequence (replace with the actual adaptor used in the experiment)\n# Common Illumina 3' adaptor for eCLIP might be similar to: AGATCGGAAGAGCACACGTCTGAACTCCAGTCACNNNNNNNNATCTCGTATGCCGTCTTCTGCTTG\nADAPTOR_SEQUENCE=\"ADAPTOR_SEQUENCE_PLACEHOLDER\"\n\n# Define quality threshold and minimum read length\nQUALITY_THRESHOLD=20 # Phred quality score threshold\nMIN_READ_LENGTH=15   # Minimum length for reads after trimming\n\n# Run Cutadapt for 3' adaptor trimming and low quality read removal\ncutadapt -a \"${ADAPTOR_SEQUENCE}\" \\\n         -q ${QUALITY_THRESHOLD} \\\n         -m ${MIN_READ_LENGTH} \\\n         -o \"${OUTPUT_FASTQ}\" \\\n         \"${INPUT_FASTQ}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 3,
+            "description": "The high quality trimmed reads (clean reads) were aligned to the human reference genome (UCSC HG19) using Hisat2(v2.0.1).",
+            "tool_name": "HISAT2",
+            "tool_version": "2.0.1",
+            "code_example": "# Install HISAT2 (if not already installed)\n# conda install -c bioconda hisat2=2.0.1\n\n# Define input and output files\nREAD1=\"clean_reads_R1.fastq.gz\" # Placeholder for high quality trimmed read file 1\nREAD2=\"clean_reads_R2.fastq.gz\" # Placeholder for high quality trimmed read file 2\nOUTPUT_SAM=\"aligned_reads.sam\" # Output SAM file\n\n# Define the path to the HISAT2 index for UCSC HG19\n# This index needs to be pre-built or downloaded. \n# To build the index, first download the hg19 reference genome FASTA file (e.g., from UCSC):\n# wget https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.fa.gz\n# gunzip hg19.fa.gz\n# Then build the HISAT2 index:\n# hisat2-build hg19.fa path/to/hisat2_indices/hg19\nHISAT2_INDEX=\"path/to/hisat2_indices/hg19\" # Placeholder for the base name of the hg19 HISAT2 index\n\n# Run HISAT2 alignment\nhisat2 -x \"${HISAT2_INDEX}\" -1 \"${READ1}\" -2 \"${READ2}\" -S \"${OUTPUT_SAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/DaehwanKimLab/hisat2"
+        },
+        {
+            "step_order": 4,
+            "description": "Reads Per Kilobase of exon per Megabase of library size (RPKM) were calculated using Htseq (V0.6.1).",
+            "tool_name": "HTSeq",
+            "tool_version": "0.6.1",
+            "code_example": "# Install HTSeq (if not already installed)\n# conda install -c bioconda htseq\n\n# Define input and reference files\nINPUT_BAM=\"input_aligned_reads.bam\" # Replace with your actual aligned BAM file\nGTF_FILE=\"Homo_sapiens.GRCh38.111.gtf\" # Placeholder: Replace with your specific GTF annotation file (e.g., from Ensembl or GENCODE)\nOUTPUT_COUNTS_FILE=\"htseq_exon_counts.txt\"\n\n# Run htseq-count to get raw exon counts\n# -f bam: Input file format is BAM\n# -r pos: Assume input BAM is sorted by position (common for aligners like STAR, HISAT2)\n# -s no: Strandedness (can be 'yes', 'reverse', 'no'). 'no' is a common default if not specified.\n# -a 10: Minimum alignment quality score (default is 10)\n# -t exon: Feature type to count (as specified in the description \"Reads Per Kilobase of exon\")\n# -i gene_id: Attribute in the GTF file to use as the feature identifier\nhtseq-count -f bam -r pos -s no -a 10 -t exon -i gene_id \"${INPUT_BAM}\" \"${GTF_FILE}\" > \"${OUTPUT_COUNTS_FILE}\"\n\n# RPKM calculation is a post-processing step after obtaining raw counts.\n# HTSeq itself calculates raw counts, not RPKM directly.\n# RPKM (Reads Per Kilobase of exon per Megabase of library size) is calculated as:\n# RPKM = (raw_exon_counts * 10^9) / (exon_length_in_bases * total_mapped_reads_in_library)\n#\n# To perform this calculation, you would typically:\n# 1. Extract exon lengths from the GTF file (e.g., using a custom script or tool like gffread/gffutils).\n# 2. Get the total number of mapped reads from the BAM file (e.g., using samtools flagstat) or from the htseq-count summary.\n# 3. Use a custom script (e.g., Python, R) to combine counts, lengths, and total reads to compute RPKM.\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/simon-anders/htseq"
+        },
+        {
+            "step_order": 5,
+            "description": "Differential expression analysis used the DESeq2 (V1.6.3).",
+            "tool_name": "DESeq2",
+            "tool_version": "1.6.3",
+            "code_example": "# Install Bioconductor and DESeq2 if not already installed\n# Note: Version 1.6.3 is quite old. Current BiocManager might install a newer version.\n# To install a specific older version, you might need to use an older Bioconductor release.\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\")'\n# R -e 'BiocManager::install(\"DESeq2\", version = \"3.0\")' # Example for Bioconductor 3.0, which corresponds to DESeq2 v1.6.3\n\n# Create an R script for DESeq2 analysis\ncat << 'EOF' > run_deseq2.R\n# Load DESeq2 library\nlibrary(DESeq2)\n\n# --- Configuration ---\n# Input count matrix file (e.g., from featureCounts, HTSeq-count, Salmon, Kallisto)\n# Rows are genes/features, columns are samples. First column should be gene IDs.\ncount_file <- \"counts.tsv\" # Placeholder: Replace with your actual count matrix file\n\n# Sample metadata file\n# Rows are samples, columns are metadata (e.g., condition, treatment, batch).\n# Must contain a column whose values match the column names in the count_file\n# and a column for the primary comparison (e.g., 'condition').\nmetadata_file <- \"sample_metadata.tsv\" # Placeholder: Replace with your actual metadata file\n\n# Output file for differential expression results\noutput_file <- \"deseq2_results.tsv\"\n\n# Design formula (e.g., ~ condition, ~ batch + condition)\n# This specifies the experimental design for the differential expression analysis.\ndesign_formula_str <- \"~ condition\" # Placeholder: Adjust based on your experimental design\n# --- End Configuration ---\n\n# Load count data\n# Assuming the first column is gene IDs and subsequent columns are sample counts.\ncount_data <- read.delim(count_file, row.names = 1, check.names = FALSE)\n# Ensure counts are integers, as DESeq2 expects integer counts.\ncount_data <- round(count_data)\n\n# Load sample metadata\n# Assuming the first column of metadata_file contains sample IDs that match count_data column names.\ncol_data <- read.delim(metadata_file, row.names = 1)\n\n# Ensure sample names match between count data and metadata, and order them consistently.\ncommon_samples <- intersect(colnames(count_data), rownames(col_data))\nif (length(common_samples) == 0) {\n  stop(\"No common samples found between count data and metadata. Please check file formats and sample IDs.\")\n}\ncount_data <- count_data[, common_samples]\ncol_data <- col_data[common_samples, ]\n\n# Create DESeqDataSet object\n# This object stores the count data, sample information, and the experimental design.\ndds <- DESeqDataSetFromMatrix(countData = count_data,\n                              colData = col_data,\n                              design = as.formula(design_formula_str))\n\n# Run DESeq2 analysis\n# This performs normalization, dispersion estimation, and differential expression testing.\ndds <- DESeq(dds)\n\n# Get results\n# By default, results() extracts the comparison for the last variable in the design formula.\n# For specific comparisons (e.g., 'treated' vs 'untreated' for 'condition'), use:\n# res <- results(dds, contrast=c(\"condition\",\"treated\",\"untreated\"))\nres <- results(dds)\n\n# Order results by adjusted p-value (padj) for easier interpretation of most significant genes.\nres <- res[order(res$padj),]\n\n# Save results to a tab-separated file.\nwrite.table(as.data.frame(res), file = output_file, sep = \"\\t\", quote = FALSE, row.names = TRUE)\n\nmessage(paste(\"DESeq2 analysis completed. Results saved to\", output_file))\nEOF\n\n# Execute the R script\nRscript run_deseq2.R\n\n# Note: The count data (counts.tsv) would typically be generated upstream\n# using tools like featureCounts, HTSeq-count, Salmon, or Kallisto.\n# These upstream quantification steps usually rely on a reference genome\n# (e.g., GRCh38/hg38 for human, GRCm39/mm39 for mouse) and gene annotations.\n# For this specific DESeq2 differential expression step, no direct reference genome is used.",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/s13059-014-0550-8"
+        }
+    ],
+    "raw_text": "Bcl2fastq (v2.17.1.14) used for basecalling.\n3\u00e2\u0080\u0099 adaptor-trimming and low quality reads removing by Cutadapt\u00ef\u00bc\u0088version 1.9.1\u00ef\u00bc\u0089\nThe high quality trimmed reads (clean reads) were aligned to the human reference genome (UCSC HG19) using Hisat2(v2.0.1).\nReads Per Kilobase of exon per Megabase of library size (RPKM) were calculated using Htseq (V0.6.1).\nDifferential expression analysis used the DESeq2 (V1.6.3).\nGenome_build: HG19\nSupplementary_files_format_and_content: Excel files include RPKM values for each Sample",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

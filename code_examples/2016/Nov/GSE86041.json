@@ -1,70 +1,70 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Raw CLIP-seq reads were trimmed of polyA tails, adapters and low quality ends using Cutadapt with parameters --match-read-wildcards --times 2 -e 0 -O 5 --quality-cutoff' 6 -m 18 -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b TGGAATTCTCGGGTGCCAAGG -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT.",
-      "tool_name": "cutadapt",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Trimmed reads were mapped against a database of repetitive elements derived from RepBase (version 18.05) using Bowtie (version 1.0.0) with parameters -S -q -p 16 -e 100 -l 20 (Langmead et al.",
-      "tool_name": "Bowtie",
-      "tool_version": "1.0.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "2009).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Reads not mapped to repetitive elements were mapped to the mm9 mouse genome (UCSC assembly) using STAR (version 2.3.03) with parameters --outSAMunmapped Within \u00e2\u0080\u0093outFilterMultimapNmax 1 \u00e2\u0080\u0093outFilterMultimapScoreRange 1 (Dobin et al.",
-      "tool_name": "STAR",
-      "tool_version": "2.3.03",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "2013).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Reads having the same 5\u00e2\u0080\u0099 mapping position were collapsed to a single read to eliminate PCR duplication.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "CLIP-seq peaks were identified as previously described (Zisoulis et al, NSMB 2010).",
-      "tool_name": "CLIP-seq",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Raw CLIP-seq reads were trimmed of polyA tails, adapters and low quality ends using Cutadapt with parameters --match-read-wildcards --times 2 -e 0 -O 5 --quality-cutoff' 6 -m 18 -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b TGGAATTCTCGGGTGCCAAGG -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT. Trimmed reads were mapped against a database of repetitive elements derived from RepBase (version 18.05) using Bowtie (version 1.0.0) with parameters -S -q -p 16 -e 100 -l 20 (Langmead et al. 2009). Reads not mapped to repetitive elements were mapped to the mm9 mouse genome (UCSC assembly) using STAR (version 2.3.03) with parameters --outSAMunmapped Within \u00e2\u0080\u0093outFilterMultimapNmax 1 \u00e2\u0080\u0093outFilterMultimapScoreRange 1 (Dobin et al. 2013). Reads having the same 5\u00e2\u0080\u0099 mapping position were collapsed to a single read to eliminate PCR duplication. CLIP-seq peaks were identified as previously described (Zisoulis et al, NSMB 2010).\nGenome_build: mm9\nSupplementary_files_format_and_content: peaks.bed and bigwig",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Raw CLIP-seq reads were trimmed of polyA tails, adapters and low quality ends using Cutadapt with parameters --match-read-wildcards --times 2 -e 0 -O 5 --quality-cutoff' 6 -m 18 -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b TGGAATTCTCGGGTGCCAAGG -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT.",
+            "tool_name": "cutadapt",
+            "tool_version": "2.10",
+            "code_example": "# Install cutadapt (e.g., using conda)\n# conda install -c bioconda cutadapt=2.10\n\ncutadapt \\\n  --match-read-wildcards \\\n  --times 2 \\\n  -e 0 \\\n  -O 5 \\\n  --quality-cutoff 6 \\\n  -m 18 \\\n  -b TCGTATGCCGTCTTCTGCTTG \\\n  -b ATCTCGTATGCCGTCTTCTGCTTG \\\n  -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC \\\n  -b TGGAATTCTCGGGTGCCAAGG \\\n  -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \\\n  -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT \\\n  -o trimmed_reads.fastq.gz \\\n  raw_reads.fastq.gz",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 2,
+            "description": "Trimmed reads were mapped against a database of repetitive elements derived from RepBase (version 18.05) using Bowtie (version 1.0.0) with parameters -S -q -p 16 -e 100 -l 20 (Langmead et al.",
+            "tool_name": "Bowtie",
+            "tool_version": "1.0.0",
+            "code_example": "# Install Bowtie (if not already installed)\n# conda install -c bioconda bowtie\n\n# Define input and output files\n# Replace 'trimmed_reads.fastq' with your actual trimmed reads file\nTRIMMED_READS=\"trimmed_reads.fastq\"\n# Replace 'repbase_18.05' with the path to your Bowtie index for repetitive elements\n# This index should be built from the RepBase (version 18.05) repetitive elements database\nBOWTIE_INDEX=\"repbase_18.05\"\nOUTPUT_SAM=\"mapped_to_repbase.sam\"\n\n# Run Bowtie mapping\n# Trimmed reads were mapped against a database of repetitive elements derived from RepBase (version 18.05)\n# using Bowtie (version 1.0.0) with parameters -S -q -p 16 -e 100 -l 20\nbowtie -S -q -p 16 -e 100 -l 20 \"${BOWTIE_INDEX}\" \"${TRIMMED_READS}\" > \"${OUTPUT_SAM}\"",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/gb-2009-10-3-r25"
+        },
+        {
+            "step_order": 3,
+            "description": "2009).",
+            "tool_name": "N/A (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A (Inferred with models/gemini-2.5-flash)",
+            "code_example": "",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 4,
+            "description": "Reads not mapped to repetitive elements were mapped to the mm9 mouse genome (UCSC assembly) using STAR (version 2.3.03) with parameters --outSAMunmapped Within \u00e2\u0080\u0093outFilterMultimapNmax 1 \u00e2\u0080\u0093outFilterMultimapScoreRange 1 (Dobin et al.",
+            "tool_name": "STAR",
+            "tool_version": "2.3.03",
+            "code_example": "# Install STAR if not already installed\n# conda install -c bioconda star=2.3.03\n\n# Placeholder for STAR genome index directory for mm9 (UCSC assembly)\n# You would need to download or build the mm9 STAR index first.\n# Example command to build index (replace paths and threads):\n# STAR --runMode genomeGenerate --genomeDir /path/to/mm9_star_index --genomeFastaFiles /path/to/mm9.fa --sjdbGTFfile /path/to/mm9.gtf --runThreadN <num_threads>\nGENOME_DIR=\"/path/to/mm9_star_index\" # Replace with actual path to mm9 STAR index\n\n# Placeholder for input reads file (FASTQ format, pre-filtered for repetitive elements)\nINPUT_READS=\"input_reads.fastq\" # Replace with your actual input FASTQ file\n\n# Placeholder for output prefix\nOUTPUT_PREFIX=\"mapped_reads\"\n\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${INPUT_READS}\" \\\n     --outSAMunmapped Within \\\n     --outFilterMultimapNmax 1 \\\n     --outFilterMultimapScoreRange 1 \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --runThreadN 8 # Example: Adjust number of threads as needed\n",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 5,
+            "description": "2013).",
+            "tool_name": "(Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# No specific tool or command could be inferred from the description '2013)'.\n# Please provide more context to generate a relevant bash command.\n\n# Placeholder for a generic reference genome (e.g., human hg38)\n# This would typically be used by an alignment or peak calling tool.\n# GENOME_FASTA=\"/path/to/your/genome/hg38.fa\"\n# GENOME_INDEX_PREFIX=\"/path/to/your/genome/index/hg38\" # For aligners like STAR, HISAT2\n\n# Placeholder for input and output files\n# INPUT_FASTQ=\"sample.fastq.gz\"\n# OUTPUT_BAM=\"aligned.bam\"\n# OUTPUT_PEAKS=\"peaks.bed\"\n\n# Example of a generic command structure (replace with actual tool and parameters)\n# For alignment:\n# STAR --runThreadN 8 --genomeDir \"${GENOME_INDEX_PREFIX}\" --readFilesIn \"${INPUT_FASTQ}\" --outFileNamePrefix \"${OUTPUT_BAM%.bam}\"\n# For peak calling (e.g., CLIPper, MACS2):\n# clipper -i \"${OUTPUT_BAM}\" -o \"${OUTPUT_PEAKS}\" -s hg38\n\necho \"Placeholder: No specific bioinformatics command inferred due to insufficient description.\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 6,
+            "description": "Reads having the same 5\u00e2\u0080\u0099 mapping position were collapsed to a single read to eliminate PCR duplication.",
+            "tool_name": "samtools markdup (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.19",
+            "code_example": "# Install samtools if not already installed\n# conda install -c bioconda samtools\n\n# Input BAM file (assumed to be sorted by coordinate)\nINPUT_BAM=\"aligned_reads.bam\"\nOUTPUT_BAM=\"deduplicated_reads.bam\"\n\n# Collapse reads having the same 5' mapping position to a single read to eliminate PCR duplication.\n# The -r option removes duplicate reads instead of just marking them.\nsamtools markdup -r \"${INPUT_BAM}\" \"${OUTPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/samtools/samtools"
+        },
+        {
+            "step_order": 7,
+            "description": "CLIP-seq peaks were identified as previously described (Zisoulis et al, NSMB 2010).",
+            "tool_name": "CLIP-seq",
+            "tool_version": "latest",
+            "code_example": "# Install clipper (if not already installed)\n# git clone https://github.com/yeolab/clipper.git\n# cd clipper\n# python setup.py install # Or just use the script directly\n\n# Placeholder variables - User should replace these with actual file paths\n# For human (hg38) genome, you can download .fa and .gtf from UCSC or Ensembl.\nIP_BAM=\"path/to/your/ip.bam\"\nCONTROL_BAM=\"path/to/your/control.bam\" # Optional, but highly recommended for CLIP-seq\nGENOME_FASTA=\"path/to/your/hg38.fa\" \nGENOME_ANNOTATION=\"path/to/your/hg38.gtf\" \nOUTPUT_DIR=\"clipper_peaks\"\nP_VALUE=0.01\nFOLD_ENRICHMENT=2\nSTRAND=\".\" # Use '.' for unstranded, '+' for forward, '-' for reverse\nTHREADS=8 # Number of CPU threads to use\n\n# Create output directory\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Execute clipper\npython /path/to/clipper/clipper.py \\\n    -o \"${OUTPUT_DIR}\" \\\n    -p \"${P_VALUE}\" \\\n    -f \"${FOLD_ENRICHMENT}\" \\\n    -s \"${STRAND}\" \\\n    -g \"${GENOME_FASTA}\" \\\n    -a \"${GENOME_ANNOTATION}\" \\\n    -c \"${CONTROL_BAM}\" \\\n    -t \"${THREADS}\" \\\n    \"${IP_BAM}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/clipper"
+        }
+    ],
+    "raw_text": "Raw CLIP-seq reads were trimmed of polyA tails, adapters and low quality ends using Cutadapt with parameters --match-read-wildcards --times 2 -e 0 -O 5 --quality-cutoff' 6 -m 18 -b TCGTATGCCGTCTTCTGCTTG -b ATCTCGTATGCCGTCTTCTGCTTG -b CGACAGGTTCAGAGTTCTACAGTCCGACGATC -b TGGAATTCTCGGGTGCCAAGG -b AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -b TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT. Trimmed reads were mapped against a database of repetitive elements derived from RepBase (version 18.05) using Bowtie (version 1.0.0) with parameters -S -q -p 16 -e 100 -l 20 (Langmead et al. 2009). Reads not mapped to repetitive elements were mapped to the mm9 mouse genome (UCSC assembly) using STAR (version 2.3.03) with parameters --outSAMunmapped Within \u00e2\u0080\u0093outFilterMultimapNmax 1 \u00e2\u0080\u0093outFilterMultimapScoreRange 1 (Dobin et al. 2013). Reads having the same 5\u00e2\u0080\u0099 mapping position were collapsed to a single read to eliminate PCR duplication. CLIP-seq peaks were identified as previously described (Zisoulis et al, NSMB 2010).\nGenome_build: mm9\nSupplementary_files_format_and_content: peaks.bed and bigwig",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

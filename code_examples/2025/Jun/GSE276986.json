@@ -1,16 +1,16 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "RNA-Seq data was processed using the NF-Core architecture, which compiles several RNA-seq processing steps into a single executable command",
-      "tool_name": "Nextflow",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "RNA-Seq data was processed using the NF-Core architecture, which compiles several RNA-seq processing steps into a single executable command\nAssembly: hg38\nSupplementary files format and content: Feature counts for all detected transcripts in .csv format",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "RNA-Seq data was processed using the NF-Core architecture, which compiles several RNA-seq processing steps into a single executable command",
+            "tool_name": "Nextflow",
+            "tool_version": "Latest stable version (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install Nextflow (if not already installed)\n# For example, using Conda:\n# conda install -c bioconda -c conda-forge nextflow\n# Or via curl:\n# curl -s https://get.nextflow.io | bash\n# mv nextflow /usr/local/bin/\n\n# Install nf-core (if not already installed)\n# pip install nf-core\n\n# Create a dummy samplesheet.csv (replace with your actual data)\n# This is a minimal example. Refer to nf-core/rnaseq documentation for full samplesheet format.\ncat <<EOF > samplesheet.csv\nsample,fastq_1,fastq_2,group,replicate\ncontrol_rep1,data/control_rep1_R1.fastq.gz,data/control_rep1_R2.fastq.gz,control,1\ntreated_rep1,data/treated_rep1_R1.fastq.gz,data/treated_rep1_R2.fastq.gz,treated,1\nEOF\n\n# Ensure you have a Nextflow compatible container engine (e.g., Docker, Singularity) installed and running.\n# For a full list of available genomes, check: https://nf-co.re/rnaseq/usage#--genome\n# For custom genomes, provide --fasta and --gtf files.\n# Using a recent stable release (e.g., 3.14.0) as an example for the pipeline version.\nnextflow run nf-core/rnaseq \\\n    -profile docker \\\n    --input samplesheet.csv \\\n    --genome GRCh38 \\\n    --outdir results \\\n    -r 3.14.0",
+            "code_language": "bash",
+            "github_url": "https://github.com/nf-core/rnaseq"
+        }
+    ],
+    "raw_text": "RNA-Seq data was processed using the NF-Core architecture, which compiles several RNA-seq processing steps into a single executable command\nAssembly: hg38\nSupplementary files format and content: Feature counts for all detected transcripts in .csv format",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

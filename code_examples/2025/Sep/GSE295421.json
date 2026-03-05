@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Reads were mapped using STAR 2.7.6a",
-      "tool_name": "STAR",
-      "tool_version": "2.7.6a",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Read count extraction was performed using featureCounts from the Subread package, with results sorted into counts matrices",
-      "tool_name": "featureCounts",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Differential gene expression analysis was performed on the counts matrices using DESeq2",
-      "tool_name": "DESeq2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Reads were mapped using STAR 2.7.6a\nRead count extraction was performed using featureCounts from the Subread package, with results sorted into counts matrices\nDifferential gene expression analysis was performed on the counts matrices using DESeq2\nAssembly: GRCh38\nSupplementary files format and content: Supplementary files format and content: tab-delimited text files include gene expression analysis for each transfection condition relative to pUC19 (empty vector)",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Reads were mapped using STAR 2.7.6a",
+            "tool_name": "STAR",
+            "tool_version": "2.7.6a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables\nREADS_R1=\"reads_R1.fastq.gz\" # Replace with your actual R1 fastq file\nREADS_R2=\"reads_R2.fastq.gz\" # Replace with your actual R2 fastq file (remove if single-end)\nGENOME_DIR=\"path/to/STAR_genome_index/GRCh38\" # Replace with the path to your STAR genome index for GRCh38 (e.g., built from Gencode v44 annotation)\nOUTPUT_PREFIX=\"mapped_reads_\" # Prefix for output files\nTHREADS=8 # Number of threads to use\n\n# Run STAR alignment with common RNA-seq parameters\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${READS_R1}\" \"${READS_R2}\" \\\n     --runThreadN \"${THREADS}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes Standard \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignSJDBoverhangMin 1 \\\n     --outReadsUnmapped Fastx \\\n     --quantMode GeneCounts # Optional: for gene quantification (e.g., for RNA-seq)",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 2,
+            "description": "Read count extraction was performed using featureCounts from the Subread package, with results sorted into counts matrices",
+            "tool_name": "featureCounts",
+            "tool_version": "2.0.3",
+            "code_example": "# Install featureCounts (part of Subread package)\n# conda install -c bioconda subread\n\n# Define input and output files\nINPUT_BAM=\"aligned_reads.bam\" # Replace with your actual aligned BAM file\nGENOME_GTF=\"gencode.v38.annotation.gtf\" # Replace with your actual GTF annotation file (e.g., from GENCODE for GRCh38)\nOUTPUT_COUNTS=\"gene_counts.txt\"\n\n# Run featureCounts to extract read counts into a matrix\n# -a: Annotation file (GTF/GFF)\n# -o: Output file for counts\n# -F GTF: Specify GTF format for annotation\n# -t exon: Count features of type 'exon'\n# -g gene_id: Group features by 'gene_id'\n# -s 0: Unstranded (0), stranded (1), reverse stranded (2) - adjust as needed\n# -T 8: Use 8 threads for parallel processing\n# --primary: Only count primary alignments\n# --ignore-multimapping: Ignore multi-mapping reads\nfeatureCounts -a \"${GENOME_GTF}\" \\\n              -o \"${OUTPUT_COUNTS}\" \\\n              -F GTF \\\n              -t exon \\\n              -g gene_id \\\n              -s 0 \\\n              -T 8 \\\n              --primary \\\n              --ignore-multimapping \\\n              \"${INPUT_BAM}\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "Differential gene expression analysis was performed on the counts matrices using DESeq2",
+            "tool_name": "DESeq2",
+            "tool_version": "1.38.3",
+            "code_example": "# Install R and Bioconductor if not already present\n# For Ubuntu/Debian:\n# sudo apt-get update\n# sudo apt-get install r-base\n\n# Open R and install Bioconductor packages\n# R\n# if (!require(\"BiocManager\", quietly = TRUE))\n#     install.packages(\"BiocManager\")\n# BiocManager::install(\"DESeq2\")\n# quit()\n\n# Create dummy input files for demonstration purposes\n# In a real scenario, these files would be generated by upstream steps (e.g., featureCounts, Salmon, Kallisto)\n# Example counts.tsv (replace with your actual counts matrix)\ncat <<EOF > counts.tsv\nGeneID\tSample1\tSample2\tSample3\tSample4\nGeneA\t100\t120\t50\t60\nGeneB\t500\t550\t200\t220\nGeneC\t10\t15\t5\t8\nGeneD\t2000\t2100\t1000\t1100\nGeneE\t5\t7\t20\t25\nEOF\n\n# Example sample_info.tsv (replace with your actual sample metadata)\ncat <<EOF > sample_info.tsv\nSample\tcondition\nSample1\tcontrol\nSample2\tcontrol\nSample3\ttreated\nSample4\ttreated\nEOF\n\n# R script for DESeq2 analysis\ncat <<'EOF' > run_deseq2.R\n# Load DESeq2 package\nlibrary(DESeq2)\n\n# --- Configuration ---\n# Input files\ncounts_file <- \"counts.tsv\" # Path to your raw count matrix\nsample_info_file <- \"sample_info.tsv\" # Path to your sample metadata file\n\n# Output file\nresults_file <- \"deseq2_results.tsv\"\n\n# Design formula (e.g., ~ condition, ~ treatment + condition, etc.)\n# This should match a column name in your sample_info_file\ndesign_formula_str <- \"~ condition\" \n\n# --- Read input data ---\n# Read count matrix\n# Assuming counts.tsv has genes/features as rows and samples as columns\n# First column is gene ID, subsequent columns are counts\ncounts_data <- read.delim(counts_file, row.names = 1, sep = \"\\t\")\n\n# Read sample information\n# Assuming sample_info.tsv has sample IDs as rows and metadata as columns\n# First column is sample ID, subsequent columns are metadata (e.g., condition, treatment)\nsample_info <- read.delim(sample_info_file, row.names = 1, sep = \"\\t\")\n\n# Ensure sample names match and are in the same order\n# It's crucial that the column names of counts_data match the row names of sample_info\n# and are in the same order. Reorder counts_data columns to match sample_info rows.\ncounts_data <- counts_data[, rownames(sample_info)]\n\n# Convert counts to integer matrix (DESeq2 requirement)\ncounts_data <- round(counts_data)\ncounts_data <- as.matrix(counts_data)\n\n# --- Create DESeqDataSet object ---\ndds <- DESeqDataSetFromMatrix(countData = counts_data,\n                              colData = sample_info,\n                              design = as.formula(design_formula_str))\n\n# --- Pre-filtering (optional but recommended) ---\n# Remove genes with very low counts across all samples\n# For example, keep genes that have at least 10 counts in total across all samples\nkeep <- rowSums(counts(dds)) >= 10\ndds <- dds[keep,]\n\n# --- Run DESeq2 analysis ---\ndds <- DESeq(dds)\n\n# --- Extract results ---\n# Get results for the primary comparison (e.g., \"condition_treated_vs_control\")\n# To see available comparisons: resultsNames(dds)\n# Assuming 'condition' has levels 'control' and 'treated'\nres <- results(dds, contrast=c(\"condition\", \"treated\", \"control\"))\n\n# Order results by adjusted p-value\nres <- res[order(res$padj),]\n\n# --- Write results to file ---\nwrite.table(as.data.frame(res), file = results_file, sep = \"\\t\", quote = FALSE, row.names = TRUE)\n\nmessage(paste(\"DESeq2 analysis complete. Results saved to:\", results_file))\nEOF\n\n# Execute the R script\nRscript run_deseq2.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/DESeq2.html"
+        }
+    ],
+    "raw_text": "Reads were mapped using STAR 2.7.6a\nRead count extraction was performed using featureCounts from the Subread package, with results sorted into counts matrices\nDifferential gene expression analysis was performed on the counts matrices using DESeq2\nAssembly: GRCh38\nSupplementary files format and content: Supplementary files format and content: tab-delimited text files include gene expression analysis for each transfection condition relative to pUC19 (empty vector)",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

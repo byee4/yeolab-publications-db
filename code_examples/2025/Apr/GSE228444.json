@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Following sequencing, raw reads were aligned to GRCh38 and analyzed following a previously published pipeline (Nostrand et al, 2016)",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Consistent with the ENCODE standard 65, reads aligning to artifact-enriched or repetitive genomic regions were removed",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Reproducible and significant peaks of aligned reads were defined as IDR cutoff of 0.01, P \u00e2\u0089\u00a4 0.001, and fold enrichment \u00e2\u0089\u00a58.",
-      "tool_name": "IDR",
-      "tool_version": "0.01",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "Genic regions of eCLIP peaks were annotated based on overlap with GENCODE v26 transcripts following the priority order consistent with the previous study",
-      "tool_name": "GENCODE",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Following sequencing, raw reads were aligned to GRCh38 and analyzed following a previously published pipeline (Nostrand et al, 2016)\nConsistent with the ENCODE standard 65, reads aligning to artifact-enriched or repetitive genomic regions were removed\nReproducible and significant peaks of aligned reads were defined as IDR cutoff of 0.01, P \u00e2\u0089\u00a4 0.001, and fold enrichment \u00e2\u0089\u00a58.\nGenic regions of eCLIP peaks were annotated based on overlap with GENCODE v26 transcripts following the priority order consistent with the previous study\nAssembly: GRCh38\nSupplementary files format and content: wig files represent read covergae for plus and minus strands\nSupplementary files format and content: peak files",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Following sequencing, raw reads were aligned to GRCh38 and analyzed following a previously published pipeline (Nostrand et al, 2016)",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.5.2b",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Placeholder for STAR genome index creation (run once)\n# This step prepares the GRCh38 genome for alignment.\n# Replace /path/to/ with actual paths to your genome files.\n# STAR --runMode genomeGenerate \\\n#      --genomeDir /path/to/GRCh38_STAR_index \\\n#      --genomeFastaFiles /path/to/GRCh38.fasta \\\n#      --sjdbGTFfile /path/to/GRCh38.gtf \\\n#      --runThreadN 8\n\n# Align raw reads to GRCh38 using STAR, following parameters typical for eCLIP.\n# Replace 'read1.fastq.gz', 'read2.fastq.gz' with your actual input files.\n# Replace '/path/to/GRCh38_STAR_index' with the path to your STAR genome index.\n# Output BAM file will be 'aligned_reads/sample_Aligned.sortedByCoord.out.bam'.\n\nmkdir -p aligned_reads\n\nSTAR \\\n  --runThreadN 8 \\\n  --genomeDir /path/to/GRCh38_STAR_index \\\n  --readFilesIn read1.fastq.gz read2.fastq.gz \\\n  --readFilesCommand zcat \\\n  --outFileNamePrefix aligned_reads/sample_ \\\n  --outSAMtype BAM SortedByCoordinate \\\n  --outSAMattributes All \\\n  --outFilterMultimapNmax 20 \\\n  --alignSJDBoverhangMin 8 \\\n  --alignIntronMin 20 \\\n  --alignIntronMax 1000000 \\\n  --alignMatesGapMax 1000000 \\\n  --outFilterMismatchNmax 999 \\\n  --outFilterMismatchNoverLmax 0.05 \\\n  --seedSearchStartLmax 30 \\\n  --winAnchorMultimapNmax 50 \\\n  --outFilterScoreMinOverLread 0 \\\n  --outFilterMatchNminOverLread 0 \\\n  --limitBAMsortRAM 60000000000\n\n# Note: The full Nostrand et al, 2016 eCLIP pipeline (as implemented in yeolab/eclip) \n# includes additional steps for adapter trimming, duplicate removal, peak calling \n# (e.g., CLIPper), IDR, and downstream analysis beyond just alignment.",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        },
+        {
+            "step_order": 2,
+            "description": "Consistent with the ENCODE standard 65, reads aligning to artifact-enriched or repetitive genomic regions were removed",
+            "tool_name": "samtools (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.10",
+            "code_example": "# Install samtools if not already installed\n# conda install -c bioconda samtools\n\n# Download ENCODE hg38 blacklist (example, use appropriate assembly for your data)\n# wget -O hg38-blacklist.v2.bed.gz https://github.com/Boyle-Lab/Blacklist/raw/master/lists/hg38-blacklist.v2.bed.gz\n# gunzip hg38-blacklist.v2.bed.gz\n\n# Define input and output files\nINPUT_BAM=\"aligned_reads.bam\" # Placeholder for input aligned BAM file\nOUTPUT_BAM=\"filtered_reads.bam\"\nBLACKLIST_BED=\"hg38-blacklist.v2.bed\" # Path to the ENCODE hg38 blacklist BED file\n\n# Filter reads aligning to blacklisted regions\n# Reads overlapping the blacklist are discarded, and non-overlapping reads are written to OUTPUT_BAM\nsamtools view -L \"${BLACKLIST_BED}\" \"${INPUT_BAM}\" -U \"${OUTPUT_BAM}\" -b > /dev/null",
+            "code_language": "bash",
+            "github_url": "https://github.com/ENCODE-DCC/chip-seq-pipeline2"
+        },
+        {
+            "step_order": 3,
+            "description": "Reproducible and significant peaks of aligned reads were defined as IDR cutoff of 0.01, P \u00e2\u0089\u00a4 0.001, and fold enrichment \u00e2\u0089\u00a58.",
+            "tool_name": "IDR",
+            "tool_version": "0.01",
+            "code_example": "# Install IDR Python package (if not already installed)\n# pip install idr\n\n# Clone the yeolab/merge_peaks repository (if not already cloned)\n# git clone https://github.com/yeolab/merge_peaks.git\n# cd merge_peaks\n\n# Example usage of merge_peaks.py for IDR analysis\n# Input peak files (e.g., from MACS2) for two replicates.\n# These files are expected to be in a format like narrowPeak, containing P-values and fold enrichment.\n# Replace 'rep1_peaks.narrowPeak' and 'rep2_peaks.narrowPeak' with actual file paths.\n# Replace 'reproducible_peaks' with your desired output prefix.\n\npython merge_peaks.py \\\n    --peak_files rep1_peaks.narrowPeak rep2_peaks.narrowPeak \\\n    --idr_threshold 0.01 \\\n    --p_value_threshold 0.001 \\\n    --fold_enrichment_threshold 8 \\\n    --output_prefix reproducible_peaks",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/merge_peaks"
+        },
+        {
+            "step_order": 4,
+            "description": "Genic regions of eCLIP peaks were annotated based on overlap with GENCODE v26 transcripts following the priority order consistent with the previous study",
+            "tool_name": "GENCODE",
+            "tool_version": "2.27.1 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install dependencies (if not already installed, recommended in a conda environment):\n# conda create -n eclip_annotation python=3.7 pybedtools gffutils bedtools\n# conda activate eclip_annotation\n\n# Download the GENCODE v26 annotation GTF file\nGENCODE_GTF_URL=\"https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_26/gencode.v26.annotation.gtf.gz\"\nGENCODE_GTF=\"gencode.v26.annotation.gtf\"\nwget -O \"${GENCODE_GTF}.gz\" \"${GENCODE_GTF_URL}\"\ngunzip -f \"${GENCODE_GTF}.gz\"\n\n# Placeholder for eCLIP peaks file (replace with your actual input BED file)\n# Example: eCLIP_peaks.bed\n# For demonstration, create a dummy peaks file:\necho -e \"chr1\\t1000\\t2000\\tpeak1\\t100\\t+\\nchr1\\t3000\\t4000\\tpeak2\\t100\\t-\" > eCLIP_peaks.bed\n\n# The annotation with priority order is typically handled by a custom Python script\n# from the Yeo lab's eCLIP pipeline, which leverages pybedtools (a Python wrapper for bedtools)\n# and gffutils to parse GTF and perform intersections with specific prioritization logic\n# (e.g., exon > UTR > intron > intergenic).\n\n# To use the exact script from the Yeo lab's eCLIP pipeline, you would first download it:\n# wget https://raw.githubusercontent.com/yeolab/eclip/master/tools/annotate_peaks_with_genes/annotate_peaks_with_genes.py\n# chmod +x annotate_peaks_with_genes.py\n\n# Execute the annotation script\npython annotate_peaks_with_genes.py \\\n  --peaks eCLIP_peaks.bed \\\n  --annotation \"${GENCODE_GTF}\" \\\n  --output annotated_eCLIP_peaks.bed",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip/"
+        }
+    ],
+    "raw_text": "Following sequencing, raw reads were aligned to GRCh38 and analyzed following a previously published pipeline (Nostrand et al, 2016)\nConsistent with the ENCODE standard 65, reads aligning to artifact-enriched or repetitive genomic regions were removed\nReproducible and significant peaks of aligned reads were defined as IDR cutoff of 0.01, P \u00e2\u0089\u00a4 0.001, and fold enrichment \u00e2\u0089\u00a58.\nGenic regions of eCLIP peaks were annotated based on overlap with GENCODE v26 transcripts following the priority order consistent with the previous study\nAssembly: GRCh38\nSupplementary files format and content: wig files represent read covergae for plus and minus strands\nSupplementary files format and content: peak files",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

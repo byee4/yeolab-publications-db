@@ -1,70 +1,70 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "We used Illumina CASAVA 1.8.2 software to generate fastq files.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reads were trimmed using cutadapt (Martin 2011) (parameters: -a ADAPTER1 -a \u00e2\u0080\u009cA{10}\u00e2\u0080\u009d -a \u00e2\u0080\u009cT{10}\u00e2\u0080\u009d -A \u00e2\u0080\u009cA{10}\u00e2\u0080\u009d -A \u00e2\u0080\u009cT{10}\u00e2\u0080\u009d \u00e2\u0080\u0093times 2 -q 20 -m 25).",
-      "tool_name": "cutadapt",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Reads were mapped to genome mm10 using STAR (Dobin et al.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "2013) v2.4.2a (parameters: \u00e2\u0080\u0093alignEndsType EndToEnd, \u00e2\u0080\u0093outFilterMismatchNoverLmax 0.05, \u00e2\u0080\u0093twopassMode Basic).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Sample counting was done using STAR, quantifying mm10 RefSeq annotated genes.",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Normalization of the counts and differential expression analysis was performed using DESeq2 (Love et al.",
-      "tool_name": "DESeq2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "2014) with the parameters: betaPrior=True, cooksCutoff=FALSE, independentFiltering=FALSE.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "We used Illumina CASAVA 1.8.2 software to generate fastq files.\nReads were trimmed using cutadapt (Martin 2011) (parameters: -a ADAPTER1 -a \u00e2\u0080\u009cA{10}\u00e2\u0080\u009d -a \u00e2\u0080\u009cT{10}\u00e2\u0080\u009d -A \u00e2\u0080\u009cA{10}\u00e2\u0080\u009d -A \u00e2\u0080\u009cT{10}\u00e2\u0080\u009d \u00e2\u0080\u0093times 2 -q 20 -m 25).\nReads were mapped to genome mm10 using STAR (Dobin et al. 2013) v2.4.2a (parameters: \u00e2\u0080\u0093alignEndsType EndToEnd, \u00e2\u0080\u0093outFilterMismatchNoverLmax 0.05, \u00e2\u0080\u0093twopassMode Basic).\nSample counting was done using STAR, quantifying mm10 RefSeq annotated genes.\nNormalization of the counts and differential expression analysis was performed using DESeq2 (Love et al. 2014) with the parameters: betaPrior=True, cooksCutoff=FALSE, independentFiltering=FALSE.\nGenome_build: mm10\nSupplementary_files_format_and_content: DESeq2 output",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "We used Illumina CASAVA 1.8.2 software to generate fastq files.",
+            "tool_name": "Illumina CASAVA",
+            "tool_version": "1.8.2",
+            "code_example": "# Illumina CASAVA 1.8.2 software was used to generate fastq files from BCL files.\n# This typically involved using the 'configureBclToFastq.pl' script followed by 'make'.\n\n# Replace <path_to_run_folder>, <path_to_output_dir>, <path_to_sample_sheet.csv>, and <num_cores> with actual values.\n\n# Example installation (CASAVA was proprietary and typically bundled with Illumina systems):\n# Modern bcl2fastq (successor to CASAVA's BCL to FASTQ conversion) can be installed via conda:\n# conda install -c bioconda bcl2fastq2\n\n# Step 1: Configure the conversion using configureBclToFastq.pl\nconfigureBclToFastq.pl \\\n    --input-dir <path_to_run_folder>/Data/Intensities/BaseCalls \\\n    --output-dir <path_to_output_dir> \\\n    --sample-sheet <path_to_sample_sheet.csv>\n\n# Step 2: Execute the conversion using make (run this command from the <path_to_output_dir> created above)\n# cd <path_to_output_dir>\nmake -j <num_cores>",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Reads were trimmed using cutadapt (Martin 2011) (parameters: -a ADAPTER1 -a \u00e2\u0080\u009cA{10}\u00e2\u0080\u009d -a \u00e2\u0080\u009cT{10}\u00e2\u0080\u009d -A \u00e2\u0080\u009cA{10}\u00e2\u0080\u009d -A \u00e2\u0080\u009cT{10}\u00e2\u0080\u009d \u00e2\u0080\u0093times 2 -q 20 -m 25).",
+            "tool_name": "cutadapt",
+            "tool_version": "1.0",
+            "code_example": "# Install cutadapt using conda\n# conda install -c bioconda cutadapt\n\n# Note: 'ADAPTER1' should be replaced with the actual adapter sequence used.\n# The presence of both -a (for forward read) and -A (for reverse read) parameters suggests paired-end reads.\ncutadapt \\\n  -a ADAPTER1 \\\n  -a \"A{10}\" \\\n  -a \"T{10}\" \\\n  -A \"A{10}\" \\\n  -A \"T{10}\" \\\n  --times 2 \\\n  -q 20 \\\n  -m 25 \\\n  -o trimmed_reads_R1.fastq.gz \\\n  -p trimmed_reads_R2.fastq.gz \\\n  reads_R1.fastq.gz reads_R2.fastq.gz",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.14806/ej.17.1.200"
+        },
+        {
+            "step_order": 3,
+            "description": "Reads were mapped to genome mm10 using STAR (Dobin et al.",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star=2.7.10a\n\n# Define variables for paths and files\nGENOME_DIR=\"/path/to/STAR_index/mm10\" # Placeholder for STAR genome index directory\nGENOME_FASTA=\"/path/to/mm10.fa\"       # Placeholder for mm10 reference genome FASTA file\nGTF_FILE=\"/path/to/mm10.gtf\"           # Placeholder for mm10 gene annotation GTF file (recommended for RNA-seq/eCLIP)\n\nREADS_R1=\"reads_R1.fastq.gz\"         # Placeholder for input forward reads file\nREADS_R2=\"reads_R2.fastq.gz\"         # Placeholder for input reverse reads file (remove if single-end)\nOUTPUT_PREFIX=\"aligned_reads\"        # Prefix for output files\nNUM_THREADS=8                        # Number of threads to use\n\n# 1. Build STAR genome index (if not already built)\n# This step only needs to be run once per genome version.\n# If you already have an index, skip this block.\n# mkdir -p ${GENOME_DIR}\n# STAR --runMode genomeGenerate \\\n#      --genomeDir ${GENOME_DIR} \\\n#      --genomeFastaFiles ${GENOME_FASTA} \\\n#      --sjdbGTFfile ${GTF_FILE} \\\n#      --sjdbOverhang 100 \\\n#      --runThreadN ${NUM_THREADS}\n\n# 2. Map reads to the mm10 genome using STAR\nSTAR --runMode alignReads \\\n     --genomeDir ${GENOME_DIR} \\\n     --readFilesIn ${READS_R1} ${READS_R2} \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix ${OUTPUT_PREFIX}. \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes All \\\n     --outFilterType BySJout \\\n     --outFilterMultimapNmax 20 \\\n     --alignSJDBoverhangMin 1 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.1 \\\n     --limitBAMsortRAM 60000000000 \\\n     --runThreadN ${NUM_THREADS}\n\n# Note: For single-end reads, remove ${READS_R2} from --readFilesIn.",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 4,
+            "description": "2013) v2.4.2a (parameters: \u00e2\u0080\u0093alignEndsType EndToEnd, \u00e2\u0080\u0093outFilterMismatchNoverLmax 0.05, \u00e2\u0080\u0093twopassMode Basic).",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.4.2a",
+            "code_example": "# Reference genome: hg38 (placeholder, replace with actual path to STAR index)\n# Input reads: input_read1.fastq.gz, input_read2.fastq.gz (placeholders, replace with actual files)\n# Output prefix: aligned_output_ (placeholder, replace as needed)\n\nSTAR --genomeDir \"/path/to/STAR_genome_index/hg38\" \\\n     --readFilesIn \"input_read1.fastq.gz\" \"input_read2.fastq.gz\" \\\n     --outFileNamePrefix \"aligned_output_\" \\\n     --alignEndsType EndToEnd \\\n     --outFilterMismatchNoverLmax 0.05 \\\n     --twopassMode Basic \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --runThreadN 8",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 5,
+            "description": "Sample counting was done using STAR, quantifying mm10 RefSeq annotated genes.",
+            "tool_name": "STAR",
+            "tool_version": "2.7.10a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# --- Reference Data Setup (Example paths, replace with actual paths) ---\n# Download mm10 genome FASTA (e.g., from UCSC or NCBI)\n# Example: wget -P /path/to/ref_data/mm10/ ftp://ftp.ensembl.org/pub/release-109/fasta/mus_musculus/dna/Mus_musculus.GRCm38.dna.primary_assembly.fa.gz\n# gunzip /path/to/ref_data/mm10/Mus_musculus.GRCm38.dna.primary_assembly.fa.gz\n\n# Download mm10 RefSeq GTF (e.g., from NCBI RefSeq or UCSC)\n# For RefSeq, NCBI is a primary source. Example for GRCm38.p6 (mm10):\n# wget -P /path/to/ref_data/mm10/ ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/635/27_GRCm38.p6/GCF_000001635.27_GRCm38.p6_genomic.gtf.gz\n# gunzip /path/to/ref_data/mm10/GCF_000001635.27_GRCm38.p6_genomic.gtf.gz\n\n# Define paths for genome and GTF\nGENOME_FASTA=\"/path/to/ref_data/mm10/Mus_musculus.GRCm38.dna.primary_assembly.fa\"\nGTF_FILE=\"/path/to/ref_data/mm10/GCF_000001635.27_GRCm38.p6_genomic.gtf\" # This GTF contains RefSeq annotations\n\n# --- STAR Genome Indexing (Run once per genome/annotation combination) ---\n# This step is a prerequisite for alignment and quantification.\n# Replace /path/to/STAR_index/mm10_refseq with your desired index directory.\n# STAR --runMode genomeGenerate \\\n#      --genomeDir /path/to/STAR_index/mm10_refseq \\\n#      --genomeFastaFiles \"${GENOME_FASTA}\" \\\n#      --sjdbGTFfile \"${GTF_FILE}\" \\\n#      --sjdbOverhang 100 \\\n#      --runThreadN 8\n\n# --- Sample Counting using STAR (Alignment and Gene Quantification) ---\n# Input FASTQ files (replace with actual sample files)\nREAD1=\"/path/to/sample/sample_R1.fastq.gz\"\nREAD2=\"/path/to/sample/sample_R2.fastq.gz\" # Remove if single-end\n\n# Output directory for STAR results\nOUTPUT_DIR=\"/path/to/output/sample_star_counts\"\nmkdir -p \"${OUTPUT_DIR}\"\n\n# Path to the pre-built STAR genome index\nSTAR_INDEX_DIR=\"/path/to/STAR_index/mm10_refseq\"\n\nSTAR --runMode alignReads \\\n     --genomeDir \"${STAR_INDEX_DIR}\" \\\n     --readFilesIn \"${READ1}\" \"${READ2}\" \\\n     --readFilesCommand zcat \\\n     --quantMode GeneCounts \\\n     --outFileNamePrefix \"${OUTPUT_DIR}/sample_\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outFilterType BySJout \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.04 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --alignSJoverhangMin 8 \\\n     --alignSJDBoverhangMin 1 \\\n     --sjdbGTFfile \"${GTF_FILE}\" \\\n     --runThreadN 8",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 6,
+            "description": "Normalization of the counts and differential expression analysis was performed using DESeq2 (Love et al.",
+            "tool_name": "DESeq2",
+            "tool_version": "1.42.0 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install R and Bioconductor if not already installed\n# For R:\n# sudo apt-get update\n# sudo apt-get install r-base\n\n# For Bioconductor and DESeq2:\n# R -e 'if (!require(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\")'\n# R -e 'BiocManager::install(\"DESeq2\")'\n\n# Create a placeholder R script for DESeq2 analysis\n# This script assumes you have a counts matrix (e.g., counts.csv) and a sample information file (e.g., coldata.csv)\n# counts.csv: rows are genes, columns are samples, values are raw counts\n# coldata.csv: rows are samples, columns are sample metadata (e.g., condition, batch)\n\ncat << 'EOF' > run_deseq2.R\nlibrary(DESeq2)\n\n# --- Configuration --- #\n# Input files (replace with your actual file paths)\ncounts_file <- \"counts.csv\"\nsample_info_file <- \"coldata.csv\"\n\n# Output file\nresults_file <- \"deseq2_results.csv\"\n\n# Design formula (replace 'condition' with your primary variable of interest)\ndesign_formula <- ~ condition\n\n# --- Load Data --- #\n# Load counts data\n# Assuming counts.csv has gene IDs as the first column and sample names as headers\ncounts_data <- read.csv(counts_file, row.names = 1, check.names = FALSE)\n\n# Load sample information\n# Assuming coldata.csv has sample names as the first column and metadata as other columns\n# Ensure row names match column names of counts_data\nsample_info <- read.csv(sample_info_file, row.names = 1)\n\n# Ensure sample order matches between counts and sample_info\nsample_info <- sample_info[colnames(counts_data), , drop = FALSE]\n\n# --- DESeq2 Analysis --- #\n# Create DESeqDataSet object\ndds <- DESeqDataSetFromMatrix(countData = counts_data,\n                              colData = sample_info,\n                              design = design_formula)\n\n# Pre-filtering: remove genes with very low counts\ndds <- dds[rowSums(counts(dds)) >= 10, ]\n\n# Run DESeq2 analysis\ndds <- DESeq(dds)\n\n# Get results (e.g., for the 'condition' variable, comparing 'treatment' vs 'control')\n# Replace 'condition_treatment_vs_control' with your specific contrast if needed\nres <- results(dds)\n\n# Order results by adjusted p-value\nres <- res[order(res$padj), ]\n\n# --- Save Results --- #\nwrite.csv(as.data.frame(res), file = results_file)\n\nmessage(paste(\"DESeq2 analysis complete. Results saved to\", results_file))\nEOF\n\n# Create dummy input files for demonstration\n# In a real scenario, these would be your actual data files\n\n# Dummy counts.csv\ncat << 'EOF' > counts.csv\nGeneID,Sample_A1,Sample_A2,Sample_B1,Sample_B2\nGene1,100,120,50,60\nGene2,20,25,80,90\nGene3,5,8,15,12\nGene4,150,160,140,130\nGene5,30,35,32,38\nEOF\n\n# Dummy coldata.csv\ncat << 'EOF' > coldata.csv\nSample,condition\nSample_A1,control\nSample_A2,control\nSample_B1,treatment\nSample_B2,treatment\nEOF\n\n# Execute the R script\nRscript run_deseq2.R\n",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/1471-2105-14-370"
+        },
+        {
+            "step_order": 7,
+            "description": "2014) with the parameters: betaPrior=True, cooksCutoff=FALSE, independentFiltering=FALSE.",
+            "tool_name": "DESeq2 (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.4.1 (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install BiocManager if not already installed\n# if (!requireNamespace(\"BiocManager\", quietly = TRUE))\n#     install.packages(\"BiocManager\")\n\n# Install DESeq2 package if not already installed\n# BiocManager::install(\"DESeq2\")\n\n# Create dummy input files for demonstration\n# In a real scenario, replace these with your actual count matrix and sample metadata.\n# Example counts_matrix.csv (replace with your actual data)\ncat 'gene_id,sample1,sample2,sample3,sample4\ngeneA,100,120,50,60\ngeneB,200,210,100,110\ngeneC,50,60,200,220\ngeneD,10,12,5,6' > counts_matrix.csv\n\n# Example sample_info.csv (replace with your actual data)\ncat 'sample_id,condition\nsample1,control\nsample2,control\nsample3,treated\nsample4,treated' > sample_info.csv\n\nRscript -e '\nlibrary(DESeq2)\n\n# Load count data (replace with your actual path)\ncountData <- read.csv(\"counts_matrix.csv\", row.names = 1)\n\n# Load sample information (replace with your actual path)\ncolData <- read.csv(\"sample_info.csv\", row.names = 1)\n\n# Ensure sample names in colData match column names in countData\ncolData <- colData[colnames(countData), , drop = FALSE]\n\n# Create DESeqDataSet object\ndds <- DESeqDataSetFromMatrix(countData = countData,\n                              colData = colData,\n                              design = ~ condition) # Adjust \"condition\" to your experimental design variable\n\n# Run DESeq2 analysis with specified parameters\ndds <- DESeq(dds,\n             betaPrior = TRUE,\n             cooksCutoff = FALSE,\n             independentFiltering = FALSE)\n\n# Get results\nres <- results(dds)\n\n# Save results to a CSV file\nwrite.csv(as.data.frame(res), file = \"deseq2_differential_expression_results.csv\")\n\nmessage(\"DESeq2 analysis complete. Results saved to deseq2_differential_expression_results.csv\")\n'\n",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/s13059-014-0550-8"
+        }
+    ],
+    "raw_text": "We used Illumina CASAVA 1.8.2 software to generate fastq files.\nReads were trimmed using cutadapt (Martin 2011) (parameters: -a ADAPTER1 -a \u00e2\u0080\u009cA{10}\u00e2\u0080\u009d -a \u00e2\u0080\u009cT{10}\u00e2\u0080\u009d -A \u00e2\u0080\u009cA{10}\u00e2\u0080\u009d -A \u00e2\u0080\u009cT{10}\u00e2\u0080\u009d \u00e2\u0080\u0093times 2 -q 20 -m 25).\nReads were mapped to genome mm10 using STAR (Dobin et al. 2013) v2.4.2a (parameters: \u00e2\u0080\u0093alignEndsType EndToEnd, \u00e2\u0080\u0093outFilterMismatchNoverLmax 0.05, \u00e2\u0080\u0093twopassMode Basic).\nSample counting was done using STAR, quantifying mm10 RefSeq annotated genes.\nNormalization of the counts and differential expression analysis was performed using DESeq2 (Love et al. 2014) with the parameters: betaPrior=True, cooksCutoff=FALSE, independentFiltering=FALSE.\nGenome_build: mm10\nSupplementary_files_format_and_content: DESeq2 output",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

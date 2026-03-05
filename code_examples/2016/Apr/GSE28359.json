@@ -1,16 +1,16 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "gcRMA",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "gcRMA",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "gcRMA",
+            "tool_name": "gcrma (R package) (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# Install R and Bioconductor if not already installed.\n# For example, using conda:\n# conda create -n r_env r-base bioconductor-affy bioconductor-gcrma -y\n# conda activate r_env\n\n# Create an R script to perform gcRMA normalization\ncat << 'EOF' > run_gcrma.R\n# Load necessary libraries\nlibrary(affy)\nlibrary(gcrma)\n\n# Define input directory containing .CEL files\n# Replace 'path/to/your/cel_files' with the actual path to your raw microarray data.\ncel_files_dir <- \"path/to/your/cel_files\"\n\n# Read .CEL files from the specified directory.\n# This assumes all .CEL files in the directory are part of the same experiment\n# and should be normalized together.\ncel_files <- list.files(cel_files_dir, pattern = \"\\\\.CEL$\", full.names = TRUE)\nif (length(cel_files) == 0) {\n  stop(paste(\"No .CEL files found in the specified directory:\", cel_files_dir))\n}\nraw_data <- ReadAffy(filenames = cel_files)\n\n# Perform gcRMA normalization.\n# This step adjusts for background noise and normalizes probe intensities.\nnormalized_data <- gcrma(raw_data)\n\n# Extract the normalized expression matrix.\nexpression_matrix <- exprs(normalized_data)\n\n# Define output file path.\n# Replace 'normalized_gcrma_expression.tsv' with your desired output file name and path.\noutput_file <- \"normalized_gcrma_expression.tsv\"\n\n# Save the normalized expression matrix to a TSV file.\n# row.names = TRUE ensures probe IDs are included.\nwrite.table(expression_matrix, file = output_file, sep = \"\\t\", quote = FALSE, row.names = TRUE)\n\nmessage(paste(\"gcRMA normalization complete. Normalized data saved to:\", output_file))\nEOF\n\n# Execute the R script to perform gcRMA normalization.\nRscript run_gcrma.R\n\n# Example usage:\n# 1. Place your .CEL files into a directory, e.g., 'raw_cel_data'.\n# 2. Edit 'run_gcrma.R' to set 'cel_files_dir' to 'raw_cel_data' and 'output_file' to your desired output path.\n#    e.g., cel_files_dir <- \"raw_cel_data\"\n#    e.g., output_file <- \"results/normalized_gcrma_expression.tsv\"\n# 3. Ensure the output directory exists: mkdir -p results\n# 4. Run the script: Rscript run_gcrma.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/gcrma.html"
+        }
+    ],
+    "raw_text": "gcRMA",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

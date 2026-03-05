@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "remove adapter with Cutadapt",
-      "tool_name": "cutadapt",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "align to genome using STAR 2.7.6",
-      "tool_name": "STAR",
-      "tool_version": "2.7.6",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "calculate edits per read (EPR)",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "remove adapter with Cutadapt\nalign to genome using STAR 2.7.6\ncalculate edits per read (EPR)\nAssembly: GRCh38\nSupplementary files format and content: epr_volcano_plot_values.tsv\nSupplementary files format and content: epr_cds_3_fusion_joined.tsv",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "remove adapter with Cutadapt",
+            "tool_name": "cutadapt",
+            "tool_version": "4.0",
+            "code_example": "# Installation (example using conda)\n# conda install -c bioconda cutadapt=4.0\n\n# Command to remove adapters\n# The adapter sequence is a common Illumina TruSeq adapter, inferred from eCLIP workflows.\n# --minimum-length 18 is a common setting to discard very short reads after trimming.\n# --cores 8 is a placeholder for parallel processing.\ncutadapt -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA -o output.trimmed.fastq.gz --minimum-length 18 --cores 8 input.fastq.gz",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 2,
+            "description": "align to genome using STAR 2.7.6",
+            "tool_name": "STAR",
+            "tool_version": "2.7.6",
+            "code_example": "# Install STAR (example using conda)\n# conda install -c bioconda star=2.7.6\n\n# Define variables\n# Replace with actual paths and filenames\nGENOME_DIR=\"/path/to/STAR_genome_index/hg38\" # Path to the STAR genome index (e.g., for human hg38)\nREAD1_FASTQ=\"sample_R1.fastq.gz\" # Input FASTQ file for Read 1\nREAD2_FASTQ=\"sample_R2.fastq.gz\" # Input FASTQ file for Read 2 (remove if single-end)\nOUTPUT_PREFIX=\"sample_aligned\" # Prefix for output files\nTHREADS=8 # Number of threads to use\n\n# Run STAR alignment\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${READ1_FASTQ}\" \"${READ2_FASTQ}\" \\\n     --runThreadN \"${THREADS}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}_\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMattributes Standard \\\n     --quantMode GeneCounts \\\n     --readFilesCommand zcat",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 3,
+            "description": "calculate edits per read (EPR)",
+            "tool_name": "Custom script (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "N/A",
+            "code_example": "# Placeholder for a custom script to calculate edits per read (EPR).\n# This step typically follows RNA variant calling (e.g., using GATK or samtools mpileup).\n# The script would process a VCF file (containing identified RNA editing sites) and\n# potentially the corresponding BAM file to count reads supporting edits and calculate the EPR metric.\n\n# Define input and output files (example paths)\nINPUT_VCF=\"path/to/sample_variants.vcf\"\nINPUT_BAM=\"path/to/sample_aligned.bam\"\nOUTPUT_EPR_FILE=\"path/to/sample_epr_results.tsv\"\nREFERENCE_GENOME=\"path/to/hg38.fa\" # Using hg38 as a placeholder for the latest human reference genome\n\n# Example command for a hypothetical custom script\n# This script would iterate through identified editing sites in the VCF,\n# extract reads covering those sites from the BAM, and calculate the proportion\n# of reads containing the edit, or the average number of edits per read.\npython calculate_epr.py \\\n    --vcf \"${INPUT_VCF}\" \\\n    --bam \"${INPUT_BAM}\" \\\n    --reference \"${REFERENCE_GENOME}\" \\\n    --output \"${OUTPUT_EPR_FILE}\" \\\n    --min-coverage 10 \\\n    --min-edit-frequency 0.05 \\\n    --output-format tsv",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/skipper/"
+        }
+    ],
+    "raw_text": "remove adapter with Cutadapt\nalign to genome using STAR 2.7.6\ncalculate edits per read (EPR)\nAssembly: GRCh38\nSupplementary files format and content: epr_volcano_plot_values.tsv\nSupplementary files format and content: epr_cds_3_fusion_joined.tsv",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

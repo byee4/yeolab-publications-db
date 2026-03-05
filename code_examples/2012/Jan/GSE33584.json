@@ -1,25 +1,25 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Adapter-trimmed sequencing libraries were mapped against an index composed of both the human (UCSC hg19, http://genome.ucsc.edu) and HCMV Towne (Genbank FJ616285.1) genomes, using Bowtie software (version 0.12.7, with parameters -k 1 -m 10 -l 25 --best).",
-      "tool_name": "Bowtie",
-      "tool_version": "0.12.7",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Custom Perl scripts were used to overlap mapped coordinates with smRNA annotations, which were obtained from miRBase 16.0 (http://www.mirbase.org) and the UCSC Table Browser.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Adapter-trimmed sequencing libraries were mapped against an index composed of both the human (UCSC hg19, http://genome.ucsc.edu) and HCMV Towne (Genbank FJ616285.1) genomes, using Bowtie software (version 0.12.7, with parameters -k 1 -m 10 -l 25 --best). Custom Perl scripts were used to overlap mapped coordinates with smRNA annotations, which were obtained from miRBase 16.0 (http://www.mirbase.org) and the UCSC Table Browser.",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Adapter-trimmed sequencing libraries were mapped against an index composed of both the human (UCSC hg19, http://genome.ucsc.edu) and HCMV Towne (Genbank FJ616285.1) genomes, using Bowtie software (version 0.12.7, with parameters -k 1 -m 10 -l 25 --best).",
+            "tool_name": "Bowtie",
+            "tool_version": "0.12.7",
+            "code_example": "# Install Bowtie (version 0.12.7 or compatible)\n# conda install -c bioconda bowtie=0.12.7\n\n# --- Reference Genome Preparation ---\n# 1. Download human genome (UCSC hg19)\nwget -O hg19.fa.gz http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.fa.gz\ngunzip hg19.fa.gz\n\n# 2. Download HCMV Towne genome (Genbank FJ616285.1)\n# Ensure 'entrez-direct' is installed for 'efetch': conda install -c bioconda entrez-direct\nefetch -db nuccore -id FJ616285.1 -format fasta > HCMV_Towne.fa\n\n# 3. Combine genomes into a single FASTA file\ncat hg19.fa HCMV_Towne.fa > combined_human_hcmv.fa\n\n# 4. Build Bowtie index for the combined genome\n# The index name will be 'combined_human_hcmv'\nbowtie-build combined_human_hcmv.fa combined_human_hcmv\n\n# --- Alignment Step ---\n# Placeholder for adapter-trimmed sequencing libraries (e.g., trimmed_reads.fastq)\n# Replace 'trimmed_reads.fastq' with your actual input file\n# Replace 'mapped_reads.sam' with your desired output file name\nbowtie -k 1 -m 10 -l 25 --best combined_human_hcmv trimmed_reads.fastq mapped_reads.sam",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Custom Perl scripts were used to overlap mapped coordinates with smRNA annotations, which were obtained from miRBase 16.0 (http://www.mirbase.org) and the UCSC Table Browser.",
+            "tool_name": "Custom Perl scripts",
+            "tool_version": "",
+            "code_example": "# Placeholder for input mapped coordinates (e.g., from a previous alignment/peak calling step)\nINPUT_MAPPED_COORDINATES=\"path/to/your/mapped_coordinates.bed\"\n\n# Reference smRNA annotations from miRBase 16.0\n# miRBase 16.0 is an older version. The exact download URL for a BED file might vary or require conversion from GFF.\n# For demonstration, assume a pre-processed BED file is available.\nMIRBASE_16_0_SMRNA_BED=\"path/to/mirbase_16.0_smrna.bed\"\n\n# Reference smRNA annotations from UCSC Table Browser\n# These would typically be downloaded via the UCSC Table Browser interface for a specific genome and track.\n# For demonstration, assume a pre-processed BED file is available.\nUCSC_SMRNA_BED=\"path/to/ucsc_smrna.bed\"\n\n# Combine smRNA annotations if the custom script expects a single file\n# This step might be handled internally by the custom script or done beforehand.\n# cat \"${MIRBASE_16_0_SMRNA_BED}\" \"${UCSC_SMRNA_BED}\" | sort -k1,1 -k2,2n | bedtools merge > combined_smrna_annotations.bed\nCOMBINED_SMRNA_ANNOTATIONS=\"path/to/combined_smrna_annotations.bed\" # Or use the output of the above command\n\n# Execute the custom Perl script to overlap mapped coordinates with smRNA annotations.\n# The exact script name and parameters are unknown, so this is a generic representation.\n# The script would take mapped coordinates and smRNA annotations as input and produce overlapped regions.\nperl custom_overlap_script.pl \\\n    --input_mapped_coordinates \"${INPUT_MAPPED_COORDINATES}\" \\\n    --smrna_annotations \"${COMBINED_SMRNA_ANNOTATIONS}\" \\\n    --output_overlapped_regions \"overlapped_smrna_regions.bed\"",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Adapter-trimmed sequencing libraries were mapped against an index composed of both the human (UCSC hg19, http://genome.ucsc.edu) and HCMV Towne (Genbank FJ616285.1) genomes, using Bowtie software (version 0.12.7, with parameters -k 1 -m 10 -l 25 --best). Custom Perl scripts were used to overlap mapped coordinates with smRNA annotations, which were obtained from miRBase 16.0 (http://www.mirbase.org) and the UCSC Table Browser.",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

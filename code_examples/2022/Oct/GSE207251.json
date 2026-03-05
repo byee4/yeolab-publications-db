@@ -1,43 +1,43 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Adapters trimmed with cutadapt (v1.4.0)",
-      "tool_name": "cutadapt",
-      "tool_version": "1.4.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Reads mapping to repetitive elements (RepBase v18.04) with STAR were removed",
-      "tool_name": "STAR",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Remaining reads were mapped to mouse genome mm9 with STAR (v2.4.0i)",
-      "tool_name": "STAR",
-      "tool_version": "2.4.0i",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "FeatureCounts was used to assign reads to genes (v1.5.0)",
-      "tool_name": "featureCounts",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Adapters trimmed with cutadapt (v1.4.0)\nReads mapping to repetitive elements (RepBase v18.04) with STAR were removed\nRemaining reads were mapped to mouse genome mm9 with STAR (v2.4.0i)\nFeatureCounts was used to assign reads to genes (v1.5.0)\nAssembly: mm9\nSupplementary files format and content: tpm_filtered.csv, comma separated file with transcripts per million calculated for all expressed genes.\nSupplementary files format and content: deseq2_results.csv, comma separated file with results from differential expression analysis (prion vs mock) calculated with DESeq2",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Adapters trimmed with cutadapt (v1.4.0)",
+            "tool_name": "cutadapt",
+            "tool_version": "1.4.0",
+            "code_example": "# Install cutadapt (if not already installed)\n# conda install -c bioconda cutadapt=1.4.0\n\n# Define adapter sequences based on common Illumina TruSeq adapters used in eCLIP assays.\n# These sequences are often found in the Yeo lab's eCLIP CWL workflow (e.g., https://github.com/yeolab/eclip/blob/master/eclip.cwl).\nADAPTER_3_PRIME=\"AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC\" # Illumina TruSeq 3' adapter\nADAPTER_5_PRIME=\"AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT\" # Illumina TruSeq 5' adapter\n\n# Define placeholder input and output files\nINPUT_FASTQ=\"input_reads.fastq.gz\"\nOUTPUT_FASTQ=\"trimmed_reads.fastq.gz\"\n\n# Parameters inferred from common eCLIP preprocessing steps:\n# -a: 3' adapter sequence to be removed from the 3' end of reads.\n# -g: 5' adapter sequence to be removed from the 5' end of reads.\n# -u 6: Trim 6 bases from the 5' end of reads (common for UMI or random primer removal in eCLIP).\n# -q 20: Quality trim from the 3' end using a quality threshold of 20.\n# -m 18: Discard reads shorter than 18 bp after trimming.\n# -o: Specify the output file.\n# Note: --cores or parallel processing options were not available in cutadapt v1.4.0.\n\ncutadapt -a \"${ADAPTER_3_PRIME}\" \\\n         -g \"${ADAPTER_5_PRIME}\" \\\n         -u 6 \\\n         -q 20 \\\n         -m 18 \\\n         -o \"${OUTPUT_FASTQ}\" \\\n         \"${INPUT_FASTQ}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/marcelm/cutadapt"
+        },
+        {
+            "step_order": 2,
+            "description": "Reads mapping to repetitive elements (RepBase v18.04) with STAR were removed",
+            "tool_name": "STAR",
+            "tool_version": "2.7.3a",
+            "code_example": "# --- Installation (commented out) ---\n# conda create -n star_env star -y\n# conda activate star_env\n\n# --- Reference Data Setup (commented out, assuming RepBase index is pre-built) ---\n# Download RepBase v18.04 FASTA (e.g., from GIRINST or a local mirror)\n# Example: wget -O repbase_v18.04.fasta \"https://www.girinst.org/repbase/update/RepBase_v18.04.fasta.gz\"\n# gunzip repbase_v18.04.fasta.gz\n\n# Build STAR index for RepBase v18.04\n# REPBASE_FASTA=\"repbase_v18.04.fasta\" # Path to RepBase v18.04 FASTA file\n# REPBASE_STAR_INDEX=\"/path/to/repbase_star_index\" # Directory for the STAR index\n# mkdir -p \"${REPBASE_STAR_INDEX}\"\n# STAR --runMode genomeGenerate \\\n#      --genomeDir \"${REPBASE_STAR_INDEX}\" \\\n#      --genomeFastaFiles \"${REPBASE_FASTA}\" \\\n#      --genomeSAindexNbases 10 # Recommended for smaller genomes/decoy sequences\n\n# --- Parameters ---\nREAD1=\"input_R1.fastq.gz\" # Path to input Read 1 FASTQ file\nREAD2=\"input_R2.fastq.gz\" # Path to input Read 2 FASTQ file (remove if single-end)\nREPBASE_STAR_INDEX=\"/path/to/repbase_star_index\" # Path to the pre-built STAR index for RepBase v18.04\nOUTPUT_PREFIX=\"filtered_from_repbase\" # Prefix for output files\nTHREADS=8 # Number of threads to use\n\n# --- Execution Command ---\n# Align reads to the RepBase index. Reads that map to repetitive elements are effectively \"removed\"\n# by outputting only the unmapped reads for subsequent analysis.\nSTAR --genomeDir \"${REPBASE_STAR_INDEX}\" \\\n     --readFilesIn \"${READ1}\" \"${READ2}\" \\\n     --readFilesCommand zcat \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}_\" \\\n     --outSAMtype None \\\n     --outReadsUnmapped Fastx \\\n     --outFilterMultimapNmax 100 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 1 \\\n     --outFilterScoreMinOverLread 0 \\\n     --outFilterMatchNminOverLread 0 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --alignSJoverhangMin 8 \\\n     --alignSJDBoverhangMin 1 \\\n     --sjdbScore 1 \\\n     --runThreadN \"${THREADS}\"\n\n# Output files:\n# - ${OUTPUT_PREFIX}_Unmapped.out.mate1: FASTQ file containing Read 1 sequences that did NOT map to RepBase.\n# - ${OUTPUT_PREFIX}_Unmapped.out.mate2: FASTQ file containing Read 2 sequences that did NOT map to RepBase (if paired-end).\n# These unmapped reads are the ones that proceed to the next step of the pipeline (e.g., alignment to the main genome).",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip"
+        },
+        {
+            "step_order": 3,
+            "description": "Remaining reads were mapped to mouse genome mm9 with STAR (v2.4.0i)",
+            "tool_name": "STAR",
+            "tool_version": "2.4.0i",
+            "code_example": "# Install STAR if not already installed\n# conda install -c bioconda star=2.4.0i\n\n# Define variables (adjust paths as needed)\n# Placeholder for input reads. \"Remaining reads\" implies a single FASTQ or gzipped FASTQ.\nINPUT_FASTQ=\"remaining_reads.fastq.gz\"\n# Placeholder for the STAR genome index directory for mouse genome mm9.\n# This directory should contain genome.fa, SA, SAindex, etc., pre-built by STAR --runMode genomeGenerate.\n# Example: /path/to/star_index/mm9\nGENOME_DIR=\"/path/to/star_index/mm9\"\n# Prefix for output files (e.g., mapped_reads.Aligned.sortedByCoord.out.bam)\nOUTPUT_PREFIX=\"mapped_reads\"\n# Number of threads to use for alignment\nNUM_THREADS=8 # Adjust based on available CPU cores\n\n# Run STAR alignment\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${INPUT_FASTQ}\" \\\n     --runThreadN \"${NUM_THREADS}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --outSAMtype BAM SortedByCoordinate # Common output format for downstream analysis",
+            "code_language": "bash",
+            "github_url": "https://github.com/alexdobin/STAR"
+        },
+        {
+            "step_order": 4,
+            "description": "FeatureCounts was used to assign reads to genes (v1.5.0)",
+            "tool_name": "featureCounts",
+            "tool_version": "1.5.0",
+            "code_example": "# Install featureCounts (part of the Subread package)\n# conda install -c bioconda subread\n\n# Example: Assign reads from an RNA-seq BAM file to genes using a GTF annotation.\n# This command assumes unstranded data (-s 0). Adjust -s 1 or -s 2 for stranded libraries.\n# Replace 'Homo_sapiens.GRCh38.109.gtf' with your actual gene annotation file (e.g., from Ensembl or GENCODE).\n# Replace 'aligned_reads.bam' with your input BAM file(s).\n# Replace 'gene_counts.txt' with your desired output file name.\nfeatureCounts -a Homo_sapiens.GRCh38.109.gtf \\\n              -o gene_counts.txt \\\n              -F GTF \\\n              -t exon \\\n              -g gene_id \\\n              -s 0 \\\n              -T 8 \\\n              aligned_reads.bam",
+            "code_language": "bash",
+            "github_url": ""
+        }
+    ],
+    "raw_text": "Adapters trimmed with cutadapt (v1.4.0)\nReads mapping to repetitive elements (RepBase v18.04) with STAR were removed\nRemaining reads were mapped to mouse genome mm9 with STAR (v2.4.0i)\nFeatureCounts was used to assign reads to genes (v1.5.0)\nAssembly: mm9\nSupplementary files format and content: tpm_filtered.csv, comma separated file with transcripts per million calculated for all expressed genes.\nSupplementary files format and content: deseq2_results.csv, comma separated file with results from differential expression analysis (prion vs mock) calculated with DESeq2",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

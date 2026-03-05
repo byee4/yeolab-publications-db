@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Reads for all samples were mapped to the human genome using Casava (Ver 1.8.2) with default paramters",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "RPKM values and reads counts were calculated using Casava",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Analysis of differntial gene expression was performed thorugh ratio analysis and R (Deseq package)",
-      "tool_name": "DESeq2",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Reads for all samples were mapped to the human genome using Casava (Ver 1.8.2) with default paramters\nRPKM values and reads counts were calculated using Casava\nAnalysis of differntial gene expression was performed thorugh ratio analysis and R (Deseq package)\nGenome_build: hg19\nSupplementary_files_format_and_content: KH_ratios_results.xlsx: This file contains the results of a ratio analysis of gene expression\nSupplementary_files_format_and_content: KH_DESeq_results.xlsx: This file contains the results of a gene expression analysi performed using the DEseq R package",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Reads for all samples were mapped to the human genome using Casava (Ver 1.8.2) with default paramters",
+            "tool_name": "Casava",
+            "tool_version": "1.8.2",
+            "code_example": "# Casava is an Illumina software suite, typically installed with sequencing instruments.\n# It orchestrates multiple steps including base calling, demultiplexing, and alignment (often using ELAND).\n# A direct single command for 'mapping' is not typically exposed, as it's part of a larger pipeline execution.\n# The following is a conceptual representation of initiating a Casava run for a human genome, assuming default parameters.\n# Replace '/path/to/run_folder' with your actual Illumina run folder containing BCL files.\n# Replace '/path/to/output_dir' with your desired output directory for FASTQ and alignment files.\n# Replace '/path/to/human_genome_index' with the path to your human genome (e.g., hg38) index prepared for ELAND or Casava's internal aligner.\n\n# Example of setting up and running a Casava 1.8.2 pipeline (conceptual):\n# This typically involves a configuration script and then a 'make' command.\n# The alignment to the human genome would be an internal step within this pipeline.\n\n# Navigate to the run folder (or a directory where you want to configure the run)\n# cd /path/to/run_folder\n\n# Configure the Casava pipeline. This step generates a Makefile.\n# The --genome-folder parameter would point to the pre-indexed human genome for alignment.\n# The --output-dir specifies where the processed data (including aligned reads) will be placed.\n# configureBclToFastq.pl \\\n#   --input-dir /path/to/run_folder/Data/Intensities/BaseCalls \\\n#   --output-dir /path/to/output_dir \\\n#   --sample-sheet /path/to/run_folder/SampleSheet.csv \\\n#   --genome-folder /path/to/human_genome_index \\\n#   --default-params # This is a placeholder for 'default parameters' as specified in the description\n\n# After configuration, execute the pipeline using make. This will perform base calling, demultiplexing, and alignment.\n# make -j <number_of_cores>\n\n# Since a direct, single command for 'mapping' with Casava 1.8.2 is not standard, and it's a pipeline, \n# a more generic representation of the *outcome* of mapping might be considered if a specific command is strictly required.\n# However, adhering to the description, the mapping is *done by* Casava.\n# For modern alignment, a tool like BWA or STAR would have a clear command, but Casava is an older, integrated system.\n\n# Placeholder for reference genome (hg38/GRCh38) if not explicitly provided in the description's context:\n# Reference genome: GRCh38/hg38\n# Source: NCBI/UCSC/GENCODE\n# Example index path (conceptual, depends on Casava's internal aligner requirements):\n# /path/to/human_genome_index/GRCh38_Casava_index",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "RPKM values and reads counts were calculated using Casava",
+            "tool_name": "RSEM (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "1.3.3",
+            "code_example": "# Install RSEM (if not already installed)\n# conda install -c bioconda rsem\n\n# Define reference genome and annotation\n# Replace with actual paths to your reference files\nGENOME_FASTA=\"GRCh38.p14.genome.fa\" # Placeholder for latest human assembly\nGTF_FILE=\"gencode.v44.annotation.gtf\" # Placeholder for latest GENCODE annotation for hg38\nRSEM_INDEX_BASE=\"rsem_ref\"\n\n# Define input and output files\n# Assuming 'sample.bam' is the aligned BAM file produced by Casava\nBAM_FILE=\"sample.bam\"\nSAMPLE_NAME=\"sample_id\"\nOUTPUT_DIR=\"rsem_output\"\n\n# Create output directory\nmkdir -p \"${OUTPUT_DIR}\"\n\n# 1. Build RSEM reference index (run this once per reference genome)\n# This step prepares the reference for RSEM quantification.\n# rsem-prepare-reference --gtf \"${GTF_FILE}\" \"${GENOME_FASTA}\" \"${RSEM_INDEX_BASE}\"\n\n# 2. Quantify expression using RSEM from aligned BAM files\n# --bam: Specifies that the input is a BAM file.\n# --no-qualities: Use if the BAM file does not contain quality scores (common for older alignments).\n# --paired-end: Use if the input reads are paired-end (remove if single-end).\n# --output-genome-bam: Outputs a genome-aligned BAM file (optional, can be removed if not needed).\n# --num-threads: Number of threads to use for parallel processing.\n# --estimate-rspd: Estimate read start position distribution (recommended for better accuracy).\n# --seed: Random seed for reproducibility.\nrsem-calculate-expression \\\n    --bam \\\n    --no-qualities \\\n    --paired-end \\\n    --output-genome-bam \\\n    --num-threads 8 \\\n    --estimate-rspd \\\n    --seed 12345 \\\n    \"${BAM_FILE}\" \\\n    \"${RSEM_INDEX_BASE}\" \\\n    \"${OUTPUT_DIR}/${SAMPLE_NAME}\"\n\necho \"RPKM values are available in the '${OUTPUT_DIR}/${SAMPLE_NAME}.genes.results' file, typically in the 'RPKM' column.\"",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/gb-2011-12-3-r22"
+        },
+        {
+            "step_order": 3,
+            "description": "Analysis of differntial gene expression was performed thorugh ratio analysis and R (Deseq package)",
+            "tool_name": "DESeq2",
+            "tool_version": "Bioconductor (Inferred with models/gemini-2.5-flash)",
+            "code_example": "# Install R and Bioconductor if not already installed\n# sudo apt-get update\n# sudo apt-get install -y r-base\n# R -e 'if (!requireNamespace(\"BiocManager\", quietly = TRUE)) install.packages(\"BiocManager\")'\n# R -e 'BiocManager::install(\"DESeq2\")'\n\n# Create placeholder input files for demonstration.\n# In a real scenario, 'counts_matrix.tsv' would be generated by upstream quantification tools\n# (e.g., featureCounts, HTSeq, Salmon, Kallisto) and 'sample_metadata.tsv' would be provided.\n\n# Placeholder for gene count matrix\necho -e \"gene_id\\tsample1\\tsample2\\tsample3\\tsample4\" > counts_matrix.tsv\necho -e \"geneA\\t100\\t120\\t50\\t60\" >> counts_matrix.tsv\necho -e \"geneB\\t50\\t60\\t100\\t110\" >> counts_matrix.tsv\necho -e \"geneC\\t200\\t210\\t220\\t230\" >> counts_matrix.tsv\necho -e \"geneD\\t10\\t12\\t20\\t25\" >> counts_matrix.tsv\n\n# Placeholder for sample metadata\necho -e \"sample\\tcondition\" > sample_metadata.tsv\necho -e \"sample1\\tcontrol\" >> sample_metadata.tsv\necho -e \"sample2\\tcontrol\" >> sample_metadata.tsv\necho -e \"sample3\\ttreated\" >> sample_metadata.tsv\necho -e \"sample4\\ttreated\" >> sample_metadata.tsv\n\n# R script for DESeq2 analysis\ncat << 'EOF' > run_deseq2.R\nlibrary(DESeq2)\n\n# Load count data\n# The first column is assumed to be gene IDs, and subsequent columns are sample counts.\ncount_data <- read.table(\"counts_matrix.tsv\", header = TRUE, row.names = 1, sep = \"\\t\")\n# DESeq2 requires integer counts\ncount_data <- round(count_data)\n\n# Load sample metadata\n# The first column is assumed to be sample IDs, and subsequent columns are experimental factors.\nsample_data <- read.table(\"sample_metadata.tsv\", header = TRUE, row.names = 1, sep = \"\\t\")\n\n# Ensure sample names in count data and metadata match and are in the same order\nsample_data <- sample_data[colnames(count_data), , drop = FALSE]\n\n# Create DESeqDataSet object\n# 'design' specifies the experimental design, here comparing 'condition' groups.\ndds <- DESeqDataSetFromMatrix(countData = count_data,\n                              colData = sample_data,\n                              design = ~ condition)\n\n# Run DESeq2 analysis\ndds <- DESeq(dds)\n\n# Get results for 'treated' vs 'control'\n# The contrast argument specifies the comparison: c(\"factor\", \"level_numerator\", \"level_denominator\")\nres <- results(dds, contrast = c(\"condition\", \"treated\", \"control\"))\n\n# Order results by adjusted p-value\nres_ordered <- res[order(res$padj),]\n\n# Save differential expression results\nwrite.csv(as.data.frame(res_ordered), file = \"deseq2_results.csv\")\n\n# Optional: Save normalized counts\nnormalized_counts <- counts(dds, normalized=TRUE)\nwrite.csv(as.data.frame(normalized_counts), file = \"deseq2_normalized_counts.csv\")\n\nmessage(\"DESeq2 analysis complete. Results saved to deseq2_results.csv\")\nEOF\n\n# Execute the R script\nRscript run_deseq2.R",
+            "code_language": "bash",
+            "github_url": "https://bioconductor.org/packages/release/bioc/html/DESeq2.html"
+        }
+    ],
+    "raw_text": "Reads for all samples were mapped to the human genome using Casava (Ver 1.8.2) with default paramters\nRPKM values and reads counts were calculated using Casava\nAnalysis of differntial gene expression was performed thorugh ratio analysis and R (Deseq package)\nGenome_build: hg19\nSupplementary_files_format_and_content: KH_ratios_results.xlsx: This file contains the results of a ratio analysis of gene expression\nSupplementary_files_format_and_content: KH_DESeq_results.xlsx: This file contains the results of a gene expression analysi performed using the DEseq R package",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

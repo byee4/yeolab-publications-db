@@ -1,34 +1,34 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Sample demultiplexing, barcode processing, alignment, filtering, UMI counting, and aggregation of multiple sequencing runs were performed using the Cell Ranger analysis pipeline (v1.2)",
-      "tool_name": "Cell Ranger",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "Data normalization, dimension reduction, and differential expression analysis were performed using the Seurat R package (v2.2.0)",
-      "tool_name": "Seurat",
-      "tool_version": "2.2.0",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "Single cell signatures scoring was performed using the FastProject software (v1.1.0)",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Sample demultiplexing, barcode processing, alignment, filtering, UMI counting, and aggregation of multiple sequencing runs were performed using the Cell Ranger analysis pipeline (v1.2)\nData normalization, dimension reduction, and differential expression analysis were performed using the Seurat R package (v2.2.0)\nSingle cell signatures scoring was performed using the FastProject software (v1.1.0)\nGenome_build: mm10\nSupplementary_files_format_and_content: matrix.mtx file is count matrix in sparse matrix format; barcodes.tsv is list of barcodes for each sample; genes.tsv is list of genes detected in samples",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Sample demultiplexing, barcode processing, alignment, filtering, UMI counting, and aggregation of multiple sequencing runs were performed using the Cell Ranger analysis pipeline (v1.2)",
+            "tool_name": "Cell Ranger",
+            "tool_version": "1.2",
+            "code_example": "# Install Cell Ranger (example: download and add to PATH)\n# # Download Cell Ranger v1.2 from 10x Genomics website (requires login)\n# # e.g., wget https://cf.10xgenomics.com/releases/cell-exp/cellranger-1.2.0.tar.gz\n# # tar -xzf cellranger-1.2.0.tar.gz\n# # export PATH=/path/to/cellranger-1.2.0:$PATH\n\n# Define variables\nOUTPUT_ID=\"my_cellranger_analysis\"\nFASTQ_DIR=\"/path/to/your/fastq_files\" # Directory containing FASTQ files (e.g., from cellranger mkfastq)\nSAMPLE_NAME=\"my_sample\"\n# Reference transcriptome (e.g., human GRCh38-2020-A)\n# Download from 10x Genomics: https://www.10xgenomics.com/resources/cell-ranger-downloads\nTRANSCRIPTOME_REF=\"/path/to/refdata-gex-GRCh38-2020-A\"\n\n# Run Cell Ranger count to perform demultiplexing, barcode processing, alignment, filtering, and UMI counting\n# This command processes a single sample, potentially from multiple sequencing runs/lanes if FASTQs are in the specified directory.\ncellranger count \\\n    --id=\"${OUTPUT_ID}\" \\\n    --transcriptome=\"${TRANSCRIPTOME_REF}\" \\\n    --fastqs=\"${FASTQ_DIR}\" \\\n    --sample=\"${SAMPLE_NAME}\" \\\n    --localcores=8 \\\n    --localmem=64\n\n# If \"aggregation of multiple sequencing runs\" refers to combining outputs from multiple *samples*,\n# you would use cellranger aggr after running cellranger count for each sample.\n# Example for cellranger aggr:\n# # Create an aggregation CSV file (e.g., aggregation.csv) with sample_id and molecule_h5 paths\n# # sample_id,molecule_h5\n# # sample1,/path/to/sample1_output/outs/molecule_info.h5\n# # sample2,/path/to/sample2_output/outs/molecule_info.h5\n# # cellranger aggr --id=\"aggregated_output\" --csv=\"aggregation.csv\" --normalize=none\n",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "Data normalization, dimension reduction, and differential expression analysis were performed using the Seurat R package (v2.2.0)",
+            "tool_name": "Seurat",
+            "tool_version": "2.2.0",
+            "code_example": "# Install R if not already present\n# sudo apt-get update\n# sudo apt-get install -y r-base\n\n# Install devtools if not already present\n# R -e 'install.packages(\"devtools\")'\n\n# Install Seurat v2.2.0 using devtools::install_version\n# R -e 'devtools::install_version(\"Seurat\", version = \"2.2.0\", repos = \"http://cran.us.r-project.org\")'\n\n# This script assumes Seurat v2.2.0 is installed and R is available.\n# It demonstrates the typical steps for normalization, dimension reduction, and differential expression.\n# Replace the dummy data loading with your actual input data (e.g., a count matrix).\n\nRscript -e '\nlibrary(Seurat)\n\n# --- 1. Load Data ---\n# In a real scenario, you would load your single-cell RNA-seq count matrix.\n# Example: pbmc.data <- Read10X(data.dir = \"path/to/10x/data/\")\n# For demonstration, we create a small dummy count matrix.\nset.seed(123)\ndummy_counts <- matrix(sample(0:100, 1000, replace = TRUE), nrow = 100, ncol = 10)\nrownames(dummy_counts) <- paste0(\"gene\", 1:100)\ncolnames(dummy_counts) <- paste0(\"cell\", 1:10)\npbmc <- CreateSeuratObject(raw.data = dummy_counts)\n\n# --- 2. Normalization ---\n# Normalizes the raw expression data. LogNormalize is the default for Seurat v2.\npbmc <- NormalizeData(object = pbmc, normalization.method = \"LogNormalize\", scale.factor = 10000)\n\n# --- 3. Find Variable Genes (Optional but common before dimension reduction) ---\n# Identifies genes that are highly variable across cells.\npbmc <- FindVariableGenes(object = pbmc, mean.function = ExpMean, dispersion.function = LogVMR, \n                          x.low.cutoff = 0.0125, x.high.cutoff = 3, y.cutoff = 0.5)\n\n# --- 4. Scale Data ---\n# Scales and centers the data. This is crucial before performing PCA.\n# Common covariates like \"nUMI\" (number of unique molecular identifiers) can be regressed out.\npbmc <- ScaleData(object = pbmc, vars.to.regress = c(\"nUMI\"))\n\n# --- 5. Dimension Reduction (PCA) ---\n# Performs Principal Component Analysis on the scaled data.\npbmc <- RunPCA(object = pbmc, pc.genes = pbmc@var.genes, do.print = FALSE, pcs.print = 1:5, genes.print = 5)\n\n# --- 6. Cluster Cells (Optional but common after dimension reduction) ---\n# Finds clusters of cells based on their PCA embeddings.\npbmc <- FindClusters(object = pbmc, reduction.type = \"pca\", dims.use = 1:10, resolution = 0.6, print.output = 0, save.SNN = TRUE)\n\n# --- 7. Differential Expression Analysis ---\n# Identifies genes that are differentially expressed between cell clusters.\n# Example: Find markers for cluster 0 compared to all other cells.\n# Replace \"0\" with the actual cluster ID you want to analyze.\ncluster_0_markers <- FindMarkers(object = pbmc, ident.1 = 0, min.pct = 0.25)\n\n# To find markers for all clusters, uncomment the following:\n# all_markers <- FindAllMarkers(object = pbmc, only.pos = TRUE, min.pct = 0.25, thresh.use = 0.25)\n\n# --- 8. Save Results (Optional) ---\n# Save the processed Seurat object and/or differential expression results.\n# saveRDS(pbmc, file = \"processed_seurat_object.rds\")\n# write.csv(cluster_0_markers, \"cluster_0_markers.csv\")\n# write.csv(all_markers, \"all_cluster_markers.csv\")\n'",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1016/j.cell.2018.07.020"
+        },
+        {
+            "step_order": 3,
+            "description": "Single cell signatures scoring was performed using the FastProject software (v1.1.0)",
+            "tool_name": "FastProject",
+            "tool_version": "1.1.0",
+            "code_example": "# Install FastProject (if not already installed)\n# pip install fastproject\n\n# Example command for single cell signatures scoring with FastProject v1.1.0\n# This is a generic example as specific parameters (input files, output directory, etc.) are not provided in the description.\n# Replace 'input_expression_matrix.h5ad' with your actual single-cell expression data (e.g., anndata object).\n# Replace 'gene_signatures.gmt' with your actual gene signature file (e.g., in GMT format).\n# Replace 'output_directory' with your desired output location.\nfastproject \\\n  --expression_matrix input_expression_matrix.h5ad \\\n  --signatures gene_signatures.gmt \\\n  --output_dir output_directory",
+            "code_language": "bash",
+            "github_url": "https://github.com/YosefLab/FastProject"
+        }
+    ],
+    "raw_text": "Sample demultiplexing, barcode processing, alignment, filtering, UMI counting, and aggregation of multiple sequencing runs were performed using the Cell Ranger analysis pipeline (v1.2)\nData normalization, dimension reduction, and differential expression analysis were performed using the Seurat R package (v2.2.0)\nSingle cell signatures scoring was performed using the FastProject software (v1.1.0)\nGenome_build: mm10\nSupplementary_files_format_and_content: matrix.mtx file is count matrix in sparse matrix format; barcodes.tsv is list of barcodes for each sample; genes.tsv is list of genes detected in samples",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }

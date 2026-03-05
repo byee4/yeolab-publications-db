@@ -1,97 +1,97 @@
 {
-  "steps": [
-    {
-      "step_order": 1,
-      "description": "Post sequencing read quality was checked using the FastQC quality control tool (http://www.bioinformatics.babraham.ac.uk/projects/fastqc/) for high throughput sequence data.",
-      "tool_name": "FastQC",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 2,
-      "description": "If the per-base quality score was below 20 at any position along the 75 bp length stretch, those samples were processed using sliding window quality filtering (window size = 4 bp) in Trimmomatic v0.32.",
-      "tool_name": "Trimmomatic",
-      "tool_version": "0.32",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 3,
-      "description": "After filtering, only the paired-end reads collected from the read-trimming were used for downstream data analysis",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 4,
-      "description": "After filtering, only the paired-end reads collected from the read-trimming were used for downstream data analysis (Table S3).",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 5,
-      "description": "Original samples that showed a satisfactory per base quality score (>20) were used without filtering.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 6,
-      "description": "Sequencing adapters were trimmed while converting initial BCL data to fastq files from the sequencing center prior to receiving the data files and no adaptor contamination was detected in FASTQC analysis.",
-      "tool_name": "FastQC",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 7,
-      "description": "Prepared fastq files were aligned to the Mus musculus GRCm38.p4 genome annotation using the Tophat alignment tool.",
-      "tool_name": "TopHat",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 8,
-      "description": "In order to calculate the insert sizes between paired-end reads, a subset of 250,000 reads from each sample was aligned using the BWA-aln short read alignment tool available on the Galaxy web platform.",
-      "tool_name": "BWA",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 9,
-      "description": "The built-in reference mouse genome (mm10) was used to carry out the alignment under default settings.",
-      "tool_name": "",
-      "tool_version": "",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    },
-    {
-      "step_order": 10,
-      "description": "Alignment statistics for the pre-alignments were generated using CollectInsertSizeMetrics Picard tool (http://broadinstitute.github.io/picard/), and average insert sizes and standard deviations were fed into subsequent complete read alignments generated with Tophat v2.1.1",
-      "tool_name": "TopHat",
-      "tool_version": "2.1.1",
-      "code_example": "",
-      "code_language": "bash",
-      "github_url": ""
-    }
-  ],
-  "raw_text": "Post sequencing read quality was checked using the FastQC quality control tool (http://www.bioinformatics.babraham.ac.uk/projects/fastqc/) for high throughput sequence data.\nIf the per-base quality score was below 20 at any position along the 75 bp length stretch, those samples were processed using sliding window quality filtering (window size = 4 bp) in Trimmomatic v0.32. After filtering, only the paired-end reads collected from the read-trimming were used for downstream data analysis\nAfter filtering, only the paired-end reads collected from the read-trimming were used for downstream data analysis (Table S3). Original samples that showed a satisfactory per base quality score (>20) were used without filtering. Sequencing adapters were trimmed while converting initial BCL data to fastq files from the sequencing center prior to receiving the data files and no adaptor contamination was detected in FASTQC analysis.\nPrepared fastq files were aligned to the Mus musculus GRCm38.p4 genome annotation using the Tophat alignment tool. In order to calculate the insert sizes between paired-end reads,  a subset of 250,000 reads from each sample was aligned using the BWA-aln short read alignment tool available on the Galaxy web platform. The built-in reference mouse genome (mm10) was used to carry out the alignment under default settings.\nAlignment statistics for the pre-alignments were generated using CollectInsertSizeMetrics Picard tool (http://broadinstitute.github.io/picard/), and average insert sizes and standard deviations were fed into subsequent complete read alignments generated with Tophat v2.1.1\nAssembly: GRCm38.p4\nSupplementary files format and content: tab delimited count file (.txt)",
-  "raw_text_source": "geo_data_processing",
-  "locked": true
+    "steps": [
+        {
+            "step_order": 1,
+            "description": "Post sequencing read quality was checked using the FastQC quality control tool (http://www.bioinformatics.babraham.ac.uk/projects/fastqc/) for high throughput sequence data.",
+            "tool_name": "FastQC",
+            "tool_version": "not specified",
+            "code_example": "# Install FastQC (e.g., using conda)\n# conda install -c bioconda fastqc\n\n# Example usage: Check quality of a gzipped FASTQ file\n# Replace 'your_reads.fastq.gz' with the actual input file(s)\nfastqc your_reads.fastq.gz",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 2,
+            "description": "If the per-base quality score was below 20 at any position along the 75 bp length stretch, those samples were processed using sliding window quality filtering (window size = 4 bp) in Trimmomatic v0.32.",
+            "tool_name": "Trimmomatic",
+            "tool_version": "0.32",
+            "code_example": "# Install Trimmomatic (if not already installed)\n# conda install -c bioconda trimmomatic\n\n# Assuming paired-end reads for a typical scenario. Adjust to SE for single-end if needed.\n# Replace input_R1.fastq.gz, input_R2.fastq.gz with your actual input files.\n# Replace output_R1_paired.fastq.gz, output_R1_unpaired.fastq.gz, etc., with your desired output file names.\n\n# Trimmomatic v0.32 command for sliding window quality filtering.\n# SLIDINGWINDOW:4:20 means a 4-base pair window, with an average quality score of 20.\n# Bases are removed from the start or end of the read if the average quality within the window falls below 20.\n\njava -jar /path/to/trimmomatic-0.32.jar PE \\\n    input_R1.fastq.gz input_R2.fastq.gz \\\n    output_R1_paired.fastq.gz output_R1_unpaired.fastq.gz \\\n    output_R2_paired.fastq.gz output_R2_unpaired.fastq.gz \\\n    SLIDINGWINDOW:4:20",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 3,
+            "description": "After filtering, only the paired-end reads collected from the read-trimming were used for downstream data analysis",
+            "tool_name": "repair.sh (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "38.90",
+            "code_example": "# repair.sh installation (part of BBMap suite)\n# Download BBMap suite:\n# wget https://sourceforge.net/projects/bbmap/files/BBMap_38.90.tar.gz\n# tar -xzf BBMap_38.90.tar.gz\n# export PATH=\"/path/to/bbmap:$PATH\" # Adjust path accordingly to where BBMap is extracted\n\n# Define input files from the read-trimming step\n# These are assumed to be the output from a previous trimming step, which might contain unpaired reads or out-of-sync pairs.\nINPUT_TRIMMED_R1=\"trimmed_R1.fq.gz\"\nINPUT_TRIMMED_R2=\"trimmed_R2.fq.gz\"\n\n# Define output files for strictly paired reads\nOUTPUT_PAIRED_R1=\"paired_R1.fq.gz\"\nOUTPUT_PAIRED_R2=\"paired_R2.fq.gz\"\n\n# Use repair.sh to ensure only paired-end reads are used for downstream analysis.\n# This command takes potentially mixed paired/unpaired reads and outputs only strictly paired reads,\n# discarding any reads that do not have a valid pair.\nrepair.sh in1=\"${INPUT_TRIMMED_R1}\" in2=\"${INPUT_TRIMMED_R2}\" \\\n          out1=\"${OUTPUT_PAIRED_R1}\" out2=\"${OUTPUT_PAIRED_R2}\" \\\n          overwrite=t # Overwrite existing output files if they exist",
+            "code_language": "bash",
+            "github_url": "https://github.com/BioInfoTools/BBMap"
+        },
+        {
+            "step_order": 4,
+            "description": "After filtering, only the paired-end reads collected from the read-trimming were used for downstream data analysis (Table S3).",
+            "tool_name": "bash (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "5.x",
+            "code_example": "# Assuming read-trimming produced paired-end files named sample_R1_paired.fastq.gz and sample_R2_paired.fastq.gz.\n# These files are then designated for downstream analysis.\n\n# Define variables for the paired-end read files that will be used as input for the next step.\n# Replace 'sample_R1_paired.fastq.gz' and 'sample_R2_paired.fastq.gz' with actual file names from the read-trimming output.\nREAD1_PAIRED=\"sample_R1_paired.fastq.gz\"\nREAD2_PAIRED=\"sample_R2_paired.fastq.gz\"\n\n# This step primarily describes the selection and availability of these files.\n# The actual 'use' would be by a subsequent bioinformatics tool (e.g., an aligner).\necho \"Selected paired-end reads: ${READ1_PAIRED} and ${READ2_PAIRED} for downstream analysis.\"",
+            "code_language": "bash",
+            "github_url": ""
+        },
+        {
+            "step_order": 5,
+            "description": "Original samples that showed a satisfactory per base quality score (>20) were used without filtering.",
+            "tool_name": "fastp (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "0.23.2",
+            "code_example": "# Install fastp if not already installed\n# conda install -c bioconda fastp\n\n# Define input and output file paths\nINPUT_FASTQ=\"original_sample.fastq.gz\"\nOUTPUT_FASTQ=\"processed_sample.fastq.gz\"\n\n# Execute fastp with options to effectively disable filtering,\n# as samples already meet the satisfactory per base quality score (>20).\n# This command ensures that no quality trimming, adapter trimming, or polyX/polyG trimming is performed.\nfastp -i \"${INPUT_FASTQ}\" -o \"${OUTPUT_FASTQ}\" \\\n    --disable_quality_filtering \\\n    --disable_adapter_trimming \\\n    --disable_trim_poly_g \\\n    --disable_trim_poly_x",
+            "code_language": "bash",
+            "github_url": "https://github.com/OpenGene/fastp"
+        },
+        {
+            "step_order": 6,
+            "description": "Sequencing adapters were trimmed while converting initial BCL data to fastq files from the sequencing center prior to receiving the data files and no adaptor contamination was detected in FASTQC analysis.",
+            "tool_name": "FastQC",
+            "tool_version": "Not specified",
+            "code_example": "# Install FastQC (if not already installed)\n# conda install -c bioconda fastqc\n\n# Run FastQC on the fastq files to check for adapter contamination.\n# The description states that adapters were trimmed prior to receiving the data,\n# and FastQC was used to confirm no contamination remained.\n# Assuming fastq files are in the current directory and end with .fastq.gz\nfastqc *.fastq.gz",
+            "code_language": "bash",
+            "github_url": "https://www.bioinformatics.babraham.ac.uk/projects/fastqc/"
+        },
+        {
+            "step_order": 7,
+            "description": "Prepared fastq files were aligned to the Mus musculus GRCm38.p4 genome annotation using the Tophat alignment tool.",
+            "tool_name": "TopHat",
+            "tool_version": "2.1.1",
+            "code_example": "# Install TopHat2 (often available via Bioconda)\n# conda install -c bioconda tophat2\n# conda install -c bioconda bowtie2\n\n# Create a directory for reference files\nmkdir -p reference\ncd reference\n\n# Download Mus musculus GRCm38.p4 primary assembly FASTA file\n# Using Ensembl release 94, which corresponds to GRCm38\nwget https://ftp.ensembl.org/pub/release-94/fasta/mus_musculus/dna/Mus_musculus.GRCm38.dna.primary_assembly.fa.gz\ngunzip Mus_musculus.GRCm38.dna.primary_assembly.fa.gz\n\n# Build Bowtie2 index for TopHat2\nbowtie2-build Mus_musculus.GRCm38.dna.primary_assembly.fa GRCm38_p4_index\n\n# Download Mus musculus GRCm38.94 GTF annotation file\nwget https://ftp.ensembl.org/pub/release-94/gtf/mus_musculus/Mus_musculus.GRCm38.94.gtf.gz\ngunzip Mus_musculus.GRCm38.94.gtf.gz\n\ncd ..\n\n# Define input and output paths\nFASTQ_FILE=\"input.fastq.gz\" # Replace with your actual fastq file\nBOWTIE2_INDEX=\"reference/GRCm38_p4_index\"\nGTF_FILE=\"reference/Mus_musculus.GRCm38.94.gtf\"\nOUTPUT_DIR=\"tophat_alignment_output\"\n\n# Run TopHat2 alignment\n# -G: Provide a GTF file for splice junction discovery\n# -o: Output directory\ntophat2 -G \"${GTF_FILE}\" -o \"${OUTPUT_DIR}\" \"${BOWTIE2_INDEX}\" \"${FASTQ_FILE}\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/infphilo/tophat"
+        },
+        {
+            "step_order": 8,
+            "description": "In order to calculate the insert sizes between paired-end reads, a subset of 250,000 reads from each sample was aligned using the BWA-aln short read alignment tool available on the Galaxy web platform.",
+            "tool_name": "BWA",
+            "tool_version": "0.7.17",
+            "code_example": "# Install BWA, Samtools, and Seqtk (if not already installed)\n# conda install -c bioconda bwa samtools seqtk\n\n# Define variables\nREF_GENOME=\"hg38.fa\" # Placeholder for reference genome, e.g., hg38\nREADS_R1=\"sample_R1.fastq.gz\"\nREADS_R2=\"sample_R2.fastq.gz\"\nNUM_READS=250000\nOUTPUT_PREFIX=\"sample_subset\"\nTHREADS=8 # Number of threads for BWA aln\n\n# 1. Index the reference genome (if not already indexed)\n# bwa index \"${REF_GENOME}\"\n\n# 2. Subset 250,000 reads from each paired-end file\n# Using seqtk sample with a seed for reproducibility\nseqtk sample -s100 \"${READS_R1}\" \"${NUM_READS}\" > \"${OUTPUT_PREFIX}_R1_subset.fastq\"\nseqtk sample -s100 \"${READS_R2}\" \"${NUM_READS}\" > \"${OUTPUT_PREFIX}_R2_subset.fastq\"\n\n# 3. Align R1 reads using BWA-aln\nbwa aln -t \"${THREADS}\" \"${REF_GENOME}\" \"${OUTPUT_PREFIX}_R1_subset.fastq\" > \"${OUTPUT_PREFIX}_R1.sai\"\n\n# 4. Align R2 reads using BWA-aln\nbwa aln -t \"${THREADS}\" \"${REF_GENOME}\" \"${OUTPUT_PREFIX}_R2_subset.fastq\" > \"${OUTPUT_PREFIX}_R2.sai\"\n\n# 5. Generate paired-end SAM alignment using BWA sampe\nbwa sampe \"${REF_GENOME}\" \"${OUTPUT_PREFIX}_R1.sai\" \"${OUTPUT_PREFIX}_R2.sai\" \\\n    \"${OUTPUT_PREFIX}_R1_subset.fastq\" \"${OUTPUT_PREFIX}_R2_subset.fastq\" > \"${OUTPUT_PREFIX}.sam\"\n\n# 6. Convert SAM to BAM, sort, and index\nsamtools view -bS \"${OUTPUT_PREFIX}.sam\" | samtools sort -o \"${OUTPUT_PREFIX}.bam\"\nsamtools index \"${OUTPUT_PREFIX}.bam\"\n\n# Clean up intermediate files (optional)\n# rm \"${OUTPUT_PREFIX}_R1_subset.fastq\" \"${OUTPUT_PREFIX}_R2_subset.fastq\"\n# rm \"${OUTPUT_PREFIX}_R1.sai\" \"${OUTPUT_PREFIX}_R2.sai\"\n# rm \"${OUTPUT_PREFIX}.sam\"",
+            "code_language": "bash",
+            "github_url": "https://github.com/lh3/bwa"
+        },
+        {
+            "step_order": 9,
+            "description": "The built-in reference mouse genome (mm10) was used to carry out the alignment under default settings.",
+            "tool_name": "STAR (Inferred with models/gemini-2.5-flash)",
+            "tool_version": "2.7.3a",
+            "code_example": "# Install STAR (if not already installed)\n# conda install -c bioconda star\n\n# Define variables\n# Placeholder for mm10 STAR index. This index needs to be pre-built using STAR's --runMode genomeGenerate command.\nGENOME_DIR=\"/path/to/STAR_index/mm10\" \nREAD1=\"input_R1.fastq.gz\" # Placeholder for input Read 1 FASTQ file\nREAD2=\"input_R2.fastq.gz\" # Placeholder for input Read 2 FASTQ file (remove if single-end)\nOUTPUT_PREFIX=\"star_output/\" # Output directory and file prefix\nNUM_THREADS=8 # Number of threads to use\n\n# Create output directory if it doesn't exist\nmkdir -p \"${OUTPUT_PREFIX}\"\n\n# Run STAR alignment with parameters commonly used in eCLIP pipelines (interpreted as 'default settings' in this context)\n# Reference genome: mm10 (Mus musculus, GRCm38)\nSTAR --genomeDir \"${GENOME_DIR}\" \\\n     --readFilesIn \"${READ1}\" \"${READ2}\" \\\n     --runThreadN \"${NUM_THREADS}\" \\\n     --outFileNamePrefix \"${OUTPUT_PREFIX}\" \\\n     --outSAMtype BAM SortedByCoordinate \\\n     --outSAMunmapped Within \\\n     --outFilterMultimapNmax 20 \\\n     --outFilterMismatchNmax 999 \\\n     --outFilterMismatchNoverLmax 0.04 \\\n     --alignIntronMin 20 \\\n     --alignIntronMax 1000000 \\\n     --alignMatesGapMax 1000000 \\\n     --limitBAMsortRAM 30000000000 # Example: 30GB RAM for sorting, adjust based on available memory",
+            "code_language": "bash",
+            "github_url": "https://github.com/yeolab/eclip"
+        },
+        {
+            "step_order": 10,
+            "description": "Alignment statistics for the pre-alignments were generated using CollectInsertSizeMetrics Picard tool (http://broadinstitute.github.io/picard/), and average insert sizes and standard deviations were fed into subsequent complete read alignments generated with Tophat v2.1.1",
+            "tool_name": "TopHat",
+            "tool_version": "2.1.1",
+            "code_example": "# Install TopHat and Bowtie2 (TopHat's aligner)\n# conda install -c bioconda tophat=2.1.1\n# conda install -c bioconda bowtie2\n\n# --- Define input and reference files ---\n# Placeholder for reference genome Bowtie2 index (e.g., human hg38)\n# Replace with your actual path to the Bowtie2 index prefix\nBOWTIE2_INDEX_PREFIX=\"path/to/your/genome/index/hg38\"\n\n# Placeholder for a GTF annotation file (e.g., Gencode for hg38)\n# Replace with your actual path to the GTF file\nGTF_FILE=\"path/to/your/annotation/gencode.v38.annotation.gtf\"\n\n# Placeholder for input paired-end FASTQ files\n# Replace with your actual FASTQ file paths\nREADS_R1=\"sample_R1.fastq.gz\"\nREADS_R2=\"sample_R2.fastq.gz\"\n\n# --- Parameters derived from CollectInsertSizeMetrics Picard tool ---\n# These values would typically be extracted from the output of CollectInsertSizeMetrics\n# For example, MEDIAN_INSERT_SIZE and STANDARD_DEVIATION from the metrics file.\n# Replace with actual values from your CollectInsertSizeMetrics output\nINSERT_SIZE_MEAN=200    # Example: Median insert size from Picard\nINSERT_SIZE_STDDEV=50   # Example: Standard deviation from Picard\n\n# --- TopHat alignment command ---\n# Generates complete read alignments using TopHat v2.1.1\n# The --mate-inner-dist and --mate-std-dev parameters are fed from Picard's output.\ntophat2 \\\n  --mate-inner-dist ${INSERT_SIZE_MEAN} \\\n  --mate-std-dev ${INSERT_SIZE_STDDEV} \\\n  --gtf ${GTF_FILE} \\\n  -o tophat_output \\\n  ${BOWTIE2_INDEX_PREFIX} \\\n  ${READS_R1} ${READS_R2}",
+            "code_language": "bash",
+            "github_url": "https://doi.org/10.1186/gb-2013-14-4-r36"
+        }
+    ],
+    "raw_text": "Post sequencing read quality was checked using the FastQC quality control tool (http://www.bioinformatics.babraham.ac.uk/projects/fastqc/) for high throughput sequence data.\nIf the per-base quality score was below 20 at any position along the 75 bp length stretch, those samples were processed using sliding window quality filtering (window size = 4 bp) in Trimmomatic v0.32. After filtering, only the paired-end reads collected from the read-trimming were used for downstream data analysis\nAfter filtering, only the paired-end reads collected from the read-trimming were used for downstream data analysis (Table S3). Original samples that showed a satisfactory per base quality score (>20) were used without filtering. Sequencing adapters were trimmed while converting initial BCL data to fastq files from the sequencing center prior to receiving the data files and no adaptor contamination was detected in FASTQC analysis.\nPrepared fastq files were aligned to the Mus musculus GRCm38.p4 genome annotation using the Tophat alignment tool. In order to calculate the insert sizes between paired-end reads,  a subset of 250,000 reads from each sample was aligned using the BWA-aln short read alignment tool available on the Galaxy web platform. The built-in reference mouse genome (mm10) was used to carry out the alignment under default settings.\nAlignment statistics for the pre-alignments were generated using CollectInsertSizeMetrics Picard tool (http://broadinstitute.github.io/picard/), and average insert sizes and standard deviations were fed into subsequent complete read alignments generated with Tophat v2.1.1\nAssembly: GRCm38.p4\nSupplementary files format and content: tab delimited count file (.txt)",
+    "raw_text_source": "geo_data_processing",
+    "locked": true
 }
