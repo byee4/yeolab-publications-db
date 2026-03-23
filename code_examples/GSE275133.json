@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "reads were mapped using STARv2.7.6a",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "counts were compiled with subread featureCounts",
+      "tool_name": "featureCounts",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "reads were mapped using STARv2.7.6a\ncounts were compiled with subread featureCounts\nAssembly: mm10\nSupplementary files format and content: .txt files with featurecounts counts per gene",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}
