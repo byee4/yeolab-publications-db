@@ -1,0 +1,70 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Aligned with cellranger-3.0.0 to mm10 + tdTomato reference",
+      "tool_name": "Cell Ranger",
+      "tool_version": "3.0.0",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 2,
+      "description": "Doublet removal with Scrublet",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 3,
+      "description": "QC filtering: removed low-quality cells and genes, mitochondrial filtering, replicate-specific Gm42418 filtering",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 4,
+      "description": "CPM and log normalization.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 5,
+      "description": "Raw edits were normalized by Stamp expression via regression.",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 6,
+      "description": "EPR = normed edits / raw reads",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    },
+    {
+      "step_order": 7,
+      "description": "BBKNN batch correction, cell type assignment with marker genes using Scanpy",
+      "tool_name": "Scanpy",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Aligned with cellranger-3.0.0 to mm10 + tdTomato reference\nDoublet removal with Scrublet\nQC filtering: removed low-quality cells and genes, mitochondrial filtering, replicate-specific Gm42418 filtering\nCPM and log normalization. Raw edits were normalized by Stamp expression via regression. EPR = normed edits / raw reads\nBBKNN batch correction, cell type assignment with marker genes using Scanpy\nAssembly: mm10\nSupplementary files format and content: Barcodes: cell barcodes (barcodes.tsv.gz)\nSupplementary files format and content: Features: gene IDs and names (features.tsv.gz). Matrix: gene expression counts in Matrix Market format (matrix.mtx.gz)\nSupplementary files format and content: Adatas (.h5ad files): filtered and normalized counts (shortread_normed_counts_adata_*), filtered and Stamp normalized edits (shortread_normed_edits_adata_*), filtered EPR adata (shortread_epr_adata_*)\nSupplementary files format and content: MARINE output of raw edits: raw_edits_per_cell_per_gene_*.tsv",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}
