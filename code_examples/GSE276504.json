@@ -1,0 +1,16 @@
+{
+  "steps": [
+    {
+      "step_order": 1,
+      "description": "Reads were aligned with STARv2.7.6a",
+      "tool_name": "",
+      "tool_version": "",
+      "code_example": "",
+      "code_language": "bash",
+      "github_url": ""
+    }
+  ],
+  "raw_text": "Reads were aligned with STARv2.7.6a\nAssembly: mm10\nSupplementary files format and content: tsv files contain edits-per-read (EPR) for each gene",
+  "raw_text_source": "geo_data_processing",
+  "locked": true
+}
